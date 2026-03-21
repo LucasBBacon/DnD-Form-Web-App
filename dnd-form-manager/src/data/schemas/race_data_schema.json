@@ -1,0 +1,156 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "DnD Base Race",
+    "type": "object",
+    "patternProperties": {
+        "^race_[a-z0-9_]+$": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Display name of the race"
+                },
+                "size": {
+                    "type": "string",
+                    "enum": [
+                        "tiny",
+                        "small",
+                        "medium",
+                        "large"
+                    ],
+                    "description": "The creature's size category."
+                },
+                "speed": {
+                    "type": "object",
+                    "properties": {
+                        "walk": {
+                            "type": "integer",
+                            "description": "Base walking speed in feet."
+                        },
+                        "fly": {
+                            "type": "integer",
+                            "default": 0
+                        },
+                        "swim": {
+                            "type": "integer",
+                            "default": 0
+                        },
+                        "climb": {
+                            "type": "integer",
+                            "default": 0
+                        }
+                    },
+                    "required": [
+                        "walk"
+                    ]
+                },
+                "ability_bonuses": {
+                    "type": "object",
+                    "properties": {
+                        "fixed": {
+                            "type": "object",
+                            "properties": {
+                                "str": {
+                                    "type": "integer"
+                                },
+                                "dex": {
+                                    "type": "integer"
+                                },
+                                "con": {
+                                    "type": "integer"
+                                },
+                                "int": {
+                                    "type": "integer"
+                                },
+                                "wis": {
+                                    "type": "integer"
+                                },
+                                "cha": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "choices": {
+                            "type": "object",
+                            "properties": {
+                                "count": {
+                                    "type": "integer",
+                                    "description": "Number of ability score bonuses the player can assign."
+                                },
+                                "bonus": {
+                                    "type": "integer",
+                                    "description": "The bonus amount for each chosen ability score."
+                                },
+                                "options": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "str",
+                                            "dex",
+                                            "con",
+                                            "int",
+                                            "wis",
+                                            "cha"
+                                        ]
+                                    },
+                                    "description": "Ability scores that can be chosen for the bonus."
+                                }
+                            }
+                        }
+                    }
+                },
+                "languages": {
+                    "type": "object",
+                    "properties": {
+                        "known": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "Array of language IDs granted automatically."
+                        },
+                        "choices": {
+                            "type": "integer",
+                            "description": "Number of additional languages the player can choose."
+                        }
+                    },
+                    "required": [
+                        "known"
+                    ]
+                },
+                "traits": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "Array of Trait IDs referencing the external traits file (e.g., 'trait_fey_ancestry')."
+                },
+                "subrace_info": {
+                    "type": [
+                        "object",
+                        "null"
+                    ],
+                    "description": "If null, this race has no subraces. If present, forces a choice.",
+                    "properties": {
+                        "options_pool": {
+                            "type": "string",
+                            "description": "e.g., 'subraces_elf'"
+                        }
+                    }
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "size",
+                "speed",
+                "ability_bonuses",
+                "languages",
+                "traits"
+            ]
+        }
+    }
+}
