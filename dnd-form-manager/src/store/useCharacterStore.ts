@@ -10,6 +10,9 @@ interface CharacterState {
 
   // The raw numbers before racial bonuses or feats are applied
   baseAbilityScores: Record<Ability, number>;
+  // Level up HP rolls
+  hpRolls: Record<number, number>;
+  chosenRacialBonuses: Partial<Record<Ability, number>>;
 }
 
 interface CharacterActions {
@@ -37,6 +40,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     wis: 10,
     cha: 10,
   },
+  hpRolls: {},
+  chosenRacialBonuses: {},
 
   // --- Actions ---
   setName: (name) => set({ name }),
