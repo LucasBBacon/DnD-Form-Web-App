@@ -3,6 +3,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import {
   calculateModifier,
   calculateTotalAbilityScore,
+  calculateTotalASI,
 } from "../utils/abilityUtils";
 import { calculateArmorClass } from "../utils/acUtils";
 import { calculateMaxHP } from "../utils/hpUtils";
@@ -18,11 +19,15 @@ export const useCharacterStats = () => {
     baseAbilityScores,
     hpRolls,
     chosenRacialBonuses,
+    choicesByLevel,
   } = useCharacterStore();
 
   // fetch static definitions
   const raceData = raceId ? getRaceById(raceId) : null;
   const classData = classId ? getClassById(classId) : null;
+
+  // Aggregate all ASI choices from level 1 to current level
+  const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
 
   // Calculate core attributes
   const totalDex = calculateTotalAbilityScore(
@@ -30,12 +35,14 @@ export const useCharacterStats = () => {
     baseAbilityScores.dex,
     raceData,
     chosenRacialBonuses,
+    totalAsiBonuses.dex
   );
   const totalCon = calculateTotalAbilityScore(
     "con",
     baseAbilityScores.con,
     raceData,
     chosenRacialBonuses,
+    totalAsiBonuses.con
   );
 
   const dexMod = calculateModifier(totalDex);
