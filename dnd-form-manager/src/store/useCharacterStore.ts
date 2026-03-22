@@ -26,6 +26,7 @@ interface CharacterActions {
   setClass: (classId: string) => void;
   setSubclass: (subclassId: string) => void;
   setLevel: (level: number) => void;
+  updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
   setBaseAbilityScore: (ability: Ability, score: number) => void;
 }
 
@@ -69,13 +70,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       return {
         level: clampedLevel,
         choicesByLevel: updatedChoices,
-        // If de-leveing below the subclass requirement, clear subclass
-        // (Wire up the exact level check in derrivation engine)
+        // If de-leveling below the subclass requirement, clear subclass
+        // (Wire up the exact level check in derivation engine)
       };
     }),
 
   // Action to save a specific choice made at a specific level
-  updateLevelChoice: (level: number, updates: Partial<LevelChoice>) =>
+  updateLevelChoice: (level, updates) =>
     set((state) => ({
       choicesByLevel: {
         ...state.choicesByLevel,
