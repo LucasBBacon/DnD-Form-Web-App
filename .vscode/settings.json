@@ -11,7 +11,9 @@
         "longsword",
         "multiclass",
         "shortsword",
+        "spellbook",
         "Spellcasting",
-        "tiefling"
+        "tiefling",
+        "unprepare"
     ]
 }
