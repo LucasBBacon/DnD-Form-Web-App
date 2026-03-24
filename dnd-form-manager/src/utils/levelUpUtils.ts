@@ -1,4 +1,5 @@
 import type { ClassData } from "../types/class";
+import { MECHANIC_IDS } from "./constants";
 
 export interface LevelUpRequirements {
   requiresAsiOrFeat: boolean;
@@ -38,7 +39,7 @@ export const getLevelUpRequirements = (
 
   // Check for ASI / Feat choice
   const levelData = classData.progression.find((p) => p.level === targetLevel);
-  if (levelData?.features.includes("trait_asi")) {
+  if (levelData?.features.includes(MECHANIC_IDS.ASI)) {
     requirements.requiresAsiOrFeat = true;
   }
 

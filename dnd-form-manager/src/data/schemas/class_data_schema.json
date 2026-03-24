@@ -3,114 +3,102 @@
     "title": "DnD Class",
     "description": "",
     "type": "object",
-    "patternProperties": {
-        "^class_[a-z0-9_]+$": {
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^class_[a-z0-9_]+$",
+            "description": "Unique identifier for the class."
+        },
+        "name": {
+            "type": "string"
+        },
+        "hit_die": {
+            "$ref": "definitions.json#/definitions/HitDie",
+            "description": "Faces of the hit die (e.g., 8 for d8)."
+        },
+        "proficiencies": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "hit_die": {
-                    "type": "integer",
-                    "enum": [
-                        6,
-                        8,
-                        10,
-                        12
-                    ],
-                    "description": "Faces of the hit die (e.g., 8 for d8)."
-                },
-                "proficiencies": {
-                    "type": "object",
-                    "properties": {
-                        "armor": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "weapons": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "tools": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "saving_throws": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "enum": [
-                                    "str",
-                                    "dex",
-                                    "con",
-                                    "int",
-                                    "wis",
-                                    "cha"
-                                ]
-                            }
-                        },
-                        "skills": {
-                            "type": "object",
-                            "properties": {
-                                "count": {
-                                    "type": "integer"
-                                },
-                                "pool": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "description": "Array of valid skill IDs to choose from."
-                                }
-                            }
-                        }
+                "armor": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 },
-                "starting_equipment": {
+                "weapons": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tools": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "saving_throws": {
+                    "type": "array",
+                    "items": { "$ref": "definitions.json#/definitions/AbilityScore" }
+                },
+                "skills": {
                     "type": "object",
                     "properties": {
-                        "given": {
+                        "count": {
+                            "type": "integer"
+                        },
+                        "pool": {
                             "type": "array",
-                            "description": "Items the class always starts with.",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "item_id": {
-                                        "type": "string",
-                                        "description": "Id of the specific item or item category pool."
-                                    },
-                                    "quantity": {
-                                        "type": "integer",
-                                        "minimum": 1
-                                    }
-                                },
-                                "required": [
-                                    "item_id",
-                                    "quantity"
-                                ]
+                            "items": { "$ref": "definitions.json#/definitions/Skill" },
+                            "description": "Array of valid skill IDs to choose from."
+                        }
+                    }
+                }
+            }
+        },
+        "starting_equipment": {
+            "type": "object",
+            "properties": {
+                "given": {
+                    "type": "array",
+                    "description": "Items the class always starts with.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "item_id": {
+                                "type": "string",
+                                "description": "Id of the specific item or item category pool."
+                            },
+                            "quantity": {
+                                "type": "integer",
+                                "minimum": 1
                             }
                         },
-                        "choices": {
-                            "type": "array",
-                            "description": "An array of choice groups (e.g., Bullet point 1, Bullet point 2).",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "choose": {
-                                        "type": "integer",
-                                        "description": "How many options the user can pick from this group (typically 1)."
-                                    },
-                                    "options": {
-                                        "type": "array",
-                                        "description": "The mutually exclusive options. Each option is an array of items, allowing for bundles.",
-                                        "items": {
+                        "required": [
+                            "item_id",
+                            "quantity"
+                        ]
+                    }
+                },
+                "choices": {
+                    "type": "array",
+                    "description": "An array of choice groups (e.g., Bullet point 1, Bullet point 2).",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "choose": {
+                                "type": "integer",
+                                "description": "How many options the user can pick from this group (typically 1)."
+                            },
+                            "options": {
+                                "type": "array",
+                                "description": "The mutually exclusive options. Each option is a bundle object containing an array of items.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "equipment_bundle": {
                                             "type": "array",
+                                            "description": "A set of items granted together as a single choice.",
                                             "items": {
                                                 "type": "object",
                                                 "properties": {
@@ -128,154 +116,158 @@
                                                 ]
                                             }
                                         }
-                                    }
-                                },
-                                "required": [
-                                    "choose",
-                                    "options"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "spellcasting_base": {
-                    "type": [
-                        "object",
-                        "null"
-                    ],
-                    "description": "Base rules for spellcasting, null if the class does not cast spells by default.",
-                    "properties": {
-                        "ability": {
-                            "type": "string",
-                            "enum": [
-                                "int",
-                                "wis",
-                                "cha"
-                            ]
-                        },
-                        "preparation_type": {
-                            "type": "string",
-                            "enum": [
-                                "known",
-                                "prepared",
-                                "pact"
-                            ]
-                        },
-                        "ritual_casting": {
-                            "type": "boolean"
-                        }
-                    }
-                },
-                "subclass_info": {
-                    "type": "object",
-                    "properties": {
-                        "choice_level": {
-                            "type": "integer",
-                            "description": "The level at which this class chooses a subclass."
-                        },
-                        "options_pool": {
-                            "type": "string",
-                            "description": "Identifier to query valid subclasses (e.g., 'subclasses_rogue')"
-                        }
-                    }
-                },
-                "progression": {
-                    "type": "object",
-                    "description": "An array of 20 objects, representing levels 1 through 20.",
-                    "patternProperties": {
-                        "^(1[0-9]|20|[1-9])$": {
-                            "type": "object",
-                            "properties": {
-                                "features": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string"
                                     },
-                                    "description": "Trait IDs granted at this level (e.g. 'trait_action_surge')."
-                                },
-                                "class_specific_scaling": {
-                                    "type": "object",
-                                    "description": "Custom key-value pairs for class-specific resources (e.g., Sneak Attack damage, Ki points).",
-                                    "additionalProperties": {
-                                        "type": [
-                                            "array",
-                                            "string",
-                                            "integer",
-                                            "number"
-                                        ]
-                                    }
-                                },
-                                "spellcasting_progression": {
-                                    "type": [
-                                        "object",
-                                        "null"
-                                    ],
-                                    "properties": {
-                                        "cantrips_known": {
-                                            "type": "integer"
-                                        },
-                                        "spells_known": {
-                                            "type": "integer"
-                                        },
-                                        "spell_slots": {
-                                            "type": "object",
-                                            "description": "Mapping of spell level (1-9) to number of slots available.",
-                                            "additionalProperties": {
-                                                "type": "integer"
-                                            }
-                                        }
-                                    }
+                                    "required": [
+                                        "equipment_bundle"
+                                    ]
                                 }
-                            },
-                            "required": [
-                                "features"
-                            ]
-                        }
-                    }
-                },
-                "lore": {
-                    "type": "object",
-                    "properties": {
-                        "short_description": {
-                            "type": "string",
-                            "description": "A quick 1-2 sentence summary for tooltips."
-                        },
-                        "full_text": {
-                            "type": "string",
-                            "description": "The main body of text for the entity."
-                        },
-                        "sections": {
-                            "type": "array",
-                            "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "body": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "title",
-                                    "body"
-                                ]
                             }
+                        },
+                        "required": [
+                            "choose",
+                            "options"
+                        ]
+                    }
+                }
+            }
+        },
+        "spellcasting_base": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "description": "Base rules for spellcasting, null if the class does not cast spells by default.",
+            "properties": {
+                "ability": { "$ref": "definitions.json#/definitions/SpellcastingAbility" },
+                "preparation_type": {
+                    "type": "string",
+                    "enum": [
+                        "known",
+                        "prepared",
+                        "pact"
+                    ]
+                },
+                "ritual_casting": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "subclass_info": {
+            "type": "object",
+            "properties": {
+                "choice_level": {
+                    "type": "integer",
+                    "description": "The level at which this class chooses a subclass."
+                },
+                "options_pool": {
+                    "type": "string",
+                    "description": "Identifier to query valid subclasses (e.g., 'subclasses_rogue')"
+                }
+            }
+        },
+        "progression": {
+            "type": "array",
+            "description": "Exactly 20 objects representing levels 1 through 20, in order. Index 0 = level 1, index 19 = level 20.",
+            "minItems": 20,
+            "maxItems": 20,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "level": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20,
+                        "description": "The class level this entry represents (1–20)."
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Trait IDs granted at this level (e.g. 'trait_action_surge')."
+                    },
+                    "class_specific_scaling": {
+                        "type": "object",
+                        "description": "Custom key-value pairs for class-specific resources (e.g., Sneak Attack damage, Ki points).",
+                        "additionalProperties": {
+                            "type": [
+                                "array",
+                                "string",
+                                "integer",
+                                "number"
+                            ]
                         }
                     },
-                    "required": [
-                        "short_description"
-                    ]
+                    "spellcasting_progression": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "properties": {
+                            "cantrips_known": {
+                                "type": "integer"
+                            },
+                            "spells_known": {
+                                "type": "integer"
+                            },
+                            "spell_slots": {
+                                "type": "object",
+                                "description": "Mapping of spell level (1-9) to number of slots available.",
+                                "additionalProperties": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "level",
+                    "features"
+                ]
+            }
+        },
+        "lore": {
+            "type": "object",
+            "properties": {
+                "short_description": {
+                    "type": "string",
+                    "description": "A quick 1-2 sentence summary for tooltips."
+                },
+                "full_text": {
+                    "type": "string",
+                    "description": "The main body of text for the entity."
+                },
+                "sections": {
+                    "type": "array",
+                    "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "title",
+                            "body"
+                        ]
+                    }
                 }
             },
             "required": [
-                "name",
-                "hit_die",
-                "proficiencies",
-                "subclass_info",
-                "progression"
+                "short_description"
             ]
         }
-    }
+    },
+    "required": [
+        "id",
+        "name",
+        "hit_die",
+        "proficiencies",
+        "subclass_info",
+        "progression"
+    ]
 }

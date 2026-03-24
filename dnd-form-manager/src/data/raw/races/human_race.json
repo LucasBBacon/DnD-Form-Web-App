@@ -1,0 +1,31 @@
+{
+    "id": "race_human",
+    "name": "Human",
+    "size": "medium",
+    "speed": {
+        "walk": 30
+    },
+    "ability_bonuses": {
+        "fixed": {
+            "cha": 1,
+            "con": 1,
+            "dex": 1,
+            "int": 1,
+            "str": 1,
+            "wis": 1
+        }
+    },
+    "languages": {
+        "known": [
+            "lang_common"
+        ],
+        "choices": {
+            "count": 1,
+            "unique_choices": true
+        }
+    },
+    "lore": {
+        "short_description": "Ambitious and short-lived, humans pursue innovation, conquest, and trade with a relentless drive to achieve.",
+        "full_text": "In the reckonings of most worlds, humans are the youngest of the common races, late to arrive on the world scene and short-lived in comparison to dwarves, elves, and dragons. Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. Or maybe they feel they have something to prove to the elder races, and that's why they build their mighty empires on the foundation of conquest and trade. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds."
+    }
+}

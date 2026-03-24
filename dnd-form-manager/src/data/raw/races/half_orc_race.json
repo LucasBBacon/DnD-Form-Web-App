@@ -1,0 +1,36 @@
+{
+    "id": "race_half_orc",
+    "name": "Half-Orc",
+    "size": "medium",
+    "speed": {
+        "walk": 30
+    },
+    "ability_bonuses": {
+        "fixed": {
+            "str": 2,
+            "con": 1
+        }
+    },
+    "languages": {
+        "known": [
+            "lang_common",
+            "lang_orc"
+        ]
+    },
+    "traits": [
+        "trait_darkvision_60",
+        "trait_menacing",
+        "trait_relentless_endurance",
+        "trait_savage_attacks"
+    ],
+    "lore": {
+        "short_description": "Born of human and orc blood, half-orcs are powerful, fierce, and driven to prove their strength in both savage and civilized worlds.",
+        "full_text": "Whether united under the leadership of a mighty warlock or having fought to a standstill after years of conflict, orc and human tribes sometimes form alliances, joining forces into a larger horde to the terror of civilized lands nearby. When these alliances are sealed by marriages, half-orcs are born. Some half-orcs rise to become proud chiefs of orc tribes, their human blood giving them an edge over their full-blooded orc rivals. Some venture into the world to prove their worth among humans and other more civilized races. Many of these become adventurers, achieving greatness for their mighty deeds and notoriety for their barbaric customs and savage fury.",
+        "sections": [
+            {
+                "title": "Ability Score Increase",
+                "body": "Your Strength score increases by 2, and your Constitution score increases by 1."
+            }
+        ]
+    }
+}

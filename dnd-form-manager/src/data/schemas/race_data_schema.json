@@ -2,155 +2,191 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "title": "DnD Base Race",
     "type": "object",
-    "patternProperties": {
-        "^race_[a-z0-9_]+$": {
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^race_[a-z0-9_]+$",
+            "description": "Unique identifier for the race."
+        },
+        "name": {
+            "type": "string",
+            "description": "Display name of the race"
+        },
+        "size": {
+            "$ref": "definitions.json#/definitions/Size",
+            "description": "The creature's size category."
+        },
+        "speed": {
             "type": "object",
             "properties": {
-                "name": {
-                    "type": "string",
-                    "description": "Display name of the race"
+                "walk": {
+                    "type": "integer",
+                    "description": "Base walking speed in feet."
                 },
-                "size": {
-                    "type": "string",
-                    "enum": [
-                        "tiny",
-                        "small",
-                        "medium",
-                        "large"
-                    ],
-                    "description": "The creature's size category."
+                "fly": {
+                    "type": "integer",
+                    "default": 0
                 },
-                "speed": {
+                "swim": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "climb": {
+                    "type": "integer",
+                    "default": 0
+                }
+            },
+            "required": [
+                "walk"
+            ]
+        },
+        "ability_bonuses": {
+            "type": "object",
+            "properties": {
+                "fixed": {
                     "type": "object",
                     "properties": {
-                        "walk": {
-                            "type": "integer",
-                            "description": "Base walking speed in feet."
+                        "str": {
+                            "type": "integer"
                         },
-                        "fly": {
-                            "type": "integer",
-                            "default": 0
+                        "dex": {
+                            "type": "integer"
                         },
-                        "swim": {
-                            "type": "integer",
-                            "default": 0
+                        "con": {
+                            "type": "integer"
                         },
-                        "climb": {
-                            "type": "integer",
-                            "default": 0
+                        "int": {
+                            "type": "integer"
+                        },
+                        "wis": {
+                            "type": "integer"
+                        },
+                        "cha": {
+                            "type": "integer"
                         }
                     },
-                    "required": [
-                        "walk"
-                    ]
+                    "additionalProperties": false
                 },
-                "ability_bonuses": {
-                    "type": "object",
-                    "properties": {
-                        "fixed": {
-                            "type": "object",
-                            "properties": {
-                                "str": {
-                                    "type": "integer"
-                                },
-                                "dex": {
-                                    "type": "integer"
-                                },
-                                "con": {
-                                    "type": "integer"
-                                },
-                                "int": {
-                                    "type": "integer"
-                                },
-                                "wis": {
-                                    "type": "integer"
-                                },
-                                "cha": {
-                                    "type": "integer"
-                                }
-                            }
-                        },
-                        "choices": {
-                            "type": "object",
-                            "properties": {
-                                "count": {
-                                    "type": "integer",
-                                    "description": "Number of ability score bonuses the player can assign."
-                                },
-                                "bonus": {
-                                    "type": "integer",
-                                    "description": "The bonus amount for each chosen ability score."
-                                },
-                                "options": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string",
-                                        "enum": [
-                                            "str",
-                                            "dex",
-                                            "con",
-                                            "int",
-                                            "wis",
-                                            "cha"
-                                        ]
-                                    },
-                                    "description": "Ability scores that can be chosen for the bonus."
-                                }
-                            }
-                        }
-                    }
-                },
-                "languages": {
-                    "type": "object",
-                    "properties": {
-                        "known": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
+                "choices": {
+                    "type": "array",
+                    "description": "An ordered list of bonus assignments the player must make. Each entry is a separate bonus grant (e.g., one +2 and one +1 for Tasha's, or two +1s for Half-Elf).",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "count": {
+                                "type": "integer",
+                                "description": "Number of ability scores to assign this bonus to."
                             },
-                            "description": "Array of language IDs granted automatically."
+                            "bonus": {
+                                "type": "integer",
+                                "description": "The bonus amount to assign."
+                            },
+                            "options": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "definitions.json#/definitions/AbilityScore"
+                                },
+                                "description": "Ability scores eligible for this bonus. If omitted, all six scores are valid."
+                            }
                         },
-                        "choices": {
-                            "type": "integer",
-                            "description": "Number of additional languages the player can choose."
-                        }
-                    },
-                    "required": [
-                        "known"
-                    ]
-                },
-                "traits": {
+                        "required": [
+                            "count",
+                            "bonus"
+                        ]
+                    }
+                }
+            }
+        },
+        "languages": {
+            "type": "object",
+            "properties": {
+                "known": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     },
-                    "description": "Array of Trait IDs referencing the external traits file (e.g., 'trait_fey_ancestry')."
+                    "description": "Array of language IDs granted automatically."
                 },
-                "subrace_info": {
-                    "type": [
-                        "object",
-                        "null"
-                    ],
-                    "description": "If null, this race has no subraces. If present, forces a choice.",
+                "choices": {
+                    "type": "object",
                     "properties": {
-                        "options_pool": {
-                            "type": "string",
-                            "description": "e.g., 'subraces_elf'"
+                        "count": {
+                            "type": "integer",
+                            "description": "Number of additional languages the player can choose."
+                        },
+                        "unique_choices": {
+                            "type": "boolean"
                         }
                     }
-                },
-                "description": {
-                    "type": "string"
                 }
             },
             "required": [
-                "name",
-                "size",
-                "speed",
-                "ability_bonuses",
-                "languages",
-                "traits"
+                "known"
+            ]
+        },
+        "traits": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "description": "Array of Trait IDs referencing the external traits file (e.g., 'trait_fey_ancestry')."
+        },
+        "subrace_info": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "description": "If null, this race has no subraces. If present, forces a choice.",
+            "properties": {
+                "options_pool": {
+                    "type": "string",
+                    "description": "e.g., 'subraces_elf'"
+                }
+            }
+        },
+        "lore": {
+            "type": "object",
+            "properties": {
+                "short_description": {
+                    "type": "string",
+                    "description": "A quick 1-2 sentence summary for tooltips."
+                },
+                "full_text": {
+                    "type": "string",
+                    "description": "The main body of text for the entity."
+                },
+                "sections": {
+                    "type": "array",
+                    "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "title",
+                            "body"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "short_description"
             ]
         }
-    }
+    },
+    "required": [
+        "id",
+        "name",
+        "size",
+        "speed",
+        "ability_bonuses",
+        "languages",
+        "lore"
+    ]
 }

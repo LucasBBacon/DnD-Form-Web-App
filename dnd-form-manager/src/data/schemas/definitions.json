@@ -1,0 +1,52 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "definitions.json",
+    "title": "Shared DnD Type Definitions",
+    "description": "Reusable type definitions referenced by other schemas via $ref. Mirrors the union types in src/types/common.ts.",
+    "definitions": {
+        "AbilityScore": {
+            "type": "string",
+            "enum": ["str", "dex", "con", "int", "wis", "cha"],
+            "description": "One of the six D&D ability scores."
+        },
+        "Skill": {
+            "type": "string",
+            "enum": [
+                "acrobatics",
+                "animal_handling",
+                "arcana",
+                "athletics",
+                "deception",
+                "history",
+                "insight",
+                "intimidation",
+                "investigation",
+                "medicine",
+                "nature",
+                "perception",
+                "performance",
+                "persuasion",
+                "religion",
+                "sleight_of_hand",
+                "stealth",
+                "survival"
+            ],
+            "description": "A D&D 5e skill identifier."
+        },
+        "Size": {
+            "type": "string",
+            "enum": ["tiny", "small", "medium", "large"],
+            "description": "A creature size category."
+        },
+        "HitDie": {
+            "type": "integer",
+            "enum": [6, 8, 10, 12],
+            "description": "Valid hit die face values (d6, d8, d10, d12)."
+        },
+        "SpellcastingAbility": {
+            "type": "string",
+            "enum": ["int", "wis", "cha"],
+            "description": "Ability scores that can be used as a spellcasting ability."
+        }
+    }
+}

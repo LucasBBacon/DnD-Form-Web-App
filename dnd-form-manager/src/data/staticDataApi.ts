@@ -3,6 +3,7 @@ import type { Race } from "../types/race";
 import type { SubclassData } from "../types/subclass";
 
 import rawClassesData from "./classes.json";
+import rawSubclassesData from "./subclasses.json"
 import rawRacesData from "./races.json";
 
 const racesArray = rawRacesData as Race[];
@@ -16,7 +17,7 @@ classesArray.forEach((c) => {
 });
 
 const subclassDictionary: Record<string, SubclassData> = {};
-subclassesArray.foreach((sc) => {
+subclassesArray.forEach((sc) => {
   subclassDictionary[sc.id] = sc;
 });
 

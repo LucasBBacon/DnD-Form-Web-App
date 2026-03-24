@@ -120,7 +120,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       choicesByLevel: {
         ...state.choicesByLevel,
         [level]: {
-          ...state.choicesByLevel[level],
+          ...(state.choicesByLevel[level] || {}),
           ...updates,
         },
       },

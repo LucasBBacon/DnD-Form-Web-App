@@ -7,6 +7,7 @@
         "dwarvish",
         "greataxe",
         "halfling",
+        "halflings",
         "handaxe",
         "longsword",
         "multiclass",
@@ -14,6 +15,15 @@
         "spellbook",
         "Spellcasting",
         "tiefling",
+        "tieflings",
         "unprepare"
+    ],
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "races/*_race.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/race_data_schema.json"
+        }
     ]
 }
