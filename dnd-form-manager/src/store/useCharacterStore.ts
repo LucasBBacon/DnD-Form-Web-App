@@ -3,6 +3,11 @@ import type { Ability } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import { getClassById } from "../data/staticDataApi";
 
+export interface InventoryRecord {
+  itemId: string;
+  quantity: number;
+}
+
 interface CharacterState {
   name: string;
   level: number;
@@ -28,6 +33,12 @@ interface CharacterState {
   expendedSpellSlots: Record<number, number>;
   // Warlocks are weird, track separately
   expendedPactSlots: number;
+
+  // --- Inventory State ---
+  inventory: InventoryRecord[];
+  equippedArmorId: string | null;
+  equippedShieldId: string | null;
+  equippedWeaponIds: string[];
 }
 
 interface CharacterActions {
@@ -53,6 +64,12 @@ interface CharacterActions {
   // Resting Actions
   takeLongRest: () => void;
   takeShortRest: () => void;
+
+  // Inventory Actions
+  addInventoryItem: (itemId: string, quantity: number) => void;
+  removeInventoryItem: (itemId: string, quantity: number) => void;
+  equipArmor: (itemId: string | null) => void;
+  equipShield: (itemId: string | null) => void;
 }
 
 type CharacterStore = CharacterState & CharacterActions;
@@ -79,6 +96,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   spellsPrepared: [],
   expendedSpellSlots: {},
   expendedPactSlots: 0,
+  inventory: [
+    { itemId: "item_backpack", quantity: 1 },
+    { itemId: "item_torch", quantity: 10 },
+  ],
+  equippedArmorId: null,
+  equippedShieldId: null,
+  equippedWeaponIds: [],
 
   // --- Actions ---
   setName: (name) => set({ name }),
@@ -93,7 +117,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       if (state.classId && updatedSubclassId) {
         // TODO import getClassById properly to check
         const currentClass = getClassById(state.classId);
-        if (currentClass && clampedLevel < currentClass.subclass_info.choice_level) {
+        if (
+          currentClass &&
+          clampedLevel < currentClass.subclass_info.choice_level
+        ) {
           updatedSubclassId = null;
         }
       }
@@ -146,6 +173,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       },
     })),
 
+  // region Spell Actions
+
   learnSpell: (spellId) =>
     set((state) => {
       if (!spellId || state.spellsKnown.includes(spellId)) {
@@ -172,6 +201,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
     })),
+
+  // endregion
+
+  // region Combat Actions
 
   expendSpellSlot: (level) =>
     set((state) => {
@@ -218,6 +251,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       expendedPactSlots: state.expendedPactSlots + 1,
     })),
 
+  // endregion
+
+  // region Rest Actions
+
   takeLongRest: () =>
     set(() => ({
       expendedSpellSlots: {}, // Wipes all normal slot usage
@@ -230,4 +267,38 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       expendedPactSlots: 0, // Warlocks get spell slots back after short rest
       // Normal spell slots remain untouched
     })),
+
+  // endregion
+
+  // region Inventory Actions
+  addInventoryItem: (itemId, quantity) =>
+    set((state) => {
+      const existing = state.inventory.find((i) => i.itemId === itemId);
+      if (existing) {
+        return {
+          inventory: state.inventory.map((i) =>
+            i.itemId === itemId ? { ...i, quantity: i.quantity + quantity } : i,
+          ),
+        };
+      }
+      return { inventory: [...state.inventory, { itemId, quantity }] };
+    }),
+
+  removeInventoryItem: (itemId, quantity) =>
+    set((state) => {
+      // Logic to subtract quantity
+      return {
+        inventory: state.inventory
+          .map((i) =>
+            i.itemId === itemId ? { ...i, quantity: i.quantity - quantity } : i,
+          )
+          .filter((i) => i.quantity > 0),
+      };
+    }),
+
+  equipArmor: (itemId) => set({ equippedArmorId: itemId }),
+
+  equipShield: (itemId) => set({ equippedShieldId: itemId }),
+
+  // endregion
 }));

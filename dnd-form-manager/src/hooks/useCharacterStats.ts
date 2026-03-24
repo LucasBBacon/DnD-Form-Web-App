@@ -1,4 +1,4 @@
-import { getClassById, getRaceById } from "../data/staticDataApi";
+import { getClassById, getItemById, getRaceById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import {
   calculateModifier,
@@ -20,6 +20,9 @@ export const useCharacterStats = () => {
     hpRolls,
     chosenRacialBonuses,
     choicesByLevel,
+    inventory,
+    equippedArmorId,
+    equippedShieldId,
   } = useCharacterStore();
 
   // fetch static definitions
@@ -35,15 +38,22 @@ export const useCharacterStats = () => {
     baseAbilityScores.dex,
     raceData,
     chosenRacialBonuses,
-    totalAsiBonuses.dex
+    totalAsiBonuses.dex,
   );
   const totalCon = calculateTotalAbilityScore(
     "con",
     baseAbilityScores.con,
     raceData,
     chosenRacialBonuses,
-    totalAsiBonuses.con
+    totalAsiBonuses.con,
   );
+
+  // Calculate total weight
+  // Map over the inventory, look up the static weight of each item, multiply by quantity
+  const totalWeight = inventory.reduce((total, record) => {
+    const itemData = getItemById(record.itemId);
+    return total + (itemData?.weight || 0) * record.quantity;
+  }, 0);
 
   const dexMod = calculateModifier(totalDex);
   const conMod = calculateModifier(totalCon);
@@ -55,8 +65,16 @@ export const useCharacterStats = () => {
 
   const initiative = calculateInitiative(dexMod);
 
-  // For now pass null for armor to default to unarmored AC (TODO: FIX THIS)
-  const armorClass = calculateArmorClass(dexMod, null, false);
+  const equippedArmorData = equippedArmorId
+    ? getItemById(equippedArmorId)
+    : null;
+  const isWearingShield = !!equippedShieldId;
+
+  const armorClass = calculateArmorClass(
+    dexMod,
+    equippedArmorData?.armor_properties || null,
+    isWearingShield,
+  );
 
   // Return clean data
   return {
@@ -65,5 +83,6 @@ export const useCharacterStats = () => {
     maxHp,
     initiative,
     armorClass,
+    totalWeight,
   };
 };
