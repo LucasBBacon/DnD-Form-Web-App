@@ -1,10 +1,13 @@
 import type { ClassData } from "../types/class";
+import type { SubclassData } from "../types/subclass";
 import { MECHANIC_IDS } from "./constants";
 
 export interface LevelUpRequirements {
   requiresAsiOrFeat: boolean;
   requiresSubclass: boolean;
-  // TODO: Add requiresSpell and requiresInvocations, etc.
+  newCantripsToLearn: number;
+  newSpellsToLearn: number;
+  // TODO: add requiresInvocations, etc.
 }
 
 /**
@@ -24,10 +27,13 @@ export interface LevelUpRequirements {
 export const getLevelUpRequirements = (
   targetLevel: number,
   classData: ClassData | null,
+  subclassData: SubclassData | null = null
 ): LevelUpRequirements => {
   const requirements: LevelUpRequirements = {
     requiresAsiOrFeat: false,
     requiresSubclass: false,
+    newCantripsToLearn: 0,
+    newSpellsToLearn: 0
   };
 
   if (!classData) return requirements;
@@ -42,6 +48,19 @@ export const getLevelUpRequirements = (
   if (levelData?.features.includes(MECHANIC_IDS.ASI)) {
     requirements.requiresAsiOrFeat = true;
   }
+
+  // Spells check (derivation)
+  const prevLevelData = classData.progression.find((p) => p.level == targetLevel);
+
+  const currentSpellsKnown = levelData?.spellcasting_progression?.spells_known || 0;
+  const prevSpellsKnown = prevLevelData?.spellcasting_progression?.spells_known || 0;
+  requirements.newCantripsToLearn = Math.max(0, currentSpellsKnown - prevSpellsKnown);
+
+  const currentCantrips = levelData?.spellcasting_progression?.cantrips_known || 0;
+  const prevCantrips = prevLevelData?.spellcasting_progression?.cantrips_known || 0;
+  requirements.newCantripsToLearn = Math.max(0, currentCantrips - prevCantrips);
+
+  // TODO: subclassData.progression
 
   return requirements;
 };

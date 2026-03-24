@@ -1,4 +1,4 @@
-import { getClassById } from "../../data/staticDataApi";
+import { getClassById, getSubclassById } from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
 import { getLevelUpRequirements } from "../../utils/levelUpUtils";
@@ -14,12 +14,14 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   onClose,
 }) => {
   // Fetch from zustand
-  const { classId, setLevel, updateLevelChoice, setSubclass } =
+  const { classId, subclassId, setLevel, updateLevelChoice, setSubclass } =
     useCharacterStore();
+
   const classData = classId ? getClassById(classId) : null;
+  const subclassData = subclassId ? getSubclassById(subclassId) : null; 
 
   // Determine modules to render
-  const requirements = getLevelUpRequirements(targetLevel, classData);
+  const requirements = getLevelUpRequirements(targetLevel, classData, subclassData);
 
   // Universal save handler
   const handleSaveChoice = (updates: Partial<LevelChoice>) => {
