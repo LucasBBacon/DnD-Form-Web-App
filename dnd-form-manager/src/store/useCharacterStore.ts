@@ -115,7 +115,6 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       let updatedSubclassId = state.subclassId;
 
       if (state.classId && updatedSubclassId) {
-        // TODO import getClassById properly to check
         const currentClass = getClassById(state.classId);
         if (
           currentClass &&

@@ -1,12 +1,14 @@
-import type { ClassData } from "../types/class";
 import type { Race } from "../types/race";
+import type { SubraceData } from "../types/subrace";
+import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemData } from "../types/item";
 import type { SpellData } from "../types/spell";
 
+import rawRacesData from "./races.json";
+import rawSubracesData from "./subraces.json";
 import rawClassesData from "./classes.json";
 import rawSubclassesData from "./subclasses.json";
-import rawRacesData from "./races.json";
 import rawItemsData from "./items.json";
 import rawSpellsData from "./spells.json";
 
@@ -24,6 +26,22 @@ export const getRaceById = (id: string | null): Race | null => {
 
 export const getAllRaces = (): Race[] => {
   return racesArray;
+};
+
+// region Subrace API
+const subracesArray = rawSubracesData as SubraceData[];
+const subraceDictionary: Record<string, SubraceData> = {};
+subracesArray.forEach((sr) => {
+  subraceDictionary[sr.id] = sr;
+});
+
+export const getSubraceById = (id: string | null): SubraceData | null => {
+  if (!id) return null;
+  return subraceDictionary[id] || null;
+};
+
+export const getSubracesForRace = (raceId: string): SubraceData[] => {
+  return subracesArray.filter((sr) => sr.parent_race_id === raceId);
 };
 
 // region Class API
@@ -84,8 +102,8 @@ spellsArray.forEach((s) => {
 export const getSpellByID = (id: string | null): SpellData | null => {
   if (!id) return null;
   return spellsDictionary[id] || null;
-}
+};
 
-export const getAllSpells = () : SpellData[] => {
+export const getAllSpells = (): SpellData[] => {
   return spellsArray;
-}
+};

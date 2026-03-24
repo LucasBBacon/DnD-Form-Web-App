@@ -1,5 +1,6 @@
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
+import type { SubraceData } from "../types/subrace";
 
 /**
  * Calculates the proficiency bonus based on the character's total level.
@@ -19,10 +20,16 @@ export const calculateProficiencyBonus = (level: number): number => {
 
 export const getUnlockedFeatures = (
   currentLevel: number,
+  subraceData: SubraceData | null,
   classData: ClassData | null,
   subclassData: SubclassData | null,
 ): string[] => {
   const unlockedFeatures = new Set<string>();
+
+  // Grab subrace traits
+  if (subraceData && subraceData.traits_added) {
+    subraceData.traits_added.forEach(f => unlockedFeatures.add(f));
+  }
 
   // Grab base class features
   if (classData) {

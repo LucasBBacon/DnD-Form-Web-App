@@ -1,6 +1,7 @@
 import type { Ability } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import type { Race } from "../types/race";
+import type { SubraceData } from "../types/subrace";
 
 /**
  * Converts a total ability score into its corresponding modifier.
@@ -27,6 +28,7 @@ export const calculateTotalAbilityScore = (
   ability: Ability,
   baseScore: number,
   race: Race | null,
+  subrace: SubraceData | null,
   userChosenRacialBonuses: Partial<Record<Ability, number>> = {},
   totalAsiBonus?: number,
 ): number => {
@@ -34,13 +36,15 @@ export const calculateTotalAbilityScore = (
 
   if (race) {
     // Add fixed racial bonuses (if the race has one for this ability)
-    const fixedBonus = race.ability_bonuses.fixed[ability] || 0;
-    total += fixedBonus;
+    total += race.ability_bonuses.fixed[ability] || 0;
+  }
+
+  if (subrace) {
+    total += subrace.ability_bonuses?.fixed?.[ability] || 0;
   }
 
   // Add any user-selected racial bonuses
-  const chosenBonus = userChosenRacialBonuses[ability] || 0;
-  total += chosenBonus;
+  total += userChosenRacialBonuses[ability] || 0;
 
   // Add ASI bonus
   total += totalAsiBonus || 0;

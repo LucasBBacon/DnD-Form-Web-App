@@ -39,58 +39,7 @@
       "required": ["walk"]
     },
     "ability_bonuses": {
-      "type": "object",
-      "properties": {
-        "fixed": {
-          "type": "object",
-          "properties": {
-            "str": {
-              "type": "integer"
-            },
-            "dex": {
-              "type": "integer"
-            },
-            "con": {
-              "type": "integer"
-            },
-            "int": {
-              "type": "integer"
-            },
-            "wis": {
-              "type": "integer"
-            },
-            "cha": {
-              "type": "integer"
-            }
-          },
-          "additionalProperties": false
-        },
-        "choices": {
-          "type": "array",
-          "description": "An ordered list of bonus assignments the player must make. Each entry is a separate bonus grant (e.g., one +2 and one +1 for Tasha's, or two +1s for Half-Elf).",
-          "items": {
-            "type": "object",
-            "properties": {
-              "count": {
-                "type": "integer",
-                "description": "Number of ability scores to assign this bonus to."
-              },
-              "bonus": {
-                "type": "integer",
-                "description": "The bonus amount to assign."
-              },
-              "options": {
-                "type": "array",
-                "items": {
-                  "$ref": "definitions.json#/definitions/AbilityScore"
-                },
-                "description": "Ability scores eligible for this bonus. If omitted, all six scores are valid."
-              }
-            },
-            "required": ["count", "bonus"]
-          }
-        }
-      }
+      "$ref": "definitions.json#/definitions/AbilityBonuses"
     },
     "languages": {
       "type": "object",

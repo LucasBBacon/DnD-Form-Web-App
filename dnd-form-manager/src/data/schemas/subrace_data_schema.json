@@ -16,12 +16,8 @@
       "type": "string",
       "description": "REQUIRED. Links back to the parent class."
     },
-    "ability_bonuses_additions": {
-      "type": "object",
-      "description": "Stats appended to the base race's ASI",
-      "additionalProperties": {
-        "type": "integer"
-      }
+    "ability_bonuses": {
+      "$ref": "definitions.json#/definitions/AbilityBonuses"
     },
     "traits_added": {
       "type": "array",
@@ -77,8 +73,7 @@
               "type": "integer",
               "default": 0
             }
-          },
-          "required": ["walk"]
+          }
         },
         "size": {
           "$ref": "definitions.json#/definitions/Size",
