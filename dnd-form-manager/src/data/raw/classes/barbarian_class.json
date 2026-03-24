@@ -1,0 +1,268 @@
+{
+    "id": "class_barbarian",
+    "name": "Barbarian",
+    "hit_die": 12,
+    "proficiencies": {
+        "armor": [
+            "category_armor_light",
+            "category_armor_medium",
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "saving_throws": [
+            "str",
+            "con"
+        ],
+        "skills": {
+            "count": 2,
+            "pool": [
+                "animal_handling",
+                "athletics",
+                "intimidation",
+                "nature",
+                "perception",
+                "survival"
+            ]
+        }
+    },
+    "multiclass_proficiencies": {
+        "armor": [
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "skills": {}
+    },
+    "starting_equipment": {
+        "given": [
+            {
+                "item_id": "pack_explorers",
+                "quantity": 1
+            },
+            {
+                "item_id": "weapon_javelin",
+                "quantity": 4
+            }
+        ],
+        "choices": [
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_greataxe",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_martial_melee",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_handaxe",
+                                "quantity": 2
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_simple",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "subclass_info": {
+        "choice_level": 3,
+        "options_pool": "subclasses_barbarian"
+    },
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_rage",
+                "trait_unarmored_defense_barbarian"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": 2,
+                "rage_damage_bonus": 2
+            }
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_reckless_attack",
+                "trait_danger_sense"
+            ]
+        },
+        {
+            "level": 3,
+            "features": [
+                "trait_rage",
+                "trait_primal_path"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": 3
+            }
+        },
+        {
+            "level": 4,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 5,
+            "features": [
+                "trait_extra_attack",
+                "trait_fast_movement"
+            ]
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_primal_path_feature"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": 4
+            }
+        },
+        {
+            "level": 7,
+            "features": [
+                "trait_feral_instinct"
+            ]
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 9,
+            "features": [
+                "trait_rage",
+                "trait_brutal_critical"
+            ],
+            "class_specific_scaling": {
+                "rage_damage_bonus": 3,
+                "brutal_critical_extra_die_count": 1
+            }
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_primal_path_feature"
+            ]
+        },
+        {
+            "level": 11,
+            "features": [
+                "trait_relentless_rage"
+            ]
+        },
+        {
+            "level": 12,
+            "features": [
+                "trait_rage",
+                "trait_ability_score_improvement"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": 5
+            }
+        },
+        {
+            "level": 13,
+            "features": [
+                "trait_brutal_critical"
+            ],
+            "class_specific_scaling": {
+                "brutal_critical_extra_die_count": 2
+            }
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_primal_path_feature"
+            ]
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_persistent_rage"
+            ]
+        },
+        {
+            "level": 16,
+            "features": [
+                "trait_rage",
+                "trait_ability_score_improvement"
+            ],
+            "class_specific_scaling": {
+                "rage_damage_bonus": 4
+            }
+        },
+        {
+            "level": 17,
+            "features": [
+                "trait_rage",
+                "trait_brutal_critical"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": 6,
+                "brutal_critical_extra_die_count": 3
+            }
+        },
+        {
+            "level": 18,
+            "features": [
+                "trait_indomitable_might"
+            ]
+        },
+        {
+            "level": 19,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 20,
+            "features": [
+                "trait_rage",
+                "trait_primal_champion"
+            ],
+            "class_specific_scaling": {
+                "rage_number_of_rages": -1
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "Warriors defined by unbridled rage, channeling primal fury into uncanny reflexes, resilience, and combat strength.",
+        "full_text": "A tall human tribesman strides through a blizzard, draped in fur and hefting his axe. He laughs as he charges toward the frost giant who dared poach his people's elk herd.\nA half-orc snarls at the latest challenger to her authority over their savage tribe, ready to break his neck with her bare hands as she did to the last six rivals.\nFrothing at the mouth, a dwarf slams his helmet into the face of his drow foe, then turns to drive his armored elbow into the gut of another.\nThese barbarians, different as they might be, are defined by their rage: unbridled, unquenchable, and unthinking fury. More than a mere emotion, their anger is the ferocity of a cornered predator, the unrelenting assault of a storm, the churning turmoil of the sea.\nFor some, their rage springs from a communion with fierce animal spirits. Others draw from a roiling reservoir of anger at a world full of pain. For every barbarian, rage is a power that fuels not just a battle frenzy but also uncanny reflexes, resilience, and feats of strength."
+    }
+}

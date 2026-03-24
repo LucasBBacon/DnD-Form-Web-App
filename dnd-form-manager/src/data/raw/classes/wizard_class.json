@@ -1,0 +1,450 @@
+{
+    "id": "class_wizard",
+    "name": "Wizard",
+    "hit_die": 6,
+    "proficiencies": {
+        "armor": [],
+        "weapons": [
+            "weapon_dagger",
+            "weapon_dart",
+            "weapon_sling",
+            "weapon_quarterstaff",
+            "weapon_light_crossbow"
+        ],
+        "tools": [],
+        "saving_throws": [
+            "int",
+            "wis"
+        ],
+        "skills": {
+            "count": 2,
+            "pool": [
+                "arcana",
+                "history",
+                "insight",
+                "investigation",
+                "medicine",
+                "religion"
+            ]
+        }
+    },
+    "multiclass_proficiencies": {
+        "armor": [],
+        "weapons": [],
+        "tools": [],
+        "skills": {}
+    },
+    "starting_equipment": {
+        "given": [
+            {
+                "item_id": "magic_item_spellbook",
+                "quantity": 1
+            }
+        ],
+        "choices": [
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_quarterstaff",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_dagger",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "gear_component_pouch",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_arcane_focus",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_scholars",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_explorers",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "spellcasting_base": {
+        "ability": "int",
+        "preparation_type": "prepared",
+        "ritual_casting": true
+    },
+    "subclass_info": {
+        "choice_level": 2,
+        "options_pool": "subclasses_wizard"
+    },
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_spellcasting_wizard",
+                "trait_arcane_recovery"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 6,
+                "spell_slots": {
+                    "1": 2
+                }
+            }
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_arcane_tradition"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 8,
+                "spell_slots": {
+                    "1": 2
+                }
+            }
+        },
+        {
+            "level": 3,
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 10,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 2
+                }
+            }
+        },
+        {
+            "level": 4,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 12,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3
+                }
+            }
+        },
+        {
+            "level": 5,
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 14,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 2
+                }
+            }
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_arcane_tradition_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 16,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3
+                }
+            }
+        },
+        {
+            "level": 7,
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 18,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 1
+                }
+            }
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 20,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 2
+                }
+            }
+        },
+        {
+            "level": 9,
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 22,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 1
+                }
+            }
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_arcane_tradition_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 24,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2
+                }
+            }
+        },
+        {
+            "level": 11,
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 26,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1
+                }
+            }
+        },
+        {
+            "level": 12,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 26,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1
+                }
+            }
+        },
+        {
+            "level": 13,
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 28,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1,
+                    "7": 1
+                }
+            }
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_arcane_tradition_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 30,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1,
+                    "7": 1
+                }
+            }
+        },
+        {
+            "level": 15,
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 32,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1,
+                    "7": 1,
+                    "8": 1
+                }
+            }
+        },
+        {
+            "level": 16,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 34,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1,
+                    "7": 1,
+                    "8": 1
+                }
+            }
+        },
+        {
+            "level": 17,
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 36,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2,
+                    "6": 1,
+                    "7": 1,
+                    "8": 1,
+                    "9": 1
+                }
+            }
+        },
+        {
+            "level": 18,
+            "features": [
+                "trait_spell_mastery"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 38,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 3,
+                    "6": 1,
+                    "7": 1,
+                    "8": 1,
+                    "9": 1
+                }
+            }
+        },
+        {
+            "level": 19,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 40,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 3,
+                    "6": 2,
+                    "7": 1,
+                    "8": 1,
+                    "9": 1
+                }
+            }
+        },
+        {
+            "level": 20,
+            "features": [
+                "trait_signature_spell"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 5,
+                "spells_known": 42,
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 3,
+                    "6": 2,
+                    "7": 2,
+                    "8": 1,
+                    "9": 1
+                }
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "Scholarly mages who research and master arcane magic through rigorous study and discipline.",
+        "full_text": "Clad in the silver robes that denote her station, an elf closes her eyes to shut out the distractions of the battlefield and begins her quiet chant. Fingers weaving in front of her, she completes her spell and launches a tiny bead of tire toward the enemy ranks, where it erupts into a conflagration that engulfs the soldiers.\nChecking and rechecking his work, a human scribes an intricate magic circle in chalk on the bare stone floor, then sprinkles powdered iron along every line and graceful curve. When the circle is complete, he drones a long incantation. A hole opens in space inside the circle, bringing a whiff of brimstone from the otherworldly plane beyond.\nCrouching on the floor in a dungeon intersection, a gnome tosses a handful of small bones inscribed with mystic symbols, muttering a few words of power over them. Closing his eyes to see the visions more clearly, he nods slowly, then opens his eyes and points down the passage to his left.\nWizards are supreme magic-users, defined and united as a class by the spells they cast. Drawing on the subtle weave of magic that permeates the cosmos, wizards cast spells of explosive tire, arcing lightning, subtle deception, and brute=force mind control. Their magic conjures monsters from other planes of existence, glimpses the future, or turns slain foes into zombies. Their mightiest spells change one substance into another, call meteors down from the sky, or open portals to other worlds."
+    }
+}

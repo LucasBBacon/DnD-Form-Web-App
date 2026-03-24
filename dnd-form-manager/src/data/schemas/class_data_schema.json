@@ -221,8 +221,7 @@
                     }
                 },
                 "required": [
-                    "level",
-                    "features"
+                    "level"
                 ]
             }
         },

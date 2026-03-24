@@ -1,0 +1,390 @@
+{
+    "id": "class_warlock",
+    "name": "Warlock",
+    "hit_die": 8,
+    "proficiencies": {
+        "armor": [
+            "category_armor_light"
+        ],
+        "weapons": [
+            "category_weapon_simple"
+        ],
+        "tools": [],
+        "saving_throws": [
+            "wis",
+            "cha"
+        ],
+        "skills": {
+            "count": 2,
+            "pool": [
+                "arcana",
+                "deception",
+                "history",
+                "intimidation",
+                "investigation",
+                "investigation",
+                "nature",
+                "religion"
+            ]
+        }
+    },
+    "multiclass_proficiencies": {
+        "armor": [
+            "category_armor_light"
+        ],
+        "weapons": [
+            "category_weapon_simple"
+        ],
+        "tools": [],
+        "skills": {}
+    },
+    "starting_equipment": {
+        "given": [
+            {
+                "item_id": "armor_leather",
+                "quantity": 1
+            },
+            {
+                "item_id": "weapon_dagger",
+                "quantity": 2
+            },
+            {
+                "item_id": "category_weapon_simple",
+                "quantity": 1
+            }
+        ],
+        "choices": [
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_light_crossbow",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "weapon_crossbow_bolt",
+                                "quantity": 20
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_simple",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "gear_component_pouch",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_arcane_focus",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_scholars",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_dungeoneers",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "spellcasting_base": {
+        "ability": "cha",
+        "preparation_type": "pact",
+        "ritual_casting": false
+    },
+    "subclass_info": {
+        "choice_level": 1,
+        "options_pool": "subclasses_warlock"
+    },
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_otherworldly_patron",
+                "trait_pact_magic"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 2,
+                "spells_known": 2,
+                "spell_slots": {
+                    "1": 1
+                }
+            }
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_eldritch_invocations"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 2,
+                "spells_known": 3,
+                "spell_slots": {
+                    "1": 2
+                }
+            }
+        },
+        {
+            "level": 3,
+            "features": [
+                "trait_pact_boon"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 2,
+                "spells_known": 4,
+                "spell_slots": {
+                    "2": 2
+                }
+            }
+        },
+        {
+            "level": 4,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 5,
+                "spell_slots": {
+                    "2": 2
+                }
+            }
+        },
+        {
+            "level": 5,
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 6,
+                "spell_slots": {
+                    "3": 2
+                }
+            }
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_otherworldly_patron_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 7,
+                "spell_slots": {
+                    "3": 2
+                }
+            }
+        },
+        {
+            "level": 7,
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 8,
+                "spell_slots": {
+                    "4": 2
+                }
+            }
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 9,
+                "spell_slots": {
+                    "4": 2
+                }
+            }
+        },
+        {
+            "level": 9,
+            "spellcasting_progression": {
+                "cantrips_known": 3,
+                "spells_known": 10,
+                "spell_slots": {
+                    "5": 2
+                }
+            }
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_otherworldly_patron_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 10,
+                "spell_slots": {
+                    "5": 2
+                }
+            }
+        },
+        {
+            "level": 11,
+            "features": [
+                "trait_mystic_arcanum_6"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 11,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 12,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 11,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 13,
+            "features": [
+                "trait_mystic_arcanum_7"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 12,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_otherworldly_patron_feature"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 12,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_mystic_arcanum_8"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 13,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 16,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 13,
+                "spell_slots": {
+                    "5": 3
+                }
+            }
+        },
+        {
+            "level": 17,
+            "features": [
+                "trait_mystic_arcanum_9"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 14,
+                "spell_slots": {
+                    "5": 4
+                }
+            }
+        },
+        {
+            "level": 18,
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 14,
+                "spell_slots": {
+                    "5": 4
+                }
+            }
+        },
+        {
+            "level": 19,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 15,
+                "spell_slots": {
+                    "5": 4
+                }
+            }
+        },
+        {
+            "level": 20,
+            "features": [
+                "trait_eldritch_master"
+            ],
+            "spellcasting_progression": {
+                "cantrips_known": 4,
+                "spells_known": 15,
+                "spell_slots": {
+                    "5": 4
+                }
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "Bargainers with otherworldly powers who make mysterious pacts to unlock arcane secrets and wield eldritch magic.",
+        "full_text": "With a pseudodragon curled on his shoulder, a young elf in golden robes smiles warmly, weaving a magical charm into his honeyed words and bending the palace sentinel to his will.\nAs flames spring to life in her hands, a wizened human whispers the secret name of her demonic patron, infusing her spell with fiendish magic.\nShifting his gaze between a battered tome and the odd alignment of the stars overhead, a wild-eyed tiefling chants the mystic ritual that will open a doorway to a distant world\nWarlocks are seekers of the knowledge that lies hidden in the fabric of the multiverse, Through pacts made with mysterious beings of supernatural power, warlocks unlock magical effects both subtle and spectacular. Drawing on the ancient knowledge of beings such as fey nobles, demons, devils, hags, and alien entities of the Far Realm, warlocks piece together arcane secrets to bolster their own power,"
+    }
+}

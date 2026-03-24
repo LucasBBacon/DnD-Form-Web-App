@@ -1,756 +1,4969 @@
 [
-    {
-        "id": "class_barbarian",
-        "name": "Barbarian",
-        "hit_die": "1d12",
-        "proficiencies": {
-            "armor": [
-                "category_armor_light",
-                "category_armor_medium",
-                "category_armor_shield"
-            ],
-            "weapons": [
-                "category_weapon_simple",
-                "category_weapon_martial"
-            ],
-            "tools": [],
-            "saving_throws": [
-                "str",
-                "con"
-            ],
-            "skills": {
-                "count": 2,
-                "pool": [
-                    "skill_animal_handling",
-                    "skill_athletics",
-                    "skill_intimidation",
-                    "skill_nature",
-                    "skill_perception",
-                    "skill_survival"
-                ]
-            }
-        },
-        "multiclass_proficiencies": {
-            "armor": [
-                "category_armor_shield"
-            ],
-            "weapons": [
-                "category_weapon_simple",
-                "category_weapon_martial"
-            ],
-            "tools": [],
-            "skills": {}
-        },
-        "starting_equipment": {
-            "given": [
-                {
-                    "item_id": "pack_explorers",
-                    "quantity": 1
-                },
-                {
-                    "item_id": "weapon_javelin",
-                    "quantity": 4
-                }
-            ],
-            "choices": [
-                {
-                    "choose": 1,
-                    "options": [
-                        [
-                            {
-                                "item_id": "weapon_greataxe",
-                                "quantity": 1
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "category_weapon_martial_melee",
-                                "quantity": 1
-                            }
-                        ]
-                    ]
-                },
-                {
-                    "choose": 1,
-                    "options": [
-                        [
-                            {
-                                "item_id": "weapon_handaxe",
-                                "quantity": 2
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "category_weapon_simple",
-                                "quantity": 1
-                            }
-                        ]
-                    ]
-                }
-            ]
-        },
-        "subclass_info": {
-            "choice_level": 3,
-            "options_pool": "subclasses_barbarian"
-        },
-        "progression": {
-            "1": {
-                "features": [
-                    "trait_rage",
-                    "trait_unarmored_defense_barbarian"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": 2,
-                    "rage_damage_bonus": 2
-                }
-            },
-            "2": {
-                "features": [
-                    "trait_reckless_attack",
-                    "trait_danger_sense"
-                ]
-            },
-            "3": {
-                "features": [
-                    "trait_rage",
-                    "trait_primal_path"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": 3
-                }
-            },
-            "4": {
-                "level": 4,
-                "features": [
-                    "trait_ability_score_improvement"
-                ]
-            },
-            "5": {
-                "features": [
-                    "trait_extra_attack",
-                    "trait_fast_movement"
-                ]
-            },
-            "6": {
-                "features": [
-                    "trait_primal_path_feature"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": 4
-                }
-            },
-            "7": {
-                "features": [
-                    "trait_feral_instinct"
-                ]
-            },
-            "8": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ]
-            },
-            "9": {
-                "features": [
-                    "trait_rage",
-                    "trait_brutal_critical"
-                ],
-                "class_specific_scaling": {
-                    "rage_damage_bonus": 3,
-                    "brutal_critical_extra_die_count": 1
-                }
-            },
-            "10": {
-                "features": [
-                    "trait_primal_path_feature"
-                ]
-            },
-            "11": {
-                "features": [
-                    "trait_relentless_rage"
-                ]
-            },
-            "12": {
-                "features": [
-                    "trait_rage",
-                    "trait_ability_score_improvement"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": 5
-                }
-            },
-            "13": {
-                "features": [
-                    "trait_brutal_critical"
-                ],
-                "class_specific_scaling": {
-                    "brutal_critical_extra_die_count": 2
-                }
-            },
-            "14": {
-                "features": [
-                    "trait_primal_path_feature"
-                ]
-            },
-            "15": {
-                "features": [
-                    "trait_persistent_rage"
-                ]
-            },
-            "16": {
-                "features": [
-                    "trait_rage",
-                    "trait_ability_score_improvement"
-                ],
-                "class_specific_scaling": {
-                    "rage_damage_bonus": 4
-                }
-            },
-            "17": {
-                "features": [
-                    "trait_rage",
-                    "trait_brutal_critical"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": 6,
-                    "brutal_critical_extra_die_count": 3
-                }
-            },
-            "18": {
-                "features": [
-                    "trait_indomitable_might"
-                ]
-            },
-            "19": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ]
-            },
-            "20": {
-                "features": [
-                    "trait_rage",
-                    "trait_primal_champion"
-                ],
-                "class_specific_scaling": {
-                    "rage_number_of_rages": -1
-                }
-            }
-        }
+  {
+    "id": "class_barbarian",
+    "name": "Barbarian",
+    "hit_die": 12,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "str",
+        "con"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "animal_handling",
+          "athletics",
+          "intimidation",
+          "nature",
+          "perception",
+          "survival"
+        ]
+      }
     },
-    {
-        "id": "class_bard",
-        "name": "Bard",
-        "hit_die": "1d8",
-        "proficiencies": {
-            "armor": [
-                "category_armor_light"
-            ],
-            "weapons": [
-                "category_weapon_simple",
-                "weapon_hand_crossbow",
-                "weapon_longsword",
-                "weapon_rapier",
-                "weapon_shortsword"
-            ],
-            "tools": [
-                "category_musical_instrument",
-                "category_musical_instrument",
-                "category_musical_instrument"
-            ],
-            "saving_throws": [
-                "dex",
-                "cha"
-            ],
-            "skills": {
-                "count": 3,
-                "pool": [
-                    "skill_acrobatics",
-                    "skill_animal_handling",
-                    "skill_arcana",
-                    "skill_athletics",
-                    "skill_deception",
-                    "skill_history",
-                    "skill_insight",
-                    "skill_intimidation",
-                    "skill_investigation",
-                    "skill_medicine",
-                    "skill_nature",
-                    "skill_perception",
-                    "skill_performance",
-                    "skill_persuasion",
-                    "skill_religion",
-                    "skill_sleight_of_hand",
-                    "skill_stealth",
-                    "skill_survival"
-                ]
-            }
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "pack_explorers",
+          "quantity": 1
         },
-        "multiclass_proficiencies": {
-            "armor": [
-                "category_armor_light"
-            ],
-            "weapons": [],
-            "tools": [
-                "category_musical_instrument"
-            ],
-            "skills": {
-                "count": 1,
-                "pool": [
-                    "skill_acrobatics",
-                    "skill_animal_handling",
-                    "skill_arcana",
-                    "skill_athletics",
-                    "skill_deception",
-                    "skill_history",
-                    "skill_insight",
-                    "skill_intimidation",
-                    "skill_investigation",
-                    "skill_medicine",
-                    "skill_nature",
-                    "skill_perception",
-                    "skill_performance",
-                    "skill_persuasion",
-                    "skill_religion",
-                    "skill_sleight_of_hand",
-                    "skill_stealth",
-                    "skill_survival"
-                ]
-            }
-        },
-        "starting_equipment": {
-            "given": [
-                {
-                    "item_id": "armor_leather",
-                    "quantity": 1
-                },
-                {
-                    "item_id": "weapon_dagger",
-                    "quantity": 1
-                }
-            ],
-            "choices": [
-                {
-                    "choose": 1,
-                    "options": [
-                        [
-                            {
-                                "item_id": "weapon_rapier",
-                                "quantity": 1
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "weapon_longsword",
-                                "quantity": 1
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "category_weapon_simple",
-                                "quantity": 1
-                            }
-                        ]
-                    ]
-                },
-                {
-                    "choose": 1,
-                    "options": [
-                        [
-                            {
-                                "item_id": "pack_diplomats",
-                                "quantity": 1
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "pack_entertainers",
-                                "quantity": 1
-                            }
-                        ]
-                    ]
-                },
-                {
-                    "choose": 1,
-                    "options": [
-                        [
-                            {
-                                "item_id": "musical_instrument_lute",
-                                "quantity": 1
-                            }
-                        ],
-                        [
-                            {
-                                "item_id": "category_musical_instrument",
-                                "quantity": 1
-                            }
-                        ]
-                    ]
-                }
-            ]
-        },
-        "spellcasting_base": {
-            "ability": "cha",
-            "preparation_type": "known",
-            "ritual_casting": true
-        },
-        "subclass_info": {
-            "choice_level": 3,
-            "options_pool": "subclasses_bard"
-        },
-        "progression": {
-            "1": {
-                "features": [
-                    "trait_spellcasting_bard",
-                    "trait_bardic_inspiration"
-                ],
-                "class_specific_scaling": {
-                    "bardic_inspiration_die": "1d6"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 2,
-                    "spells_known": 4,
-                    "spell_slots": {
-                        "1": 2
-                    }
-                }
-            },
-            "2": {
-                "features": [
-                    "trait_jack_of_all_trades",
-                    "trait_song_of_rest"
-                ],
-                "class_specific_scaling": {
-                    "song_of_rest_extra_hp": "1d6"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 2,
-                    "spells_known": 5,
-                    "spell_slots": {
-                        "1": 3
-                    }
-                }
-            },
-            "3": {
-                "features": [
-                    "trait_bard_college",
-                    "trait_expertise"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 2,
-                    "spells_known": 6,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 2
-                    }
-                }
-            },
-            "4": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 7,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3
-                    }
-                }
-            },
-            "5": {
-                "features": [
-                    "trait_bardic_inspiration",
-                    "trait_font_of_inspiration"
-                ],
-                "class_specific_scaling": {
-                    "bardic_inspiration_die": "1d8"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 8,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 2
-                    }
-                }
-            },
-            "6": {
-                "features": [
-                    "trait_countercharm",
-                    "trait_bard_college_feature"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 9,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3
-                    }
-                }
-            },
-            "7": {
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 10,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 1
-                    }
-                }
-            },
-            "8": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 11,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 2
-                    }
-                }
-            },
-            "9": {
-                "features": [
-                    "trait_song_of_rest"
-                ],
-                "class_specific_scaling": {
-                    "song_of_rest_extra_hp": "1d8"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 3,
-                    "spells_known": 12,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 1
-                    }
-                }
-            },
-            "10": {
-                "features": [
-                    "trait_bardic_inspiration",
-                    "trait_expertise",
-                    "trait_magical_secrets"
-                ],
-                "class_specific_scaling": {
-                    "bardic_inspiration_die": "1d10"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 14,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2
-                    }
-                }
-            },
-            "11": {
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 15,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1
-                    }
-                }
-            },
-            "12": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 15,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1
-                    }
-                }
-            },
-            "13": {
-                "features": [
-                    "trait_song_of_rest"
-                ],
-                "class_specific_scaling": {
-                    "song_of_rest_extra_hp": "1d10"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 16,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1,
-                        "7": 1
-                    }
-                }
-            },
-            "14": {
-                "features": [
-                    "trait_magical_secrets",
-                    "trait_bard_college_feature"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 18,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1,
-                        "7": 1
-                    }
-                }
-            },
-            "15": {
-                "features": [
-                    "trait_bardic_inspiration"
-                ],
-                "class_specific_scaling": {
-                    "bardic_inspiration_die": "1d12"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 19,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1,
-                        "7": 1,
-                        "8": 1
-                    }
-                }
-            },
-            "16": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 19,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1,
-                        "7": 1,
-                        "8": 1
-                    }
-                }
-            },
-            "17": {
-                "features": [
-                    "trait_song_of_rest"
-                ],
-                "class_specific_scaling": {
-                    "song_of_rest_extra_hp": "1d12"
-                },
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 20,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 2,
-                        "6": 1,
-                        "7": 1,
-                        "8": 1,
-                        "9": 1
-                    }
-                }
-            },
-            "18": {
-                "features": [
-                    "trait_magical_secrets"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 22,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 3,
-                        "6": 1,
-                        "7": 1,
-                        "8": 1,
-                        "9": 1
-                    }
-                }
-            },
-            "19": {
-                "features": [
-                    "trait_ability_score_improvement"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 22,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 3,
-                        "6": 2,
-                        "7": 1,
-                        "8": 1,
-                        "9": 1
-                    }
-                }
-            },
-            "20": {
-                "features": [
-                    "trait_superior_inspiration"
-                ],
-                "spellcasting_progression": {
-                    "cantrips_known": 4,
-                    "spells_known": 22,
-                    "spell_slots": {
-                        "1": 4,
-                        "2": 3,
-                        "3": 3,
-                        "4": 3,
-                        "5": 3,
-                        "6": 2,
-                        "7": 2,
-                        "8": 1,
-                        "9": 1
-                    }
-                }
-            }
+        {
+          "item_id": "weapon_javelin",
+          "quantity": 4
         }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_greataxe",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_martial_melee",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_handaxe",
+                  "quantity": 2
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_barbarian"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_rage",
+          "trait_unarmored_defense_barbarian"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": 2,
+          "rage_damage_bonus": 2
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_reckless_attack",
+          "trait_danger_sense"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_rage",
+          "trait_primal_path"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": 3
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_extra_attack",
+          "trait_fast_movement"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_primal_path_feature"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": 4
+        }
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_feral_instinct"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "trait_rage",
+          "trait_brutal_critical"
+        ],
+        "class_specific_scaling": {
+          "rage_damage_bonus": 3,
+          "brutal_critical_extra_die_count": 1
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_primal_path_feature"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_relentless_rage"
+        ]
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_rage",
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": 5
+        }
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_brutal_critical"
+        ],
+        "class_specific_scaling": {
+          "brutal_critical_extra_die_count": 2
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_primal_path_feature"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_persistent_rage"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_rage",
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "rage_damage_bonus": 4
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_rage",
+          "trait_brutal_critical"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": 6,
+          "brutal_critical_extra_die_count": 3
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_indomitable_might"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_rage",
+          "trait_primal_champion"
+        ],
+        "class_specific_scaling": {
+          "rage_number_of_rages": -1
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Warriors defined by unbridled rage, channeling primal fury into uncanny reflexes, resilience, and combat strength.",
+      "full_text": "A tall human tribesman strides through a blizzard, draped in fur and hefting his axe. He laughs as he charges toward the frost giant who dared poach his people's elk herd.\nA half-orc snarls at the latest challenger to her authority over their savage tribe, ready to break his neck with her bare hands as she did to the last six rivals.\nFrothing at the mouth, a dwarf slams his helmet into the face of his drow foe, then turns to drive his armored elbow into the gut of another.\nThese barbarians, different as they might be, are defined by their rage: unbridled, unquenchable, and unthinking fury. More than a mere emotion, their anger is the ferocity of a cornered predator, the unrelenting assault of a storm, the churning turmoil of the sea.\nFor some, their rage springs from a communion with fierce animal spirits. Others draw from a roiling reservoir of anger at a world full of pain. For every barbarian, rage is a power that fuels not just a battle frenzy but also uncanny reflexes, resilience, and feats of strength."
     }
+  },
+  {
+    "id": "class_bard",
+    "name": "Bard",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "weapon_hand_crossbow",
+        "weapon_longsword",
+        "weapon_rapier",
+        "weapon_shortsword"
+      ],
+      "tools": [
+        "category_musical_instrument",
+        "category_musical_instrument",
+        "category_musical_instrument"
+      ],
+      "saving_throws": [
+        "dex",
+        "cha"
+      ],
+      "skills": {
+        "count": 3,
+        "pool": [
+          "acrobatics",
+          "animal_handling",
+          "arcana",
+          "athletics",
+          "deception",
+          "history",
+          "insight",
+          "intimidation",
+          "investigation",
+          "medicine",
+          "nature",
+          "perception",
+          "performance",
+          "persuasion",
+          "religion",
+          "sleight_of_hand",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [],
+      "tools": [
+        "category_musical_instrument"
+      ],
+      "skills": {
+        "count": 1,
+        "pool": [
+          "acrobatics",
+          "animal_handling",
+          "arcana",
+          "athletics",
+          "deception",
+          "history",
+          "insight",
+          "intimidation",
+          "investigation",
+          "medicine",
+          "nature",
+          "perception",
+          "performance",
+          "persuasion",
+          "religion",
+          "sleight_of_hand",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "armor_leather",
+          "quantity": 1
+        },
+        {
+          "item_id": "weapon_dagger",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_rapier",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_longsword",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_diplomats",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_entertainers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "musical_instrument_lute",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_musical_instrument",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "cha",
+      "preparation_type": "known",
+      "ritual_casting": true
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_bard"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_spellcasting_bard",
+          "trait_bardic_inspiration"
+        ],
+        "class_specific_scaling": {
+          "bardic_inspiration_die": "1d6"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 4,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_jack_of_all_trades",
+          "trait_song_of_rest"
+        ],
+        "class_specific_scaling": {
+          "song_of_rest_extra_hp": "1d6"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 5,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_bard_college",
+          "trait_expertise"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 6,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 7,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_bardic_inspiration",
+          "trait_font_of_inspiration"
+        ],
+        "class_specific_scaling": {
+          "bardic_inspiration_die": "1d8"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 8,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_countercharm",
+          "trait_bard_college_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 9,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 7,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 10,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 11,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "features": [
+          "trait_song_of_rest"
+        ],
+        "class_specific_scaling": {
+          "song_of_rest_extra_hp": "1d8"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 12,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_bardic_inspiration",
+          "trait_expertise",
+          "trait_magical_secrets"
+        ],
+        "class_specific_scaling": {
+          "bardic_inspiration_die": "1d10"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 14,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_song_of_rest"
+        ],
+        "class_specific_scaling": {
+          "song_of_rest_extra_hp": "1d10"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 16,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_magical_secrets",
+          "trait_bard_college_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 18,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_bardic_inspiration"
+        ],
+        "class_specific_scaling": {
+          "bardic_inspiration_die": "1d12"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 19,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 19,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_song_of_rest"
+        ],
+        "class_specific_scaling": {
+          "song_of_rest_extra_hp": "1d12"
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 20,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_magical_secrets"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 22,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 22,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_superior_inspiration"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 22,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Masters of words and music who weave magic to inspire allies, manipulate minds, and reshape reality.",
+      "full_text": "Humming as she traces her fingers over an ancient monument in a long-forgotten ruin, a half-elf in rugged leathers finds knowledge springing into her mind, conjured forth by the magic of her song-knowledge of the people who constructed the monument and the mythic saga it depicts.\nA stern human warrior bangs his sword rhythmically against his scale mail, setting the tempo for his war chant and exhorting his companions to bravery and heroism.The magic of his song fortifies and emboldens them.\nLaughing as she tunes her cittern, a gnome weaves her subtle magic over the assembled nobles, ensuring that her companions' words will be well received.\nWhether scholar, skald, oor scoundrel, a bard weaves magic through words and music to inspire allies, demoralize foes, manipulate minds, create illusions, and even heal wounds."
+    }
+  },
+  {
+    "id": "class_cleric",
+    "name": "Cleric",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "history",
+          "insight",
+          "medicine",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "category_armor_shield",
+          "quantity": 1
+        },
+        {
+          "item_id": "category_holy_symbol",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_mace",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_warhammer",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_scale_mail",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_leather",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_chain_mail",
+                  "quantity": 1,
+                  "condition": "proficiency_category_armor_heavy"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_light_crossbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_crossbow_bolt",
+                  "quantity": 20
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_priests",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "wis",
+      "preparation_type": "prepared",
+      "ritual_casting": true
+    },
+    "subclass_info": {
+      "choice_level": 1,
+      "options_pool": "subclasses_cleric"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_spellcasting_cleric",
+          "trait_divine_domain"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_channel_divinity",
+          "trait_divine_domain_feature"
+        ],
+        "class_specific_scaling": {
+          "channel_divinity_uses_between_rests": 1
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 3,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_destroy_undead"
+        ],
+        "class_specific_scaling": {
+          "destroy_undead_max_cr": 0.5
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_channel_divinity",
+          "trait_divine_domain_feature"
+        ],
+        "class_specific_scaling": {
+          "channel_divinity_uses_between_rests": 2
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 7,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement",
+          "trait_destroy_undead",
+          "trait_divine_domain_feature"
+        ],
+        "class_specific_scaling": {
+          "destroy_undead_max_cr": 1
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_divine_intervention"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_destroy_undead"
+        ],
+        "class_specific_scaling": {
+          "destroy_undead_max_cr": 2
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 13,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_destroy_undead"
+        ],
+        "class_specific_scaling": {
+          "destroy_undead_max_cr": 3
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_destroy_undead",
+          "trait_divine_domain_feature"
+        ],
+        "class_specific_scaling": {
+          "destroy_undead_max_cr": 4
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_channel_divinity"
+        ],
+        "class_specific_scaling": {
+          "channel_divinity_uses_between_rests": 3
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_divine_intervention_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Divine intermediaries imbued with godly power, channeling miracles to heal the wounded and smite the wicked.",
+      "full_text": "Arms and eyes upraised toward the sun and a prayer on his lips, an elf begins to glow with an inner light that spills out to heal his battle-worn companions.\nChanting a song of glory, a dwarf swings his axe in wide swaths to cut through the ranks of orcs arrayed against him, shouting praise to the gods with every foe's fall.\nCalling down a curse upon the forces of undeath, a human lifts her holy symbol as light pours from it to drive back the zombies crowding in on her companions.\nClerics are intermediaries between the mortal world and the distant planes of the gods. As varied as the gods they serve, clerics strive to embody the handiwork of their deities. No ordinary priest, a cleric is imbued with divine magic."
+    }
+  },
+  {
+    "id": "class_druid",
+    "name": "Druid",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light_no_metal",
+        "category_armor_medium_no_metal",
+        "category_armor_shield_no_metal"
+      ],
+      "weapons": [
+        "weapon_club",
+        "weapon_dagger",
+        "weapon_dart",
+        "weapon_javelin",
+        "weapon_mace",
+        "weapon_quarterstaff",
+        "weapon_scimitar",
+        "weapon_sickle",
+        "weapon_sling",
+        "weapon_spear"
+      ],
+      "tools": [
+        "tool_herbalism_kit"
+      ],
+      "saving_throws": [
+        "int",
+        "wis"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "arcana",
+          "animal_handling",
+          "insight",
+          "medicine",
+          "nature",
+          "perception",
+          "religion",
+          "survival"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light_no_metal",
+        "category_armor_medium_no_metal",
+        "category_armor_shield_no_metal"
+      ],
+      "weapons": [],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "armor_leather",
+          "quantity": 1
+        },
+        {
+          "item_id": "pack_explorers",
+          "quantity": 1
+        },
+        {
+          "item_id": "category_druidic_focus",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_shield_wooden",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_scimitar",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple_melee",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "wis",
+      "preparation_type": "prepared",
+      "ritual_casting": true
+    },
+    "subclass_info": {
+      "choice_level": 2,
+      "options_pool": "subclasses_druid"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_druidic",
+          "trait_spellcasting_druid"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_wild_shape",
+          "trait_druid_circle"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 3,
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_wild_shape_improvement",
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "wild_shape_max_cr": 0.5,
+          "wild_shape_limitations": [
+            "no_flying_speed"
+          ]
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_druid_circle_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 7,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_wild_shape_improvement",
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "wild_shape_max_cr": 1,
+          "wild_shape_limitations": []
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_druid_circle_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 13,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_druid_circle_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 17,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_timeless_body",
+          "trait_beast_spells"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_archdruid"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "One with nature's primal forces, druids command the elements and take animal form as extensions of nature's will.",
+      "full_text": "Holding high a gnarled staff wreathed with holly, an elf summons the fury of the storm and calls down explosive bolts of lightning to smite the torch-carrying orcs who threaten her forest.\nCrouching out of sight on a high tree branch in the form of a leopard, a human peers out of the jungle at the strange construction of a temple of Evil Elemental Air, keeping a close eye on lhe cultists' activities.\nSwinging a blade formed of pure fire, a half-elf charges into a mass of skeletal soldiers, sundering the unnatural magic that gives the foul creatures the mocking semblance of life.\nWhether calling on lhe elemental forces of nature or emulating the creatures of the animal world, druids are an embodiment of nature's resilience, cunning, and fury. They claim no mastery over nature. Instead, they see themselves as extensions of nature's indomitable will."
+    }
+  },
+  {
+    "id": "class_fighter",
+    "name": "Fighter",
+    "hit_die": 10,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_heavy",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "str",
+        "con"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "acrobatics",
+          "animal_handling",
+          "athletics",
+          "history",
+          "insight",
+          "intimidation",
+          "perception",
+          "survival"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_chain_mail",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_leather",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_longbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_arrow",
+                  "quantity": 20
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_martial",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "category_armor_shield",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_martial",
+                  "quantity": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_light_crossbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_crossbow_bolt",
+                  "quantity": 20
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_handaxe",
+                  "quantity": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_fighter"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_fighting_style",
+          "trait_second_wind"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_action_surge"
+        ],
+        "class_specific_scaling": {
+          "action_surge_use_count": 1
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_martial_archetype"
+        ]
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_extra_attack"
+        ],
+        "class_specific_scaling": {
+          "extra_attack_count": 1
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_martial_archetype_feature"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 9,
+        "features": [
+          "trait_indomitable"
+        ],
+        "class_specific_scaling": {
+          "indomitable_use_count": 1
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_martial_archetype_feature"
+        ]
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_extra_attack"
+        ],
+        "class_specific_scaling": {
+          "extra_attack_count": 2
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_indomitable"
+        ],
+        "class_specific_scaling": {
+          "indomitable_use_count": 2
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_martial_archetype_feature"
+        ]
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_action_surge",
+          "trait_indomitable"
+        ],
+        "class_specific_scaling": {
+          "action_surge_use_count": 2,
+          "indomitable_use_count": 3
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_martial_archetype_feature"
+        ]
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ]
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_extra_attack"
+        ],
+        "class_specific_scaling": {
+          "extra_attack_count": 3
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Versatile masters of combat with unparalleled skill in weaponry, armor, and the tactical knowledge of warfare.",
+      "full_text": "A human in clanging plate armor holds her shield before her as she runs toward the massed goblins. An elf behind her, clad in studded leather armor, peppers the goblins with arrows loosed from his exquisite bow. The half-orc nearby shouts orders, helping the two combatants coordinate their assault to the best advantage.\nA dwarf in chain mail interposes his shield between the ogre's club and his companion, knocking the deadly blow aside. His companion, a half-elf in scale armor, swings two scimitars in a blinding whirl as she circles the ogre, looking for a blind spot in its defenses.\nA gladiator fights for sport in an arena, a master with his trident and net, skilled at toppling foes and moving them around for the crowd's delight-and his own tactical advantage. His opponent's sword flares with blue light an instant before she sends lightning flashing forth to smite him.\nAll of these heroes are fighters, perhaps the most diverse class of characters in the worlds of Dungeons & Dragons. Questing knights, conquering overlords, royal champions, elite foot soldiers, hardened mercenaries, and bandit kings-as fighters, they all share an unparalleled mastery with weapons and armor, and a thorough knowledge of the skills of combat. And they are well acquainted with death, both meting it out and staring it defiantly in the face."
+    }
+  },
+  {
+    "id": "class_monk",
+    "name": "Monk",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "category_weapon_simple",
+        "weapon_shortsword"
+      ],
+      "tools": [
+        "category_artisans_tools",
+        "category_musical_instrument"
+      ],
+      "saving_throws": [
+        "str",
+        "dex"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "acrobatics",
+          "athletics",
+          "history",
+          "insight",
+          "religion",
+          "stealth"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [],
+      "weapons": [
+        "category_weapon_simple",
+        "weapon_shortsword"
+      ],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "weapon_dart",
+          "quantity": 10
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_shortsword",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_monk"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_unarmored_defense_monk",
+          "trait_martial_arts"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d4",
+          "ki_points": 0,
+          "unarmored_movement_bonus": 0
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_ki",
+          "trait_unarmored_movement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d4",
+          "ki_points": 2,
+          "unarmored_movement_bonus": 10
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_monastic_tradition",
+          "trait_deflect_missiles"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d4",
+          "ki_points": 3,
+          "unarmored_movement_bonus": 10
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement",
+          "trait_slow_fall"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d4",
+          "ki_points": 4,
+          "unarmored_movement_bonus": 10
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_extra_attack",
+          "trait_stunning_strike"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 5,
+          "unarmored_movement_bonus": 10
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_ki_empowered_strikes",
+          "trait_monastic_tradition_feature"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 6,
+          "unarmored_movement_bonus": 15
+        }
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_evasion_monk",
+          "trait_stillness_of_mind"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 7,
+          "unarmored_movement_bonus": 15
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 8,
+          "unarmored_movement_bonus": 15
+        }
+      },
+      {
+        "level": 9,
+        "features": [
+          "trait_unarmored_movement_improvement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 9,
+          "unarmored_movement_bonus": 15
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_purity_of_body"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d6",
+          "ki_points": 10,
+          "unarmored_movement_bonus": 20
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_monastic_tradition_feature"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 11,
+          "unarmored_movement_bonus": 20
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 12,
+          "unarmored_movement_bonus": 20
+        }
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_tongue_of_the_sun_and_moon"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 13,
+          "unarmored_movement_bonus": 20
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_diamond_soul"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 14,
+          "unarmored_movement_bonus": 25
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_timeless_body"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 15,
+          "unarmored_movement_bonus": 25
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d8",
+          "ki_points": 16,
+          "unarmored_movement_bonus": 25
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_monastic_tradition_feature"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d10",
+          "ki_points": 17,
+          "unarmored_movement_bonus": 25
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_empty_body"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d10",
+          "ki_points": 18,
+          "unarmored_movement_bonus": 30
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d10",
+          "ki_points": 19,
+          "unarmored_movement_bonus": 30
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_perfect_self"
+        ],
+        "class_specific_scaling": {
+          "martial_arts_dice": "1d10",
+          "ki_points": 20,
+          "unarmored_movement_bonus": 30
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Disciplined warriors who harness mystical inner energy to strike swiftly and defend with supernatural grace.",
+      "full_text": "Her fists a blur as they deflect an incoming hail of arrows, a half-elf springs over a barricade and throws herself into the massed ranks of hobgoblins on the other side. She whirls among them, knocking their blows aside and sending them reeling, until at last she stands alone.\nTaking a deep breath. a human covered in tattoos settles into a battle stance. As the first charging orcs reach him, he exhales and a blast of fire roars from his mouth, engulfing his foes.\nMoving with the silence of the night, a black-clad halfling steps into a shadow beneath an arch and emerges from another inky shadow on a balcony a stone's throw away. She slides her blade free of its cloth wrapped scabbard and peers through the open window at the tyrant prince, so vulnerable in the grip of sleep.\nWhatever their discipline, monks are united in their ability to magically harness the energy that flows in their bodies. Whether channeled as a striking display of combat prowess or a subtler focus of defensive ability and speed, this energy infuses all that a monk does."
+    }
+  },
+  {
+    "id": "class_paladin",
+    "name": "Paladin",
+    "hit_die": 10,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_heavy",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "athletics",
+          "insight",
+          "intimidation",
+          "medicine",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "armor_chain_mail",
+          "quantity": 1
+        },
+        {
+          "item_id": "category_holy_symbol",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_martial",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "category_armor_shield",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_martial",
+                  "quantity": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_javelin",
+                  "quantity": 5
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple_melee",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_priests",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "cha",
+      "preparation_type": "prepared",
+      "ritual_casting": false
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_paladin"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_divine_sense",
+          "trait_lay_on_hands"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_fighting_style",
+          "trait_divine_smite"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_divine_health",
+          "trait_sacred_oath"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_extra_attack"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_aura_of_protection"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_sacred_oath_feature"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 9,
+        "features": [],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_aura_of_courage"
+        ],
+        "class_specific_scaling": {},
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_improved_divine_strike"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 13,
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_cleansing_touch"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_sacred_oath_feature"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 17,
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_aura_improvements"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_sacred_oath_feature"
+        ],
+        "spellcasting_progression": {
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Holy warriors bound by sacred oaths, wielding divine power to stand against evil as blessed champions.",
+      "full_text": "Clad in plate armor that gleams in the sunlight despite the dust and grime of long travel, a human lays down her sword and shield and places her hands on a mortally wounded man. Divine radiance shines from her hands, the man's wounds knit closed, and his eyes open wide with amazement.\nA dwarf crouches behind an outcrop, his black cloak making him nearly invisible in the night, and watches an orc war band celebrating its recent victory. Silently, he stalks into their midst and whispers an oath, and two orcs are dead before they even realize he is there.\nSilver hair shining in a shaft of light that seems to illuminate only him, an elf laughs with exultation. His spear flashes like his eyes as he jabs again and again at a twisted giant, until at last his light overcomes its hideous darkness.\nWhatever their origin and their mission, paladins are united by their oaths to stand against the forces of evil. Whether sworn before a god's altar and the witness of a priest, in a sacred glade before nature spirits and fey beings, or in a moment of desperation and grief with the dead as the only witness, a paladin's oath is a powerful bond. It is a source of power that turns a devout warrior into a blessed champion."
+    }
+  },
+  {
+    "id": "class_ranger",
+    "name": "Ranger",
+    "hit_die": 10,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "str",
+        "dex"
+      ],
+      "skills": {
+        "count": 3,
+        "pool": [
+          "animal_handling",
+          "athletics",
+          "insight",
+          "investigation",
+          "nature",
+          "perception",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light",
+        "category_armor_medium",
+        "category_armor_shield"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "category_weapon_martial"
+      ],
+      "tools": [],
+      "skills": {
+        "count": 1,
+        "pool": [
+          "animal_handling",
+          "athletics",
+          "insight",
+          "investigation",
+          "nature",
+          "perception",
+          "stealth",
+          "survival"
+        ]
+      }
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "weapon_longbow",
+          "quantity": 1
+        },
+        {
+          "item_id": "weapon_arrow",
+          "quantity": 20
+        },
+        {
+          "item_id": "pack_quiver",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_scale",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "armor_leather",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_shortsword",
+                  "quantity": 2
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "wis",
+      "preparation_type": "known",
+      "ritual_casting": false
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_ranger"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_favored_enemy",
+          "trait_natural_explorer"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_fighting_style",
+          "trait_spellcasting_ranger"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 2,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_ranger_archetype",
+          "trait_primeval_awareness"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 3,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 3,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_extra_attack"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_favored_enemy_improvement",
+          "trait_natural_explorer_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_ranger_archetype_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement",
+          "trait_lands_stride"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 9,
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 6,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_natural_explorer_improvement",
+          "trait_hide_in_plain_sight"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 6,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_ranger_archetype_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 7,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 7,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 13,
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 8,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_favored_enemy_improvement",
+          "trait_vanish"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 8,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_ranger_archetype_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 9,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 9,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 17,
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 10,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_feral_senses"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 10,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 11,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_foe_slayer"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 0,
+          "spells_known": 11,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Solitary scouts and hunters who keep watch over the wilderness, expert in bow, survival, and protective magic.",
+      "full_text": "Rough and wild looking, a human stalks alone through the shadows of trees, hunting the orcs he knows are planning a raid on a nearby farm. Clutching a shortsword in each hand, he becomes a whirlwind of steel, cutting down one enemy after another.\nAfter tumbling away from a cone of freezing air, an elf finds her feet and draws back her bow to loose an arrow aI the white dragon. Shrugging off the wave of fear that emanates from the dragon like the cold of its breath, she sends one arrow after another to find the gaps between the dragon's thick scales.\nHolding his hand high, a half-elf whistles to the hawk that circles high above him, calling the bird back to his side. Whispering instructions in Elvish, he points to the owlbear he's been tracking and sends the hawk to distract the creature while he readies his bow.\nFar from the bustle of cities and towns, past the hedges that shelter the most distant farms from the terrors of the wild, amid the dense-packed trees of trackless forests and across wide and empty plains, rangers keep their unending watch."
+    }
+  },
+  {
+    "id": "class_rogue",
+    "name": "Rogue",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [
+        "category_weapon_simple",
+        "weapon_hand_crossbow",
+        "weapon_longsword",
+        "weapon_rapier",
+        "weapon_shortsword"
+      ],
+      "tools": [
+        "tool_thieves_tools"
+      ],
+      "saving_throws": [
+        "dex",
+        "int"
+      ],
+      "skills": {
+        "count": 4,
+        "pool": [
+          "acrobatics",
+          "athletics",
+          "deception",
+          "insight",
+          "intimidation",
+          "investigation",
+          "perception",
+          "performance",
+          "persuasion",
+          "sleight_of_hand",
+          "stealth"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [],
+      "tools": [
+        "tool_thieves_tools"
+      ],
+      "skills": {
+        "count": 1,
+        "pool": [
+          "acrobatics",
+          "athletics",
+          "deception",
+          "insight",
+          "intimidation",
+          "investigation",
+          "perception",
+          "performance",
+          "persuasion",
+          "sleight_of_hand",
+          "stealth"
+        ]
+      }
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "armor_leather",
+          "quantity": 1
+        },
+        {
+          "item_id": "weapon_dagger",
+          "quantity": 2
+        },
+        {
+          "item_id": "tool_thieves_tools",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_rapier",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_shortsword",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_shortbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_arrow",
+                  "quantity": 20
+                },
+                {
+                  "item_id": "pack_quiver",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_shortsword",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_burglars",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "subclass_info": {
+      "choice_level": 3,
+      "options_pool": "subclasses_rogue"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_expertise",
+          "trait_sneak_attack",
+          "trait_thieves_cant"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "1d6"
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cunning_action"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "1d6"
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_roguish_archetype"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "2d6"
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "2d6"
+        }
+      },
+      {
+        "level": 5,
+        "features": [
+          "trait_uncanny_dodge"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "3d6"
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_expertise"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "3d6"
+        }
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_evasion_rogue"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "4d6"
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "4d6"
+        }
+      },
+      {
+        "level": 9,
+        "features": [
+          "trait_roguish_archetype_feature"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "5d6"
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "5d6"
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_reliable_talent"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "6d6"
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "6d6"
+        }
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_roguish_archetype_feature"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "7d6"
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_blindsense"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "7d6"
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_slippery_mind"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "8d6"
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "8d6"
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_roguish_archetype_feature"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "9d6"
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_elusive"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "9d6"
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "10d6"
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_stroke_of_luck"
+        ],
+        "class_specific_scaling": {
+          "sneak_attack_dice": "10d6"
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Cunning masters of stealth and skill who exploit vulnerabilities and find elegant solutions to any problem.",
+      "full_text": "Signaling for her companions to wait, a halfling creeps forward through the dungeon hall. She presses an ear to the door, then pulls out a set of tools and picks the lock in the blink of an eye. Then she disappears into the shadows as her fighter friend moves forward to kick the door open.\nA human lurks in the shadows of an alley while his accomplice prepares for her part in the ambush. When their target-a notorious slaver-passes the alleyway, the accomplice cries out, the slaver comes to investigate, and the assassin's blade cuts his throat before he can make a sound.\nSuppressing a giggle, a gnome waggles her fingers and magically lifts the key ring from the guard's belt. In a moment, the keys are in her hand, the cell door is open, and she and her companions are free to make their escape.\nRogues rely on skill, stealth, and their foes' vulnerabilities to get the upper hand in any situation. They have a knack for finding the solution to just about any problem, demonstrating a resourcefulness and versatility that is the cornerstone of any successful adventuring party."
+    }
+  },
+  {
+    "id": "class_sorcerer",
+    "name": "Sorcerer",
+    "hit_die": 6,
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "weapon_dagger",
+        "weapon_dart",
+        "weapon_sling",
+        "weapon_quarterstaff",
+        "weapon_light_crossbow"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "con",
+        "cha"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "arcana",
+          "deception",
+          "insight",
+          "intimidation",
+          "persuasion",
+          "religion"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [],
+      "weapons": [],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "weapon_dagger",
+          "quantity": 2
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_light_crossbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_crossbow_bolt",
+                  "quantity": 20
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "gear_component_pouch",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_arcane_focus",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "cha",
+      "preparation_type": "known",
+      "ritual_casting": false
+    },
+    "subclass_info": {
+      "choice_level": 1,
+      "options_pool": "subclasses_sorcerer"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_spellcasting_sorcerer",
+          "trait_sorcerous_origin"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 2,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_font_of_magic"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 2
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 3,
+          "spell_slots": {
+            "1": 3
+          }
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_metamagic"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 3
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 4,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 4
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 5,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 5,
+        "class_specific_scaling": {
+          "sorcery_points": 5
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 6,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_sorcerous_origin_feature"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 6
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 7,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 7,
+        "features": [],
+        "class_specific_scaling": {
+          "sorcery_points": 7
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 8,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 8
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 9,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "class_specific_scaling": {
+          "sorcery_points": 9
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 10,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_metamagic"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 10
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 11,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "class_specific_scaling": {
+          "sorcery_points": 11
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 12,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 12
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 12,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 13,
+        "class_specific_scaling": {
+          "sorcery_points": 13
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 13,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_sorcerous_origin_feature"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 14
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 13,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "class_specific_scaling": {
+          "sorcery_points": 15
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 14,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 16
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 14,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_metamagic"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 17
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_sorcerous_origin_feature"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 18
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 19
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_sorcerous_restoration"
+        ],
+        "class_specific_scaling": {
+          "sorcery_points": 20
+        },
+        "spellcasting_progression": {
+          "cantrips_known": 6,
+          "spells_known": 15,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Born with innate magical power from exotic bloodlines or cosmic forces, sorcerers channel raw arcane energy.",
+      "full_text": "Golden eyes flashing, a human stretches out her hand and unleashes the dragonfire that burns in her veins. As an inferno rages around her foes, leathery wings spread from her back and she takes to the air.\nLong hair whipped bya conjured wind, a half.elf spreads his arms wide and throws his head back. Lifting him momentarily off the ground. a wave of magic surges up in him, through him, and out from him in a mighty blast of lightning.\nCrouching behind a stalagmite, a halfling points a finger at a charging troglodyte. A blast of fire springs from her finger to strike the creature. She ducks back behind the rock formation with a grin, unaware that her wild magic has turned her skin bright blue.\nSorcerers carry a magical birthright conferred upon them by an exotic bloodline, some otherworldly influence. or exposure to unknown cosmic forces. One can't study sorcery as one learns a language, any more than one can learn to live a legendary life. No one chooses sorcery; the power chooses the sorcerer."
+    }
+  },
+  {
+    "id": "class_warlock",
+    "name": "Warlock",
+    "hit_die": 8,
+    "proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [
+        "category_weapon_simple"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "wis",
+        "cha"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "arcana",
+          "deception",
+          "history",
+          "intimidation",
+          "investigation",
+          "investigation",
+          "nature",
+          "religion"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [
+        "category_armor_light"
+      ],
+      "weapons": [
+        "category_weapon_simple"
+      ],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "armor_leather",
+          "quantity": 1
+        },
+        {
+          "item_id": "weapon_dagger",
+          "quantity": 2
+        },
+        {
+          "item_id": "category_weapon_simple",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_light_crossbow",
+                  "quantity": 1
+                },
+                {
+                  "item_id": "weapon_crossbow_bolt",
+                  "quantity": 20
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_weapon_simple",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "gear_component_pouch",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_arcane_focus",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_scholars",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_dungeoneers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "cha",
+      "preparation_type": "pact",
+      "ritual_casting": false
+    },
+    "subclass_info": {
+      "choice_level": 1,
+      "options_pool": "subclasses_warlock"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_otherworldly_patron",
+          "trait_pact_magic"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 2,
+          "spell_slots": {
+            "1": 1
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_eldritch_invocations"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 3,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_pact_boon"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 2,
+          "spells_known": 4,
+          "spell_slots": {
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 5,
+          "spell_slots": {
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 5,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 6,
+          "spell_slots": {
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_otherworldly_patron_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 7,
+          "spell_slots": {
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 7,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 8,
+          "spell_slots": {
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 9,
+          "spell_slots": {
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 10,
+          "spell_slots": {
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_otherworldly_patron_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 10,
+          "spell_slots": {
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "features": [
+          "trait_mystic_arcanum_6"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 11,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 11,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 13,
+        "features": [
+          "trait_mystic_arcanum_7"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 12,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_otherworldly_patron_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 12,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_mystic_arcanum_8"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 13,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 13,
+          "spell_slots": {
+            "5": 3
+          }
+        }
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_mystic_arcanum_9"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 14,
+          "spell_slots": {
+            "5": 4
+          }
+        }
+      },
+      {
+        "level": 18,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 14,
+          "spell_slots": {
+            "5": 4
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 15,
+          "spell_slots": {
+            "5": 4
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_eldritch_master"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 15,
+          "spell_slots": {
+            "5": 4
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Bargainers with otherworldly powers who make mysterious pacts to unlock arcane secrets and wield eldritch magic.",
+      "full_text": "With a pseudodragon curled on his shoulder, a young elf in golden robes smiles warmly, weaving a magical charm into his honeyed words and bending the palace sentinel to his will.\nAs flames spring to life in her hands, a wizened human whispers the secret name of her demonic patron, infusing her spell with fiendish magic.\nShifting his gaze between a battered tome and the odd alignment of the stars overhead, a wild-eyed tiefling chants the mystic ritual that will open a doorway to a distant world\nWarlocks are seekers of the knowledge that lies hidden in the fabric of the multiverse, Through pacts made with mysterious beings of supernatural power, warlocks unlock magical effects both subtle and spectacular. Drawing on the ancient knowledge of beings such as fey nobles, demons, devils, hags, and alien entities of the Far Realm, warlocks piece together arcane secrets to bolster their own power,"
+    }
+  },
+  {
+    "id": "class_wizard",
+    "name": "Wizard",
+    "hit_die": 6,
+    "proficiencies": {
+      "armor": [],
+      "weapons": [
+        "weapon_dagger",
+        "weapon_dart",
+        "weapon_sling",
+        "weapon_quarterstaff",
+        "weapon_light_crossbow"
+      ],
+      "tools": [],
+      "saving_throws": [
+        "int",
+        "wis"
+      ],
+      "skills": {
+        "count": 2,
+        "pool": [
+          "arcana",
+          "history",
+          "insight",
+          "investigation",
+          "medicine",
+          "religion"
+        ]
+      }
+    },
+    "multiclass_proficiencies": {
+      "armor": [],
+      "weapons": [],
+      "tools": [],
+      "skills": {}
+    },
+    "starting_equipment": {
+      "given": [
+        {
+          "item_id": "magic_item_spellbook",
+          "quantity": 1
+        }
+      ],
+      "choices": [
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_quarterstaff",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "weapon_dagger",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "gear_component_pouch",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "category_arcane_focus",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "choose": 1,
+          "options": [
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_scholars",
+                  "quantity": 1
+                }
+              ]
+            },
+            {
+              "equipment_bundle": [
+                {
+                  "item_id": "pack_explorers",
+                  "quantity": 1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "spellcasting_base": {
+      "ability": "int",
+      "preparation_type": "prepared",
+      "ritual_casting": true
+    },
+    "subclass_info": {
+      "choice_level": 2,
+      "options_pool": "subclasses_wizard"
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_spellcasting_wizard",
+          "trait_arcane_recovery"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 6,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_arcane_tradition"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 8,
+          "spell_slots": {
+            "1": 2
+          }
+        }
+      },
+      {
+        "level": 3,
+        "spellcasting_progression": {
+          "cantrips_known": 3,
+          "spells_known": 10,
+          "spell_slots": {
+            "1": 4,
+            "2": 2
+          }
+        }
+      },
+      {
+        "level": 4,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 12,
+          "spell_slots": {
+            "1": 4,
+            "2": 3
+          }
+        }
+      },
+      {
+        "level": 5,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 14,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 2
+          }
+        }
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_arcane_tradition_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 16,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3
+          }
+        }
+      },
+      {
+        "level": 7,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 18,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 1
+          }
+        }
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 20,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          }
+        }
+      },
+      {
+        "level": 9,
+        "spellcasting_progression": {
+          "cantrips_known": 4,
+          "spells_known": 22,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 1
+          }
+        }
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_arcane_tradition_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 24,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          }
+        }
+      },
+      {
+        "level": 11,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 26,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 12,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 26,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          }
+        }
+      },
+      {
+        "level": 13,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 28,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_arcane_tradition_feature"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 30,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1
+          }
+        }
+      },
+      {
+        "level": 15,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 32,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 16,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 34,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1
+          }
+        }
+      },
+      {
+        "level": 17,
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 36,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 2,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_spell_mastery"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 38,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 1,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 19,
+        "features": [
+          "trait_ability_score_improvement"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 40,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 1,
+            "8": 1,
+            "9": 1
+          }
+        }
+      },
+      {
+        "level": 20,
+        "features": [
+          "trait_signature_spell"
+        ],
+        "spellcasting_progression": {
+          "cantrips_known": 5,
+          "spells_known": 42,
+          "spell_slots": {
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 3,
+            "5": 3,
+            "6": 2,
+            "7": 2,
+            "8": 1,
+            "9": 1
+          }
+        }
+      }
+    ],
+    "lore": {
+      "short_description": "Scholarly mages who research and master arcane magic through rigorous study and discipline.",
+      "full_text": "Clad in the silver robes that denote her station, an elf closes her eyes to shut out the distractions of the battlefield and begins her quiet chant. Fingers weaving in front of her, she completes her spell and launches a tiny bead of tire toward the enemy ranks, where it erupts into a conflagration that engulfs the soldiers.\nChecking and rechecking his work, a human scribes an intricate magic circle in chalk on the bare stone floor, then sprinkles powdered iron along every line and graceful curve. When the circle is complete, he drones a long incantation. A hole opens in space inside the circle, bringing a whiff of brimstone from the otherworldly plane beyond.\nCrouching on the floor in a dungeon intersection, a gnome tosses a handful of small bones inscribed with mystic symbols, muttering a few words of power over them. Closing his eyes to see the visions more clearly, he nods slowly, then opens his eyes and points down the passage to his left.\nWizards are supreme magic-users, defined and united as a class by the spells they cast. Drawing on the subtle weave of magic that permeates the cosmos, wizards cast spells of explosive tire, arcing lightning, subtle deception, and brute=force mind control. Their magic conjures monsters from other planes of existence, glimpses the future, or turns slain foes into zombies. Their mightiest spells change one substance into another, call meteors down from the sky, or open portals to other worlds."
+    }
+  }
 ]

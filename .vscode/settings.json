@@ -1,8 +1,13 @@
 {
     "cSpell.words": [
+        "archdruid",
+        "blindsense",
         "countercharm",
         "darkvision",
         "dragonborn",
+        "dragonfire",
+        "drow",
+        "dungeoneers",
         "dwarven",
         "dwarvish",
         "greataxe",
@@ -10,13 +15,20 @@
         "halflings",
         "handaxe",
         "longsword",
+        "metamagic",
         "multiclass",
+        "owlbear",
+        "pseudodragon",
+        "shortbow",
         "shortsword",
         "spellbook",
+        "spellbooks",
         "Spellcasting",
         "tiefling",
         "tieflings",
-        "unprepare"
+        "undeath",
+        "unprepare",
+        "warhammer"
     ],
     "json.schemas": [
         {
@@ -24,6 +36,12 @@
                 "races/*_race.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/race_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "classes/*_class.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/class_data_schema.json"
         }
     ]
 }

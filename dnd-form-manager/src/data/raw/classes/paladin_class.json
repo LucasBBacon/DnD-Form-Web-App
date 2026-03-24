@@ -1,0 +1,393 @@
+{
+    "id": "class_paladin",
+    "name": "Paladin",
+    "hit_die": 10,
+    "proficiencies": {
+        "armor": [
+            "category_armor_light",
+            "category_armor_medium",
+            "category_armor_heavy",
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "saving_throws": [
+            "wis",
+            "cha"
+        ],
+        "skills": {
+            "count": 2,
+            "pool": [
+                "athletics",
+                "insight",
+                "intimidation",
+                "medicine",
+                "persuasion",
+                "religion"
+            ]
+        }
+    },
+    "multiclass_proficiencies": {
+        "armor": [
+            "category_armor_light",
+            "category_armor_medium",
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "skills": {}
+    },
+    "starting_equipment": {
+        "given": [
+            {
+                "item_id": "armor_chain_mail",
+                "quantity": 1
+            },
+            {
+                "item_id": "category_holy_symbol",
+                "quantity": 1
+            }
+        ],
+        "choices": [
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_martial",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "category_armor_shield",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_martial",
+                                "quantity": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_javelin",
+                                "quantity": 5
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_simple_melee",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_priests",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_explorers",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "spellcasting_base": {
+        "ability": "cha",
+        "preparation_type": "prepared",
+        "ritual_casting": false
+    },
+    "subclass_info": {
+        "choice_level": 3,
+        "options_pool": "subclasses_paladin"
+    },
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_divine_sense",
+                "trait_lay_on_hands"
+            ]
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_fighting_style",
+                "trait_divine_smite"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 2
+                }
+            }
+        },
+        {
+            "level": 3,
+            "features": [
+                "trait_divine_health",
+                "trait_sacred_oath"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 3
+                }
+            }
+        },
+        {
+            "level": 4,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 3
+                }
+            }
+        },
+        {
+            "level": 5,
+            "features": [
+                "trait_extra_attack"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 2
+                }
+            }
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_aura_of_protection"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 2
+                }
+            }
+        },
+        {
+            "level": 7,
+            "features": [
+                "trait_sacred_oath_feature"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3
+                }
+            }
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3
+                }
+            }
+        },
+        {
+            "level": 9,
+            "features": [],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 2
+                }
+            }
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_aura_of_courage"
+            ],
+            "class_specific_scaling": {},
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 2
+                }
+            }
+        },
+        {
+            "level": 11,
+            "features": [
+                "trait_improved_divine_strike"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3
+                }
+            }
+        },
+        {
+            "level": 12,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3
+                }
+            }
+        },
+        {
+            "level": 13,
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 1
+                }
+            }
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_cleansing_touch"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 1
+                }
+            }
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_sacred_oath_feature"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 2
+                }
+            }
+        },
+        {
+            "level": 16,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 2
+                }
+            }
+        },
+        {
+            "level": 17,
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 1
+                }
+            }
+        },
+        {
+            "level": 18,
+            "features": [
+                "trait_aura_improvements"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 1
+                }
+            }
+        },
+        {
+            "level": 19,
+            "features": [
+                "trait_ability_score_improvement"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2
+                }
+            }
+        },
+        {
+            "level": 20,
+            "features": [
+                "trait_sacred_oath_feature"
+            ],
+            "spellcasting_progression": {
+                "spell_slots": {
+                    "1": 4,
+                    "2": 3,
+                    "3": 3,
+                    "4": 3,
+                    "5": 2
+                }
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "Holy warriors bound by sacred oaths, wielding divine power to stand against evil as blessed champions.",
+        "full_text": "Clad in plate armor that gleams in the sunlight despite the dust and grime of long travel, a human lays down her sword and shield and places her hands on a mortally wounded man. Divine radiance shines from her hands, the man's wounds knit closed, and his eyes open wide with amazement.\nA dwarf crouches behind an outcrop, his black cloak making him nearly invisible in the night, and watches an orc war band celebrating its recent victory. Silently, he stalks into their midst and whispers an oath, and two orcs are dead before they even realize he is there.\nSilver hair shining in a shaft of light that seems to illuminate only him, an elf laughs with exultation. His spear flashes like his eyes as he jabs again and again at a twisted giant, until at last his light overcomes its hideous darkness.\nWhatever their origin and their mission, paladins are united by their oaths to stand against the forces of evil. Whether sworn before a god's altar and the witness of a priest, in a sacred glade before nature spirits and fey beings, or in a moment of desperation and grief with the dead as the only witness, a paladin's oath is a powerful bond. It is a source of power that turns a devout warrior into a blessed champion."
+    }
+}

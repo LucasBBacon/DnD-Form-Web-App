@@ -1,0 +1,307 @@
+{
+    "id": "class_fighter",
+    "name": "Fighter",
+    "hit_die": 10,
+    "proficiencies": {
+        "armor": [
+            "category_armor_light",
+            "category_armor_medium",
+            "category_armor_heavy",
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "saving_throws": [
+            "str",
+            "con"
+        ],
+        "skills": {
+            "count": 2,
+            "pool": [
+                "acrobatics",
+                "animal_handling",
+                "athletics",
+                "history",
+                "insight",
+                "intimidation",
+                "perception",
+                "survival"
+            ]
+        }
+    },
+    "multiclass_proficiencies": {
+        "armor": [
+            "category_armor_light",
+            "category_armor_medium",
+            "category_armor_shield"
+        ],
+        "weapons": [
+            "category_weapon_simple",
+            "category_weapon_martial"
+        ],
+        "tools": [],
+        "skills": {}
+    },
+    "starting_equipment": {
+        "given": [],
+        "choices": [
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "armor_chain_mail",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "armor_leather",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "weapon_longbow",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "weapon_arrow",
+                                "quantity": 20
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_martial",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "category_armor_shield",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "category_weapon_martial",
+                                "quantity": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_light_crossbow",
+                                "quantity": 1
+                            },
+                            {
+                                "item_id": "weapon_crossbow_bolt",
+                                "quantity": 20
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "weapon_handaxe",
+                                "quantity": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "choose": 1,
+                "options": [
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_dungeoneers",
+                                "quantity": 1
+                            }
+                        ]
+                    },
+                    {
+                        "equipment_bundle": [
+                            {
+                                "item_id": "pack_explorers",
+                                "quantity": 1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "subclass_info": {
+        "choice_level": 3,
+        "options_pool": "subclasses_fighter"
+    },
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_fighting_style",
+                "trait_second_wind"
+            ]
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_action_surge"
+            ],
+            "class_specific_scaling": {
+                "action_surge_use_count": 1
+            }
+        },
+        {
+            "level": 3,
+            "features": [
+                "trait_martial_archetype"
+            ]
+        },
+        {
+            "level": 4,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 5,
+            "features": [
+                "trait_extra_attack"
+            ],
+            "class_specific_scaling": {
+                "extra_attack_count": 1
+            }
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 7,
+            "features": [
+                "trait_martial_archetype_feature"
+            ]
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 9,
+            "features": [
+                "trait_indomitable"
+            ],
+            "class_specific_scaling": {
+                "indomitable_use_count": 1
+            }
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_martial_archetype_feature"
+            ]
+        },
+        {
+            "level": 11,
+            "features": [
+                "trait_extra_attack"
+            ],
+            "class_specific_scaling": {
+                "extra_attack_count": 2
+            }
+        },
+        {
+            "level": 12,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 13,
+            "features": [
+                "trait_indomitable"
+            ],
+            "class_specific_scaling": {
+                "indomitable_use_count": 2
+            }
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_martial_archetype_feature"
+            ]
+        },
+        {
+            "level": 16,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 17,
+            "features": [
+                "trait_action_surge",
+                "trait_indomitable"
+            ],
+            "class_specific_scaling": {
+                "action_surge_use_count": 2,
+                "indomitable_use_count": 3
+            }
+        },
+        {
+            "level": 18,
+            "features": [
+                "trait_martial_archetype_feature"
+            ]
+        },
+        {
+            "level": 19,
+            "features": [
+                "trait_ability_score_improvement"
+            ]
+        },
+        {
+            "level": 20,
+            "features": [
+                "trait_extra_attack"
+            ],
+            "class_specific_scaling": {
+                "extra_attack_count": 3
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "Versatile masters of combat with unparalleled skill in weaponry, armor, and the tactical knowledge of warfare.",
+        "full_text": "A human in clanging plate armor holds her shield before her as she runs toward the massed goblins. An elf behind her, clad in studded leather armor, peppers the goblins with arrows loosed from his exquisite bow. The half-orc nearby shouts orders, helping the two combatants coordinate their assault to the best advantage.\nA dwarf in chain mail interposes his shield between the ogre's club and his companion, knocking the deadly blow aside. His companion, a half-elf in scale armor, swings two scimitars in a blinding whirl as she circles the ogre, looking for a blind spot in its defenses.\nA gladiator fights for sport in an arena, a master with his trident and net, skilled at toppling foes and moving them around for the crowd's delight-and his own tactical advantage. His opponent's sword flares with blue light an instant before she sends lightning flashing forth to smite him.\nAll of these heroes are fighters, perhaps the most diverse class of characters in the worlds of Dungeons & Dragons. Questing knights, conquering overlords, royal champions, elite foot soldiers, hardened mercenaries, and bandit kings-as fighters, they all share an unparalleled mastery with weapons and armor, and a thorough knowledge of the skills of combat. And they are well acquainted with death, both meting it out and staring it defiantly in the face."
+    }
+}
