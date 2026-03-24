@@ -1,4 +1,9 @@
-import { getClassById, getItemById, getRaceById } from "../data/staticDataApi";
+import {
+  getClassById,
+  getItemById,
+  getRaceById,
+  getSubraceById,
+} from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import {
   calculateModifier,
@@ -15,6 +20,7 @@ export const useCharacterStats = () => {
   const {
     level,
     raceId,
+    subraceId,
     classId,
     baseAbilityScores,
     hpRolls,
@@ -23,10 +29,12 @@ export const useCharacterStats = () => {
     inventory,
     equippedArmorId,
     equippedShieldId,
+    damageTaken,
   } = useCharacterStore();
 
   // fetch static definitions
   const raceData = raceId ? getRaceById(raceId) : null;
+  const subraceData = subraceId ? getSubraceById(subraceId) : null;
   const classData = classId ? getClassById(classId) : null;
 
   // Aggregate all ASI choices from level 1 to current level
@@ -37,6 +45,7 @@ export const useCharacterStats = () => {
     "dex",
     baseAbilityScores.dex,
     raceData,
+    subraceData,
     chosenRacialBonuses,
     totalAsiBonuses.dex,
   );
@@ -44,6 +53,7 @@ export const useCharacterStats = () => {
     "con",
     baseAbilityScores.con,
     raceData,
+    subraceData,
     chosenRacialBonuses,
     totalAsiBonuses.con,
   );
@@ -63,16 +73,25 @@ export const useCharacterStats = () => {
 
   const maxHp = calculateMaxHP(level, classData?.hit_die, conMod, hpRolls);
 
+  const currentHp = Math.max(0, maxHp - damageTaken);
+
   const initiative = calculateInitiative(dexMod);
 
   const equippedArmorData = equippedArmorId
     ? getItemById(equippedArmorId)
     : null;
+  const equippedArmor: Parameters<typeof calculateArmorClass>[1] =
+    equippedArmorData?.type === "armor" && equippedArmorData.armor_properties
+      ? (equippedArmorData as Exclude<
+          Parameters<typeof calculateArmorClass>[1],
+          null
+        >)
+      : null;
   const isWearingShield = !!equippedShieldId;
 
   const armorClass = calculateArmorClass(
     dexMod,
-    equippedArmorData?.armor_properties || null,
+    equippedArmor,
     isWearingShield,
   );
 
@@ -81,6 +100,7 @@ export const useCharacterStats = () => {
     modifiers: { dex: dexMod, con: conMod /* add others */ },
     proficiencyBonus,
     maxHp,
+    currentHp,
     initiative,
     armorClass,
     totalWeight,

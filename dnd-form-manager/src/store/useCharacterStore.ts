@@ -24,6 +24,7 @@ interface CharacterState {
   // Master record of everything chosen at each level
   choicesByLevel: Record<number, LevelChoice>;
 
+  // region Spells state
   // IDs of spells permanently learned (Bards, Sorcerers, Warlocks...)
   spellsKnown: string[];
   // IDs of spells prepared today (Clerics, Druids, Wizards...)
@@ -34,11 +35,17 @@ interface CharacterState {
   // Warlocks are weird, track separately
   expendedPactSlots: number;
 
-  // --- Inventory State ---
+  // region Inventory State
   inventory: InventoryRecord[];
   equippedArmorId: string | null;
   equippedShieldId: string | null;
   equippedWeaponIds: string[];
+
+  // region Combat State
+  damageTaken: number;
+  tempHp: number;
+  deathSaves: { successes: number; failures: number };
+  expendedHitDice: number;
 }
 
 interface CharacterActions {
@@ -70,6 +77,13 @@ interface CharacterActions {
   removeInventoryItem: (itemId: string, quantity: number) => void;
   equipArmor: (itemId: string | null) => void;
   equipShield: (itemId: string | null) => void;
+
+  // Combat Actions
+  takeDamage: (amount: number) => void;
+  heal: (amount: number) => void;
+  setTempHp: (amount: number) => void;
+  recordDeathSave: (type: "successes" | "failures", value: boolean) => void;
+  expendHitDie: () => void;
 }
 
 type CharacterStore = CharacterState & CharacterActions;
@@ -103,6 +117,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   equippedArmorId: null,
   equippedShieldId: null,
   equippedWeaponIds: [],
+  damageTaken: 0,
+  tempHp: 0,
+  deathSaves: { successes: 0, failures: 0 },
+  expendedHitDice: 0,
 
   // --- Actions ---
   setName: (name) => set({ name }),
@@ -255,10 +273,16 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   // region Rest Actions
 
   takeLongRest: () =>
-    set(() => ({
+    set((state) => ({
       expendedSpellSlots: {}, // Wipes all normal slot usage
       expendedPactSlots: 0, // Wipes pact slot usage
-      // TODO: Reset HP to max HP, reset Hit Dice
+      damageTaken: 0, // fully heal
+      tempHp: 0, // temp HP stops after long rest
+      // 5e rule: regain half total hit dice (min 1)
+      expendedHitDice: Math.max(
+        0,
+        state.expendedHitDice - Math.max(1, Math.floor(state.level / 2)),
+      ),
     })),
 
   takeShortRest: () =>
@@ -300,4 +324,57 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   equipShield: (itemId) => set({ equippedShieldId: itemId }),
 
   // endregion
+
+  takeDamage: (amount) =>
+    set((state) => {
+      let remainingDamage = amount;
+      let newTempHp = state.tempHp;
+
+      // Temp HP absorbs damage first
+      if (newTempHp > 0) {
+        if (newTempHp >= remainingDamage) {
+          newTempHp -= remainingDamage;
+          remainingDamage = 0;
+        } else {
+          remainingDamage -= newTempHp;
+          newTempHp = 0;
+        }
+      }
+
+      return {
+        tempHp: newTempHp,
+        damageTaken: state.damageTaken + remainingDamage,
+      };
+    }),
+
+  heal: (amount) =>
+    set((state) => ({
+      // Cannot have negative damage take (cannot heal above max HP)
+      damageTaken: Math.max(0, state.damageTaken - amount),
+      // 5e rule: regaining any HP resets death saves
+      deathSaves: { successes: 0, failures: 0 },
+    })),
+
+  setTempHp: (amount) =>
+    set((state) => ({
+      // 5e rule: temp hp does not stack, choose higher value
+      tempHp: Math.max(state.tempHp, amount),
+    })),
+
+  recordDeathSave: (type, value) =>
+    set((state) => {
+      const current = state.deathSaves[type];
+      return {
+        deathSaves: {
+          ...state.deathSaves,
+          // add or subtract depending on the checkbox toggle
+          [type]: value ? Math.min(3, current + 1) : Math.max(0, current - 1),
+        },
+      };
+    }),
+
+  expendHitDie: () =>
+    set((state) => ({
+      expendedHitDice: state.expendedHitDice + 1,
+    })),
 }));

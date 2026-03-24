@@ -1,12 +1,13 @@
-import { getClassById, getRaceById, getSubclassById } from "../data/staticDataApi";
+import { getClassById, getRaceById, getSubclassById, getSubraceById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { calculateModifier, calculateTotalAbilityScore, calculateTotalASI } from "../utils/abilityUtils";
 import { calculateProficiencyBonus } from "../utils/progressionUtils";
 
 export const useSpellcasting = () => {
-    const { level, raceId, classId, subclassId, baseAbilityScores, chosenRacialBonuses, choicesByLevel, expendedSpellSlots, expendedPactSlots, spellsPrepared, spellsKnown } = useCharacterStore();
+    const { level, raceId, subraceId, classId, subclassId, baseAbilityScores, chosenRacialBonuses, choicesByLevel, expendedSpellSlots, expendedPactSlots, spellsPrepared, spellsKnown } = useCharacterStore();
 
     const raceData = raceId ? getRaceById(raceId) : null;
+    const subraceData = subraceId ? getSubraceById(subraceId) : null;
     const classData = classId ? getClassById(classId) : null;
     const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
@@ -46,6 +47,7 @@ export const useSpellcasting = () => {
             spellcastingAbility,
             baseAbilityScores[spellcastingAbility],
             raceData,
+            subraceData,
             chosenRacialBonuses,
             totalAsiBonuses[spellcastingAbility]
         );
