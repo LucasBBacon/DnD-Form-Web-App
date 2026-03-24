@@ -1,9 +1,12 @@
-import { getClassById, getSubclassById } from "../data/staticDataApi";
+import { getClassById, getRaceById, getSubclassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
+import { calculateModifier, calculateTotalAbilityScore, calculateTotalASI } from "../utils/abilityUtils";
+import { calculateProficiencyBonus } from "../utils/progressionUtils";
 
 export const useSpellcasting = () => {
-    const { level, classId, subclassId, expendedSpellSlots, expendedPactSlots, spellsPrepared, spellsKnown } = useCharacterStore();
+    const { level, raceId, classId, subclassId, baseAbilityScores, chosenRacialBonuses, choicesByLevel, expendedSpellSlots, expendedPactSlots, spellsPrepared, spellsKnown } = useCharacterStore();
 
+    const raceData = raceId ? getRaceById(raceId) : null;
     const classData = classId ? getClassById(classId) : null;
     const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
@@ -13,7 +16,7 @@ export const useSpellcasting = () => {
     const totalSlots = currentProgression?.spellcasting_progression?.spell_slots || {};
 
     // Generate a clean array for the UI to render slot checkboxes
-    // eg.g, Level 1: [true, true, false, false] (2 used, 2 available out of 4)
+    // e.g., Level 1: [true, true, false, false] (2 used, 2 available out of 4)
     const slotStatusByLevel: Record<number, boolean[]> = {};
 
     for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
@@ -32,12 +35,38 @@ export const useSpellcasting = () => {
         }
     }
 
+    // Calculate spell math
+    let spellSaveDC = 0;
+    let spellAttackBonus = 0;
+    const spellcastingAbility = classData?.spellcasting_base?.ability;
+
+    if (spellcastingAbility) {
+        const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
+        const totalAbilityScore = calculateTotalAbilityScore(
+            spellcastingAbility,
+            baseAbilityScores[spellcastingAbility],
+            raceData,
+            chosenRacialBonuses,
+            totalAsiBonuses[spellcastingAbility]
+        );
+
+        const abilityMod = calculateModifier(totalAbilityScore);
+        const profBonus = calculateProficiencyBonus(level);
+
+        spellSaveDC = 8 + profBonus + abilityMod;
+        spellAttackBonus = profBonus + abilityMod;
+    }
+
     // Return the data needed to build the spellbook UI
     return {
-        spellcastingAbility: classData?.spellcasting_base?.ability,
+        isSpellcaster: !!classData?.spellcasting_base,
+        preparationType: classData?.spellcasting_base?.preparation_type,
+        spellcastingAbility,
+        spellSaveDC,
+        spellAttackBonus,
         slotStatusByLevel,
         spellsPrepared,
         spellsKnown,
-        // TODO: Add Pact Logic and spell save DC
+        // TODO: Add Pact Logic
     };
 };

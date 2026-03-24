@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "DnD Subrace",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^subrace_[a-z0-9_]+$",
+      "description": "Unique identifier for the subrace."
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the subrace"
+    },
+    "parent_race_id": {
+      "type": "string",
+      "description": "REQUIRED. Links back to the parent class."
+    },
+    "ability_bonuses_additions": {
+      "type": "object",
+      "description": "Stats appended to the base race's ASI",
+      "additionalProperties": {
+        "type": "integer"
+      }
+    },
+    "traits_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "languages_added": {
+      "type": "object",
+      "properties": {
+        "known": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of language IDs granted automatically."
+        },
+        "choices": {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": "integer",
+              "description": "Number of additional languages the player can choose."
+            },
+            "unique_choices": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "overrides": {
+      "type": "object",
+      "description": "Omit if the subrace does not change base physics.",
+      "properties": {
+        "speed": {
+          "type": "object",
+          "properties": {
+            "walk": {
+              "type": "integer",
+              "description": "Base walking speed in feet."
+            },
+            "fly": {
+              "type": "integer",
+              "default": 0
+            },
+            "swim": {
+              "type": "integer",
+              "default": 0
+            },
+            "climb": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          "required": ["walk"]
+        },
+        "size": {
+          "$ref": "definitions.json#/definitions/Size",
+          "description": "The creature's size category."
+        }
+      }
+    },
+    "lore": {
+      "type": "object",
+      "properties": {
+        "short_description": {
+          "type": "string",
+          "description": "A quick 1-2 sentence summary for tooltips."
+        },
+        "full_text": {
+          "type": "string",
+          "description": "The main body of text for the entity."
+        },
+        "sections": {
+          "type": "array",
+          "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": ["title", "body"]
+          }
+        }
+      },
+      "required": ["short_description"]
+    }
+  },
+  "required": ["name", "parent_race_id"]
+}
