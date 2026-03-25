@@ -11,7 +11,7 @@ import { getUnlockedFeatures } from "../utils/progressionUtils";
 import { aggregateSkills } from "../utils/skillUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
-export const useSkill = () => {
+export const useSkills = () => {
   // pull from zustand
   const {
     level,
@@ -55,7 +55,6 @@ export const useSkill = () => {
 
   // Build the final dictionary for UI
   const skillList = Object.keys(SKILL_ABILITY_MAP) as Skill[];
-
   const calculatedSkills = {} as Record<
     Skill,
     {
@@ -90,4 +89,25 @@ export const useSkill = () => {
       stat: governingStat,
     };
   });
+
+  // Aggregate saving throws
+  const proficientSaves = classData?.proficiencies.saving_throws || [];
+  const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+  const calculatedSaves: Record<
+    Ability,
+    { total: number; isProficient: boolean }
+  > = {} as Record<Ability, { total: number; isProficient: boolean }>;
+
+  abilities.forEach((ability) => {
+    const isProficient = proficientSaves.includes(ability);
+    // TODO: 'Diamond Soul' feature for monk at level 4 grants proficiencies in all saves.
+    // Add a check for 'unlockedFeatures.includes("trait_diamond_soul") here
+
+    let finalMod = modifiers[ability] || 0;
+    if (isProficient) finalMod += proficiencyBonus;
+
+    calculatedSaves[ability] = { total: finalMod, isProficient };
+  });
+
+  return { calculatedSkills, calculatedSaves, proficiencyBonus };
 };
