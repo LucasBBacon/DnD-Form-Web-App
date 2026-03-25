@@ -8,7 +8,7 @@ const formatName = (str: string) =>
 const formatMod = (num: number) => (num >= 0 ? `+${num}` : `${num}`);
 
 export const SkillAndSavesBlock = () => {
-  const { calculatedSkills, calculatedSaves } = useSkills();
+  const { calculatedSkills, calculatedSaves, passives } = useSkills();
 
   return (
     <div className="skills-saves-container">
@@ -34,9 +34,27 @@ export const SkillAndSavesBlock = () => {
         </ul>
       </div>
 
-      {/* Skills */}
+      {/* Skills and Passives */}
       <div className="skills-block">
-        <h3>Skills</h3>
+        <h3>Skills & Passives</h3>
+
+        {/* Passives */}
+        <div className="passives-row">
+          <div className="passive-box">
+            <span className="passive-val">{passives.perception}</span>
+            <span className="passive-label">Passive Perception</span>
+          </div>
+          <div className="passive-box">
+            <span className="passive-val">{passives.investigation}</span>
+            <span className="passive-label">Passives Investigation</span>
+          </div>
+          <div className="passive-box">
+            <span className="passive-val">{passives.insight}</span>
+            <span className="passive-label">Passives Insight</span>
+          </div>
+        </div>
+
+        {/* SKills */}
         <ul className="skill-list">
           {Object.entries(calculatedSkills).map(([skillKey, skillData]) => {
             const skill = skillKey as Skill;

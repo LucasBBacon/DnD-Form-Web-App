@@ -109,5 +109,22 @@ export const useSkills = () => {
     calculatedSaves[ability] = { total: finalMod, isProficient };
   });
 
-  return { calculatedSkills, calculatedSaves, proficiencyBonus };
+  // Calculate passive scores
+  const flatPassiveBonus = 0;
+  const passivePerception =
+    10 + calculatedSkills.perception.total + flatPassiveBonus;
+  const passiveInvestigation =
+    10 + calculatedSkills.investigation.total + flatPassiveBonus;
+  const passiveInsight = 10 + calculatedSkills.insight.total + flatPassiveBonus;
+
+  return {
+    calculatedSkills,
+    calculatedSaves,
+    proficiencyBonus,
+    passives: {
+      perception: passivePerception,
+      investigation: passiveInvestigation,
+      insight: passiveInsight,
+    },
+  };
 };
