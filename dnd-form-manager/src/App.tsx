@@ -1,14 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import { CombatStatsBlock } from "./components/CombatStatsBlock";
+import { CharacterSheet } from "./components/CharacterSheet";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <CombatStatsBlock />
-    </>
+    <div className="app-container">
+      <CharacterSheet />
+    </div>
   );
 }
 

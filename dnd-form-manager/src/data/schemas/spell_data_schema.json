@@ -1,0 +1,114 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema#",
+	"title": "DnD Spell",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"pattern": "^spell_[a-z0-9_]+$",
+			"description": "Unique identifier for the spell."
+		},
+		"name": {
+			"type": "string",
+			"description": "Display name of the spell."
+		},
+		"level": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 9,
+			"description": "Spell level: 0 for cantrips, 1-9 for leveled spells."
+		},
+		"school": {
+			"type": "string",
+			"enum": [
+				"abjuration",
+				"alteration",
+				"conjuration",
+				"divination",
+				"enchantment",
+				"evocation",
+				"illusion",
+				"necromancy"
+			],
+			"description": "The spell school."
+		},
+		"classes": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "Class IDs that can access this spell."
+		},
+		"casting_time": {
+			"type": "string",
+			"description": "Casting time text, e.g. '1 action'."
+		},
+		"range": {
+			"type": "string",
+			"description": "Range text, e.g. '150 feet' or 'Touch'."
+		},
+		"duration": {
+			"type": "string",
+			"description": "Duration text, e.g. 'Instantaneous' or '1 hour'."
+		},
+		"concentration": {
+			"type": "boolean",
+			"description": "Whether concentration is required."
+		},
+		"ritual": {
+			"type": "boolean",
+			"description": "Whether the spell can be cast as a ritual."
+		},
+		"components": {
+			"type": "object",
+			"properties": {
+				"vocal": {
+					"type": "boolean"
+				},
+				"somatic": {
+					"type": "boolean"
+				},
+				"material": {
+					"type": "boolean"
+				},
+				"material_materials": {
+					"type": "string",
+					"description": "Material details, e.g. 'A pinch of sulfur'."
+				}
+			},
+			"required": ["vocal", "somatic", "material"]
+		},
+		"lore": {
+			"type": "object",
+			"properties": {
+				"short_description": {
+					"type": "string",
+					"description": "A quick 1-2 sentence summary for tooltips."
+				},
+				"full_text": {
+					"type": "string",
+					"description": "The main body of text for the spell."
+				},
+				"higher_level": {
+					"type": "string",
+					"description": "Additional effects when cast using a higher-level spell slot."
+				}
+			},
+			"required": ["short_description", "full_text"]
+		}
+	},
+	"required": [
+		"id",
+		"name",
+		"level",
+		"school",
+		"classes",
+		"casting_time",
+		"range",
+		"duration",
+		"concentration",
+		"ritual",
+		"components",
+		"lore"
+	]
+}

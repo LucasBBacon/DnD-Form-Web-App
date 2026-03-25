@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "archdruid",
+        "Berserkers",
         "blindsense",
         "countercharm",
         "darkvision",
@@ -44,6 +45,18 @@
                 "classes/*_class.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/class_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "subraces/*_subrace.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/subrace_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "subraces/*_subclass.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/subclass_data_schema.json"
         }
     ]
 }

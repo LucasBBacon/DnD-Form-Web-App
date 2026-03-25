@@ -1,9 +1,9 @@
 /**
  * compileData.ts
  *
- * Reads each JSON file from src/data/raw/classes/ and src/data/raw/races/,
- * validates every entry against its JSON Schema, and writes the merged
- * arrays to src/data/classes.json and src/data/races.json respectively.
+ * Reads each JSON file from src/data/raw/*,
+ * validates every entry against its category JSON Schema, and writes merged
+ * arrays to src/data/*.json for each supported category.
  *
  * Usage:  tsx scripts/compileData.ts
  * Runs automatically as a pre-step before `dev` and `build` via package.json.
@@ -33,6 +33,18 @@ const classSchema = JSON.parse(
 const raceSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'race_data_schema.json'), 'utf-8')
 );
+const itemSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'item_data_schema.json'), 'utf-8')
+);
+const spellSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'spell_data_schema.json'), 'utf-8')
+);
+const subclassSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'subclass_data_schema.json'), 'utf-8')
+);
+const subraceSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'subrace_data_schema.json'), 'utf-8')
+);
 
 // Ajv instance — strict:false to stay compatible with draft-07 constructs;
 // validateSchema:false prevents Ajv 8 from trying to fetch the draft-07 meta-schema URI
@@ -43,6 +55,10 @@ ajv.addSchema(definitionsSchema);
 
 const validateClass = ajv.compile(classSchema);
 const validateRace  = ajv.compile(raceSchema);
+const validateItem = ajv.compile(itemSchema);
+const validateSpell = ajv.compile(spellSchema);
+const validateSubclass = ajv.compile(subclassSchema);
+const validateSubrace  = ajv.compile(subraceSchema);
 
 type ValidateFn = ReturnType<typeof ajv.compile>;
 
@@ -57,7 +73,7 @@ function compileFolder(
 ): void {
   const folderPath = resolve(rawDir, folderName);
   const files = readdirSync(folderPath)
-    .filter((f) => f.endsWith('.json'))
+    .filter((f: string) => f.endsWith('.json'))
     .sort();
 
   let hasErrors = false;
@@ -102,4 +118,8 @@ function compileFolder(
 console.log('\nCompiling raw data files...');
 compileFolder('classes', validateClass, 'classes.json');
 compileFolder('races',   validateRace,  'races.json');
+compileFolder('items', validateItem, 'items.json');
+compileFolder('spells', validateSpell, 'spells.json');
+compileFolder('subclasses', validateSubclass, 'subclasses.json');
+compileFolder('subraces', validateSubrace, 'subraces.json');
 console.log('Data compilation complete.\n');

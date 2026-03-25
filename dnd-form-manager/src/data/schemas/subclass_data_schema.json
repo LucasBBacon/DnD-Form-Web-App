@@ -1,0 +1,177 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "DnD Subclass",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "pattern": "^subclass_[a-z0-9_]+$",
+            "description": "Unique identifier for the subclass."
+        },
+        "name": {
+            "type": "string"
+        },
+        "parent_class_id": {
+            "type": "string",
+            "description": "The Id of the base class this belongs to (e.g., 'class_rogue')"
+        },
+        "spellcasting_override": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "description": "Used if the subclass introduces spellcasting to a martial class, or changes the base class casting rules.",
+            "properties": {
+                "ability": {
+                    "type": "string",
+                    "enum": [
+                        "int",
+                        "wis",
+                        "cha"
+                    ]
+                },
+                "preparation_type": {
+                    "type": "string",
+                    "enum": [
+                        "known",
+                        "prepared",
+                        "pact"
+                    ]
+                },
+                "school_restrictions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "abjuration",
+                            "conjuration",
+                            "divination",
+                            "enchantment",
+                            "evocation",
+                            "illusion",
+                            "necromancy",
+                            "transmutation"
+                        ]
+                    },
+                    "description": "Array of valid spell schools for 1/3 casters. Leave empty if no restrictions apply."
+                }
+            }
+        },
+        "progression": {
+            "type": "array",
+            "description": "An ordered list of subclass progression entries. Include only levels where this subclass grants features.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "level": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20,
+                        "description": "The character level this subclass entry applies to (1-20)."
+                    },
+                    "features": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Trait IDs granted at this specific level."
+                    },
+                    "subclass_specific_scaling": {
+                        "type": "object",
+                        "description": "Custom key-value pairs for subclass-specific resources.",
+                        "additionalProperties": {
+                            "type": [
+                                "array",
+                                "string",
+                                "integer",
+                                "number"
+                            ]
+                        }
+                    },
+                    "bonus_spells": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Spell IDs automatically learned or prepared at this level."
+                    },
+                    "spells_added_to_list": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Spell IDs added to the class spell list for optional selection."
+                    },
+                    "spellcasting_progression_additions": {
+                        "type": [
+                            "object",
+                            "null"
+                        ],
+                        "description": "Slot and spell-progression additions granted by this subclass level.",
+                        "properties": {
+                            "cantrips_known": {
+                                "type": "integer"
+                            },
+                            "spells_known": {
+                                "type": "integer"
+                            },
+                            "spell_slots": {
+                                "type": "object",
+                                "description": "Mapping of spell level (1-9) to number of slots available.",
+                                "additionalProperties": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                },
+                "required": [
+                    "level",
+                    "features"
+                ]
+            }
+        },
+        "lore": {
+            "type": "object",
+            "properties": {
+                "short_description": {
+                    "type": "string",
+                    "description": "A quick 1-2 sentence summary for tooltips."
+                },
+                "full_text": {
+                    "type": "string",
+                    "description": "The main body of text for the entity."
+                },
+                "sections": {
+                    "type": "array",
+                    "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "title",
+                            "body"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "short_description"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "parent_class_id",
+        "progression"
+    ]
+}

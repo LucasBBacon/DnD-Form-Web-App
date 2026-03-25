@@ -1,0 +1,29 @@
+[
+  {
+    "id": "subrace_dwarf_hill",
+    "name": "Hill Dwarf",
+    "parent_race_id": "race_dwarf",
+    "ability_bonuses": {
+      "fixed": {
+        "wis": 1
+      }
+    },
+    "traits_added": [
+      "trait_dwarven_toughness"
+    ],
+    "lore": {
+      "short_description": "Hill dwarves are sturdy and keen-witted, known for deep traditions, long memory, and exceptional resilience.",
+      "full_text": "Hill dwarves are among the oldest and most tradition-bound of dwarven folk. Their communities prize endurance, practical wisdom, and strong clan ties. Generations of hard living in rugged lands have made them notably hardy, and many hill dwarves are respected as defenders, craftsmen, and elders whose counsel carries weight.",
+      "sections": [
+        {
+          "title": "Dwarven Toughness",
+          "body": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+        },
+        {
+          "title": "Hill Dwarf Culture",
+          "body": "Hill dwarf settlements tend to be old, stable, and strongly rooted in clan tradition. Their leaders are often chosen for wisdom and reliability, and their people are expected to contribute to the community's long-term strength."
+        }
+      ]
+    }
+  }
+]

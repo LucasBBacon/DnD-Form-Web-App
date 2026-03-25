@@ -1,0 +1,84 @@
+{
+	"$schema": "https://json-schema.org/draft-07/schema#",
+	"title": "DnD Item",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"pattern": "^item_[a-z0-9_]+$",
+			"description": "Unique identifier for the item."
+		},
+		"name": {
+			"type": "string",
+			"description": "Display name of the item."
+		},
+		"type": {
+			"type": "string",
+			"enum": ["gear", "weapon", "armor", "tool", "magic_item"],
+			"description": "High-level item category."
+		},
+		"weight": {
+			"type": "number",
+			"minimum": 0,
+			"description": "Item weight in pounds."
+		},
+		"lore": {
+			"type": "object",
+			"properties": {
+				"short_description": {
+					"type": "string",
+					"description": "A quick 1-2 sentence summary for tooltips."
+				},
+				"full_text": {
+					"type": "string",
+					"description": "The main body of text for the item."
+				}
+			},
+			"required": ["short_description"]
+		},
+		"armor_properties": {
+			"type": "object",
+			"properties": {
+				"armorType": {
+					"type": "string",
+					"enum": ["light", "medium", "heavy", "shield"],
+					"description": "Armor category."
+				},
+				"baseAc": {
+					"type": "number",
+					"description": "Base Armor Class granted by the armor."
+				},
+				"stealthDisadvantage": {
+					"type": "boolean",
+					"description": "Whether this armor imposes disadvantage on Stealth checks."
+				},
+				"strengthRequirement": {
+					"type": "number",
+					"description": "Minimum Strength score required to avoid speed penalties."
+				}
+			},
+			"required": ["armorType", "baseAc", "stealthDisadvantage"]
+		}
+	},
+	"required": ["id", "name", "type", "weight", "lore"],
+	"allOf": [
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "armor"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"required": ["armor_properties"]
+			},
+			"else": {
+				"not": {
+					"required": ["armor_properties"]
+				}
+			}
+		}
+	]
+}
