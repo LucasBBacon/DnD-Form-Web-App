@@ -1,0 +1,10 @@
+{
+	"id": "item_ammo_bolt",
+	"name": "Crossbow Bolt",
+	"type": "gear",
+	"weight": 0.075,
+	"lore": {
+		"short_description": "Standard ammunition for crossbows.",
+		"full_text": "A metal-tipped bolt sized for crossbow use. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+	}
+}

@@ -1,5 +1,15 @@
 [
   {
+    "id": "item_ammo_bolt",
+    "name": "Crossbow Bolt",
+    "type": "gear",
+    "weight": 0.075,
+    "lore": {
+      "short_description": "Standard ammunition for crossbows.",
+      "full_text": "A metal-tipped bolt sized for crossbow use. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+    }
+  },
+  {
     "id": "item_armor_leather",
     "name": "Leather Armor",
     "type": "armor",
@@ -12,6 +22,46 @@
       "armorType": "light",
       "baseAc": 11,
       "stealthDisadvantage": false
+    }
+  },
+  {
+    "id": "item_weapon_club",
+    "name": "Club",
+    "type": "weapon",
+    "weight": 2,
+    "lore": {
+      "short_description": "A simple wooden bludgeon that is easy to carry and use.",
+      "full_text": "A club is a basic one-handed melee weapon made from a sturdy length of wood. It deals bludgeoning damage and is light enough to be used with two-weapon fighting when paired with another light melee weapon."
+    },
+    "weaponProperties": {
+      "category": "simple_melee",
+      "damageDice": "1d4",
+      "damageType": "bludgeoning",
+      "properties": [
+        "light"
+      ],
+      "range": "5 ft"
+    }
+  },
+  {
+    "id": "item_weapon_crossbow_light",
+    "name": "Light Crossbow",
+    "type": "weapon",
+    "weight": 5,
+    "lore": {
+      "short_description": "A simple ranged crossbow that fires bolts with solid range and stopping power.",
+      "full_text": "The light crossbow is a simple ranged weapon used to launch bolts at distant targets. It deals piercing damage and uses ammunition."
+    },
+    "weaponProperties": {
+      "category": "simple_ranged",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "ammunition",
+        "two-handed"
+      ],
+      "range": "80/320 ft",
+      "ammoItemId": "item_ammo_bolt"
     }
   }
 ]

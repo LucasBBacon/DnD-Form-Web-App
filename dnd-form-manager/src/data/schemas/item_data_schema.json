@@ -58,6 +58,42 @@
 				}
 			},
 			"required": ["armorType", "baseAc", "stealthDisadvantage"]
+		},
+		"weaponProperties": {
+			"type": "object",
+			"properties": {
+				"category": {
+					"type": "string",
+					"enum": ["simple_melee", "martial_melee", "simple_ranged", "martial_ranged"],
+					"description": "Weapon category used for proficiency and classification."
+				},
+				"damageDice": {
+					"type": "string",
+					"description": "Damage dice expression, e.g. 1d8."
+				},
+				"damageType": {
+					"type": "string",
+					"description": "Damage type dealt by the weapon, e.g. slashing."
+				},
+				"properties": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": ["finesse", "light", "heavy", "two-handed", "thrown", "ammunition", "versatile", "reach"]
+					},
+					"description": "Rules properties associated with this weapon."
+				},
+				"range": {
+					"type": "string",
+					"description": "Range string such as 5 ft or 150/600 ft."
+				},
+				"ammoItemId": {
+					"type": "string",
+					"pattern": "^item_[a-z0-9_]+$",
+					"description": "ID of item required as ammunition, if any."
+				}
+			},
+			"required": ["category", "damageDice", "damageType", "properties", "range"]
 		}
 	},
 	"required": ["id", "name", "type", "weight", "lore"],
@@ -77,6 +113,24 @@
 			"else": {
 				"not": {
 					"required": ["armor_properties"]
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": {
+					"type": {
+						"const": "weapon"
+					}
+				},
+				"required": ["type"]
+			},
+			"then": {
+				"required": ["weaponProperties"]
+			},
+			"else": {
+				"not": {
+					"required": ["weaponProperties"]
 				}
 			}
 		}

@@ -15,6 +15,7 @@ import { InventoryBlock } from "./InventoryBlock";
 import { SpellSlotsTracker } from "./SpellSlotsTracker";
 import { SpellbookBlock } from "./SpellbookBlock";
 import { LevelUpModal } from "./LevelUp/LevelUpModal";
+import { AttacksBlock } from "./AttacksBlock";
 
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -78,6 +79,7 @@ export const CharacterSheet = () => {
         <div className="sheet-column center-column">
           <CombatStatsBlock />
           <CombatDashboard />
+          <AttacksBlock />
         </div>
 
         {/* Col 3: Gear and Magic */}

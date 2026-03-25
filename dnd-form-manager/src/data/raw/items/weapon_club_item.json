@@ -1,0 +1,17 @@
+{
+	"id": "item_weapon_club",
+	"name": "Club",
+	"type": "weapon",
+	"weight": 2,
+	"lore": {
+		"short_description": "A simple wooden bludgeon that is easy to carry and use.",
+		"full_text": "A club is a basic one-handed melee weapon made from a sturdy length of wood. It deals bludgeoning damage and is light enough to be used with two-weapon fighting when paired with another light melee weapon."
+	},
+	"weaponProperties": {
+		"category": "simple_melee",
+		"damageDice": "1d4",
+		"damageType": "bludgeoning",
+		"properties": ["light"],
+		"range": "5 ft"
+	}
+}
