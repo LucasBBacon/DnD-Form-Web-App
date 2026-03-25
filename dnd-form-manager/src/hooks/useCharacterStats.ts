@@ -5,6 +5,7 @@ import {
   getSubraceById,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
+import type { Ability } from "../types/common";
 import {
   calculateModifier,
   calculateTotalAbilityScore,
@@ -65,6 +66,30 @@ export const useCharacterStats = () => {
     chosenRacialBonuses,
     totalAsiBonuses.con,
   );
+  const totalInt = calculateTotalAbilityScore(
+    "int",
+    baseAbilityScores.int,
+    raceData,
+    subraceData,
+    chosenRacialBonuses,
+    totalAsiBonuses.int,
+  );
+  const totalWis = calculateTotalAbilityScore(
+    "wis",
+    baseAbilityScores.wis,
+    raceData,
+    subraceData,
+    chosenRacialBonuses,
+    totalAsiBonuses.wis,
+  );
+  const totalCha = calculateTotalAbilityScore(
+    "cha",
+    baseAbilityScores.cha,
+    raceData,
+    subraceData,
+    chosenRacialBonuses,
+    totalAsiBonuses.cha,
+  );
 
   // Calculate total weight
   // Map over the inventory, look up the static weight of each item, multiply by quantity
@@ -76,6 +101,18 @@ export const useCharacterStats = () => {
   const strMod = calculateModifier(totalStr);
   const dexMod = calculateModifier(totalDex);
   const conMod = calculateModifier(totalCon);
+  const intMod = calculateModifier(totalInt);
+  const wisMod = calculateModifier(totalWis);
+  const chaMod = calculateModifier(totalCha);
+
+  const modifiers: Record<Ability, number> = {
+    str: strMod,
+    dex: dexMod,
+    con: conMod,
+    int: intMod,
+    wis: wisMod,
+    cha: chaMod,
+  };
 
   const carryingCapacity = totalStr * 15;
   const isEncumbered = totalWeight > carryingCapacity;
@@ -109,7 +146,7 @@ export const useCharacterStats = () => {
 
   // Return clean data
   return {
-    modifiers: { dex: dexMod, con: conMod /* add others */ },
+    modifiers,
     proficiencyBonus,
     maxHp,
     currentHp,

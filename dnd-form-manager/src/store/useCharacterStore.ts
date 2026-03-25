@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Ability } from "../types/common";
+import type { Ability, Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import { getClassById } from "../data/staticDataApi";
 
@@ -21,6 +21,9 @@ interface CharacterState {
   // Level up HP rolls
   hpRolls: Record<number, number>;
   chosenRacialBonuses: Partial<Record<Ability, number>>;
+  backgroundId: string | null;
+  chosenRacialSkills: Skill[];
+  chosenBackgroundSkills: Skill[];
   // Master record of everything chosen at each level
   choicesByLevel: Record<number, LevelChoice>;
 
@@ -54,10 +57,13 @@ interface CharacterActions {
   setSubrace: (subraceId: string | null) => void;
   setClass: (classId: string) => void;
   setSubclass: (subclassId: string) => void;
+  setBackground: (background: string) => void;
 
   setLevel: (level: number) => void;
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
   setBaseAbilityScore: (ability: Ability, score: number) => void;
+  setRacialSkills: (skills: Skill[]) => void;
+  setBackgroundSkills: (skills: Skill[]) => void;
 
   learnSpell: (spellId: string) => void;
   prepareSpell: (spellId: string) => void;
@@ -105,6 +111,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   },
   hpRolls: {},
   chosenRacialBonuses: {},
+  backgroundId: null,
+  chosenRacialSkills: [],
+  chosenBackgroundSkills: [],
   choicesByLevel: {},
   spellsKnown: [],
   spellsPrepared: [],
@@ -173,7 +182,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setRace: (raceId) =>
     set({
       raceId,
-      subraceId: null, // Reset subrace if the main race changes
+      subraceId: null,         // Reset subrace if the main race changes
+      chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
     }),
 
   setSubrace: (subraceId) => set({ subraceId }),
@@ -182,6 +192,12 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   setSubclass: (subclassId) => set({ subclassId }),
 
+  setBackground: (backgroundId) =>
+    set({
+      backgroundId,
+      chosenBackgroundSkills: [], // Background skill pool changes, previous picks are invalid
+    }),
+
   setBaseAbilityScore: (ability, score) =>
     set((state) => ({
       baseAbilityScores: {
@@ -189,6 +205,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         [ability]: score,
       },
     })),
+
+  setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
+  setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
 
   // region Spell Actions
 
