@@ -310,12 +310,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   removeInventoryItem: (itemId, quantity) =>
     set((state) => {
       // Logic to subtract quantity
+      const updatedInventory = state.inventory.map((i) => i.itemId === itemId ? { ...i, quantity: i.quantity - quantity} : i).filter((i) => i.quantity > 0);
+
+      // Check if the item was completely removed
+      const isItemFullyRemoved = !updatedInventory.some(i => i.itemId === itemId);
       return {
-        inventory: state.inventory
-          .map((i) =>
-            i.itemId === itemId ? { ...i, quantity: i.quantity - quantity } : i,
-          )
-          .filter((i) => i.quantity > 0),
+        inventory: updatedInventory,
+        // Strip the ID if they just dropped equipped gear
+        equippedArmorId: (isItemFullyRemoved && state.equippedArmorId === itemId) ? null : state.equippedArmorId,
+        equippedShieldId: (isItemFullyRemoved && state.equippedShieldId === itemId) ? null : state.equippedShieldId,
       };
     }),
 

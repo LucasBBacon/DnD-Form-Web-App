@@ -41,6 +41,14 @@ export const useCharacterStats = () => {
   const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
 
   // Calculate core attributes
+  const totalStr = calculateTotalAbilityScore(
+    "str",
+    baseAbilityScores.str,
+    raceData,
+    subraceData,
+    chosenRacialBonuses,
+    totalAsiBonuses.str,
+  );
   const totalDex = calculateTotalAbilityScore(
     "dex",
     baseAbilityScores.dex,
@@ -65,8 +73,12 @@ export const useCharacterStats = () => {
     return total + (itemData?.weight || 0) * record.quantity;
   }, 0);
 
+  const strMod = calculateModifier(totalStr);
   const dexMod = calculateModifier(totalDex);
   const conMod = calculateModifier(totalCon);
+
+  const carryingCapacity = totalStr * 15;
+  const isEncumbered = totalWeight > carryingCapacity;
 
   // Calculate Derived Combat Stats
   const proficiencyBonus = calculateProficiencyBonus(level);
@@ -104,5 +116,6 @@ export const useCharacterStats = () => {
     initiative,
     armorClass,
     totalWeight,
+    isEncumbered,
   };
 };
