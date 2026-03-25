@@ -26,7 +26,7 @@ export const SkillAndSavesBlock = () => {
                 <span className="indicator">
                   {save.isProficient ? "●" : "○"}
                 </span>
-                <span className="mod">{formatMod(save.total)}</span>
+                <span className="mod"> {formatMod(save.total)} </span>
                 <span className="name">{ability.toUpperCase()}</span>
               </li>
             );
@@ -41,20 +41,20 @@ export const SkillAndSavesBlock = () => {
         {/* Passives */}
         <div className="passives-row">
           <div className="passive-box">
-            <span className="passive-val">{passives.perception}</span>
+            <span className="passive-val">{passives.perception} </span>
             <span className="passive-label">Passive Perception</span>
           </div>
           <div className="passive-box">
-            <span className="passive-val">{passives.investigation}</span>
-            <span className="passive-label">Passives Investigation</span>
+            <span className="passive-val">{passives.investigation} </span>
+            <span className="passive-label">Passive Investigation</span>
           </div>
           <div className="passive-box">
-            <span className="passive-val">{passives.insight}</span>
-            <span className="passive-label">Passives Insight</span>
+            <span className="passive-val">{passives.insight} </span>
+            <span className="passive-label">Passive Insight</span>
           </div>
         </div>
 
-        {/* SKills */}
+        {/* Skills */}
         <ul className="skill-list">
           {Object.entries(calculatedSkills).map(([skillKey, skillData]) => {
             const skill = skillKey as Skill;
@@ -69,9 +69,9 @@ export const SkillAndSavesBlock = () => {
                 key={`skill-${skill}`}
                 className={skillData.isProficient ? "proficient" : ""}
               >
-                <span className="indicator">{indicator}</span>
-                <span className="mod">{formatMod(skillData.total)}</span>
-                <span className="name">{formatName(skill)}</span>
+                <span className="indicator">{indicator} </span>
+                <span className="mod">{formatMod(skillData.total)} </span>
+                <span className="name">{formatName(skill)} </span>
                 <span className="stat-tag">
                   ({skillData.stat.toUpperCase()})
                 </span>
