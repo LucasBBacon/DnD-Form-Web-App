@@ -3,6 +3,7 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
 import { getLevelUpRequirements } from "../../utils/levelUpUtils";
 import { ASIChoiceBlock } from "./ASIChoiceBlock";
+import { SkillChoiceBlock } from "./SkillChoiceBlock";
 
 interface LevelUpModalProps {
   targetLevel: number;
@@ -18,10 +19,14 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     useCharacterStore();
 
   const classData = classId ? getClassById(classId) : null;
-  const subclassData = subclassId ? getSubclassById(subclassId) : null; 
+  const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
   // Determine modules to render
-  const requirements = getLevelUpRequirements(targetLevel, classData, subclassData);
+  const requirements = getLevelUpRequirements(
+    targetLevel,
+    classData,
+    subclassData,
+  );
 
   // Universal save handler
   const handleSaveChoice = (updates: Partial<LevelChoice>) => {
@@ -45,6 +50,16 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
             {/* Map over getSubclassesForClass(classId) here */}
           </select>
         </div>
+      )}
+
+      {/* Render Skill picker if required */}
+      {requirements.requiresSkillSelection && (
+        <SkillChoiceBlock
+          level={targetLevel}
+          count={requirements.skillSelectionCount}
+          pool={requirements.skillSelectPool}
+          onSave={handleSaveChoice}
+        />
       )}
 
       {/* Render ASI/Feat Picker if required */}
