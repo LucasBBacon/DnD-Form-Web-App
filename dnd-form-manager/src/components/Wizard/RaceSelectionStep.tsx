@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCharacterStore } from "../../store/useCharacterStore";
-import { getAllRaces, getSubracesForRace } from "../../data/staticDataApi";
+import { getAllRaces, getRaceById, getSubraceById, getSubracesForRace, getTraitsByIds } from "../../data/staticDataApi";
 
 export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
   const { setRace, setSubrace } = useCharacterStore();
@@ -13,6 +13,16 @@ export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
   const availableSubraces = previewRaceId
     ? getSubracesForRace(previewRaceId)
     : [];
+    
+  const previewRaceData = previewRaceId ? getRaceById(previewRaceId) : null;
+  const previewSubraceData = previewSubraceId ? getSubraceById(previewSubraceId) : null;
+
+  // Aggregate traits for preview
+  // grab race traits
+  const baseTraitIds = previewRaceData?.traits || [];
+  const subraceTraitIds = previewSubraceData?.traits_added || [];
+  // combine and fetch actual trait data objs
+  const combinedTraits = getTraitsByIds([...baseTraitIds, ...subraceTraitIds]);
 
   const handleLockIn = () => {
     if (!previewRaceId) return;
@@ -69,8 +79,20 @@ export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
               )}
 
               {/* Show the lore of either the subrace (if selected) or the base race */}
-              <div className="lore-box">
-                {/* TODO: Render the full text/traits here based on static data */}
+              <div className="traits-box">
+                <h4>Racial Traits</h4>
+                {combinedTraits.length === 0 ? (
+                  <p className="empty-state">No special traits.</p>
+                ) : (
+                  <ul className="traits-list">
+                    {combinedTraits.map(trait => (
+                      <li key={trait.id} className="trait-item">
+                        <strong>{trait.name}: </strong>
+                        <span>{trait.lore.short_description}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
 
               <button

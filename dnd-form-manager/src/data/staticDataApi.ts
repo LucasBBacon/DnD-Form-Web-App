@@ -4,6 +4,7 @@ import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemData } from "../types/item";
 import type { SpellData } from "../types/spell";
+// import type { TraitData } from "../types/trait";
 
 import rawRacesData from "./races.json";
 import rawSubracesData from "./subraces.json";
@@ -11,6 +12,7 @@ import rawClassesData from "./classes.json";
 import rawSubclassesData from "./subclasses.json";
 import rawItemsData from "./items.json";
 import rawSpellsData from "./spells.json";
+// import rawTraitsData from "./traits.json"
 
 // region Race API
 const racesArray = rawRacesData as Race[];
@@ -107,3 +109,28 @@ export const getSpellByID = (id: string | null): SpellData | null => {
 export const getAllSpells = (): SpellData[] => {
   return spellsArray;
 };
+
+// region Traits API
+// const traitsArray = rawTraitsData as TraitData[];
+// const traitDictionary: Record<string, TraitData> = {};
+// traitsArray.forEach((t) => {
+//   traitDictionary[t.id] = t;
+// });
+
+// export const getTraitById = (id: string): TraitData | null => {
+//   return traitDictionary[id] || null;
+// };
+
+// export const getTraitsByIds = (ids: string[]): TraitData[] => {
+//   return ids.map(id => traitDictionary[id]).filter((t): t is TraitData => t !== undefined);
+// }
+
+// TODO: Implement proper traits.
+// Mock getter
+export const getTraitsByIds = (ids: string[]) => {
+  return ids.map(id => ({
+    id,
+    name: id.replace('trait_', '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+    lore: { short_description: "Trait description pending static data update." }
+  }));
+}
