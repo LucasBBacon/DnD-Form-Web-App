@@ -1,10 +1,21 @@
-import { getItemById } from "../data/staticDataApi";
+import { getClassById, getItemById, getRaceById, getSubclassById, getSubraceById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { useCharacterStats } from "./useCharacterStats";
 
 export const useAttacks = () => {
-  const { equippedWeaponIds, inventory } = useCharacterStore();
+  const { raceId, classId, subraceId, subclassId, equippedWeaponIds, inventory } = useCharacterStore();
   const { modifiers, proficiencyBonus } = useCharacterStats();
+
+  const raceData = raceId ? getRaceById(raceId) : null;
+  const subraceData = subraceId ? getSubraceById(subraceId) : null;
+  const classData = classId ? getClassById(classId) : null;
+  const subclassData = subclassId ? getSubclassById(subclassId) : null;
+
+  // TODO: Implement trait/feature based proficiencies...
+
+  const weaponProficiencies = [
+    ...(classData?.proficiencies?.weapons || []),
+  ]
 
   const attacks = equippedWeaponIds
     .map((weaponId) => {
@@ -13,7 +24,7 @@ export const useAttacks = () => {
 
       const props = weaponData.weaponProperties;
 
-      // Determine governing stat (str vs dex)
+      // region Determine governing stat (str vs dex)
       let attackStat = "str";
       if (props.category.includes("ranged")) {
         attackStat = "dex";
@@ -24,16 +35,23 @@ export const useAttacks = () => {
 
       const statMod = modifiers[attackStat as "str" | "dex"] || 0;
 
-      // Proficiency check
-      // TODO: cross-reference props.category with classData.proficiencies.weapons
-      // for now, assume true for the MVP
-      const isProficient = true;
+      // region Proficiency Check
+      const isProficient = weaponProficiencies.some(prof => {
+        // Check for broad category matches
+        if (prof === 'simple' && props.category.includes('simple')) return true;
+        if (prof === 'martial' && props.category.includes('martial')) return true;
+        
+        // Check for exact weapon ID matches
+        if (prof === weaponData.id) return true;
 
-      // Calculate to-hit and damage
+        return false;
+      });
+
+      // region Calculate to-hit and damage
       const toHit = statMod + (isProficient ? proficiencyBonus : 0);
       const damageBonus = statMod;
 
-      // Ammunition check
+      // region Ammunition check
       let ammoCount = null;
       let ammoName = null;
       let canAttack = true;
