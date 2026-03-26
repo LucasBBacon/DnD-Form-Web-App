@@ -8,6 +8,9 @@ export interface InventoryRecord {
   quantity: number;
 }
 
+const clampAbilityScore = (score: number): number =>
+  Math.max(1, Math.min(20, score));
+
 interface CharacterState {
   name: string;
   level: number;
@@ -62,6 +65,7 @@ interface CharacterActions {
   setLevel: (level: number) => void;
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
   setBaseAbilityScore: (ability: Ability, score: number) => void;
+  setBaseAbilityScores: (scores: Record<Ability, number>) => void;
   setRacialSkills: (skills: Skill[]) => void;
   setBackgroundSkills: (skills: Skill[]) => void;
 
@@ -182,7 +186,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setRace: (raceId) =>
     set({
       raceId,
-      subraceId: null,         // Reset subrace if the main race changes
+      subraceId: null, // Reset subrace if the main race changes
       chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
     }),
 
@@ -202,9 +206,25 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       baseAbilityScores: {
         ...state.baseAbilityScores,
-        [ability]: score,
+        [ability]: clampAbilityScore(score),
       },
     })),
+
+  setBaseAbilityScores: (scores) =>
+    set((state) => {
+      const nextScores = { ...state.baseAbilityScores };
+
+      (Object.keys(scores) as Ability[]).forEach((ability) => {
+        const incoming = scores[ability];
+        if (typeof incoming === "number" && Number.isFinite(incoming)) {
+          nextScores[ability] = clampAbilityScore(incoming);
+        }
+      });
+
+      return {
+        baseAbilityScores: nextScores,
+      };
+    }),
 
   setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
   setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
@@ -329,15 +349,27 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   removeInventoryItem: (itemId, quantity) =>
     set((state) => {
       // Logic to subtract quantity
-      const updatedInventory = state.inventory.map((i) => i.itemId === itemId ? { ...i, quantity: i.quantity - quantity} : i).filter((i) => i.quantity > 0);
+      const updatedInventory = state.inventory
+        .map((i) =>
+          i.itemId === itemId ? { ...i, quantity: i.quantity - quantity } : i,
+        )
+        .filter((i) => i.quantity > 0);
 
       // Check if the item was completely removed
-      const isItemFullyRemoved = !updatedInventory.some(i => i.itemId === itemId);
+      const isItemFullyRemoved = !updatedInventory.some(
+        (i) => i.itemId === itemId,
+      );
       return {
         inventory: updatedInventory,
         // Strip the ID if they just dropped equipped gear
-        equippedArmorId: (isItemFullyRemoved && state.equippedArmorId === itemId) ? null : state.equippedArmorId,
-        equippedShieldId: (isItemFullyRemoved && state.equippedShieldId === itemId) ? null : state.equippedShieldId,
+        equippedArmorId:
+          isItemFullyRemoved && state.equippedArmorId === itemId
+            ? null
+            : state.equippedArmorId,
+        equippedShieldId:
+          isItemFullyRemoved && state.equippedShieldId === itemId
+            ? null
+            : state.equippedShieldId,
       };
     }),
 

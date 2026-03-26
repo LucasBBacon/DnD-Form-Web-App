@@ -15,3 +15,16 @@ export function rollDice(roll: DiceRoll): number {
   }
   return total + (roll.modifier || 0);
 }
+
+export const roll4d6DropLowest = (): number => {
+  const rolls = [
+    rollDice({ count: 1, faces: 6}),
+    rollDice({ count: 1, faces: 6}),
+    rollDice({ count: 1, faces: 6}),
+    rollDice({ count: 1, faces: 6}),
+  ];
+
+  // Sort descending, keep top 3, sum up
+  rolls.sort((a, b) => b - a);
+  return rolls[0] + rolls[1] + rolls[2];
+};

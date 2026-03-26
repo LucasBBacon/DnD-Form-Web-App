@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RaceSelectionStep } from "./RaceSelectionStep";
 import { ClassSelectionStep } from "./ClassSelectionStep";
+import { AbilityScoreStep } from "./AbilityScoreStep";
 
 type WizardStep = "race" | "class" | "abilities" | "details" | "complete";
 
@@ -36,8 +37,7 @@ export const CharacterCreationWizard = () => {
         )}
         {currentStep === 'abilities' && (
           <div>
-            {/* TODO: develop and put AbilityScoreStep here */}
-            <button onClick={finishWizard}>Finish and Play</button>
+            <AbilityScoreStep onFinish={finishWizard}/>
           </div>
         )}
       </div>
