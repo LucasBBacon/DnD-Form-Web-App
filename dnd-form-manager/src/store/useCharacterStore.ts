@@ -69,6 +69,7 @@ interface CharacterActions {
   setBaseAbilityScore: (ability: Ability, score: number) => void;
   setBaseAbilityScores: (scores: Record<Ability, number>) => void;
   setRacialSkills: (skills: Skill[]) => void;
+  setChosenRacialBonuses: (bonuses: Partial<Record<Ability, number>>) => void;
   setBackgroundSkills: (skills: Skill[]) => void;
 
   learnSpell: (spellId: string) => void;
@@ -234,6 +235,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     }),
 
   setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
+  setChosenRacialBonuses: (bonuses) => set({ chosenRacialBonuses: bonuses }),
   setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
 
   // region Spell Actions

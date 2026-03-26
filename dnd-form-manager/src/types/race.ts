@@ -1,8 +1,9 @@
 import type { Ability, Size } from "./common";
 
 export interface AbilityBonusChoice {
+  count: number;
   bonus: number; // e.g., +2 or +1
-  options: Ability[]; // Allowed stats to apply this specific bonus to
+  pool: Ability[]; // Allowed stats to apply this specific bonus to
 }
 
 export interface Race {

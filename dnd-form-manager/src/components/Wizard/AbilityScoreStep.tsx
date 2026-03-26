@@ -13,9 +13,9 @@ const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
   const {
     setBaseAbilityScores,
+    setChosenRacialBonuses,
     raceId,
     subraceId,
-    chosenRacialBonuses,
     completeSetup,
   } = useCharacterStore();
 
@@ -31,6 +31,34 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
     wis: 10,
     cha: 10,
   });
+
+  // aggregate all choice blocks from both race, subrace, give unique IDs
+  const availableChoices = [
+    ...(raceData?.ability_bonuses?.choices || []).map((c, i) => ({
+      ...c,
+      id: `race_choice_${i}`,
+    })),
+    ...(subraceData?.ability_bonuses?.choices || []).map((c, i) => ({
+      ...c,
+      id: `subrace_choice_${i}`,
+    })),
+  ];
+
+  // State maps choice block ID to an array of selected abilities
+  const [floatingSelections, setFloatingSelections] = useState<
+    Record<string, Ability[]>
+  >({});
+
+  // Compile local selections into the correct format for math util
+  const localChosenBonuses: Partial<Record<Ability, number>> = {};
+  availableChoices.forEach((choice) => {
+    const selectedStats = floatingSelections[choice.id] || [];
+    selectedStats.forEach((stat) => {
+      localChosenBonuses[stat] = (localChosenBonuses[stat] || 0) + choice.bonus;
+    });
+  });
+
+  // region Handlers
 
   const handleUpdateScore = (stat: Ability, val: number) => {
     // Keep it within standard 5e bounds
@@ -53,9 +81,35 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
     });
   };
 
+  const toggleFloatingChoice = (
+    choiceId: string,
+    stat: Ability,
+    maxCount: number,
+  ) => {
+    setFloatingSelections((prev) => {
+      const current = prev[choiceId] || [];
+      if (current.includes(stat)) {
+        // remove it
+        return { ...prev, [choiceId]: current.filter((s) => s !== stat) };
+      } else if (current.length < maxCount) {
+        // add it
+        return { ...prev, [choiceId]: [...current, stat] };
+      }
+      return prev;
+    });
+  };
+
+  // Validation
+  // Ensure every choice block has the required number of selections
+  const isFloatingChoicesValid = availableChoices.every((choice) => {
+    const selectedCount = (floatingSelections[choice.id] || []).length;
+    return selectedCount === choice.count;
+  });
+
   const handleLockIn = () => {
     // push raw scores to global zustand
     setBaseAbilityScores(rawScores);
+    setChosenRacialBonuses(localChosenBonuses);
     completeSetup();
     onFinish();
   };
@@ -74,6 +128,50 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
         </button>
       </div>
 
+      {/* Floating choices */}
+      {availableChoices.length > 0 && (
+        <div className="floating-choices-block choice-block">
+          <h3>Racial Ability Choices</h3>
+          {availableChoices.map((choice) => {
+            const selected = floatingSelections[choice.id] || [];
+            const isFull = selected.length >= choice.count;
+
+            return (
+              <div key={choice.id} className="floating-choice-row">
+                <p>
+                  Choose <strong>{choice.count - selected.length}</strong>{" "}
+                  ability score(s) to increase by +{choice.bonus}:
+                </p>
+                <div className="skill-grid">
+                  {choice.pool.map((stat) => {
+                    const isChecked = selected.includes(stat);
+                    const isDisabled = !isChecked && isFull;
+
+                    return (
+                      <label
+                        key={stat}
+                        className={`skill-checkbox ${isDisabled ? "disabled" : ""}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          disabled={isDisabled}
+                          onChange={() =>
+                            toggleFloatingChoice(choice.id, stat, choice.count)
+                          }
+                        />
+                        {stat.toUpperCase()}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Live preview grid */}
       <div className="abilities-input-grid">
         <div className="grid-header">
           <span>Stat</span>
@@ -91,7 +189,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
             rawScores[stat],
             raceData,
             subraceData,
-            chosenRacialBonuses,
+            localChosenBonuses,
             0,
           );
           const mod = calculateModifier(totalScore);
@@ -136,9 +234,11 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
         })}
       </div>
 
-      {/* TODO: If the race grants floating choices (e.g., Half-elf) render a small picker */}
-
-      <button className="lock-in-btn finalize" onClick={handleLockIn}>
+      <button
+        className="lock-in-btn finalize"
+        onClick={handleLockIn}
+        disabled={!isFloatingChoicesValid}
+      >
         Finish and Generate Sheet
       </button>
     </div>
