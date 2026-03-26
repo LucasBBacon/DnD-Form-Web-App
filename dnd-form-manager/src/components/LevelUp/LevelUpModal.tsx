@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { getClassById, getSubclassById } from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
@@ -28,6 +29,23 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     subclassData,
   );
 
+  // region Validation State
+  // if step is not required, mark it as pre-completed (true)
+  const [asiCompleted, setAsiCompleted] = useState(
+    !requirements.requiresAsiOrFeat,
+  );
+  const [skillsCompleted, setSkillsCompleted] = useState(
+    !requirements.requiresSkillSelection,
+  );
+
+  // don't need local state for subclass/HP, just check if they are valid
+  const isSubclassValid = !requirements.requiresSubclass || subclassId !== null;
+  const isHpValid = targetLevel === 1 || true; // TODO: Make HP rolling optional or default to average
+
+  // Master check
+  const canFinalize =
+    asiCompleted && skillsCompleted && isSubclassValid && isHpValid;
+
   // Universal save handler
   const handleSaveChoice = (updates: Partial<LevelChoice>) => {
     updateLevelChoice(targetLevel, updates);
@@ -46,8 +64,14 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresSubclass && classId && (
         <div className="choice-block">
           <h3>Choose your Martial Archetype</h3>
-          <select onChange={(e) => setSubclass(e.target.value)}>
-            {/* Map over getSubclassesForClass(classId) here */}
+          <select
+            value={subclassId || ""}
+            onChange={(e) => setSubclass(e.target.value)}
+          >
+            <option value="" disabled>
+              Select an archetype...
+            </option>
+            {/* TODO: Map over getSubclassesForClass(classId) here */}
           </select>
         </div>
       )}
@@ -59,12 +83,13 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           count={requirements.skillSelectionCount}
           pool={requirements.skillSelectPool}
           onSave={handleSaveChoice}
+          onConfirm={() => setSkillsCompleted(true)}
         />
       )}
 
       {/* Render ASI/Feat Picker if required */}
       {requirements.requiresAsiOrFeat && (
-        <ASIChoiceBlock level={targetLevel} onSave={handleSaveChoice} />
+        <ASIChoiceBlock level={targetLevel} onSave={handleSaveChoice} onConfirm={() => setAsiCompleted(true)}/>
       )}
 
       {/* Render HP Roller (Required every level after 1) */}
@@ -80,7 +105,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
         </div>
       )}
 
-      <button className="finalize-btn" onClick={finalizeLevelUp}>
+      <button className="finalize-btn" onClick={finalizeLevelUp} disabled={!canFinalize}>
         Complete Level Up
       </button>
     </div>

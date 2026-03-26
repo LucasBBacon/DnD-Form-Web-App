@@ -7,6 +7,7 @@ interface SkillChoiceBlockProps {
   count: number;
   pool: Skill[];
   onSave: (choice: Partial<LevelChoice>) => void;
+  onConfirm: () => void;
 }
 
 const formatSkillName = (skill: string) => {
@@ -21,6 +22,7 @@ export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
   count,
   pool,
   onSave,
+  onConfirm
 }) => {
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
 
@@ -34,6 +36,11 @@ export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
 
   const handleSave = () => {
     onSave({ skillChoices: selectedSkills });
+  };
+
+  const handleConfirm = () => {
+    handleSave();
+    onConfirm();
   };
 
   const isComplete = selectedSkills.length === count;
@@ -72,9 +79,9 @@ export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
       <button
         className="confirm-btn"
         disabled={!isComplete}
-        onClick={handleSave}
+        onClick={handleConfirm}
       >
-        COnfirm Proficiencies
+        Confirm Proficiencies
       </button>
     </div>
   );
