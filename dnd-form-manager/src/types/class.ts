@@ -47,6 +47,7 @@ export interface ClassData {
   };
   spellcasting_base: SpellcastingBase | null;
   subclass_info: {
+    name: string;
     choice_level: number;
     options_pool: string;
   };

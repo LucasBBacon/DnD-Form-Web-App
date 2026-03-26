@@ -56,7 +56,7 @@ interface CharacterActions {
   setRace: (raceId: string) => void;
   setSubrace: (subraceId: string | null) => void;
   setClass: (classId: string) => void;
-  setSubclass: (subclassId: string) => void;
+  setSubclass: (subclassId: string | null) => void;
   setBackground: (background: string) => void;
 
   setLevel: (level: number) => void;

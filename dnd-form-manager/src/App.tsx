@@ -1,11 +1,11 @@
 import { useState } from "react";
 import "./App.css";
-import { CharacterSheet } from "./components/CharacterSheet";
+import { CharacterCreationWizard } from "./components/Wizard/CharacterCreationWizard";
 
 function App() {
   return (
     <div className="app-container">
-      <CharacterSheet />
+      <CharacterCreationWizard />
     </div>
   );
 }

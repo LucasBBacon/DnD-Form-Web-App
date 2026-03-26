@@ -28,4 +28,9 @@ export interface Race {
   subrace_info: {
     options_pool: string; // Subrace grouping ID
   } | null;
+  lore: {
+    short_description: string;
+    full_text?: string;
+    sections?: Array<{ title: string; body: string }>;
+  };
 }
