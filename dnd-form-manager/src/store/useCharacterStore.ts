@@ -52,6 +52,8 @@ interface CharacterState {
   tempHp: number;
   deathSaves: { successes: number; failures: number };
   expendedHitDice: number;
+
+  isSetupComplete: boolean;
 }
 
 interface CharacterActions {
@@ -94,6 +96,9 @@ interface CharacterActions {
   setTempHp: (amount: number) => void;
   recordDeathSave: (type: "successes" | "failures", value: boolean) => void;
   expendHitDie: () => void;
+
+  completeSetup: () => void;
+  resetCharacter: () => void;
 }
 
 type CharacterStore = CharacterState & CharacterActions;
@@ -134,6 +139,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   tempHp: 0,
   deathSaves: { successes: 0, failures: 0 },
   expendedHitDice: 0,
+
+  isSetupComplete: false,
 
   // --- Actions ---
   setName: (name) => set({ name }),
@@ -431,4 +438,18 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       expendedHitDice: state.expendedHitDice + 1,
     })),
+
+  // region Character Saving Actions
+  completeSetup: () => set({ isSetupComplete: true}),
+
+  resetCharacter: () => set({
+    isSetupComplete: false,
+    name: '',
+    level: 1,
+    raceId: null,
+    subraceId: null,
+    classId: null,
+    subclassId: null,
+    inventory: []
+  })
 }));

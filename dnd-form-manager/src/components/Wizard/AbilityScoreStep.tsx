@@ -11,8 +11,13 @@ import {
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
 export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
-  const { setBaseAbilityScores, raceId, subraceId, chosenRacialBonuses } =
-    useCharacterStore();
+  const {
+    setBaseAbilityScores,
+    raceId,
+    subraceId,
+    chosenRacialBonuses,
+    completeSetup,
+  } = useCharacterStore();
 
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
@@ -51,6 +56,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
   const handleLockIn = () => {
     // push raw scores to global zustand
     setBaseAbilityScores(rawScores);
+    completeSetup();
     onFinish();
   };
 
@@ -112,14 +118,18 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
               </button>
 
               {/* Racial Bonus Preview */}
-              <span className={`racial-bonus ${racialBonus > 0 ? 'positive' : 'neutral'}`}>
-                {racialBonus > 0 ? `+${racialBonus}` : '-'}
+              <span
+                className={`racial-bonus ${racialBonus > 0 ? "positive" : "neutral"}`}
+              >
+                {racialBonus > 0 ? `+${racialBonus}` : "-"}
               </span>
 
               {/* Final Preview */}
               <div className="final-preview">
                 <strong>{totalScore}</strong>
-                <span className="mod-preview">({mod >= 0 ? `$+{mod}` : mod})</span>
+                <span className="mod-preview">
+                  ({mod >= 0 ? `$+{mod}` : mod})
+                </span>
               </div>
             </div>
           );
@@ -127,7 +137,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
       </div>
 
       {/* TODO: If the race grants floating choices (e.g., Half-elf) render a small picker */}
-      
+
       <button className="lock-in-btn finalize" onClick={handleLockIn}>
         Finish and Generate Sheet
       </button>
