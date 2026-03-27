@@ -2,6 +2,7 @@ import {
   getClassById,
   getItemById,
   getRaceById,
+  getSubclassById,
   getSubraceById,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
@@ -23,6 +24,7 @@ export const useCharacterStats = () => {
     raceId,
     subraceId,
     classId,
+    subclassId,
     baseAbilityScores,
     hpRolls,
     chosenRacialBonuses,
@@ -37,6 +39,7 @@ export const useCharacterStats = () => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
   const classData = classId ? getClassById(classId) : null;
+  const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
   // Aggregate all ASI choices from level 1 to current level
   const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
@@ -138,6 +141,26 @@ export const useCharacterStats = () => {
       : null;
   const isWearingShield = !!equippedShieldId;
 
+  // region Armor Penalty Check
+  const armorProficiencies = [...(classData?.proficiencies?.armor || [])];
+
+  let isArmorPenalized = false;
+
+  if (equippedArmorId) {
+    if (
+      equippedArmor?.armor_properties &&
+      !armorProficiencies.includes(equippedArmor.armor_properties.armorType)
+    ) {
+      isArmorPenalized = true;
+    }
+  }
+
+  if (isWearingShield) {
+    if (!armorProficiencies.includes("category_armor_shield")) {
+      isArmorPenalized = true;
+    }
+  }
+
   const armorClass = calculateArmorClass(
     dexMod,
     equippedArmor,
@@ -152,6 +175,7 @@ export const useCharacterStats = () => {
     currentHp,
     initiative,
     armorClass,
+    isArmorPenalized,
     totalWeight,
     isEncumbered,
   };

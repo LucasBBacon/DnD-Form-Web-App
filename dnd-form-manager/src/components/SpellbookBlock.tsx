@@ -13,6 +13,7 @@ export const SpellbookBlock = () => {
     spellAttackBonus,
     spellsKnown,
     spellsPrepared,
+    canCastSpells,
   } = useSpellcasting();
 
   const [selectedSpellId, setSelectedSpellId] = useState<string>("");
@@ -39,6 +40,23 @@ export const SpellbookBlock = () => {
 
   return (
     <div className="spellbook-container">
+      {/* Penalty Banner */}
+      {!canCastSpells && (
+        <div
+          className="penalty-banner"
+          style={{
+            background: "#ff4444",
+            color: "white",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "15px",
+          }}
+        >
+          <strong>ARMOR PENALTY</strong> You are wearing armor or wielding a
+          shield you are not proficient with. You cannot cast spells!
+        </div>
+      )}
+
       <div className="spellbook-header">
         <h2>Spellbook</h2>
         <div className="spell-stats">
@@ -68,7 +86,7 @@ export const SpellbookBlock = () => {
             </option>
           ))}
         </select>
-        <button onClick={handleAddSpell}>
+        <button onClick={handleAddSpell} disabled={!canCastSpells}>
           {isPreparedCaster ? "Prepare" : "Learn"}
         </button>
       </div>
@@ -87,7 +105,7 @@ export const SpellbookBlock = () => {
                 <div className="spell-card-header">
                   <strong>{spell.name}</strong>
                   <span className="spell-tags">
-                    {spell.level === 0 ? "Cantrip" : `Level ${spell.level}`} - 
+                    {spell.level === 0 ? "Cantrip" : `Level ${spell.level}`} -
                     {spell.school}
                   </span>
                 </div>

@@ -1,74 +1,102 @@
-import { getClassById, getRaceById, getSubclassById, getSubraceById } from "../data/staticDataApi";
+import {
+  getClassById,
+  getRaceById,
+  getSubclassById,
+  getSubraceById,
+} from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { calculateModifier, calculateTotalAbilityScore, calculateTotalASI } from "../utils/abilityUtils";
+import {
+  calculateModifier,
+  calculateTotalAbilityScore,
+  calculateTotalASI,
+} from "../utils/abilityUtils";
 import { calculateProficiencyBonus } from "../utils/progressionUtils";
+import { useCharacterStats } from "./useCharacterStats";
 
 export const useSpellcasting = () => {
-    const { level, raceId, subraceId, classId, subclassId, baseAbilityScores, chosenRacialBonuses, choicesByLevel, expendedSpellSlots, expendedPactSlots, spellsPrepared, spellsKnown } = useCharacterStore();
+  const {
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+    baseAbilityScores,
+    chosenRacialBonuses,
+    choicesByLevel,
+    expendedSpellSlots,
+    expendedPactSlots,
+    spellsPrepared,
+    spellsKnown,
+  } = useCharacterStore();
+  const { isArmorPenalized } = useCharacterStats();
 
-    const raceData = raceId ? getRaceById(raceId) : null;
-    const subraceData = subraceId ? getSubraceById(subraceId) : null;
-    const classData = classId ? getClassById(classId) : null;
-    const subclassData = subclassId ? getSubclassById(subclassId) : null;
+  const raceData = raceId ? getRaceById(raceId) : null;
+  const subraceData = subraceId ? getSubraceById(subraceId) : null;
+  const classData = classId ? getClassById(classId) : null;
+  const subclassData = subclassId ? getSubclassById(subclassId) : null; // TODO: Add subclass spells!
 
-    // Find the total slots the character *should* have at this level
-    // Assuming Class JSON has progression[level - 1].spellcasting_progression
-    const currentProgression = classData?.progression.find(p => p.level === level);
-    const totalSlots = currentProgression?.spellcasting_progression?.spell_slots || {};
+  // Find the total slots the character *should* have at this level
+  // Assuming Class JSON has progression[level - 1].spellcasting_progression
+  const currentProgression = classData?.progression.find(
+    (p) => p.level === level,
+  );
+  const totalSlots =
+    currentProgression?.spellcasting_progression?.spell_slots || {};
 
-    // Generate a clean array for the UI to render slot checkboxes
-    // e.g., Level 1: [true, true, false, false] (2 used, 2 available out of 4)
-    const slotStatusByLevel: Record<number, boolean[]> = {};
+  // Generate a clean array for the UI to render slot checkboxes
+  // e.g., Level 1: [true, true, false, false] (2 used, 2 available out of 4)
+  const slotStatusByLevel: Record<number, boolean[]> = {};
 
-    for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
-        const maxSlotsForThisLevel = totalSlots[spellLevel] || 0;
+  for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
+    const maxSlotsForThisLevel = totalSlots[spellLevel] || 0;
 
-        if (maxSlotsForThisLevel > 0) {
-            const usedSlots = expendedSpellSlots[spellLevel] || 0;
-            const statusArray = [];
-            
-            for (let i = 0; i < maxSlotsForThisLevel; i++) {
-                // if i is less than used slots, this specific checkbox is checked
-                statusArray.push(i < usedSlots);
-            }
+    if (maxSlotsForThisLevel > 0) {
+      const usedSlots = expendedSpellSlots[spellLevel] || 0;
+      const statusArray = [];
 
-            slotStatusByLevel[spellLevel] = statusArray;
-        }
+      for (let i = 0; i < maxSlotsForThisLevel; i++) {
+        // if i is less than used slots, this specific checkbox is checked
+        statusArray.push(i < usedSlots);
+      }
+
+      slotStatusByLevel[spellLevel] = statusArray;
     }
+  }
 
-    // Calculate spell math
-    let spellSaveDC = 0;
-    let spellAttackBonus = 0;
-    const spellcastingAbility = classData?.spellcasting_base?.ability;
+  // Calculate spell math
+  let spellSaveDC = 0;
+  let spellAttackBonus = 0;
+  const spellcastingAbility = classData?.spellcasting_base?.ability;
 
-    if (spellcastingAbility) {
-        const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
-        const totalAbilityScore = calculateTotalAbilityScore(
-            spellcastingAbility,
-            baseAbilityScores[spellcastingAbility],
-            raceData,
-            subraceData,
-            chosenRacialBonuses,
-            totalAsiBonuses[spellcastingAbility]
-        );
+  if (spellcastingAbility) {
+    const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
+    const totalAbilityScore = calculateTotalAbilityScore(
+      spellcastingAbility,
+      baseAbilityScores[spellcastingAbility],
+      raceData,
+      subraceData,
+      chosenRacialBonuses,
+      totalAsiBonuses[spellcastingAbility],
+    );
 
-        const abilityMod = calculateModifier(totalAbilityScore);
-        const profBonus = calculateProficiencyBonus(level);
+    const abilityMod = calculateModifier(totalAbilityScore);
+    const profBonus = calculateProficiencyBonus(level);
 
-        spellSaveDC = 8 + profBonus + abilityMod;
-        spellAttackBonus = profBonus + abilityMod;
-    }
+    spellSaveDC = 8 + profBonus + abilityMod;
+    spellAttackBonus = profBonus + abilityMod;
+  }
 
-    // Return the data needed to build the spellbook UI
-    return {
-        isSpellcaster: !!classData?.spellcasting_base,
-        preparationType: classData?.spellcasting_base?.preparation_type,
-        spellcastingAbility,
-        spellSaveDC,
-        spellAttackBonus,
-        slotStatusByLevel,
-        spellsPrepared,
-        spellsKnown,
-        // TODO: Add Pact Logic
-    };
+  // Return the data needed to build the spellbook UI
+  return {
+    isSpellcaster: !!classData?.spellcasting_base,
+    preparationType: classData?.spellcasting_base?.preparation_type,
+    spellcastingAbility,
+    spellSaveDC,
+    spellAttackBonus,
+    slotStatusByLevel,
+    spellsPrepared,
+    spellsKnown,
+    canCastSpells: !isArmorPenalized,
+    // TODO: Add Pact Logic
+  };
 };
