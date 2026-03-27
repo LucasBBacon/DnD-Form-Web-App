@@ -1,52 +1,60 @@
-import {
-  getClassById,
-  getRaceById,
-  getSubclassById,
-  getSubraceById,
-} from "../data/staticDataApi";
+import { getClassById, getSubclassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
-import {
-  calculateModifier,
-  calculateTotalAbilityScore,
-  calculateTotalASI,
-} from "../utils/abilityUtils";
-import { calculateProficiencyBonus } from "../utils/progressionUtils";
+import type { Ability } from "../types/common";
 import { useCharacterStats } from "./useCharacterStats";
 
 export const useSpellcasting = () => {
   const {
     level,
-    raceId,
-    subraceId,
     classId,
     subclassId,
-    baseAbilityScores,
-    chosenRacialBonuses,
-    choicesByLevel,
     expendedSpellSlots,
     expendedPactSlots,
     spellsPrepared,
     spellsKnown,
   } = useCharacterStore();
-  const { isArmorPenalized } = useCharacterStats();
+  const { modifiers, proficiencyBonus, isArmorPenalized } = useCharacterStats();
 
-  const raceData = raceId ? getRaceById(raceId) : null;
-  const subraceData = subraceId ? getSubraceById(subraceId) : null;
   const classData = classId ? getClassById(classId) : null;
-  const subclassData = subclassId ? getSubclassById(subclassId) : null; // TODO: Add subclass spells!
+  const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
-  const preparationType = classData?.spellcasting_base?.preparation_type;
+  // --- Identify caster type ---
+  // Subclass takes priority if it grants spellcasting
+  const activeSpellcastingBase =
+    subclassData?.spellcasting_override || classData?.spellcasting_base;
+  const isSpellcaster = !!activeSpellcastingBase;
+  const preparationType = activeSpellcastingBase?.preparation_type;
+  const spellcastingAbility =
+    (activeSpellcastingBase?.ability as Ability) || undefined;
   const isPactMagic = preparationType === "pact";
 
-  // Find the total slots the character *should* have at this level
-  const currentProgression = classData?.progression.find(
-    (p) => p.level === level,
-  );
-  const spellProg = currentProgression?.spellcasting_progression;
-  const totalSlots = spellProg?.spell_slots || {};
+  // --- Find progression for current level ---
+  // Look backwards from current level to find most recent spell slot update
+  const getActiveSpellProgression = () => {
+    if (subclassData?.spellcasting_override) {
+      for (let i = level; i >= 1; i--) {
+        const prog = subclassData.progression.find((p) => p.level === i);
+        if (prog?.spellcasting_progression_additions) {
+          return prog.spellcasting_progression_additions;
+        }
+      }
+    }
 
-  // Generate a clean array for the UI to render slot checkboxes
-  // e.g., Level 1: [true, true, false, false] (2 used, 2 available out of 4)
+    if (classData?.spellcasting_base) {
+      for (let i = level; i >= 1; i--) {
+        const prog = classData.progression.find((p) => p.level === i);
+        if (prog?.spellcasting_progression) {
+          return prog.spellcasting_progression;
+        }
+      }
+    }
+
+    return null;
+  };
+
+  const spellProg = getActiveSpellProgression();
+
+  // --- Slot generation ---
   const slotStatusByLevel: Record<number, { total: number; expended: number }> =
     {};
   let pactMagicInfo: {
@@ -54,6 +62,8 @@ export const useSpellcasting = () => {
     total: number;
     expended: number;
   } | null = null;
+  const maxCantrips = spellProg?.cantrips_known || 0;
+  const maxSpellsKnown = spellProg?.spells_known || 0;
 
   if (spellProg) {
     if (isPactMagic) {
@@ -73,52 +83,38 @@ export const useSpellcasting = () => {
         };
       }
     } else {
-      for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
-        const maxSlotsForThisLevel = totalSlots[spellLevel] || 0;
-
-        if (maxSlotsForThisLevel > 0) {
-          const usedSlots = expendedSpellSlots[spellLevel] || 0;
-          slotStatusByLevel[spellLevel] = {
-            total: maxSlotsForThisLevel,
-            expended: usedSlots,
+      // All other magic casting
+      const slots = spellProg.spell_slots || {};
+      Object.entries(slots).forEach(([lvlStr, totalSlots]) => {
+        const lvl = Number(lvlStr);
+        if (totalSlots > 0) {
+          slotStatusByLevel[lvl] = {
+            total: totalSlots,
+            expended: expendedSpellSlots[lvl] || 0,
           };
         }
-      }
+      });
     }
   }
 
-  // Calculate spell math
-  let spellSaveDC = 0;
-  let spellAttackBonus = 0;
-  const spellcastingAbility = classData?.spellcasting_base?.ability;
-
-  if (spellcastingAbility) {
-    const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
-    const totalAbilityScore = calculateTotalAbilityScore(
-      spellcastingAbility,
-      baseAbilityScores[spellcastingAbility],
-      raceData,
-      subraceData,
-      chosenRacialBonuses,
-      totalAsiBonuses[spellcastingAbility],
-    );
-
-    const abilityMod = calculateModifier(totalAbilityScore);
-    const profBonus = calculateProficiencyBonus(level);
-
-    spellSaveDC = 8 + profBonus + abilityMod;
-    spellAttackBonus = profBonus + abilityMod;
-  }
+  // --- Calculate spell math ---
+  const statMod = spellcastingAbility ? modifiers[spellcastingAbility] || 0 : 0;
+  const spellSaveDC = 8 + proficiencyBonus + statMod;
+  const spellAttackBonus = proficiencyBonus + statMod;
 
   // Return the data needed to build the spellbook UI
   return {
-    isSpellcaster: !!classData?.spellcasting_base,
-    preparationType: classData?.spellcasting_base?.preparation_type,
-    spellcastingAbility: classData?.spellcasting_base?.ability,
+    isSpellcaster,
+    preparationType,
+    spellcastingAbility,
     spellSaveDC,
     spellAttackBonus,
+
     slotStatusByLevel,
     pactMagicInfo,
+
+    maxCantrips,
+    maxSpellsKnown,
     spellsPrepared,
     spellsKnown,
     canCastSpells: !isArmorPenalized,
