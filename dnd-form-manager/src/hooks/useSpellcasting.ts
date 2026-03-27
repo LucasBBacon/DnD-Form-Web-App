@@ -35,31 +35,55 @@ export const useSpellcasting = () => {
   const classData = classId ? getClassById(classId) : null;
   const subclassData = subclassId ? getSubclassById(subclassId) : null; // TODO: Add subclass spells!
 
+  const preparationType = classData?.spellcasting_base?.preparation_type;
+  const isPactMagic = preparationType === "pact";
+
   // Find the total slots the character *should* have at this level
-  // Assuming Class JSON has progression[level - 1].spellcasting_progression
   const currentProgression = classData?.progression.find(
     (p) => p.level === level,
   );
-  const totalSlots =
-    currentProgression?.spellcasting_progression?.spell_slots || {};
+  const spellProg = currentProgression?.spellcasting_progression;
+  const totalSlots = spellProg?.spell_slots || {};
 
   // Generate a clean array for the UI to render slot checkboxes
   // e.g., Level 1: [true, true, false, false] (2 used, 2 available out of 4)
-  const slotStatusByLevel: Record<number, boolean[]> = {};
+  const slotStatusByLevel: Record<number, { total: number; expended: number }> =
+    {};
+  let pactMagicInfo: {
+    level: number;
+    total: number;
+    expended: number;
+  } | null = null;
 
-  for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
-    const maxSlotsForThisLevel = totalSlots[spellLevel] || 0;
+  if (spellProg) {
+    if (isPactMagic) {
+      // Warlock spells only have one tier of slots
+      const slotLevels = Object.keys(spellProg.spell_slots || {});
+      if (slotLevels.length > 0) {
+        // Grab the single key (slot level) and its value (total slots)
+        const pLevel = Math.max(...slotLevels.map(Number));
+        const pTotal = spellProg.spell_slots
+          ? spellProg.spell_slots[pLevel]
+          : 0;
 
-    if (maxSlotsForThisLevel > 0) {
-      const usedSlots = expendedSpellSlots[spellLevel] || 0;
-      const statusArray = [];
-
-      for (let i = 0; i < maxSlotsForThisLevel; i++) {
-        // if i is less than used slots, this specific checkbox is checked
-        statusArray.push(i < usedSlots);
+        pactMagicInfo = {
+          level: pLevel,
+          total: pTotal,
+          expended: expendedPactSlots || 0,
+        };
       }
+    } else {
+      for (let spellLevel = 1; spellLevel <= 9; spellLevel++) {
+        const maxSlotsForThisLevel = totalSlots[spellLevel] || 0;
 
-      slotStatusByLevel[spellLevel] = statusArray;
+        if (maxSlotsForThisLevel > 0) {
+          const usedSlots = expendedSpellSlots[spellLevel] || 0;
+          slotStatusByLevel[spellLevel] = {
+            total: maxSlotsForThisLevel,
+            expended: usedSlots,
+          };
+        }
+      }
     }
   }
 
@@ -90,13 +114,13 @@ export const useSpellcasting = () => {
   return {
     isSpellcaster: !!classData?.spellcasting_base,
     preparationType: classData?.spellcasting_base?.preparation_type,
-    spellcastingAbility,
+    spellcastingAbility: classData?.spellcasting_base?.ability,
     spellSaveDC,
     spellAttackBonus,
     slotStatusByLevel,
+    pactMagicInfo,
     spellsPrepared,
     spellsKnown,
     canCastSpells: !isArmorPenalized,
-    // TODO: Add Pact Logic
   };
 };
