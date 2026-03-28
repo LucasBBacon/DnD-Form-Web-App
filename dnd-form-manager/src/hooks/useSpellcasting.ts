@@ -1,11 +1,14 @@
 import { getClassById, getSubclassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
+import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
 export const useSpellcasting = () => {
   const {
     level,
+    raceId,
+    subraceId,
     classId,
     subclassId,
     expendedSpellSlots,
@@ -22,7 +25,6 @@ export const useSpellcasting = () => {
   // Subclass takes priority if it grants spellcasting
   const activeSpellcastingBase =
     subclassData?.spellcasting_override || classData?.spellcasting_base;
-  const isSpellcaster = !!activeSpellcastingBase;
   const preparationType = activeSpellcastingBase?.preparation_type;
   const spellcastingAbility =
     (activeSpellcastingBase?.ability as Ability) || undefined;
@@ -97,6 +99,51 @@ export const useSpellcasting = () => {
     }
   }
 
+  // --- Innate spellcasting (Traits)
+  const allTraits = getAllCharacterTraits(
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+  );
+  const innateSpells: Array<{
+    spellId: string;
+    sourceTraitName: string;
+    spellSaveDC: number;
+    spellAttackBonus: number;
+    uses?: { count: number | string; reset: string };
+  }> = [];
+
+  allTraits.forEach((trait) => {
+    if (!trait.effects) return;
+
+    trait.effects.forEach((effect) => {
+      // Check if it's a spell grant and the character is high enough level
+      if (
+        effect.type === "spell_grant" &&
+        effect.target &&
+        (effect.level_available || 1) <= level
+      ) {
+        // Innate spells often have their own specific casting ability
+        // If not specified, default to the class casting ability, 0 if neither
+        const ability = effect.spellcasting_ability || spellcastingAbility;
+        const statMod = ability ? modifiers[ability] || 0 : 0;
+
+        innateSpells.push({
+          spellId: effect.target,
+          sourceTraitName: trait.name,
+          spellSaveDC: 8 + proficiencyBonus + statMod,
+          spellAttackBonus: proficiencyBonus + statMod,
+          uses: effect.uses,
+        });
+      }
+    });
+  });
+
+  // A level 1 fighter with high elf cantrip is a spellcaster still
+  const isSpellcaster = !!activeSpellcastingBase || innateSpells.length > 0;
+
   // --- Calculate spell math ---
   const statMod = spellcastingAbility ? modifiers[spellcastingAbility] || 0 : 0;
   const spellSaveDC = 8 + proficiencyBonus + statMod;
@@ -117,6 +164,8 @@ export const useSpellcasting = () => {
     maxSpellsKnown,
     spellsPrepared,
     spellsKnown,
+    innateSpells,
+    
     canCastSpells: !isArmorPenalized,
   };
 };

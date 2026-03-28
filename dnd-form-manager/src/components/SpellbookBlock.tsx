@@ -13,6 +13,7 @@ export const SpellbookBlock = () => {
     spellAttackBonus,
     spellsKnown,
     spellsPrepared,
+    innateSpells,
     canCastSpells,
   } = useSpellcasting();
 
@@ -68,6 +69,41 @@ export const SpellbookBlock = () => {
           </span>
         </div>
       </div>
+
+      {/* --- Innate Spells --- */}
+      {innateSpells && innateSpells.length > 0 && (
+        <div className="innate-spells-block">
+          <h3>Innate Magic and Traits</h3>
+          <ul className="innate-spell-list">
+            {innateSpells.map((innate, idx) => (
+              <li key={`innate-${idx}`} className="spell-row">
+                <div className="spell-info">
+                  <strong>
+                    {/* TODO: Fetch Spell Name by innate.spellId */}
+                  </strong>
+                  <span className="source-tag">
+                    from {innate.sourceTraitName}
+                  </span>
+                </div>
+                <div className="spell-math">
+                  <span>
+                    ATK:{" "}
+                    {innate.spellAttackBonus >= 0
+                      ? `+${innate.spellAttackBonus}`
+                      : innate.spellAttackBonus}
+                  </span>
+                  <span>DC: {innate.spellSaveDC}</span>
+                </div>
+                {innate.uses && (
+                  <div className="spell-uses">
+                    {innate.uses.count} / {innate.uses.reset.replace("_", " ")}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* --- Add Spell Dev Tool --- */}
       <div className="add-spell-row">
