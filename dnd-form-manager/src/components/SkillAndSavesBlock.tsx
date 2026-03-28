@@ -69,12 +69,26 @@ export const SkillAndSavesBlock = () => {
                 key={`skill-${skill}`}
                 className={skillData.isProficient ? "proficient" : ""}
               >
-                <span className="indicator">{indicator} </span>
-                <span className="mod">{formatMod(skillData.total)} </span>
+                <span className="indicator">{indicator}</span>
+                <span className="mod">{formatMod(skillData.total)}</span>
                 <span className="name">{formatName(skill)} </span>
-                <span className="stat-tag">
-                  ({skillData.stat.toUpperCase()})
-                </span>
+                {/* Conditional Tags */}
+                {skillData.advantageSources.length > 0 && (
+                  <span
+                    className="tag adv"
+                    title={`Granted by: ${skillData.advantageSources.join(", ")}`}
+                  >
+                    ADV
+                  </span>
+                )}
+                {skillData.disadvantageSources.length > 0 && (
+                  <span
+                    className="tag dis"
+                    title={`Caused by: ${skillData.disadvantageSources.join(", ")}`}
+                  >
+                    DIS
+                  </span>
+                )}
               </li>
             );
           })}

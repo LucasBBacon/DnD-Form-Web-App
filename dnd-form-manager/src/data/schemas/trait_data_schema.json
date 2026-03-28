@@ -67,6 +67,7 @@
                     "type": {
                         "type": "string",
                         "enum": [
+                            "advantage",
                             "sense",
                             "proficiency",
                             "spell_grant",

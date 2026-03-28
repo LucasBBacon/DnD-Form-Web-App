@@ -5,7 +5,7 @@
         {
             "type": "stat_modifier",
             "target": "ac",
-            "value": "calc_unarmored_con",
+            "value": "con",
             "predicates": [
                 {
                     "type": "armor_prohibited",

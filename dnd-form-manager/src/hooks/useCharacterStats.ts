@@ -20,28 +20,13 @@ import { getAllCharacterTraits } from "../utils/traitUtils";
 
 export const useCharacterStats = () => {
   // Pull raw data from zustand
-  // const {
-  //   level,
-  //   raceId,
-  //   subraceId,
-  //   classId,
-  //   subclassId,
-  //   baseAbilityScores,
-  //   hpRolls,
-  //   chosenRacialBonuses,
-  //   choicesByLevel,
-  //   inventory,
-  //   equippedArmorId,
-  //   equippedShieldId,
-  //   damageTaken,
-  // } = useCharacterStore();
   const state = useCharacterStore();
 
   // fetch static definitions
   const raceData = state.raceId ? getRaceById(state.raceId) : null;
   const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
-  // TODO: get data from subclass
+  // TODO: get data from subclass and process
 
   const allTraits = getAllCharacterTraits(
     state.level,
@@ -153,12 +138,12 @@ export const useCharacterStats = () => {
 
       // Apply AC modifiers
       if (effect.target === "ac" && effect.value !== undefined) {
-        const acBonus =
-          typeof effect.value === "number"
-            ? effect.value
-            : effect.value === "calc_unarmored_con"
-              ? modifiers.dex + modifiers.con
-              : 0;
+        let acBonus = 0;
+        if (typeof effect.value === "number") {
+          acBonus = effect.value;
+        } else {
+          acBonus = modifiers.dex + modifiers[effect.value as Ability];
+        }
         finalArmorClass += acBonus;
       }
 

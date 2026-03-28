@@ -126,5 +126,5 @@ compileFolder('items', validateItem, 'items.json');
 compileFolder('spells', validateSpell, 'spells.json');
 compileFolder('subclasses', validateSubclass, 'subclasses.json');
 compileFolder('subraces', validateSubrace, 'subraces.json');
-compileFolder('traits', validateTrait, 'trait.json');
+compileFolder('traits', validateTrait, 'traits.json');
 console.log('Data compilation complete.\n');
