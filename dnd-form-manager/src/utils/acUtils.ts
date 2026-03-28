@@ -23,7 +23,7 @@ export const calculateArmorClass = (
   dexModifier: number,
   equippedArmor: EquippedArmorItem | null,
   isWearingShield: boolean,
-  unarmoredDefense?: UnarmoredDefenseModifier,
+  unarmoredDefense?: number,
   flatBonuses: number = 0,
 ): number => {
   let baseAc = 10;
@@ -35,7 +35,7 @@ export const calculateArmorClass = (
 
     // Monk & Barbarian get a second modifier added
     if (unarmoredDefense) {
-      baseAc += unarmoredDefense.modifier;
+      baseAc += unarmoredDefense;
     }
   } else {
     // Wearing armor

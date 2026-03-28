@@ -1,0 +1,53 @@
+import { getItemById } from "../data/staticDataApi";
+import type { useCharacterStats } from "../hooks/useCharacterStats";
+import type { useCharacterStore } from "../store/useCharacterStore";
+import type { Ability } from "../types/common";
+import type { Predicate } from "../types/predicate";
+
+export const evaluatePredicate = (
+  predicate: Predicate,
+  state: ReturnType<typeof useCharacterStore.getState>,
+  stats: ReturnType<typeof useCharacterStats>,
+): boolean => {
+  switch (predicate.type) {
+    case "amor_prohibited": {
+      if (!state.equippedArmorId) return true;
+      const armor = getItemById(state.equippedArmorId);
+      // Return false if the equipped armor matches the prohibited category
+      return armor?.armor_properties?.armorType !== predicate.value;
+    }
+
+    case "shield_prohibited": {
+      const hasShield = !!state.equippedShieldId;
+      // If predicate.value is true (shield IS prohibited), we return true if they DON'T have a shield
+      return predicate.value === true ? !hasShield : hasShield;
+    }
+
+    case "stat_minimum": {
+      if (!predicate.target || typeof predicate.value !== "number")
+        return false;
+      // Check the derived modifiers/totals
+      const statTotal = stats.totalScores[predicate.target as Ability];
+      return statTotal >= predicate.value;
+    }
+
+    case "requires_trait": {
+      // TODO: use getAllCharacterTraits utility to check if ID exists
+      return true; // placeholder
+    }
+
+    default:
+      console.warn(`Unknown predicate type: ${predicate.type}`);
+      return false;
+  }
+};
+
+// Helper to evaluate an array of predicates (ALL must be true)
+export const evaluateAllPredicates = (
+  predicates: Predicate[] | undefined,
+  state: ReturnType<typeof useCharacterStore.getState>,
+  stats: ReturnType<typeof useCharacterStats>,
+): boolean => {
+  if (!predicates || predicates.length === 0) return true;
+  return predicates.every((p) => evaluatePredicate(p, state, stats));
+};

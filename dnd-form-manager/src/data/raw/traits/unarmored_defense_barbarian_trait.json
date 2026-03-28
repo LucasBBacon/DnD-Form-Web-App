@@ -1,0 +1,26 @@
+{
+    "id": "trait_unarmored_defense_barbarian",
+    "name": "Unarmored Defense",
+    "is_active": false,
+    "effects": [
+        {
+            "type": "ac_calc",
+            "target": "ac",
+            "value": "calc_unarmored_con",
+            "condition": {
+                "operator": "OR",
+                "conditions": [
+                    {
+                        "operator": "EQUALS",
+                        "target": "equipment.armor.base_type",
+                        "value": "none"
+                    }
+                ]
+            }
+        }
+    ],
+    "lore": {
+        "short_description": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit.",
+        "full_text": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit."
+    }
+}

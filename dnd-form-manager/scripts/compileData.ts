@@ -45,6 +45,9 @@ const subclassSchema = JSON.parse(
 const subraceSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'subrace_data_schema.json'), 'utf-8')
 );
+const traitSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'trait_data_schema.json'), 'utf-8')
+);
 
 // Ajv instance — strict:false to stay compatible with draft-07 constructs;
 // validateSchema:false prevents Ajv 8 from trying to fetch the draft-07 meta-schema URI
@@ -59,6 +62,7 @@ const validateItem = ajv.compile(itemSchema);
 const validateSpell = ajv.compile(spellSchema);
 const validateSubclass = ajv.compile(subclassSchema);
 const validateSubrace  = ajv.compile(subraceSchema);
+const validateTrait  = ajv.compile(traitSchema);
 
 type ValidateFn = ReturnType<typeof ajv.compile>;
 
@@ -122,4 +126,5 @@ compileFolder('items', validateItem, 'items.json');
 compileFolder('spells', validateSpell, 'spells.json');
 compileFolder('subclasses', validateSubclass, 'subclasses.json');
 compileFolder('subraces', validateSubrace, 'subraces.json');
+compileFolder('traits', validateTrait, 'trait.json');
 console.log('Data compilation complete.\n');

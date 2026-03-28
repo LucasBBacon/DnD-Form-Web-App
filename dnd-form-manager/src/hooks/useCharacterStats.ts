@@ -2,7 +2,6 @@ import {
   getClassById,
   getItemById,
   getRaceById,
-  getSubclassById,
   getSubraceById,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
@@ -15,7 +14,9 @@ import {
 import { calculateArmorClass } from "../utils/acUtils";
 import { calculateMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
+import { evaluateAllPredicates } from "../utils/predicateEngine";
 import { calculateProficiencyBonus } from "../utils/progressionUtils";
+import { getAllCharacterTraits } from "../utils/traitUtils";
 
 export const useCharacterStats = () => {
   // Pull raw data from zustand
@@ -39,7 +40,7 @@ export const useCharacterStats = () => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
   const classData = classId ? getClassById(classId) : null;
-  const subclassData = subclassId ? getSubclassById(subclassId) : null;
+  // TODO: get data from subclass
 
   // Aggregate all ASI choices from level 1 to current level
   const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
@@ -115,6 +116,15 @@ export const useCharacterStats = () => {
     int: intMod,
     wis: wisMod,
     cha: chaMod,
+  }; // TODO: iterate through this to generate it
+
+  const totalScores: Record<Ability, number> = {
+    str: totalStr,
+    dex: totalDex,
+    con: totalCon,
+    int: totalInt,
+    wis: totalWis,
+    cha: totalCha,
   };
 
   const carryingCapacity = totalStr * 15;
@@ -161,14 +171,63 @@ export const useCharacterStats = () => {
     }
   }
 
-  const armorClass = calculateArmorClass(
+  const allTraits = getAllCharacterTraits(
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+  );
+
+  const monkUnarmoredTrait = allTraits.find(
+    (t) => t.id === "trait_unarmored_defense",
+  );
+
+  let armorClass = calculateArmorClass(
     dexMod,
     equippedArmor,
     isWearingShield,
   );
 
+  let unarmoredDefense = 0;
+  if (monkUnarmoredTrait) {
+    // Grab the effects array
+    const acEffect = monkUnarmoredTrait.effects?.find(
+      (e) => e.type === "ac_calculation",
+    );
+
+    const isValid = evaluateAllPredicates(
+      acEffect?.predicates,
+      useCharacterStore.getState(),
+      {
+        totalScores,
+        modifiers,
+        proficiencyBonus,
+        maxHp,
+        currentHp,
+        initiative,
+        armorClass,
+        isArmorPenalized,
+        totalWeight,
+        isEncumbered,
+      },
+    );
+
+    if (isValid) {
+      unarmoredDefense = modifiers.dex + modifiers.wis;
+    }
+  }
+
+  armorClass = calculateArmorClass(
+    dexMod,
+    equippedArmor,
+    isWearingShield,
+    unarmoredDefense,
+  );
+
   // Return clean data
   return {
+    totalScores,
     modifiers,
     proficiencyBonus,
     maxHp,
