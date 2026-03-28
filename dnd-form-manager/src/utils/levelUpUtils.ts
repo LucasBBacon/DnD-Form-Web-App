@@ -84,7 +84,7 @@ export const getLevelUpRequirements = (
   requirements.newCantripsToLearn = Math.max(0, currentCantrips - prevCantrips);
 
   // TODO: Future proofing, if a bard hits level 3 and chooses the College of lore, 
-  // they get 3 bonus skills. You would add that check right here by looking at 
+  // they get 3 bonus skills. Add that check right here by looking at 
   // subclassData.progression for specific trait ID
 
   return requirements;

@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { getClassById, getSubclassById } from "../../data/staticDataApi";
+import {
+  getClassById,
+  getSubclassById,
+  getSubclassesForClass,
+} from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
 import { getLevelUpRequirements } from "../../utils/levelUpUtils";
@@ -21,6 +25,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
   const classData = classId ? getClassById(classId) : null;
   const subclassData = subclassId ? getSubclassById(subclassId) : null;
+  const availableSubclasses = classId ? getSubclassesForClass(classId) : [];
 
   // Determine modules to render
   const requirements = getLevelUpRequirements(
@@ -71,7 +76,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
             <option value="" disabled>
               Select an archetype...
             </option>
-            {/* TODO: Map over getSubclassesForClass(classId) here */}
+            {availableSubclasses.map((subclass) => (
+              <option key={subclass.id} value={subclass.id}>
+                {subclass.name}
+              </option>
+            ))}
           </select>
         </div>
       )}
@@ -89,7 +98,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
       {/* Render ASI/Feat Picker if required */}
       {requirements.requiresAsiOrFeat && (
-        <ASIChoiceBlock level={targetLevel} onSave={handleSaveChoice} onConfirm={() => setAsiCompleted(true)}/>
+        <ASIChoiceBlock
+          level={targetLevel}
+          onSave={handleSaveChoice}
+          onConfirm={() => setAsiCompleted(true)}
+        />
       )}
 
       {/* Render HP Roller (Required every level after 1) */}
@@ -105,7 +118,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
         </div>
       )}
 
-      <button className="finalize-btn" onClick={finalizeLevelUp} disabled={!canFinalize}>
+      <button
+        className="finalize-btn"
+        onClick={finalizeLevelUp}
+        disabled={!canFinalize}
+      >
         Complete Level Up
       </button>
     </div>
