@@ -35,6 +35,7 @@
         "warhammer"
     ],
     "json.schemas": [
+
         {
             "fileMatch": [
                 "races/*_race.json"
@@ -55,9 +56,18 @@
         },
         {
             "fileMatch": [
-                "subraces/*_subclass.json"
+                "subclasses/*_subclass.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/subclass_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "traits/*_trait.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/trait_data_schema.json"
         }
-    ]
+    ],
+    "chat.tools.terminal.autoApprove": {
+        "npx tsc": true
+    }
 }

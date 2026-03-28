@@ -10,6 +10,15 @@ export const evaluatePredicate = (
   stats: ReturnType<typeof useCharacterStats>,
 ): boolean => {
   switch (predicate.type) {
+    case "armor_required": {
+      // if no armor equipped, fail
+      if (!state.equippedArmorId) return false;
+
+      const armor = getItemById(state.equippedArmorId);
+      if (predicate.value === "any") return true;
+      return armor?.armor_properties?.armorType === predicate.value;
+    }
+
     case "amor_prohibited": {
       if (!state.equippedArmorId) return true;
       const armor = getItemById(state.equippedArmorId);

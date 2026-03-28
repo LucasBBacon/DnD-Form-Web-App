@@ -1,4 +1,5 @@
 export type PredicateType =
+  | "armor_required"
   | "amor_prohibited" // e.g., Barbarian unarmored defense
   | "shield_prohibited" // e.g., Monk marital arts
   | "stat_minimum" // e.g., Multiclassing requires 13 STR

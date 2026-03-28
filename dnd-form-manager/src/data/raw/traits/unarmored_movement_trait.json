@@ -1,0 +1,24 @@
+{
+    "id": "trait_unarmored_movement",
+    "name": "Unarmored Movement",
+    "lore": {
+        "short_description": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "speed",
+            "value": 10,
+            "predicates": [
+                {
+                    "type": "armor_prohibited",
+                    "value": "any"
+                },
+                {
+                    "type": "shield_prohibited",
+                    "value": true
+                }
+            ]
+        }
+    ]
+}

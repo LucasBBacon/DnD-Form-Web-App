@@ -4,57 +4,30 @@
     "type": "object",
     "definitions": {
         "predicate": {
-            "anyOf": [
-                {
+            "type": "object",
+            "description": "A predicate used to conditionally apply a trait effect.",
+            "properties": {
+                "type": {
                     "type": "string",
-                    "description": "ID of globally defined predicate (e.g., 'pred_no_heavy_armor')"
+                    "description": "Predicate evaluation type."
                 },
-                {
-                    "type": "object",
-                    "description": "An inline logic evaluation evaluated against the character's state",
-                    "properties": {
-                        "operator": {
-                            "type": "string",
-                            "enum": [
-                                "AND",
-                                "OR",
-                                "NOT",
-                                "EQUALS",
-                                "NOT_EQUALS",
-                                "GREATER_THAN",
-                                "LESS_THAN",
-                                "GREATER_THAN_OR_EQUAL",
-                                "LESS_THAN_OR_EQUAL",
-                                "INCLUDES",
-                                "EXISTS"
-                            ]
-                        },
-                        "target": {
-                            "type": "string",
-                            "description": "The dot-notation path in the state to evaluate (e.g., 'equipment.armor.type')."
-                        },
-                        "value": {
-                            "type": [
-                                "string",
-                                "number",
-                                "boolean",
-                                "array"
-                            ],
-                            "description": "The value to compare against target."
-                        },
-                        "conditions": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/predicate"
-                            },
-                            "description": "Array of child predicates for recursive logic."
-                        }
-                    },
-                    "required": [
-                        "operator"
-                    ]
+                "value": {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                    ],
+                    "description": "Value used by the predicate comparison."
+                },
+                "target": {
+                    "type": "string",
+                    "description": "The predicate target (e.g., 'str', 'trait_darkvision')."
                 }
-            ]
+            },
+            "required": [
+                "type"
+            ],
+            "additionalProperties": false
         }
     },
     "properties": {
@@ -67,64 +40,27 @@
             "type": "string",
             "description": "Display name of the trait."
         },
-        "is_active": {
-            "type": "boolean",
-            "default": false,
-            "description": "True if the trait grants an action/bonus action (e.g., Dragon Breath), False if purely passive."
-        },
-        "activation_type": {
-            "type": "string",
-            "enum": [
-                "action",
-                "bonus_action",
-                "reaction",
-                "special",
-                "trigger"
+        "lore": {
+            "type": "object",
+            "description": "Flavor text and short description shown in the UI.",
+            "properties": {
+                "short_description": {
+                    "type": "string",
+                    "description": "A short description for list views and tooltips."
+                },
+                "full_text": {
+                    "type": "string",
+                    "description": "Optional extended text for detail views."
+                }
+            },
+            "required": [
+                "short_description"
             ],
-            "description": "Required if is_active is true. Defines the action economy."
-        },
-        "uses": {
-            "type": "object",
-            "description": "Defines how many times an active trait can be used and when it resets.",
-            "properties": {
-                "count": {
-                    "type": [
-                        "integer",
-                        "string"
-                    ],
-                    "description": "Number of uses (can be a string if tied to a scaling  stat like '@rage_number_of_rages')."
-                },
-                "reset": {
-                    "type": "string",
-                    "enum": [
-                        "short_rest",
-                        "long_rest",
-                        "turn",
-                        "initiative",
-                        "other"
-                    ]
-                }
-            }
-        },
-        "mechanics": {
-            "type": "object",
-            "description": "Pointers to active combat abilities granted by this trait.",
-            "properties": {
-                "granted_actions": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "trigger_event": {
-                    "type": "string",
-                    "description": "If activation_type is 'trigger', defines the engine event to listen for (e.g., 'on_hp_zero', 'on_take_damage')."
-                }
-            }
+            "additionalProperties": false
         },
         "effects": {
             "type": "array",
-            "description": "The discrete mechanical changes applied to the character sheet.",
+            "description": "Mechanical effects granted by this trait.",
             "items": {
                 "type": "object",
                 "properties": {
@@ -133,40 +69,28 @@
                         "enum": [
                             "sense",
                             "proficiency",
-                            "resistance",
-                            "immunity",
-                            "advantage",
-                            "disadvantage",
                             "spell_grant",
-                            "trait_grant",
                             "stat_modifier",
-                            "speed",
-                            "ac_calc",
-                            "rule_bypass",
-                            "ability_score_improvement"
-                        ]
+                            "ac_calculation",
+                            "other"
+                        ],
+                        "description": "The kind of effect this entry applies."
                     },
                     "level_available": {
                         "type": "integer",
-                        "default": 1,
-                        "description": "Character level required for this specific effect to trigger (e.g., Drow Magic scaling)."
+                        "description": "Character level required before this effect applies."
                     },
                     "target": {
                         "type": "string",
-                        "description": "What is being modified (e.g., 'darkvision', 'poison', 'hp_max')"
+                        "description": "What this effect modifies; for spell_grant this is typically a spell id."
                     },
                     "value": {
                         "type": [
-                            "array",
-                            "integer",
+                            "boolean",
                             "string",
-                            "boolean"
-                        ],
-                        "description": "The magnitude of the effect. Can use an '@' prefix to point to class-specific scaling values."
-                    },
-                    "condition": {
-                        "$ref": "#/definitions/predicate",
-                        "description": "Context required for the effect (e.g., 'against_poison', 'in_direct_sunlight')"
+                            "integer",
+                            "number"
+                        ]
                     },
                     "spellcasting_ability": {
                         "type": "string",
@@ -178,18 +102,18 @@
                             "wis",
                             "cha"
                         ],
-                        "description": "The ability score used for DCs/Attack Rolls when type is 'spell_grant'."
+                        "description": "The ability score used for a granted spell."
                     },
                     "uses": {
                         "type": "object",
-                        "description": "Defines how many times an active trait can be used and when it resets.",
+                        "description": "How many times the effect can be used and when it resets.",
                         "properties": {
                             "count": {
                                 "type": [
-                                    "integer",
+                                    "number",
                                     "string"
                                 ],
-                                "description": "Number of uses (can be a string if tied to a scaling stat like '@rage_number_of_rages')."
+                                "description": "Use count, or a scaling key when represented as a string."
                             },
                             "reset": {
                                 "type": "string",
@@ -197,140 +121,36 @@
                                     "short_rest",
                                     "long_rest",
                                     "turn",
-                                    "initiative",
                                     "other"
-                                ]
+                                ],
+                                "description": "When the use count resets."
                             }
-                        }
+                        },
+                        "required": [
+                            "count",
+                            "reset"
+                        ],
+                        "additionalProperties": false
                     },
-                    "choice": {
-                        "type": "object",
-                        "description": "Used when the trait requires the player to make a selection.",
-                        "properties": {
-                            "count": {
-                                "type": "integer"
-                            },
-                            "category": {
-                                "type": "string",
-                                "enum": [
-                                    "skill",
-                                    "tool",
-                                    "weapon",
-                                    "spell",
-                                    "language",
-                                    "armor",
-                                    "trait"
-                                ]
-                            },
-                            "pool": {
-                                "type": "string",
-                                "description": "Identifier for the list of valid options (e.g., 'any_skill', 'wizard_cantrips', 'artisan_tools'"
-                            }
+                    "predicates": {
+                        "type": "array",
+                        "description": "Optional conditions that all need to pass for this effect to apply.",
+                        "items": {
+                            "$ref": "#/definitions/predicate"
                         }
                     }
                 },
                 "required": [
                     "type"
                 ],
-                "allOf": [
-                    {
-                        "if": {
-                            "properties": {
-                                "type": {
-                                    "const": "proficiency"
-                                }
-                            }
-                        },
-                        "then": {
-                            "required": [
-                                "target"
-                            ]
-                        }
-                    },
-                    {
-                        "if": {
-                            "properties": {
-                                "type": {
-                                    "const": "resistance"
-                                }
-                            }
-                        },
-                        "then": {
-                            "required": [
-                                "target"
-                            ]
-                        }
-                    },
-                    {
-                        "if": {
-                            "properties": {
-                                "type": {
-                                    "const": "immunity"
-                                }
-                            }
-                        },
-                        "then": {
-                            "required": [
-                                "target"
-                            ]
-                        }
-                    },
-                    {
-                        "if": {
-                            "properties": {
-                                "type": {
-                                    "const": "stat_modifier"
-                                }
-                            }
-                        },
-                        "then": {
-                            "required": [
-                                "target",
-                                "value"
-                            ]
-                        }
-                    }
-                ]
+                "additionalProperties": false
             }
-        },
-        "lore": {
-            "type": "object",
-            "properties": {
-                "short_description": {
-                    "type": "string",
-                    "description": "A quick 1-2 sentence summary for tooltips."
-                },
-                "full_text": {
-                    "type": "string",
-                    "description": "The main body of text for the entity."
-                },
-                "sections": {
-                    "type": "array",
-                    "description": "Flexible key-value pairs for categorized flavor text (Age, Alignment, Lore, etc.).",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "title": {
-                                "type": "string"
-                            },
-                            "body": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "title",
-                            "body"
-                        ]
-                    }
-                }
-            },
-            "required": [
-                "short_description"
-            ]
         }
     },
     "required": [
         "id",
-        "name"
-    ]
+        "name",
+        "lore"
+    ],
+    "additionalProperties": false
 }

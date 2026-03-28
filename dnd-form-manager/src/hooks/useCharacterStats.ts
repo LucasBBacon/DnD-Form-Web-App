@@ -20,127 +20,91 @@ import { getAllCharacterTraits } from "../utils/traitUtils";
 
 export const useCharacterStats = () => {
   // Pull raw data from zustand
-  const {
-    level,
-    raceId,
-    subraceId,
-    classId,
-    subclassId,
-    baseAbilityScores,
-    hpRolls,
-    chosenRacialBonuses,
-    choicesByLevel,
-    inventory,
-    equippedArmorId,
-    equippedShieldId,
-    damageTaken,
-  } = useCharacterStore();
+  // const {
+  //   level,
+  //   raceId,
+  //   subraceId,
+  //   classId,
+  //   subclassId,
+  //   baseAbilityScores,
+  //   hpRolls,
+  //   chosenRacialBonuses,
+  //   choicesByLevel,
+  //   inventory,
+  //   equippedArmorId,
+  //   equippedShieldId,
+  //   damageTaken,
+  // } = useCharacterStore();
+  const state = useCharacterStore();
 
   // fetch static definitions
-  const raceData = raceId ? getRaceById(raceId) : null;
-  const subraceData = subraceId ? getSubraceById(subraceId) : null;
-  const classData = classId ? getClassById(classId) : null;
+  const raceData = state.raceId ? getRaceById(state.raceId) : null;
+  const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
+  const classData = state.classId ? getClassById(state.classId) : null;
   // TODO: get data from subclass
 
+  const allTraits = getAllCharacterTraits(
+    state.level,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
+  );
+
   // Aggregate all ASI choices from level 1 to current level
-  const totalAsiBonuses = calculateTotalASI(level, choicesByLevel);
+  const totalAsiBonuses = calculateTotalASI(state.level, state.choicesByLevel);
 
-  // Calculate core attributes
-  const totalStr = calculateTotalAbilityScore(
-    "str",
-    baseAbilityScores.str,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.str,
-  );
-  const totalDex = calculateTotalAbilityScore(
-    "dex",
-    baseAbilityScores.dex,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.dex,
-  );
-  const totalCon = calculateTotalAbilityScore(
-    "con",
-    baseAbilityScores.con,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.con,
-  );
-  const totalInt = calculateTotalAbilityScore(
-    "int",
-    baseAbilityScores.int,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.int,
-  );
-  const totalWis = calculateTotalAbilityScore(
-    "wis",
-    baseAbilityScores.wis,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.wis,
-  );
-  const totalCha = calculateTotalAbilityScore(
-    "cha",
-    baseAbilityScores.cha,
-    raceData,
-    subraceData,
-    chosenRacialBonuses,
-    totalAsiBonuses.cha,
+  // Calculate all ability scores and modifiers in one pass
+  const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+  const totalScores = abilities.reduce(
+    (acc, ability) => {
+      acc[ability] = calculateTotalAbilityScore(
+        ability,
+        state.baseAbilityScores[ability],
+        raceData,
+        subraceData,
+        state.chosenRacialBonuses,
+        totalAsiBonuses[ability],
+      );
+      return acc;
+    },
+    {} as Record<Ability, number>,
   );
 
-  // Calculate total weight
-  // Map over the inventory, look up the static weight of each item, multiply by quantity
-  const totalWeight = inventory.reduce((total, record) => {
+  const modifiers = abilities.reduce(
+    (acc, ability) => {
+      acc[ability] = calculateModifier(totalScores[ability]);
+      return acc;
+    },
+    {} as Record<Ability, number>,
+  );
+
+  // Calculate total weight from inventory
+  const totalWeight = state.inventory.reduce((total, record) => {
     const itemData = getItemById(record.itemId);
     return total + (itemData?.weight || 0) * record.quantity;
   }, 0);
 
-  const strMod = calculateModifier(totalStr);
-  const dexMod = calculateModifier(totalDex);
-  const conMod = calculateModifier(totalCon);
-  const intMod = calculateModifier(totalInt);
-  const wisMod = calculateModifier(totalWis);
-  const chaMod = calculateModifier(totalCha);
-
-  const modifiers: Record<Ability, number> = {
-    str: strMod,
-    dex: dexMod,
-    con: conMod,
-    int: intMod,
-    wis: wisMod,
-    cha: chaMod,
-  }; // TODO: iterate through this to generate it
-
-  const totalScores: Record<Ability, number> = {
-    str: totalStr,
-    dex: totalDex,
-    con: totalCon,
-    int: totalInt,
-    wis: totalWis,
-    cha: totalCha,
-  };
-
-  const carryingCapacity = totalStr * 15;
+  const carryingCapacity = totalScores.str * 15;
   const isEncumbered = totalWeight > carryingCapacity;
 
   // Calculate Derived Combat Stats
-  const proficiencyBonus = calculateProficiencyBonus(level);
+  const proficiencyBonus = calculateProficiencyBonus(state.level);
 
-  const maxHp = calculateMaxHP(level, classData?.hit_die, conMod, hpRolls);
+  const maxHp = calculateMaxHP(
+    state.level,
+    classData?.hit_die,
+    modifiers.con,
+    state.hpRolls,
+  );
 
-  const currentHp = Math.max(0, maxHp - damageTaken);
+  const currentHp = Math.max(0, maxHp - state.damageTaken);
 
-  const initiative = calculateInitiative(dexMod);
+  const initiative = calculateInitiative(modifiers.dex);
 
-  const equippedArmorData = equippedArmorId
-    ? getItemById(equippedArmorId)
+  // Resolve equipment data
+  const equippedArmorData = state.equippedArmorId
+    ? getItemById(state.equippedArmorId)
     : null;
   const equippedArmor: Parameters<typeof calculateArmorClass>[1] =
     equippedArmorData?.type === "armor" && equippedArmorData.armor_properties
@@ -149,83 +113,62 @@ export const useCharacterStats = () => {
           null
         >)
       : null;
-  const isWearingShield = !!equippedShieldId;
+  const isWearingShield = !!state.equippedShieldId;
 
-  // region Armor Penalty Check
-  const armorProficiencies = [...(classData?.proficiencies?.armor || [])];
-
-  let isArmorPenalized = false;
-
-  if (equippedArmorId) {
-    if (
+  // Check if armor proficiencies are satisfied
+  const armorProficiencies = new Set(classData?.proficiencies?.armor || []);
+  const isArmorPenalized =
+    (!!state.equippedArmorId &&
       equippedArmor?.armor_properties &&
-      !armorProficiencies.includes(equippedArmor.armor_properties.armorType)
-    ) {
-      isArmorPenalized = true;
-    }
-  }
+      !armorProficiencies.has(equippedArmor.armor_properties.armorType)) ||
+    (isWearingShield && !armorProficiencies.has("category_armor_shield"));
 
-  if (isWearingShield) {
-    if (!armorProficiencies.includes("category_armor_shield")) {
-      isArmorPenalized = true;
-    }
-  }
-
-  const allTraits = getAllCharacterTraits(
-    level,
-    raceId,
-    subraceId,
-    classId,
-    subclassId,
-  );
-
-  const monkUnarmoredTrait = allTraits.find(
-    (t) => t.id === "trait_unarmored_defense",
-  );
-
-  let armorClass = calculateArmorClass(
-    dexMod,
+  const baseArmorClass = calculateArmorClass(
+    modifiers.dex,
     equippedArmor,
     isWearingShield,
   );
 
-  let unarmoredDefense = 0;
-  if (monkUnarmoredTrait) {
-    // Grab the effects array
-    const acEffect = monkUnarmoredTrait.effects?.find(
-      (e) => e.type === "ac_calculation",
-    );
+  // Apply trait-based stat modifiers
+  let finalArmorClass = baseArmorClass;
+  let finalSpeed = 30;
 
-    const isValid = evaluateAllPredicates(
-      acEffect?.predicates,
-      useCharacterStore.getState(),
-      {
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      const isActive = evaluateAllPredicates(effect.predicates, state, {
         totalScores,
         modifiers,
         proficiencyBonus,
         maxHp,
         currentHp,
         initiative,
-        armorClass,
+        armorClass: finalArmorClass,
         isArmorPenalized,
         totalWeight,
         isEncumbered,
-      },
-    );
+        speed: finalSpeed,
+      });
 
-    if (isValid) {
-      unarmoredDefense = modifiers.dex + modifiers.wis;
-    }
-  }
+      if (!isActive || effect.type !== "stat_modifier") return;
 
-  armorClass = calculateArmorClass(
-    dexMod,
-    equippedArmor,
-    isWearingShield,
-    unarmoredDefense,
-  );
+      // Apply AC modifiers
+      if (effect.target === "ac" && effect.value !== undefined) {
+        const acBonus =
+          typeof effect.value === "number"
+            ? effect.value
+            : effect.value === "calc_unarmored_con"
+              ? modifiers.dex + modifiers.con
+              : 0;
+        finalArmorClass += acBonus;
+      }
 
-  // Return clean data
+      // Apply speed modifiers
+      if (effect.target === "speed" && typeof effect.value === "number") {
+        finalSpeed += effect.value;
+      }
+    });
+  });
+
   return {
     totalScores,
     modifiers,
@@ -233,9 +176,10 @@ export const useCharacterStats = () => {
     maxHp,
     currentHp,
     initiative,
-    armorClass,
+    armorClass: finalArmorClass,
     isArmorPenalized,
     totalWeight,
     isEncumbered,
+    speed: finalSpeed,
   };
 };

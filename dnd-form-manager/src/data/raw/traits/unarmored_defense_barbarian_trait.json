@@ -1,22 +1,21 @@
 {
     "id": "trait_unarmored_defense_barbarian",
     "name": "Unarmored Defense",
-    "is_active": false,
     "effects": [
         {
-            "type": "ac_calc",
+            "type": "stat_modifier",
             "target": "ac",
             "value": "calc_unarmored_con",
-            "condition": {
-                "operator": "OR",
-                "conditions": [
-                    {
-                        "operator": "EQUALS",
-                        "target": "equipment.armor.base_type",
-                        "value": "none"
-                    }
-                ]
-            }
+            "predicates": [
+                {
+                    "type": "armor_prohibited",
+                    "value": "any"
+                },
+                {
+                    "type": "shield_prohibited",
+                    "value": true
+                }
+            ]
         }
     ],
     "lore": {

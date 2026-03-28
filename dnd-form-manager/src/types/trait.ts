@@ -11,6 +11,7 @@ export interface TraitEffect {
     | "other"; // TODO: further additions in accordance to old schema
   level_available?: number;
   target?: string; // For spell_grant, this is the spellId (e.g., 'spell_hellish_rebuke')
+  value?: number;
   spellcasting_ability?: Ability; // The stat used specifically for this spell
   uses?: {
     count: number | string;
