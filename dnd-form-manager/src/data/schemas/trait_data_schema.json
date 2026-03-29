@@ -68,8 +68,10 @@
                         "type": "string",
                         "enum": [
                             "advantage",
+                            "disadvantage",
                             "sense",
                             "proficiency",
+                            "half_proficiency",
                             "spell_grant",
                             "stat_modifier",
                             "ac_calculation",

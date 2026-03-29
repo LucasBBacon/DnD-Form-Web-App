@@ -1,14 +1,8 @@
-import {
-  getClassById,
-  getRaceById,
-  getSubclassById,
-  getSubraceById,
-} from "../data/staticDataApi";
+import { getClassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
-import { MECHANIC_IDS, SKILL_ABILITY_MAP } from "../utils/constants";
+import { SKILL_ABILITY_MAP } from "../utils/constants";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
-import { getUnlockedFeatures } from "../utils/progressionUtils";
 import { aggregateSkills } from "../utils/skillUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
@@ -30,35 +24,7 @@ export const useSkills = () => {
   const derivedStats = useCharacterStats();
 
   // #region Data Lookups (selected race/class records)
-  const raceData = state.raceId ? getRaceById(state.raceId) : null;
-  const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
-  const subclassData = state.subclassId
-    ? getSubclassById(state.subclassId)
-    : null;
-  // #endregion
-
-  // #region Skill Source Aggregation
-  // Collect skill proficiencies/expertise granted by race, class, and user choices.
-  const { proficiencies, expertise } = aggregateSkills(
-    raceData,
-    classData,
-    state.chosenRacialSkills,
-    state.chosenBackgroundSkills,
-    state.choicesByLevel,
-    state.level,
-  );
-
-  // Determine whether half-proficiency should apply to non-proficient skills.
-  const unlockedFeatures = getUnlockedFeatures(
-    state.level,
-    subraceData,
-    classData,
-    subclassData,
-  );
-  const hasJackOfAllTrades = unlockedFeatures.includes(
-    MECHANIC_IDS.JACK_ALL_TRADES,
-  );
   // #endregion
 
   // #region Trait Effects (predicate-driven modifiers)
@@ -69,6 +35,44 @@ export const useSkills = () => {
     state.classId,
     state.subclassId,
   );
+  // #endregion
+
+  // #region Skill Source Aggregation
+  // Collect skill proficiencies/expertise granted by race, class, and user choices.
+  const { proficiencies, expertise } = aggregateSkills(
+    state.chosenRacialSkills,
+    state.chosenBackgroundSkills,
+    state.choicesByLevel,
+    state.level,
+    allTraits,
+    state,
+    derivedStats,
+  );
+  // #endregion
+
+  // #region Global Mechanics
+  let addsHalfProfToUnproficient = false;
+
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      // Does this trait grant half proficiency to all unproficient checks?
+      if (
+        effect.type === "half_proficiency" &&
+        effect.target === "unproficient_checks"
+      ) {
+        // Run predicates here
+        const isActive = evaluateAllPredicates(
+          effect.predicates,
+          state,
+          derivedStats,
+        );
+        if (isActive) addsHalfProfToUnproficient = true;
+      }
+    });
+  });
+
+  // Calculate the actual bonus to apply (round down)
+  const halfProfBonus = Math.floor(derivedStats.proficiencyBonus / 2);
   // #endregion
 
   // #region Skill Totals
@@ -98,8 +102,8 @@ export const useSkills = () => {
       finalMod += derivedStats.proficiencyBonus * 2;
     } else if (isProficient) {
       finalMod += derivedStats.proficiencyBonus;
-    } else if (hasJackOfAllTrades) {
-      finalMod += Math.floor(derivedStats.proficiencyBonus / 2);
+    } else if (addsHalfProfToUnproficient) {
+      finalMod += halfProfBonus;
     }
 
     const advantageSources: string[] = [];

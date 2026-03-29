@@ -7,10 +7,8 @@
 	},
 	"effects": [
 		{
-			"type": "other",
-			"target": "ability_checks_non_proficient",
-			"value": "half_proficiency_rounded_down",
-			"level_available": 2
+			"type": "half_proficiency",
+			"target": "unproficient_checks"
 		}
 	]
 }

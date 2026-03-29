@@ -32,6 +32,7 @@
         "undeath",
         "unequip",
         "unprepare",
+        "unproficient",
         "warhammer"
     ],
     "json.schemas": [

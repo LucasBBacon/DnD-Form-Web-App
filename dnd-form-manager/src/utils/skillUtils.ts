@@ -1,23 +1,21 @@
-import type { ClassData } from "../types/class";
 import type { Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
-import type { Race } from "../types/race";
+import type { TraitData } from "../types/trait";
+import { evaluateAllPredicates } from "./predicateEngine";
 
 export const aggregateSkills = (
-  raceData: Race | null,
-  classData: ClassData | null, // TODO: expand to an array for multi-classing
   chosenRacialSkills: Skill[],
   chosenBackgroundSkills: Skill[],
   choicesByLevel: Record<number, LevelChoice>,
   currentLevel: number,
+  allTraits: TraitData[],
+  state: any,
+  stats: any,
 ) => {
   const proficiencies = new Set<Skill>();
   const expertise = new Set<Skill>();
 
-  // Fixed Racial Skills (e.g., Elf -> Perception)
-  // Assume Race schema has a traits array, or 'fixed_skills' array to race schema
-
-  // Chosen Racial and Background Skills
+  // #region Chosen Racial and Background Skills
   chosenRacialSkills.forEach((s) => proficiencies.add(s));
   chosenBackgroundSkills.forEach((s) => proficiencies.add(s));
 
@@ -29,6 +27,23 @@ export const aggregateSkills = (
       choice.expertiseChoices?.forEach((s) => expertise.add(s));
     }
   }
+
+  // #region Trait Effects
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      // Ask engine if conditions are met
+      const isActive = evaluateAllPredicates(effect.predicates, state, stats);
+
+      if (isActive) {
+        if (effect.type === "proficiency") {
+          proficiencies.add(effect.target as Skill);
+        }
+        if (effect.type === "expertise") {
+          expertise.add(effect.target as Skill);
+        }
+      }
+    });
+  });
 
   return {
     proficiencies: Array.from(proficiencies),

@@ -20,18 +20,22 @@ export const getAllCharacterTraits = (
 
   const traitIds = new Set<string>();
 
-  // region --- Racial Traits ---
+  // #region Racial Traits
   raceData?.traits?.forEach((id) => traitIds.add(id));
   subraceData?.traits_added?.forEach((id) => traitIds.add(id));
+  // #endregion
 
-  // region --- Class and Subclass Traits ---
-  for (let i = 1; i < level; i++) {
-    classData?.progression
-      .find((p) => p.level === i)
-      ?.features.forEach((id) => traitIds.add(id));
-    subclassData?.progression
-      .find((p) => p.level === i)
-      ?.features.forEach((id) => traitIds.add(id));
+  // #region Class and Subclass Traits
+  if (classData) {
+    classData.progression
+      .filter((p) => p.level <= level)
+      .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
+  }
+
+  if (subclassData) {
+    subclassData.progression
+      .filter((p) => p.level <= level)
+      .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
   }
 
   return getTraitsByIds(Array.from(traitIds));
