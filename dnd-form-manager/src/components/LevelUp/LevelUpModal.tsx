@@ -20,8 +20,15 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   onClose,
 }) => {
   // Fetch from zustand
-  const { raceId, subraceId, classId, subclassId, setLevel, updateLevelChoice, setSubclass } =
-    useCharacterStore();
+  const {
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+    setLevel,
+    updateLevelChoice,
+    setSubclass,
+  } = useCharacterStore();
 
   const classData = classId ? getClassById(classId) : null;
   const subclassData = subclassId ? getSubclassById(subclassId) : null;
@@ -36,36 +43,48 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     subclassData,
   );
 
-  // region Validation State
-  // if step is not required, mark it as pre-completed (true)
-  const [asiCompleted, setAsiCompleted] = useState(
-    false,
-  );
-  const [skillsCompleted, setSkillsCompleted] = useState(
-    false,
-  );
+  // #region Draft State
+  
+  const [draftChoices, setDraftChoices] = useState<Partial<LevelChoice>>({});
+  
+  // #endregion
 
+  // #region Dynamic Validity States
+
+  const [isAsiValid, setIsAsiValid] = useState(!requirements.requiresAsiOrFeat);
+  const [isSkillsValid, setIsSkillsValid] = useState(!requirements.requiresSkillSelection);
+  const [isHpValid, setIsHpValid] = useState(targetLevel === 1);
+  
   // don't need local state for subclass/HP, just check if they are valid
   const isSubclassValid = !requirements.requiresSubclass || subclassId !== null;
-  const isHpValid = targetLevel === 1 || true; // TODO: Make HP rolling optional or default to average
-
+  
   // Master check
-  const canFinalize =
-    asiCompleted && skillsCompleted && isSubclassValid && isHpValid;
+  const canFinalize = isAsiValid && isSkillsValid && isSubclassValid && isHpValid;
 
-  // Universal save handler
-  const handleSaveChoice = (updates: Partial<LevelChoice>) => {
-    updateLevelChoice(targetLevel, updates);
+  // #endregion
+  
+  // #region Event Handlers
+
+  const handleDraftUpdate = (updates: Partial<LevelChoice>, isValid: boolean, type: 'asi' | 'skills' | 'hp') => {
+    setDraftChoices(prev => ({...prev, ...updates}));
+    if (type === 'asi') setIsAsiValid(isValid);
+    if (type === 'skills') setIsSkillsValid(isValid);
+    if (type === 'hp') setIsHpValid(isValid);
   };
 
   const finalizeLevelUp = () => {
+    updateLevelChoice(targetLevel, draftChoices);
     setLevel(targetLevel);
     onClose();
   };
 
   return (
     <div className="modal level-up-wizard">
-      <h2>{targetLevel === 1 ? "Finalize Character Creation" : `Leveling up to ${targetLevel}!`}</h2>
+      <h2>
+        {targetLevel === 1
+          ? "Finalize Character Creation"
+          : `Leveling up to ${targetLevel}!`}
+      </h2>
 
       {/* Render subclass picker if required */}
       {requirements.requiresSubclass && classId && (
@@ -91,8 +110,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresSkillSelection && (
         <SkillChoiceBlock
           level={targetLevel}
-          onSave={handleSaveChoice}
-          onConfirm={() => setSkillsCompleted(true)}
+          onChange={(draft, isValid) => handleDraftUpdate(draft, isValid, 'skills')}
         />
       )}
 
@@ -100,8 +118,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresAsiOrFeat && (
         <ASIChoiceBlock
           level={targetLevel}
-          onSave={handleSaveChoice}
-          onConfirm={() => setAsiCompleted(true)}
+          onChange={(draft, isValid) => handleDraftUpdate(draft, isValid, 'asi')}
         />
       )}
 
@@ -111,8 +128,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           <input
             type="number"
             placeholder={`Roll 1d${classData?.hit_die}`}
-            onChange={(e) =>
-              handleSaveChoice({ hpGained: Number(e.target.value) })
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              handleDraftUpdate({ hpGained: val}, val > 0, 'hp');
+            }
             }
           />
         </div>

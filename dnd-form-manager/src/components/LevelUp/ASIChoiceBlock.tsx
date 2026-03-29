@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LevelChoice } from "../../types/progression";
 import type { Ability } from "../../types/common";
 
@@ -6,14 +6,12 @@ const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
 interface ASIChoiceBlockProps {
   level: number;
-  onSave: (choice: Partial<LevelChoice>) => void;
-  onConfirm: () => void;
+  onChange: (draft: Partial<LevelChoice>, isValid: boolean) => void;
 }
 
 export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
   level,
-  onSave,
-  onConfirm,
+  onChange,
 }) => {
   const [choiceType, setChoiceType] = useState<"asi" | "feat">("asi");
   const [asiSelections, setAsiSelections] = useState<Record<Ability, number>>({
@@ -25,7 +23,6 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
     cha: 0,
   });
   const [selectedFeat, setSelectedFeat] = useState<string>("");
-  const [isConfirmed, setIsConfirmed] = useState(false);
 
   // Derive how many points to spend
   const totalPointsSpent = Object.values(asiSelections).reduce(
@@ -37,36 +34,34 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
   const handleIncrement = (stat: Ability) => {
     if (remainingPoints > 0 && asiSelections[stat] < 2) {
       setAsiSelections({ ...asiSelections, [stat]: asiSelections[stat] + 1 });
-      setIsConfirmed(false); // Un-confirm if they change their mind
     }
   };
 
   const handleDecrement = (stat: Ability) => {
     if (asiSelections[stat] > 0) {
       setAsiSelections({ ...asiSelections, [stat]: asiSelections[stat] - 1 });
-      setIsConfirmed(false);
     }
-  };
-
-  const handleSave = () => {
-    if (choiceType === "asi") {
-      // Clean out 0s before saving to zustand
-      const cleanSelections: Partial<Record<Ability, number>> = {};
-      (Object.keys(asiSelections) as Ability[]).forEach((key) => {
-        if (asiSelections[key] > 0) cleanSelections[key] = asiSelections[key];
-      });
-      onSave({ asiChoices: cleanSelections });
-    } else {
-      onSave({ featId: selectedFeat });
-    }
-
-    setIsConfirmed(true);
-    onConfirm();
   };
 
   const isValid =
     (choiceType === "asi" && totalPointsSpent === 2) ||
     (choiceType === "feat" && selectedFeat !== "");
+
+  useEffect(() => {
+    if (choiceType === "asi") {
+      const cleanSelections: Partial<Record<Ability, number>> = {};
+      (Object.keys(asiSelections) as Ability[]).forEach((key) => {
+        if (asiSelections[key] > 0) {
+          cleanSelections[key] = asiSelections[key];
+        }
+      });
+
+      onChange({ asiChoices: cleanSelections, featId: undefined }, isValid);
+      return;
+    }
+
+    onChange({ featId: selectedFeat, asiChoices: undefined }, isValid);
+  }, [asiSelections, choiceType, isValid, onChange, selectedFeat]);
 
   return (
     <div className="choice-block asi-block">
@@ -77,7 +72,6 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
         <button
           onClick={() => {
             setChoiceType("asi");
-            setIsConfirmed(false);
           }}
         >
           Increase Stats
@@ -85,7 +79,6 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
         <button
           onClick={() => {
             setChoiceType("feat");
-            setIsConfirmed(false);
           }}
         >
           Choose a Feat
@@ -102,7 +95,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
                 <div className="quantity-controls">
                   <button
                     onClick={() => handleDecrement(stat)}
-                    disabled={asiSelections[stat] === 0 || isConfirmed}
+                    disabled={asiSelections[stat] === 0}
                   >
                     -
                   </button>
@@ -111,8 +104,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
                     onClick={() => handleIncrement(stat)}
                     disabled={
                       remainingPoints === 0 ||
-                      asiSelections[stat] === 2 ||
-                      isConfirmed
+                      asiSelections[stat] === 2
                     }
                   >
                     +
@@ -129,9 +121,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
             value={selectedFeat}
             onChange={(e) => {
               setSelectedFeat(e.target.value);
-              setIsConfirmed(false);
             }}
-            disabled={isConfirmed}
           >
             <option value="" disabled>
               Select a feat...
@@ -142,14 +132,6 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
           </select>
         </div>
       )}
-
-      <button
-        className="confirm-btn"
-        onClick={handleSave}
-        disabled={!isValid || isConfirmed}
-      >
-        {isConfirmed ? "Choice Saved" : "Confirm Choice"}
-      </button>
     </div>
   );
 };

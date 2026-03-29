@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Skill } from "../../types/common";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getPendingSkillChoices } from "../../utils/choiceUtils";
 import type { LevelChoice } from "../../types/progression";
+
+interface SkillChoiceBlockProps {
+  level: number;
+  onChange: (draft: Partial<LevelChoice>, isValid: boolean) => void;
+}
 
 const formatSkillName = (skill: string) => {
   return skill
@@ -11,14 +16,9 @@ const formatSkillName = (skill: string) => {
     .join(" ");
 };
 
-export const SkillChoiceBlock = ({
+export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
   level,
-  onSave,
-  onConfirm,
-}: {
-  level: number;
-  onSave: (choice: Partial<LevelChoice>) => void;
-  onConfirm: () => void;
+  onChange,
 }) => {
   const { raceId, subraceId, classId, subclassId } = useCharacterStore();
 
@@ -33,6 +33,15 @@ export const SkillChoiceBlock = ({
 
   // Local state to track selections per source
   const [selections, setSelection] = useState<Record<string, Skill[]>>({});
+
+  useEffect(() => {
+    const isValid = pendingChoices.every(
+      (choice) => (selections[choice.sourceId] || []).length === choice.count,
+    );
+    const allChosenSkills = Object.values(selections).flat();
+
+    onChange({ skillChoices: allChosenSkills }, isValid);
+  }, [selections, pendingChoices, onChange]);
 
   if (pendingChoices.length === 0) {
     return null; // No choices to make at this level!
@@ -49,20 +58,6 @@ export const SkillChoiceBlock = ({
       return prev;
     });
   };
-
-  const handleSave = () => {
-    // Flatten all selections into a single array
-    const allChosenSkills = Object.values(selections).flat();
-
-    // Persist through parent callback (same pattern as ASIChoiceBlock)
-    onSave({ skillChoices: allChosenSkills });
-    onConfirm();
-  };
-
-  // Ensure all choice blocks are fully satisfied
-  const isValid = pendingChoices.every(
-    (choice) => (selections[choice.sourceId] || []).length === choice.count,
-  );
 
   return (
     <div className="choice-block">
@@ -97,7 +92,7 @@ export const SkillChoiceBlock = ({
                         handleToggle(choice.sourceId, skill, choice.count)
                       }
                     />
-                      {formatSkillName(skill)}
+                    {formatSkillName(skill)}
                   </label>
                 );
               })}
@@ -105,10 +100,6 @@ export const SkillChoiceBlock = ({
           </div>
         );
       })}
-
-      <button disabled={!isValid} onClick={handleSave}>
-        Confirm Skills
-      </button>
     </div>
   );
 };
