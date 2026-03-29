@@ -15,17 +15,7 @@
         "saving_throws": [
             "wis",
             "cha"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "history",
-                "insight",
-                "medicine",
-                "persuasion",
-                "religion"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -161,6 +151,7 @@
         {
             "level": 1,
             "features": [
+                "trait_cleric_skills",
                 "trait_spellcasting_cleric",
                 "trait_divine_domain"
             ],

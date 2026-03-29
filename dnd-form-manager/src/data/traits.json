@@ -1,4 +1,422 @@
 [
-    {},
-    {}
+  {
+    "id": "trait_barbarian_skills",
+    "name": "Barbarian Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "animal_handling",
+            "athletics",
+            "intimidation",
+            "nature",
+            "perception",
+            "survival"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_bard_skills",
+    "name": "Bard Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 3,
+          "pool": [
+            "acrobatics",
+            "animal_handling",
+            "arcana",
+            "athletics",
+            "deception",
+            "history",
+            "insight",
+            "intimidation",
+            "investigation",
+            "medicine",
+            "nature",
+            "perception",
+            "performance",
+            "persuasion",
+            "religion",
+            "sleight_of_hand",
+            "stealth",
+            "survival"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_cleric_skills",
+    "name": "Cleric Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "history",
+            "insight",
+            "medicine",
+            "persuasion",
+            "religion"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_druid_skills",
+    "name": "Druid Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "arcana",
+            "animal_handling",
+            "insight",
+            "medicine",
+            "nature",
+            "perception",
+            "religion",
+            "survival"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_fighter_skills",
+    "name": "Fighter Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "acrobatics",
+            "animal_handling",
+            "athletics",
+            "history",
+            "insight",
+            "intimidation",
+            "perception",
+            "survival"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_fighting_style_defense",
+    "name": "Fighting Style: Defense",
+    "lore": {
+      "short_description": "While you are wearing armor, you gain a +1 bonus to AC."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "ac",
+        "value": 1,
+        "predicates": [
+          {
+            "type": "armor_required",
+            "value": "any"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "trait_jack_of_all_trades",
+    "name": "Jack of All Trades",
+    "lore": {
+      "short_description": "Starting at 2nd level, you can add half your proficiency bonus to any ability check that does not already include your proficiency bonus.",
+      "full_text": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that does not already include your proficiency bonus."
+    },
+    "effects": [
+      {
+        "type": "half_proficiency",
+        "target": "unproficient_checks"
+      }
+    ]
+  },
+  {
+    "id": "trait_keen_senses",
+    "name": "Keen Senses",
+    "lore": {
+      "short_description": "You have proficiency in the Perception skill."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "perception"
+      }
+    ]
+  },
+  {
+    "id": "trait_monk_skills",
+    "name": "Monk Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "acrobatics",
+            "athletics",
+            "history",
+            "insight",
+            "religion",
+            "stealth"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_paladin_skills",
+    "name": "Paladin Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "athletics",
+            "insight",
+            "intimidation",
+            "medicine",
+            "persuasion",
+            "religion"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_ranger_skills",
+    "name": "Ranger Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 3,
+          "pool": [
+            "animal_handling",
+            "athletics",
+            "insight",
+            "investigation",
+            "nature",
+            "perception",
+            "stealth",
+            "survival"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_rogue_skills",
+    "name": "Rogue Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 4,
+          "pool": [
+            "acrobatics",
+            "athletics",
+            "deception",
+            "insight",
+            "intimidation",
+            "investigation",
+            "perception",
+            "performance",
+            "persuasion",
+            "sleight_of_hand",
+            "stealth"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_shadow_stalker",
+    "name": "Shadow Stalker",
+    "lore": {
+      "short_description": "You gain +2 to Stealth and have Advantage on Stealth checks in dim light."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "stealth",
+        "value": 2
+      },
+      {
+        "type": "advantage",
+        "target": "stealth",
+        "predicates": [
+          {
+            "type": "environment_condition",
+            "value": "dim_light"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "trait_sorcerer_skills",
+    "name": "Sorcerer Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "arcana",
+            "deception",
+            "insight",
+            "intimidation",
+            "persuasion",
+            "religion"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_unarmored_defense_barbarian",
+    "name": "Unarmored Defense",
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "ac",
+        "value": "con",
+        "predicates": [
+          {
+            "type": "armor_prohibited",
+            "value": "any"
+          },
+          {
+            "type": "shield_prohibited",
+            "value": true
+          }
+        ]
+      }
+    ],
+    "lore": {
+      "short_description": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit.",
+      "full_text": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit."
+    }
+  },
+  {
+    "id": "trait_unarmored_movement",
+    "name": "Unarmored Movement",
+    "lore": {
+      "short_description": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "speed",
+        "value": 10,
+        "predicates": [
+          {
+            "type": "armor_prohibited",
+            "value": "any"
+          },
+          {
+            "type": "shield_prohibited",
+            "value": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "trait_warlock_skills",
+    "name": "Warlock Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "arcana",
+            "deception",
+            "history",
+            "intimidation",
+            "investigation",
+            "investigation",
+            "nature",
+            "religion"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_wizard_skills",
+    "name": "Wizard Skills",
+    "lore": {
+      "short_description": ""
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "arcana",
+            "history",
+            "insight",
+            "investigation",
+            "medicine",
+            "religion"
+          ]
+        }
+      }
+    ]
+  }
 ]

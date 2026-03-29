@@ -1,4 +1,4 @@
-import type { Ability, HitDie, Skill } from "./common";
+import type { Ability, HitDie } from "./common";
 
 export interface EquipmentItem {
   item_id: string;
@@ -36,10 +36,6 @@ export interface ClassData {
     weapons: string[]; // Weapon category IDs
     tools: string[]; // Tool IDs
     saving_throws: Ability[];
-    skills: {
-      count: number;
-      pool: Skill[];
-    };
   };
   starting_equipment: {
     given: EquipmentItem[];

@@ -16,18 +16,7 @@
         "saving_throws": [
             "str",
             "con"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "animal_handling",
-                "athletics",
-                "intimidation",
-                "nature",
-                "perception",
-                "survival"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -104,6 +93,7 @@
         {
             "level": 1,
             "features": [
+                "trait_barbarian_skills",
                 "trait_rage",
                 "trait_unarmored_defense_barbarian"
             ],

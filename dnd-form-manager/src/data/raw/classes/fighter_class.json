@@ -17,20 +17,7 @@
         "saving_throws": [
             "str",
             "con"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "acrobatics",
-                "animal_handling",
-                "athletics",
-                "history",
-                "insight",
-                "intimidation",
-                "perception",
-                "survival"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -158,6 +145,7 @@
         {
             "level": 1,
             "features": [
+                "trait_fighter_skills",
                 "trait_fighting_style",
                 "trait_second_wind"
             ]

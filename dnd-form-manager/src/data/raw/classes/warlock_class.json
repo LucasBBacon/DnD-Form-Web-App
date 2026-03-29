@@ -13,20 +13,7 @@
         "saving_throws": [
             "wis",
             "cha"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "arcana",
-                "deception",
-                "history",
-                "intimidation",
-                "investigation",
-                "investigation",
-                "nature",
-                "religion"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -136,6 +123,7 @@
         {
             "level": 1,
             "features": [
+                "trait_warlock_skills",
                 "trait_otherworldly_patron",
                 "trait_pact_magic"
             ],

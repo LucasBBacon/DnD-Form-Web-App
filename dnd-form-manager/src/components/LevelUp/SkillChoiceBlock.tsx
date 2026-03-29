@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Skill } from "../../types/common";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getPendingSkillChoices } from "../../utils/choiceUtils";
+import type { LevelChoice } from "../../types/progression";
 
 const formatSkillName = (skill: string) => {
   return skill
@@ -12,13 +13,14 @@ const formatSkillName = (skill: string) => {
 
 export const SkillChoiceBlock = ({
   level,
+  onSave,
   onConfirm,
 }: {
   level: number;
+  onSave: (choice: Partial<LevelChoice>) => void;
   onConfirm: () => void;
 }) => {
-  const { raceId, subraceId, classId, subclassId, updateLevelChoice } =
-    useCharacterStore();
+  const { raceId, subraceId, classId, subclassId } = useCharacterStore();
 
   // Ask engine what choice this level requires
   const pendingChoices = getPendingSkillChoices(
@@ -49,11 +51,11 @@ export const SkillChoiceBlock = ({
   };
 
   const handleSave = () => {
-    // Flatten all selections into a single array for Zustand
+    // Flatten all selections into a single array
     const allChosenSkills = Object.values(selections).flat();
 
-    // Save to zustand's choicesByLevel[level]
-    updateLevelChoice(level, { skillChoices: allChosenSkills });
+    // Persist through parent callback (same pattern as ASIChoiceBlock)
+    onSave({ skillChoices: allChosenSkills });
     onConfirm();
   };
 
@@ -94,9 +96,8 @@ export const SkillChoiceBlock = ({
                       onChange={() =>
                         handleToggle(choice.sourceId, skill, choice.count)
                       }
-                    >
+                    />
                       {formatSkillName(skill)}
-                    </input>
                   </label>
                 );
               })}

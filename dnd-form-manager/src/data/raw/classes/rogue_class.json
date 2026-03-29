@@ -19,23 +19,7 @@
         "saving_throws": [
             "dex",
             "int"
-        ],
-        "skills": {
-            "count": 4,
-            "pool": [
-                "acrobatics",
-                "athletics",
-                "deception",
-                "insight",
-                "intimidation",
-                "investigation",
-                "perception",
-                "performance",
-                "persuasion",
-                "sleight_of_hand",
-                "stealth"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -167,6 +151,7 @@
         {
             "level": 1,
             "features": [
+                "trait_rogue_skills",
                 "trait_expertise",
                 "trait_sneak_attack",
                 "trait_thieves_cant"

@@ -1,6 +1,6 @@
 {
-    "id": "trait_rogue_skills",
-    "name": "Rogue Skills",
+    "id": "trait_paladin_skills",
+    "name": "Paladin Skills",
     "lore": {
         "short_description": ""
     },
@@ -8,19 +8,14 @@
         {
             "type": "proficiency_choice",
             "choice": {
-                "count": 4,
+                "count": 2,
                 "pool": [
-                    "acrobatics",
                     "athletics",
-                    "deception",
                     "insight",
                     "intimidation",
-                    "investigation",
-                    "perception",
-                    "performance",
+                    "medicine",
                     "persuasion",
-                    "sleight_of_hand",
-                    "stealth"
+                    "religion"
                 ]
             }
         }

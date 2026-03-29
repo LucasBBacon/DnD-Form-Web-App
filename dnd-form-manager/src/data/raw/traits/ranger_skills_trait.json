@@ -1,6 +1,6 @@
 {
-    "id": "trait_rogue_skills",
-    "name": "Rogue Skills",
+    "id": "trait_ranger_skills",
+    "name": "Ranger Skills",
     "lore": {
         "short_description": ""
     },
@@ -8,19 +8,16 @@
         {
             "type": "proficiency_choice",
             "choice": {
-                "count": 4,
+                "count": 3,
                 "pool": [
-                    "acrobatics",
+                    "animal_handling",
                     "athletics",
-                    "deception",
                     "insight",
-                    "intimidation",
                     "investigation",
+                    "nature",
                     "perception",
-                    "performance",
-                    "persuasion",
-                    "sleight_of_hand",
-                    "stealth"
+                    "stealth",
+                    "survival"
                 ]
             }
         }

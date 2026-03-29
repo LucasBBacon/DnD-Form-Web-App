@@ -15,18 +15,7 @@
         "saving_throws": [
             "int",
             "wis"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "arcana",
-                "history",
-                "insight",
-                "investigation",
-                "medicine",
-                "religion"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [],
@@ -120,6 +109,7 @@
         {
             "level": 1,
             "features": [
+                "trait_wizard_skills",
                 "trait_spellcasting_wizard",
                 "trait_arcane_recovery"
             ],

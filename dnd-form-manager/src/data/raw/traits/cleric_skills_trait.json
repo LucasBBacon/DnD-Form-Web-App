@@ -1,0 +1,22 @@
+{
+    "id": "trait_cleric_skills",
+    "name": "Cleric Skills",
+    "lore": {
+        "short_description": ""
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "history",
+                    "insight",
+                    "medicine",
+                    "persuasion",
+                    "religion"
+                ]
+            }
+        }
+    ]
+}

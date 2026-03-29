@@ -1,6 +1,6 @@
 {
-    "id": "trait_rogue_skills",
-    "name": "Rogue Skills",
+    "id": "trait_monk_skills",
+    "name": "Monk Skills",
     "lore": {
         "short_description": ""
     },
@@ -8,18 +8,13 @@
         {
             "type": "proficiency_choice",
             "choice": {
-                "count": 4,
+                "count": 2,
                 "pool": [
                     "acrobatics",
                     "athletics",
-                    "deception",
+                    "history",
                     "insight",
-                    "intimidation",
-                    "investigation",
-                    "perception",
-                    "performance",
-                    "persuasion",
-                    "sleight_of_hand",
+                    "religion",
                     "stealth"
                 ]
             }

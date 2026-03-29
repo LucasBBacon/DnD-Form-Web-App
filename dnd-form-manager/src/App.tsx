@@ -1,11 +1,15 @@
-import React from "react";
+import { useState } from "react";
 import "./App.css";
 import { CharacterCreationWizard } from "./components/Wizard/CharacterCreationWizard";
 import { useCharacterStore } from "./store/useCharacterStore";
 import { CharacterSheet } from "./components/CharacterSheet";
+import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
 
 function App() {
-  const { isSetupComplete, resetCharacter } = useCharacterStore();
+  const { isSetupComplete, resetCharacter, level, choicesByLevel } =
+    useCharacterStore();
+  const needsLevel1Setup = isSetupComplete && level === 1 && !choicesByLevel[1];
+  const [showLevel1Modal, setShowLevel1Modal] = useState(true);
 
   return (
     <div className="app-container">
@@ -22,7 +26,22 @@ function App() {
       )}
 
       {/* Conditional core renderer */}
-      {!isSetupComplete ? <CharacterCreationWizard /> : <CharacterSheet />}
+      {!isSetupComplete ? (
+        <CharacterCreationWizard />
+      ) : (
+        <>
+          <CharacterSheet />
+
+          {needsLevel1Setup && showLevel1Modal && (
+            <div className="modal-overlay">
+              <LevelUpModal
+                targetLevel={1}
+                onClose={() => setShowLevel1Modal(false)}
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

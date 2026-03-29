@@ -17,18 +17,7 @@
         "saving_throws": [
             "wis",
             "cha"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "athletics",
-                "insight",
-                "intimidation",
-                "medicine",
-                "persuasion",
-                "religion"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -137,6 +126,7 @@
         {
             "level": 1,
             "features": [
+                "trait_paladin_skills",
                 "trait_divine_sense",
                 "trait_lay_on_hands"
             ]

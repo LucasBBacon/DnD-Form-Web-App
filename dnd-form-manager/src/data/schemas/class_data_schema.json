@@ -39,19 +39,8 @@
         },
         "saving_throws": {
           "type": "array",
-          "items": { "$ref": "definitions.json#/definitions/AbilityScore" }
-        },
-        "skills": {
-          "type": "object",
-          "properties": {
-            "count": {
-              "type": "integer"
-            },
-            "pool": {
-              "type": "array",
-              "items": { "$ref": "definitions.json#/definitions/Skill" },
-              "description": "Array of valid skill IDs to choose from."
-            }
+          "items": {
+            "$ref": "definitions.json#/definitions/AbilityScore"
           }
         }
       }
@@ -74,7 +63,10 @@
                 "minimum": 1
               }
             },
-            "required": ["item_id", "quantity"]
+            "required": [
+              "item_id",
+              "quantity"
+            ]
           }
         },
         "choices": {
@@ -107,21 +99,32 @@
                             "minimum": 1
                           }
                         },
-                        "required": ["item_id", "quantity"]
+                        "required": [
+                          "item_id",
+                          "quantity"
+                        ]
                       }
                     }
                   },
-                  "required": ["equipment_bundle"]
+                  "required": [
+                    "equipment_bundle"
+                  ]
                 }
               }
             },
-            "required": ["choose", "options"]
+            "required": [
+              "choose",
+              "options"
+            ]
           }
         }
       }
     },
     "spellcasting_base": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "description": "Base rules for spellcasting, null if the class does not cast spells by default.",
       "properties": {
         "ability": {
@@ -129,7 +132,11 @@
         },
         "preparation_type": {
           "type": "string",
-          "enum": ["known", "prepared", "pact"]
+          "enum": [
+            "known",
+            "prepared",
+            "pact"
+          ]
         },
         "ritual_casting": {
           "type": "boolean"
@@ -174,11 +181,19 @@
             "type": "object",
             "description": "Custom key-value pairs for class-specific resources (e.g., Sneak Attack damage, Ki points).",
             "additionalProperties": {
-              "type": ["array", "string", "integer", "number"]
+              "type": [
+                "array",
+                "string",
+                "integer",
+                "number"
+              ]
             }
           },
           "spellcasting_progression": {
-            "type": ["object", "null"],
+            "type": [
+              "object",
+              "null"
+            ],
             "properties": {
               "cantrips_known": {
                 "type": "integer"
@@ -196,7 +211,9 @@
             }
           }
         },
-        "required": ["level"]
+        "required": [
+          "level"
+        ]
       }
     },
     "lore": {
@@ -223,11 +240,16 @@
                 "type": "string"
               }
             },
-            "required": ["title", "body"]
+            "required": [
+              "title",
+              "body"
+            ]
           }
         }
       },
-      "required": ["short_description"]
+      "required": [
+        "short_description"
+      ]
     }
   },
   "required": [

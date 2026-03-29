@@ -1,0 +1,25 @@
+{
+    "id": "trait_warlock_skills",
+    "name": "Warlock Skills",
+    "lore": {
+        "short_description": ""
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "arcana",
+                    "deception",
+                    "history",
+                    "intimidation",
+                    "investigation",
+                    "investigation",
+                    "nature",
+                    "religion"
+                ]
+            }
+        }
+    ]
+}

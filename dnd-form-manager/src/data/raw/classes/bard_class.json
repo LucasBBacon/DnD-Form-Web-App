@@ -21,30 +21,7 @@
         "saving_throws": [
             "dex",
             "cha"
-        ],
-        "skills": {
-            "count": 3,
-            "pool": [
-                "acrobatics",
-                "animal_handling",
-                "arcana",
-                "athletics",
-                "deception",
-                "history",
-                "insight",
-                "intimidation",
-                "investigation",
-                "medicine",
-                "nature",
-                "perception",
-                "performance",
-                "persuasion",
-                "religion",
-                "sleight_of_hand",
-                "stealth",
-                "survival"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -176,6 +153,7 @@
         {
             "level": 1,
             "features": [
+                "trait_bard_skills",
                 "trait_spellcasting_bard",
                 "trait_bardic_inspiration"
             ],

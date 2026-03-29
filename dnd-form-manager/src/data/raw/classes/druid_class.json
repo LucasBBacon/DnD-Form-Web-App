@@ -26,20 +26,7 @@
         "saving_throws": [
             "int",
             "wis"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "arcana",
-                "animal_handling",
-                "insight",
-                "medicine",
-                "nature",
-                "perception",
-                "religion",
-                "survival"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -124,6 +111,7 @@
         {
             "level": 1,
             "features": [
+                "trait_druid_skills",
                 "trait_druidic",
                 "trait_spellcasting_druid"
             ],

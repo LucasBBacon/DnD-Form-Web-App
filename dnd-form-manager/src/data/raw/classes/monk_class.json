@@ -15,18 +15,7 @@
         "saving_throws": [
             "str",
             "dex"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "acrobatics",
-                "athletics",
-                "history",
-                "insight",
-                "religion",
-                "stealth"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [],
@@ -97,6 +86,7 @@
         {
             "level": 1,
             "features": [
+                "trait_monk_skills",
                 "trait_unarmored_defense_monk",
                 "trait_martial_arts"
             ],

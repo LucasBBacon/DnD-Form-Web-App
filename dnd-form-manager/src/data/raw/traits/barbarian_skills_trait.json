@@ -1,0 +1,23 @@
+{
+    "id": "trait_barbarian_skills",
+    "name": "Barbarian Skills",
+    "lore": {
+        "short_description": ""
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "animal_handling",
+                    "athletics",
+                    "intimidation",
+                    "nature",
+                    "perception",
+                    "survival"
+                ]
+            }
+        }
+    ]
+}

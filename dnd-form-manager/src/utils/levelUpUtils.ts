@@ -1,6 +1,6 @@
 import type { ClassData } from "../types/class";
-import type { Skill } from "../types/common";
 import type { SubclassData } from "../types/subclass";
+import { getPendingSkillChoices } from "./choiceUtils";
 import { MECHANIC_IDS } from "./constants";
 
 export interface LevelUpRequirements {
@@ -9,8 +9,6 @@ export interface LevelUpRequirements {
   requiresSkillSelection: boolean;
   newCantripsToLearn: number;
   newSpellsToLearn: number;
-  skillSelectionCount: number;
-  skillSelectPool: Skill[];
   // TODO: add requiresInvocations, etc.
 }
 
@@ -30,7 +28,9 @@ export interface LevelUpRequirements {
  */
 export const getLevelUpRequirements = (
   targetLevel: number,
-  classData: ClassData | null,
+  raceId: string | null = null,
+  subraceId: string | null = null,
+  classData: ClassData | null = null,
   subclassData: SubclassData | null = null,
 ): LevelUpRequirements => {
   const requirements: LevelUpRequirements = {
@@ -39,33 +39,35 @@ export const getLevelUpRequirements = (
     requiresSkillSelection: false,
     newCantripsToLearn: 0,
     newSpellsToLearn: 0,
-    skillSelectionCount: 0,
-    skillSelectPool: [],
   };
 
   if (!classData) return requirements;
 
-  // Check for Level 1 Class Skills
-  if (targetLevel === 1) {
-    requirements.requiresSkillSelection = true;
-    requirements.skillSelectionCount = classData.proficiencies.skills.count;
-    requirements.skillSelectPool = classData.proficiencies.skills.pool;
-  }
-
-  // Check for subclass choice
+  // #region Subclass Check
   if (classData.subclass_info.choice_level == targetLevel) {
     requirements.requiresSubclass = true;
   }
+  // #endregion
 
-  // Check for ASI / Feat choice
+  // #region Skill Choice Check
+  const pendingSkillChoices = getPendingSkillChoices(targetLevel, raceId, subraceId, classData.id, subclassData?.id || null);
+  
+  if (pendingSkillChoices.length > 0) {
+    requirements.requiresSkillSelection = true;
+  }
+  // #endregion
+
   const levelData = classData.progression.find((p) => p.level === targetLevel);
+
+  // #region ASI / Feat Choice
   if (levelData?.features.includes(MECHANIC_IDS.ASI)) {
     requirements.requiresAsiOrFeat = true;
   }
+  // #endregion
 
-  // Spells check (derivation)
+  // #region Spells Check (derivation)
   const prevLevelData = classData.progression.find(
-    (p) => p.level == targetLevel,
+    (p) => p.level === targetLevel - 1,
   );
 
   const currentSpellsKnown =
@@ -83,9 +85,7 @@ export const getLevelUpRequirements = (
     prevLevelData?.spellcasting_progression?.cantrips_known || 0;
   requirements.newCantripsToLearn = Math.max(0, currentCantrips - prevCantrips);
 
-  // TODO: Future proofing, if a bard hits level 3 and chooses the College of lore, 
-  // they get 3 bonus skills. Add that check right here by looking at 
-  // subclassData.progression for specific trait ID
+  // #endregion
 
   return requirements;
 };

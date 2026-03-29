@@ -15,18 +15,7 @@
         "saving_throws": [
             "con",
             "cha"
-        ],
-        "skills": {
-            "count": 2,
-            "pool": [
-                "arcana",
-                "deception",
-                "insight",
-                "intimidation",
-                "persuasion",
-                "religion"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [],
@@ -124,6 +113,7 @@
         {
             "level": 1,
             "features": [
+                "trait_sorcerer_skills",
                 "trait_spellcasting_sorcerer",
                 "trait_sorcerous_origin"
             ],

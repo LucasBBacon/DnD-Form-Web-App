@@ -20,7 +20,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   onClose,
 }) => {
   // Fetch from zustand
-  const { classId, subclassId, setLevel, updateLevelChoice, setSubclass } =
+  const { raceId, subraceId, classId, subclassId, setLevel, updateLevelChoice, setSubclass } =
     useCharacterStore();
 
   const classData = classId ? getClassById(classId) : null;
@@ -30,6 +30,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   // Determine modules to render
   const requirements = getLevelUpRequirements(
     targetLevel,
+    raceId,
+    subraceId,
     classData,
     subclassData,
   );
@@ -37,10 +39,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   // region Validation State
   // if step is not required, mark it as pre-completed (true)
   const [asiCompleted, setAsiCompleted] = useState(
-    !requirements.requiresAsiOrFeat,
+    false,
   );
   const [skillsCompleted, setSkillsCompleted] = useState(
-    !requirements.requiresSkillSelection,
+    false,
   );
 
   // don't need local state for subclass/HP, just check if they are valid
@@ -63,7 +65,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
   return (
     <div className="modal level-up-wizard">
-      <h2>Leveling up to {targetLevel}!</h2>
+      <h2>{targetLevel === 1 ? "Finalize Character Creation" : `Leveling up to ${targetLevel}!`}</h2>
 
       {/* Render subclass picker if required */}
       {requirements.requiresSubclass && classId && (
@@ -89,6 +91,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresSkillSelection && (
         <SkillChoiceBlock
           level={targetLevel}
+          onSave={handleSaveChoice}
           onConfirm={() => setSkillsCompleted(true)}
         />
       )}
@@ -120,7 +123,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
         onClick={finalizeLevelUp}
         disabled={!canFinalize}
       >
-        Complete Level Up
+        {targetLevel === 1 ? "Enter Game" : "Complete Level Up"}
       </button>
     </div>
   );

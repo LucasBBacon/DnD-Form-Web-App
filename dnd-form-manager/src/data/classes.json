@@ -17,18 +17,7 @@
       "saving_throws": [
         "str",
         "con"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "animal_handling",
-          "athletics",
-          "intimidation",
-          "nature",
-          "perception",
-          "survival"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -105,6 +94,7 @@
       {
         "level": 1,
         "features": [
+          "trait_barbarian_skills",
           "trait_rage",
           "trait_unarmored_defense_barbarian"
         ],
@@ -290,30 +280,7 @@
       "saving_throws": [
         "dex",
         "cha"
-      ],
-      "skills": {
-        "count": 3,
-        "pool": [
-          "acrobatics",
-          "animal_handling",
-          "arcana",
-          "athletics",
-          "deception",
-          "history",
-          "insight",
-          "intimidation",
-          "investigation",
-          "medicine",
-          "nature",
-          "perception",
-          "performance",
-          "persuasion",
-          "religion",
-          "sleight_of_hand",
-          "stealth",
-          "survival"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -445,6 +412,7 @@
       {
         "level": 1,
         "features": [
+          "trait_bard_skills",
           "trait_spellcasting_bard",
           "trait_bardic_inspiration"
         ],
@@ -839,17 +807,7 @@
       "saving_throws": [
         "wis",
         "cha"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "history",
-          "insight",
-          "medicine",
-          "persuasion",
-          "religion"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -985,6 +943,7 @@
       {
         "level": 1,
         "features": [
+          "trait_cleric_skills",
           "trait_spellcasting_cleric",
           "trait_divine_domain"
         ],
@@ -1359,20 +1318,7 @@
       "saving_throws": [
         "int",
         "wis"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "arcana",
-          "animal_handling",
-          "insight",
-          "medicine",
-          "nature",
-          "perception",
-          "religion",
-          "survival"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -1457,6 +1403,7 @@
       {
         "level": 1,
         "features": [
+          "trait_druid_skills",
           "trait_druidic",
           "trait_spellcasting_druid"
         ],
@@ -1798,20 +1745,7 @@
       "saving_throws": [
         "str",
         "con"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "acrobatics",
-          "animal_handling",
-          "athletics",
-          "history",
-          "insight",
-          "intimidation",
-          "perception",
-          "survival"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -1939,6 +1873,7 @@
       {
         "level": 1,
         "features": [
+          "trait_fighter_skills",
           "trait_fighting_style",
           "trait_second_wind"
         ]
@@ -2103,18 +2038,7 @@
       "saving_throws": [
         "str",
         "dex"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "acrobatics",
-          "athletics",
-          "history",
-          "insight",
-          "religion",
-          "stealth"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [],
@@ -2185,6 +2109,7 @@
       {
         "level": 1,
         "features": [
+          "trait_monk_skills",
           "trait_unarmored_defense_monk",
           "trait_martial_arts"
         ],
@@ -2434,18 +2359,7 @@
       "saving_throws": [
         "wis",
         "cha"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "athletics",
-          "insight",
-          "intimidation",
-          "medicine",
-          "persuasion",
-          "religion"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -2554,6 +2468,7 @@
       {
         "level": 1,
         "features": [
+          "trait_paladin_skills",
           "trait_divine_sense",
           "trait_lay_on_hands"
         ]
@@ -2826,20 +2741,7 @@
       "saving_throws": [
         "str",
         "dex"
-      ],
-      "skills": {
-        "count": 3,
-        "pool": [
-          "animal_handling",
-          "athletics",
-          "insight",
-          "investigation",
-          "nature",
-          "perception",
-          "stealth",
-          "survival"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -2960,6 +2862,7 @@
       {
         "level": 1,
         "features": [
+          "trait_ranger_skills",
           "trait_favored_enemy",
           "trait_natural_explorer"
         ]
@@ -3275,23 +3178,7 @@
       "saving_throws": [
         "dex",
         "int"
-      ],
-      "skills": {
-        "count": 4,
-        "pool": [
-          "acrobatics",
-          "athletics",
-          "deception",
-          "insight",
-          "intimidation",
-          "investigation",
-          "perception",
-          "performance",
-          "persuasion",
-          "sleight_of_hand",
-          "stealth"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -3423,6 +3310,7 @@
       {
         "level": 1,
         "features": [
+          "trait_rogue_skills",
           "trait_expertise",
           "trait_sneak_attack",
           "trait_thieves_cant"
@@ -3625,18 +3513,7 @@
       "saving_throws": [
         "con",
         "cha"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "arcana",
-          "deception",
-          "insight",
-          "intimidation",
-          "persuasion",
-          "religion"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [],
@@ -3734,6 +3611,7 @@
       {
         "level": 1,
         "features": [
+          "trait_sorcerer_skills",
           "trait_spellcasting_sorcerer",
           "trait_sorcerous_origin"
         ],
@@ -4141,20 +4019,7 @@
       "saving_throws": [
         "wis",
         "cha"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "arcana",
-          "deception",
-          "history",
-          "intimidation",
-          "investigation",
-          "investigation",
-          "nature",
-          "religion"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [
@@ -4264,6 +4129,7 @@
       {
         "level": 1,
         "features": [
+          "trait_warlock_skills",
           "trait_otherworldly_patron",
           "trait_pact_magic"
         ],
@@ -4533,18 +4399,7 @@
       "saving_throws": [
         "int",
         "wis"
-      ],
-      "skills": {
-        "count": 2,
-        "pool": [
-          "arcana",
-          "history",
-          "insight",
-          "investigation",
-          "medicine",
-          "religion"
-        ]
-      }
+      ]
     },
     "multiclass_proficiencies": {
       "armor": [],
@@ -4638,6 +4493,7 @@
       {
         "level": 1,
         "features": [
+          "trait_wizard_skills",
           "trait_spellcasting_wizard",
           "trait_arcane_recovery"
         ],

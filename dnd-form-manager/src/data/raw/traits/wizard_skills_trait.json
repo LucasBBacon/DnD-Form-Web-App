@@ -1,0 +1,23 @@
+{
+    "id": "trait_wizard_skills",
+    "name": "Wizard Skills",
+    "lore": {
+        "short_description": ""
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "arcana",
+                    "history",
+                    "insight",
+                    "investigation",
+                    "medicine",
+                    "religion"
+                ]
+            }
+        }
+    ]
+}

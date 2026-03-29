@@ -16,20 +16,7 @@
         "saving_throws": [
             "str",
             "dex"
-        ],
-        "skills": {
-            "count": 3,
-            "pool": [
-                "animal_handling",
-                "athletics",
-                "insight",
-                "investigation",
-                "nature",
-                "perception",
-                "stealth",
-                "survival"
-            ]
-        }
+        ]
     },
     "multiclass_proficiencies": {
         "armor": [
@@ -150,6 +137,7 @@
         {
             "level": 1,
             "features": [
+                "trait_ranger_skills",
                 "trait_favored_enemy",
                 "trait_natural_explorer"
             ]

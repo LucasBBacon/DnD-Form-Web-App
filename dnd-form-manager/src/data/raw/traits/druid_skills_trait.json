@@ -1,0 +1,25 @@
+{
+    "id": "trait_druid_skills",
+    "name": "Druid Skills",
+    "lore": {
+        "short_description": ""
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "arcana",
+                    "animal_handling",
+                    "insight",
+                    "medicine",
+                    "nature",
+                    "perception",
+                    "religion",
+                    "survival"
+                ]
+            }
+        }
+    ]
+}

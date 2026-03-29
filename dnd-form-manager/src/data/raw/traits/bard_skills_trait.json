@@ -1,6 +1,6 @@
 {
-    "id": "trait_rogue_skills",
-    "name": "Rogue Skills",
+    "id": "trait_bard_skills",
+    "name": "Bard Skills",
     "lore": {
         "short_description": ""
     },
@@ -8,19 +8,26 @@
         {
             "type": "proficiency_choice",
             "choice": {
-                "count": 4,
+                "count": 3,
                 "pool": [
                     "acrobatics",
+                    "animal_handling",
+                    "arcana",
                     "athletics",
                     "deception",
+                    "history",
                     "insight",
                     "intimidation",
                     "investigation",
+                    "medicine",
+                    "nature",
                     "perception",
                     "performance",
                     "persuasion",
+                    "religion",
                     "sleight_of_hand",
-                    "stealth"
+                    "stealth",
+                    "survival"
                 ]
             }
         }
