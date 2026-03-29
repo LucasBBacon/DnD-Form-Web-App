@@ -1,4 +1,4 @@
-import type { Ability } from "./common";
+import type { Ability, Skill } from "./common";
 import type { Predicate } from "./predicate";
 
 export interface TraitEffect {
@@ -8,6 +8,7 @@ export interface TraitEffect {
     | "sense"
     | "half_proficiency"
     | "proficiency"
+    | "proficiency_choice"
     | "expertise"
     | "spell_grant"
     | "stat_modifier"
@@ -22,6 +23,10 @@ export interface TraitEffect {
     reset: "short_rest" | "long_rest" | "turn" | "other";
   };
   predicates?: Predicate[];
+  choice?: {
+    count: number;
+    pool: Skill[] | "any";
+  };
 }
 
 export interface TraitData {

@@ -89,9 +89,6 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresSkillSelection && (
         <SkillChoiceBlock
           level={targetLevel}
-          count={requirements.skillSelectionCount}
-          pool={requirements.skillSelectPool}
-          onSave={handleSaveChoice}
           onConfirm={() => setSkillsCompleted(true)}
         />
       )}

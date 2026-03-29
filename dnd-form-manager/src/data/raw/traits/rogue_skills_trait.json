@@ -1,0 +1,25 @@
+{
+    "id": "trait_rogue_skills",
+    "name": "Rogue Skills",
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 4,
+                "pool": [
+                    "acrobatics",
+                    "athletics",
+                    "deception",
+                    "insight",
+                    "intimidation",
+                    "investigation",
+                    "perception",
+                    "performance",
+                    "persuasion",
+                    "sleight_of_hand",
+                    "stealth"
+                ]
+            }
+        }
+    ]
+}

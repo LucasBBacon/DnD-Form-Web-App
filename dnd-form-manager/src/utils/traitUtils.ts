@@ -12,6 +12,7 @@ export const getAllCharacterTraits = (
   subraceId: string | null,
   classId: string | null,
   subclassId: string | null,
+  exactLevel = false,
 ) => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
@@ -21,20 +22,28 @@ export const getAllCharacterTraits = (
   const traitIds = new Set<string>();
 
   // #region Racial Traits
-  raceData?.traits?.forEach((id) => traitIds.add(id));
-  subraceData?.traits_added?.forEach((id) => traitIds.add(id));
+  // Racial traits are granted at character creation (level 1).
+  // When filtering by exact level, only include them if we're at level 1.
+  if (!exactLevel || level === 1) {
+    raceData?.traits?.forEach((id) => traitIds.add(id));
+    subraceData?.traits_added?.forEach((id) => traitIds.add(id));
+  }
   // #endregion
 
   // #region Class and Subclass Traits
+  const levelFilter = exactLevel
+    ? (p: { level: number }) => p.level === level
+    : (p: { level: number }) => p.level <= level;
+
   if (classData) {
     classData.progression
-      .filter((p) => p.level <= level)
+      .filter(levelFilter)
       .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
   }
 
   if (subclassData) {
     subclassData.progression
-      .filter((p) => p.level <= level)
+      .filter(levelFilter)
       .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
   }
 

@@ -1,14 +1,7 @@
 import { useState } from "react";
 import type { Skill } from "../../types/common";
-import type { LevelChoice } from "../../types/progression";
-
-interface SkillChoiceBlockProps {
-  level: number;
-  count: number;
-  pool: Skill[];
-  onSave: (choice: Partial<LevelChoice>) => void;
-  onConfirm: () => void;
-}
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { getPendingSkillChoices } from "../../utils/choiceUtils";
 
 const formatSkillName = (skill: string) => {
   return skill
@@ -17,71 +10,103 @@ const formatSkillName = (skill: string) => {
     .join(" ");
 };
 
-export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
+export const SkillChoiceBlock = ({
   level,
-  count,
-  pool,
-  onSave,
-  onConfirm
+  onConfirm,
+}: {
+  level: number;
+  onConfirm: () => void;
 }) => {
-  const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
+  const { raceId, subraceId, classId, subclassId, updateLevelChoice } =
+    useCharacterStore();
 
-  const toggleSkill = (skill: Skill) => {
-    if (selectedSkills.includes(skill)) {
-      setSelectedSkills(selectedSkills.filter((s) => s !== skill));
-    } else if (selectedSkills.length < count) {
-      setSelectedSkills([...selectedSkills, skill]);
-    }
+  // Ask engine what choice this level requires
+  const pendingChoices = getPendingSkillChoices(
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+  );
+
+  // Local state to track selections per source
+  const [selections, setSelection] = useState<Record<string, Skill[]>>({});
+
+  if (pendingChoices.length === 0) {
+    return null; // No choices to make at this level!
+  }
+
+  const handleToggle = (sourceId: string, skill: Skill, maxCount: number) => {
+    setSelection((prev) => {
+      const current = prev[sourceId] || [];
+      if (current.includes(skill)) {
+        return { ...prev, [sourceId]: current.filter((s) => s !== skill) };
+      } else if (current.length < maxCount) {
+        return { ...prev, [sourceId]: [...current, skill] };
+      }
+      return prev;
+    });
   };
 
   const handleSave = () => {
-    onSave({ skillChoices: selectedSkills });
-  };
+    // Flatten all selections into a single array for Zustand
+    const allChosenSkills = Object.values(selections).flat();
 
-  const handleConfirm = () => {
-    handleSave();
+    // Save to zustand's choicesByLevel[level]
+    updateLevelChoice(level, { skillChoices: allChosenSkills });
     onConfirm();
   };
 
-  const isComplete = selectedSkills.length === count;
+  // Ensure all choice blocks are fully satisfied
+  const isValid = pendingChoices.every(
+    (choice) => (selections[choice.sourceId] || []).length === choice.count,
+  );
 
   return (
-    <div className="choice-block skill-block">
-      <h3>Level {level}: Skill Proficiencies</h3>
-      <p>
-        Choose <strong>{count - selectedSkills.length}</strong> more skill(s)
-        from the list below:
-      </p>
+    <div className="choice-block">
+      <h3>Level {level} Skill Proficiencies</h3>
 
-      <div className="skill-grid">
-        {pool.map((skill) => {
-          const isChecked = selectedSkills.includes(skill);
-          // Disable unchecked boxes if limit reached
-          const isDisabled = !isChecked && selectedSkills.length >= count;
+      {pendingChoices.map((choice) => {
+        const selected = selections[choice.sourceId] || [];
+        const isFull = selected.length >= choice.count;
 
-          return (
-            <label
-              key={skill}
-              className={`skill-checkbox ${isDisabled ? "disabled" : ""}`}
-            >
-              <input
-                type="checkbox"
-                checked={isChecked}
-                disabled={isDisabled}
-                onChange={() => toggleSkill(skill)}
-              />
-              {formatSkillName(skill)}
-            </label>
-          );
-        })}
-      </div>
+        return (
+          <div key={choice.sourceId} className="choice-group">
+            <p>
+              From <strong>{choice.sourceName}</strong>: Choose{" "}
+              {choice.count - selected.length} more.
+            </p>
 
-      <button
-        className="confirm-btn"
-        disabled={!isComplete}
-        onClick={handleConfirm}
-      >
-        Confirm Proficiencies
+            <div className="skill-grid">
+              {choice.pool.map((skill) => {
+                const isChecked = selected.includes(skill);
+                const isDisabled = !isChecked && isFull;
+
+                return (
+                  <label
+                    key={skill}
+                    className={`checkbox-label ${isDisabled ? "disabled" : ""}`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      disabled={isDisabled}
+                      onChange={() =>
+                        handleToggle(choice.sourceId, skill, choice.count)
+                      }
+                    >
+                      {formatSkillName(skill)}
+                    </input>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      <button disabled={!isValid} onClick={handleSave}>
+        Confirm Skills
       </button>
     </div>
   );

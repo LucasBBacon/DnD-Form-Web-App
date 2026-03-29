@@ -72,9 +72,11 @@
                             "sense",
                             "proficiency",
                             "half_proficiency",
+                            "expertise",
                             "spell_grant",
                             "stat_modifier",
                             "ac_calculation",
+                            "proficiency_choice",
                             "other"
                         ],
                         "description": "The kind of effect this entry applies."
@@ -141,6 +143,39 @@
                         "items": {
                             "$ref": "#/definitions/predicate"
                         }
+                    },
+                    "choice": {
+                        "type": "object",
+                        "description": "Optional selection when the effect requires choosing from a pool of options.",
+                        "properties": {
+                            "count": {
+                                "type": "number",
+                                "description": "The number of items to choose from the pool."
+                            },
+                            "pool": {
+                                "anyOf": [
+                                    {
+                                        "type": "string",
+                                        "enum": [
+                                            "any"
+                                        ],
+                                        "description": "Allow any option."
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "A specific list of pool IDs (e.g., skill names or trait IDs)."
+                                    }
+                                ]
+                            }
+                        },
+                        "required": [
+                            "count",
+                            "pool"
+                        ],
+                        "additionalProperties": false
                     }
                 },
                 "required": [
