@@ -1,10 +1,14 @@
 {
-    "id": "trait_bard_weapons",
-    "name": "Bard Weapon Proficiencies",
+    "id": "trait_rogue_proficiencies",
+    "name": "Rogue Proficiencies",
     "lore": {
-        "short_description": "Gain proficiency with simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+        "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, and shortswords."
     },
     "effects": [
+        {
+            "type": "proficiency",
+            "target": "light"
+        },
         {
             "type": "proficiency",
             "target": "simple"

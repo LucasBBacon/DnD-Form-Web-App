@@ -4,15 +4,6 @@
     "name": "Barbarian",
     "hit_die": 12,
     "proficiencies": {
-      "armor": [
-        "category_armor_light",
-        "category_armor_medium",
-        "category_armor_shield"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "category_weapon_martial"
-      ],
       "tools": [],
       "saving_throws": [
         "str",
@@ -94,6 +85,7 @@
       {
         "level": 1,
         "features": [
+          "trait_barbarian_proficiencies",
           "trait_barbarian_skills",
           "trait_rage",
           "trait_unarmored_defense_barbarian"
@@ -262,16 +254,6 @@
     "name": "Bard",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [
-        "category_armor_light"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "weapon_hand_crossbow",
-        "weapon_longsword",
-        "weapon_rapier",
-        "weapon_shortsword"
-      ],
       "tools": [
         "category_musical_instrument",
         "category_musical_instrument",
@@ -412,6 +394,7 @@
       {
         "level": 1,
         "features": [
+          "trait_bard_proficiencies",
           "trait_bard_skills",
           "trait_spellcasting_bard",
           "trait_bardic_inspiration"
@@ -795,14 +778,6 @@
     "name": "Cleric",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [
-        "category_armor_light",
-        "category_armor_medium",
-        "category_armor_shield"
-      ],
-      "weapons": [
-        "category_weapon_simple"
-      ],
       "tools": [],
       "saving_throws": [
         "wis",
@@ -943,6 +918,7 @@
       {
         "level": 1,
         "features": [
+          "trait_cleric_proficiencies",
           "trait_cleric_skills",
           "trait_spellcasting_cleric",
           "trait_divine_domain"
@@ -1295,23 +1271,6 @@
     "name": "Druid",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [
-        "category_armor_light_no_metal",
-        "category_armor_medium_no_metal",
-        "category_armor_shield_no_metal"
-      ],
-      "weapons": [
-        "weapon_club",
-        "weapon_dagger",
-        "weapon_dart",
-        "weapon_javelin",
-        "weapon_mace",
-        "weapon_quarterstaff",
-        "weapon_scimitar",
-        "weapon_sickle",
-        "weapon_sling",
-        "weapon_spear"
-      ],
       "tools": [
         "tool_herbalism_kit"
       ],
@@ -1403,6 +1362,7 @@
       {
         "level": 1,
         "features": [
+          "trait_druid_proficiencies",
           "trait_druid_skills",
           "trait_druidic",
           "trait_spellcasting_druid"
@@ -1731,16 +1691,6 @@
     "name": "Fighter",
     "hit_die": 10,
     "proficiencies": {
-      "armor": [
-        "category_armor_light",
-        "category_armor_medium",
-        "category_armor_heavy",
-        "category_armor_shield"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "category_weapon_martial"
-      ],
       "tools": [],
       "saving_throws": [
         "str",
@@ -1873,6 +1823,7 @@
       {
         "level": 1,
         "features": [
+          "trait_fighter_proficiencies",
           "trait_fighter_skills",
           "trait_fighting_style",
           "trait_second_wind"
@@ -2026,11 +1977,6 @@
     "name": "Monk",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [],
-      "weapons": [
-        "category_weapon_simple",
-        "weapon_shortsword"
-      ],
       "tools": [
         "category_artisans_tools",
         "category_musical_instrument"
@@ -2109,6 +2055,7 @@
       {
         "level": 1,
         "features": [
+          "trait_monk_proficiencies",
           "trait_monk_skills",
           "trait_unarmored_defense_monk",
           "trait_martial_arts"
@@ -2345,16 +2292,6 @@
     "name": "Paladin",
     "hit_die": 10,
     "proficiencies": {
-      "armor": [
-        "category_armor_light",
-        "category_armor_medium",
-        "category_armor_heavy",
-        "category_armor_shield"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "category_weapon_martial"
-      ],
       "tools": [],
       "saving_throws": [
         "wis",
@@ -2468,6 +2405,7 @@
       {
         "level": 1,
         "features": [
+          "trait_paladin_proficiencies",
           "trait_paladin_skills",
           "trait_divine_sense",
           "trait_lay_on_hands"
@@ -2728,15 +2666,6 @@
     "name": "Ranger",
     "hit_die": 10,
     "proficiencies": {
-      "armor": [
-        "category_armor_light",
-        "category_armor_medium",
-        "category_armor_shield"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "category_weapon_martial"
-      ],
       "tools": [],
       "saving_throws": [
         "str",
@@ -2862,6 +2791,7 @@
       {
         "level": 1,
         "features": [
+          "trait_ranger_proficiencies",
           "trait_ranger_skills",
           "trait_favored_enemy",
           "trait_natural_explorer"
@@ -3162,16 +3092,6 @@
     "name": "Rogue",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [
-        "category_armor_light"
-      ],
-      "weapons": [
-        "category_weapon_simple",
-        "weapon_hand_crossbow",
-        "weapon_longsword",
-        "weapon_rapier",
-        "weapon_shortsword"
-      ],
       "tools": [
         "tool_thieves_tools"
       ],
@@ -3310,6 +3230,7 @@
       {
         "level": 1,
         "features": [
+          "trait_rogue_proficiencies",
           "trait_rogue_skills",
           "trait_expertise",
           "trait_sneak_attack",
@@ -3501,14 +3422,6 @@
     "name": "Sorcerer",
     "hit_die": 6,
     "proficiencies": {
-      "armor": [],
-      "weapons": [
-        "weapon_dagger",
-        "weapon_dart",
-        "weapon_sling",
-        "weapon_quarterstaff",
-        "weapon_light_crossbow"
-      ],
       "tools": [],
       "saving_throws": [
         "con",
@@ -3611,6 +3524,7 @@
       {
         "level": 1,
         "features": [
+          "trait_sorcerer_proficiencies",
           "trait_sorcerer_skills",
           "trait_spellcasting_sorcerer",
           "trait_sorcerous_origin"
@@ -4009,12 +3923,6 @@
     "name": "Warlock",
     "hit_die": 8,
     "proficiencies": {
-      "armor": [
-        "category_armor_light"
-      ],
-      "weapons": [
-        "category_weapon_simple"
-      ],
       "tools": [],
       "saving_throws": [
         "wis",
@@ -4129,6 +4037,7 @@
       {
         "level": 1,
         "features": [
+          "trait_warlock_proficiencies",
           "trait_warlock_skills",
           "trait_otherworldly_patron",
           "trait_pact_magic"
@@ -4387,14 +4296,6 @@
     "name": "Wizard",
     "hit_die": 6,
     "proficiencies": {
-      "armor": [],
-      "weapons": [
-        "weapon_dagger",
-        "weapon_dart",
-        "weapon_sling",
-        "weapon_quarterstaff",
-        "weapon_light_crossbow"
-      ],
       "tools": [],
       "saving_throws": [
         "int",
@@ -4493,6 +4394,7 @@
       {
         "level": 1,
         "features": [
+          "trait_wizard_proficiencies",
           "trait_wizard_skills",
           "trait_spellcasting_wizard",
           "trait_arcane_recovery"

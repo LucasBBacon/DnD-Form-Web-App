@@ -3,12 +3,6 @@
     "name": "Fighter",
     "hit_die": 10,
     "proficiencies": {
-        "armor": [
-            "category_armor_light",
-            "category_armor_medium",
-            "category_armor_heavy",
-            "category_armor_shield"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -141,7 +135,7 @@
         {
             "level": 1,
             "features": [
-                "trait_fighter_weapons",
+                "trait_fighter_proficiencies",
                 "trait_fighter_skills",
                 "trait_fighting_style",
                 "trait_second_wind"

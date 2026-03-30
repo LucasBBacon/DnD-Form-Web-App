@@ -3,11 +3,6 @@
     "name": "Barbarian",
     "hit_die": 12,
     "proficiencies": {
-        "armor": [
-            "category_armor_light",
-            "category_armor_medium",
-            "category_armor_shield"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -89,7 +84,7 @@
         {
             "level": 1,
             "features": [
-                "trait_barbarian_weapons",
+                "trait_barbarian_proficiencies",
                 "trait_barbarian_skills",
                 "trait_rage",
                 "trait_unarmored_defense_barbarian"

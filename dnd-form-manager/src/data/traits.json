@@ -1,5 +1,34 @@
 [
   {
+    "id": "trait_barbarian_proficiencies",
+    "name": "Barbarian Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "martial"
+      }
+    ]
+  },
+  {
     "id": "trait_barbarian_skills",
     "name": "Barbarian Skills",
     "lore": {
@@ -19,6 +48,39 @@
             "survival"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_bard_proficiencies",
+    "name": "Bard Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_hand_crossbow"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_longsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_rapier"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_shortsword"
       }
     ]
   },
@@ -58,6 +120,31 @@
     ]
   },
   {
+    "id": "trait_cleric_proficiencies",
+    "name": "Cleric Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, medium armor, shields, and simple weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      }
+    ]
+  },
+  {
     "id": "trait_cleric_skills",
     "name": "Cleric Skills",
     "lore": {
@@ -76,6 +163,67 @@
             "religion"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_druid_proficiencies",
+    "name": "Druid Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, medium armor, shields, and druid weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_club"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_dagger"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_dart"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_javelin"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_mace"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_quarterstaff"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_scimitar"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_sickle"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_sling"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_spear"
       }
     ]
   },
@@ -101,6 +249,39 @@
             "survival"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_fighter_proficiencies",
+    "name": "Fighter Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "heavy"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "martial"
       }
     ]
   },
@@ -177,6 +358,23 @@
     ]
   },
   {
+    "id": "trait_monk_proficiencies",
+    "name": "Monk Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with simple weapons and shortswords."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_shortsword"
+      }
+    ]
+  },
+  {
     "id": "trait_monk_skills",
     "name": "Monk Skills",
     "lore": {
@@ -196,6 +394,39 @@
             "stealth"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_paladin_proficiencies",
+    "name": "Paladin Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "heavy"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "martial"
       }
     ]
   },
@@ -223,6 +454,35 @@
     ]
   },
   {
+    "id": "trait_ranger_proficiencies",
+    "name": "Ranger Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, medium armor, shields, and simple and martial weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "medium"
+      },
+      {
+        "type": "proficiency",
+        "target": "shield"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "martial"
+      }
+    ]
+  },
+  {
     "id": "trait_ranger_skills",
     "name": "Ranger Skills",
     "lore": {
@@ -244,6 +504,39 @@
             "survival"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_rogue_proficiencies",
+    "name": "Rogue Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_hand_crossbow"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_longsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_rapier"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_shortsword"
       }
     ]
   },
@@ -296,6 +589,35 @@
             "value": "dim_light"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "trait_sorcerer_proficiencies",
+    "name": "Sorcerer Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "weapon_dagger"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_dart"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_sling"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_quarterstaff"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_light_crossbow"
       }
     ]
   },
@@ -372,6 +694,23 @@
     ]
   },
   {
+    "id": "trait_warlock_proficiencies",
+    "name": "Warlock Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with light armor and simple weapons."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "light"
+      },
+      {
+        "type": "proficiency",
+        "target": "simple"
+      }
+    ]
+  },
+  {
     "id": "trait_warlock_skills",
     "name": "Warlock Skills",
     "lore": {
@@ -393,6 +732,35 @@
             "religion"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_wizard_proficiencies",
+    "name": "Wizard Proficiencies",
+    "lore": {
+      "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "weapon_dagger"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_dart"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_sling"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_quarterstaff"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_light_crossbow"
       }
     ]
   },

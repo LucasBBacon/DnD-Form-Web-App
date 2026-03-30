@@ -1,0 +1,17 @@
+{
+    "id": "trait_warlock_proficiencies",
+    "name": "Warlock Proficiencies",
+    "lore": {
+        "short_description": "Gain proficiency with light armor and simple weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "light"
+        },
+        {
+            "type": "proficiency",
+            "target": "simple"
+        }
+    ]
+}

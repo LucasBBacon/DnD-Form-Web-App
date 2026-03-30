@@ -100,13 +100,38 @@ export const useCharacterStats = () => {
       : null;
   const isWearingShield = !!state.equippedShieldId;
 
-  // Check if armor proficiencies are satisfied
-  const armorProficiencies = new Set(classData?.proficiencies?.armor || []);
+  // Aggregate all active proficiencies from trait data
+  const activeProficiencies = new Set<string>();
+
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      if (effect.type !== "proficiency" || !effect.target) return;
+
+      const isActive = evaluateAllPredicates(effect.predicates, state, {
+        totalScores,
+        modifiers,
+        proficiencyBonus,
+        maxHp,
+        currentHp,
+        initiative,
+        armorClass: 0,
+        isArmorPenalized: false,
+        totalWeight,
+        isEncumbered,
+        speed: 30,
+      });
+
+      if (isActive) {
+        activeProficiencies.add(effect.target);
+      }
+    });
+  });
+
   const isArmorPenalized =
     (!!state.equippedArmorId &&
       equippedArmor?.armor_properties &&
-      !armorProficiencies.has(equippedArmor.armor_properties.armorType)) ||
-    (isWearingShield && !armorProficiencies.has("category_armor_shield"));
+      !activeProficiencies.has(equippedArmor.armor_properties.armorType)) ||
+    (isWearingShield && !activeProficiencies.has("shield"));
 
   const baseArmorClass = calculateArmorClass(
     modifiers.dex,

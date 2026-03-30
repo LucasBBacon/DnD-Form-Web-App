@@ -3,9 +3,6 @@
     "name": "Warlock",
     "hit_die": 8,
     "proficiencies": {
-        "armor": [
-            "category_armor_light"
-        ],
         "tools": [],
         "saving_throws": [
             "wis",
@@ -120,7 +117,7 @@
         {
             "level": 1,
             "features": [
-                "trait_warlock_weapons",
+                "trait_warlock_proficiencies",
                 "trait_warlock_skills",
                 "trait_otherworldly_patron",
                 "trait_pact_magic"

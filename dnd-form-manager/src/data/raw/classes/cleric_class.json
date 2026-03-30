@@ -3,11 +3,6 @@
     "name": "Cleric",
     "hit_die": 8,
     "proficiencies": {
-        "armor": [
-            "category_armor_light",
-            "category_armor_medium",
-            "category_armor_shield"
-        ],
         "tools": [],
         "saving_throws": [
             "wis",
@@ -148,7 +143,7 @@
         {
             "level": 1,
             "features": [
-                "trait_cleric_weapons",
+                "trait_cleric_proficiencies",
                 "trait_cleric_skills",
                 "trait_spellcasting_cleric",
                 "trait_divine_domain"

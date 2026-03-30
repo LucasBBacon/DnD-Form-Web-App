@@ -32,7 +32,6 @@ export interface ClassData {
   name: string;
   hit_die: HitDie;
   proficiencies: {
-    armor: string[]; // Amor category IDs
     weapons: string[]; // Weapon category IDs
     tools: string[]; // Tool IDs
     saving_throws: Ability[];

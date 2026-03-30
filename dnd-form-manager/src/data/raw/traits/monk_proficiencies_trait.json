@@ -1,6 +1,6 @@
 {
-    "id": "trait_monk_weapons",
-    "name": "Monk Weapon Proficiencies",
+    "id": "trait_monk_proficiencies",
+    "name": "Monk Proficiencies",
     "lore": {
         "short_description": "Gain proficiency with simple weapons and shortswords."
     },

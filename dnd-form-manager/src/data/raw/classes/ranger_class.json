@@ -3,11 +3,6 @@
     "name": "Ranger",
     "hit_die": 10,
     "proficiencies": {
-        "armor": [
-            "category_armor_light",
-            "category_armor_medium",
-            "category_armor_shield"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -133,7 +128,7 @@
         {
             "level": 1,
             "features": [
-                "trait_ranger_weapons",
+                "trait_ranger_proficiencies",
                 "trait_ranger_skills",
                 "trait_favored_enemy",
                 "trait_natural_explorer"

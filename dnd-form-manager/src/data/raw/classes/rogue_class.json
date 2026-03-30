@@ -3,9 +3,6 @@
     "name": "Rogue",
     "hit_die": 8,
     "proficiencies": {
-        "armor": [
-            "category_armor_light"
-        ],
         "tools": [
             "tool_thieves_tools"
         ],
@@ -144,7 +141,7 @@
         {
             "level": 1,
             "features": [
-                "trait_rogue_weapons",
+                "trait_rogue_proficiencies",
                 "trait_rogue_skills",
                 "trait_expertise",
                 "trait_sneak_attack",

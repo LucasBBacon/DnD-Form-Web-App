@@ -1,6 +1,6 @@
 {
-    "id": "trait_sorcerer_weapons",
-    "name": "Sorcerer Weapon Proficiencies",
+    "id": "trait_sorcerer_proficiencies",
+    "name": "Sorcerer Proficiencies",
     "lore": {
         "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
     },

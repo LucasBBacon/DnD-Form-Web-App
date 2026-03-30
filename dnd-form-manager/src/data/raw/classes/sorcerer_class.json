@@ -3,7 +3,6 @@
     "name": "Sorcerer",
     "hit_die": 6,
     "proficiencies": {
-        "armor": [],
         "tools": [],
         "saving_throws": [
             "con",
@@ -106,7 +105,7 @@
         {
             "level": 1,
             "features": [
-                "trait_sorcerer_weapons",
+                "trait_sorcerer_proficiencies",
                 "trait_sorcerer_skills",
                 "trait_spellcasting_sorcerer",
                 "trait_sorcerous_origin"
