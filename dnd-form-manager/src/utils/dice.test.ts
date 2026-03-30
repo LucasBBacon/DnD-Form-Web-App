@@ -1,6 +1,8 @@
-import { test, expect } from 'vitest';
+import { test, expect } from "vitest";
+import { rollDice } from "./dice";
 
-test('rolls a dice', () => {
-	expect(Math.floor(Math.random() * 6) + 1).toBeGreaterThan(0);
-	expect(Math.floor(Math.random() * 6) + 1).toBeLessThan(7);
+test("rolls a d6 in range", () => {
+	const result = rollDice({ count: 1, faces: 6 });
+	expect(result).toBeGreaterThan(0);
+	expect(result).toBeLessThan(7);
 });

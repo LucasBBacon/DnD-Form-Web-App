@@ -226,7 +226,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
               <div className="final-preview">
                 <strong>{totalScore}</strong>
                 <span className="mod-preview">
-                  ({mod >= 0 ? `$+{mod}` : mod})
+                  ({mod >= 0 ? `+${mod}` : mod})
                 </span>
               </div>
             </div>

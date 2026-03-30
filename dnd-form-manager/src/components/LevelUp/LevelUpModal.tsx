@@ -7,6 +7,8 @@ import {
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
 import { getLevelUpRequirements } from "../../utils/levelUpUtils";
+import { rollDice } from "../../utils/dice";
+import type { DiceRoll, DieFace } from "../../types/common";
 import { ASIChoiceBlock } from "./ASIChoiceBlock";
 import { SkillChoiceBlock } from "./SkillChoiceBlock";
 
@@ -46,6 +48,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   // #region Draft State
   
   const [draftChoices, setDraftChoices] = useState<Partial<LevelChoice>>({});
+  const [hpInputValue, setHpInputValue] = useState<string>("");
   
   // #endregion
 
@@ -72,11 +75,28 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     if (type === 'hp') setIsHpValid(isValid);
   };
 
+  const handleRollHp = () => {
+    if (!classData?.hit_die) return;
+    const diceRoll: DiceRoll = { count: 1, faces: classData.hit_die as DieFace };
+    const result = rollDice(diceRoll);
+    setHpInputValue(result.toString());
+    handleDraftUpdate({ hpGained: result }, result > 0, 'hp');
+  };
+
+  const handleHpInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setHpInputValue(val);
+    const numVal = Number(val);
+    handleDraftUpdate({ hpGained: numVal }, numVal > 0, 'hp');
+  };
+
   const finalizeLevelUp = () => {
     updateLevelChoice(targetLevel, draftChoices);
     setLevel(targetLevel);
     onClose();
   };
+
+  // #endregion
 
   return (
     <div className="modal level-up-wizard">
@@ -125,15 +145,18 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {/* Render HP Roller (Required every level after 1) */}
       {targetLevel > 1 && (
         <div className="choice-block">
-          <input
-            type="number"
-            placeholder={`Roll 1d${classData?.hit_die}`}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              handleDraftUpdate({ hpGained: val}, val > 0, 'hp');
-            }
-            }
-          />
+          <h3>Roll for Hit Points</h3>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <button onClick={handleRollHp} type="button">
+              Roll 1d{classData?.hit_die}
+            </button>
+            <input
+              type="number"
+              placeholder={`Enter HP (1d${classData?.hit_die})`}
+              value={hpInputValue}
+              onChange={handleHpInputChange}
+            />
+          </div>
         </div>
       )}
 

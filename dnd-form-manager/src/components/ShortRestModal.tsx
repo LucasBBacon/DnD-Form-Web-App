@@ -2,6 +2,8 @@ import { useState } from "react";
 import { getClassById } from "../data/staticDataApi";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
+import { rollDice } from "../utils/dice";
+import type { HitDie } from "../types/common";
 
 interface ShortRestModalProps {
   onClose: () => void;
@@ -16,7 +18,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
   const conMod = modifiers.con;
 
   const classData = classId ? getClassById(classId) : null;
-  const hitDie = classData?.hit_die || 6; // Fallback to d6 if no class
+  const hitDie: HitDie = classData?.hit_die ?? 6; // Fallback to d6 if no class
 
   const [manualRoll, setManualRoll] = useState<number | "">("");
 
@@ -29,7 +31,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
   const handleAutoRoll = () => {
     if (availableDice <= 0 || isFullyHealed) return;
 
-    const roll = Math.floor(Math.random() * hitDie) + 1;
+    const roll = rollDice({ count: 1, faces: hitDie });
     // Negative heals cannot happen (e.g., rolling a 1 with a -2 con mod)
     const totalHeal = Math.max(0, roll + conMod);
 
