@@ -3,9 +3,6 @@
     "name": "Rogue",
     "hit_die": 8,
     "proficiencies": {
-        "tools": [
-            "tool_thieves_tools"
-        ],
         "saving_throws": [
             "dex",
             "int"

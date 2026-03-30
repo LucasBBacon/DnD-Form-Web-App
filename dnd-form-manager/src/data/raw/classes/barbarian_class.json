@@ -3,7 +3,6 @@
     "name": "Barbarian",
     "hit_die": 12,
     "proficiencies": {
-        "tools": [],
         "saving_throws": [
             "str",
             "con"

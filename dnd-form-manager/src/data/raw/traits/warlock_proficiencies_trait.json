@@ -7,11 +7,11 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "light"
+            "target": "armor_light"
         },
         {
             "type": "proficiency",
-            "target": "simple"
+            "target": "weapon_simple"
         }
     ]
 }

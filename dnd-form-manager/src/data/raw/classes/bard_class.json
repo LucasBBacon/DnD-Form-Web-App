@@ -3,11 +3,6 @@
     "name": "Bard",
     "hit_die": 8,
     "proficiencies": {
-        "tools": [
-            "category_musical_instrument",
-            "category_musical_instrument",
-            "category_musical_instrument"
-        ],
         "saving_throws": [
             "dex",
             "cha"

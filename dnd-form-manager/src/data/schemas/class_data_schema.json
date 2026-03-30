@@ -19,18 +19,6 @@
     "proficiencies": {
       "type": "object",
       "properties": {
-        "armor": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "tools": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "saving_throws": {
           "type": "array",
           "items": {

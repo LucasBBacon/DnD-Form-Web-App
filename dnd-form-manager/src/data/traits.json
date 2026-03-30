@@ -55,7 +55,7 @@
     "id": "trait_bard_proficiencies",
     "name": "Bard Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and three musical instruments."
     },
     "effects": [
       {
@@ -81,6 +81,18 @@
       {
         "type": "proficiency",
         "target": "weapon_shortsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "category_musical_instrument"
+      },
+      {
+        "type": "proficiency",
+        "target": "category_musical_instrument"
+      },
+      {
+        "type": "proficiency",
+        "target": "category_musical_instrument"
       }
     ]
   },
@@ -170,7 +182,7 @@
     "id": "trait_druid_proficiencies",
     "name": "Druid Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, shields, and druid weapons."
+      "short_description": "Gain proficiency with light armor, medium armor, shields, druid weapons, and the herbalism kit."
     },
     "effects": [
       {
@@ -224,6 +236,10 @@
       {
         "type": "proficiency",
         "target": "weapon_spear"
+      },
+      {
+        "type": "proficiency",
+        "target": "tool_herbalism_kit"
       }
     ]
   },
@@ -361,7 +377,7 @@
     "id": "trait_monk_proficiencies",
     "name": "Monk Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with simple weapons and shortswords."
+      "short_description": "Gain proficiency with simple weapons, shortswords, one artisan tool type, and one musical instrument type."
     },
     "effects": [
       {
@@ -371,6 +387,14 @@
       {
         "type": "proficiency",
         "target": "weapon_shortsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "category_artisans_tools"
+      },
+      {
+        "type": "proficiency",
+        "target": "category_musical_instrument"
       }
     ]
   },
@@ -511,7 +535,7 @@
     "id": "trait_rogue_proficiencies",
     "name": "Rogue Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and thieves' tools."
     },
     "effects": [
       {
@@ -537,6 +561,10 @@
       {
         "type": "proficiency",
         "target": "weapon_shortsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "tool_thieves_tools"
       }
     ]
   },

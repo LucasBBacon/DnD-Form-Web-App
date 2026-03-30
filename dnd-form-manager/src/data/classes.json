@@ -4,7 +4,6 @@
     "name": "Barbarian",
     "hit_die": 12,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "str",
         "con"
@@ -254,11 +253,6 @@
     "name": "Bard",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [
-        "category_musical_instrument",
-        "category_musical_instrument",
-        "category_musical_instrument"
-      ],
       "saving_throws": [
         "dex",
         "cha"
@@ -1271,9 +1265,6 @@
     "name": "Druid",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [
-        "tool_herbalism_kit"
-      ],
       "saving_throws": [
         "int",
         "wis"
@@ -1977,10 +1968,6 @@
     "name": "Monk",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [
-        "category_artisans_tools",
-        "category_musical_instrument"
-      ],
       "saving_throws": [
         "str",
         "dex"
@@ -3092,9 +3079,6 @@
     "name": "Rogue",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [
-        "tool_thieves_tools"
-      ],
       "saving_throws": [
         "dex",
         "int"

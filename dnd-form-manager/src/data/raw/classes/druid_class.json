@@ -3,9 +3,6 @@
     "name": "Druid",
     "hit_die": 8,
     "proficiencies": {
-        "tools": [
-            "tool_herbalism_kit"
-        ],
         "saving_throws": [
             "int",
             "wis"

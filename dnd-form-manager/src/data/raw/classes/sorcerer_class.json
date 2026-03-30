@@ -3,7 +3,6 @@
     "name": "Sorcerer",
     "hit_die": 6,
     "proficiencies": {
-        "tools": [],
         "saving_throws": [
             "con",
             "cha"

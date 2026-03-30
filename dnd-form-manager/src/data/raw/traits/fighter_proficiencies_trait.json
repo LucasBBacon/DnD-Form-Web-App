@@ -7,27 +7,27 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "light"
+            "target": "armor_light"
         },
         {
             "type": "proficiency",
-            "target": "medium"
+            "target": "armor_medium"
         },
         {
             "type": "proficiency",
-            "target": "heavy"
+            "target": "armor_heavy"
         },
         {
             "type": "proficiency",
-            "target": "shield"
+            "target": "armor_shields"
         },
         {
             "type": "proficiency",
-            "target": "simple"
+            "target": "weapon_simple"
         },
         {
             "type": "proficiency",
-            "target": "martial"
+            "target": "weapon_martial"
         }
     ]
 }

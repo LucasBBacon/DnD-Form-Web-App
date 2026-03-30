@@ -3,7 +3,6 @@
     "name": "Paladin",
     "hit_die": 10,
     "proficiencies": {
-        "tools": [],
         "saving_throws": [
             "wis",
             "cha"

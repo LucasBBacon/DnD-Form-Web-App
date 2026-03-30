@@ -2,20 +2,20 @@
     "id": "trait_druid_proficiencies",
     "name": "Druid Proficiencies",
     "lore": {
-        "short_description": "Gain proficiency with light armor, medium armor, shields, and druid weapons."
+        "short_description": "Gain proficiency with light armor, medium armor, shields, druid weapons, and the herbalism kit."
     },
     "effects": [
         {
             "type": "proficiency",
-            "target": "light"
+            "target": "armor_light"
         },
         {
             "type": "proficiency",
-            "target": "medium"
+            "target": "armor_medium"
         },
         {
             "type": "proficiency",
-            "target": "shield"
+            "target": "armor_shields"
         },
         {
             "type": "proficiency",
@@ -56,6 +56,10 @@
         {
             "type": "proficiency",
             "target": "weapon_spear"
+        },
+        {
+            "type": "proficiency",
+            "target": "tool_herbalism_kit"
         }
     ]
 }

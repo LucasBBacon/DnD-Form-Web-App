@@ -3,7 +3,6 @@
     "name": "Warlock",
     "hit_die": 8,
     "proficiencies": {
-        "tools": [],
         "saving_throws": [
             "wis",
             "cha"
