@@ -60,7 +60,7 @@ describe("useCharacterStats", () => {
 
     // Mock ability calculations
     vi.mocked(abilityUtils.calculateTotalAbilityScore).mockImplementation(
-      (ability, base) => base
+      (_ability, base) => base
     );
     vi.mocked(abilityUtils.calculateModifier).mockImplementation(
       (score) => Math.floor((score - 10) / 2)
@@ -271,10 +271,19 @@ describe("useCharacterStats", () => {
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
-      vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hit_die: 10,
-        proficiencies: { armor: ["heavy"] },
-      } as any);
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "heavy_armor_training",
+          effects: [
+            {
+              type: "proficiency",
+              target: "heavy",
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
 
       const result = useCharacterStats();
 
@@ -303,10 +312,19 @@ describe("useCharacterStats", () => {
         equippedShieldId: "wooden_shield",
       } as any);
 
-      vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hit_die: 10,
-        proficiencies: { armor: ["category_armor_shield"] },
-      } as any);
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "shield_training",
+          effects: [
+            {
+              type: "proficiency",
+              target: "shield",
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
 
       const result = useCharacterStats();
 
@@ -443,8 +461,120 @@ describe("useCharacterStats", () => {
     it("should calculate initiative from DEX modifier", () => {
       const result = useCharacterStats();
 
-      expect(initiativeUtils.calculateInitiative).toHaveBeenCalledWith(2);
+      expect(initiativeUtils.calculateInitiative).toHaveBeenCalledWith(
+        2,
+        0,
+        false,
+        2
+      );
       expect(result.initiative).toBe(2);
+    });
+
+    it("should apply numeric initiative modifiers from active traits", () => {
+      vi.mocked(initiativeUtils.calculateInitiative).mockImplementation(
+        (dexModifier, flatBonuses = 0, hasJackOfAllTrades = false, proficiencyBonus = 0) =>
+          dexModifier + flatBonuses + (hasJackOfAllTrades ? Math.floor(proficiencyBonus / 2) : 0)
+      );
+
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "alert",
+          effects: [
+            {
+              type: "stat_modifier",
+              target: "initiative",
+              value: 5,
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
+
+      const result = useCharacterStats();
+
+      expect(initiativeUtils.calculateInitiative).toHaveBeenLastCalledWith(
+        2,
+        5,
+        false,
+        2
+      );
+      expect(result.initiative).toBe(7);
+    });
+
+    it("should apply ability-based initiative modifiers from active traits", () => {
+      vi.mocked(initiativeUtils.calculateInitiative).mockImplementation(
+        (dexModifier, flatBonuses = 0, hasJackOfAllTrades = false, proficiencyBonus = 0) =>
+          dexModifier + flatBonuses + (hasJackOfAllTrades ? Math.floor(proficiencyBonus / 2) : 0)
+      );
+
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        baseAbilityScores: {
+          str: 15,
+          dex: 14,
+          con: 13,
+          int: 10,
+          wis: 12,
+          cha: 18,
+        },
+      } as any);
+
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "swashbuckler",
+          effects: [
+            {
+              type: "stat_modifier",
+              target: "initiative",
+              value: "cha",
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
+
+      const result = useCharacterStats();
+
+      expect(initiativeUtils.calculateInitiative).toHaveBeenLastCalledWith(
+        2,
+        4,
+        false,
+        2
+      );
+      expect(result.initiative).toBe(6);
+    });
+
+    it("should apply Jack of All Trades to initiative", () => {
+      vi.mocked(initiativeUtils.calculateInitiative).mockImplementation(
+        (dexModifier, flatBonuses = 0, hasJackOfAllTrades = false, proficiencyBonus = 0) =>
+          dexModifier + flatBonuses + (hasJackOfAllTrades ? Math.floor(proficiencyBonus / 2) : 0)
+      );
+      vi.mocked(progressionUtils.calculateProficiencyBonus).mockReturnValue(3);
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "trait_jack_of_all_trades",
+          effects: [
+            {
+              type: "half_proficiency",
+              target: "unproficient_checks",
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
+
+      const result = useCharacterStats();
+
+      expect(initiativeUtils.calculateInitiative).toHaveBeenLastCalledWith(
+        2,
+        0,
+        true,
+        3
+      );
+      expect(result.initiative).toBe(3);
     });
   });
 
@@ -719,10 +849,28 @@ describe("useCharacterStats", () => {
         hit_die: 10,
         proficiencies: { armor: ["heavy", "category_armor_shield"] },
       } as any);
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
+        {
+          id: "fighter_proficiencies",
+          effects: [
+            {
+              type: "proficiency",
+              target: "heavy",
+              predicates: [],
+            },
+            {
+              type: "proficiency",
+              target: "shield",
+              predicates: [],
+            },
+          ],
+        },
+      ] as any);
+      vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(true);
 
       const result = useCharacterStats();
 
-      expect(result.level).toBeUndefined(); // Not returned
+      expect(result).not.toHaveProperty("level");
       expect(result.maxHp).toBe(45);
       expect(result.currentHp).toBe(40);
       expect(result.proficiencyBonus).toBe(3);

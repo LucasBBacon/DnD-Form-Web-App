@@ -4,7 +4,7 @@
  * @param flatBonuses Catch-all for Alert feat (+5), Swashbuckler (+Cha), etc.
  * @param hasJackOfAllTrades Bard-specific bonus.
  * @param proficiencyBonus Only needed if Jack of All Trades is true.
- * @returns Character total initative bonus.
+ * @returns Character total initiative bonus.
  */
 export const calculateInitiative = (
   dexModifier: number,

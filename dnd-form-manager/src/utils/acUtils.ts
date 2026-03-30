@@ -62,7 +62,7 @@ export const calculateArmorClass = (
 
   // Shields
   if (isWearingShield) {
-    totalAc += 2;
+    totalAc += 2; // TODO: custom shield AC!
   }
 
   // Flat bonuses

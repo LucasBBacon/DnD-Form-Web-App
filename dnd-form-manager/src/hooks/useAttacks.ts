@@ -1,5 +1,6 @@
 import { getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
+import { getSelectedProficiencyChoices } from "../utils/choiceUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
@@ -20,13 +21,13 @@ export const useAttacks = () => {
 
   const activeProficiencies = new Set<string>();
 
-  // Manual user choices (e.g., "Weapon Master" feat)
-  for (let i = 1; i <= state.level; i++) {
-    const choice = state.choicesByLevel[i];
-    if (choice?.weaponChoices) {
-      choice.weaponChoices.forEach((w) => activeProficiencies.add(w));
-    }
-  }
+  const selectedChoices = getSelectedProficiencyChoices(
+    state.choicesByLevel,
+    state.level,
+  );
+  selectedChoices.weaponChoices.forEach((weapon) =>
+    activeProficiencies.add(weapon),
+  );
 
   // Data driven proficiencies
   allTraits.forEach((trait) => {

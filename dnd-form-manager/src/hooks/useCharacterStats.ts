@@ -85,7 +85,12 @@ export const useCharacterStats = () => {
 
   const currentHp = Math.max(0, maxHp - state.damageTaken);
 
-  const initiative = calculateInitiative(modifiers.dex);
+  const baseInitiative = calculateInitiative(
+    modifiers.dex,
+    0,
+    false,
+    proficiencyBonus,
+  );
 
   // Resolve equipment data
   const equippedArmorData = state.equippedArmorId
@@ -113,7 +118,7 @@ export const useCharacterStats = () => {
         proficiencyBonus,
         maxHp,
         currentHp,
-        initiative,
+        initiative: baseInitiative,
         armorClass: 0,
         isArmorPenalized: false,
         totalWeight,
@@ -142,6 +147,9 @@ export const useCharacterStats = () => {
   // Apply trait-based stat modifiers
   let finalArmorClass = baseArmorClass;
   let finalSpeed = 30;
+  let initiativeFlatBonuses = 0;
+  let hasJackOfAllTrades = false;
+  let finalInitiative = baseInitiative;
 
   allTraits.forEach((trait) => {
     trait.effects?.forEach((effect) => {
@@ -151,7 +159,7 @@ export const useCharacterStats = () => {
         proficiencyBonus,
         maxHp,
         currentHp,
-        initiative,
+        initiative: finalInitiative,
         armorClass: finalArmorClass,
         isArmorPenalized,
         totalWeight,
@@ -159,7 +167,23 @@ export const useCharacterStats = () => {
         speed: finalSpeed,
       });
 
-      if (!isActive || effect.type !== "stat_modifier") return;
+      if (!isActive) return;
+
+      if (
+        effect.type === "half_proficiency" &&
+        effect.target === "unproficient_checks"
+      ) {
+        hasJackOfAllTrades = true;
+        finalInitiative = calculateInitiative(
+          modifiers.dex,
+          initiativeFlatBonuses,
+          hasJackOfAllTrades,
+          proficiencyBonus,
+        );
+        return;
+      }
+
+      if (effect.type !== "stat_modifier") return;
 
       // Apply AC modifiers
       if (effect.target === "ac" && effect.value !== undefined) {
@@ -170,6 +194,21 @@ export const useCharacterStats = () => {
           acBonus = modifiers.dex + modifiers[effect.value as Ability];
         }
         finalArmorClass += acBonus;
+      }
+
+      if (effect.target === "initiative" && effect.value !== undefined) {
+        if (typeof effect.value === "number") {
+          initiativeFlatBonuses += effect.value;
+        } else {
+          initiativeFlatBonuses += modifiers[effect.value as Ability] ?? 0;
+        }
+
+        finalInitiative = calculateInitiative(
+          modifiers.dex,
+          initiativeFlatBonuses,
+          hasJackOfAllTrades,
+          proficiencyBonus,
+        );
       }
 
       // Apply speed modifiers
@@ -185,7 +224,7 @@ export const useCharacterStats = () => {
     proficiencyBonus,
     maxHp,
     currentHp,
-    initiative,
+    initiative: finalInitiative,
     armorClass: finalArmorClass,
     isArmorPenalized,
     totalWeight,

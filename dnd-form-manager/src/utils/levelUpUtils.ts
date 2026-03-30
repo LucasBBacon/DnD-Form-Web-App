@@ -50,8 +50,14 @@ export const getLevelUpRequirements = (
   // #endregion
 
   // #region Skill Choice Check
-  const pendingSkillChoices = getPendingSkillChoices(targetLevel, raceId, subraceId, classData.id, subclassData?.id || null);
-  
+  const pendingSkillChoices = getPendingSkillChoices(
+    targetLevel,
+    raceId,
+    subraceId,
+    classData.id,
+    subclassData?.id || null,
+  );
+
   if (pendingSkillChoices.length > 0) {
     requirements.requiresSkillSelection = true;
   }
@@ -74,7 +80,7 @@ export const getLevelUpRequirements = (
     levelData?.spellcasting_progression?.spells_known || 0;
   const prevSpellsKnown =
     prevLevelData?.spellcasting_progression?.spells_known || 0;
-  requirements.newCantripsToLearn = Math.max(
+  requirements.newSpellsToLearn = Math.max(
     0,
     currentSpellsKnown - prevSpellsKnown,
   );

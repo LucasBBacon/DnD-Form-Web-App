@@ -4,6 +4,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { SKILL_ABILITY_MAP } from "../utils/constants";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
+import { getSelectedProficiencyChoices } from "../utils/choiceUtils";
 import { formatProficiency } from "../utils/formattingUtils";
 
 export const ProficienciesBlock = () => {
@@ -40,15 +41,13 @@ export const ProficienciesBlock = () => {
       });
     });
 
-    // Add manual choice proficiencies
-    for (let i = 1; i <= state.level; i++) {
-      const choice = state.choicesByLevel[i];
-      if (choice?.weaponChoices)
-        choice.weaponChoices.forEach((w) => profs.add(w));
-      if (choice?.toolChoices) choice.toolChoices.forEach((t) => profs.add(t));
-      if (choice?.languageChoices)
-        choice.languageChoices.forEach((l) => profs.add(l));
-    }
+    const selectedChoices = getSelectedProficiencyChoices(
+      state.choicesByLevel,
+      state.level,
+    );
+    selectedChoices.weaponChoices.forEach((weapon) => profs.add(weapon));
+    selectedChoices.toolChoices.forEach((tool) => profs.add(tool));
+    selectedChoices.languageChoices.forEach((language) => profs.add(language));
 
     return Array.from(profs);
   }, [allTraits, state, derivedStats]);

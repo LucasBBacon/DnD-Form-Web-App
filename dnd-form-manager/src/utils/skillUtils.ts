@@ -1,6 +1,7 @@
 import type { Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import type { TraitData } from "../types/trait";
+import { getSelectedSkillChoices } from "./choiceUtils";
 import { evaluateAllPredicates } from "./predicateEngine";
 
 export const aggregateSkills = (
@@ -19,14 +20,16 @@ export const aggregateSkills = (
   chosenRacialSkills.forEach((s) => proficiencies.add(s));
   chosenBackgroundSkills.forEach((s) => proficiencies.add(s));
 
-  // Loop through Level Choices (Class skills, Feat skills, Expertise)
-  for (let i = 1; i <= currentLevel; i++) {
-    const choice = choicesByLevel[i];
-    if (choice) {
-      choice.skillChoices?.forEach((s) => proficiencies.add(s));
-      choice.expertiseChoices?.forEach((s) => expertise.add(s));
-    }
-  }
+  const selectedSkillChoices = getSelectedSkillChoices(
+    choicesByLevel,
+    currentLevel,
+  );
+  selectedSkillChoices.skillChoices.forEach((skill) =>
+    proficiencies.add(skill),
+  );
+  selectedSkillChoices.expertiseChoices.forEach((skill) =>
+    expertise.add(skill),
+  );
 
   // #region Trait Effects
   allTraits.forEach((trait) => {
