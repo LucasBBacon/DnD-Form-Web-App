@@ -6,13 +6,6 @@
         "armor": [
             "category_armor_light"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "weapon_hand_crossbow",
-            "weapon_longsword",
-            "weapon_rapier",
-            "weapon_shortsword"
-        ],
         "tools": [
             "tool_thieves_tools"
         ],
@@ -151,6 +144,7 @@
         {
             "level": 1,
             "features": [
+                "trait_rogue_weapons",
                 "trait_rogue_skills",
                 "trait_expertise",
                 "trait_sneak_attack",

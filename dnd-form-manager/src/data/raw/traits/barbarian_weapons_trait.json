@@ -1,0 +1,17 @@
+{
+    "id": "trait_barbarian_weapons",
+    "name": "Barbarian Weapon Proficiencies",
+    "lore": {
+        "short_description": "Gain weapon proficiencies in..."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "martial"
+        }
+    ]
+}

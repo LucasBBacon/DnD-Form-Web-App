@@ -1,0 +1,17 @@
+{
+    "id": "trait_ranger_weapons",
+    "name": "Ranger Weapon Proficiencies",
+    "lore": {
+        "short_description": "Gain proficiency with simple and martial weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "martial"
+        }
+    ]
+}

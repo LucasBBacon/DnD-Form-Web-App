@@ -4,10 +4,6 @@
     "hit_die": 8,
     "proficiencies": {
         "armor": [],
-        "weapons": [
-            "category_weapon_simple",
-            "weapon_shortsword"
-        ],
         "tools": [
             "category_artisans_tools",
             "category_musical_instrument"
@@ -86,6 +82,7 @@
         {
             "level": 1,
             "features": [
+                "trait_monk_weapons",
                 "trait_monk_skills",
                 "trait_unarmored_defense_monk",
                 "trait_martial_arts"

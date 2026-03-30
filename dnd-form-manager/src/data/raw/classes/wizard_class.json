@@ -4,13 +4,6 @@
     "hit_die": 6,
     "proficiencies": {
         "armor": [],
-        "weapons": [
-            "weapon_dagger",
-            "weapon_dart",
-            "weapon_sling",
-            "weapon_quarterstaff",
-            "weapon_light_crossbow"
-        ],
         "tools": [],
         "saving_throws": [
             "int",
@@ -109,6 +102,7 @@
         {
             "level": 1,
             "features": [
+                "trait_wizard_weapons",
                 "trait_wizard_skills",
                 "trait_spellcasting_wizard",
                 "trait_arcane_recovery"

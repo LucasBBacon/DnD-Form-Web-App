@@ -1,0 +1,13 @@
+{
+    "id": "trait_cleric_weapons",
+    "name": "Cleric Weapon Proficiencies",
+    "lore": {
+        "short_description": "Gain proficiency with simple weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "simple"
+        }
+    ]
+}

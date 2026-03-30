@@ -25,12 +25,6 @@
             "type": "string"
           }
         },
-        "weapons": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "tools": {
           "type": "array",
           "items": {

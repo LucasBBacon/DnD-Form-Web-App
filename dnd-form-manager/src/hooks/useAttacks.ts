@@ -1,23 +1,54 @@
-import { getClassById, getItemById, getRaceById, getSubclassById, getSubraceById } from "../data/staticDataApi";
+import { getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
+import { evaluateAllPredicates } from "../utils/predicateEngine";
+import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
 export const useAttacks = () => {
-  const { raceId, classId, subraceId, subclassId, equippedWeaponIds, inventory } = useCharacterStore();
-  const { modifiers, proficiencyBonus } = useCharacterStats();
+  const state = useCharacterStore();
+  const derivedStats = useCharacterStats();
 
-  const raceData = raceId ? getRaceById(raceId) : null;
-  const subraceData = subraceId ? getSubraceById(subraceId) : null;
-  const classData = classId ? getClassById(classId) : null;
-  const subclassData = subclassId ? getSubclassById(subclassId) : null;
+  const allTraits = getAllCharacterTraits(
+    state.level,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
+  );
 
-  // TODO: Implement trait/feature based proficiencies...
+  // #region Aggregate Proficiencies
 
-  const weaponProficiencies = [
-    ...(classData?.proficiencies?.weapons || []),
-  ]
+  const activeProficiencies = new Set<string>();
 
-  const attacks = equippedWeaponIds
+  // Manual user choices (e.g., "Weapon Master" feat)
+  for (let i = 1; i <= state.level; i++) {
+    const choice = state.choicesByLevel[i];
+    if (choice?.weaponChoices) {
+      choice.weaponChoices.forEach((w) => activeProficiencies.add(w));
+    }
+  }
+
+  // Data driven proficiencies
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      if (effect.type === "proficiency" && effect.target) {
+        const isActive = evaluateAllPredicates(
+          effect.predicates,
+          state,
+          derivedStats,
+        );
+        if (isActive) {
+          activeProficiencies.add(effect.target);
+        }
+      }
+    });
+  });
+
+  // #endregion
+
+  // #region Calculate Attacks
+
+  const attacks = state.equippedWeaponIds
     .map((weaponId) => {
       const weaponData = getItemById(weaponId);
       if (!weaponData || !weaponData.weaponProperties) return null;
@@ -30,35 +61,38 @@ export const useAttacks = () => {
         attackStat = "dex";
       } else if (props.properties.includes("finesse")) {
         // finesse lets player choose the higher stat
-        attackStat = modifiers.dex > modifiers.str ? "dex" : "str";
+        attackStat =
+          derivedStats.modifiers.dex > derivedStats.modifiers.str
+            ? "dex"
+            : "str";
       }
 
-      const statMod = modifiers[attackStat as "str" | "dex"] || 0;
+      const statMod = derivedStats.modifiers[attackStat as "str" | "dex"] || 0;
 
-      // region Proficiency Check
-      const isProficient = weaponProficiencies.some(prof => {
-        // Check for broad category matches
-        if (prof === 'simple' && props.category.includes('simple')) return true;
-        if (prof === 'martial' && props.category.includes('martial')) return true;
-        
-        // Check for exact weapon ID matches
-        if (prof === weaponData.id) return true;
+      // #region Proficiency Check
+      // Ask if unified set if contains the broad category or weapon id
+      const isProficient =
+        (activeProficiencies.has("simple") &&
+          props.category.includes("simple")) ||
+        (activeProficiencies.has("martial") &&
+          props.category.includes("martial")) ||
+        activeProficiencies.has(weaponData.id);
+      // #endregion
 
-        return false;
-      });
-
-      // region Calculate to-hit and damage
-      const toHit = statMod + (isProficient ? proficiencyBonus : 0);
+      // #region Calculate to-hit and damage
+      const toHit =
+        statMod + (isProficient ? derivedStats.proficiencyBonus : 0);
       const damageBonus = statMod;
+      // #endregion
 
-      // region Ammunition check
+      // #region Ammunition check
       let ammoCount = null;
       let ammoName = null;
       let canAttack = true;
 
       if (props.properties.includes("ammunition") && props.ammoItemId) {
         const ammoItem = getItemById(props.ammoItemId);
-        const inventoryRecord = inventory.find(
+        const inventoryRecord = state.inventory.find(
           (i) => i.itemId === props.ammoItemId,
         );
 
@@ -67,6 +101,7 @@ export const useAttacks = () => {
 
         if (ammoCount === 0) canAttack = false;
       }
+      // #endregion
 
       return {
         weaponId: weaponData.id,
@@ -85,3 +120,5 @@ export const useAttacks = () => {
 
   return { attacks };
 };
+
+// #endregion

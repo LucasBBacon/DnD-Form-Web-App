@@ -8,18 +8,6 @@
             "category_armor_medium_no_metal",
             "category_armor_shield_no_metal"
         ],
-        "weapons": [
-            "weapon_club",
-            "weapon_dagger",
-            "weapon_dart",
-            "weapon_javelin",
-            "weapon_mace",
-            "weapon_quarterstaff",
-            "weapon_scimitar",
-            "weapon_sickle",
-            "weapon_sling",
-            "weapon_spear"
-        ],
         "tools": [
             "tool_herbalism_kit"
         ],
@@ -111,6 +99,7 @@
         {
             "level": 1,
             "features": [
+                "trait_druid_weapons",
                 "trait_druid_skills",
                 "trait_druidic",
                 "trait_spellcasting_druid"

@@ -9,10 +9,6 @@
             "category_armor_heavy",
             "category_armor_shield"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "category_weapon_martial"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -145,6 +141,7 @@
         {
             "level": 1,
             "features": [
+                "trait_fighter_weapons",
                 "trait_fighter_skills",
                 "trait_fighting_style",
                 "trait_second_wind"

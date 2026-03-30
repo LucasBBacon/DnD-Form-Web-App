@@ -6,13 +6,6 @@
         "armor": [
             "category_armor_light"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "weapon_hand_crossbow",
-            "weapon_longsword",
-            "weapon_rapier",
-            "weapon_shortsword"
-        ],
         "tools": [
             "category_musical_instrument",
             "category_musical_instrument",
@@ -153,6 +146,7 @@
         {
             "level": 1,
             "features": [
+                "trait_bard_weapons",
                 "trait_bard_skills",
                 "trait_spellcasting_bard",
                 "trait_bardic_inspiration"

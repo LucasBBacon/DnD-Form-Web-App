@@ -8,9 +8,6 @@
             "category_armor_medium",
             "category_armor_shield"
         ],
-        "weapons": [
-            "category_weapon_simple"
-        ],
         "tools": [],
         "saving_throws": [
             "wis",
@@ -151,6 +148,7 @@
         {
             "level": 1,
             "features": [
+                "trait_cleric_weapons",
                 "trait_cleric_skills",
                 "trait_spellcasting_cleric",
                 "trait_divine_domain"

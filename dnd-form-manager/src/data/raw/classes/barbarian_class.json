@@ -8,10 +8,6 @@
             "category_armor_medium",
             "category_armor_shield"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "category_weapon_martial"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -93,6 +89,7 @@
         {
             "level": 1,
             "features": [
+                "trait_barbarian_weapons",
                 "trait_barbarian_skills",
                 "trait_rage",
                 "trait_unarmored_defense_barbarian"

@@ -4,13 +4,6 @@
     "hit_die": 6,
     "proficiencies": {
         "armor": [],
-        "weapons": [
-            "weapon_dagger",
-            "weapon_dart",
-            "weapon_sling",
-            "weapon_quarterstaff",
-            "weapon_light_crossbow"
-        ],
         "tools": [],
         "saving_throws": [
             "con",
@@ -113,6 +106,7 @@
         {
             "level": 1,
             "features": [
+                "trait_sorcerer_weapons",
                 "trait_sorcerer_skills",
                 "trait_spellcasting_sorcerer",
                 "trait_sorcerous_origin"

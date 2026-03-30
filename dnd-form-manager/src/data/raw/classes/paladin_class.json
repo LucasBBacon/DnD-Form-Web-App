@@ -9,10 +9,6 @@
             "category_armor_heavy",
             "category_armor_shield"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "category_weapon_martial"
-        ],
         "tools": [],
         "saving_throws": [
             "wis",
@@ -126,6 +122,7 @@
         {
             "level": 1,
             "features": [
+                "trait_paladin_weapons",
                 "trait_paladin_skills",
                 "trait_divine_sense",
                 "trait_lay_on_hands"

@@ -11,4 +11,5 @@ export interface LevelChoice {
 
   skillChoices?: Skill[];
   expertiseChoices?: Skill[];
+  weaponChoices?: string[];
 }

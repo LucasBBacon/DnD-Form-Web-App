@@ -8,10 +8,6 @@
             "category_armor_medium",
             "category_armor_shield"
         ],
-        "weapons": [
-            "category_weapon_simple",
-            "category_weapon_martial"
-        ],
         "tools": [],
         "saving_throws": [
             "str",
@@ -137,6 +133,7 @@
         {
             "level": 1,
             "features": [
+                "trait_ranger_weapons",
                 "trait_ranger_skills",
                 "trait_favored_enemy",
                 "trait_natural_explorer"
