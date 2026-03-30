@@ -12,4 +12,6 @@ export interface LevelChoice {
   skillChoices?: Skill[];
   expertiseChoices?: Skill[];
   weaponChoices?: string[];
+  toolChoices?: string[];
+  languageChoices?: string[];
 }
