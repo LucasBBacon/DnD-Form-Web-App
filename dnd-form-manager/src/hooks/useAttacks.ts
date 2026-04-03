@@ -1,7 +1,6 @@
 import { getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { getSelectedProficiencyChoices } from "../utils/choiceUtils";
-import { evaluateAllPredicates } from "../utils/predicateEngine";
+import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
@@ -19,31 +18,15 @@ export const useAttacks = () => {
 
   // #region Aggregate Proficiencies
 
-  const activeProficiencies = new Set<string>();
-
-  const selectedChoices = getSelectedProficiencyChoices(
-    state.choicesByLevel,
-    state.level,
+  const { weapons: activeWeaponProficiencies } = aggregateNonSkillProficiencies(
+    {
+      choicesByLevel: state.choicesByLevel,
+      currentLevel: state.level,
+      traits: allTraits,
+      state,
+      stats: derivedStats,
+    },
   );
-  selectedChoices.weaponChoices.forEach((weapon) =>
-    activeProficiencies.add(weapon),
-  );
-
-  // Data driven proficiencies
-  allTraits.forEach((trait) => {
-    trait.effects?.forEach((effect) => {
-      if (effect.type === "proficiency" && effect.target) {
-        const isActive = evaluateAllPredicates(
-          effect.predicates,
-          state,
-          derivedStats,
-        );
-        if (isActive) {
-          activeProficiencies.add(effect.target);
-        }
-      }
-    });
-  });
 
   // #endregion
 
@@ -73,11 +56,11 @@ export const useAttacks = () => {
       // #region Proficiency Check
       // Ask if unified set if contains the broad category or weapon id
       const isProficient =
-        (activeProficiencies.has("simple") &&
+        (activeWeaponProficiencies.has("simple") &&
           props.category.includes("simple")) ||
-        (activeProficiencies.has("martial") &&
+        (activeWeaponProficiencies.has("martial") &&
           props.category.includes("martial")) ||
-        activeProficiencies.has(weaponData.id);
+        activeWeaponProficiencies.has(weaponData.id);
       // #endregion
 
       // #region Calculate to-hit and damage

@@ -8,6 +8,7 @@ export interface TraitEffect {
     | "sense"
     | "half_proficiency"
     | "proficiency"
+    | "save_proficiency"
     | "proficiency_choice"
     | "expertise"
     | "spell_grant"

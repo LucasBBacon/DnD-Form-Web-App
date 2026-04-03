@@ -2,10 +2,8 @@ import { useMemo } from "react";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllCharacterTraits } from "../utils/traitUtils";
-import { SKILL_ABILITY_MAP } from "../utils/constants";
-import { evaluateAllPredicates } from "../utils/predicateEngine";
-import { getSelectedProficiencyChoices } from "../utils/choiceUtils";
 import { formatProficiency } from "../utils/formattingUtils";
+import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
 
 export const ProficienciesBlock = () => {
   const state = useCharacterStore();
@@ -20,44 +18,28 @@ export const ProficienciesBlock = () => {
   );
 
   const nonSkillProficiencies = useMemo(() => {
-    const profs = new Set<string>();
-
-    // Add trait-driven proficiencies
-    allTraits.forEach((trait) => {
-      trait.effects?.forEach((effect) => {
-        if (effect.type === "proficiency" && effect.target) {
-          // Filter out skills
-          if (Object.keys(SKILL_ABILITY_MAP).includes(effect.target)) return;
-
-          const isActive = evaluateAllPredicates(
-            effect.predicates,
-            state,
-            derivedStats,
-          );
-          if (isActive) {
-            profs.add(effect.target);
-          }
-        }
-      });
+    const aggregated = aggregateNonSkillProficiencies({
+      choicesByLevel: state.choicesByLevel,
+      currentLevel: state.level,
+      traits: allTraits,
+      state,
+      stats: derivedStats,
     });
 
-    const selectedChoices = getSelectedProficiencyChoices(
-      state.choicesByLevel,
-      state.level,
-    );
-    selectedChoices.weaponChoices.forEach((weapon) => profs.add(weapon));
-    selectedChoices.toolChoices.forEach((tool) => profs.add(tool));
-    selectedChoices.languageChoices.forEach((language) => profs.add(language));
-
-    return Array.from(profs);
+    return [
+      ...aggregated.armor.list,
+      ...aggregated.weapons.list,
+      ...aggregated.tools.list,
+      ...aggregated.languagesAndOther.list,
+    ];
   }, [allTraits, state, derivedStats]);
 
   // Group by category
   const groupedProficiencies = useMemo(() => {
     const groups: Record<string, string[]> = {
-      "Armor": [],
-      "Weapons": [],
-      "Tools": [],
+      Armor: [],
+      Weapons: [],
+      Tools: [],
       "Languages & Other": [],
     };
 

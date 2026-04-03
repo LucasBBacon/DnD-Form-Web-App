@@ -3,6 +3,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
 import { SKILL_ABILITY_MAP } from "../utils/constants";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
+import { aggregateSaveProficiencies } from "../utils/proficiencyAggregator";
 import { aggregateSkills } from "../utils/skillUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
@@ -156,7 +157,13 @@ export const useSkills = () => {
   // #endregion
 
   // #region Saving Throws
-  const proficientSaves = classData?.proficiencies.saving_throws || [];
+  const saveProficiencies = aggregateSaveProficiencies({
+    classSavingThrows: classData?.proficiencies.saving_throws || [],
+    currentLevel: state.level,
+    traits: allTraits,
+    state,
+    stats: derivedStats,
+  });
   const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
   const calculatedSaves: Record<
     Ability,
@@ -164,8 +171,7 @@ export const useSkills = () => {
   > = {} as Record<Ability, { total: number; isProficient: boolean }>;
 
   abilities.forEach((ability) => {
-    const isProficient = proficientSaves.includes(ability);
-    // TODO: Implement feature-granted save proficiencies (e.g. Monk's Diamond Soul).
+    const isProficient = saveProficiencies.has(ability);
 
     let finalMod = derivedStats.modifiers[ability] || 0;
     if (isProficient) finalMod += derivedStats.proficiencyBonus;

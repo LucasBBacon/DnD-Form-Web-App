@@ -71,6 +71,7 @@
                             "disadvantage",
                             "sense",
                             "proficiency",
+                            "save_proficiency",
                             "half_proficiency",
                             "expertise",
                             "spell_grant",
