@@ -3,6 +3,28 @@ import type { useCharacterStats } from "../hooks/useCharacterStats";
 import type { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import type { Predicate } from "../types/predicate";
+import { getAllCharacterTraits } from "./traitUtils";
+
+const hasCharacterTrait = (
+  state: ReturnType<typeof useCharacterStore.getState>,
+  traitId: string,
+): boolean =>
+  getAllCharacterTraits(
+    state.level,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
+  ).some((trait) => trait.id === traitId);
+
+const warnInvalidRequiresTraitPredicate = (predicate: Predicate): void => {
+  if (import.meta.env.DEV) {
+    console.warn(
+      "Invalid requires_trait predicate: missing target trait id",
+      predicate,
+    );
+  }
+};
 
 export const evaluatePredicate = (
   predicate: Predicate,
@@ -19,7 +41,7 @@ export const evaluatePredicate = (
       return armor?.armor_properties?.armorType === predicate.value;
     }
 
-    case "amor_prohibited": {
+    case "armor_prohibited": {
       if (!state.equippedArmorId) return true;
       const armor = getItemById(state.equippedArmorId);
       // Return false if the equipped armor matches the prohibited category
@@ -41,8 +63,12 @@ export const evaluatePredicate = (
     }
 
     case "requires_trait": {
-      // TODO: use getAllCharacterTraits utility to check if ID exists
-      return true; // placeholder
+      if (!predicate.target?.trim()) {
+        warnInvalidRequiresTraitPredicate(predicate);
+        return false;
+      }
+
+      return hasCharacterTrait(state, predicate.target);
     }
 
     default:
