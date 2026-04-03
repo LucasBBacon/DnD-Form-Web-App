@@ -102,9 +102,13 @@ const armorCategoryAliases: Record<string, string> = {
   armor_shield: "shield",
   armor_shields: "shield",
   category_armor_light: "light",
+  category_armor_light_no_metal: "light",
   category_armor_medium: "medium",
+  category_armor_medium_no_metal: "medium",
   category_armor_heavy: "heavy",
+  category_armor_heavy_no_metal: "heavy",
   category_armor_shield: "shield",
+  category_armor_shield_no_metal: "shield",
   category_armor_shields: "shield",
 };
 const toolCategoryTargets = new Set([

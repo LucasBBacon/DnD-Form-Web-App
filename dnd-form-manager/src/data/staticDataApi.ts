@@ -15,7 +15,7 @@ import rawSpellsData from "./spells.json";
 import rawTraitsData from "./traits.json"
 
 // region Race API
-const racesArray = rawRacesData as Race[];
+const racesArray = rawRacesData as unknown as Race[];
 const raceDictionary: Record<string, Race> = {};
 racesArray.forEach((r) => {
   raceDictionary[r.id] = r;
@@ -47,7 +47,7 @@ export const getSubracesForRace = (raceId: string): SubraceData[] => {
 };
 
 // region Class API
-const classesArray = rawClassesData as ClassData[];
+const classesArray = rawClassesData as unknown as ClassData[];
 const classDictionary: Record<string, ClassData> = {};
 classesArray.forEach((c) => {
   classDictionary[c.id] = c;
@@ -63,7 +63,7 @@ export const getAllClasses = (): ClassData[] => {
 };
 
 // region Subclass API
-const subclassesArray = rawSubclassesData as SubclassData[];
+const subclassesArray = rawSubclassesData as unknown as SubclassData[];
 const subclassDictionary: Record<string, SubclassData> = {};
 subclassesArray.forEach((sc) => {
   subclassDictionary[sc.id] = sc;

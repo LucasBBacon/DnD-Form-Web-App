@@ -15,6 +15,7 @@ import { calculateArmorClass } from "../utils/acUtils";
 import { calculateMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
+import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
 import { calculateProficiencyBonus } from "../utils/progressionUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 
@@ -105,38 +106,34 @@ export const useCharacterStats = () => {
       : null;
   const isWearingShield = !!state.equippedShieldId;
 
-  // Aggregate all active proficiencies from trait data
-  const activeProficiencies = new Set<string>();
+  // Build local stats snapshot for predicate checks used during proficiency aggregation
+  const proficiencyEvaluationStats = {
+    totalScores,
+    modifiers,
+    proficiencyBonus,
+    maxHp,
+    currentHp,
+    initiative: baseInitiative,
+    armorClass: 0,
+    isArmorPenalized: false,
+    totalWeight,
+    isEncumbered,
+    speed: 30
+  };
 
-  allTraits.forEach((trait) => {
-    trait.effects?.forEach((effect) => {
-      if (effect.type !== "proficiency" || !effect.target) return;
-
-      const isActive = evaluateAllPredicates(effect.predicates, state, {
-        totalScores,
-        modifiers,
-        proficiencyBonus,
-        maxHp,
-        currentHp,
-        initiative: baseInitiative,
-        armorClass: 0,
-        isArmorPenalized: false,
-        totalWeight,
-        isEncumbered,
-        speed: 30,
-      });
-
-      if (isActive) {
-        activeProficiencies.add(effect.target);
-      }
-    });
+  const nonSkillProficiencies = aggregateNonSkillProficiencies({
+    choicesByLevel: state.choicesByLevel,
+    currentLevel: state.level,
+    traits: allTraits,
+    state,
+    stats: proficiencyEvaluationStats,
   });
 
   const isArmorPenalized =
     (!!state.equippedArmorId &&
       equippedArmor?.armor_properties &&
-      !activeProficiencies.has(equippedArmor.armor_properties.armorType)) ||
-    (isWearingShield && !activeProficiencies.has("shield"));
+      !nonSkillProficiencies.armor.has(equippedArmor.armor_properties.armorType)) ||
+    (isWearingShield && !nonSkillProficiencies.armor.has("shield"));
 
   const baseArmorClass = calculateArmorClass(
     modifiers.dex,

@@ -32,7 +32,7 @@ export interface ClassData {
   name: string;
   hit_die: HitDie;
   proficiencies: {
-    weapons: string[]; // Weapon category IDs
+    weapons?: string[]; // Weapon category IDs
     saving_throws: Ability[];
   };
   starting_equipment: {

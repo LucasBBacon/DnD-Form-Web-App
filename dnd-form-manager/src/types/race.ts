@@ -9,7 +9,7 @@ export interface AbilityBonusChoice {
 export interface Race {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   size: Size;
   speed: {
     walk: number;
@@ -25,7 +25,7 @@ export interface Race {
     known: string[]; // Language IDs
     choices: number; // How many extra
   };
-  traits: string[]; // Trait IDs
+  traits?: string[]; // Trait IDs
   subrace_info: {
     options_pool: string; // Subrace grouping ID
   } | null;

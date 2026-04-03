@@ -25,7 +25,7 @@ export interface SubclassData {
     parent_class_id: string; // e.g., 'class_fighter'
 
     // Overrides the base class casting if necessary
-    spellcasting_override?: SpellcastingBase;
+    spellcasting_override?: SpellcastingBase | null;
 
     // Only contains items for the specific levels where this subclass grants features
     progression: SubclassProgressionLevel[];

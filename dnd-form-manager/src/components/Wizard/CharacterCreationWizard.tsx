@@ -8,9 +8,6 @@ type WizardStep = "race" | "class" | "abilities" | "details" | "complete";
 export const CharacterCreationWizard = () => {
   const [currentStep, setCurrentStep] = useState<WizardStep>("race");
 
-  // use local state to hold the draft so user can back out
-  const [draftName, setDraftName] = useState('');
-
   // Final commit function
   const finishWizard = () => {
     // commit the final details to zustand,
