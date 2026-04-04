@@ -2,6 +2,7 @@ import { getItemById } from "../data/staticDataApi";
 import type { useCharacterStats } from "../hooks/useCharacterStats";
 import type { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
+import type { WeaponProperty } from "../types/item";
 import type { Predicate } from "../types/predicate";
 import { getAllCharacterTraits } from "./traitUtils";
 
@@ -26,6 +27,21 @@ const warnInvalidRequiresTraitPredicate = (predicate: Predicate): void => {
   }
 };
 
+const hasEquippedWeaponProperty = (
+  state: ReturnType<typeof useCharacterStore.getState>,
+  propertyTarget: string,
+): boolean =>
+  state.equippedWeaponIds.some((weaponId) => {
+    const weapon = getItemById(weaponId);
+    if (!weapon?.weaponProperties) return false;
+    if (propertyTarget === "ranged") {
+      return weapon.weaponProperties.category.includes("ranged");
+    }
+    return weapon.weaponProperties.properties.includes(
+      propertyTarget as WeaponProperty,
+    );
+  });
+
 export const evaluatePredicate = (
   predicate: Predicate,
   state: ReturnType<typeof useCharacterStore.getState>,
@@ -43,6 +59,8 @@ export const evaluatePredicate = (
 
     case "armor_prohibited": {
       if (!state.equippedArmorId) return true;
+      // 'any' means all armor categories are prohibited
+      if (predicate.value === "any") return false;
       const armor = getItemById(state.equippedArmorId);
       // Return false if the equipped armor matches the prohibited category
       return armor?.armor_properties?.armorType !== predicate.value;
@@ -69,6 +87,32 @@ export const evaluatePredicate = (
       }
 
       return hasCharacterTrait(state, predicate.target);
+    }
+
+    case "weapon_property": {
+      if (!predicate.target?.trim()) {
+        if (import.meta.env.DEV) {
+          console.warn(
+            "Invalid weapon_property predicate: missing target property name",
+            predicate,
+          );
+        }
+        return false;
+      }
+
+      return hasEquippedWeaponProperty(state, predicate.target);
+    }
+
+    case "environment_condition": {
+      // Environment-aware evaluation is not implemented !! return false !!
+      // so the effect does not active rather than granting it unconditionally
+      if (import.meta.env.DEV) {
+        console.warn(
+          "environment_condition predicate is not yet implemented",
+          predicate,
+        );
+      }
+      return false;
     }
 
     default:

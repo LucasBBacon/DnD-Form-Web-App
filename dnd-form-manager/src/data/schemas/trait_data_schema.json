@@ -4,30 +4,181 @@
     "type": "object",
     "definitions": {
         "predicate": {
-            "type": "object",
-            "description": "A predicate used to conditionally apply a trait effect.",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Predicate evaluation type."
-                },
-                "value": {
-                    "type": [
-                        "string",
-                        "number",
-                        "boolean"
+            "oneOf": [
+                {
+                    "type": "object",
+                    "description": "Require equipped armor of a specific type or any",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "armor_required"
+                        },
+                        "value": {
+                            "type": "string",
+                            "enum": [
+                                "heavy",
+                                "light",
+                                "medium",
+                                "shield",
+                                "any"
+                            ],
+                            "description": "Armor category required."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "value"
                     ],
-                    "description": "Value used by the predicate comparison."
+                    "additionalProperties": false
                 },
-                "target": {
-                    "type": "string",
-                    "description": "The predicate target (e.g., 'str', 'trait_darkvision')."
+                {
+                    "type": "object",
+                    "description": "Prohibit equipped armor of a specific type, or any armor at all.",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "armor_prohibited"
+                        },
+                        "value": {
+                            "type": "string",
+                            "enum": [
+                                "heavy",
+                                "light",
+                                "medium",
+                                "shield",
+                                "any"
+                            ],
+                            "description": "Armor category prohibited, or 'any' to prohibit all armor."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "value"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "description": "Prohibit equipping a shield.",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "shield_prohibited"
+                        },
+                        "value": {
+                            "type": "boolean",
+                            "description": "true = shield must NOT be equipped; false = shield must be equipped."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "value"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "description": "Require a minimum ability score.",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "stat_minimum"
+                        },
+                        "target": {
+                            "type": "string",
+                            "enum": [
+                                "str",
+                                "dex",
+                                "con",
+                                "int",
+                                "wis",
+                                "cha"
+                            ],
+                            "description": "Ability score to check."
+                        },
+                        "value": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 30,
+                            "description": "Minimum score required (inclusive)."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "target",
+                        "value"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "description": "Require a specific trait to be active on the character.",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "requires_trait"
+                        },
+                        "target": {
+                            "type": "string",
+                            "pattern": "^trait_[a-z0-9_]+$",
+                            "description": "Trait ID required (e.g., 'trait_spellcasting')."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "target"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "description": "Gate an effect on an environmental condition (not currently evaluated at runtime).",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "environment_condition"
+                        },
+                        "value": {
+                            "type": "string",
+                            "description": "Environment condition identifier (e.g., 'dim_light')."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "value"
+                    ],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "description": "Require any equipped weapon to have a specific property or be of the ranged category.",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "const": "weapon_property"
+                        },
+                        "target": {
+                            "type": "string",
+                            "enum": [
+                                "finesse",
+                                "light",
+                                "heavy",
+                                "two-handed",
+                                "thrown",
+                                "ammunition",
+                                "versatile",
+                                "reach",
+                                "ranged"
+                            ],
+                            "description": "Weapon property or category token to match."
+                        }
+                    },
+                    "required": [
+                        "type",
+                        "target"
+                    ],
+                    "additionalProperties": false
                 }
-            },
-            "required": [
-                "type"
-            ],
-            "additionalProperties": false
+            ]
         }
     },
     "properties": {

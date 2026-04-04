@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getItemById } from "../data/staticDataApi";
 import { getAllCharacterTraits } from "./traitUtils";
@@ -20,6 +21,7 @@ const createState = () =>
     subclassId: "subclass_evocation",
     equippedArmorId: null,
     equippedShieldId: null,
+    equippedWeaponIds: [],
   }) as any;
 
 const createStats = () =>
@@ -77,7 +79,7 @@ describe("evaluatePredicate", () => {
       expect(result).toBe(false);
     });
 
-    it("returns false for malformed predicates and warns in development", () => {
+    it("returns false for malformed predicates and warns in dev", () => {
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
       const result = evaluatePredicate(
@@ -92,6 +94,123 @@ describe("evaluatePredicate", () => {
         "Invalid requires_trait predicate: missing target trait id",
         { type: "requires_trait", target: "   " },
       );
+    });
+  });
+
+  describe("weapon_property", () => {
+    it("returns false when no weapons are equipped", () => {
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "finesse" },
+        createState(),
+        createStats(),
+      );
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false for a malformed predicate and warns in dev", () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "   " },
+        createState(),
+        createStats(),
+      );
+
+      expect(result).toBe(false);
+      expect(warnSpy).toHaveBeenCalledWith(
+        "Invalid weapon_property predicate: missing target property name",
+        { type: "weapon_property", target: "   " },
+      );
+    });
+
+    it("returns true when an equipped weapon has the target property", () => {
+      vi.mocked(getItemById).mockReturnValue({
+        weaponProperties: {
+          category: "martial_melee",
+          properties: ["finesse", "light"],
+        },
+      } as any);
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "finesse" },
+        { ...createState(), equippedWeaponIds: ["item_rapier"] },
+        createStats(),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it("returns false when no equipped weapons has the target property", () => {
+      vi.mocked(getItemById).mockReturnValue({
+        weaponProperties: {
+          category: "simple_melee",
+          properties: ["light"],
+        },
+      } as any);
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "finesse" },
+        { ...createState(), equippedWeaponIds: ["item_club"] },
+        createStats(),
+      );
+
+      expect(result).toBe(false);
+    });
+
+    it("returns true when matching the ranged token against a ranged weapon category", () => {
+      vi.mocked(getItemById).mockReturnValue({
+        weaponProperties: {
+          category: "simple_ranged",
+          properties: ["ammunition"],
+        },
+      } as any);
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "ranged" },
+        { ...createState(), equippedWeaponIds: ["item_shortbow"] },
+        createStats(),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it("returns true when only one of multiple equipped weapons satisfies the predicate", () => {
+      vi.mocked(getItemById)
+        .mockReturnValueOnce({
+          weaponProperties: {
+            category: "simple_melee",
+            properties: ["light"],
+          },
+        } as any)
+        .mockReturnValueOnce({
+          weaponProperties: {
+            category: "martial_melee",
+            properties: ["finesse", "reach"],
+          },
+        } as any);
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "reach" },
+        { ...createState(), equippedWeaponIds: ["item_club", "item_whip"] },
+        createStats(),
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it("returns false when the equipped weapon has no weaponProperties", () => {
+      vi.mocked(getItemById).mockReturnValue({
+        type: "gear",
+      } as any);
+
+      const result = evaluatePredicate(
+        { type: "weapon_property", target: "finesse" },
+        { ...createState(), equippedWeaponIds: ["item_torch"] },
+        createStats(),
+      );
+
+      expect(result).toBe(false);
     });
   });
 
