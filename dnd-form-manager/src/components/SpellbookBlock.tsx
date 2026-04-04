@@ -33,9 +33,11 @@ export const SpellbookBlock = () => {
 
   const handleAddSpell = () => {
     if (!selectedSpellId) return;
-    isPreparedCaster
-      ? prepareSpell(selectedSpellId)
-      : learnSpell(selectedSpellId);
+    if (isPreparedCaster) {
+      prepareSpell(selectedSpellId)
+    } else {
+      learnSpell(selectedSpellId);
+    }
     setSelectedSpellId("");
   };
 
@@ -79,7 +81,7 @@ export const SpellbookBlock = () => {
               <li key={`innate-${idx}`} className="spell-row">
                 <div className="spell-info">
                   <strong>
-                    {/* TODO: Fetch Spell Name by innate.spellId */}
+                    {innate.spellName}
                   </strong>
                   <span className="source-tag">
                     from {innate.sourceTraitName}

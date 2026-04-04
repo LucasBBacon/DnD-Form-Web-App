@@ -1,8 +1,22 @@
-import { getClassById, getSubclassById } from "../data/staticDataApi";
+import {
+  getClassById,
+  getSpellByID,
+  getSubclassById,
+} from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
+
+export interface InnateSpellcastingEntry {
+  spellId: string;
+  spellName: string;
+  isResolvedSpell: boolean;
+  sourceTraitName: string;
+  spellSaveDC: number;
+  spellAttackBonus: number;
+  uses?: { count: number | string; reset: string };
+}
 
 export const useSpellcasting = () => {
   const {
@@ -107,13 +121,7 @@ export const useSpellcasting = () => {
     classId,
     subclassId,
   );
-  const innateSpells: Array<{
-    spellId: string;
-    sourceTraitName: string;
-    spellSaveDC: number;
-    spellAttackBonus: number;
-    uses?: { count: number | string; reset: string };
-  }> = [];
+  const innateSpells: InnateSpellcastingEntry[] = [];
 
   allTraits.forEach((trait) => {
     if (!trait.effects) return;
@@ -125,13 +133,17 @@ export const useSpellcasting = () => {
         effect.target &&
         (effect.level_available || 1) <= level
       ) {
+        const spellId = effect.target;
+        const spell = getSpellByID(spellId);
         // Innate spells often have their own specific casting ability
         // If not specified, default to the class casting ability, 0 if neither
         const ability = effect.spellcasting_ability || spellcastingAbility;
         const statMod = ability ? modifiers[ability] || 0 : 0;
 
         innateSpells.push({
-          spellId: effect.target,
+          spellId,
+          spellName: spell?.name ?? `Unknown Spell (${spellId})`,
+          isResolvedSpell: !!spell,
           sourceTraitName: trait.name,
           spellSaveDC: 8 + proficiencyBonus + statMod,
           spellAttackBonus: proficiencyBonus + statMod,
@@ -165,7 +177,7 @@ export const useSpellcasting = () => {
     spellsPrepared,
     spellsKnown,
     innateSpells,
-    
+
     canCastSpells: !isArmorPenalized,
   };
 };
