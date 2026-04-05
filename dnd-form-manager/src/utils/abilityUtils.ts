@@ -22,6 +22,7 @@ export const calculateModifier = (score: number): number => {
  * @param race Selected race used to apply fixed racial bonuses.
  * @param userChosenRacialBonuses User-selected racial bonuses keyed by ability.
  * @param totalAsiBonus Total ASI bonus already aggregated for this ability.
+ * @param featBonuses Aggregated feat-driven bonuses keyed by ability.
  * @returns The final ability score after all applied bonuses.
  */
 export const calculateTotalAbilityScore = (
@@ -31,6 +32,7 @@ export const calculateTotalAbilityScore = (
   subrace: SubraceData | null,
   userChosenRacialBonuses: Partial<Record<Ability, number>> = {},
   totalAsiBonus?: number,
+  featBonuses: Partial<Record<Ability, number>> = {},
 ): number => {
   let total = baseScore;
 
@@ -49,7 +51,8 @@ export const calculateTotalAbilityScore = (
   // Add ASI bonus
   total += totalAsiBonus || 0;
 
-  // TODO: Add feats and magic items
+  // Add feat-driven bonuses
+  total += featBonuses[ability] || 0;
 
   return total;
 };
