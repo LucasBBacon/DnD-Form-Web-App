@@ -3,7 +3,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
 import { SKILL_ABILITY_MAP } from "../utils/constants";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
-import { aggregateSaveProficiencies } from "../utils/proficiencyAggregator";
+import { aggregateSaveProficienciesMulticlass } from "../utils/proficiencyAggregator";
 import { aggregateSkills } from "../utils/skillUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
@@ -160,8 +160,8 @@ export const useSkills = () => {
   // #endregion
 
   // #region Saving Throws
-  const saveProficiencies = aggregateSaveProficiencies({
-    classSavingThrows: classData?.proficiencies.savingThrows || [],
+  const saveProficiencies = aggregateSaveProficienciesMulticlass({
+    classTracks: state.classTracks,
     currentLevel: state.level,
     traits: allTraits,
     state,

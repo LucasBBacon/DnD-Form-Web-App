@@ -46,6 +46,7 @@ describe("useCharacterStats", () => {
       equippedArmorId: null,
       equippedShieldId: null,
       damageTaken: 0,
+      classTracks: [],
     } as any;
   }
 

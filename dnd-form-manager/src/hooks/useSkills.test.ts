@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { useCharacterStats } from "./useCharacterStats";
@@ -22,6 +23,7 @@ describe("useSkills", () => {
     chosenRacialSkills: [],
     chosenBackgroundSkills: [],
     choicesByLevel: {},
+    classTracks: [],
   } as any;
 
   beforeEach(() => {

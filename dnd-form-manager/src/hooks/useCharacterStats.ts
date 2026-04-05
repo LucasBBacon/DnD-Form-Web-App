@@ -20,7 +20,7 @@ import { calculateArmorClass } from "../utils/acUtils";
 import { calculateMulticlassMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
-import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
+import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAggregator";
 import {
   calculateProficiencyBonus,
   mergeSubclassSpecificScaling,
@@ -196,8 +196,9 @@ export const useCharacterStats = () => {
     speed: 30 + subclassSpeedBonus,
   };
 
-  const nonSkillProficiencies = aggregateNonSkillProficiencies({
+  const nonSkillProficiencies = aggregateNonSkillProficienciesMulticlass({
     choicesByLevel: state.choicesByLevel,
+    classTracks: state.classTracks,
     currentLevel: state.level,
     traits: allTraits,
     state,
