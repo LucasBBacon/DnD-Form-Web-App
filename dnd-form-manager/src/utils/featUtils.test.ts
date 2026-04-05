@@ -184,6 +184,31 @@ describe("featUtils", () => {
 
       expect(result).toBe(true);
     });
+
+    it("flips eligibility when ability minimums are no longer met", () => {
+      const feat = {
+        id: "feat_fleet_footed",
+        name: "Fleet Footed",
+        category: "origin" as const,
+        granted_traits: ["trait_feat_fleet_footed"],
+        lore: { short_description: "" },
+        prerequisites: {
+          ability_minimums: { dex: 12 },
+        },
+      };
+
+      const eligibleResult = isFeatEligible(feat, createContext());
+      const ineligibleResult = isFeatEligible(feat, {
+        ...createContext(),
+        totalScores: {
+          ...createContext().totalScores,
+          dex: 10,
+        },
+      });
+
+      expect(eligibleResult).toBe(true);
+      expect(ineligibleResult).toBe(false);
+    });
   });
 
   describe("resolveGrantedTraitIdsForSelectedFeats", () => {
