@@ -30,9 +30,9 @@ const createRace = (traits: string[] = []) =>
     traits,
   }) as any;
 
-const createSubrace = (traits_added: string[] = []) =>
+const createSubrace = (traitsAdded: string[] = []) =>
   ({
-    traits_added,
+    traitsAdded,
   }) as any;
 
 const createClass = (progression: any[] = []) =>
@@ -412,11 +412,11 @@ describe("getAllCharacterTraits", () => {
       vi.mocked(getFeatsByIds).mockReturnValue([
         {
           id: "feat_alert",
-          granted_traits: ["trait_feat_alert"],
+          grantedTraits: ["trait_feat_alert"],
         },
         {
           id: "feat_mobile",
-          granted_traits: ["trait_feat_mobile"],
+          grantedTraits: ["trait_feat_mobile"],
         },
       ] as any);
 
@@ -447,7 +447,7 @@ describe("getAllCharacterTraits", () => {
       vi.mocked(getFeatsByIds).mockReturnValue([
         {
           id: "feat_mobile",
-          granted_traits: ["trait_feat_mobile"],
+          grantedTraits: ["trait_feat_mobile"],
         },
       ] as any);
 
@@ -472,7 +472,7 @@ describe("getAllCharacterTraits", () => {
       vi.mocked(getFeatsByIds).mockReturnValue([
         {
           id: "feat_gifted_mind",
-          granted_traits: ["trait_feat_gifted_mind"],
+          grantedTraits: ["trait_feat_gifted_mind"],
         },
       ] as any);
 

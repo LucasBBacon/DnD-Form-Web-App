@@ -17,7 +17,7 @@ export interface Race {
     swim?: number;
     climb?: number;
   };
-  ability_bonuses: {
+  abilityBonuses: {
     fixed: Partial<Record<Ability, number>>; // e.g., { dex: 2, cha: 1 }
     choices?: AbilityBonusChoice[];
   };
@@ -26,12 +26,12 @@ export interface Race {
     choices: number; // How many extra
   };
   traits?: string[]; // Trait IDs
-  subrace_info: {
-    options_pool: string; // Subrace grouping ID
+  subraceInfo: {
+    optionsPool: string; // Subrace grouping ID
   } | null;
   lore: {
-    short_description: string;
-    full_text?: string;
+    shortDescription: string;
+    fullText?: string;
     sections?: Array<{ title: string; body: string }>;
   };
 }

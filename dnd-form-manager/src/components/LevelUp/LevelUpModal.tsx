@@ -98,8 +98,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   };
 
   const handleRollHp = () => {
-    if (!classData?.hit_die) return;
-    const diceRoll: DiceRoll = { count: 1, faces: classData.hit_die as DieFace };
+    if (!classData?.hitDie) return;
+    const diceRoll: DiceRoll = { count: 1, faces: classData.hitDie as DieFace };
     const result = rollDice(diceRoll);
     setHpInputValue(result.toString());
     handleDraftUpdate({ hpGained: result }, result > 0, 'hp');
@@ -210,11 +210,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           <h3>Roll for Hit Points</h3>
           <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
             <button onClick={handleRollHp} type="button">
-              Roll 1d{classData?.hit_die}
+              Roll 1d{classData?.hitDie}
             </button>
             <input
               type="number"
-              placeholder={`Enter HP (1d${classData?.hit_die})`}
+              placeholder={`Enter HP (1d${classData?.hitDie})`}
               value={hpInputValue}
               onChange={handleHpInputChange}
             />

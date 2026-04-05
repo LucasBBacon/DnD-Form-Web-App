@@ -2,7 +2,7 @@
     "id": "trait_feat_gifted_mind",
     "name": "Gifted Mind",
     "lore": {
-        "short_description": "You gain proficiency in Arcana and History."
+        "shortDescription": "You gain proficiency in Arcana and History."
     },
     "effects": [
         {

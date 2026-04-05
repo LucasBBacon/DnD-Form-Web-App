@@ -228,7 +228,7 @@ const normalizeLanguageOrOtherTarget = (target: string): string | null => {
 export const isEffectActiveForLevel = (
   effect: TraitEffect,
   currentLevel: number,
-): boolean => (effect.level_available || 1) <= currentLevel;
+): boolean => (effect.levelAvailable || 1) <= currentLevel;
 
 export const groupChoiceValuesByLevel = <T extends string>(
   choicesByLevel: Record<number, LevelChoice>,

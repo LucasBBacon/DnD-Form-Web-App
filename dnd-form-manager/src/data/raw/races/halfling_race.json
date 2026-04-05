@@ -5,7 +5,7 @@
     "speed": {
         "walk": 25
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
         "fixed": {
             "dex": 2
         }
@@ -21,11 +21,11 @@
         "trait_brave",
         "trait_halfling_nimbleness"
     ],
-    "subrace_info": {
-        "options_pool": "subraces_halfling"
+    "subraceInfo": {
+        "optionsPool": "subraces_halfling"
     },
     "lore": {
-        "short_description": "Peace-loving folk who prize hearth, good food, and quiet communities, whether settled in villages or wandering the open road.",
-        "full_text": "The comforts of home are the goals of most halflings' lives: a place to settle in peace and quiet, far from marauding monsters and clashing armies; a blazing fire and a generous meal; fine drink and fine conversation. Though some halflings live out their days in remote agricultural communities, others form nomadic bands that travel constantly, lured by the open road and the wide horizon to discover the wonders of new lands and peoples. But even these wanderers love peace, food, hearth, and home, though home might be a wagon jostling along an dirt road or a raft floating downriver."
+        "shortDescription": "Peace-loving folk who prize hearth, good food, and quiet communities, whether settled in villages or wandering the open road.",
+        "fullText": "The comforts of home are the goals of most halflings' lives: a place to settle in peace and quiet, far from marauding monsters and clashing armies; a blazing fire and a generous meal; fine drink and fine conversation. Though some halflings live out their days in remote agricultural communities, others form nomadic bands that travel constantly, lured by the open road and the wide horizon to discover the wonders of new lands and peoples. But even these wanderers love peace, food, hearth, and home, though home might be a wagon jostling along an dirt road or a raft floating downriver."
     }
 }

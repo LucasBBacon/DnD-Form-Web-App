@@ -2,7 +2,7 @@
     "id": "trait_monk_skills",
     "name": "Monk Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

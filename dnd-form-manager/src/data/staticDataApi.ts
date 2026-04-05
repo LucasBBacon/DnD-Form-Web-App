@@ -45,7 +45,7 @@ export const getSubraceById = (id: string | null): SubraceData | null => {
 };
 
 export const getSubracesForRace = (raceId: string): SubraceData[] => {
-  return subracesArray.filter((sr) => sr.parent_race_id === raceId);
+  return subracesArray.filter((sr) => sr.parentRaceId === raceId);
 };
 
 // region Class API
@@ -77,7 +77,7 @@ export const getSubclassById = (id: string | null): SubclassData | null => {
 };
 
 export const getSubclassesForClass = (classId: string): SubclassData[] => {
-  return subclassesArray.filter((sc) => sc.parent_class_id === classId);
+  return subclassesArray.filter((sc) => sc.parentClassId === classId);
 };
 
 // region Items API
@@ -160,6 +160,6 @@ export const getTraitsByIds = (ids: string[]): TraitData[] => {
 //   return ids.map(id => ({
 //     id,
 //     name: id.replace('trait_', '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-//     lore: { short_description: "Trait description pending static data update." }
+//     lore: { shortDescription: "Trait description pending static data update." }
 //   }));
 // }

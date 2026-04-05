@@ -222,7 +222,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         const currentClass = getClassById(state.classId);
         if (
           currentClass &&
-          clampedLevel < currentClass.subclass_info.choice_level
+          clampedLevel < currentClass.subclassInfo.choiceLevel
         ) {
           updatedSubclassId = null;
         }

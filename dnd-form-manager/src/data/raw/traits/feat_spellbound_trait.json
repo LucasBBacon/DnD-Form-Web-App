@@ -2,7 +2,7 @@
     "id": "trait_feat_spellbound",
     "name": "Spellbound",
     "lore": {
-        "short_description": "A feat reserved for practiced spellcasters."
+        "shortDescription": "A feat reserved for practiced spellcasters."
     },
     "effects": [
         {

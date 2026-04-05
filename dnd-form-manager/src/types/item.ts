@@ -26,12 +26,12 @@ export interface ItemData {
   weight: number; // in pounds
 
   lore: {
-    short_description: string;
-    full_text?: string;
+    shortDescription: string;
+    fullText?: string;
   };
 
   // Optional; only present if type === 'armor'
-  armor_properties?: ArmorProperties;
+  armorProperties?: ArmorProperties;
 
   weaponProperties?: WeaponProperties;
 

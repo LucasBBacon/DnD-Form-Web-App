@@ -12,11 +12,11 @@
         "name": {
             "type": "string"
         },
-        "parent_class_id": {
+        "parentClassId": {
             "type": "string",
             "description": "The Id of the base class this belongs to (e.g., 'class_rogue')"
         },
-        "spellcasting_override": {
+        "spellcastingOverride": {
             "type": [
                 "object",
                 "null"
@@ -31,7 +31,7 @@
                         "cha"
                     ]
                 },
-                "preparation_type": {
+                "preparationType": {
                     "type": "string",
                     "enum": [
                         "known",
@@ -39,7 +39,7 @@
                         "pact"
                     ]
                 },
-                "school_restrictions": {
+                "schoolRestrictions": {
                     "type": "array",
                     "items": {
                         "type": "string",
@@ -77,7 +77,7 @@
                         },
                         "description": "Trait IDs granted at this specific level."
                     },
-                    "subclass_specific_scaling": {
+                    "subclassSpecificScaling": {
                         "type": "object",
                         "description": "Subclass scaling key-value pairs where each key maps to a scalar value. During runtime resolution, entries from higher character levels override lower-level values for the same key. Known stat keys currently consumed by useCharacterStats include: initiative, initiative_bonus, ac, armor_class, speed.",
                         "additionalProperties": {
@@ -88,34 +88,34 @@
                             ]
                         }
                     },
-                    "bonus_spells": {
+                    "bonusSpells": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         },
                         "description": "Spell IDs automatically learned or prepared at this level."
                     },
-                    "spells_added_to_list": {
+                    "spellsAddedToList": {
                         "type": "array",
                         "items": {
                             "type": "string"
                         },
                         "description": "Spell IDs added to the class spell list for optional selection."
                     },
-                    "spellcasting_progression_additions": {
+                    "spellcastingProgressionAdditions": {
                         "type": [
                             "object",
                             "null"
                         ],
-                        "description": "Spellcasting progression adjustments granted at this level (separate from subclass_specific_scaling, which is generic scalar progression data).",
+                        "description": "Spellcasting progression adjustments granted at this level (separate from subclassSpecificScaling, which is generic scalar progression data).",
                         "properties": {
-                            "cantrips_known": {
+                            "cantripsKnown": {
                                 "type": "integer"
                             },
-                            "spells_known": {
+                            "spellsKnown": {
                                 "type": "integer"
                             },
-                            "spell_slots": {
+                            "spellSlots": {
                                 "type": "object",
                                 "description": "Mapping of spell level (1-9) to number of slots available.",
                                 "additionalProperties": {
@@ -134,11 +134,11 @@
         "lore": {
             "type": "object",
             "properties": {
-                "short_description": {
+                "shortDescription": {
                     "type": "string",
                     "description": "A quick 1-2 sentence summary for tooltips."
                 },
-                "full_text": {
+                "fullText": {
                     "type": "string",
                     "description": "The main body of text for the entity."
                 },
@@ -163,14 +163,14 @@
                 }
             },
             "required": [
-                "short_description"
+                "shortDescription"
             ]
         }
     },
     "required": [
         "id",
         "name",
-        "parent_class_id",
+        "parentClassId",
         "progression"
     ]
 }

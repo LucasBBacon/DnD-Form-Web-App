@@ -195,17 +195,17 @@
             "type": "object",
             "description": "Flavor text and short description shown in the UI.",
             "properties": {
-                "short_description": {
+                "shortDescription": {
                     "type": "string",
                     "description": "A short description for list views and tooltips."
                 },
-                "full_text": {
+                "fullText": {
                     "type": "string",
                     "description": "Optional extended text for detail views."
                 }
             },
             "required": [
-                "short_description"
+                "shortDescription"
             ],
             "additionalProperties": false
         },
@@ -233,7 +233,7 @@
                         ],
                         "description": "The kind of effect this entry applies."
                     },
-                    "level_available": {
+                    "levelAvailable": {
                         "type": "integer",
                         "description": "Character level required before this effect applies."
                     },
@@ -249,7 +249,7 @@
                             "number"
                         ]
                     },
-                    "spellcasting_ability": {
+                    "spellcastingAbility": {
                         "type": "string",
                         "enum": [
                             "str",

@@ -41,7 +41,7 @@ describe("useSkills", () => {
       isArmorPenalized: false,
     } as any);
     vi.mocked(getClassById).mockReturnValue({
-      proficiencies: { saving_throws: ["str", "dex"] },
+      proficiencies: { savingThrows: ["str", "dex"] },
     } as any);
     vi.mocked(aggregateSkills).mockReturnValue({
       proficiencies: [],
@@ -77,7 +77,7 @@ describe("useSkills", () => {
       {
         id: "trait_diamond_soul",
         name: "Diamond Soul",
-        lore: { short_description: "All saves." },
+        lore: { shortDescription: "All saves." },
         effects: [
           {
             type: "save_proficiency",

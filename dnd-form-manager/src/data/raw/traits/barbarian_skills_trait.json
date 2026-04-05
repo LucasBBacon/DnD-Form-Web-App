@@ -2,7 +2,7 @@
     "id": "trait_barbarian_skills",
     "name": "Barbarian Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

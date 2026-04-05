@@ -5,7 +5,7 @@
     "speed": {
         "walk": 30
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
         "fixed": {
             "cha": 1,
             "con": 1,
@@ -21,11 +21,11 @@
         ],
         "choices": {
             "count": 1,
-            "unique_choices": true
+            "uniqueChoices": true
         }
     },
     "lore": {
-        "short_description": "Ambitious and short-lived, humans pursue innovation, conquest, and trade with a relentless drive to achieve.",
-        "full_text": "In the reckonings of most worlds, humans are the youngest of the common races, late to arrive on the world scene and short-lived in comparison to dwarves, elves, and dragons. Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. Or maybe they feel they have something to prove to the elder races, and that's why they build their mighty empires on the foundation of conquest and trade. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds."
+        "shortDescription": "Ambitious and short-lived, humans pursue innovation, conquest, and trade with a relentless drive to achieve.",
+        "fullText": "In the reckonings of most worlds, humans are the youngest of the common races, late to arrive on the world scene and short-lived in comparison to dwarves, elves, and dragons. Perhaps it is because of their shorter lives that they strive to achieve as much as they can in the years they are given. Or maybe they feel they have something to prove to the elder races, and that's why they build their mighty empires on the foundation of conquest and trade. Whatever drives them, humans are the innovators, the achievers, and the pioneers of the worlds."
     }
 }

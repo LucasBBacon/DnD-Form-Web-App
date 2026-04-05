@@ -53,7 +53,7 @@ describe("proficiencyAggregator", () => {
       {
         id: "trait_duplicate_simple",
         name: "Duplicate Simple",
-        lore: { short_description: "Simple weapons again." },
+        lore: { shortDescription: "Simple weapons again." },
         effects: [{ type: "proficiency", target: "weapon_simple" }],
       },
     ];
@@ -88,7 +88,7 @@ describe("proficiencyAggregator", () => {
         {
           id: "trait_diamond_soul",
           name: "Diamond Soul",
-          lore: { short_description: "All saves." },
+          lore: { shortDescription: "All saves." },
           effects: [{ type: "save_proficiency", target: "dex" }],
         },
       ],
@@ -110,13 +110,13 @@ describe("proficiencyAggregator", () => {
         {
           id: "trait_keen_senses",
           name: "Keen Senses",
-          lore: { short_description: "Perception proficiency." },
+          lore: { shortDescription: "Perception proficiency." },
           effects: [{ type: "proficiency", target: "insight" }],
         },
         {
           id: "trait_expertise",
           name: "Expertise",
-          lore: { short_description: "Stealth expertise" },
+          lore: { shortDescription: "Stealth expertise" },
           effects: [{ type: "expertise", target: "perception" }],
         },
       ],
@@ -143,7 +143,7 @@ describe("proficiencyAggregator", () => {
         {
           id: "trait_diamond_soul",
           name: "Diamond Soul",
-          lore: { short_description: "All saves." },
+          lore: { shortDescription: "All saves." },
           effects: [
             { type: "save_proficiency", target: "wis" },
             { type: "save_proficiency", target: "not_a_save" },
@@ -171,7 +171,7 @@ describe("proficiencyAggregator", () => {
         {
           id: "trait_fighter_proficiencies",
           name: "Fighter Proficiencies",
-          lore: { short_description: "Armor and Martial weapons." },
+          lore: { shortDescription: "Armor and Martial weapons." },
           effects: [
             { type: "proficiency", target: "armor_shields" },
             { type: "proficiency", target: "weapon_martial" },

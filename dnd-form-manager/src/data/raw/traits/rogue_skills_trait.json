@@ -2,7 +2,7 @@
     "id": "trait_rogue_skills",
     "name": "Rogue Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

@@ -12,20 +12,20 @@
       "type": "string",
       "description": "Display name of the subrace"
     },
-    "parent_race_id": {
+    "parentRaceId": {
       "type": "string",
       "description": "REQUIRED. Links back to the parent class."
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
       "$ref": "definitions.json#/definitions/AbilityBonuses"
     },
-    "traits_added": {
+    "traitsAdded": {
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "languages_added": {
+    "languagesAdded": {
       "type": "object",
       "properties": {
         "known": {
@@ -42,7 +42,7 @@
               "type": "integer",
               "description": "Number of additional languages the player can choose."
             },
-            "unique_choices": {
+            "uniqueChoices": {
               "type": "boolean",
               "default": true
             }
@@ -84,11 +84,11 @@
     "lore": {
       "type": "object",
       "properties": {
-        "short_description": {
+        "shortDescription": {
           "type": "string",
           "description": "A quick 1-2 sentence summary for tooltips."
         },
-        "full_text": {
+        "fullText": {
           "type": "string",
           "description": "The main body of text for the entity."
         },
@@ -105,12 +105,20 @@
                 "type": "string"
               }
             },
-            "required": ["title", "body"]
+            "required": [
+              "title",
+              "body"
+            ]
           }
         }
       },
-      "required": ["short_description"]
+      "required": [
+        "shortDescription"
+      ]
     }
   },
-  "required": ["name", "parent_race_id"]
+  "required": [
+    "name",
+    "parentRaceId"
+  ]
 }

@@ -2,7 +2,7 @@
     "id": "trait_cleric_proficiencies",
     "name": "Cleric Proficiencies",
     "lore": {
-        "short_description": "Gain proficiency with light armor, medium armor, shields, and simple weapons."
+        "shortDescription": "Gain proficiency with light armor, medium armor, shields, and simple weapons."
     },
     "effects": [
         {

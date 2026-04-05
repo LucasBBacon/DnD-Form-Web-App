@@ -2,7 +2,7 @@
     "id": "trait_unarmored_movement",
     "name": "Unarmored Movement",
     "lore": {
-        "short_description": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
+        "shortDescription": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
     },
     "effects": [
         {

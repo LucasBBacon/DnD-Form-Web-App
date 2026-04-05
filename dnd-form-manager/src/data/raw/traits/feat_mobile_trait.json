@@ -2,7 +2,7 @@
     "id": "trait_feat_mobile",
     "name": "Mobile",
     "lore": {
-        "short_description": "Your speed increases by 10 feet."
+        "shortDescription": "Your speed increases by 10 feet."
     },
     "effects": [
         {

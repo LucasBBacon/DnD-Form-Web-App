@@ -20,7 +20,7 @@ export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
   // Aggregate traits for preview
   // grab race traits
   const baseTraitIds = previewRaceData?.traits || [];
-  const subraceTraitIds = previewSubraceData?.traits_added || [];
+  const subraceTraitIds = previewSubraceData?.traitsAdded || [];
   // combine and fetch actual trait data objs
   const combinedTraits = getTraitsByIds([...baseTraitIds, ...subraceTraitIds]);
 
@@ -52,7 +52,7 @@ export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
               }}
             >
               <h3>{race.name}</h3>
-              <p>{race.lore.short_description}</p>
+              <p>{race.lore.shortDescription}</p>
             </button>
           ))}
         </div>
@@ -88,7 +88,7 @@ export const RaceSelectionStep = ({ onNext }: { onNext: () => void }) => {
                     {combinedTraits.map(trait => (
                       <li key={trait.id} className="trait-item">
                         <strong>{trait.name}: </strong>
-                        <span>{trait.lore.short_description}</span>
+                        <span>{trait.lore.shortDescription}</span>
                       </li>
                     ))}
                   </ul>

@@ -12,7 +12,11 @@
     },
     "category": {
       "type": "string",
-      "enum": ["origin", "general", "epic_boon"]
+      "enum": [
+        "origin",
+        "general",
+        "epic_boon"
+      ]
     },
     "source": {
       "type": "string"
@@ -23,12 +27,12 @@
     "prerequisites": {
       "type": "object",
       "properties": {
-        "minimum_level": {
+        "minimumLevel": {
           "type": "integer",
           "minimum": 1,
           "maximum": 20
         },
-        "ability_minimums": {
+        "abilityMinimums": {
           "type": "object",
           "properties": {
             "str": {
@@ -64,48 +68,48 @@
           },
           "additionalProperties": false
         },
-        "required_feat_ids": {
+        "requiredFeatIds": {
           "type": "array",
           "items": {
             "type": "string",
             "pattern": "^feat_[a-z0-9_]+$"
           }
         },
-        "required_class_ids": {
+        "requiredClassIds": {
           "type": "array",
           "items": {
             "type": "string",
             "pattern": "^class_[a-z0-9_]+$"
           }
         },
-        "required_subclass_ids": {
+        "requiredSubclassIds": {
           "type": "array",
           "items": {
             "type": "string",
             "pattern": "^subclass_[a-z0-9_]+$"
           }
         },
-        "required_race_ids": {
+        "requiredRaceIds": {
           "type": "array",
           "items": {
             "type": "string",
             "pattern": "^race_[a-z0-9_]+$"
           }
         },
-        "required_subrace_ids": {
+        "requiredSubraceIds": {
           "type": "array",
           "items": {
             "type": "string",
             "pattern": "^subrace_[a-z0-9_]+$"
           }
         },
-        "requires_spellcasting": {
+        "requiresSpellcasting": {
           "type": "boolean"
         }
       },
       "additionalProperties": false
     },
-    "granted_traits": {
+    "grantedTraits": {
       "type": "array",
       "items": {
         "type": "string",
@@ -115,10 +119,10 @@
     "lore": {
       "type": "object",
       "properties": {
-        "short_description": {
+        "shortDescription": {
           "type": "string"
         },
-        "full_text": {
+        "fullText": {
           "type": "string"
         },
         "sections": {
@@ -133,12 +137,17 @@
                 "type": "string"
               }
             },
-            "required": ["title", "body"],
+            "required": [
+              "title",
+              "body"
+            ],
             "additionalProperties": false
           }
         }
       },
-      "required": ["short_description"],
+      "required": [
+        "shortDescription"
+      ],
       "additionalProperties": false
     },
     "tags": {
@@ -148,6 +157,12 @@
       }
     }
   },
-  "required": ["id", "name", "category", "granted_traits", "lore"],
+  "required": [
+    "id",
+    "name",
+    "category",
+    "grantedTraits",
+    "lore"
+  ],
   "additionalProperties": false
 }

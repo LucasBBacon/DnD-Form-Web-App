@@ -221,7 +221,7 @@ describe("evaluatePredicate", () => {
   describe("armor_prohibited", () => {
     it("returns false when the equipped armor matches the prohibited type", () => {
       vi.mocked(getItemById).mockReturnValue({
-        armor_properties: { armorType: "heavy" },
+        armorProperties: { armorType: "heavy" },
       } as any);
 
       const result = evaluatePredicate(

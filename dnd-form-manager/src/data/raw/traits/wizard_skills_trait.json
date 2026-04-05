@@ -2,7 +2,7 @@
     "id": "trait_wizard_skills",
     "name": "Wizard Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

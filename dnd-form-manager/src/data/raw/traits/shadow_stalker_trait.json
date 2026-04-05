@@ -2,7 +2,7 @@
     "id": "trait_shadow_stalker",
     "name": "Shadow Stalker",
     "lore": {
-        "short_description": "You gain +2 to Stealth and have Advantage on Stealth checks in dim light."
+        "shortDescription": "You gain +2 to Stealth and have Advantage on Stealth checks in dim light."
     },
     "effects": [
         {

@@ -2,8 +2,8 @@
 	"id": "trait_jack_of_all_trades",
 	"name": "Jack of All Trades",
 	"lore": {
-		"short_description": "Starting at 2nd level, you can add half your proficiency bonus to any ability check that does not already include your proficiency bonus.",
-		"full_text": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that does not already include your proficiency bonus."
+		"shortDescription": "Starting at 2nd level, you can add half your proficiency bonus to any ability check that does not already include your proficiency bonus.",
+		"fullText": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that does not already include your proficiency bonus."
 	},
 	"effects": [
 		{

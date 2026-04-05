@@ -2,7 +2,7 @@
     "id": "trait_cleric_skills",
     "name": "Cleric Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

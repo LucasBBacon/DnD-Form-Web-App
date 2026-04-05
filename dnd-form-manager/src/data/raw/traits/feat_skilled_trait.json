@@ -2,7 +2,7 @@
     "id": "trait_feat_skilled",
     "name": "Skilled",
     "lore": {
-        "short_description": "Gain proficiency in any combination of three skills of your choice."
+        "shortDescription": "Gain proficiency in any combination of three skills of your choice."
     },
     "effects": [
         {

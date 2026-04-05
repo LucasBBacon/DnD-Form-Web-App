@@ -31,7 +31,7 @@ export const getAllCharacterTraits = (
   // When filtering by exact level, only include them if we're at level 1.
   if (!exactLevel || level === 1) {
     raceData?.traits?.forEach((id) => traitIds.add(id));
-    subraceData?.traits_added?.forEach((id) => traitIds.add(id));
+    subraceData?.traitsAdded?.forEach((id) => traitIds.add(id));
   }
   // #endregion
 
@@ -59,7 +59,7 @@ export const getAllCharacterTraits = (
     exactLevel,
   );
   selectedFeats.forEach((feat) => {
-    feat.granted_traits.forEach((id) => traitIds.add(id));
+    feat.grantedTraits.forEach((id) => traitIds.add(id));
   });
 
   return getTraitsByIds(Array.from(traitIds));

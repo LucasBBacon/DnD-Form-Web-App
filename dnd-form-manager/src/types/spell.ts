@@ -12,7 +12,7 @@ export interface SpellComponents {
   vocal: boolean;
   somatic: boolean;
   material: boolean;
-  material_materials?: string; // e.g., "A pinch of sulfur"
+  materialMaterials?: string; // e.g., "A pinch of sulfur"
 }
 
 export interface SpellData {
@@ -24,7 +24,7 @@ export interface SpellData {
   classes: string[];
 
   // Filtering properties
-  casting_time: string; // e.g., "1 action", "1 bonus action", "1 minute"
+  castingTime: string; // e.g., "1 action", "1 bonus action", "1 minute"
   range: string; // e.g., "150 feet", "Touch", "Self (15-foot cone)"
   duration: string; // e.g., "Instantaneous", "1 hour"
   concentration: boolean;
@@ -33,8 +33,8 @@ export interface SpellData {
   components: SpellComponents;
 
   lore: {
-    short_description: string; // "Hurls a fiery bead that explodes..."
-    full_text: string;
-    higher_level?: string; // "when you cast this spell using a spell slot of 4th level..."
+    shortDescription: string; // "Hurls a fiery bead that explodes..."
+    fullText: string;
+    higherLevel?: string; // "when you cast this spell using a spell slot of 4th level..."
   };
 }

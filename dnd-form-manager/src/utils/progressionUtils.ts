@@ -32,9 +32,9 @@ export const mergeSubclassSpecificScaling = (
 ): SubclassSpecificScaling => {
   return getActiveSubclassProgression(progression, level).reduce(
     (acc, entry) => {
-      if (!entry.subclass_specific_scaling) return acc;
+      if (!entry.subclassSpecificScaling) return acc;
 
-      Object.entries(entry.subclass_specific_scaling).forEach(([key, value]) => {
+      Object.entries(entry.subclassSpecificScaling).forEach(([key, value]) => {
         acc[key] = value;
       });
 

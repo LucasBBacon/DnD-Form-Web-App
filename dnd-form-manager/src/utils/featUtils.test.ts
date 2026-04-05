@@ -101,8 +101,8 @@ describe("featUtils", () => {
           id: "feat_alert",
           name: "Alert",
           category: "general",
-          granted_traits: ["trait_feat_alert"],
-          lore: { short_description: "" },
+          grantedTraits: ["trait_feat_alert"],
+          lore: { shortDescription: "" },
         },
         {
           ...createContext(),
@@ -121,12 +121,12 @@ describe("featUtils", () => {
           id: "feat_battle_hardened",
           name: "Battle Hardened",
           category: "general",
-          granted_traits: ["trait_feat_battle_hardened"],
-          lore: { short_description: "" },
+          grantedTraits: ["trait_feat_battle_hardened"],
+          lore: { shortDescription: "" },
           prerequisites: {
-            minimum_level: 4,
-            ability_minimums: { str: 13 },
-            required_class_ids: ["class_fighter"],
+            minimumLevel: 4,
+            abilityMinimums: { str: 13 },
+            requiredClassIds: ["class_fighter"],
           },
         },
         createContext(),
@@ -141,11 +141,11 @@ describe("featUtils", () => {
           id: "feat_spellbound",
           name: "Spellbound",
           category: "general",
-          granted_traits: ["trait_feat_spellbound"],
-          lore: { short_description: "" },
+          grantedTraits: ["trait_feat_spellbound"],
+          lore: { shortDescription: "" },
           prerequisites: {
-            requires_spellcasting: true,
-            required_class_ids: ["class_wizard"],
+            requiresSpellcasting: true,
+            requiredClassIds: ["class_wizard"],
           },
         },
         createContext(),
@@ -170,10 +170,10 @@ describe("featUtils", () => {
           id: "feat_spellbound",
           name: "Spellbound",
           category: "general",
-          granted_traits: ["trait_feat_spellbound"],
-          lore: { short_description: "" },
+          grantedTraits: ["trait_feat_spellbound"],
+          lore: { shortDescription: "" },
           prerequisites: {
-            requires_spellcasting: true,
+            requiresSpellcasting: true,
           },
         },
         {
@@ -190,10 +190,10 @@ describe("featUtils", () => {
         id: "feat_fleet_footed",
         name: "Fleet Footed",
         category: "origin" as const,
-        granted_traits: ["trait_feat_fleet_footed"],
-        lore: { short_description: "" },
+        grantedTraits: ["trait_feat_fleet_footed"],
+        lore: { shortDescription: "" },
         prerequisites: {
-          ability_minimums: { dex: 12 },
+          abilityMinimums: { dex: 12 },
         },
       };
 
@@ -216,11 +216,11 @@ describe("featUtils", () => {
       vi.mocked(getFeatById)
         .mockReturnValueOnce({
           id: "feat_alert",
-          granted_traits: ["trait_feat_alert"],
+          grantedTraits: ["trait_feat_alert"],
         } as any)
         .mockReturnValueOnce({
           id: "feat_mobile",
-          granted_traits: ["trait_feat_mobile", "trait_shared"],
+          grantedTraits: ["trait_feat_mobile", "trait_shared"],
         } as any);
 
       const result = resolveGrantedTraitIdsForSelectedFeats(4, {
@@ -238,7 +238,7 @@ describe("featUtils", () => {
     it("resolves traits for origin-source acquisition entries", () => {
       vi.mocked(getFeatById).mockReturnValue({
         id: "feat_gifted_mind",
-        granted_traits: ["trait_feat_gifted_mind"],
+        grantedTraits: ["trait_feat_gifted_mind"],
       } as any);
 
       const result = resolveGrantedTraitIdsForSelectedFeats(

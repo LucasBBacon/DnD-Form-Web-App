@@ -1,14 +1,14 @@
 {
     "id": "class_rogue",
     "name": "Rogue",
-    "hit_die": 8,
+    "hitDie": 8,
     "proficiencies": {
-        "saving_throws": [
+        "savingThrows": [
             "dex",
             "int"
         ]
     },
-    "multiclass_proficiencies": {
+    "multiclassProficiencies": {
         "armor": [
             "category_armor_light"
         ],
@@ -33,18 +33,18 @@
             ]
         }
     },
-    "starting_equipment": {
+    "startingEquipment": {
         "given": [
             {
-                "item_id": "armor_leather",
+                "itemId": "armor_leather",
                 "quantity": 1
             },
             {
-                "item_id": "weapon_dagger",
+                "itemId": "weapon_dagger",
                 "quantity": 2
             },
             {
-                "item_id": "tool_thieves_tools",
+                "itemId": "tool_thieves_tools",
                 "quantity": 1
             }
         ],
@@ -53,17 +53,17 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "weapon_rapier",
+                                "itemId": "weapon_rapier",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "weapon_shortsword",
+                                "itemId": "weapon_shortsword",
                                 "quantity": 1
                             }
                         ]
@@ -74,25 +74,25 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "weapon_shortbow",
+                                "itemId": "weapon_shortbow",
                                 "quantity": 1
                             },
                             {
-                                "item_id": "weapon_arrow",
+                                "itemId": "weapon_arrow",
                                 "quantity": 20
                             },
                             {
-                                "item_id": "pack_quiver",
+                                "itemId": "pack_quiver",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "weapon_shortsword",
+                                "itemId": "weapon_shortsword",
                                 "quantity": 1
                             }
                         ]
@@ -103,25 +103,25 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "pack_burglars",
+                                "itemId": "pack_burglars",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "pack_dungeoneers",
+                                "itemId": "pack_dungeoneers",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "pack_explorers",
+                                "itemId": "pack_explorers",
                                 "quantity": 1
                             }
                         ]
@@ -130,9 +130,9 @@
             }
         ]
     },
-    "subclass_info": {
-        "choice_level": 3,
-        "options_pool": "subclasses_rogue"
+    "subclassInfo": {
+        "choiceLevel": 3,
+        "optionsPool": "subclasses_rogue"
     },
     "progression": [
         {
@@ -144,7 +144,7 @@
                 "trait_sneak_attack",
                 "trait_thieves_cant"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "1d6"
             }
         },
@@ -153,7 +153,7 @@
             "features": [
                 "trait_cunning_action"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "1d6"
             }
         },
@@ -162,7 +162,7 @@
             "features": [
                 "trait_roguish_archetype"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "2d6"
             }
         },
@@ -171,7 +171,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "2d6"
             }
         },
@@ -180,7 +180,7 @@
             "features": [
                 "trait_uncanny_dodge"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "3d6"
             }
         },
@@ -189,7 +189,7 @@
             "features": [
                 "trait_expertise"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "3d6"
             }
         },
@@ -198,7 +198,7 @@
             "features": [
                 "trait_evasion_rogue"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "4d6"
             }
         },
@@ -207,7 +207,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "4d6"
             }
         },
@@ -216,7 +216,7 @@
             "features": [
                 "trait_roguish_archetype_feature"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "5d6"
             }
         },
@@ -225,7 +225,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "5d6"
             }
         },
@@ -234,7 +234,7 @@
             "features": [
                 "trait_reliable_talent"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "6d6"
             }
         },
@@ -243,7 +243,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "6d6"
             }
         },
@@ -252,7 +252,7 @@
             "features": [
                 "trait_roguish_archetype_feature"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "7d6"
             }
         },
@@ -261,7 +261,7 @@
             "features": [
                 "trait_blindsense"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "7d6"
             }
         },
@@ -270,7 +270,7 @@
             "features": [
                 "trait_slippery_mind"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "8d6"
             }
         },
@@ -279,7 +279,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "8d6"
             }
         },
@@ -288,7 +288,7 @@
             "features": [
                 "trait_roguish_archetype_feature"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "9d6"
             }
         },
@@ -297,7 +297,7 @@
             "features": [
                 "trait_elusive"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "9d6"
             }
         },
@@ -306,7 +306,7 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "10d6"
             }
         },
@@ -315,13 +315,13 @@
             "features": [
                 "trait_stroke_of_luck"
             ],
-            "class_specific_scaling": {
+            "classSpecificScaling": {
                 "sneak_attack_dice": "10d6"
             }
         }
     ],
     "lore": {
-        "short_description": "Cunning masters of stealth and skill who exploit vulnerabilities and find elegant solutions to any problem.",
-        "full_text": "Signaling for her companions to wait, a halfling creeps forward through the dungeon hall. She presses an ear to the door, then pulls out a set of tools and picks the lock in the blink of an eye. Then she disappears into the shadows as her fighter friend moves forward to kick the door open.\nA human lurks in the shadows of an alley while his accomplice prepares for her part in the ambush. When their target-a notorious slaver-passes the alleyway, the accomplice cries out, the slaver comes to investigate, and the assassin's blade cuts his throat before he can make a sound.\nSuppressing a giggle, a gnome waggles her fingers and magically lifts the key ring from the guard's belt. In a moment, the keys are in her hand, the cell door is open, and she and her companions are free to make their escape.\nRogues rely on skill, stealth, and their foes' vulnerabilities to get the upper hand in any situation. They have a knack for finding the solution to just about any problem, demonstrating a resourcefulness and versatility that is the cornerstone of any successful adventuring party."
+        "shortDescription": "Cunning masters of stealth and skill who exploit vulnerabilities and find elegant solutions to any problem.",
+        "fullText": "Signaling for her companions to wait, a halfling creeps forward through the dungeon hall. She presses an ear to the door, then pulls out a set of tools and picks the lock in the blink of an eye. Then she disappears into the shadows as her fighter friend moves forward to kick the door open.\nA human lurks in the shadows of an alley while his accomplice prepares for her part in the ambush. When their target-a notorious slaver-passes the alleyway, the accomplice cries out, the slaver comes to investigate, and the assassin's blade cuts his throat before he can make a sound.\nSuppressing a giggle, a gnome waggles her fingers and magically lifts the key ring from the guard's belt. In a moment, the keys are in her hand, the cell door is open, and she and her companions are free to make their escape.\nRogues rely on skill, stealth, and their foes' vulnerabilities to get the upper hand in any situation. They have a knack for finding the solution to just about any problem, demonstrating a resourcefulness and versatility that is the cornerstone of any successful adventuring party."
     }
 }

@@ -18,7 +18,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
   const conMod = modifiers.con;
 
   const classData = classId ? getClassById(classId) : null;
-  const hitDie: HitDie = classData?.hit_die ?? 6; // Fallback to d6 if no class
+  const hitDie: HitDie = classData?.hitDie ?? 6; // Fallback to d6 if no class
 
   const [manualRoll, setManualRoll] = useState<number | "">("");
 

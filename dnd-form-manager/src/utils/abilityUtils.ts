@@ -38,11 +38,11 @@ export const calculateTotalAbilityScore = (
 
   if (race) {
     // Add fixed racial bonuses (if the race has one for this ability)
-    total += race.ability_bonuses.fixed[ability] || 0;
+    total += race.abilityBonuses.fixed[ability] || 0;
   }
 
   if (subrace) {
-    total += subrace.ability_bonuses?.fixed?.[ability] || 0;
+    total += subrace.abilityBonuses?.fixed?.[ability] || 0;
   }
 
   // Add any user-selected racial bonuses

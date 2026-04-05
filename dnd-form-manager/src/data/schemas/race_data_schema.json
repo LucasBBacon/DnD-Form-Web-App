@@ -36,9 +36,11 @@
           "default": 0
         }
       },
-      "required": ["walk"]
+      "required": [
+        "walk"
+      ]
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
       "$ref": "definitions.json#/definitions/AbilityBonuses"
     },
     "languages": {
@@ -58,13 +60,15 @@
               "type": "integer",
               "description": "Number of additional languages the player can choose."
             },
-            "unique_choices": {
+            "uniqueChoices": {
               "type": "boolean"
             }
           }
         }
       },
-      "required": ["known"]
+      "required": [
+        "known"
+      ]
     },
     "traits": {
       "type": "array",
@@ -73,11 +77,14 @@
       },
       "description": "Array of Trait IDs referencing the external traits file (e.g., 'trait_fey_ancestry')."
     },
-    "subrace_info": {
-      "type": ["object", "null"],
+    "subraceInfo": {
+      "type": [
+        "object",
+        "null"
+      ],
       "description": "If null, this race has no subraces. If present, forces a choice.",
       "properties": {
-        "options_pool": {
+        "optionsPool": {
           "type": "string",
           "description": "e.g., 'subraces_elf'"
         }
@@ -86,11 +93,11 @@
     "lore": {
       "type": "object",
       "properties": {
-        "short_description": {
+        "shortDescription": {
           "type": "string",
           "description": "A quick 1-2 sentence summary for tooltips."
         },
-        "full_text": {
+        "fullText": {
           "type": "string",
           "description": "The main body of text for the entity."
         },
@@ -107,11 +114,16 @@
                 "type": "string"
               }
             },
-            "required": ["title", "body"]
+            "required": [
+              "title",
+              "body"
+            ]
           }
         }
       },
-      "required": ["short_description"]
+      "required": [
+        "shortDescription"
+      ]
     }
   },
   "required": [
@@ -119,7 +131,7 @@
     "name",
     "size",
     "speed",
-    "ability_bonuses",
+    "abilityBonuses",
     "languages",
     "lore"
   ]

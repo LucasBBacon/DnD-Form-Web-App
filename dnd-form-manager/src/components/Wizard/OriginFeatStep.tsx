@@ -94,7 +94,7 @@ export const OriginFeatStep: React.FC<OriginFeatStepProps> = ({
                 onChange={() => setOriginFeat(feat.id)}
               />
               <strong>{feat.name}</strong>
-              <span> - {feat.lore.short_description}</span>
+              <span> - {feat.lore.shortDescription}</span>
             </label>
           ))}
         </div>

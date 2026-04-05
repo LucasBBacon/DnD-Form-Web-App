@@ -5,7 +5,7 @@
     "speed": {
         "walk": 25
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
         "fixed": {
             "int": 2
         }
@@ -20,12 +20,12 @@
         "trait_darkvision_60",
         "trait_gnome_cunning"
     ],
-    "subrace_info": {
-        "options_pool": "subraces_gnome"
+    "subraceInfo": {
+        "optionsPool": "subraces_gnome"
     },
     "lore": {
-        "short_description": "Clever inventors and tinkerers living in close-knit communities, driven by boundless curiosity, creativity, and an infectious love of life's adventures.",
-        "full_text": "A constant hum of busy activity pervades the warrens and neighborhoods where gnomes form their close knit communities. Louder sounds punctuate the hum: a crunch of grinding gears here, a minor explosion there, a yelp of surprise or triumph, and especially bursts of laughter. Gnomes take delight in life, enjoying every moment of invention, exploration, investigation, creation, and play.",
+        "shortDescription": "Clever inventors and tinkerers living in close-knit communities, driven by boundless curiosity, creativity, and an infectious love of life's adventures.",
+        "fullText": "A constant hum of busy activity pervades the warrens and neighborhoods where gnomes form their close knit communities. Louder sounds punctuate the hum: a crunch of grinding gears here, a minor explosion there, a yelp of surprise or triumph, and especially bursts of laughter. Gnomes take delight in life, enjoying every moment of invention, exploration, investigation, creation, and play.",
         "sections": [
             {
                 "title": "Vibrant Expression",

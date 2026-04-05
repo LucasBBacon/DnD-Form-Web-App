@@ -2,7 +2,7 @@
     "id": "trait_wizard_proficiencies",
     "name": "Wizard Proficiencies",
     "lore": {
-        "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+        "shortDescription": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
     },
     "effects": [
         {

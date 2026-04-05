@@ -2,7 +2,7 @@
     "id": "trait_diamond_soul",
     "name": "Diamond Soul",
     "lore": {
-        "short_description": "Gain proficiency in all saving throws."
+        "shortDescription": "Gain proficiency in all saving throws."
     },
     "effects": [
         {

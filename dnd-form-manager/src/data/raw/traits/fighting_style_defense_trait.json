@@ -2,7 +2,7 @@
     "id": "trait_fighting_style_defense",
     "name": "Fighting Style: Defense",
     "lore": {
-        "short_description": "While you are wearing armor, you gain a +1 bonus to AC."
+        "shortDescription": "While you are wearing armor, you gain a +1 bonus to AC."
     },
     "effects": [
         {

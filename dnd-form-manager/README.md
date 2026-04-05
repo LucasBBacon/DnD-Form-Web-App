@@ -72,9 +72,9 @@ export default defineConfig([
 ])
 ```
 
-## Data Authoring Note: subclass_specific_scaling
+## Data Authoring Note: subclassSpecificScaling
 
-Subclass progression entries support an optional `subclass_specific_scaling` object.
+Subclass progression entries support an optional `subclassSpecificScaling` object.
 
 - Values must be scalar (`string`, `integer`, or `number`). Arrays and objects are invalid.
 - Scaling keys are merged by character level, where the higher-level entry overrides the lower-level value for the same key.

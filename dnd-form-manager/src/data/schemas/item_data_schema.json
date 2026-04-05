@@ -14,7 +14,13 @@
 		},
 		"type": {
 			"type": "string",
-			"enum": ["gear", "weapon", "armor", "tool", "magic_item"],
+			"enum": [
+				"gear",
+				"weapon",
+				"armor",
+				"tool",
+				"magic_item"
+			],
 			"description": "High-level item category."
 		},
 		"weight": {
@@ -25,23 +31,30 @@
 		"lore": {
 			"type": "object",
 			"properties": {
-				"short_description": {
+				"shortDescription": {
 					"type": "string",
 					"description": "A quick 1-2 sentence summary for tooltips."
 				},
-				"full_text": {
+				"fullText": {
 					"type": "string",
 					"description": "The main body of text for the item."
 				}
 			},
-			"required": ["short_description"]
+			"required": [
+				"shortDescription"
+			]
 		},
-		"armor_properties": {
+		"armorProperties": {
 			"type": "object",
 			"properties": {
 				"armorType": {
 					"type": "string",
-					"enum": ["light", "medium", "heavy", "shield"],
+					"enum": [
+						"light",
+						"medium",
+						"heavy",
+						"shield"
+					],
 					"description": "Armor category."
 				},
 				"baseAc": {
@@ -57,14 +70,23 @@
 					"description": "Minimum Strength score required to avoid speed penalties."
 				}
 			},
-			"required": ["armorType", "baseAc", "stealthDisadvantage"]
+			"required": [
+				"armorType",
+				"baseAc",
+				"stealthDisadvantage"
+			]
 		},
 		"weaponProperties": {
 			"type": "object",
 			"properties": {
 				"category": {
 					"type": "string",
-					"enum": ["simple_melee", "martial_melee", "simple_ranged", "martial_ranged"],
+					"enum": [
+						"simple_melee",
+						"martial_melee",
+						"simple_ranged",
+						"martial_ranged"
+					],
 					"description": "Weapon category used for proficiency and classification."
 				},
 				"damageDice": {
@@ -79,7 +101,16 @@
 					"type": "array",
 					"items": {
 						"type": "string",
-						"enum": ["finesse", "light", "heavy", "two-handed", "thrown", "ammunition", "versatile", "reach"]
+						"enum": [
+							"finesse",
+							"light",
+							"heavy",
+							"two-handed",
+							"thrown",
+							"ammunition",
+							"versatile",
+							"reach"
+						]
 					},
 					"description": "Rules properties associated with this weapon."
 				},
@@ -93,10 +124,22 @@
 					"description": "ID of item required as ammunition, if any."
 				}
 			},
-			"required": ["category", "damageDice", "damageType", "properties", "range"]
+			"required": [
+				"category",
+				"damageDice",
+				"damageType",
+				"properties",
+				"range"
+			]
 		}
 	},
-	"required": ["id", "name", "type", "weight", "lore"],
+	"required": [
+		"id",
+		"name",
+		"type",
+		"weight",
+		"lore"
+	],
 	"allOf": [
 		{
 			"if": {
@@ -105,14 +148,20 @@
 						"const": "armor"
 					}
 				},
-				"required": ["type"]
+				"required": [
+					"type"
+				]
 			},
 			"then": {
-				"required": ["armor_properties"]
+				"required": [
+					"armorProperties"
+				]
 			},
 			"else": {
 				"not": {
-					"required": ["armor_properties"]
+					"required": [
+						"armorProperties"
+					]
 				}
 			}
 		},
@@ -123,14 +172,20 @@
 						"const": "weapon"
 					}
 				},
-				"required": ["type"]
+				"required": [
+					"type"
+				]
 			},
 			"then": {
-				"required": ["weaponProperties"]
+				"required": [
+					"weaponProperties"
+				]
 			},
 			"else": {
 				"not": {
-					"required": ["weaponProperties"]
+					"required": [
+						"weaponProperties"
+					]
 				}
 			}
 		}

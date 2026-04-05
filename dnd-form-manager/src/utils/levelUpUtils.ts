@@ -44,7 +44,7 @@ export const getLevelUpRequirements = (
   if (!classData) return requirements;
 
   // #region Subclass Check
-  if (classData.subclass_info.choice_level == targetLevel) {
+  if (classData.subclassInfo.choiceLevel == targetLevel) {
     requirements.requiresSubclass = true;
   }
   // #endregion
@@ -77,18 +77,18 @@ export const getLevelUpRequirements = (
   );
 
   const currentSpellsKnown =
-    levelData?.spellcasting_progression?.spells_known || 0;
+    levelData?.spellcastingProgression?.spellsKnown || 0;
   const prevSpellsKnown =
-    prevLevelData?.spellcasting_progression?.spells_known || 0;
+    prevLevelData?.spellcastingProgression?.spellsKnown || 0;
   requirements.newSpellsToLearn = Math.max(
     0,
     currentSpellsKnown - prevSpellsKnown,
   );
 
   const currentCantrips =
-    levelData?.spellcasting_progression?.cantrips_known || 0;
+    levelData?.spellcastingProgression?.cantripsKnown || 0;
   const prevCantrips =
-    prevLevelData?.spellcasting_progression?.cantrips_known || 0;
+    prevLevelData?.spellcastingProgression?.cantripsKnown || 0;
   requirements.newCantripsToLearn = Math.max(0, currentCantrips - prevCantrips);
 
   // #endregion

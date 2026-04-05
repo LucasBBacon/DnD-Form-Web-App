@@ -2,7 +2,7 @@
     "id": "trait_sorcerer_skills",
     "name": "Sorcerer Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

@@ -6,7 +6,14 @@
     "definitions": {
         "AbilityScore": {
             "type": "string",
-            "enum": ["str", "dex", "con", "int", "wis", "cha"],
+            "enum": [
+                "str",
+                "dex",
+                "con",
+                "int",
+                "wis",
+                "cha"
+            ],
             "description": "One of the six D&D ability scores."
         },
         "AbilityBonusFixed": {
@@ -52,7 +59,10 @@
                     "description": "Ability scores eligible for this bonus. If omitted, all six scores are valid."
                 }
             },
-            "required": ["count", "bonus"]
+            "required": [
+                "count",
+                "bonus"
+            ]
         },
         "AbilityBonuses": {
             "type": "object",
@@ -96,17 +106,31 @@
         },
         "Size": {
             "type": "string",
-            "enum": ["tiny", "small", "medium", "large"],
+            "enum": [
+                "tiny",
+                "small",
+                "medium",
+                "large"
+            ],
             "description": "A creature size category."
         },
         "HitDie": {
             "type": "integer",
-            "enum": [6, 8, 10, 12],
+            "enum": [
+                6,
+                8,
+                10,
+                12
+            ],
             "description": "Valid hit die face values (d6, d8, d10, d12)."
         },
         "SpellcastingAbility": {
             "type": "string",
-            "enum": ["int", "wis", "cha"],
+            "enum": [
+                "int",
+                "wis",
+                "cha"
+            ],
             "description": "Ability scores that can be used as a spellcasting ability."
         }
     }

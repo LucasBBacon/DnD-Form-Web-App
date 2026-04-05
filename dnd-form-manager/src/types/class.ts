@@ -1,7 +1,7 @@
 import type { Ability, HitDie } from "./common";
 
 export interface EquipmentItem {
-  item_id: string;
+  itemId: string;
   quantity: number;
 }
 
@@ -12,14 +12,14 @@ export interface EquipmentChoiceGroup {
 
 export interface SpellcastingBase {
   ability: Ability;
-  preparation_type: "known" | "prepared" | "pact";
-  ritual_casting: boolean;
+  preparationType: "known" | "prepared" | "pact";
+  ritualCasting: boolean;
 }
 
 export interface SpellcastingProgressionPayload {
-  cantrips_known?: number;
-  spells_known?: number;
-  spell_slots?: Record<number, number>;
+  cantripsKnown?: number;
+  spellsKnown?: number;
+  spellSlots?: Record<number, number>;
 }
 
 export interface MulticlassSkillChoice {
@@ -39,33 +39,33 @@ export type SpellcastingProgression = SpellcastingProgressionPayload | null;
 export interface ProgressionLevel {
   level: number;
   features: string[];
-  class_specific_scaling?: Record<string, string | number | unknown[]>; // e.g., { sneak_attack: "1d6" }
-  spellcasting_progression?: SpellcastingProgression;
+  classSpecificScaling?: Record<string, string | number | unknown[]>; // e.g., { sneak_attack: "1d6" }
+  spellcastingProgression?: SpellcastingProgression;
 }
 
 export interface ClassData {
   id: string;
   name: string;
-  hit_die: HitDie;
+  hitDie: HitDie;
   proficiencies: {
     weapons?: string[]; // Weapon category IDs
-    saving_throws: Ability[];
+    savingThrows: Ability[];
   };
-  starting_equipment: {
+  startingEquipment: {
     given: EquipmentItem[];
     choices: EquipmentChoiceGroup[];
   };
-  spellcasting_base: SpellcastingBase | null;
-  multiclass_proficiencies?: MulticlassProficiencies;
-  subclass_info: {
+  spellcastingBase: SpellcastingBase | null;
+  multiclassProficiencies?: MulticlassProficiencies;
+  subclassInfo: {
     name: string;
-    choice_level: number;
-    options_pool: string;
+    choiceLevel: number;
+    optionsPool: string;
   };
   progression: ProgressionLevel[];
   lore: {
-    short_description: string;
-    full_text?: string;
+    shortDescription: string;
+    fullText?: string;
     sections?: Array<{ title: string; body: string }>;
   };
 }

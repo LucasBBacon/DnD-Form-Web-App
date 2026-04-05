@@ -3,7 +3,7 @@
     "id": "trait_barbarian_proficiencies",
     "name": "Barbarian Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
+      "shortDescription": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
     },
     "effects": [
       {
@@ -32,7 +32,7 @@
     "id": "trait_barbarian_skills",
     "name": "Barbarian Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -55,7 +55,7 @@
     "id": "trait_bard_proficiencies",
     "name": "Bard Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and three musical instruments."
+      "shortDescription": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and three musical instruments."
     },
     "effects": [
       {
@@ -100,7 +100,7 @@
     "id": "trait_bard_skills",
     "name": "Bard Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -135,7 +135,7 @@
     "id": "trait_cleric_proficiencies",
     "name": "Cleric Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, shields, and simple weapons."
+      "shortDescription": "Gain proficiency with light armor, medium armor, shields, and simple weapons."
     },
     "effects": [
       {
@@ -160,7 +160,7 @@
     "id": "trait_cleric_skills",
     "name": "Cleric Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -182,7 +182,7 @@
     "id": "trait_diamond_soul",
     "name": "Diamond Soul",
     "lore": {
-      "short_description": "Gain proficiency in all saving throws."
+      "shortDescription": "Gain proficiency in all saving throws."
     },
     "effects": [
       {
@@ -215,7 +215,7 @@
     "id": "trait_druid_proficiencies",
     "name": "Druid Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, shields, druid weapons, and the herbalism kit."
+      "shortDescription": "Gain proficiency with light armor, medium armor, shields, druid weapons, and the herbalism kit."
     },
     "effects": [
       {
@@ -280,7 +280,7 @@
     "id": "trait_druid_skills",
     "name": "Druid Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -305,7 +305,7 @@
     "id": "trait_feat_alert",
     "name": "Alert",
     "lore": {
-      "short_description": "You gain a +5 bonus to initiative."
+      "shortDescription": "You gain a +5 bonus to initiative."
     },
     "effects": [
       {
@@ -319,7 +319,7 @@
     "id": "trait_feat_battle_hardened",
     "name": "Battle Hardened",
     "lore": {
-      "short_description": "You gain a +1 bonus to Armor Class."
+      "shortDescription": "You gain a +1 bonus to Armor Class."
     },
     "effects": [
       {
@@ -333,7 +333,7 @@
     "id": "trait_feat_fleet_footed",
     "name": "Fleet Footed",
     "lore": {
-      "short_description": "Your speed increases by 5 feet."
+      "shortDescription": "Your speed increases by 5 feet."
     },
     "effects": [
       {
@@ -347,7 +347,7 @@
     "id": "trait_feat_gifted_mind",
     "name": "Gifted Mind",
     "lore": {
-      "short_description": "You gain proficiency in Arcana and History."
+      "shortDescription": "You gain proficiency in Arcana and History."
     },
     "effects": [
       {
@@ -364,7 +364,7 @@
     "id": "trait_feat_mobile",
     "name": "Mobile",
     "lore": {
-      "short_description": "Your speed increases by 10 feet."
+      "shortDescription": "Your speed increases by 10 feet."
     },
     "effects": [
       {
@@ -378,7 +378,7 @@
     "id": "trait_feat_skilled",
     "name": "Skilled",
     "lore": {
-      "short_description": "Gain proficiency in any combination of three skills of your choice."
+      "shortDescription": "Gain proficiency in any combination of three skills of your choice."
     },
     "effects": [
       {
@@ -394,7 +394,7 @@
     "id": "trait_feat_spellbound",
     "name": "Spellbound",
     "lore": {
-      "short_description": "A feat reserved for practiced spellcasters."
+      "shortDescription": "A feat reserved for practiced spellcasters."
     },
     "effects": [
       {
@@ -407,7 +407,7 @@
     "id": "trait_fighter_proficiencies",
     "name": "Fighter Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
+      "shortDescription": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
     },
     "effects": [
       {
@@ -440,7 +440,7 @@
     "id": "trait_fighter_skills",
     "name": "Fighter Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -465,7 +465,7 @@
     "id": "trait_fighting_style_defense",
     "name": "Fighting Style: Defense",
     "lore": {
-      "short_description": "While you are wearing armor, you gain a +1 bonus to AC."
+      "shortDescription": "While you are wearing armor, you gain a +1 bonus to AC."
     },
     "effects": [
       {
@@ -485,8 +485,8 @@
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {
-      "short_description": "Starting at 2nd level, you can add half your proficiency bonus to any ability check that does not already include your proficiency bonus.",
-      "full_text": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that does not already include your proficiency bonus."
+      "shortDescription": "Starting at 2nd level, you can add half your proficiency bonus to any ability check that does not already include your proficiency bonus.",
+      "fullText": "Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that does not already include your proficiency bonus."
     },
     "effects": [
       {
@@ -499,7 +499,7 @@
     "id": "trait_keen_senses",
     "name": "Keen Senses",
     "lore": {
-      "short_description": "You have proficiency in the Perception skill."
+      "shortDescription": "You have proficiency in the Perception skill."
     },
     "effects": [
       {
@@ -512,7 +512,7 @@
     "id": "trait_monk_proficiencies",
     "name": "Monk Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with simple weapons, shortswords, one artisan tool type, and one musical instrument type."
+      "shortDescription": "Gain proficiency with simple weapons, shortswords, one artisan tool type, and one musical instrument type."
     },
     "effects": [
       {
@@ -537,7 +537,7 @@
     "id": "trait_monk_skills",
     "name": "Monk Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -560,7 +560,7 @@
     "id": "trait_paladin_proficiencies",
     "name": "Paladin Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
+      "shortDescription": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."
     },
     "effects": [
       {
@@ -593,7 +593,7 @@
     "id": "trait_paladin_skills",
     "name": "Paladin Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -616,7 +616,7 @@
     "id": "trait_ranger_proficiencies",
     "name": "Ranger Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, medium armor, shields, and simple and martial weapons."
+      "shortDescription": "Gain proficiency with light armor, medium armor, shields, and simple and martial weapons."
     },
     "effects": [
       {
@@ -645,7 +645,7 @@
     "id": "trait_ranger_skills",
     "name": "Ranger Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -670,7 +670,7 @@
     "id": "trait_rogue_proficiencies",
     "name": "Rogue Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and thieves' tools."
+      "shortDescription": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and thieves' tools."
     },
     "effects": [
       {
@@ -707,7 +707,7 @@
     "id": "trait_rogue_skills",
     "name": "Rogue Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -735,7 +735,7 @@
     "id": "trait_shadow_stalker",
     "name": "Shadow Stalker",
     "lore": {
-      "short_description": "You gain +2 to Stealth and have Advantage on Stealth checks in dim light."
+      "shortDescription": "You gain +2 to Stealth and have Advantage on Stealth checks in dim light."
     },
     "effects": [
       {
@@ -759,7 +759,7 @@
     "id": "trait_sorcerer_proficiencies",
     "name": "Sorcerer Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+      "shortDescription": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
     },
     "effects": [
       {
@@ -788,7 +788,7 @@
     "id": "trait_sorcerer_skills",
     "name": "Sorcerer Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -828,15 +828,15 @@
       }
     ],
     "lore": {
-      "short_description": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit.",
-      "full_text": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit."
+      "shortDescription": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit.",
+      "fullText": "While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. Vou can use a shield and still gain this benefit."
     }
   },
   {
     "id": "trait_unarmored_movement",
     "name": "Unarmored Movement",
     "lore": {
-      "short_description": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
+      "shortDescription": "Your speed increases by 10 feet while you are not wearing armor or wielding a shield."
     },
     "effects": [
       {
@@ -860,7 +860,7 @@
     "id": "trait_warlock_proficiencies",
     "name": "Warlock Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with light armor and simple weapons."
+      "shortDescription": "Gain proficiency with light armor and simple weapons."
     },
     "effects": [
       {
@@ -877,7 +877,7 @@
     "id": "trait_warlock_skills",
     "name": "Warlock Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {
@@ -902,7 +902,7 @@
     "id": "trait_wizard_proficiencies",
     "name": "Wizard Proficiencies",
     "lore": {
-      "short_description": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+      "shortDescription": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
     },
     "effects": [
       {
@@ -931,7 +931,7 @@
     "id": "trait_wizard_skills",
     "name": "Wizard Skills",
     "lore": {
-      "short_description": ""
+      "shortDescription": ""
     },
     "effects": [
       {

@@ -2,7 +2,7 @@ import type { ItemData } from "../types/item";
 
 export type EquippedArmorItem = ItemData & {
   type: "armor";
-  armor_properties: NonNullable<ItemData["armor_properties"]>;
+  armorProperties: NonNullable<ItemData["armorProperties"]>;
 };
 
 export interface UnarmoredDefenseModifier {
@@ -39,9 +39,9 @@ export const calculateArmorClass = (
     }
   } else {
     // Wearing armor
-    baseAc = equippedArmor.armor_properties.baseAc;
+    baseAc = equippedArmor.armorProperties.baseAc;
 
-    switch (equippedArmor.armor_properties.armorType) {
+    switch (equippedArmor.armorProperties.armorType) {
       case "light":
         // Full Dex mod
         break;

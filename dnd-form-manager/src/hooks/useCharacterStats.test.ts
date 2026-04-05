@@ -85,7 +85,7 @@ describe("useCharacterStats", () => {
     vi.mocked(staticDataApi.getRaceById).mockReturnValue(null);
     vi.mocked(staticDataApi.getSubraceById).mockReturnValue(null);
     vi.mocked(staticDataApi.getClassById).mockReturnValue({
-      hit_die: 10,
+      hitDie: 10,
       proficiencies: { armor: [] },
     } as any);
     vi.mocked(staticDataApi.getSubclassById).mockReturnValue(null);
@@ -135,7 +135,7 @@ describe("useCharacterStats", () => {
       vi.mocked(staticDataApi.getSubclassById).mockReturnValue({
         id: "subclass_berserker",
         name: "Berserker",
-        parent_class_id: "class_barbarian",
+        parentClassId: "class_barbarian",
         progression: [],
       } as any);
 
@@ -156,12 +156,12 @@ describe("useCharacterStats", () => {
       vi.mocked(staticDataApi.getSubclassById).mockReturnValue({
         id: "subclass_test",
         name: "Test Subclass",
-        parent_class_id: "class_fighter",
+        parentClassId: "class_fighter",
         progression: [
           {
             level: 1,
             features: [],
-            subclass_specific_scaling: {
+            subclassSpecificScaling: {
               ac: 1,
               initiative_bonus: 2,
               speed: 10,
@@ -170,7 +170,7 @@ describe("useCharacterStats", () => {
           {
             level: 3,
             features: [],
-            subclass_specific_scaling: {
+            subclassSpecificScaling: {
               speed: 15,
             },
           },
@@ -209,12 +209,12 @@ describe("useCharacterStats", () => {
       );
     });
 
-    it("should resolve armor data when armor is equipped with valid armor_properties", () => {
+    it("should resolve armor data when armor is equipped with valid armorProperties", () => {
       const armorId = "plate_armor";
       const mockArmor = {
         id: armorId,
         type: "armor",
-        armor_properties: {
+        armorProperties: {
           armorType: "heavy",
           baseAc: 18,
         },
@@ -251,12 +251,12 @@ describe("useCharacterStats", () => {
       expect(staticDataApi.getItemById).toHaveBeenCalledWith(itemId);
     });
 
-    it("should set equippedArmor to null when armor lacks armor_properties", () => {
+    it("should set equippedArmor to null when armor lacks armorProperties", () => {
       const armorId = "broken_armor";
       const mockArmor = {
         id: armorId,
         type: "armor",
-        armor_properties: null,
+        armorProperties: null,
       };
 
       vi.mocked(useCharacterStore).mockReturnValue({
@@ -302,7 +302,7 @@ describe("useCharacterStats", () => {
       const mockArmor = {
         id: armorId,
         type: "armor",
-        armor_properties: {
+        armorProperties: {
           armorType: "heavy",
           baseAc: 18,
         },
@@ -315,7 +315,7 @@ describe("useCharacterStats", () => {
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
       vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hit_die: 10,
+        hitDie: 10,
         proficiencies: { armor: ["light"] }, // Only proficient in light armor
       } as any);
 
@@ -329,7 +329,7 @@ describe("useCharacterStats", () => {
       const mockArmor = {
         id: armorId,
         type: "armor",
-        armor_properties: {
+        armorProperties: {
           armorType: "heavy",
           baseAc: 18,
         },
@@ -367,7 +367,7 @@ describe("useCharacterStats", () => {
       } as any);
 
       vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hit_die: 10,
+        hitDie: 10,
         proficiencies: { armor: [] },
       } as any);
 
@@ -882,7 +882,7 @@ describe("useCharacterStats", () => {
       const mockArmor = {
         id: "plate_armor",
         type: "armor",
-        armor_properties: { armorType: "heavy", baseAc: 18 },
+        armorProperties: { armorType: "heavy", baseAc: 18 },
       };
 
       vi.mocked(useCharacterStore).mockReturnValue({
@@ -919,7 +919,7 @@ describe("useCharacterStats", () => {
         return { weight: 3 } as any;
       });
       vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hit_die: 10,
+        hitDie: 10,
         proficiencies: { armor: ["heavy", "category_armor_shield"] },
       } as any);
       vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([

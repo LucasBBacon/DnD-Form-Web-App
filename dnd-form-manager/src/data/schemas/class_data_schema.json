@@ -12,14 +12,14 @@
     "name": {
       "type": "string"
     },
-    "hit_die": {
+    "hitDie": {
       "$ref": "definitions.json#/definitions/HitDie",
       "description": "Faces of the hit die (e.g., 8 for d8)."
     },
     "proficiencies": {
       "type": "object",
       "properties": {
-        "saving_throws": {
+        "savingThrows": {
           "type": "array",
           "items": {
             "$ref": "definitions.json#/definitions/AbilityScore"
@@ -27,7 +27,7 @@
         }
       }
     },
-    "starting_equipment": {
+    "startingEquipment": {
       "type": "object",
       "properties": {
         "given": {
@@ -36,7 +36,7 @@
           "items": {
             "type": "object",
             "properties": {
-              "item_id": {
+              "itemId": {
                 "type": "string",
                 "description": "Id of the specific item or item category pool."
               },
@@ -46,7 +46,7 @@
               }
             },
             "required": [
-              "item_id",
+              "itemId",
               "quantity"
             ]
           }
@@ -67,13 +67,13 @@
                 "items": {
                   "type": "object",
                   "properties": {
-                    "equipment_bundle": {
+                    "equipmentBundle": {
                       "type": "array",
                       "description": "A set of items granted together as a single choice.",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "item_id": {
+                          "itemId": {
                             "type": "string"
                           },
                           "quantity": {
@@ -82,14 +82,14 @@
                           }
                         },
                         "required": [
-                          "item_id",
+                          "itemId",
                           "quantity"
                         ]
                       }
                     }
                   },
                   "required": [
-                    "equipment_bundle"
+                    "equipmentBundle"
                   ]
                 }
               }
@@ -102,7 +102,7 @@
         }
       }
     },
-    "spellcasting_base": {
+    "spellcastingBase": {
       "type": [
         "object",
         "null"
@@ -112,7 +112,7 @@
         "ability": {
           "$ref": "definitions.json#/definitions/SpellcastingAbility"
         },
-        "preparation_type": {
+        "preparationType": {
           "type": "string",
           "enum": [
             "known",
@@ -120,19 +120,19 @@
             "pact"
           ]
         },
-        "ritual_casting": {
+        "ritualCasting": {
           "type": "boolean"
         }
       }
     },
-    "subclass_info": {
+    "subclassInfo": {
       "type": "object",
       "properties": {
-        "choice_level": {
+        "choiceLevel": {
           "type": "integer",
           "description": "The level at which this class chooses a subclass."
         },
-        "options_pool": {
+        "optionsPool": {
           "type": "string",
           "description": "Identifier to query valid subclasses (e.g., 'subclasses_rogue')"
         }
@@ -159,7 +159,7 @@
             },
             "description": "Trait IDs granted at this level (e.g. 'trait_action_surge')."
           },
-          "class_specific_scaling": {
+          "classSpecificScaling": {
             "type": "object",
             "description": "Custom key-value pairs for class-specific resources (e.g., Sneak Attack damage, Ki points).",
             "additionalProperties": {
@@ -171,19 +171,19 @@
               ]
             }
           },
-          "spellcasting_progression": {
+          "spellcastingProgression": {
             "type": [
               "object",
               "null"
             ],
             "properties": {
-              "cantrips_known": {
+              "cantripsKnown": {
                 "type": "integer"
               },
-              "spells_known": {
+              "spellsKnown": {
                 "type": "integer"
               },
-              "spell_slots": {
+              "spellSlots": {
                 "type": "object",
                 "description": "Mapping of spell level (1-9) to number of slots available.",
                 "additionalProperties": {
@@ -201,11 +201,11 @@
     "lore": {
       "type": "object",
       "properties": {
-        "short_description": {
+        "shortDescription": {
           "type": "string",
           "description": "A quick 1-2 sentence summary for tooltips."
         },
-        "full_text": {
+        "fullText": {
           "type": "string",
           "description": "The main body of text for the entity."
         },
@@ -230,16 +230,16 @@
         }
       },
       "required": [
-        "short_description"
+        "shortDescription"
       ]
     }
   },
   "required": [
     "id",
     "name",
-    "hit_die",
+    "hitDie",
     "proficiencies",
-    "subclass_info",
+    "subclassInfo",
     "progression"
   ]
 }

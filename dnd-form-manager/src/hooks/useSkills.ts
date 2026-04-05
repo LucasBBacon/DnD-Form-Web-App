@@ -161,7 +161,7 @@ export const useSkills = () => {
 
   // #region Saving Throws
   const saveProficiencies = aggregateSaveProficiencies({
-    classSavingThrows: classData?.proficiencies.saving_throws || [],
+    classSavingThrows: classData?.proficiencies.savingThrows || [],
     currentLevel: state.level,
     traits: allTraits,
     state,

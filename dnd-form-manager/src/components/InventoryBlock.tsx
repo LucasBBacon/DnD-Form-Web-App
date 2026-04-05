@@ -92,7 +92,7 @@ export const InventoryBlock = () => {
                     {itemData.weight} lbs (Total:{" "}
                     {itemData.weight * record.quantity} lbs)
                   </span>
-                  <p className="item-lore">{itemData.lore.short_description}</p>
+                  <p className="item-lore">{itemData.lore.shortDescription}</p>
                 </div>
 
                 <div className="item-actions">
@@ -110,13 +110,13 @@ export const InventoryBlock = () => {
                   </div>
 
                   {/* Equip Button (only shows if item is sword/shield) */}
-                  {itemData.type === "armor" && itemData.armor_properties && (
+                  {itemData.type === "armor" && itemData.armorProperties && (
                     <button
                       className={isEquipped ? "unequip-btn" : "equip-btn"}
                       onClick={() =>
                         handleEquipToggle(
                           record.itemId,
-                          itemData.armor_properties!.armorType,
+                          itemData.armorProperties!.armorType,
                         )
                       }
                     >

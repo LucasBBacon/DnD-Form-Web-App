@@ -2,7 +2,7 @@
     "id": "trait_feat_alert",
     "name": "Alert",
     "lore": {
-        "short_description": "You gain a +5 bonus to initiative."
+        "shortDescription": "You gain a +5 bonus to initiative."
     },
     "effects": [
         {

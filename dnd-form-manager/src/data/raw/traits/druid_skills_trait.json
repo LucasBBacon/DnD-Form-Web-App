@@ -2,7 +2,7 @@
     "id": "trait_druid_skills",
     "name": "Druid Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

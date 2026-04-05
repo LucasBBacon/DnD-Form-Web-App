@@ -2,7 +2,7 @@
     "id": "trait_ranger_skills",
     "name": "Ranger Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

@@ -2,7 +2,7 @@
     "id": "trait_bard_proficiencies",
     "name": "Bard Proficiencies",
     "lore": {
-        "short_description": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and three musical instruments."
+        "shortDescription": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and three musical instruments."
     },
     "effects": [
         {

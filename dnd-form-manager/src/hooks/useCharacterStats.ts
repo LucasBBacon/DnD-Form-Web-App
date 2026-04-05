@@ -139,7 +139,7 @@ export const useCharacterStats = () => {
   const hitDieByLevel: Record<number, HitDie | undefined> = {};
 
   if (state.level >= 1) {
-    hitDieByLevel[1] = classData?.hit_die;
+    hitDieByLevel[1] = classData?.hitDie;
   }
 
   for (let currentLevel = 2; currentLevel <= state.level; currentLevel++) {
@@ -149,7 +149,7 @@ export const useCharacterStats = () => {
       ? getClassById(selectedClassIdForLevel)
       : null;
 
-    hitDieByLevel[currentLevel] = selectedClassData?.hit_die;
+    hitDieByLevel[currentLevel] = selectedClassData?.hitDie;
   }
 
   const maxHp = calculateMulticlassMaxHP(
@@ -173,7 +173,7 @@ export const useCharacterStats = () => {
     ? getItemById(state.equippedArmorId)
     : null;
   const equippedArmor: Parameters<typeof calculateArmorClass>[1] =
-    equippedArmorData?.type === "armor" && equippedArmorData.armor_properties
+    equippedArmorData?.type === "armor" && equippedArmorData.armorProperties
       ? (equippedArmorData as Exclude<
           Parameters<typeof calculateArmorClass>[1],
           null
@@ -206,8 +206,8 @@ export const useCharacterStats = () => {
 
   const isArmorPenalized =
     (!!state.equippedArmorId &&
-      equippedArmor?.armor_properties &&
-      !nonSkillProficiencies.armor.has(equippedArmor.armor_properties.armorType)) ||
+      equippedArmor?.armorProperties &&
+      !nonSkillProficiencies.armor.has(equippedArmor.armorProperties.armorType)) ||
     (isWearingShield && !nonSkillProficiencies.armor.has("shield"));
 
   const baseArmorClass = calculateArmorClass(

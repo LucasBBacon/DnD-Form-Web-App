@@ -3,11 +3,11 @@
     "name": "Gifted Mind",
     "category": "origin",
     "source": "homebrew",
-    "granted_traits": [
+    "grantedTraits": [
         "trait_feat_gifted_mind"
     ],
     "lore": {
-        "short_description": "You gain proficiency in Arcana and History."
+        "shortDescription": "You gain proficiency in Arcana and History."
     },
     "tags": [
         "origin",

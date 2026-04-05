@@ -1,14 +1,14 @@
 {
     "id": "class_ranger",
     "name": "Ranger",
-    "hit_die": 10,
+    "hitDie": 10,
     "proficiencies": {
-        "saving_throws": [
+        "savingThrows": [
             "str",
             "dex"
         ]
     },
-    "multiclass_proficiencies": {
+    "multiclassProficiencies": {
         "armor": [
             "category_armor_light",
             "category_armor_medium",
@@ -33,18 +33,18 @@
             ]
         }
     },
-    "starting_equipment": {
+    "startingEquipment": {
         "given": [
             {
-                "item_id": "weapon_longbow",
+                "itemId": "weapon_longbow",
                 "quantity": 1
             },
             {
-                "item_id": "weapon_arrow",
+                "itemId": "weapon_arrow",
                 "quantity": 20
             },
             {
-                "item_id": "pack_quiver",
+                "itemId": "pack_quiver",
                 "quantity": 1
             }
         ],
@@ -53,17 +53,17 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "armor_scale",
+                                "itemId": "armor_scale",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "armor_leather",
+                                "itemId": "armor_leather",
                                 "quantity": 1
                             }
                         ]
@@ -74,17 +74,17 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "weapon_shortsword",
+                                "itemId": "weapon_shortsword",
                                 "quantity": 2
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "category_weapon_simple",
+                                "itemId": "category_weapon_simple",
                                 "quantity": 2
                             }
                         ]
@@ -95,17 +95,17 @@
                 "choose": 1,
                 "options": [
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "pack_dungeoneers",
+                                "itemId": "pack_dungeoneers",
                                 "quantity": 1
                             }
                         ]
                     },
                     {
-                        "equipment_bundle": [
+                        "equipmentBundle": [
                             {
-                                "item_id": "pack_explorers",
+                                "itemId": "pack_explorers",
                                 "quantity": 1
                             }
                         ]
@@ -114,14 +114,14 @@
             }
         ]
     },
-    "spellcasting_base": {
+    "spellcastingBase": {
         "ability": "wis",
-        "preparation_type": "known",
-        "ritual_casting": false
+        "preparationType": "known",
+        "ritualCasting": false
     },
-    "subclass_info": {
-        "choice_level": 3,
-        "options_pool": "subclasses_ranger"
+    "subclassInfo": {
+        "choiceLevel": 3,
+        "optionsPool": "subclasses_ranger"
     },
     "progression": [
         {
@@ -139,10 +139,10 @@
                 "trait_fighting_style",
                 "trait_spellcasting_ranger"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 2,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 2,
+                "spellSlots": {
                     "1": 2
                 }
             }
@@ -153,10 +153,10 @@
                 "trait_ranger_archetype",
                 "trait_primeval_awareness"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 3,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 3,
+                "spellSlots": {
                     "1": 3
                 }
             }
@@ -166,10 +166,10 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 3,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 3,
+                "spellSlots": {
                     "1": 3
                 }
             }
@@ -179,10 +179,10 @@
             "features": [
                 "trait_extra_attack"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 4,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 4,
+                "spellSlots": {
                     "1": 4,
                     "2": 2
                 }
@@ -194,10 +194,10 @@
                 "trait_favored_enemy_improvement",
                 "trait_natural_explorer_improvement"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 4,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 4,
+                "spellSlots": {
                     "1": 4,
                     "2": 2
                 }
@@ -208,10 +208,10 @@
             "features": [
                 "trait_ranger_archetype_feature"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 5,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 5,
+                "spellSlots": {
                     "1": 4,
                     "2": 3
                 }
@@ -223,10 +223,10 @@
                 "trait_ability_score_improvement",
                 "trait_lands_stride"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 5,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 5,
+                "spellSlots": {
                     "1": 4,
                     "2": 3
                 }
@@ -234,10 +234,10 @@
         },
         {
             "level": 9,
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 6,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 6,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 2
@@ -250,10 +250,10 @@
                 "trait_natural_explorer_improvement",
                 "trait_hide_in_plain_sight"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 6,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 6,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 2
@@ -265,10 +265,10 @@
             "features": [
                 "trait_ranger_archetype_feature"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 7,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 7,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3
@@ -280,10 +280,10 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 7,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 7,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3
@@ -292,10 +292,10 @@
         },
         {
             "level": 13,
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 8,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 8,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -309,10 +309,10 @@
                 "trait_favored_enemy_improvement",
                 "trait_vanish"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 8,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 8,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -325,10 +325,10 @@
             "features": [
                 "trait_ranger_archetype_feature"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 9,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 9,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -341,10 +341,10 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 9,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 9,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -354,10 +354,10 @@
         },
         {
             "level": 17,
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 10,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 10,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -371,10 +371,10 @@
             "features": [
                 "trait_feral_senses"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 10,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 10,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -388,10 +388,10 @@
             "features": [
                 "trait_ability_score_improvement"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 11,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 11,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -405,10 +405,10 @@
             "features": [
                 "trait_foe_slayer"
             ],
-            "spellcasting_progression": {
-                "cantrips_known": 0,
-                "spells_known": 11,
-                "spell_slots": {
+            "spellcastingProgression": {
+                "cantripsKnown": 0,
+                "spellsKnown": 11,
+                "spellSlots": {
                     "1": 4,
                     "2": 3,
                     "3": 3,
@@ -419,7 +419,7 @@
         }
     ],
     "lore": {
-        "short_description": "Solitary scouts and hunters who keep watch over the wilderness, expert in bow, survival, and protective magic.",
-        "full_text": "Rough and wild looking, a human stalks alone through the shadows of trees, hunting the orcs he knows are planning a raid on a nearby farm. Clutching a shortsword in each hand, he becomes a whirlwind of steel, cutting down one enemy after another.\nAfter tumbling away from a cone of freezing air, an elf finds her feet and draws back her bow to loose an arrow aI the white dragon. Shrugging off the wave of fear that emanates from the dragon like the cold of its breath, she sends one arrow after another to find the gaps between the dragon's thick scales.\nHolding his hand high, a half-elf whistles to the hawk that circles high above him, calling the bird back to his side. Whispering instructions in Elvish, he points to the owlbear he's been tracking and sends the hawk to distract the creature while he readies his bow.\nFar from the bustle of cities and towns, past the hedges that shelter the most distant farms from the terrors of the wild, amid the dense-packed trees of trackless forests and across wide and empty plains, rangers keep their unending watch."
+        "shortDescription": "Solitary scouts and hunters who keep watch over the wilderness, expert in bow, survival, and protective magic.",
+        "fullText": "Rough and wild looking, a human stalks alone through the shadows of trees, hunting the orcs he knows are planning a raid on a nearby farm. Clutching a shortsword in each hand, he becomes a whirlwind of steel, cutting down one enemy after another.\nAfter tumbling away from a cone of freezing air, an elf finds her feet and draws back her bow to loose an arrow aI the white dragon. Shrugging off the wave of fear that emanates from the dragon like the cold of its breath, she sends one arrow after another to find the gaps between the dragon's thick scales.\nHolding his hand high, a half-elf whistles to the hawk that circles high above him, calling the bird back to his side. Whispering instructions in Elvish, he points to the owlbear he's been tracking and sends the hawk to distract the creature while he readies his bow.\nFar from the bustle of cities and towns, past the hedges that shelter the most distant farms from the terrors of the wild, amid the dense-packed trees of trackless forests and across wide and empty plains, rangers keep their unending watch."
     }
 }

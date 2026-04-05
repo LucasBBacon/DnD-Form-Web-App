@@ -7,7 +7,7 @@ const makeArmor = (
 ): EquippedArmorItem =>
   ({
     type: "armor",
-    armor_properties: {
+    armorProperties: {
       armorType,
       baseAc,
     },

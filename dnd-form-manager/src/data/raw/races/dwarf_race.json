@@ -5,7 +5,7 @@
     "speed": {
         "walk": 25
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
         "fixed": {
             "con": 2
         }
@@ -24,12 +24,12 @@
         "trait_dwarf_tool_proficiency",
         "trait_stonecutting"
     ],
-    "subrace_info": {
-        "options_pool": "subraces_dwarf"
+    "subraceInfo": {
+        "optionsPool": "subraces_dwarf"
     },
     "lore": {
-        "short_description": "Mountain-dwelling craftspeople of ancient strongholds, bound by fierce clan loyalty and a long memory for both tradition and grudges.",
-        "full_text": "Kingdoms rich in ancient grandeur, halls carved into the roots of mountains, the echoing of picks and hammers in deep mines and blazing forges, a commitment to clan and tradition, and a burning hatred of goblins and ores-these common threads unite all dwarves.",
+        "shortDescription": "Mountain-dwelling craftspeople of ancient strongholds, bound by fierce clan loyalty and a long memory for both tradition and grudges.",
+        "fullText": "Kingdoms rich in ancient grandeur, halls carved into the roots of mountains, the echoing of picks and hammers in deep mines and blazing forges, a commitment to clan and tradition, and a burning hatred of goblins and ores-these common threads unite all dwarves.",
         "sections": [
             {
                 "title": "Short And Stout",

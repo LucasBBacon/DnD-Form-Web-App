@@ -114,14 +114,14 @@ const hasSpellcastingAccess = ({
   const subclassData = subclassId ? getSubclassById(subclassId) : null;
   const activeTraitIds = new Set<string>();
 
-  if (classData?.spellcasting_base || subclassData?.spellcasting_override) {
+  if (classData?.spellcastingBase || subclassData?.spellcastingOverride) {
     return true;
   }
 
   raceData?.traits?.forEach((traitId) => {
     activeTraitIds.add(traitId);
   });
-  subraceData?.traits_added?.forEach((traitId) => {
+  subraceData?.traitsAdded?.forEach((traitId) => {
     activeTraitIds.add(traitId);
   });
   classData?.progression
@@ -172,14 +172,14 @@ export const isFeatEligible = (
   if (!prerequisites) return true;
 
   if (
-    prerequisites.minimum_level !== undefined &&
-    context.level < prerequisites.minimum_level
+    prerequisites.minimumLevel !== undefined &&
+    context.level < prerequisites.minimumLevel
   ) {
     return false;
   }
 
-  if (prerequisites.ability_minimums) {
-    const requiredAbilities = Object.entries(prerequisites.ability_minimums) as Array<
+  if (prerequisites.abilityMinimums) {
+    const requiredAbilities = Object.entries(prerequisites.abilityMinimums) as Array<
       [Ability, number]
     >;
     const meetsAbilityRequirements = requiredAbilities.every(
@@ -192,23 +192,23 @@ export const isFeatEligible = (
   if (
     !matchesRequiredIdPool(
       context.classId,
-      prerequisites.required_class_ids,
+      prerequisites.requiredClassIds,
     ) ||
     !matchesRequiredIdPool(
       context.subclassId,
-      prerequisites.required_subclass_ids,
+      prerequisites.requiredSubclassIds,
     ) ||
-    !matchesRequiredIdPool(context.raceId, prerequisites.required_race_ids) ||
+    !matchesRequiredIdPool(context.raceId, prerequisites.requiredRaceIds) ||
     !matchesRequiredIdPool(
       context.subraceId,
-      prerequisites.required_subrace_ids,
+      prerequisites.requiredSubraceIds,
     )
   ) {
     return false;
   }
 
-  if (prerequisites.required_feat_ids?.length) {
-    const hasRequiredFeats = prerequisites.required_feat_ids.every((featId) =>
+  if (prerequisites.requiredFeatIds?.length) {
+    const hasRequiredFeats = prerequisites.requiredFeatIds.every((featId) =>
       selectedFeatIds.includes(featId),
     );
 
@@ -216,7 +216,7 @@ export const isFeatEligible = (
   }
 
   if (
-    prerequisites.requires_spellcasting &&
+    prerequisites.requiresSpellcasting &&
     !hasSpellcastingAccess(context)
   ) {
     return false;
@@ -249,7 +249,7 @@ export const resolveGrantedTraitIdsForSelectedFeats = (
   ).forEach(
     (featId) => {
       const feat = getFeatById(featId);
-      feat?.granted_traits.forEach((traitId) => {
+      feat?.grantedTraits.forEach((traitId) => {
         traitIds.add(traitId);
       });
     },

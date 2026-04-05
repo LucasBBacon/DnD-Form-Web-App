@@ -39,7 +39,7 @@
 			},
 			"description": "Class IDs that can access this spell."
 		},
-		"casting_time": {
+		"castingTime": {
 			"type": "string",
 			"description": "Casting time text, e.g. '1 action'."
 		},
@@ -71,7 +71,7 @@
 				"material": {
 					"type": "boolean"
 				},
-				"material_materials": {
+				"materialMaterials": {
 					"type": "string",
 					"description": "Material details, e.g. 'A pinch of sulfur'."
 				}
@@ -81,20 +81,20 @@
 		"lore": {
 			"type": "object",
 			"properties": {
-				"short_description": {
+				"shortDescription": {
 					"type": "string",
 					"description": "A quick 1-2 sentence summary for tooltips."
 				},
-				"full_text": {
+				"fullText": {
 					"type": "string",
 					"description": "The main body of text for the spell."
 				},
-				"higher_level": {
+				"higherLevel": {
 					"type": "string",
 					"description": "Additional effects when cast using a higher-level spell slot."
 				}
 			},
-			"required": ["short_description", "full_text"]
+			"required": ["shortDescription", "fullText"]
 		}
 	},
 	"required": [
@@ -103,7 +103,7 @@
 		"level",
 		"school",
 		"classes",
-		"casting_time",
+		"castingTime",
 		"range",
 		"duration",
 		"concentration",

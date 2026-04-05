@@ -5,7 +5,7 @@
     "speed": {
         "walk": 30
     },
-    "ability_bonuses": {
+    "abilityBonuses": {
         "fixed": {
             "dex": 2
         }
@@ -22,11 +22,11 @@
         "trait_fey_ancestry",
         "trait_trance"
     ],
-    "subrace_info": {
-        "options_pool": "subraces_elf"
+    "subraceInfo": {
+        "optionsPool": "subraces_elf"
     },
     "lore": {
-        "short_description": "Graceful, magical beings with an otherworldly nature, devoted to beauty, art, and the wonders of the natural world.",
-        "full_text": "Elves are a magical people of otherworldly grace, living in the world but not entirely part of it. They live in places of ethereal beauty, in the midst of ancient forests ar in silvery spires glittering with faerie light, where soft music drifts through the air and gentle fragrances waft on the breeze. Elves love nature and magic, art and artistry, music and poetry, and the good things of the world."
+        "shortDescription": "Graceful, magical beings with an otherworldly nature, devoted to beauty, art, and the wonders of the natural world.",
+        "fullText": "Elves are a magical people of otherworldly grace, living in the world but not entirely part of it. They live in places of ethereal beauty, in the midst of ancient forests ar in silvery spires glittering with faerie light, where soft music drifts through the air and gentle fragrances waft on the breeze. Elves love nature and magic, art and artistry, music and poetry, and the good things of the world."
     }
 }

@@ -4,15 +4,15 @@
     "category": "origin",
     "source": "homebrew",
     "prerequisites": {
-        "ability_minimums": {
+        "abilityMinimums": {
             "dex": 12
         }
     },
-    "granted_traits": [
+    "grantedTraits": [
         "trait_feat_fleet_footed"
     ],
     "lore": {
-        "short_description": "Your speed increases by 5 feet."
+        "shortDescription": "Your speed increases by 5 feet."
     },
     "tags": [
         "origin",

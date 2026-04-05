@@ -2,8 +2,8 @@
   {
     "id": "subclass_barbarian_berserker",
     "name": "Path of the Berserker",
-    "parent_class_id": "class_barbarian",
-    "spellcasting_override": null,
+    "parentClassId": "class_barbarian",
+    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -31,8 +31,8 @@
       }
     ],
     "lore": {
-      "short_description": "Berserkers embrace raw fury in battle, sacrificing restraint for terrifying offense and relentless pressure.",
-      "full_text": "The Path of the Berserker is one of the most primal barbarian traditions. Berserkers willingly surrender to battle-frenzy, channeling rage into overwhelming aggression. Their style is direct, brutal, and fearsome: break the enemy line fast, keep momentum, and make every opening hurt.",
+      "shortDescription": "Berserkers embrace raw fury in battle, sacrificing restraint for terrifying offense and relentless pressure.",
+      "fullText": "The Path of the Berserker is one of the most primal barbarian traditions. Berserkers willingly surrender to battle-frenzy, channeling rage into overwhelming aggression. Their style is direct, brutal, and fearsome: break the enemy line fast, keep momentum, and make every opening hurt.",
       "sections": [
         {
           "title": "Frenzy",

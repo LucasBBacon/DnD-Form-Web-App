@@ -4,14 +4,14 @@
     "category": "general",
     "source": "homebrew",
     "prerequisites": {
-        "requires_spellcasting": true,
-        "minimum_level": 4
+        "requiresSpellcasting": true,
+        "minimumLevel": 4
     },
-    "granted_traits": [
+    "grantedTraits": [
         "trait_feat_spellbound"
     ],
     "lore": {
-        "short_description": "A feat reserved for practiced spellcasters."
+        "shortDescription": "A feat reserved for practiced spellcasters."
     },
     "tags": [
         "spellcasting"

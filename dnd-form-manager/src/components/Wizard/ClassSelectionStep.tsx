@@ -19,7 +19,7 @@ export const ClassSelectionStep = ({ onNext }: { onNext: () => void }) => {
     : [];
 
   // Does this class pick a subclass at level 1?
-  const picksSubclassNow = previewClassData?.subclass_info.choice_level === 1;
+  const picksSubclassNow = previewClassData?.subclassInfo.choiceLevel === 1;
 
   const handleLockIn = () => {
     if (!previewClassId) return;
@@ -54,7 +54,7 @@ export const ClassSelectionStep = ({ onNext }: { onNext: () => void }) => {
               }}
             >
               <h3>{cls.name}</h3>
-              <p>Hit Die: d{cls.hit_die}</p>
+              <p>Hit Die: d{cls.hitDie}</p>
             </button>
           ))}
         </div>
@@ -69,8 +69,8 @@ export const ClassSelectionStep = ({ onNext }: { onNext: () => void }) => {
               <div className="sub-options">
                 <h3>
                   {picksSubclassNow
-                    ? `Choose your ${previewClassData.subclass_info.name}:`
-                    : `Preview ${previewClassData.subclass_info.name}s (Chosen at Level ${previewClassData.subclass_info.choice_level}):`}
+                    ? `Choose your ${previewClassData.subclassInfo.name}:`
+                    : `Preview ${previewClassData.subclassInfo.name}s (Chosen at Level ${previewClassData.subclassInfo.choiceLevel}):`}
                 </h3>
 
                 {availableSubclasses.map((sub) => (

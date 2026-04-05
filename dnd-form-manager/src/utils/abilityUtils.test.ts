@@ -11,7 +11,7 @@ const createRaceWithFixedBonuses = (
   fixed: Partial<Record<Ability, number>>,
 ): Race =>
   ({
-    ability_bonuses: {
+    abilityBonuses: {
       fixed,
     },
   }) as unknown as Race;
@@ -20,7 +20,7 @@ const createSubraceWithFixedBonuses = (
   fixed: Partial<Record<Ability, number>>,
 ): SubraceData =>
   ({
-    ability_bonuses: {
+    abilityBonuses: {
       fixed,
     },
   }) as unknown as SubraceData;

@@ -12,14 +12,14 @@ export interface FeatAcquisitionEntry {
 }
 
 export interface FeatPrerequisites {
-  minimum_level?: number;
-  ability_minimums?: Partial<Record<Ability, number>>;
-  required_feat_ids?: string[];
-  required_class_ids?: string[];
-  required_subclass_ids?: string[];
-  required_race_ids?: string[];
-  required_subrace_ids?: string[];
-  requires_spellcasting?: boolean;
+  minimumLevel?: number;
+  abilityMinimums?: Partial<Record<Ability, number>>;
+  requiredFeatIds?: string[];
+  requiredClassIds?: string[];
+  requiredSubclassIds?: string[];
+  requiredRaceIds?: string[];
+  requiredSubraceIds?: string[];
+  requiresSpellcasting?: boolean;
 }
 
 export interface FeatLoreSection {
@@ -34,10 +34,10 @@ export interface FeatData {
   source?: string;
   repeatable?: boolean;
   prerequisites?: FeatPrerequisites;
-  granted_traits: string[];
+  grantedTraits: string[];
   lore: {
-    short_description: string;
-    full_text?: string;
+    shortDescription: string;
+    fullText?: string;
     sections?: FeatLoreSection[];
   };
   tags?: string[];

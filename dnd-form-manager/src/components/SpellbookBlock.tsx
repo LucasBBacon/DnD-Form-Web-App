@@ -149,14 +149,14 @@ export const SpellbookBlock = () => {
                 </div>
 
                 <div className="spell-card-meta">
-                  <span>{spell.casting_time}</span>
+                  <span>{spell.castingTime}</span>
                   <span>{spell.range}</span>
                   <span>
                     {spell.duration} {spell.concentration && "(C)"}
                   </span>
                 </div>
 
-                <p className="spell-lore">{spell.lore.short_description}</p>
+                <p className="spell-lore">{spell.lore.shortDescription}</p>
 
                 {/* Clerics and Wizards can unprepare spells on the fly */}
                 {isPreparedCaster && (

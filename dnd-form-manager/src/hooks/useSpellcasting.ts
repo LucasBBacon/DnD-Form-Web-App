@@ -41,23 +41,23 @@ export const useSpellcasting = () => {
   // --- Identify caster type ---
   // Subclass takes priority if it grants spellcasting
   const activeSpellcastingBase =
-    subclassData?.spellcasting_override || classData?.spellcasting_base;
-  const preparationType = activeSpellcastingBase?.preparation_type;
+    subclassData?.spellcastingOverride || classData?.spellcastingBase;
+  const preparationType = activeSpellcastingBase?.preparationType;
   const spellcastingAbility =
     (activeSpellcastingBase?.ability as Ability) || undefined;
   const isPactMagic = preparationType === "pact";
 
-  const spellProg = subclassData?.spellcasting_override
+  const spellProg = subclassData?.spellcastingOverride
     ? getMostRecentProgressionProperty(
         subclassData.progression,
         level,
-        (entry) => entry.spellcasting_progression_additions,
+        (entry) => entry.spellcastingProgressionAdditions,
       )
-    : classData?.spellcasting_base
+    : classData?.spellcastingBase
       ? getMostRecentProgressionProperty(
           classData.progression,
           level,
-          (entry) => entry.spellcasting_progression,
+          (entry) => entry.spellcastingProgression,
         )
       : null;
 
@@ -69,18 +69,18 @@ export const useSpellcasting = () => {
     total: number;
     expended: number;
   } | null = null;
-  const maxCantrips = spellProg?.cantrips_known || 0;
-  const maxSpellsKnown = spellProg?.spells_known || 0;
+  const maxCantrips = spellProg?.cantripsKnown || 0;
+  const maxSpellsKnown = spellProg?.spellsKnown || 0;
 
   if (spellProg) {
     if (isPactMagic) {
       // Warlock spells only have one tier of slots
-      const slotLevels = Object.keys(spellProg.spell_slots || {});
+      const slotLevels = Object.keys(spellProg.spellSlots || {});
       if (slotLevels.length > 0) {
         // Grab the single key (slot level) and its value (total slots)
         const pLevel = Math.max(...slotLevels.map(Number));
-        const pTotal = spellProg.spell_slots
-          ? spellProg.spell_slots[pLevel]
+        const pTotal = spellProg.spellSlots
+          ? spellProg.spellSlots[pLevel]
           : 0;
 
         pactMagicInfo = {
@@ -91,7 +91,7 @@ export const useSpellcasting = () => {
       }
     } else {
       // All other magic casting
-      const slots = spellProg.spell_slots || {};
+      const slots = spellProg.spellSlots || {};
       Object.entries(slots).forEach(([lvlStr, totalSlots]) => {
         const lvl = Number(lvlStr);
         if (totalSlots > 0) {
@@ -125,13 +125,13 @@ export const useSpellcasting = () => {
       if (
         effect.type === "spell_grant" &&
         effect.target &&
-        (effect.level_available || 1) <= level
+        (effect.levelAvailable || 1) <= level
       ) {
         const spellId = effect.target;
         const spell = getSpellByID(spellId);
         // Innate spells often have their own specific casting ability
         // If not specified, default to the class casting ability, 0 if neither
-        const ability = effect.spellcasting_ability || spellcastingAbility;
+        const ability = effect.spellcastingAbility || spellcastingAbility;
         const statMod = ability ? modifiers[ability] || 0 : 0;
 
         innateSpells.push({

@@ -2,7 +2,7 @@
     "id": "trait_bard_skills",
     "name": "Bard Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

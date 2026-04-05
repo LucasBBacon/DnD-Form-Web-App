@@ -57,7 +57,7 @@ export const evaluatePredicate = (
 
       const armor = getItemById(state.equippedArmorId);
       if (predicate.value === "any") return true;
-      return armor?.armor_properties?.armorType === predicate.value;
+      return armor?.armorProperties?.armorType === predicate.value;
     }
 
     case "armor_prohibited": {
@@ -66,7 +66,7 @@ export const evaluatePredicate = (
       if (predicate.value === "any") return false;
       const armor = getItemById(state.equippedArmorId);
       // Return false if the equipped armor matches the prohibited category
-      return armor?.armor_properties?.armorType !== predicate.value;
+      return armor?.armorProperties?.armorType !== predicate.value;
     }
 
     case "shield_prohibited": {

@@ -33,11 +33,11 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
 
   // aggregate all choice blocks from both race, subrace, give unique IDs
   const availableChoices = [
-    ...(raceData?.ability_bonuses?.choices || []).map((c, i) => ({
+    ...(raceData?.abilityBonuses?.choices || []).map((c, i) => ({
       ...c,
       id: `race_choice_${i}`,
     })),
-    ...(subraceData?.ability_bonuses?.choices || []).map((c, i) => ({
+    ...(subraceData?.abilityBonuses?.choices || []).map((c, i) => ({
       ...c,
       id: `subrace_choice_${i}`,
     })),

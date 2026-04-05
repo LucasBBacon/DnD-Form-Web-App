@@ -3,11 +3,11 @@
     "name": "Mobile",
     "category": "general",
     "source": "phb",
-    "granted_traits": [
+    "grantedTraits": [
         "trait_feat_mobile"
     ],
     "lore": {
-        "short_description": "Your speed increases by 10 feet."
+        "shortDescription": "Your speed increases by 10 feet."
     },
     "tags": [
         "speed"

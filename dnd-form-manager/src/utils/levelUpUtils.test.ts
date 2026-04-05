@@ -21,12 +21,12 @@ const createLevelData = (
   ({
     level,
     features: options?.features ?? [],
-    spellcasting_progression:
+    spellcastingProgression:
       options?.spellsKnown !== undefined ||
       options?.cantripsKnown !== undefined
         ? {
-            spells_known: options?.spellsKnown,
-            cantrips_known: options?.cantripsKnown,
+            spellsKnown: options?.spellsKnown,
+            cantripsKnown: options?.cantripsKnown,
           }
         : undefined,
   }) as any;
@@ -42,8 +42,8 @@ const createClassData = ({
 } = {}): ClassData =>
   ({
     id,
-    subclass_info: {
-      choice_level: subclassChoiceLevel,
+    subclassInfo: {
+      choiceLevel: subclassChoiceLevel,
     },
     progression,
   }) as ClassData;

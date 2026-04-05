@@ -2,7 +2,7 @@
     "id": "trait_warlock_skills",
     "name": "Warlock Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

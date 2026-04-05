@@ -2,7 +2,7 @@
     "id": "trait_fighter_skills",
     "name": "Fighter Skills",
     "lore": {
-        "short_description": ""
+        "shortDescription": ""
     },
     "effects": [
         {

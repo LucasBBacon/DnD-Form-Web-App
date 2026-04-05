@@ -4,15 +4,15 @@
     "category": "general",
     "source": "homebrew",
     "prerequisites": {
-        "required_class_ids": [
+        "requiredClassIds": [
             "class_fighter"
         ]
     },
-    "granted_traits": [
+    "grantedTraits": [
         "trait_feat_battle_hardened"
     ],
     "lore": {
-        "short_description": "Your martial discipline grants you a +1 bonus to Armor Class."
+        "shortDescription": "Your martial discipline grants you a +1 bonus to Armor Class."
     },
     "tags": [
         "armor_class"

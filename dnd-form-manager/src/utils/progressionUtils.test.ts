@@ -29,7 +29,7 @@ describe("subclass progression helpers", () => {
     {
       level: 1,
       features: ["feature_a"],
-      subclass_specific_scaling: {
+      subclassSpecificScaling: {
         speed: 5,
         initiative_bonus: 1,
       },
@@ -37,14 +37,14 @@ describe("subclass progression helpers", () => {
     {
       level: 3,
       features: ["feature_b"],
-      subclass_specific_scaling: {
+      subclassSpecificScaling: {
         speed: 10,
       },
     },
     {
       level: 7,
       features: ["feature_c"],
-      subclass_specific_scaling: {
+      subclassSpecificScaling: {
         ac: "dex",
       },
     },
@@ -75,8 +75,8 @@ describe("subclass progression helpers", () => {
 
   it("gets most recent progression property at or below the level", () => {
     const result = getMostRecentProgressionProperty(progression, 6, (entry) =>
-      entry.subclass_specific_scaling
-        ? entry.subclass_specific_scaling.speed
+      entry.subclassSpecificScaling
+        ? entry.subclassSpecificScaling.speed
         : undefined,
     );
 
@@ -85,8 +85,8 @@ describe("subclass progression helpers", () => {
 
   it("returns null when no progression property is found", () => {
     const result = getMostRecentProgressionProperty(progression, 1, (entry) =>
-      entry.subclass_specific_scaling
-        ? entry.subclass_specific_scaling.unknown_key
+      entry.subclassSpecificScaling
+        ? entry.subclassSpecificScaling.unknown_key
         : undefined,
     );
 

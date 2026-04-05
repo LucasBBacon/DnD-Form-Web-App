@@ -4,11 +4,11 @@
     "name": "Alert",
     "category": "general",
     "source": "phb",
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_alert"
     ],
     "lore": {
-      "short_description": "You gain a +5 bonus to initiative."
+      "shortDescription": "You gain a +5 bonus to initiative."
     },
     "tags": [
       "initiative"
@@ -20,15 +20,15 @@
     "category": "general",
     "source": "homebrew",
     "prerequisites": {
-      "required_class_ids": [
+      "requiredClassIds": [
         "class_fighter"
       ]
     },
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_battle_hardened"
     ],
     "lore": {
-      "short_description": "Your martial discipline grants you a +1 bonus to Armor Class."
+      "shortDescription": "Your martial discipline grants you a +1 bonus to Armor Class."
     },
     "tags": [
       "armor_class"
@@ -40,15 +40,15 @@
     "category": "origin",
     "source": "homebrew",
     "prerequisites": {
-      "ability_minimums": {
+      "abilityMinimums": {
         "dex": 12
       }
     },
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_fleet_footed"
     ],
     "lore": {
-      "short_description": "Your speed increases by 5 feet."
+      "shortDescription": "Your speed increases by 5 feet."
     },
     "tags": [
       "origin",
@@ -60,11 +60,11 @@
     "name": "Gifted Mind",
     "category": "origin",
     "source": "homebrew",
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_gifted_mind"
     ],
     "lore": {
-      "short_description": "You gain proficiency in Arcana and History."
+      "shortDescription": "You gain proficiency in Arcana and History."
     },
     "tags": [
       "origin",
@@ -76,11 +76,11 @@
     "name": "Mobile",
     "category": "general",
     "source": "phb",
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_mobile"
     ],
     "lore": {
-      "short_description": "Your speed increases by 10 feet."
+      "shortDescription": "Your speed increases by 10 feet."
     },
     "tags": [
       "speed"
@@ -91,11 +91,11 @@
     "name": "Skilled",
     "category": "general",
     "source": "phb",
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_skilled"
     ],
     "lore": {
-      "short_description": "Gain proficiency in any combination of three skills of your choice."
+      "shortDescription": "Gain proficiency in any combination of three skills of your choice."
     },
     "tags": [
       "skills"
@@ -107,14 +107,14 @@
     "category": "general",
     "source": "homebrew",
     "prerequisites": {
-      "requires_spellcasting": true,
-      "minimum_level": 4
+      "requiresSpellcasting": true,
+      "minimumLevel": 4
     },
-    "granted_traits": [
+    "grantedTraits": [
       "trait_feat_spellbound"
     ],
     "lore": {
-      "short_description": "A feat reserved for practiced spellcasters."
+      "shortDescription": "A feat reserved for practiced spellcasters."
     },
     "tags": [
       "spellcasting"

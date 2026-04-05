@@ -4,21 +4,21 @@ import type { AbilityBonusChoice } from "./race";
 export interface SubraceData {
   id: string; // e.g., 'subrace_elf_high'
   name: string; // e.g., 'High Elf'
-  parent_race_id: string; // e.g., 'race_elf'
+  parentRaceId: string; // e.g., 'race_elf'
 
   // Mirrors base Race schema for easy merging
-  ability_bonuses?: {
+  abilityBonuses?: {
     fixed?: Partial<Record<Ability, number>>;
     choices?: AbilityBonusChoice[];
   };
 
-  traits_added?: string[]; // Traits IDs
+  traitsAdded?: string[]; // Traits IDs
 
-  languages_added?: {
+  languagesAdded?: {
     known: string[];
     choices?: {
       count: number;
-      unique_choices?: boolean;
+      uniqueChoices?: boolean;
     };
   };
 
@@ -34,8 +34,8 @@ export interface SubraceData {
   };
 
   lore: {
-    short_description: string;
-    full_text?: string;
+    shortDescription: string;
+    fullText?: string;
     sections?: Array<{ title: string; body: string }>;
   };
 }

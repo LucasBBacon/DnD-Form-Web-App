@@ -53,13 +53,13 @@ describe("useSpellcasting innate spell enrichment", () => {
       {
         id: "trait_test",
         name: "Test Trait",
-        lore: { short_description: "test" },
+        lore: { shortDescription: "test" },
         effects: [
           {
             type: "spell_grant",
             target: "spell_mage_hand",
-            level_available: 1,
-            spellcasting_ability: "cha",
+            levelAvailable: 1,
+            spellcastingAbility: "cha",
           },
         ],
       },
@@ -83,12 +83,12 @@ describe("useSpellcasting innate spell enrichment", () => {
       {
         id: "trait_test",
         name: "Test Trait",
-        lore: { short_description: "test" },
+        lore: { shortDescription: "test" },
         effects: [
           {
             type: "spell_grant",
             target: "spell_missing",
-            level_available: 1,
+            levelAvailable: 1,
           },
         ],
       },
@@ -143,33 +143,33 @@ describe("useSpellcasting progression resolution", () => {
 
   it("uses the latest class progression at or below current level", () => {
     vi.mocked(getClassById).mockReturnValue({
-      spellcasting_base: {
+      spellcastingBase: {
         ability: "int",
-        preparation_type: "known",
+        preparationType: "known",
       },
       progression: [
         {
           level: 1,
           features: [],
-          spellcasting_progression: {
-            cantrips_known: 2,
-            spells_known: 3,
+          spellcastingProgression: {
+            cantripsKnown: 2,
+            spellsKnown: 3,
           },
         },
         {
           level: 3,
           features: [],
-          spellcasting_progression: {
-            cantrips_known: 3,
-            spells_known: 4,
+          spellcastingProgression: {
+            cantripsKnown: 3,
+            spellsKnown: 4,
           },
         },
         {
           level: 5,
           features: [],
-          spellcasting_progression: {
-            cantrips_known: 4,
-            spells_known: 6,
+          spellcastingProgression: {
+            cantripsKnown: 4,
+            spellsKnown: 6,
           },
         },
       ],
@@ -195,39 +195,39 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(getClassById).mockReturnValue({
-      spellcasting_base: null,
+      spellcastingBase: null,
       progression: [
         {
           level: 1,
           features: [],
-          spellcasting_progression: {
-            cantrips_known: 99,
-            spells_known: 99,
+          spellcastingProgression: {
+            cantripsKnown: 99,
+            spellsKnown: 99,
           },
         },
       ],
     } as any);
 
     vi.mocked(getSubclassById).mockReturnValue({
-      spellcasting_override: {
+      spellcastingOverride: {
         ability: "int",
-        preparation_type: "known",
+        preparationType: "known",
       },
       progression: [
         {
           level: 3,
           features: [],
-          spellcasting_progression_additions: {
-            cantrips_known: 1,
-            spells_known: 3,
+          spellcastingProgressionAdditions: {
+            cantripsKnown: 1,
+            spellsKnown: 3,
           },
         },
         {
           level: 6,
           features: [],
-          spellcasting_progression_additions: {
-            cantrips_known: 2,
-            spells_known: 4,
+          spellcastingProgressionAdditions: {
+            cantripsKnown: 2,
+            spellsKnown: 4,
           },
         },
       ],
@@ -254,31 +254,31 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(getClassById).mockReturnValue({
-      spellcasting_base: {
+      spellcastingBase: {
         ability: "int",
-        preparation_type: "prepared",
+        preparationType: "prepared",
       },
       progression: [
         {
           level: 1,
           features: [],
-          spellcasting_progression: {
-            cantrips_known: 3,
-            spells_known: 6,
+          spellcastingProgression: {
+            cantripsKnown: 3,
+            spellsKnown: 6,
           },
         },
       ],
     } as any);
 
     vi.mocked(getSubclassById).mockReturnValue({
-      spellcasting_override: null,
+      spellcastingOverride: null,
       progression: [
         {
           level: 3,
           features: [],
-          spellcasting_progression_additions: {
-            cantrips_known: 0,
-            spells_known: 0,
+          spellcastingProgressionAdditions: {
+            cantripsKnown: 0,
+            spellsKnown: 0,
           },
         },
       ],
