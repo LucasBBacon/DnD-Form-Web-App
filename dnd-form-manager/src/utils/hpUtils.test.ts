@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { calculateMaxHP } from "./hpUtils";
+import { calculateMaxHP, calculateMulticlassMaxHP } from "./hpUtils";
 import type { HitDie } from "../types/common";
 
 const D6 = 6 as HitDie;
@@ -129,5 +129,48 @@ describe("calculateMaxHP", () => {
         }),
       ).toBe(19);
     });
+  });
+});
+
+describe("calculateMulticlassMaxHP", () => {
+  test("uses per-level class hit dice when multiclassing", () => {
+    // Level 1 (fighter d10): 10 + 2 = 12
+    // Level 2 (fighter d10 avg): 6 + 2 = 8
+    // Level 3 (wizard d6 avg): 4 + 2 = 6
+    // Level 4 (wizard d6 avg): 4 + 2 = 6
+    expect(
+      calculateMulticlassMaxHP(
+        4,
+        {
+          1: D10,
+          2: D10,
+          3: D6,
+          4: D6,
+        },
+        2,
+      ),
+    ).toBe(32);
+  });
+
+  test("falls back to the previous level hit die if an entry is missing", () => {
+    // Missing level 3/4 hit die should continue using d10 from level 2
+    // L1: 10 + 1 = 11
+    // L2: 6 + 1 = 7
+    // L3: 6 + 1 = 7
+    // L4: 6 + 1 = 7
+    expect(
+      calculateMulticlassMaxHP(
+        4,
+        {
+          1: D10,
+          2: D10,
+        },
+        1,
+      ),
+    ).toBe(32);
+  });
+
+  test("returns 0 if no level 1 hit die exists", () => {
+    expect(calculateMulticlassMaxHP(3, { 2: D8, 3: D8 }, 2)).toBe(0);
   });
 });

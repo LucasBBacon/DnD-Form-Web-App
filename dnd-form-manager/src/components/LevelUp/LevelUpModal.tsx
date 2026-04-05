@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   getClassById,
   getSubclassById,
@@ -27,14 +27,36 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     subraceId,
     classId,
     subclassId,
+    classTracks,
     setLevel,
     updateLevelChoice,
     setSubclass,
+    setClassTrackLevel,
+    addClassTrack,
   } = useCharacterStore();
 
-  const classData = classId ? getClassById(classId) : null;
-  const subclassData = subclassId ? getSubclassById(subclassId) : null;
-  const availableSubclasses = classId ? getSubclassesForClass(classId) : [];
+  const selectableClassIds = useMemo(() => {
+    if (classTracks.length > 0) {
+      return classTracks.map((track) => track.classId);
+    }
+
+    return classId ? [classId] : [];
+  }, [classId, classTracks]);
+
+  const [selectedClassId, setSelectedClassId] = useState<string>(
+    classId || "",
+  );
+  const activeClassId = selectedClassId || classId;
+  const activeClassTrack = classTracks.find(
+    (track) => track.classId === activeClassId,
+  );
+
+  const classData = activeClassId ? getClassById(activeClassId) : null;
+  const activeSubclassId = activeClassTrack?.subclassId ?? subclassId;
+  const subclassData = activeSubclassId ? getSubclassById(activeSubclassId) : null;
+  const availableSubclasses = activeClassId
+    ? getSubclassesForClass(activeClassId)
+    : [];
 
   // Determine modules to render
   const requirements = getLevelUpRequirements(
@@ -91,7 +113,25 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   };
 
   const finalizeLevelUp = () => {
-    updateLevelChoice(targetLevel, draftChoices);
+    const effectiveClassId = activeClassId || undefined;
+
+    updateLevelChoice(targetLevel, {
+      ...draftChoices,
+      selectedClassId: effectiveClassId,
+    });
+
+    if (effectiveClassId) {
+      const existingTrack = classTracks.find(
+        (track) => track.classId === effectiveClassId,
+      );
+
+      if (existingTrack) {
+        setClassTrackLevel(effectiveClassId, existingTrack.level + 1);
+      } else {
+        addClassTrack(effectiveClassId, 1);
+      }
+    }
+
     setLevel(targetLevel);
     onClose();
   };
@@ -106,12 +146,34 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           : `Leveling up to ${targetLevel}!`}
       </h2>
 
+      {selectableClassIds.length > 1 && (
+        <div className="choice-block">
+          <h3>Choose the class that gains this level</h3>
+          <select
+            value={activeClassId || ""}
+            onChange={(e) => setSelectedClassId(e.target.value)}
+          >
+            {selectableClassIds.map((id) => {
+              const data = getClassById(id);
+              const currentTrack = classTracks.find((track) => track.classId === id);
+              const trackLevel = currentTrack?.level || 0;
+
+              return (
+                <option key={id} value={id}>
+                  {data?.name || id} (current class level {trackLevel})
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      )}
+
       {/* Render subclass picker if required */}
-      {requirements.requiresSubclass && classId && (
+      {requirements.requiresSubclass && activeClassId && (
         <div className="choice-block">
           <h3>Choose your Martial Archetype</h3>
           <select
-            value={subclassId || ""}
+            value={activeSubclassId || ""}
             onChange={(e) => setSubclass(e.target.value)}
           >
             <option value="" disabled>

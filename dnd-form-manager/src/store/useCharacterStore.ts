@@ -12,6 +12,60 @@ export interface InventoryRecord {
 const clampAbilityScore = (score: number): number =>
   Math.max(1, Math.min(20, score));
 
+const clampCharacterLevel = (level: number): number =>
+  Math.max(1, Math.min(20, level));
+
+export interface CharacterClassTrack {
+  classId: string;
+  subclassId: string | null;
+  level: number;
+}
+
+const sanitizeClassTracks = (
+  tracks: CharacterClassTrack[],
+): CharacterClassTrack[] =>
+  tracks
+    .filter((track) => track.classId && track.level > 0)
+    .map((track) => ({
+      classId: track.classId,
+      subclassId: track.subclassId ?? null,
+      level: Math.max(1, Math.floor(track.level)),
+    }));
+
+const getTotalClassTrackLevels = (tracks: CharacterClassTrack[]): number =>
+  tracks.reduce((total, track) => total + track.level, 0);
+
+const upsertClassTrack = (
+  tracks: CharacterClassTrack[],
+  classId: string,
+  updates: Partial<CharacterClassTrack>,
+): CharacterClassTrack[] => {
+  const existingIndex = tracks.findIndex((track) => track.classId === classId);
+
+  if (existingIndex === -1) {
+    const baseLevel = Math.max(1, Math.floor(updates.level ?? 1));
+    return [
+      ...tracks,
+      {
+        classId,
+        subclassId: updates.subclassId ?? null,
+        level: baseLevel,
+      },
+    ];
+  }
+
+  return tracks.map((track) =>
+    track.classId !== classId
+      ? track
+      : {
+          ...track,
+          ...updates,
+          subclassId: updates.subclassId ?? track.subclassId,
+          level: Math.max(1, Math.floor(updates.level ?? track.level)),
+        },
+  );
+};
+
 interface CharacterState {
   name: string;
   level: number;
@@ -19,6 +73,7 @@ interface CharacterState {
   subraceId: string | null;
   classId: string | null;
   subclassId: string | null;
+  classTracks: CharacterClassTrack[];
 
   // The raw numbers before racial bonuses or feats are applied
   baseAbilityScores: Record<Ability, number>;
@@ -64,6 +119,11 @@ interface CharacterActions {
   setSubrace: (subraceId: string | null) => void;
   setClass: (classId: string) => void;
   setSubclass: (subclassId: string | null) => void;
+  setClassTracks: (tracks: CharacterClassTrack[]) => void;
+  addClassTrack: (classId: string, startingLevel?: number) => void;
+  removeClassTrack: (classId: string) => void;
+  setClassTrackLevel: (classId: string, level: number) => void;
+  setClassTrackSubclass: (classId: string, subclassId: string | null) => void;
   setBackground: (background: string) => void;
 
   setLevel: (level: number) => void;
@@ -114,6 +174,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   subraceId: null,
   classId: null,
   subclassId: null,
+  classTracks: [],
   baseAbilityScores: {
     str: 10,
     dex: 10,
@@ -153,7 +214,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setLevel: (newLevel) =>
     set((state) => {
       // If leveled DOWN, should theoretically clear choices for levels lost to prevent ghost stats from applying
-      const clampedLevel = Math.max(1, Math.min(20, newLevel));
+      const clampedLevel = clampCharacterLevel(newLevel);
 
       let updatedSubclassId = state.subclassId;
 
@@ -185,6 +246,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         choicesByLevel: updatedChoices,
         acquiredFeats: updatedAcquiredFeats,
         subclassId: updatedSubclassId,
+        classTracks:
+          state.classTracks.length === 1 &&
+          state.classId === state.classTracks[0].classId
+            ? upsertClassTrack(state.classTracks, state.classTracks[0].classId, {
+                level: clampedLevel,
+              })
+            : state.classTracks,
         // (Wire up the exact level check in derivation engine)
       };
     }),
@@ -238,13 +306,102 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setClass: (classId) =>
     set((state) => ({
       classId,
+      classTracks: upsertClassTrack(state.classTracks, classId, {
+        subclassId: null,
+        level: state.level,
+      }),
       acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
     })),
 
   setSubclass: (subclassId) =>
     set((state) => ({
       subclassId,
+      classTracks: state.classId
+        ? upsertClassTrack(state.classTracks, state.classId, { subclassId })
+        : state.classTracks,
       acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+    })),
+
+  setClassTracks: (tracks) =>
+    set((state) => {
+      const sanitizedTracks = sanitizeClassTracks(tracks);
+      const primaryTrack = sanitizedTracks[0] || null;
+      const totalLevel =
+        sanitizedTracks.length > 0
+          ? clampCharacterLevel(getTotalClassTrackLevels(sanitizedTracks))
+          : state.level;
+
+      return {
+        classTracks: sanitizedTracks,
+        classId: primaryTrack?.classId ?? state.classId,
+        subclassId: primaryTrack?.subclassId ?? state.subclassId,
+        level: totalLevel,
+      };
+    }),
+
+  addClassTrack: (classId, startingLevel = 1) =>
+    set((state) => {
+      const nextTracks = upsertClassTrack(state.classTracks, classId, {
+        level: Math.max(1, Math.floor(startingLevel)),
+      });
+      const primaryTrack = nextTracks[0] || null;
+
+      return {
+        classTracks: nextTracks,
+        classId: state.classId ?? primaryTrack?.classId ?? null,
+        subclassId:
+          state.classId === null
+            ? (primaryTrack?.subclassId ?? null)
+            : state.subclassId,
+        level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
+      };
+    }),
+
+  removeClassTrack: (classId) =>
+    set((state) => {
+      const nextTracks = state.classTracks.filter((track) => track.classId !== classId);
+      const primaryTrack = nextTracks[0] || null;
+
+      return {
+        classTracks: nextTracks,
+        classId:
+          state.classId === classId
+            ? (primaryTrack?.classId ?? null)
+            : state.classId,
+        subclassId:
+          state.classId === classId
+            ? (primaryTrack?.subclassId ?? null)
+            : state.subclassId,
+        level:
+          nextTracks.length > 0
+            ? clampCharacterLevel(getTotalClassTrackLevels(nextTracks))
+            : 1,
+      };
+    }),
+
+  setClassTrackLevel: (classId, level) =>
+    set((state) => {
+      const classTrackLevel = Math.max(1, Math.floor(level));
+      const nextTracks = upsertClassTrack(state.classTracks, classId, {
+        level: classTrackLevel,
+      });
+
+      return {
+        classTracks: nextTracks,
+        level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
+      };
+    }),
+
+  setClassTrackSubclass: (classId, subclassId) =>
+    set((state) => ({
+      classTracks: upsertClassTrack(state.classTracks, classId, {
+        subclassId,
+      }),
+      classId: state.classId ?? classId,
+      subclassId:
+        state.classId === classId || state.classId === null
+          ? subclassId
+          : state.subclassId,
     })),
 
   setBackground: (backgroundId) =>
@@ -517,6 +674,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     subraceId: null,
     classId: null,
     subclassId: null,
+    classTracks: [],
     inventory: [],
     choicesByLevel: {},
     acquiredFeats: [],

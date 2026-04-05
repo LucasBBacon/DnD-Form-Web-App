@@ -77,7 +77,7 @@ describe("useCharacterStats", () => {
     // Mock combat stat calculations
     vi.mocked(progressionUtils.calculateProficiencyBonus).mockReturnValue(2);
     vi.mocked(progressionUtils.mergeSubclassSpecificScaling).mockReturnValue({});
-    vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(10);
+    vi.mocked(hpUtils.calculateMulticlassMaxHP).mockReturnValue(10);
     vi.mocked(initiativeUtils.calculateInitiative).mockReturnValue(2);
     vi.mocked(acUtils.calculateArmorClass).mockReturnValue(10);
 
@@ -493,9 +493,9 @@ describe("useCharacterStats", () => {
     it("should calculate max HP from level, hit die, and CON modifier", () => {
       const result = useCharacterStats();
 
-      expect(hpUtils.calculateMaxHP).toHaveBeenCalledWith(
+      expect(hpUtils.calculateMulticlassMaxHP).toHaveBeenCalledWith(
         1,
-        10,
+        { 1: 10 },
         1,
         [6, 5, 4]
       );
@@ -508,7 +508,7 @@ describe("useCharacterStats", () => {
         damageTaken: 3,
       } as any);
 
-      vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(10);
+      vi.mocked(hpUtils.calculateMulticlassMaxHP).mockReturnValue(10);
 
       const result = useCharacterStats();
 
@@ -521,7 +521,7 @@ describe("useCharacterStats", () => {
         damageTaken: 15,
       } as any);
 
-      vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(10);
+      vi.mocked(hpUtils.calculateMulticlassMaxHP).mockReturnValue(10);
 
       const result = useCharacterStats();
 
@@ -913,7 +913,7 @@ describe("useCharacterStats", () => {
       } as any);
 
       vi.mocked(progressionUtils.calculateProficiencyBonus).mockReturnValue(3);
-      vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(45);
+      vi.mocked(hpUtils.calculateMulticlassMaxHP).mockReturnValue(45);
       vi.mocked(staticDataApi.getItemById).mockImplementation((id) => {
         if (id === "plate_armor") return mockArmor;
         return { weight: 3 } as any;
@@ -975,7 +975,7 @@ describe("useCharacterStats", () => {
       } as any);
 
       vi.mocked(acUtils.calculateArmorClass).mockReturnValue(15); // 10 + DEX mod
-      vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(20);
+      vi.mocked(hpUtils.calculateMulticlassMaxHP).mockReturnValue(20);
       vi.mocked(initiativeUtils.calculateInitiative).mockReturnValue(3);
 
       const result = useCharacterStats();

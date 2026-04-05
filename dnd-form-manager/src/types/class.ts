@@ -22,6 +22,18 @@ export interface SpellcastingProgressionPayload {
   spell_slots?: Record<number, number>;
 }
 
+export interface MulticlassSkillChoice {
+  choose: number;
+  options?: string[];
+}
+
+export interface MulticlassProficiencies {
+  armor?: string[];
+  weapons?: string[];
+  tools?: string[];
+  skills?: MulticlassSkillChoice;
+}
+
 export type SpellcastingProgression = SpellcastingProgressionPayload | null;
 
 export interface ProgressionLevel {
@@ -44,6 +56,7 @@ export interface ClassData {
     choices: EquipmentChoiceGroup[];
   };
   spellcasting_base: SpellcastingBase | null;
+  multiclass_proficiencies?: MulticlassProficiencies;
   subclass_info: {
     name: string;
     choice_level: number;

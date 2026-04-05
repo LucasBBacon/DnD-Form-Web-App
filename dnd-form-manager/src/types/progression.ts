@@ -1,6 +1,7 @@
 import type { Ability, Skill } from "./common";
 
 export interface LevelChoice {
+  selectedClassId?: string;
   hpGained?: number; // Raw roll on the hit die
   // levels where an Ability Score Increase is reached
   asiChoices?: Partial<Record<Ability, number>>;

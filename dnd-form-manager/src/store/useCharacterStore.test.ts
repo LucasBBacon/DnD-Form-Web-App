@@ -10,6 +10,7 @@ describe("useCharacterStore feat acquisition state", () => {
       subraceId: null,
       classId: null,
       subclassId: null,
+      classTracks: [],
       choicesByLevel: {},
       acquiredFeats: [],
     } as any);
@@ -76,5 +77,40 @@ describe("useCharacterStore feat acquisition state", () => {
     expect(useCharacterStore.getState().acquiredFeats).toEqual([
       { featId: "feat_alert", source: "level_up", sourceLevel: 4 },
     ]);
+  });
+
+  it("seeds class track when setting a class", () => {
+    useCharacterStore.getState().setClass("class_wizard");
+
+    expect(useCharacterStore.getState().classTracks).toEqual([
+      { classId: "class_wizard", subclassId: null, level: 5 },
+    ]);
+  });
+
+  it("supports adding and leveling a multiclass track", () => {
+    useCharacterStore.getState().setClass("class_fighter");
+    useCharacterStore.getState().setLevel(3);
+    useCharacterStore.getState().setClassTrackLevel("class_fighter", 3);
+
+    useCharacterStore.getState().addClassTrack("class_wizard", 2);
+
+    expect(useCharacterStore.getState().classTracks).toEqual([
+      { classId: "class_fighter", subclassId: null, level: 3 },
+      { classId: "class_wizard", subclassId: null, level: 2 },
+    ]);
+    expect(useCharacterStore.getState().level).toBe(5);
+  });
+
+  it("promotes next class track when removing the primary class", () => {
+    useCharacterStore.getState().setClassTracks([
+      { classId: "class_fighter", subclassId: "subclass_champion", level: 3 },
+      { classId: "class_wizard", subclassId: "subclass_evocation", level: 2 },
+    ]);
+
+    useCharacterStore.getState().removeClassTrack("class_fighter");
+
+    expect(useCharacterStore.getState().classId).toBe("class_wizard");
+    expect(useCharacterStore.getState().subclassId).toBe("subclass_evocation");
+    expect(useCharacterStore.getState().level).toBe(2);
   });
 });

@@ -34,3 +34,33 @@ export const calculateMaxHP = (
 
   return totalHp;
 };
+
+/**
+ * Calculates max HP when the hit die can vary by character level (multiclass).
+ *
+ * hitDieByLevel is keyed by total character level and should include a hit die
+ * for level 1. Missing later levels fall back to the previous level's hit die.
+ */
+export const calculateMulticlassMaxHP = (
+  level: number,
+  hitDieByLevel: Record<number, HitDie | undefined>,
+  conModifier: number,
+  hpRolls: Record<number, number> = {},
+): number => {
+  const levelOneDie = hitDieByLevel[1];
+  if (!levelOneDie || level < 1) return 0;
+
+  let totalHp = Math.max(1, levelOneDie + conModifier);
+  let previousHitDie = levelOneDie;
+
+  for (let currentLevel = 2; currentLevel <= level; currentLevel++) {
+    const currentHitDie = hitDieByLevel[currentLevel] || previousHitDie;
+    const averageHp = currentHitDie / 2 + 1;
+    const baseHpGained = hpRolls[currentLevel] || averageHp;
+
+    totalHp += Math.max(1, baseHpGained + conModifier);
+    previousHitDie = currentHitDie;
+  }
+
+  return totalHp;
+};

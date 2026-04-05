@@ -6,7 +6,7 @@ import {
   getSubraceById,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
-import type { Ability } from "../types/common";
+import type { Ability, HitDie } from "../types/common";
 import type {
   KnownSubclassStatScalingKey,
   SubclassSpecificScaling,
@@ -17,7 +17,7 @@ import {
   calculateTotalASI,
 } from "../utils/abilityUtils";
 import { calculateArmorClass } from "../utils/acUtils";
-import { calculateMaxHP } from "../utils/hpUtils";
+import { calculateMulticlassMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
 import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
@@ -136,9 +136,25 @@ export const useCharacterStats = () => {
   // Calculate Derived Combat Stats
   const proficiencyBonus = calculateProficiencyBonus(state.level);
 
-  const maxHp = calculateMaxHP(
+  const hitDieByLevel: Record<number, HitDie | undefined> = {};
+
+  if (state.level >= 1) {
+    hitDieByLevel[1] = classData?.hit_die;
+  }
+
+  for (let currentLevel = 2; currentLevel <= state.level; currentLevel++) {
+    const selectedClassIdForLevel =
+      state.choicesByLevel[currentLevel]?.selectedClassId || state.classId;
+    const selectedClassData = selectedClassIdForLevel
+      ? getClassById(selectedClassIdForLevel)
+      : null;
+
+    hitDieByLevel[currentLevel] = selectedClassData?.hit_die;
+  }
+
+  const maxHp = calculateMulticlassMaxHP(
     state.level,
-    classData?.hit_die,
+    hitDieByLevel,
     modifiers.con,
     state.hpRolls,
   );
