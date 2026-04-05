@@ -1,0 +1,15 @@
+{
+    "id": "feat_alert",
+    "name": "Alert",
+    "category": "general",
+    "source": "phb",
+    "granted_traits": [
+        "trait_feat_alert"
+    ],
+    "lore": {
+        "short_description": "You gain a +5 bonus to initiative."
+    },
+    "tags": [
+        "initiative"
+    ]
+}

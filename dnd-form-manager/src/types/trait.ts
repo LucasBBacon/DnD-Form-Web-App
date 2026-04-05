@@ -38,6 +38,4 @@ export interface TraitData {
     full_text?: string;
   };
   effects?: TraitEffect[];
-
-  // TODO: Add mechanical hooks like 'grant_skill: "perception"'
 }

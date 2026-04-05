@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getAllCharacterTraits } from "./traitUtils";
 import {
   getClassById,
+  getFeatsByIds,
   getRaceById,
   getSubclassById,
   getSubraceById,
@@ -11,6 +12,7 @@ import {
 
 vi.mock("../data/staticDataApi", () => ({
   getClassById: vi.fn(),
+  getFeatsByIds: vi.fn(),
   getRaceById: vi.fn(),
   getSubclassById: vi.fn(),
   getSubraceById: vi.fn(),
@@ -50,6 +52,7 @@ describe("getAllCharacterTraits", () => {
     vi.mocked(getTraitsByIds).mockImplementation((ids: string[]) =>
       ids.map((id) => ({ id, name: `Trait ${id}` })) as any,
     );
+    vi.mocked(getFeatsByIds).mockReturnValue([] as any);
   });
 
   describe("base behavior", () => {
@@ -401,6 +404,68 @@ describe("getAllCharacterTraits", () => {
         "sneak-attack",
         "cunning-action",
       ]);
+    });
+  });
+
+  describe("feat integration", () => {
+    it("includes traits granted by feats selected up to the current level", () => {
+      vi.mocked(getFeatsByIds).mockReturnValue([
+        {
+          id: "feat_alert",
+          granted_traits: ["trait_feat_alert"],
+        },
+        {
+          id: "feat_mobile",
+          granted_traits: ["trait_feat_mobile"],
+        },
+      ] as any);
+
+      getAllCharacterTraits(
+        4,
+        null,
+        null,
+        null,
+        null,
+        false,
+        {
+          2: { featId: "feat_alert" },
+          4: { featId: "feat_mobile" },
+        },
+      );
+
+      expect(getFeatsByIds).toHaveBeenCalledWith([
+        "feat_alert",
+        "feat_mobile",
+      ]);
+      expect(getTraitsByIds).toHaveBeenCalledWith([
+        "trait_feat_alert",
+        "trait_feat_mobile",
+      ]);
+    });
+
+    it("includes only traits granted by feats selected exactly on that level when exactLevel is true", () => {
+      vi.mocked(getFeatsByIds).mockReturnValue([
+        {
+          id: "feat_mobile",
+          granted_traits: ["trait_feat_mobile"],
+        },
+      ] as any);
+
+      getAllCharacterTraits(
+        4,
+        null,
+        null,
+        null,
+        null,
+        true,
+        {
+          2: { featId: "feat_alert" },
+          4: { featId: "feat_mobile" },
+        },
+      );
+
+      expect(getFeatsByIds).toHaveBeenCalledWith(["feat_mobile"]);
+      expect(getTraitsByIds).toHaveBeenCalledWith(["trait_feat_mobile"]);
     });
   });
 });

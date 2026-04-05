@@ -1,0 +1,14 @@
+{
+    "id": "trait_feat_mobile",
+    "name": "Mobile",
+    "lore": {
+        "short_description": "Your speed increases by 10 feet."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "speed",
+            "value": 10
+        }
+    ]
+}

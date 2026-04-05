@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "DnD Feat",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^feat_[a-z0-9_]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["origin", "general", "epic_boon"]
+    },
+    "source": {
+      "type": "string"
+    },
+    "repeatable": {
+      "type": "boolean"
+    },
+    "prerequisites": {
+      "type": "object",
+      "properties": {
+        "minimum_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "ability_minimums": {
+          "type": "object",
+          "properties": {
+            "str": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "dex": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "con": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "int": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "wis": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "cha": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            }
+          },
+          "additionalProperties": false
+        },
+        "required_feat_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^feat_[a-z0-9_]+$"
+          }
+        },
+        "required_class_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^class_[a-z0-9_]+$"
+          }
+        },
+        "required_subclass_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^subclass_[a-z0-9_]+$"
+          }
+        },
+        "required_race_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^race_[a-z0-9_]+$"
+          }
+        },
+        "required_subrace_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^subrace_[a-z0-9_]+$"
+          }
+        },
+        "requires_spellcasting": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "granted_traits": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^trait_[a-z0-9_]+$"
+      }
+    },
+    "lore": {
+      "type": "object",
+      "properties": {
+        "short_description": {
+          "type": "string"
+        },
+        "full_text": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              }
+            },
+            "required": ["title", "body"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["short_description"],
+      "additionalProperties": false
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["id", "name", "category", "granted_traits", "lore"],
+  "additionalProperties": false
+}

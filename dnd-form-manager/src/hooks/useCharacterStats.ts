@@ -73,6 +73,8 @@ export const useCharacterStats = () => {
     state.subraceId,
     state.classId,
     state.subclassId,
+    false,
+    state.choicesByLevel,
   );
 
   // Aggregate all ASI choices from level 1 to current level

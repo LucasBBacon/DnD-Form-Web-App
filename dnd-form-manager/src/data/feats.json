@@ -1,0 +1,86 @@
+[
+  {
+    "id": "feat_alert",
+    "name": "Alert",
+    "category": "general",
+    "source": "phb",
+    "granted_traits": [
+      "trait_feat_alert"
+    ],
+    "lore": {
+      "short_description": "You gain a +5 bonus to initiative."
+    },
+    "tags": [
+      "initiative"
+    ]
+  },
+  {
+    "id": "feat_battle_hardened",
+    "name": "Battle Hardened",
+    "category": "general",
+    "source": "homebrew",
+    "prerequisites": {
+      "required_class_ids": [
+        "class_fighter"
+      ]
+    },
+    "granted_traits": [
+      "trait_feat_battle_hardened"
+    ],
+    "lore": {
+      "short_description": "Your martial discipline grants you a +1 bonus to Armor Class."
+    },
+    "tags": [
+      "armor_class"
+    ]
+  },
+  {
+    "id": "feat_mobile",
+    "name": "Mobile",
+    "category": "general",
+    "source": "phb",
+    "granted_traits": [
+      "trait_feat_mobile"
+    ],
+    "lore": {
+      "short_description": "Your speed increases by 10 feet."
+    },
+    "tags": [
+      "speed"
+    ]
+  },
+  {
+    "id": "feat_skilled",
+    "name": "Skilled",
+    "category": "general",
+    "source": "phb",
+    "granted_traits": [
+      "trait_feat_skilled"
+    ],
+    "lore": {
+      "short_description": "Gain proficiency in any combination of three skills of your choice."
+    },
+    "tags": [
+      "skills"
+    ]
+  },
+  {
+    "id": "feat_spellbound",
+    "name": "Spellbound",
+    "category": "general",
+    "source": "homebrew",
+    "prerequisites": {
+      "requires_spellcasting": true,
+      "minimum_level": 4
+    },
+    "granted_traits": [
+      "trait_feat_spellbound"
+    ],
+    "lore": {
+      "short_description": "A feat reserved for practiced spellcasters."
+    },
+    "tags": [
+      "spellcasting"
+    ]
+  }
+]

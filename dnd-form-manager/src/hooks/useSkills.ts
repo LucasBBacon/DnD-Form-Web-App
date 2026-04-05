@@ -35,6 +35,8 @@ export const useSkills = () => {
     state.subraceId,
     state.classId,
     state.subclassId,
+    false,
+    state.choicesByLevel,
   );
   // #endregion
 

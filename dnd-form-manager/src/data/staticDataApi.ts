@@ -4,6 +4,7 @@ import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemData } from "../types/item";
 import type { SpellData } from "../types/spell";
+import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
 
 import rawRacesData from "./races.json";
@@ -12,6 +13,7 @@ import rawClassesData from "./classes.json";
 import rawSubclassesData from "./subclasses.json";
 import rawItemsData from "./items.json";
 import rawSpellsData from "./spells.json";
+import rawFeatsData from "./feats.json";
 import rawTraitsData from "./traits.json"
 
 // region Race API
@@ -108,6 +110,28 @@ export const getSpellByID = (id: string | null): SpellData | null => {
 
 export const getAllSpells = (): SpellData[] => {
   return spellsArray;
+};
+
+// region Feats API
+const featsArray = rawFeatsData as FeatData[];
+const featDictionary: Record<string, FeatData> = {};
+featsArray.forEach((feat) => {
+  featDictionary[feat.id] = feat;
+});
+
+export const getFeatById = (id: string | null): FeatData | null => {
+  if (!id) return null;
+  return featDictionary[id] || null;
+};
+
+export const getFeatsByIds = (ids: string[]): FeatData[] => {
+  return ids
+    .map((id) => featDictionary[id])
+    .filter((feat): feat is FeatData => feat !== undefined);
+};
+
+export const getAllFeats = (): FeatData[] => {
+  return featsArray;
 };
 
 // region Traits API

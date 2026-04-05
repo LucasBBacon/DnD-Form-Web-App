@@ -1,0 +1,20 @@
+{
+    "id": "feat_battle_hardened",
+    "name": "Battle Hardened",
+    "category": "general",
+    "source": "homebrew",
+    "prerequisites": {
+        "required_class_ids": [
+            "class_fighter"
+        ]
+    },
+    "granted_traits": [
+        "trait_feat_battle_hardened"
+    ],
+    "lore": {
+        "short_description": "Your martial discipline grants you a +1 bonus to Armor Class."
+    },
+    "tags": [
+        "armor_class"
+    ]
+}

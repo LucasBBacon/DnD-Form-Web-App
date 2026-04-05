@@ -1,0 +1,13 @@
+{
+    "id": "trait_feat_spellbound",
+    "name": "Spellbound",
+    "lore": {
+        "short_description": "A feat reserved for practiced spellcasters."
+    },
+    "effects": [
+        {
+            "type": "other",
+            "target": "spellcasting_focus"
+        }
+    ]
+}

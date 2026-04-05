@@ -26,6 +26,7 @@ export const useSpellcasting = () => {
     subraceId,
     classId,
     subclassId,
+    choicesByLevel,
     expendedSpellSlots,
     expendedPactSlots,
     spellsPrepared,
@@ -109,6 +110,8 @@ export const useSpellcasting = () => {
     subraceId,
     classId,
     subclassId,
+    false,
+    choicesByLevel,
   );
   const innateSpells: InnateSpellcastingEntry[] = [];
 

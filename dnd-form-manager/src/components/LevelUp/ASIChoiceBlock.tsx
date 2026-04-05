@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getAllFeats } from "../../data/staticDataApi";
+import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelChoice } from "../../types/progression";
 import type { Ability } from "../../types/common";
+import { isFeatEligible } from "../../utils/featUtils";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
 
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -13,6 +17,8 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
   level,
   onChange,
 }) => {
+  const state = useCharacterStore();
+  const { totalScores } = useCharacterStats();
   const [choiceType, setChoiceType] = useState<"asi" | "feat">("asi");
   const [asiSelections, setAsiSelections] = useState<Record<Ability, number>>({
     str: 0,
@@ -46,6 +52,42 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
   const isValid =
     (choiceType === "asi" && totalPointsSpent === 2) ||
     (choiceType === "feat" && selectedFeat !== "");
+
+  const availableFeats = useMemo(
+    () =>
+      getAllFeats().filter(
+        (feat) =>
+          feat.category === "general" &&
+          isFeatEligible(feat, {
+            level,
+            raceId: state.raceId,
+            subraceId: state.subraceId,
+            classId: state.classId,
+            subclassId: state.subclassId,
+            totalScores,
+            choicesByLevel: state.choicesByLevel,
+          }),
+      ),
+    [
+      level,
+      state.classId,
+      state.choicesByLevel,
+      state.raceId,
+      state.subclassId,
+      state.subraceId,
+      totalScores,
+    ],
+  );
+
+  useEffect(() => {
+    const selectedFeatStillAvailable = availableFeats.some(
+      (feat) => feat.id === selectedFeat,
+    );
+
+    if (!selectedFeatStillAvailable) {
+      setSelectedFeat("");
+    }
+  }, [availableFeats, selectedFeat]);
 
   useEffect(() => {
     if (choiceType === "asi") {
@@ -119,6 +161,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
           <p>Select a Feat from the list.</p>
           <select
             value={selectedFeat}
+            disabled={availableFeats.length === 0}
             onChange={(e) => {
               setSelectedFeat(e.target.value);
             }}
@@ -126,10 +169,15 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
             <option value="" disabled>
               Select a feat...
             </option>
-            <option value="feat_tough">Tough</option>
-            <option value="feat_alert">Alert</option>
-            {/* TODO: Map from feats.json later */}
+            {availableFeats.map((feat) => (
+              <option key={feat.id} value={feat.id}>
+                {feat.name}
+              </option>
+            ))}
           </select>
+          {availableFeats.length === 0 && (
+            <p>No eligible feats are currently available.</p>
+          )}
         </div>
       )}
     </div>

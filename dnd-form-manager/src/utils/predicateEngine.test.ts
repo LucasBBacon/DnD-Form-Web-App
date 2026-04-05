@@ -22,6 +22,7 @@ const createState = () =>
     equippedArmorId: null,
     equippedShieldId: null,
     equippedWeaponIds: [],
+    choicesByLevel: {},
   }) as any;
 
 const createStats = () =>
@@ -62,6 +63,8 @@ describe("evaluatePredicate", () => {
         "subrace_high_elf",
         "class_wizard",
         "subclass_evocation",
+        false,
+        {},
       );
     });
 

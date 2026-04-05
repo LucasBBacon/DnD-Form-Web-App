@@ -1,0 +1,15 @@
+{
+    "id": "feat_skilled",
+    "name": "Skilled",
+    "category": "general",
+    "source": "phb",
+    "granted_traits": [
+        "trait_feat_skilled"
+    ],
+    "lore": {
+        "short_description": "Gain proficiency in any combination of three skills of your choice."
+    },
+    "tags": [
+        "skills"
+    ]
+}

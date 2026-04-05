@@ -302,6 +302,77 @@
     ]
   },
   {
+    "id": "trait_feat_alert",
+    "name": "Alert",
+    "lore": {
+      "short_description": "You gain a +5 bonus to initiative."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "initiative",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "trait_feat_battle_hardened",
+    "name": "Battle Hardened",
+    "lore": {
+      "short_description": "You gain a +1 bonus to Armor Class."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "ac",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_feat_mobile",
+    "name": "Mobile",
+    "lore": {
+      "short_description": "Your speed increases by 10 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "speed",
+        "value": 10
+      }
+    ]
+  },
+  {
+    "id": "trait_feat_skilled",
+    "name": "Skilled",
+    "lore": {
+      "short_description": "Gain proficiency in any combination of three skills of your choice."
+    },
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "choice": {
+          "count": 3,
+          "pool": "any"
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_feat_spellbound",
+    "name": "Spellbound",
+    "lore": {
+      "short_description": "A feat reserved for practiced spellcasters."
+    },
+    "effects": [
+      {
+        "type": "other",
+        "target": "spellcasting_focus"
+      }
+    ]
+  },
+  {
     "id": "trait_fighter_proficiencies",
     "name": "Fighter Proficiencies",
     "lore": {

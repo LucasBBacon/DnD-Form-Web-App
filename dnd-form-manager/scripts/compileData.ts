@@ -39,6 +39,9 @@ const itemSchema = JSON.parse(
 const spellSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'spell_data_schema.json'), 'utf-8')
 );
+const featSchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'feat_data_schema.json'), 'utf-8')
+);
 const subclassSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'subclass_data_schema.json'), 'utf-8')
 );
@@ -60,6 +63,7 @@ const validateClass = ajv.compile(classSchema);
 const validateRace  = ajv.compile(raceSchema);
 const validateItem = ajv.compile(itemSchema);
 const validateSpell = ajv.compile(spellSchema);
+const validateFeat = ajv.compile(featSchema);
 const validateSubclass = ajv.compile(subclassSchema);
 const validateSubrace  = ajv.compile(subraceSchema);
 const validateTrait  = ajv.compile(traitSchema);
@@ -124,6 +128,7 @@ compileFolder('classes', validateClass, 'classes.json');
 compileFolder('races',   validateRace,  'races.json');
 compileFolder('items', validateItem, 'items.json');
 compileFolder('spells', validateSpell, 'spells.json');
+compileFolder('feats', validateFeat, 'feats.json');
 compileFolder('subclasses', validateSubclass, 'subclasses.json');
 compileFolder('subraces', validateSubrace, 'subraces.json');
 compileFolder('traits', validateTrait, 'traits.json');

@@ -1,0 +1,14 @@
+{
+    "id": "trait_feat_battle_hardened",
+    "name": "Battle Hardened",
+    "lore": {
+        "short_description": "You gain a +1 bonus to Armor Class."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "ac",
+            "value": 1
+        }
+    ]
+}

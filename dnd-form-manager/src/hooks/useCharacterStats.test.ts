@@ -732,7 +732,9 @@ describe("useCharacterStats", () => {
         "human",
         null,
         "fighter",
-        null
+        null,
+        false,
+        {}
       );
     });
 

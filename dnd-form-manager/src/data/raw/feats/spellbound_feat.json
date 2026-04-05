@@ -1,0 +1,19 @@
+{
+    "id": "feat_spellbound",
+    "name": "Spellbound",
+    "category": "general",
+    "source": "homebrew",
+    "prerequisites": {
+        "requires_spellcasting": true,
+        "minimum_level": 4
+    },
+    "granted_traits": [
+        "trait_feat_spellbound"
+    ],
+    "lore": {
+        "short_description": "A feat reserved for practiced spellcasters."
+    },
+    "tags": [
+        "spellcasting"
+    ]
+}
