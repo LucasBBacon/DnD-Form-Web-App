@@ -2,8 +2,9 @@ import { useState } from "react";
 import { RaceSelectionStep } from "./RaceSelectionStep";
 import { ClassSelectionStep } from "./ClassSelectionStep";
 import { AbilityScoreStep } from "./AbilityScoreStep";
+import { OriginFeatStep } from "./OriginFeatStep";
 
-type WizardStep = "race" | "class" | "abilities" | "details" | "complete";
+type WizardStep = "race" | "class" | "abilities" | "origin" | "complete";
 
 export const CharacterCreationWizard = () => {
   const [currentStep, setCurrentStep] = useState<WizardStep>("race");
@@ -22,6 +23,7 @@ export const CharacterCreationWizard = () => {
         <span className={currentStep === 'race' ? 'active' : ''}>1. Race</span>
         <span className={currentStep === 'class' ? 'active' : ''}>2. Class</span>
         <span className={currentStep === 'abilities' ? 'active' : ''}>3. Abilities</span>
+        <span className={currentStep === 'origin' ? 'active' : ''}>4. Origin Feat</span>
       </div>
 
       {/* Step Router */}
@@ -34,8 +36,14 @@ export const CharacterCreationWizard = () => {
         )}
         {currentStep === 'abilities' && (
           <div>
-            <AbilityScoreStep onFinish={finishWizard}/>
+            <AbilityScoreStep onFinish={() => setCurrentStep('origin')} />
           </div>
+        )}
+        {currentStep === 'origin' && (
+          <OriginFeatStep
+            onBack={() => setCurrentStep('abilities')}
+            onFinish={finishWizard}
+          />
         )}
       </div>
     </div>

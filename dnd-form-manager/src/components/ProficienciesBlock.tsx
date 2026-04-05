@@ -17,6 +17,7 @@ export const ProficienciesBlock = () => {
     state.subclassId,
     false,
     state.choicesByLevel,
+    state.acquiredFeats,
   );
 
   const nonSkillProficiencies = useMemo(() => {

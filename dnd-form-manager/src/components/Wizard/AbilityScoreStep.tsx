@@ -16,7 +16,6 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
     setChosenRacialBonuses,
     raceId,
     subraceId,
-    completeSetup,
   } = useCharacterStore();
 
   const raceData = raceId ? getRaceById(raceId) : null;
@@ -110,7 +109,6 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
     // push raw scores to global zustand
     setBaseAbilityScores(rawScores);
     setChosenRacialBonuses(localChosenBonuses);
-    completeSetup();
     onFinish();
   };
 
@@ -239,7 +237,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
         onClick={handleLockIn}
         disabled={!isFloatingChoicesValid}
       >
-        Finish and Generate Sheet
+        Continue
       </button>
     </div>
   );

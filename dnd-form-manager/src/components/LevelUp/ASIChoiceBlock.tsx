@@ -66,6 +66,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
             subclassId: state.subclassId,
             totalScores,
             choicesByLevel: state.choicesByLevel,
+            acquiredFeats: state.acquiredFeats,
           }),
       ),
     [

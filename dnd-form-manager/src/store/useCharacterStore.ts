@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Ability, Skill } from "../types/common";
+import type { FeatAcquisitionEntry } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
 import { getClassById } from "../data/staticDataApi";
 
@@ -29,6 +30,7 @@ interface CharacterState {
   chosenBackgroundSkills: Skill[];
   // Master record of everything chosen at each level
   choicesByLevel: Record<number, LevelChoice>;
+  acquiredFeats: FeatAcquisitionEntry[];
 
   // region Spells state
   // IDs of spells permanently learned (Bards, Sorcerers, Warlocks...)
@@ -71,6 +73,7 @@ interface CharacterActions {
   setRacialSkills: (skills: Skill[]) => void;
   setChosenRacialBonuses: (bonuses: Partial<Record<Ability, number>>) => void;
   setBackgroundSkills: (skills: Skill[]) => void;
+  setOriginFeat: (featId: string | null) => void;
 
   learnSpell: (spellId: string) => void;
   prepareSpell: (spellId: string) => void;
@@ -125,6 +128,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   chosenRacialSkills: [],
   chosenBackgroundSkills: [],
   choicesByLevel: {},
+  acquiredFeats: [],
   spellsKnown: [],
   spellsPrepared: [],
   expendedSpellSlots: {},
@@ -171,9 +175,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         }
       });
 
+      const updatedAcquiredFeats = state.acquiredFeats.filter((entry) => {
+        if (entry.source !== "level_up") return true;
+        return (entry.sourceLevel ?? 0) <= clampedLevel;
+      });
+
       return {
         level: clampedLevel,
         choicesByLevel: updatedChoices,
+        acquiredFeats: updatedAcquiredFeats,
         subclassId: updatedSubclassId,
         // (Wire up the exact level check in derivation engine)
       };
@@ -181,28 +191,61 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   // Action to save a specific choice made at a specific level
   updateLevelChoice: (level, updates) =>
-    set((state) => ({
-      choicesByLevel: {
+    set((state) => {
+      const nextChoicesByLevel = {
         ...state.choicesByLevel,
         [level]: {
           ...(state.choicesByLevel[level] || {}),
           ...updates,
         },
-      },
-    })),
+      };
+
+      const nextAcquiredFeats = state.acquiredFeats.filter(
+        (entry) => !(entry.source === "level_up" && entry.sourceLevel === level),
+      );
+
+      if (Object.prototype.hasOwnProperty.call(updates, "featId")) {
+        const levelFeatId = updates.featId;
+        if (typeof levelFeatId === "string" && levelFeatId.trim().length > 0) {
+          nextAcquiredFeats.push({
+            featId: levelFeatId,
+            source: "level_up",
+            sourceLevel: level,
+          });
+        }
+      }
+
+      return {
+        choicesByLevel: nextChoicesByLevel,
+        acquiredFeats: nextAcquiredFeats,
+      };
+    }),
 
   setRace: (raceId) =>
-    set({
+    set((state) => ({
       raceId,
       subraceId: null, // Reset subrace if the main race changes
       chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
-    }),
+      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+    })),
 
-  setSubrace: (subraceId) => set({ subraceId }),
+  setSubrace: (subraceId) =>
+    set((state) => ({
+      subraceId,
+      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+    })),
 
-  setClass: (classId) => set({ classId }),
+  setClass: (classId) =>
+    set((state) => ({
+      classId,
+      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+    })),
 
-  setSubclass: (subclassId) => set({ subclassId }),
+  setSubclass: (subclassId) =>
+    set((state) => ({
+      subclassId,
+      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+    })),
 
   setBackground: (backgroundId) =>
     set({
@@ -237,6 +280,28 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
   setChosenRacialBonuses: (bonuses) => set({ chosenRacialBonuses: bonuses }),
   setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
+
+  setOriginFeat: (featId) =>
+    set((state) => {
+      const filtered = state.acquiredFeats.filter(
+        (entry) => entry.source !== "origin",
+      );
+
+      if (!featId) {
+        return { acquiredFeats: filtered };
+      }
+
+      return {
+        acquiredFeats: [
+          ...filtered,
+          {
+            featId,
+            source: "origin",
+            sourceLevel: 1,
+          },
+        ],
+      };
+    }),
 
   // region Spell Actions
 
@@ -452,6 +517,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     subraceId: null,
     classId: null,
     subclassId: null,
-    inventory: []
+    inventory: [],
+    choicesByLevel: {},
+    acquiredFeats: [],
   })
 }));

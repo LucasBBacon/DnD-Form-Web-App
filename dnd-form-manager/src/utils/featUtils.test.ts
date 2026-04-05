@@ -73,6 +73,25 @@ describe("featUtils", () => {
 
       expect(result).toEqual(["feat_mobile"]);
     });
+
+    it("includes feats from normalized acquisition entries", () => {
+      const result = getSelectedFeatIds(
+        4,
+        {
+          2: { featId: "feat_alert" },
+        },
+        [
+          { featId: "feat_mobile", source: "level_up", sourceLevel: 4 },
+          { featId: "feat_gifted_mind", source: "origin", sourceLevel: 1 },
+        ],
+      );
+
+      expect(result).toEqual([
+        "feat_alert",
+        "feat_mobile",
+        "feat_gifted_mind",
+      ]);
+    });
   });
 
   describe("isFeatEligible", () => {
@@ -189,6 +208,21 @@ describe("featUtils", () => {
         "trait_feat_mobile",
         "trait_shared",
       ]);
+    });
+
+    it("resolves traits for origin-source acquisition entries", () => {
+      vi.mocked(getFeatById).mockReturnValue({
+        id: "feat_gifted_mind",
+        granted_traits: ["trait_feat_gifted_mind"],
+      } as any);
+
+      const result = resolveGrantedTraitIdsForSelectedFeats(
+        1,
+        {},
+        [{ featId: "feat_gifted_mind", source: "origin", sourceLevel: 1 }],
+      );
+
+      expect(result).toEqual(["trait_feat_gifted_mind"]);
     });
   });
 });

@@ -1,13 +1,14 @@
 import {
   getClassById,
   getFeatById,
+  getFeatsByIds,
   getRaceById,
   getSubclassById,
   getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
 import type { Ability } from "../types/common";
-import type { FeatData } from "../types/feat";
+import type { FeatAcquisitionEntry, FeatData } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
 
 export interface FeatEligibilityContext {
@@ -18,13 +19,23 @@ export interface FeatEligibilityContext {
   subclassId: string | null;
   totalScores: Record<Ability, number>;
   choicesByLevel: Record<number, LevelChoice>;
+  acquiredFeats?: FeatAcquisitionEntry[];
 }
 
 export const getSelectedFeatIds = (
   currentLevel: number,
   choicesByLevel: Record<number, LevelChoice>,
-  exactLevel = false,
+  acquiredFeatsOrExactLevel: FeatAcquisitionEntry[] | boolean = [],
+  maybeExactLevel = false,
 ): string[] => {
+  const acquiredFeats = Array.isArray(acquiredFeatsOrExactLevel)
+    ? acquiredFeatsOrExactLevel
+    : [];
+  const exactLevel =
+    typeof acquiredFeatsOrExactLevel === "boolean"
+      ? acquiredFeatsOrExactLevel
+      : maybeExactLevel;
+
   const selectedFeatIds = new Set<string>();
 
   Object.entries(choicesByLevel).forEach(([levelKey, levelChoice]) => {
@@ -40,7 +51,42 @@ export const getSelectedFeatIds = (
     }
   });
 
+  acquiredFeats.forEach((entry) => {
+    if (entry.source === "level_up") {
+      if (entry.sourceLevel === undefined) {
+        if (!exactLevel) {
+          selectedFeatIds.add(entry.featId);
+        }
+        return;
+      }
+
+      const isEligibleLevel = exactLevel
+        ? entry.sourceLevel === currentLevel
+        : entry.sourceLevel <= currentLevel;
+
+      if (isEligibleLevel) {
+        selectedFeatIds.add(entry.featId);
+      }
+      return;
+    }
+
+    if (!exactLevel || currentLevel === 1) {
+      selectedFeatIds.add(entry.featId);
+    }
+  });
+
   return Array.from(selectedFeatIds);
+};
+
+export const getOwnedFeats = (
+  currentLevel: number,
+  choicesByLevel: Record<number, LevelChoice>,
+  acquiredFeats: FeatAcquisitionEntry[] = [],
+  exactLevel = false,
+): FeatData[] => {
+  return getFeatsByIds(
+    getSelectedFeatIds(currentLevel, choicesByLevel, acquiredFeats, exactLevel),
+  );
 };
 
 const matchesRequiredIdPool = (
@@ -60,6 +106,7 @@ const hasSpellcastingAccess = ({
   classId,
   subclassId,
   choicesByLevel,
+  acquiredFeats = [],
 }: Omit<FeatEligibilityContext, "totalScores">): boolean => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
@@ -92,7 +139,11 @@ const hasSpellcastingAccess = ({
       });
     });
 
-  resolveGrantedTraitIdsForSelectedFeats(level, choicesByLevel).forEach(
+  resolveGrantedTraitIdsForSelectedFeats(
+    level,
+    choicesByLevel,
+    acquiredFeats,
+  ).forEach(
     (traitId) => {
       activeTraitIds.add(traitId);
     },
@@ -111,6 +162,7 @@ export const isFeatEligible = (
   const selectedFeatIds = getSelectedFeatIds(
     context.level,
     context.choicesByLevel,
+    context.acquiredFeats,
   );
 
   if (!feat.repeatable && selectedFeatIds.includes(feat.id)) {
@@ -176,11 +228,25 @@ export const isFeatEligible = (
 export const resolveGrantedTraitIdsForSelectedFeats = (
   currentLevel: number,
   choicesByLevel: Record<number, LevelChoice>,
-  exactLevel = false,
+  acquiredFeatsOrExactLevel: FeatAcquisitionEntry[] | boolean = [],
+  maybeExactLevel = false,
 ): string[] => {
+  const acquiredFeats = Array.isArray(acquiredFeatsOrExactLevel)
+    ? acquiredFeatsOrExactLevel
+    : [];
+  const exactLevel =
+    typeof acquiredFeatsOrExactLevel === "boolean"
+      ? acquiredFeatsOrExactLevel
+      : maybeExactLevel;
+
   const traitIds = new Set<string>();
 
-  getSelectedFeatIds(currentLevel, choicesByLevel, exactLevel).forEach(
+  getSelectedFeatIds(
+    currentLevel,
+    choicesByLevel,
+    acquiredFeats,
+    exactLevel,
+  ).forEach(
     (featId) => {
       const feat = getFeatById(featId);
       feat?.granted_traits.forEach((traitId) => {

@@ -65,6 +65,7 @@ describe("evaluatePredicate", () => {
         "subclass_evocation",
         false,
         {},
+        [],
       );
     });
 

@@ -734,7 +734,8 @@ describe("useCharacterStats", () => {
         "fighter",
         null,
         false,
-        {}
+        {},
+        []
       );
     });
 

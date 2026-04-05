@@ -2,6 +2,15 @@ import type { Ability } from "./common";
 
 export type FeatCategory = "origin" | "general" | "epic_boon";
 
+export type FeatAcquisitionSource = "origin" | "level_up";
+
+export interface FeatAcquisitionEntry {
+  featId: string;
+  source: FeatAcquisitionSource;
+  sourceLevel?: number;
+  sourceId?: string;
+}
+
 export interface FeatPrerequisites {
   minimum_level?: number;
   ability_minimums?: Partial<Record<Ability, number>>;

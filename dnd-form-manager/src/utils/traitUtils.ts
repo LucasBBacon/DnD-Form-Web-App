@@ -1,13 +1,13 @@
 import {
   getClassById,
-  getFeatsByIds,
   getRaceById,
   getSubclassById,
   getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
+import type { FeatAcquisitionEntry } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
-import { getSelectedFeatIds } from "./featUtils";
+import { getOwnedFeats } from "./featUtils";
 
 export const getAllCharacterTraits = (
   level: number,
@@ -17,6 +17,7 @@ export const getAllCharacterTraits = (
   subclassId: string | null,
   exactLevel = false,
   choicesByLevel: Record<number, LevelChoice> = {},
+  acquiredFeats: FeatAcquisitionEntry[] = [],
 ) => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
@@ -51,8 +52,11 @@ export const getAllCharacterTraits = (
       .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
   }
 
-  const selectedFeats = getFeatsByIds(
-    getSelectedFeatIds(level, choicesByLevel, exactLevel),
+  const selectedFeats = getOwnedFeats(
+    level,
+    choicesByLevel,
+    acquiredFeats,
+    exactLevel,
   );
   selectedFeats.forEach((feat) => {
     feat.granted_traits.forEach((id) => traitIds.add(id));

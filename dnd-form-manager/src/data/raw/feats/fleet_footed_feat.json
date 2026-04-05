@@ -1,0 +1,21 @@
+{
+    "id": "feat_fleet_footed",
+    "name": "Fleet Footed",
+    "category": "origin",
+    "source": "homebrew",
+    "prerequisites": {
+        "ability_minimums": {
+            "dex": 12
+        }
+    },
+    "granted_traits": [
+        "trait_feat_fleet_footed"
+    ],
+    "lore": {
+        "short_description": "Your speed increases by 5 feet."
+    },
+    "tags": [
+        "origin",
+        "speed"
+    ]
+}

@@ -467,5 +467,28 @@ describe("getAllCharacterTraits", () => {
       expect(getFeatsByIds).toHaveBeenCalledWith(["feat_mobile"]);
       expect(getTraitsByIds).toHaveBeenCalledWith(["trait_feat_mobile"]);
     });
+
+    it("includes origin-source feat traits even when no level choice feat exists", () => {
+      vi.mocked(getFeatsByIds).mockReturnValue([
+        {
+          id: "feat_gifted_mind",
+          granted_traits: ["trait_feat_gifted_mind"],
+        },
+      ] as any);
+
+      getAllCharacterTraits(
+        1,
+        null,
+        null,
+        null,
+        null,
+        false,
+        {},
+        [{ featId: "feat_gifted_mind", source: "origin", sourceLevel: 1 }],
+      );
+
+      expect(getFeatsByIds).toHaveBeenCalledWith(["feat_gifted_mind"]);
+      expect(getTraitsByIds).toHaveBeenCalledWith(["trait_feat_gifted_mind"]);
+    });
   });
 });

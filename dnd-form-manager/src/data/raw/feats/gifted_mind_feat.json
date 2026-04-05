@@ -1,0 +1,16 @@
+{
+    "id": "feat_gifted_mind",
+    "name": "Gifted Mind",
+    "category": "origin",
+    "source": "homebrew",
+    "granted_traits": [
+        "trait_feat_gifted_mind"
+    ],
+    "lore": {
+        "short_description": "You gain proficiency in Arcana and History."
+    },
+    "tags": [
+        "origin",
+        "skills"
+    ]
+}

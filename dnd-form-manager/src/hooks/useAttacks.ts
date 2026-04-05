@@ -16,6 +16,7 @@ export const useAttacks = () => {
     state.subclassId,
     false,
     state.choicesByLevel,
+    state.acquiredFeats,
   );
 
   // #region Aggregate Proficiencies

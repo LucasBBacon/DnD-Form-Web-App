@@ -134,6 +134,12 @@ export const getAllFeats = (): FeatData[] => {
   return featsArray;
 };
 
+export const getFeatsByCategory = (
+  category: FeatData["category"],
+): FeatData[] => {
+  return featsArray.filter((feat) => feat.category === category);
+};
+
 // region Traits API
 const traitsArray = rawTraitsData as TraitData[];
 const traitDictionary: Record<string, TraitData> = {};

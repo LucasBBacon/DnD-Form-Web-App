@@ -1,0 +1,14 @@
+{
+    "id": "trait_feat_fleet_footed",
+    "name": "Fleet Footed",
+    "lore": {
+        "short_description": "Your speed increases by 5 feet."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "speed",
+            "value": 5
+        }
+    ]
+}

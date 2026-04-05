@@ -35,6 +35,43 @@
     ]
   },
   {
+    "id": "feat_fleet_footed",
+    "name": "Fleet Footed",
+    "category": "origin",
+    "source": "homebrew",
+    "prerequisites": {
+      "ability_minimums": {
+        "dex": 12
+      }
+    },
+    "granted_traits": [
+      "trait_feat_fleet_footed"
+    ],
+    "lore": {
+      "short_description": "Your speed increases by 5 feet."
+    },
+    "tags": [
+      "origin",
+      "speed"
+    ]
+  },
+  {
+    "id": "feat_gifted_mind",
+    "name": "Gifted Mind",
+    "category": "origin",
+    "source": "homebrew",
+    "granted_traits": [
+      "trait_feat_gifted_mind"
+    ],
+    "lore": {
+      "short_description": "You gain proficiency in Arcana and History."
+    },
+    "tags": [
+      "origin",
+      "skills"
+    ]
+  },
+  {
     "id": "feat_mobile",
     "name": "Mobile",
     "category": "general",

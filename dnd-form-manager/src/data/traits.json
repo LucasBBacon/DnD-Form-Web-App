@@ -330,6 +330,37 @@
     ]
   },
   {
+    "id": "trait_feat_fleet_footed",
+    "name": "Fleet Footed",
+    "lore": {
+      "short_description": "Your speed increases by 5 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "speed",
+        "value": 5
+      }
+    ]
+  },
+  {
+    "id": "trait_feat_gifted_mind",
+    "name": "Gifted Mind",
+    "lore": {
+      "short_description": "You gain proficiency in Arcana and History."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "skill_arcana"
+      },
+      {
+        "type": "proficiency",
+        "target": "skill_history"
+      }
+    ]
+  },
+  {
     "id": "trait_feat_mobile",
     "name": "Mobile",
     "lore": {
