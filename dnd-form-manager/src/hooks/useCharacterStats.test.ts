@@ -736,7 +736,8 @@ describe("useCharacterStats", () => {
         null,
         false,
         {},
-        []
+        [],
+        [],
       );
     });
 

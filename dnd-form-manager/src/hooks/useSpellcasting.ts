@@ -26,6 +26,7 @@ export const useSpellcasting = () => {
     subraceId,
     classId,
     subclassId,
+    classTracks,
     choicesByLevel,
     acquiredFeats,
     expendedSpellSlots,
@@ -114,6 +115,7 @@ export const useSpellcasting = () => {
     false,
     choicesByLevel,
     acquiredFeats,
+    classTracks,
   );
   const innateSpells: InnateSpellcastingEntry[] = [];
 

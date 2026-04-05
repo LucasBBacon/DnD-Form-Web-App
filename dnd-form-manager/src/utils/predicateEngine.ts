@@ -19,6 +19,7 @@ const hasCharacterTrait = (
     false,
     state.choicesByLevel ?? {},
     state.acquiredFeats ?? [],
+    state.classTracks ?? [],
   ).some((trait) => trait.id === traitId);
 
 const warnInvalidRequiresTraitPredicate = (predicate: Predicate): void => {

@@ -407,6 +407,143 @@ describe("getAllCharacterTraits", () => {
     });
   });
 
+  describe("multiclass behavior", () => {
+    it("aggregates class and subclass traits using each class track level", () => {
+      vi.mocked(getClassById).mockImplementation((id: string | null) => {
+        if (id === "fighter") {
+          return createClass([
+            createProgressionEntry(1, ["fighter-1"]),
+            createProgressionEntry(2, ["fighter-2"]),
+            createProgressionEntry(3, ["fighter-3"]),
+          ]);
+        }
+
+        if (id === "rogue") {
+          return createClass([
+            createProgressionEntry(1, ["rogue-1"]),
+            createProgressionEntry(2, ["rogue-2"]),
+            createProgressionEntry(3, ["rogue-3"]),
+            createProgressionEntry(4, ["rogue-4"]),
+          ]);
+        }
+
+        return null;
+      });
+
+      vi.mocked(getSubclassById).mockImplementation((id: string | null) => {
+        if (id === "champion") {
+          return createSubclass([
+            createProgressionEntry(1, ["champion-1"]),
+            createProgressionEntry(2, ["champion-2"]),
+            createProgressionEntry(3, ["champion-3"]),
+          ]);
+        }
+
+        if (id === "thief") {
+          return createSubclass([
+            createProgressionEntry(1, ["thief-1"]),
+            createProgressionEntry(2, ["thief-2"]),
+            createProgressionEntry(3, ["thief-3"]),
+            createProgressionEntry(4, ["thief-4"]),
+          ]);
+        }
+
+        return null;
+      });
+
+      getAllCharacterTraits(
+        5,
+        null,
+        null,
+        "fighter",
+        "champion",
+        false,
+        {},
+        [],
+        [
+          { classId: "fighter", subclassId: "champion", level: 2 },
+          { classId: "rogue", subclassId: "thief", level: 3 },
+        ],
+      );
+
+      expect(getTraitsByIds).toHaveBeenCalledWith([
+        "fighter-1",
+        "fighter-2",
+        "champion-1",
+        "champion-2",
+        "rogue-1",
+        "rogue-2",
+        "rogue-3",
+        "thief-1",
+        "thief-2",
+        "thief-3",
+      ]);
+    });
+
+    it("uses selected class track for exact-level multiclass trait grants", () => {
+      vi.mocked(getClassById).mockImplementation((id: string | null) => {
+        if (id === "fighter") {
+          return createClass([
+            createProgressionEntry(1, ["fighter-1"]),
+            createProgressionEntry(2, ["fighter-2"]),
+            createProgressionEntry(3, ["fighter-3"]),
+          ]);
+        }
+
+        if (id === "rogue") {
+          return createClass([
+            createProgressionEntry(1, ["rogue-1"]),
+            createProgressionEntry(2, ["rogue-2"]),
+            createProgressionEntry(3, ["rogue-3"]),
+            createProgressionEntry(4, ["rogue-4"]),
+          ]);
+        }
+
+        return null;
+      });
+
+      vi.mocked(getSubclassById).mockImplementation((id: string | null) => {
+        if (id === "champion") {
+          return createSubclass([
+            createProgressionEntry(1, ["champion-1"]),
+            createProgressionEntry(2, ["champion-2"]),
+            createProgressionEntry(3, ["champion-3"]),
+          ]);
+        }
+
+        if (id === "thief") {
+          return createSubclass([
+            createProgressionEntry(1, ["thief-1"]),
+            createProgressionEntry(2, ["thief-2"]),
+            createProgressionEntry(3, ["thief-3"]),
+            createProgressionEntry(4, ["thief-4"]),
+          ]);
+        }
+
+        return null;
+      });
+
+      getAllCharacterTraits(
+        5,
+        null,
+        null,
+        "fighter",
+        "champion",
+        true,
+        {
+          5: { selectedClassId: "rogue" },
+        },
+        [],
+        [
+          { classId: "fighter", subclassId: "champion", level: 2 },
+          { classId: "rogue", subclassId: "thief", level: 3 },
+        ],
+      );
+
+      expect(getTraitsByIds).toHaveBeenCalledWith(["rogue-3", "thief-3"]);
+    });
+  });
+
   describe("feat integration", () => {
     it("includes traits granted by feats selected up to the current level", () => {
       vi.mocked(getFeatsByIds).mockReturnValue([

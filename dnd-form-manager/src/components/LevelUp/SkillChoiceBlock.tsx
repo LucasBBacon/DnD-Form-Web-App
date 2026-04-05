@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { CharacterClassTrack } from "../../store/useCharacterStore";
 import type { Skill } from "../../types/common";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getPendingSkillChoices } from "../../utils/choiceUtils";
@@ -7,6 +8,10 @@ import type { LevelChoice } from "../../types/progression";
 interface SkillChoiceBlockProps {
   level: number;
   onChange: (draft: Partial<LevelChoice>, isValid: boolean) => void;
+  classIdOverride?: string | null;
+  subclassIdOverride?: string | null;
+  choicesByLevelOverride?: Record<number, LevelChoice>;
+  classTracksOverride?: CharacterClassTrack[];
 }
 
 const formatSkillName = (skill: string) => {
@@ -19,16 +24,28 @@ const formatSkillName = (skill: string) => {
 export const SkillChoiceBlock: React.FC<SkillChoiceBlockProps> = ({
   level,
   onChange,
+  classIdOverride,
+  subclassIdOverride,
+  choicesByLevelOverride,
+  classTracksOverride,
 }) => {
-  const { raceId, subraceId, classId, subclassId } = useCharacterStore();
+  const { raceId, subraceId, classId, subclassId, choicesByLevel, classTracks } =
+    useCharacterStore();
+
+  const resolvedClassId = classIdOverride ?? classId;
+  const resolvedSubclassId = subclassIdOverride ?? subclassId;
+  const resolvedChoicesByLevel = choicesByLevelOverride ?? choicesByLevel;
+  const resolvedClassTracks = classTracksOverride ?? classTracks;
 
   // Ask engine what choice this level requires
   const pendingChoices = getPendingSkillChoices(
     level,
     raceId,
     subraceId,
-    classId,
-    subclassId,
+    resolvedClassId,
+    resolvedSubclassId,
+    resolvedChoicesByLevel,
+    resolvedClassTracks,
   );
 
   // Local state to track selections per source

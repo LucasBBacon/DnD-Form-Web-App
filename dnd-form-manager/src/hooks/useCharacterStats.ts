@@ -76,6 +76,7 @@ export const useCharacterStats = () => {
     false,
     state.choicesByLevel,
     state.acquiredFeats ?? [],
+    state.classTracks,
   );
 
   // Aggregate all ASI choices from level 1 to current level

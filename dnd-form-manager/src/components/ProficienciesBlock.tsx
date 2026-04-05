@@ -3,7 +3,7 @@ import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { formatProficiency } from "../utils/formattingUtils";
-import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
+import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAggregator";
 
 export const ProficienciesBlock = () => {
   const state = useCharacterStore();
@@ -18,11 +18,13 @@ export const ProficienciesBlock = () => {
     false,
     state.choicesByLevel,
     state.acquiredFeats,
+    state.classTracks,
   );
 
   const nonSkillProficiencies = useMemo(() => {
-    const aggregated = aggregateNonSkillProficiencies({
+    const aggregated = aggregateNonSkillProficienciesMulticlass({
       choicesByLevel: state.choicesByLevel,
+      classTracks: state.classTracks,
       currentLevel: state.level,
       traits: allTraits,
       state,

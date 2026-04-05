@@ -1,3 +1,4 @@
+import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import { SKILL_ABILITY_MAP } from "./constants";
@@ -144,6 +145,8 @@ export const getPendingSkillChoices = (
   subraceId: string | null,
   classId: string | null,
   subclassId: string | null,
+  choicesByLevel: Record<number, LevelChoice> = {},
+  classTracks: CharacterClassTrack[] = [],
 ) => {
   // Only get traits granted AT THIS LEVEL to avoid re-prompting old choices.
   const allTraits = getAllCharacterTraits(
@@ -153,6 +156,9 @@ export const getPendingSkillChoices = (
     classId,
     subclassId,
     true,
+    choicesByLevel,
+    [],
+    classTracks,
   );
 
   const pendingChoices: PendingSkillChoice[] = [];

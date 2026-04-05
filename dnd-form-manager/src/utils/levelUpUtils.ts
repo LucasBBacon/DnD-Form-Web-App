@@ -1,4 +1,6 @@
+import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { ClassData } from "../types/class";
+import type { LevelChoice } from "../types/progression";
 import type { SubclassData } from "../types/subclass";
 import { getPendingSkillChoices } from "./choiceUtils";
 import { MECHANIC_IDS } from "./constants";
@@ -32,6 +34,9 @@ export const getLevelUpRequirements = (
   subraceId: string | null = null,
   classData: ClassData | null = null,
   subclassData: SubclassData | null = null,
+  classLevel: number = targetLevel,
+  choicesByLevel: Record<number, LevelChoice> = {},
+  classTracks: CharacterClassTrack[] = [],
 ): LevelUpRequirements => {
   const requirements: LevelUpRequirements = {
     requiresAsiOrFeat: false,
@@ -44,7 +49,7 @@ export const getLevelUpRequirements = (
   if (!classData) return requirements;
 
   // #region Subclass Check
-  if (classData.subclassInfo.choiceLevel == targetLevel) {
+  if (classData.subclassInfo.choiceLevel === classLevel) {
     requirements.requiresSubclass = true;
   }
   // #endregion
@@ -56,6 +61,8 @@ export const getLevelUpRequirements = (
     subraceId,
     classData.id,
     subclassData?.id || null,
+    choicesByLevel,
+    classTracks,
   );
 
   if (pendingSkillChoices.length > 0) {
@@ -63,7 +70,7 @@ export const getLevelUpRequirements = (
   }
   // #endregion
 
-  const levelData = classData.progression.find((p) => p.level === targetLevel);
+  const levelData = classData.progression.find((p) => p.level === classLevel);
 
   // #region ASI / Feat Choice
   if (levelData?.features.includes(MECHANIC_IDS.ASI)) {
@@ -73,7 +80,7 @@ export const getLevelUpRequirements = (
 
   // #region Spells Check (derivation)
   const prevLevelData = classData.progression.find(
-    (p) => p.level === targetLevel - 1,
+    (p) => p.level === classLevel - 1,
   );
 
   const currentSpellsKnown =

@@ -66,6 +66,7 @@ describe("evaluatePredicate", () => {
         false,
         {},
         [],
+        [],
       );
     });
 

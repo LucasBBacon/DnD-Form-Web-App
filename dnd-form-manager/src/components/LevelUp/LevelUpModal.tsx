@@ -28,6 +28,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     classId,
     subclassId,
     classTracks,
+    choicesByLevel,
     setLevel,
     updateLevelChoice,
     setSubclass,
@@ -58,6 +59,33 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     ? getSubclassesForClass(activeClassId)
     : [];
 
+  const projectedClassTracks = useMemo(() => {
+    if (!activeClassId) return classTracks;
+
+    const nextTracks = classTracks.map((track) =>
+      track.classId === activeClassId
+        ? { ...track, level: track.level + 1 }
+        : track,
+    );
+
+    return nextTracks;
+  }, [activeClassId, classTracks]);
+
+  const projectedChoicesByLevel = useMemo(
+    () => ({
+      ...choicesByLevel,
+      [targetLevel]: {
+        ...(choicesByLevel[targetLevel] || {}),
+        selectedClassId: activeClassId || undefined,
+      },
+    }),
+    [activeClassId, choicesByLevel, targetLevel],
+  );
+
+  const targetClassLevel = activeClassTrack
+    ? activeClassTrack.level + 1
+    : targetLevel;
+
   // Determine modules to render
   const requirements = getLevelUpRequirements(
     targetLevel,
@@ -65,6 +93,9 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     subraceId,
     classData,
     subclassData,
+    targetClassLevel,
+    projectedChoicesByLevel,
+    projectedClassTracks,
   );
 
   // #region Draft State
@@ -81,7 +112,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const [isHpValid, setIsHpValid] = useState(targetLevel === 1);
   
   // don't need local state for subclass/HP, just check if they are valid
-  const isSubclassValid = !requirements.requiresSubclass || subclassId !== null;
+  const isSubclassValid = !requirements.requiresSubclass || activeSubclassId !== null;
   
   // Master check
   const canFinalize = isAsiValid && isSkillsValid && isSubclassValid && isHpValid;
@@ -192,6 +223,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       {requirements.requiresSkillSelection && (
         <SkillChoiceBlock
           level={targetLevel}
+          classIdOverride={activeClassId}
+          subclassIdOverride={activeSubclassId}
+          choicesByLevelOverride={projectedChoicesByLevel}
+          classTracksOverride={projectedClassTracks}
           onChange={(draft, isValid) => handleDraftUpdate(draft, isValid, 'skills')}
         />
       )}

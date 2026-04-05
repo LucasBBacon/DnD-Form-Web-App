@@ -1,6 +1,6 @@
 import { getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
+import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
@@ -17,19 +17,20 @@ export const useAttacks = () => {
     false,
     state.choicesByLevel,
     state.acquiredFeats,
+    state.classTracks,
   );
 
   // #region Aggregate Proficiencies
 
-  const { weapons: activeWeaponProficiencies } = aggregateNonSkillProficiencies(
-    {
+  const { weapons: activeWeaponProficiencies } =
+    aggregateNonSkillProficienciesMulticlass({
       choicesByLevel: state.choicesByLevel,
+      classTracks: state.classTracks,
       currentLevel: state.level,
       traits: allTraits,
       state,
       stats: derivedStats,
-    },
-  );
+    });
 
   // #endregion
 

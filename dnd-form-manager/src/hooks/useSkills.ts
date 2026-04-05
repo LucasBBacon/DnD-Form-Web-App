@@ -1,4 +1,3 @@
-import { getClassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
 import { SKILL_ABILITY_MAP } from "../utils/constants";
@@ -24,10 +23,6 @@ export const useSkills = () => {
   // Derived values from ability scores, equipment, and progression.
   const derivedStats = useCharacterStats();
 
-  // #region Data Lookups (selected race/class records)
-  const classData = state.classId ? getClassById(state.classId) : null;
-  // #endregion
-
   // #region Trait Effects (predicate-driven modifiers)
   const allTraits = getAllCharacterTraits(
     state.level,
@@ -38,6 +33,7 @@ export const useSkills = () => {
     false,
     state.choicesByLevel,
     state.acquiredFeats,
+    state.classTracks,
   );
   // #endregion
 

@@ -118,6 +118,8 @@ describe("getLevelUpRequirements", () => {
         "high-elf",
         "bard",
         null,
+        {},
+        [],
       );
     });
 
@@ -133,6 +135,8 @@ describe("getLevelUpRequirements", () => {
         null,
         "wizard",
         "evocation",
+        {},
+        [],
       );
     });
   });

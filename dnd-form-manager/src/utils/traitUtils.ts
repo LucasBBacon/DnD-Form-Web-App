@@ -5,9 +5,27 @@ import {
   getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
+import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { FeatAcquisitionEntry } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
 import { getOwnedFeats } from "./featUtils";
+
+const addProgressionTraitIds = (
+  traitIds: Set<string>,
+  progression: Array<{ level: number; features: string[] }> | undefined,
+  level: number,
+  exactLevel: boolean,
+) => {
+  if (!progression) return;
+
+  const levelFilter = exactLevel
+    ? (entry: { level: number }) => entry.level === level
+    : (entry: { level: number }) => entry.level <= level;
+
+  progression
+    .filter(levelFilter)
+    .forEach((entry) => entry.features.forEach((id) => traitIds.add(id)));
+};
 
 export const getAllCharacterTraits = (
   level: number,
@@ -18,6 +36,7 @@ export const getAllCharacterTraits = (
   exactLevel = false,
   choicesByLevel: Record<number, LevelChoice> = {},
   acquiredFeats: FeatAcquisitionEntry[] = [],
+  classTracks: CharacterClassTrack[] = [],
 ) => {
   const raceData = raceId ? getRaceById(raceId) : null;
   const subraceData = subraceId ? getSubraceById(subraceId) : null;
@@ -36,20 +55,57 @@ export const getAllCharacterTraits = (
   // #endregion
 
   // #region Class and Subclass Traits
-  const levelFilter = exactLevel
-    ? (p: { level: number }) => p.level === level
-    : (p: { level: number }) => p.level <= level;
+  if (classTracks.length > 0) {
+    if (exactLevel) {
+      const selectedClassId =
+        choicesByLevel[level]?.selectedClassId || classTracks[0]?.classId || classId;
+      const selectedTrack = selectedClassId
+        ? classTracks.find((track) => track.classId === selectedClassId)
+        : null;
 
-  if (classData) {
-    classData.progression
-      .filter(levelFilter)
-      .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
-  }
+      if (selectedTrack) {
+        const selectedClassData = getClassById(selectedTrack.classId);
+        addProgressionTraitIds(
+          traitIds,
+          selectedClassData?.progression,
+          selectedTrack.level,
+          true,
+        );
 
-  if (subclassData) {
-    subclassData.progression
-      .filter(levelFilter)
-      .forEach((p) => p.features.forEach((id) => traitIds.add(id)));
+        const selectedSubclassData = selectedTrack.subclassId
+          ? getSubclassById(selectedTrack.subclassId)
+          : null;
+        addProgressionTraitIds(
+          traitIds,
+          selectedSubclassData?.progression,
+          selectedTrack.level,
+          true,
+        );
+      }
+    } else {
+      classTracks.forEach((track) => {
+        const trackClassData = getClassById(track.classId);
+        addProgressionTraitIds(
+          traitIds,
+          trackClassData?.progression,
+          track.level,
+          false,
+        );
+
+        const trackSubclassData = track.subclassId
+          ? getSubclassById(track.subclassId)
+          : null;
+        addProgressionTraitIds(
+          traitIds,
+          trackSubclassData?.progression,
+          track.level,
+          false,
+        );
+      });
+    }
+  } else {
+    addProgressionTraitIds(traitIds, classData?.progression, level, exactLevel);
+    addProgressionTraitIds(traitIds, subclassData?.progression, level, exactLevel);
   }
 
   const selectedFeats = getOwnedFeats(
