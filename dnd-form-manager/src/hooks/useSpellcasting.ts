@@ -5,6 +5,7 @@ import {
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
+import { getMostRecentProgressionProperty } from "../utils/progressionUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
@@ -44,31 +45,19 @@ export const useSpellcasting = () => {
     (activeSpellcastingBase?.ability as Ability) || undefined;
   const isPactMagic = preparationType === "pact";
 
-  // --- Find progression for current level ---
-  // Look backwards from current level to find most recent spell slot update
-  const getActiveSpellProgression = () => {
-    if (subclassData?.spellcasting_override) {
-      for (let i = level; i >= 1; i--) {
-        const prog = subclassData.progression.find((p) => p.level === i);
-        if (prog?.spellcasting_progression_additions) {
-          return prog.spellcasting_progression_additions;
-        }
-      }
-    }
-
-    if (classData?.spellcasting_base) {
-      for (let i = level; i >= 1; i--) {
-        const prog = classData.progression.find((p) => p.level === i);
-        if (prog?.spellcasting_progression) {
-          return prog.spellcasting_progression;
-        }
-      }
-    }
-
-    return null;
-  };
-
-  const spellProg = getActiveSpellProgression();
+  const spellProg = subclassData?.spellcasting_override
+    ? getMostRecentProgressionProperty(
+        subclassData.progression,
+        level,
+        (entry) => entry.spellcasting_progression_additions,
+      )
+    : classData?.spellcasting_base
+      ? getMostRecentProgressionProperty(
+          classData.progression,
+          level,
+          (entry) => entry.spellcasting_progression,
+        )
+      : null;
 
   // --- Slot generation ---
   const slotStatusByLevel: Record<number, { total: number; expended: number }> =

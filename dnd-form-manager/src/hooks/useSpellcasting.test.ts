@@ -106,3 +106,188 @@ describe("useSpellcasting innate spell enrichment", () => {
     expect(result.innateSpells[0].isResolvedSpell).toBe(false);
   });
 });
+
+describe("useSpellcasting progression resolution", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 4,
+      raceId: null,
+      subraceId: null,
+      classId: "class_wizard",
+      subclassId: null,
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(useCharacterStats).mockReturnValue({
+      modifiers: {
+        str: 0,
+        dex: 0,
+        con: 0,
+        int: 3,
+        wis: 1,
+        cha: 0,
+      },
+      proficiencyBonus: 2,
+      isArmorPenalized: false,
+    } as any);
+
+    vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
+    vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getSubclassById).mockReturnValue(null);
+  });
+
+  it("uses the latest class progression at or below current level", () => {
+    vi.mocked(getClassById).mockReturnValue({
+      spellcasting_base: {
+        ability: "int",
+        preparation_type: "known",
+      },
+      progression: [
+        {
+          level: 1,
+          features: [],
+          spellcasting_progression: {
+            cantrips_known: 2,
+            spells_known: 3,
+          },
+        },
+        {
+          level: 3,
+          features: [],
+          spellcasting_progression: {
+            cantrips_known: 3,
+            spells_known: 4,
+          },
+        },
+        {
+          level: 5,
+          features: [],
+          spellcasting_progression: {
+            cantrips_known: 4,
+            spells_known: 6,
+          },
+        },
+      ],
+    } as any);
+
+    const result = useSpellcasting();
+
+    expect(result.maxCantrips).toBe(3);
+    expect(result.maxSpellsKnown).toBe(4);
+  });
+
+  it("prefers subclass progression when subclass spellcasting override is present", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 6,
+      raceId: null,
+      subraceId: null,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      spellcasting_base: null,
+      progression: [
+        {
+          level: 1,
+          features: [],
+          spellcasting_progression: {
+            cantrips_known: 99,
+            spells_known: 99,
+          },
+        },
+      ],
+    } as any);
+
+    vi.mocked(getSubclassById).mockReturnValue({
+      spellcasting_override: {
+        ability: "int",
+        preparation_type: "known",
+      },
+      progression: [
+        {
+          level: 3,
+          features: [],
+          spellcasting_progression_additions: {
+            cantrips_known: 1,
+            spells_known: 3,
+          },
+        },
+        {
+          level: 6,
+          features: [],
+          spellcasting_progression_additions: {
+            cantrips_known: 2,
+            spells_known: 4,
+          },
+        },
+      ],
+    } as any);
+
+    const result = useSpellcasting();
+
+    expect(result.maxCantrips).toBe(2);
+    expect(result.maxSpellsKnown).toBe(4);
+    expect(result.spellcastingAbility).toBe("int");
+  });
+
+  it("falls back to class progression when subclass exists without spellcasting override", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 5,
+      raceId: null,
+      subraceId: null,
+      classId: "class_wizard",
+      subclassId: "subclass_noncaster",
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      spellcasting_base: {
+        ability: "int",
+        preparation_type: "prepared",
+      },
+      progression: [
+        {
+          level: 1,
+          features: [],
+          spellcasting_progression: {
+            cantrips_known: 3,
+            spells_known: 6,
+          },
+        },
+      ],
+    } as any);
+
+    vi.mocked(getSubclassById).mockReturnValue({
+      spellcasting_override: null,
+      progression: [
+        {
+          level: 3,
+          features: [],
+          spellcasting_progression_additions: {
+            cantrips_known: 0,
+            spells_known: 0,
+          },
+        },
+      ],
+    } as any);
+
+    const result = useSpellcasting();
+
+    expect(result.maxCantrips).toBe(3);
+    expect(result.maxSpellsKnown).toBe(6);
+    expect(result.spellcastingAbility).toBe("int");
+  });
+});

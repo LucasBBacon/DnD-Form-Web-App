@@ -2,10 +2,15 @@ import {
   getClassById,
   getItemById,
   getRaceById,
+  getSubclassById,
   getSubraceById,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
+import type {
+  KnownSubclassStatScalingKey,
+  SubclassSpecificScaling,
+} from "../types/subclass";
 import {
   calculateModifier,
   calculateTotalAbilityScore,
@@ -16,8 +21,41 @@ import { calculateMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
 import { aggregateNonSkillProficiencies } from "../utils/proficiencyAggregator";
-import { calculateProficiencyBonus } from "../utils/progressionUtils";
+import {
+  calculateProficiencyBonus,
+  mergeSubclassSpecificScaling,
+} from "../utils/progressionUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
+
+const resolveSubclassScalingBonus = (
+  value: string | number | undefined,
+  modifiers: Record<Ability, number>,
+): number => {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+
+  return modifiers[value as Ability] ?? 0;
+};
+
+const SUBCLASS_SCALING_KEYS: Record<
+  "initiative" | "ac" | "speed",
+  KnownSubclassStatScalingKey[]
+> = {
+  initiative: ["initiative", "initiative_bonus"],
+  ac: ["ac", "armor_class"],
+  speed: ["speed"],
+};
+
+const getFirstDefinedScalingValue = (
+  scaling: SubclassSpecificScaling,
+  keys: KnownSubclassStatScalingKey[],
+) => {
+  for (const key of keys) {
+    if (scaling[key] !== undefined) return scaling[key];
+  }
+
+  return undefined;
+};
 
 export const useCharacterStats = () => {
   // Pull raw data from zustand
@@ -27,7 +65,7 @@ export const useCharacterStats = () => {
   const raceData = state.raceId ? getRaceById(state.raceId) : null;
   const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
-  // TODO: get data from subclass and process
+  const subclassData = state.subclassId ? getSubclassById(state.subclassId) : null;
 
   const allTraits = getAllCharacterTraits(
     state.level,
@@ -65,6 +103,24 @@ export const useCharacterStats = () => {
     {} as Record<Ability, number>,
   );
 
+  const subclassScaling = mergeSubclassSpecificScaling(
+    subclassData?.progression ?? [],
+    state.level,
+  );
+
+  const subclassInitiativeBonus = resolveSubclassScalingBonus(
+    getFirstDefinedScalingValue(subclassScaling, SUBCLASS_SCALING_KEYS.initiative),
+    modifiers,
+  );
+  const subclassAcBonus = resolveSubclassScalingBonus(
+    getFirstDefinedScalingValue(subclassScaling, SUBCLASS_SCALING_KEYS.ac),
+    modifiers,
+  );
+  const subclassSpeedBonus = resolveSubclassScalingBonus(
+    getFirstDefinedScalingValue(subclassScaling, SUBCLASS_SCALING_KEYS.speed),
+    modifiers,
+  );
+
   // Calculate total weight from inventory
   const totalWeight = state.inventory.reduce((total, record) => {
     const itemData = getItemById(record.itemId);
@@ -88,7 +144,7 @@ export const useCharacterStats = () => {
 
   const baseInitiative = calculateInitiative(
     modifiers.dex,
-    0,
+    subclassInitiativeBonus,
     false,
     proficiencyBonus,
   );
@@ -118,7 +174,7 @@ export const useCharacterStats = () => {
     isArmorPenalized: false,
     totalWeight,
     isEncumbered,
-    speed: 30
+    speed: 30 + subclassSpeedBonus,
   };
 
   const nonSkillProficiencies = aggregateNonSkillProficiencies({
@@ -140,10 +196,11 @@ export const useCharacterStats = () => {
     equippedArmor,
     isWearingShield,
   );
+  const baseArmorClassWithSubclassBonuses = baseArmorClass + subclassAcBonus;
 
   // Apply trait-based stat modifiers
-  let finalArmorClass = baseArmorClass;
-  let finalSpeed = 30;
+  let finalArmorClass = baseArmorClassWithSubclassBonuses;
+  let finalSpeed = 30 + subclassSpeedBonus;
   let initiativeFlatBonuses = 0;
   let hasJackOfAllTrades = false;
   let finalInitiative = baseInitiative;

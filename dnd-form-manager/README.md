@@ -71,3 +71,18 @@ export default defineConfig([
   },
 ])
 ```
+
+## Data Authoring Note: subclass_specific_scaling
+
+Subclass progression entries support an optional `subclass_specific_scaling` object.
+
+- Values must be scalar (`string`, `integer`, or `number`). Arrays and objects are invalid.
+- Scaling keys are merged by character level, where the higher-level entry overrides the lower-level value for the same key.
+- Keys currently consumed by character stats include `initiative`, `initiative_bonus`, `ac`, `armor_class`, and `speed`.
+- Additional custom keys are allowed for future mechanics as long as their values are scalar.
+
+Compile and validate raw data after edits:
+
+```bash
+npm run compile-data
+```

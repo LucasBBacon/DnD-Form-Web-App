@@ -772,7 +772,6 @@
     "name": "Cleric",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "wis",
         "cha"
@@ -1682,7 +1681,6 @@
     "name": "Fighter",
     "hit_die": 10,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "str",
         "con"
@@ -2279,7 +2277,6 @@
     "name": "Paladin",
     "hit_die": 10,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "wis",
         "cha"
@@ -2653,7 +2650,6 @@
     "name": "Ranger",
     "hit_die": 10,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "str",
         "dex"
@@ -3406,7 +3402,6 @@
     "name": "Sorcerer",
     "hit_die": 6,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "con",
         "cha"
@@ -3907,7 +3902,6 @@
     "name": "Warlock",
     "hit_die": 8,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "wis",
         "cha"
@@ -4280,7 +4274,6 @@
     "name": "Wizard",
     "hit_die": 6,
     "proficiencies": {
-      "tools": [],
       "saving_throws": [
         "int",
         "wis"

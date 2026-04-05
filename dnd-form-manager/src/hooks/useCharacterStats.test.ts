@@ -76,6 +76,7 @@ describe("useCharacterStats", () => {
 
     // Mock combat stat calculations
     vi.mocked(progressionUtils.calculateProficiencyBonus).mockReturnValue(2);
+    vi.mocked(progressionUtils.mergeSubclassSpecificScaling).mockReturnValue({});
     vi.mocked(hpUtils.calculateMaxHP).mockReturnValue(10);
     vi.mocked(initiativeUtils.calculateInitiative).mockReturnValue(2);
     vi.mocked(acUtils.calculateArmorClass).mockReturnValue(10);
@@ -87,6 +88,7 @@ describe("useCharacterStats", () => {
       hit_die: 10,
       proficiencies: { armor: [] },
     } as any);
+    vi.mocked(staticDataApi.getSubclassById).mockReturnValue(null);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(null);
 
     // Mock traits and predicates
@@ -122,6 +124,74 @@ describe("useCharacterStats", () => {
       useCharacterStats();
 
       expect(abilityUtils.calculateTotalAbilityScore).toHaveBeenCalledTimes(6);
+    });
+
+    it("should fetch subclass data when subclassId is present", () => {
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        subclassId: "subclass_berserker",
+      } as any);
+
+      vi.mocked(staticDataApi.getSubclassById).mockReturnValue({
+        id: "subclass_berserker",
+        name: "Berserker",
+        parent_class_id: "class_barbarian",
+        progression: [],
+      } as any);
+
+      useCharacterStats();
+
+      expect(staticDataApi.getSubclassById).toHaveBeenCalledWith(
+        "subclass_berserker"
+      );
+    });
+
+    it("should apply subclass specific scaling bonuses from progression", () => {
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        level: 5,
+        subclassId: "subclass_test",
+      } as any);
+
+      vi.mocked(staticDataApi.getSubclassById).mockReturnValue({
+        id: "subclass_test",
+        name: "Test Subclass",
+        parent_class_id: "class_fighter",
+        progression: [
+          {
+            level: 1,
+            features: [],
+            subclass_specific_scaling: {
+              ac: 1,
+              initiative_bonus: 2,
+              speed: 10,
+            },
+          },
+          {
+            level: 3,
+            features: [],
+            subclass_specific_scaling: {
+              speed: 15,
+            },
+          },
+        ],
+      } as any);
+      vi.mocked(progressionUtils.mergeSubclassSpecificScaling).mockReturnValue({
+        ac: 1,
+        initiative_bonus: 2,
+        speed: 15,
+      });
+
+      const result = useCharacterStats();
+
+      expect(initiativeUtils.calculateInitiative).toHaveBeenCalledWith(
+        2,
+        2,
+        false,
+        2
+      );
+      expect(result.armorClass).toBe(11);
+      expect(result.speed).toBe(45);
     });
   });
 

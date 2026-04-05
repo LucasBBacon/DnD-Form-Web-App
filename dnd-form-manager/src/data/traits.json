@@ -8,23 +8,23 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
-        "target": "martial"
+        "target": "weapon_martial"
       }
     ]
   },
@@ -60,11 +60,11 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
@@ -140,19 +140,19 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       }
     ]
   },
@@ -179,6 +179,39 @@
     ]
   },
   {
+    "id": "trait_diamond_soul",
+    "name": "Diamond Soul",
+    "lore": {
+      "short_description": "Gain proficiency in all saving throws."
+    },
+    "effects": [
+      {
+        "type": "save_proficiency",
+        "target": "str"
+      },
+      {
+        "type": "save_proficiency",
+        "target": "dex"
+      },
+      {
+        "type": "save_proficiency",
+        "target": "con"
+      },
+      {
+        "type": "save_proficiency",
+        "target": "int"
+      },
+      {
+        "type": "save_proficiency",
+        "target": "wis"
+      },
+      {
+        "type": "save_proficiency",
+        "target": "cha"
+      }
+    ]
+  },
+  {
     "id": "trait_druid_proficiencies",
     "name": "Druid Proficiencies",
     "lore": {
@@ -187,15 +220,15 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
@@ -277,27 +310,27 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "heavy"
+        "target": "armor_heavy"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
-        "target": "martial"
+        "target": "weapon_martial"
       }
     ]
   },
@@ -382,7 +415,7 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
@@ -430,27 +463,27 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "heavy"
+        "target": "armor_heavy"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
-        "target": "martial"
+        "target": "weapon_martial"
       }
     ]
   },
@@ -486,23 +519,23 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "medium"
+        "target": "armor_medium"
       },
       {
         "type": "proficiency",
-        "target": "shield"
+        "target": "armor_shields"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
-        "target": "martial"
+        "target": "weapon_martial"
       }
     ]
   },
@@ -540,11 +573,11 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       },
       {
         "type": "proficiency",
@@ -730,11 +763,11 @@
     "effects": [
       {
         "type": "proficiency",
-        "target": "light"
+        "target": "armor_light"
       },
       {
         "type": "proficiency",
-        "target": "simple"
+        "target": "weapon_simple"
       }
     ]
   },

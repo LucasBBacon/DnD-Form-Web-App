@@ -1,9 +1,35 @@
-import type { SpellcastingBase } from "./class";
+import type {
+    SpellcastingBase,
+    SpellcastingProgression,
+} from "./class";
+
+/**
+ * Scalar values supported by subclass progression scaling entries.
+ * String values are typically ability references (e.g., "dex").
+ */
+export type SubclassScalingValue = string | number;
+
+/**
+ * Stat keys currently consumed by useCharacterStats.
+ * Additional keys are allowed for future subclass mechanics but must be scalar.
+ */
+export type KnownSubclassStatScalingKey =
+    | "initiative"
+    | "initiative_bonus"
+    | "ac"
+    | "armor_class"
+    | "speed";
+
+/**
+ * Generic subclass scaling map used in progression entries.
+ * When merged across levels, higher-level entries override lower-level keys.
+ */
+export type SubclassSpecificScaling = Record<string, SubclassScalingValue>;
 
 export interface SubclassProgressionLevel {
     level: number; // e.g., 3
     features: string[]; // Trait IDs
-    subclass_specific_scaling?: Record<string, string | number>;
+    subclass_specific_scaling?: SubclassSpecificScaling;
 
     // Spell IDS automatically learned/prepared (Cleric Domain, Paladin Oath)
     bonus_spells?: string[];
@@ -12,11 +38,7 @@ export interface SubclassProgressionLevel {
     spells_added_to_list?: string[];
 
     // Used for eldritch Knight, Arcane Trickster
-    spellcasting_progression_additions?: {
-        cantrips_known?: number;
-        spells_known?: number;
-        spell_slots?: Record<number, number>;
-    };
+    spellcasting_progression_additions?: SpellcastingProgression;
 }
 
 export interface SubclassData {

@@ -79,10 +79,9 @@
                     },
                     "subclass_specific_scaling": {
                         "type": "object",
-                        "description": "Custom key-value pairs for subclass-specific resources.",
+                        "description": "Subclass scaling key-value pairs where each key maps to a scalar value. During runtime resolution, entries from higher character levels override lower-level values for the same key. Known stat keys currently consumed by useCharacterStats include: initiative, initiative_bonus, ac, armor_class, speed.",
                         "additionalProperties": {
                             "type": [
-                                "array",
                                 "string",
                                 "integer",
                                 "number"
@@ -108,7 +107,7 @@
                             "object",
                             "null"
                         ],
-                        "description": "Slot and spell-progression additions granted by this subclass level.",
+                        "description": "Spellcasting progression adjustments granted at this level (separate from subclass_specific_scaling, which is generic scalar progression data).",
                         "properties": {
                             "cantrips_known": {
                                 "type": "integer"

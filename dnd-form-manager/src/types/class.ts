@@ -16,15 +16,19 @@ export interface SpellcastingBase {
   ritual_casting: boolean;
 }
 
+export interface SpellcastingProgressionPayload {
+  cantrips_known?: number;
+  spells_known?: number;
+  spell_slots?: Record<number, number>;
+}
+
+export type SpellcastingProgression = SpellcastingProgressionPayload | null;
+
 export interface ProgressionLevel {
   level: number;
   features: string[];
   class_specific_scaling?: Record<string, string | number | unknown[]>; // e.g., { sneak_attack: "1d6" }
-  spellcasting_progression?: {
-    cantrips_known?: number;
-    spells_known?: number;
-    spell_slots?: Record<number, number>;
-  } | null;
+  spellcasting_progression?: SpellcastingProgression;
 }
 
 export interface ClassData {
