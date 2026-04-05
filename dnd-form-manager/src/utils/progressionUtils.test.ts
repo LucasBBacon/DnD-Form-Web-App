@@ -1,8 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
+  calculateMulticlassCasterLevel,
   calculateProficiencyBonus,
+  getCasterLevelContribution,
+  getCasterContributionType,
   getActiveSubclassProgression,
   getMostRecentProgressionProperty,
+  getPactMagicSlotsForLevel,
+  getSharedSpellSlotsForCasterLevel,
   mergeSubclassSpecificScaling,
 } from "./progressionUtils";
 
@@ -91,5 +96,111 @@ describe("subclass progression helpers", () => {
     );
 
     expect(result).toBeNull();
+  });
+});
+
+describe("multiclass spellcasting helpers", () => {
+  it("classifies caster contribution types correctly", () => {
+    expect(
+      getCasterContributionType({
+        classId: "class_wizard",
+        classLevel: 5,
+        spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
+      }),
+    ).toBe("full");
+
+    expect(
+      getCasterContributionType({
+        classId: "class_paladin",
+        classLevel: 6,
+        spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
+      }),
+    ).toBe("half");
+
+    expect(
+      getCasterContributionType({
+        classId: "class_fighter",
+        classLevel: 7,
+        spellcastingBase: { ability: "int", preparationType: "known", ritualCasting: false },
+      }),
+    ).toBe("third");
+
+    expect(
+      getCasterContributionType({
+        classId: "class_warlock",
+        classLevel: 5,
+        spellcastingBase: { ability: "cha", preparationType: "pact", ritualCasting: false },
+      }),
+    ).toBe("none");
+  });
+
+  it("calculates caster level contribution with half and third rounding down", () => {
+    expect(
+      getCasterLevelContribution({
+        classId: "class_wizard",
+        classLevel: 3,
+        spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
+      }),
+    ).toBe(3);
+
+    expect(
+      getCasterLevelContribution({
+        classId: "class_paladin",
+        classLevel: 5,
+        spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
+      }),
+    ).toBe(2);
+
+    expect(
+      getCasterLevelContribution({
+        classId: "class_fighter",
+        classLevel: 8,
+        spellcastingBase: { ability: "int", preparationType: "known", ritualCasting: false },
+      }),
+    ).toBe(2);
+  });
+
+  it("sums multiclass effective caster level across tracks", () => {
+    const effectiveLevel = calculateMulticlassCasterLevel([
+      {
+        classId: "class_wizard",
+        classLevel: 3,
+        spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
+      },
+      {
+        classId: "class_paladin",
+        classLevel: 4,
+        spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
+      },
+      {
+        classId: "class_warlock",
+        classLevel: 3,
+        spellcastingBase: { ability: "cha", preparationType: "pact", ritualCasting: false },
+      },
+    ]);
+
+    expect(effectiveLevel).toBe(5);
+  });
+
+  it("returns PHB shared slot table values by effective caster level", () => {
+    expect(getSharedSpellSlotsForCasterLevel(0)).toEqual({});
+    expect(getSharedSpellSlotsForCasterLevel(5)).toEqual({ 1: 4, 2: 3, 3: 2 });
+    expect(getSharedSpellSlotsForCasterLevel(20)).toEqual({
+      1: 4,
+      2: 3,
+      3: 3,
+      4: 3,
+      5: 3,
+      6: 2,
+      7: 2,
+      8: 1,
+      9: 1,
+    });
+  });
+
+  it("returns pact slot progression by warlock level", () => {
+    expect(getPactMagicSlotsForLevel(0)).toBeNull();
+    expect(getPactMagicSlotsForLevel(3)).toEqual({ level: 2, total: 2 });
+    expect(getPactMagicSlotsForLevel(17)).toEqual({ level: 5, total: 4 });
   });
 });

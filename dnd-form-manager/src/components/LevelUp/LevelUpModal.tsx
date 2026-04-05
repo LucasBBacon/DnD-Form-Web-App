@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import {
+  getAllClasses,
   getClassById,
   getSubclassById,
   getSubclassesForClass,
@@ -33,8 +34,12 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     updateLevelChoice,
     setSubclass,
     setClassTrackLevel,
+    setClassTrackSubclass,
     addClassTrack,
   } = useCharacterStore();
+
+  const allClasses = getAllClasses();
+  const MULTICLASS_OPTION = "__add_multiclass__";
 
   const selectableClassIds = useMemo(() => {
     if (classTracks.length > 0) {
@@ -47,9 +52,23 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const [selectedClassId, setSelectedClassId] = useState<string>(
     classId || "",
   );
-  const activeClassId = selectedClassId || classId;
+  const [selectedNewClassId, setSelectedNewClassId] = useState<string>("");
+
+  const isAddingNewClass = selectedClassId === MULTICLASS_OPTION;
+  const activeClassId = isAddingNewClass
+    ? selectedNewClassId || null
+    : selectedClassId || classId;
   const activeClassTrack = classTracks.find(
     (track) => track.classId === activeClassId,
+  );
+
+  const availableMulticlassOptions = useMemo(
+    () =>
+      allClasses.filter(
+        (candidateClass) =>
+          !selectableClassIds.includes(candidateClass.id),
+      ),
+    [allClasses, selectableClassIds],
   );
 
   const classData = activeClassId ? getClassById(activeClassId) : null;
@@ -60,7 +79,24 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     : [];
 
   const projectedClassTracks = useMemo(() => {
+    if (targetLevel === 1) {
+      return classTracks;
+    }
+
     if (!activeClassId) return classTracks;
+
+    const existingTrack = classTracks.find((track) => track.classId === activeClassId);
+
+    if (!existingTrack) {
+      return [
+        ...classTracks,
+        {
+          classId: activeClassId,
+          subclassId: null,
+          level: 1,
+        },
+      ];
+    }
 
     const nextTracks = classTracks.map((track) =>
       track.classId === activeClassId
@@ -69,7 +105,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     );
 
     return nextTracks;
-  }, [activeClassId, classTracks]);
+  }, [activeClassId, classTracks, targetLevel]);
 
   const projectedChoicesByLevel = useMemo(
     () => ({
@@ -82,9 +118,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     [activeClassId, choicesByLevel, targetLevel],
   );
 
-  const targetClassLevel = activeClassTrack
-    ? activeClassTrack.level + 1
-    : targetLevel;
+  const targetClassLevel =
+    targetLevel === 1 ? 1 : activeClassTrack ? activeClassTrack.level + 1 : 1;
 
   // Determine modules to render
   const requirements = getLevelUpRequirements(
@@ -110,12 +145,16 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const [isAsiValid, setIsAsiValid] = useState(!requirements.requiresAsiOrFeat);
   const [isSkillsValid, setIsSkillsValid] = useState(!requirements.requiresSkillSelection);
   const [isHpValid, setIsHpValid] = useState(targetLevel === 1);
+
+  const isClassSelectionValid =
+    !isAddingNewClass || (isAddingNewClass && !!selectedNewClassId);
   
   // don't need local state for subclass/HP, just check if they are valid
   const isSubclassValid = !requirements.requiresSubclass || activeSubclassId !== null;
   
   // Master check
-  const canFinalize = isAsiValid && isSkillsValid && isSubclassValid && isHpValid;
+  const canFinalize =
+    isClassSelectionValid && isAsiValid && isSkillsValid && isSubclassValid && isHpValid;
 
   // #endregion
   
@@ -141,6 +180,16 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     setHpInputValue(val);
     const numVal = Number(val);
     handleDraftUpdate({ hpGained: numVal }, numVal > 0, 'hp');
+  };
+
+  const handleSubclassChange = (nextSubclassId: string) => {
+    if (!activeClassId) return;
+
+    if (activeClassId === classId) {
+      setSubclass(nextSubclassId);
+    }
+
+    setClassTrackSubclass(activeClassId, nextSubclassId);
   };
 
   const finalizeLevelUp = () => {
@@ -177,12 +226,17 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           : `Leveling up to ${targetLevel}!`}
       </h2>
 
-      {selectableClassIds.length > 1 && (
+        {targetLevel > 1 && (
         <div className="choice-block">
           <h3>Choose the class that gains this level</h3>
           <select
-            value={activeClassId || ""}
-            onChange={(e) => setSelectedClassId(e.target.value)}
+              value={isAddingNewClass ? MULTICLASS_OPTION : activeClassId || ""}
+              onChange={(e) => {
+                setSelectedClassId(e.target.value);
+                if (e.target.value !== MULTICLASS_OPTION) {
+                  setSelectedNewClassId("");
+                }
+              }}
           >
             {selectableClassIds.map((id) => {
               const data = getClassById(id);
@@ -195,7 +249,27 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
                 </option>
               );
             })}
+
+            {availableMulticlassOptions.length > 0 && (
+              <option value={MULTICLASS_OPTION}>Add New Class (Multiclass)</option>
+            )}
           </select>
+
+          {isAddingNewClass && (
+            <select
+              value={selectedNewClassId}
+              onChange={(e) => setSelectedNewClassId(e.target.value)}
+            >
+              <option value="" disabled>
+                Select a class to add...
+              </option>
+              {availableMulticlassOptions.map((availableClass) => (
+                <option key={availableClass.id} value={availableClass.id}>
+                  {availableClass.name}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       )}
 
@@ -205,7 +279,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           <h3>Choose your Martial Archetype</h3>
           <select
             value={activeSubclassId || ""}
-            onChange={(e) => setSubclass(e.target.value)}
+            onChange={(e) => handleSubclassChange(e.target.value)}
           >
             <option value="" disabled>
               Select an archetype...
