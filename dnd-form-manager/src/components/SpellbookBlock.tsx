@@ -11,6 +11,10 @@ export const SpellbookBlock = () => {
     preparationType,
     spellSaveDC,
     spellAttackBonus,
+    maxSpellsKnown,
+    maxPreparedSpells,
+    classSpellcastingSummaries,
+    spellSelectionDiagnostics,
     spellsKnown,
     spellsPrepared,
     innateSpells,
@@ -25,11 +29,31 @@ export const SpellbookBlock = () => {
   // Figure out which paradigm is being used
   const isPreparedCaster = preparationType === "prepared";
   const activeSpells = isPreparedCaster ? spellsPrepared : spellsKnown;
+  const eligibleClassIds =
+    classSpellcastingSummaries.length > 0
+      ? classSpellcastingSummaries.map((summary) => summary.classId)
+      : classId
+        ? [classId]
+        : [];
 
-  // filter spells so dropdown only shows spells for THIS class
+  // Filter spells so dropdown only shows spells for active spellcasting classes.
   const availableClassSpells = getAllSpells().filter(
-    (spell) => classId && spell.classes.includes(classId),
+    (spell) => spell.classes.some((spellClassId) => eligibleClassIds.includes(spellClassId)),
   );
+
+  const uniqueKnownCount = new Set(spellsKnown).size;
+  const uniquePreparedCount = new Set(spellsPrepared).size;
+
+  const resolveSpellName = (spellId: string) => {
+    const spell = getSpellByID(spellId);
+    return spell?.name || `Unknown Spell (${spellId})`;
+  };
+
+  const hasDiagnostics =
+    spellSelectionDiagnostics.invalidKnownSpellIds.length > 0 ||
+    spellSelectionDiagnostics.invalidPreparedSpellIds.length > 0 ||
+    spellSelectionDiagnostics.knownSpellOverflow > 0 ||
+    spellSelectionDiagnostics.preparedSpellOverflow > 0;
 
   const handleAddSpell = () => {
     if (!selectedSpellId) return;
@@ -71,6 +95,69 @@ export const SpellbookBlock = () => {
           </span>
         </div>
       </div>
+
+      <div className="spellbook-capacity" style={{ marginBottom: "0.75rem" }}>
+        {isPreparedCaster ? (
+          <p>
+            Prepared Capacity: {uniquePreparedCount}/{maxPreparedSpells}
+          </p>
+        ) : (
+          <p>
+            Known Capacity: {uniqueKnownCount}/{maxSpellsKnown}
+          </p>
+        )}
+      </div>
+
+      {hasDiagnostics && (
+        <div
+          className="spellbook-diagnostics"
+          style={{
+            border: "1px solid #d89d00",
+            background: "#fff7e0",
+            padding: "0.75rem",
+            borderRadius: "6px",
+            marginBottom: "1rem",
+          }}
+        >
+          <h3 style={{ marginTop: 0 }}>Spell Selection Warnings</h3>
+
+          {spellSelectionDiagnostics.knownSpellOverflow > 0 && (
+            <p>
+              Known spells exceed limit by {spellSelectionDiagnostics.knownSpellOverflow}.
+            </p>
+          )}
+
+          {spellSelectionDiagnostics.preparedSpellOverflow > 0 && (
+            <p>
+              Prepared spells exceed limit by {spellSelectionDiagnostics.preparedSpellOverflow}.
+            </p>
+          )}
+
+          {spellSelectionDiagnostics.invalidKnownSpellIds.length > 0 && (
+            <div>
+              <strong>Invalid known spells:</strong>
+              <ul>
+                {spellSelectionDiagnostics.invalidKnownSpellIds.map((spellId) => (
+                  <li key={`invalid-known-${spellId}`}>{resolveSpellName(spellId)}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {spellSelectionDiagnostics.invalidPreparedSpellIds.length > 0 && (
+            <div>
+              <strong>Invalid prepared spells:</strong>
+              <ul>
+                {spellSelectionDiagnostics.invalidPreparedSpellIds.map((spellId) => (
+                  <li key={`invalid-prepared-${spellId}`}>
+                    {resolveSpellName(spellId)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* --- Innate Spells --- */}
       {innateSpells && innateSpells.length > 0 && (
