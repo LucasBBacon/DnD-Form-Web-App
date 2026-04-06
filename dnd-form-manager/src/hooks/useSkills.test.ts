@@ -31,16 +31,37 @@ describe("useSkills", () => {
 
     vi.mocked(useCharacterStore).mockReturnValue(baseState);
     vi.mocked(useCharacterStats).mockReturnValue({
-      modifiers: {
-        str: 2,
-        dex: 3,
-        con: 1,
-        int: 0,
-        wis: 4,
-        cha: -1,
+      abilities: {
+        scores: {
+          str: 14,
+          dex: 16,
+          con: 12,
+          int: 10,
+          wis: 18,
+          cha: 8,
+        },
+        modifiers: {
+          str: 2,
+          dex: 3,
+          con: 1,
+          int: 0,
+          wis: 4,
+          cha: -1,
+        },
       },
-      proficiencyBonus: 5,
-      isArmorPenalized: false,
+      combat: {
+        proficiencyBonus: 5,
+        hp: { max: 10, current: 10 },
+        initiative: 3,
+        armorClass: 15,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: {
+        totalWeight: 0,
+        carryingCapacity: 210,
+        isEncumbered: false,
+      },
     } as any);
     vi.mocked(getClassById).mockReturnValue({
       proficiencies: { savingThrows: ["str", "dex"] },

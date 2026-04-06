@@ -4,6 +4,8 @@ import type {
 } from "../types/subclass";
 import type { ClassData, SpellcastingBase } from "../types/class";
 
+// #region Public Types
+
 export type CasterContributionType = "full" | "half" | "third" | "none";
 
 export interface SpellcastingTrackProfile {
@@ -11,6 +13,10 @@ export interface SpellcastingTrackProfile {
   classLevel: number;
   spellcastingBase: SpellcastingBase;
 }
+
+// #endregion
+
+// #region Spellcasting Constants
 
 const MULTICLASS_SHARED_SLOT_TABLE: Record<number, Record<number, number>> = {
   1: { 1: 2 },
@@ -61,6 +67,22 @@ const PACT_SLOT_TABLE: Record<number, { level: number; total: number }> = {
 const HALF_CASTER_CLASS_IDS = new Set(["class_paladin", "class_ranger"]);
 const THIRD_CASTER_CLASS_IDS = new Set(["class_fighter", "class_rogue"]);
 
+// #endregion
+
+// #region Internal Helpers
+
+const clampLevelToSupportedRange = (level: number): number =>
+  Math.max(0, Math.min(20, Math.floor(level)));
+
+// #endregion
+
+// #region Spellcasting Utilities
+
+/**
+ * Determines the type of caster contribution for a given spellcasting track profile.
+ * @param profile The spellcasting track profile to evaluate.
+ * @returns The caster contribution type: "full", "half", "third", or "none".
+ */
 export const getCasterContributionType = (
   profile: SpellcastingTrackProfile,
 ): CasterContributionType => {
@@ -71,6 +93,11 @@ export const getCasterContributionType = (
   return "full";
 };
 
+/**
+ * Determines the caster level contribution for a given spellcasting track profile.
+ * @param profile The spellcasting track profile to evaluate.
+ * @returns The caster level contribution based on the caster type: "full", "half", "third", or "none".
+ */
 export const getCasterLevelContribution = (
   profile: SpellcastingTrackProfile,
 ): number => {
@@ -83,33 +110,55 @@ export const getCasterLevelContribution = (
   return profile.classLevel;
 };
 
+/**
+ * Calculates the total caster level for a character with multiple spellcasting classes.
+ * @param profiles An array of spellcasting track profiles representing each class's contribution.
+ * @returns The total caster level for multiclass spellcasting.
+ */
 export const calculateMulticlassCasterLevel = (
   profiles: SpellcastingTrackProfile[],
 ): number => {
+  // Sum the caster level contributions from each profile to get the total caster level
   return profiles.reduce(
     (total, profile) => total + getCasterLevelContribution(profile),
     0,
   );
 };
 
+/**
+ * Determines the shared spell slots for a given caster level.
+ * @param casterLevel The total caster level to evaluate.
+ * @returns A record mapping spell slot levels to the number of available slots.
+ */
 export const getSharedSpellSlotsForCasterLevel = (
   casterLevel: number,
 ): Record<number, number> => {
-  const clamped = Math.max(0, Math.min(20, Math.floor(casterLevel)));
+  const clamped = clampLevelToSupportedRange(casterLevel);
   if (clamped === 0) return {};
 
   return MULTICLASS_SHARED_SLOT_TABLE[clamped] || {};
 };
 
+/**
+ * Determines the pact magic slots for a given warlock level.
+ * @param warlockLevel The warlock level to evaluate.
+ * @returns An object containing the pact magic slot level and total slots, or null if the level is 0.
+ */
 export const getPactMagicSlotsForLevel = (
   warlockLevel: number,
 ): { level: number; total: number } | null => {
-  const clamped = Math.max(0, Math.min(20, Math.floor(warlockLevel)));
+  const clamped = clampLevelToSupportedRange(warlockLevel);
   if (clamped === 0) return null;
 
   return PACT_SLOT_TABLE[clamped] || null;
 };
 
+/**
+ * Determines if a subclass provides spellcasting capabilities.
+ * @param classData The class data to evaluate.
+ * @param subclassId The ID of the subclass to check.
+ * @returns True if the subclass provides spellcasting, false otherwise.
+ */
 export const hasSpellcastingFromSubclass = (
   classData: ClassData,
   subclassId: string | null,
@@ -119,47 +168,17 @@ export const hasSpellcastingFromSubclass = (
   return THIRD_CASTER_CLASS_IDS.has(classData.id);
 };
 
+// #endregion
+
+// #region Progression Utilities
+
 /**
- * Calculates the proficiency bonus based on the character's total level.
- * @param level Total level of a given character.
- * * Level 1-4: +2
- * * Level 5-8: +3
- * * Level 9-12: +4
- * * Level 13-16: +5
- * * Level 17-20: +6
+ * Retrieves the most recent progression property for a given level.
+ * @param progression An array of progression entries.
+ * @param level The current level to evaluate.
+ * @param getValue A function to extract the desired value from a progression entry.
+ * @returns The most recent value for the given level, or null if none is found.
  */
-export const calculateProficiencyBonus = (level: number): number => {
-  // Constrain the level between 1 and 20 to be safe
-  const clampedLevel = Math.max(1, Math.min(20, level));
-
-  return Math.ceil(clampedLevel / 4) + 1;
-};
-
-export const getActiveSubclassProgression = (
-  progression: SubclassProgressionLevel[],
-  level: number,
-): SubclassProgressionLevel[] => {
-  return progression.filter((entry) => entry.level <= level);
-};
-
-export const mergeSubclassSpecificScaling = (
-  progression: SubclassProgressionLevel[],
-  level: number,
-): SubclassSpecificScaling => {
-  return getActiveSubclassProgression(progression, level).reduce(
-    (acc, entry) => {
-      if (!entry.subclassSpecificScaling) return acc;
-
-      Object.entries(entry.subclassSpecificScaling).forEach(([key, value]) => {
-        acc[key] = value;
-      });
-
-      return acc;
-    },
-    {} as SubclassSpecificScaling,
-  );
-};
-
 export const getMostRecentProgressionProperty = <
   TProgression extends { level: number },
   TValue,
@@ -183,3 +202,60 @@ export const getMostRecentProgressionProperty = <
 
   return resolvedValue;
 };
+
+/**
+ * Calculates the proficiency bonus based on the character's total level.
+ * @param level Total level of a given character.
+ * * Level 1-4: +2
+ * * Level 5-8: +3
+ * * Level 9-12: +4
+ * * Level 13-16: +5
+ * * Level 17-20: +6
+ */
+export const calculateProficiencyBonus = (level: number): number => {
+  // Constrain the level between 1 and 20 to be safe
+  const clampedLevel = Math.max(1, Math.min(20, level));
+
+  return Math.ceil(clampedLevel / 4) + 1;
+};
+
+/**
+ * Retrieves the active subclass progression entries for a given level.
+ * @param progression An array of subclass progression entries.
+ * @param level The current level to evaluate.
+ * @returns An array of active subclass progression entries for the given level.
+ */
+export const getActiveSubclassProgression = (
+  progression: SubclassProgressionLevel[],
+  level: number,
+): SubclassProgressionLevel[] => {
+  return progression.filter((entry) => entry.level <= level);
+};
+
+/**
+ * Merges the subclass-specific scaling for a given level.
+ * @param progression An array of subclass progression entries.
+ * @param level The current level to evaluate.
+ * @returns An object containing the merged subclass-specific scaling for the given level.
+ */
+export const mergeSubclassSpecificScaling = (
+  progression: SubclassProgressionLevel[],
+  level: number,
+): SubclassSpecificScaling => {
+  return getActiveSubclassProgression(progression, level).reduce(
+    (acc, entry) => {
+      // If the progression entry doesn't have subclass-specific scaling, skip it
+      if (!entry.subclassSpecificScaling) return acc;
+
+      // Merge the subclass-specific scaling from this entry into the accumulated scaling object
+      Object.entries(entry.subclassSpecificScaling).forEach(([key, value]) => {
+        acc[key] = value;
+      });
+
+      return acc;
+    },
+    {} as SubclassSpecificScaling,
+  );
+};
+
+// #endregion

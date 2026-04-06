@@ -8,22 +8,37 @@ import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
 /**
- * Computes all skill-related values consumed by the character sheet UI.
- *
- * Output includes:
- * - per-skill totals (ability mod + proficiency/expertise + trait modifiers)
- * - advantage/disadvantage sources per skill
- * - saving throw totals
- * - passive scores (Perception / Investigation / Insight)
+ * Custom hook to calculate the character's skill-related values based on their ability scores,
+ * proficiencies, expertise, and trait effects.
+ * @returns An object containing the character's skill totals, advantage/disadvantage sources,
+ * saving throw totals, and passive scores.
  */
 export const useSkills = () => {
+  // #region --- Get Character State and Derived Stats ---
+
   // Source of truth for character selections and progression choices.
   const state = useCharacterStore();
 
   // Derived values from ability scores, equipment, and progression.
-  const derivedStats = useCharacterStats();
+  const { abilities: abilityStats, combat, encumbrance } = useCharacterStats();
+  const derivedStats = {
+    totalScores: abilityStats.scores,
+    modifiers: abilityStats.modifiers,
+    proficiencyBonus: combat.proficiencyBonus,
+    maxHp: combat.hp.max,
+    currentHp: combat.hp.current,
+    initiative: combat.initiative,
+    armorClass: combat.armorClass,
+    isArmorPenalized: combat.isArmorPenalized,
+    totalWeight: encumbrance.totalWeight,
+    isEncumbered: encumbrance.isEncumbered,
+    speed: combat.speed,
+  };
 
-  // #region Trait Effects (predicate-driven modifiers)
+  // #endregion
+
+  // #region --- Trait Effects (predicate-driven modifiers) ---
+
   const allTraits = getAllCharacterTraits(
     state.level,
     state.raceId,
@@ -35,9 +50,11 @@ export const useSkills = () => {
     state.acquiredFeats,
     state.classTracks,
   );
+  
   // #endregion
 
-  // #region Skill Source Aggregation
+  // #region --- Skill Source Aggregation ---
+
   // Collect skill proficiencies/expertise granted by race, class, and user choices.
   const { proficiencies, expertise } = aggregateSkills(
     state.chosenRacialSkills,
@@ -48,9 +65,7 @@ export const useSkills = () => {
     state,
     derivedStats,
   );
-  // #endregion
 
-  // #region Global Mechanics
   let addsHalfProfToUnproficient = false;
 
   allTraits.forEach((trait) => {
@@ -73,9 +88,11 @@ export const useSkills = () => {
 
   // Calculate the actual bonus to apply (round down)
   const halfProfBonus = Math.floor(derivedStats.proficiencyBonus / 2);
+
   // #endregion
 
-  // #region Skill Totals
+  // #region --- Skill Totals ---
+
   const skillList = Object.keys(SKILL_ABILITY_MAP) as Skill[];
   const calculatedSkills = {} as Record<
     Skill,
@@ -92,12 +109,10 @@ export const useSkills = () => {
   skillList.forEach((skill) => {
     const governingStat = SKILL_ABILITY_MAP[skill];
     const baseMod = derivedStats.modifiers[governingStat] || 0;
-
     const isProficient = proficiencies.includes(skill);
     const isExpertise = expertise.includes(skill);
 
     let finalMod = baseMod;
-
     if (isExpertise) {
       finalMod += derivedStats.proficiencyBonus * 2;
     } else if (isProficient) {
@@ -123,16 +138,20 @@ export const useSkills = () => {
         );
 
         if (isActive) {
+          // Apply the effect based on its type.
           if (
             effect.type === "stat_modifier" &&
             typeof effect.value === "number"
           ) {
+            // If the effect is a stat modifier and has a numeric value, add it to the final modifier.
             finalMod += effect.value;
           }
           if (effect.type === "advantage") {
+            // If the effect grants advantage, add the trait name to the advantage sources.
             advantageSources.push(trait.name);
           }
           if (effect.type === "disadvantage") {
+            // If the effect grants disadvantage, add the trait name to the disadvantage sources.
             disadvantageSources.push(trait.name);
           }
         }
@@ -155,7 +174,8 @@ export const useSkills = () => {
   });
   // #endregion
 
-  // #region Saving Throws
+  // #region --- Saving Throws ---
+
   const saveProficiencies = aggregateSaveProficienciesMulticlass({
     classTracks: state.classTracks,
     currentLevel: state.level,
@@ -177,16 +197,20 @@ export const useSkills = () => {
 
     calculatedSaves[ability] = { total: finalMod, isProficient };
   });
+
   // #endregion
 
-  // #region Passive Scores
+  // #region --- Passive Scores ---
+
   // Passive score formula: 10 + related skill total + flat bonuses.
   const flatPassiveBonus = 0;
   const passivePerception =
     10 + calculatedSkills.perception.total + flatPassiveBonus;
   const passiveInvestigation =
     10 + calculatedSkills.investigation.total + flatPassiveBonus;
-  const passiveInsight = 10 + calculatedSkills.insight.total + flatPassiveBonus;
+  const passiveInsight = 
+    10 + calculatedSkills.insight.total + flatPassiveBonus;
+
   // #endregion
 
   return {

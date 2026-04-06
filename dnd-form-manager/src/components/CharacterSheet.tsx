@@ -22,7 +22,7 @@ const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 export const CharacterSheet = () => {
   const { name, level, raceId, subraceId, classId, subclassId } =
     useCharacterStore();
-  const { modifiers } = useCharacterStats();
+  const { abilities } = useCharacterStats();
 
   const [isLevelingUp, setIsLevelingUp] = useState(false);
 
@@ -64,9 +64,9 @@ export const CharacterSheet = () => {
               <div key={stat} className="ability-box">
                 <span className="ability-name">{stat.toUpperCase()}</span>
                 <span className="ability-mod">
-                  {modifiers[stat] >= 0
-                    ? `+${modifiers[stat]}`
-                    : modifiers[stat]}
+                  {abilities.modifiers[stat] >= 0
+                    ? `+${abilities.modifiers[stat]}`
+                    : abilities.modifiers[stat]}
                 </span>
               </div>
             ))}

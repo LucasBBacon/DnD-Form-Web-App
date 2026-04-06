@@ -36,16 +36,37 @@ describe("useSpellcasting innate spell enrichment", () => {
     } as any);
 
     vi.mocked(useCharacterStats).mockReturnValue({
-      modifiers: {
-        str: 0,
-        dex: 0,
-        con: 0,
-        int: 0,
-        wis: 0,
-        cha: 2,
+      abilities: {
+        scores: {
+          str: 10,
+          dex: 10,
+          con: 10,
+          int: 10,
+          wis: 10,
+          cha: 14,
+        },
+        modifiers: {
+          str: 0,
+          dex: 0,
+          con: 0,
+          int: 0,
+          wis: 0,
+          cha: 2,
+        },
       },
-      proficiencyBonus: 2,
-      isArmorPenalized: false,
+      combat: {
+        proficiencyBonus: 2,
+        hp: { max: 8, current: 8 },
+        initiative: 0,
+        armorClass: 10,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: {
+        totalWeight: 0,
+        carryingCapacity: 150,
+        isEncumbered: false,
+      },
     } as any);
 
     vi.mocked(getClassById).mockReturnValue(null);
@@ -77,10 +98,10 @@ describe("useSpellcasting innate spell enrichment", () => {
 
     const result = useSpellcasting();
 
-    expect(result.innateSpells).toHaveLength(1);
-    expect(result.innateSpells[0].spellId).toBe("spell_mage_hand");
-    expect(result.innateSpells[0].spellName).toBe("Mage Hand");
-    expect(result.innateSpells[0].isResolvedSpell).toBe(true);
+    expect(result.pools.innate).toHaveLength(1);
+    expect(result.pools.innate[0].spellId).toBe("spell_mage_hand");
+    expect(result.pools.innate[0].spellName).toBe("Mage Hand");
+    expect(result.pools.innate[0].isResolvedSpell).toBe(true);
   });
 
   it("uses debug-friendly fallback when spellId is unknown", () => {
@@ -103,12 +124,12 @@ describe("useSpellcasting innate spell enrichment", () => {
 
     const result = useSpellcasting();
 
-    expect(result.innateSpells).toHaveLength(1);
-    expect(result.innateSpells[0].spellId).toBe("spell_missing");
-    expect(result.innateSpells[0].spellName).toBe(
+    expect(result.pools.innate).toHaveLength(1);
+    expect(result.pools.innate[0].spellId).toBe("spell_missing");
+    expect(result.pools.innate[0].spellName).toBe(
       "Unknown Spell (spell_missing)",
     );
-    expect(result.innateSpells[0].isResolvedSpell).toBe(false);
+    expect(result.pools.innate[0].isResolvedSpell).toBe(false);
   });
 });
 
@@ -132,16 +153,37 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(useCharacterStats).mockReturnValue({
-      modifiers: {
-        str: 0,
-        dex: 0,
-        con: 0,
-        int: 3,
-        wis: 1,
-        cha: 0,
+      abilities: {
+        scores: {
+          str: 10,
+          dex: 10,
+          con: 10,
+          int: 16,
+          wis: 12,
+          cha: 10,
+        },
+        modifiers: {
+          str: 0,
+          dex: 0,
+          con: 0,
+          int: 3,
+          wis: 1,
+          cha: 0,
+        },
       },
-      proficiencyBonus: 2,
-      isArmorPenalized: false,
+      combat: {
+        proficiencyBonus: 2,
+        hp: { max: 20, current: 20 },
+        initiative: 0,
+        armorClass: 10,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: {
+        totalWeight: 0,
+        carryingCapacity: 150,
+        isEncumbered: false,
+      },
     } as any);
 
     vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
@@ -186,8 +228,8 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.maxCantrips).toBe(3);
-    expect(result.maxSpellsKnown).toBe(4);
+    expect(result.pools.cantrips.max).toBe(3);
+    expect(result.pools.known.max).toBe(4);
   });
 
   it("prefers subclass progression when subclass spellcasting override is present", () => {
@@ -253,9 +295,9 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.maxCantrips).toBe(2);
-    expect(result.maxSpellsKnown).toBe(4);
-    expect(result.spellcastingAbility).toBe("int");
+    expect(result.pools.cantrips.max).toBe(2);
+    expect(result.pools.known.max).toBe(4);
+    expect(result.casting.ability).toBe("int");
   });
 
   it("falls back to class progression when subclass exists without spellcasting override", () => {
@@ -313,9 +355,9 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.maxCantrips).toBe(3);
-    expect(result.maxSpellsKnown).toBe(6);
-    expect(result.spellcastingAbility).toBe("int");
+    expect(result.pools.cantrips.max).toBe(3);
+    expect(result.pools.known.max).toBe(6);
+    expect(result.casting.ability).toBe("int");
   });
 
   it("computes shared slots from strict multiclass caster level", () => {
@@ -383,12 +425,12 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.slotStatusByLevel).toEqual({
+    expect(result.slots.shared).toEqual({
       1: { total: 4, expended: 1 },
       2: { total: 3, expended: 1 },
       3: { total: 2, expended: 0 },
     });
-    expect(result.pactMagicInfo).toBeNull();
+    expect(result.slots.pact).toBeNull();
   });
 
   it("returns pact and shared slots independently in warlock multiclass", () => {
@@ -458,10 +500,10 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.slotStatusByLevel).toEqual({
+    expect(result.slots.shared).toEqual({
       1: { total: 3, expended: 1 },
     });
-    expect(result.pactMagicInfo).toEqual({
+    expect(result.slots.pact).toEqual({
       level: 2,
       total: 2,
       expended: 1,
@@ -510,13 +552,13 @@ describe("useSpellcasting progression resolution", () => {
 
     const result = useSpellcasting();
 
-    expect(result.spellSelectionDiagnostics.invalidKnownSpellIds).toEqual([
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toEqual([
       "spell_magic_missile",
       "spell_healing_word",
     ]);
-    expect(result.spellSelectionDiagnostics.invalidPreparedSpellIds).toEqual([
+    expect(result.diagnostics.selections.invalidPreparedSpellIds).toEqual([
       "spell_healing_word",
     ]);
-    expect(result.maxPreparedSpells).toBe(7);
+    expect(result.pools.prepared.max).toBe(7);
   });
 });

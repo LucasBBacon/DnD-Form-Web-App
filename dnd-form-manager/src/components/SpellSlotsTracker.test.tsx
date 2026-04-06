@@ -25,13 +25,37 @@ describe("SpellSlotsTracker", () => {
   it("renders both shared and pact sections together when both pools exist", () => {
     vi.mocked(useSpellcasting).mockReturnValue({
       isSpellcaster: true,
-      slotStatusByLevel: {
-        1: { total: 2, expended: 1 },
+      canCastSpells: true,
+      casting: {
+        ability: "cha",
+        preparationType: "pact",
+        saveDC: 13,
+        attackBonus: 5,
       },
-      pactMagicInfo: {
-        level: 2,
-        total: 2,
-        expended: 1,
+      pools: {
+        known: { selected: [], max: 0 },
+        prepared: { selected: [], max: 0 },
+        cantrips: { max: 2 },
+        innate: [],
+      },
+      slots: {
+        shared: {
+          1: { total: 2, expended: 1 },
+        },
+        pact: {
+          level: 2,
+          total: 2,
+          expended: 1,
+        },
+      },
+      diagnostics: {
+        selections: {
+          invalidKnownSpellIds: [],
+          invalidPreparedSpellIds: [],
+          knownSpellOverflow: 0,
+          preparedSpellOverflow: 0,
+        },
+        classBreakdown: [],
       },
     } as any);
 
@@ -50,13 +74,37 @@ describe("SpellSlotsTracker", () => {
 
     vi.mocked(useSpellcasting).mockReturnValue({
       isSpellcaster: true,
-      slotStatusByLevel: {
-        1: { total: 2, expended: 0 },
+      canCastSpells: true,
+      casting: {
+        ability: "cha",
+        preparationType: "pact",
+        saveDC: 13,
+        attackBonus: 5,
       },
-      pactMagicInfo: {
-        level: 2,
-        total: 2,
-        expended: 0,
+      pools: {
+        known: { selected: [], max: 0 },
+        prepared: { selected: [], max: 0 },
+        cantrips: { max: 2 },
+        innate: [],
+      },
+      slots: {
+        shared: {
+          1: { total: 2, expended: 0 },
+        },
+        pact: {
+          level: 2,
+          total: 2,
+          expended: 0,
+        },
+      },
+      diagnostics: {
+        selections: {
+          invalidKnownSpellIds: [],
+          invalidPreparedSpellIds: [],
+          knownSpellOverflow: 0,
+          preparedSpellOverflow: 0,
+        },
+        classBreakdown: [],
       },
     } as any);
 
@@ -72,8 +120,32 @@ describe("SpellSlotsTracker", () => {
   it("shows fallback message when spellcaster has no slots", () => {
     vi.mocked(useSpellcasting).mockReturnValue({
       isSpellcaster: true,
-      slotStatusByLevel: {},
-      pactMagicInfo: null,
+      canCastSpells: true,
+      casting: {
+        ability: "cha",
+        preparationType: "known",
+        saveDC: 13,
+        attackBonus: 5,
+      },
+      pools: {
+        known: { selected: [], max: 0 },
+        prepared: { selected: [], max: 0 },
+        cantrips: { max: 0 },
+        innate: [],
+      },
+      slots: {
+        shared: {},
+        pact: null,
+      },
+      diagnostics: {
+        selections: {
+          invalidKnownSpellIds: [],
+          invalidPreparedSpellIds: [],
+          knownSpellOverflow: 0,
+          preparedSpellOverflow: 0,
+        },
+        classBreakdown: [],
+      },
     } as any);
 
     render(<SpellSlotsTracker />);

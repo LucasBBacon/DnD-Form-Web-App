@@ -17,7 +17,7 @@ export const InventoryBlock = () => {
   } = useCharacterStore();
 
   // Pull derived stats from hook
-  const { totalWeight, armorClass } = useCharacterStats();
+  const { encumbrance, combat } = useCharacterStats();
 
   // Local state for 'Add Item' dropdown
   const [selectedItemId, setSelectedItemId] = useState<string>("");
@@ -36,10 +36,10 @@ export const InventoryBlock = () => {
         <h2>Inventory & Equipment</h2>
         <div className="inventory-stats">
           <span>
-            <strong>Total Weight:</strong> {totalWeight} lbs
+            <strong>Total Weight:</strong> {encumbrance.totalWeight} lbs
           </span>
           <span>
-            <strong>Current AC:</strong> {armorClass}
+            <strong>Current AC:</strong> {combat.armorClass}
           </span>
         </div>
       </div>

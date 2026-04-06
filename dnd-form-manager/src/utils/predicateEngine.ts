@@ -1,5 +1,5 @@
 import { getItemById } from "../data/staticDataApi";
-import type { useCharacterStats } from "../hooks/useCharacterStats";
+import type { CharacterStatsContext } from "../hooks/useCharacterStats";
 import type { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import type { WeaponProperty } from "../types/item";
@@ -49,7 +49,7 @@ const hasEquippedWeaponProperty = (
 export const evaluatePredicate = (
   predicate: Predicate,
   state: ReturnType<typeof useCharacterStore.getState>,
-  stats: ReturnType<typeof useCharacterStats>,
+  stats: CharacterStatsContext,
 ): boolean => {
   switch (predicate.type) {
     case "armor_required": {
@@ -129,7 +129,7 @@ export const evaluatePredicate = (
 export const evaluateAllPredicates = (
   predicates: Predicate[] | undefined,
   state: ReturnType<typeof useCharacterStore.getState>,
-  stats: ReturnType<typeof useCharacterStats>,
+  stats: CharacterStatsContext,
 ): boolean => {
   if (!predicates || predicates.length === 0) return true;
   return predicates.every((p) => evaluatePredicate(p, state, stats));

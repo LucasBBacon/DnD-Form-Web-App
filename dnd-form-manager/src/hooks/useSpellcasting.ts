@@ -17,6 +17,8 @@ import {
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
+// #region --- Types and Interfaces ---
+
 export interface InnateSpellcastingEntry {
   spellId: string;
   spellName: string;
@@ -27,7 +29,7 @@ export interface InnateSpellcastingEntry {
   uses?: { count: number | string; reset: string };
 }
 
-interface ClassSpellcastingSummary {
+export interface ClassSpellcastingSummary {
   classId: string;
   classLevel: number;
   preparationType: "known" | "prepared" | "pact";
@@ -37,13 +39,58 @@ interface ClassSpellcastingSummary {
   maxPreparedSpells: number;
 }
 
-interface SpellSelectionDiagnostics {
+export interface SpellSelectionDiagnostics {
   invalidKnownSpellIds: string[];
   invalidPreparedSpellIds: string[];
   knownSpellOverflow: number;
   preparedSpellOverflow: number;
 }
 
+export interface UseSpellcastingReturn {
+  isSpellcaster: boolean;
+  canCastSpells: boolean;
+  casting: {
+    ability: Ability | null;
+    preparationType: "known" | "prepared" | "pact" | null;
+    saveDC: number;
+    attackBonus: number;
+  };
+  pools: {
+    known: {
+      selected: string[];
+      max: number;
+    };
+    prepared: {
+      selected: string[];
+      max: number;
+    };
+    cantrips: {
+      max: number;
+    };
+    innate: InnateSpellcastingEntry[];
+  };
+  slots: {
+    shared: Record<number, { total: number; expended: number }>;
+    pact: { level: number; total: number; expended: number } | null;
+  };
+  diagnostics: {
+    selections: SpellSelectionDiagnostics;
+    classBreakdown: ClassSpellcastingSummary[];
+  };
+}
+
+// #endregion
+
+// #region --- Helper Functions ---
+
+/**
+ * Resolves the character's class tracks, ensuring there is at least one track for the character's current class and subclass.
+ * @param classTracks The existing class tracks for the character.
+ * @param classId The ID of the character's current class.
+ * @param subclassId The ID of the character's current subclass.
+ * @param level The character's current level in the class.
+ * @returns An array of resolved class tracks.
+ */
 const resolveClassTracks = (
   classTracks: CharacterClassTrack[],
   classId: string | null,
@@ -62,36 +109,60 @@ const resolveClassTracks = (
   ];
 };
 
-const resolvePreparedSpellLimit = (classLevel: number, spellcastingMod: number) =>
-  Math.max(1, classLevel + spellcastingMod);
+/**
+ * Resolves the maximum number of prepared spells for a given class level and spellcasting modifier.
+ * @param classLevel The character's level in the class.
+ * @param spellcastingMod The character's spellcasting ability modifier.
+ * @returns The maximum number of prepared spells.
+ */
+const resolvePreparedSpellLimit = (
+  classLevel: number,
+  spellcastingMod: number,
+) => Math.max(1, classLevel + spellcastingMod);
 
+/**
+ * Removes duplicate values from an array.
+ * @param values The array of values to deduplicate.
+ * @returns A new array with duplicate values removed.
+ */
 const dedupe = <T>(values: T[]): T[] => Array.from(new Set(values));
 
-export const useSpellcasting = () => {
-  const {
-    level,
-    raceId,
-    subraceId,
-    classId,
-    subclassId,
-    classTracks,
-    choicesByLevel,
-    acquiredFeats,
-    expendedSpellSlots,
-    expendedPactSlots,
-    spellsPrepared,
-    spellsKnown,
-  } = useCharacterStore();
-  const { modifiers, proficiencyBonus, isArmorPenalized } = useCharacterStats();
+// #endregion
 
-  const activeTracks = resolveClassTracks(classTracks, classId, subclassId, level);
+/**
+ * Custom hook to calculate the character's spellcasting-related values based on their class, subclass, level, and other relevant state.
+ * Handles multiclass spellcasting, innate spells from traits, and provides diagnostics for invalid spell selections.
+ * @returns An object containing the character's spellcasting information, including spell slots,
+ * known and prepared spells, and innate spellcasting entries.
+ */
+export const useSpellcasting = (): UseSpellcastingReturn => {
+  // #region --- Get Character State and Derived Stats ---
+
+  const state = useCharacterStore();
+  const { abilities, combat } = useCharacterStats();
+  const modifiers = abilities.modifiers;
+  const proficiencyBonus = combat.proficiencyBonus;
+  const isArmorPenalized = combat.isArmorPenalized;
+
+  // #endregion
+
+  // #region --- Resolve Spellcasting Tracks ---
+
+  const activeTracks = resolveClassTracks(
+    state.classTracks,
+    state.classId,
+    state.subclassId,
+    state.level,
+  );
 
   const spellcastingTracks = activeTracks
     .map((track) => {
       const classData = getClassById(track.classId);
       if (!classData) return null;
 
-      const subclassData = track.subclassId ? getSubclassById(track.subclassId) : null;
+      const subclassData = track.subclassId
+        ? getSubclassById(track.subclassId)
+        : null;
       const activeSpellcastingBase =
         subclassData?.spellcastingOverride || classData.spellcastingBase;
 
@@ -124,7 +195,11 @@ export const useSpellcasting = () => {
       ): profile is {
         classId: string;
         classLevel: number;
-        spellcastingBase: { ability: Ability; preparationType: "known" | "prepared" | "pact"; ritualCasting: boolean };
+        spellcastingBase: {
+          ability: Ability;
+          preparationType: "known" | "prepared" | "pact";
+          ritualCasting: boolean;
+        };
         progression: Exclude<SpellcastingProgression, null>;
       } => profile !== null,
     );
@@ -136,14 +211,24 @@ export const useSpellcasting = () => {
     (track) => track.spellcastingBase.preparationType === "pact",
   );
 
-  const effectiveCasterLevel = calculateMulticlassCasterLevel(nonPactTracks);
-  const combinedSlots = getSharedSpellSlotsForCasterLevel(effectiveCasterLevel);
+  // #endregion
 
+  // #region --- Derived Caster Properties ---
+
+  const effectiveCasterLevel = calculateMulticlassCasterLevel(nonPactTracks);
   const primaryCastingTrack = spellcastingTracks[0] || null;
   const preparationType = primaryCastingTrack?.spellcastingBase.preparationType;
   const spellcastingAbility = primaryCastingTrack?.spellcastingBase.ability;
+  const highestPactLevel = pactTracks.reduce(
+    (maxLevel, track) => Math.max(maxLevel, track.classLevel),
+    0,
+  );
 
-  // --- Slot generation ---
+  // #endregion
+
+  // #region --- Spell Slot Calculation ---
+
+  const combinedSlots = getSharedSpellSlotsForCasterLevel(effectiveCasterLevel);
   const slotStatusByLevel: Record<number, { total: number; expended: number }> =
     {};
   let pactMagicInfo: {
@@ -156,25 +241,25 @@ export const useSpellcasting = () => {
     const lvl = Number(lvlStr);
     slotStatusByLevel[lvl] = {
       total: totalSlots,
-      expended: expendedSpellSlots[lvl] || 0,
+      expended: state.expendedSpellSlots[lvl] || 0,
     };
   });
 
-  const highestPactLevel = pactTracks.reduce(
-    (maxLevel, track) => Math.max(maxLevel, track.classLevel),
-    0,
-  );
   const pactSlots = getPactMagicSlotsForLevel(highestPactLevel);
   if (pactSlots) {
     pactMagicInfo = {
       level: pactSlots.level,
       total: pactSlots.total,
-      expended: expendedPactSlots || 0,
+      expended: state.expendedPactSlots || 0,
     };
   }
 
-  const classSpellcastingSummaries: ClassSpellcastingSummary[] = spellcastingTracks.map(
-    (track) => {
+  // #endregion
+
+  // #region --- Class Summaries and Spell Counts ---
+
+  const classSpellcastingSummaries: ClassSpellcastingSummary[] =
+    spellcastingTracks.map((track) => {
       const abilityMod = modifiers[track.spellcastingBase.ability] || 0;
 
       return {
@@ -189,8 +274,7 @@ export const useSpellcasting = () => {
             ? resolvePreparedSpellLimit(track.classLevel, abilityMod)
             : 0,
       };
-    },
-  );
+    });
 
   const maxCantrips = classSpellcastingSummaries.reduce(
     (total, summary) => total + summary.maxCantrips,
@@ -201,6 +285,10 @@ export const useSpellcasting = () => {
     0,
   );
 
+  // #endregion
+
+  // #region --- Spell Selection Diagnostics ---
+
   const allSpells = getAllSpells();
   const knownEligibleClassIds = classSpellcastingSummaries
     .filter((summary) => summary.preparationType === "known")
@@ -210,7 +298,7 @@ export const useSpellcasting = () => {
     .map((summary) => summary.classId);
 
   const invalidKnownSpellIds = dedupe(
-    spellsKnown.filter((spellId) => {
+    state.spellsKnown.filter((spellId) => {
       const spell = allSpells.find((entry) => entry.id === spellId);
       if (!spell) return true;
 
@@ -220,7 +308,7 @@ export const useSpellcasting = () => {
     }),
   );
   const invalidPreparedSpellIds = dedupe(
-    spellsPrepared.filter((spellId) => {
+    state.spellsPrepared.filter((spellId) => {
       const spell = allSpells.find((entry) => entry.id === spellId);
       if (!spell) return true;
 
@@ -231,9 +319,9 @@ export const useSpellcasting = () => {
   );
 
   const validKnownSpellCount =
-    dedupe(spellsKnown).length - invalidKnownSpellIds.length;
+    dedupe(state.spellsKnown).length - invalidKnownSpellIds.length;
   const validPreparedSpellCount =
-    dedupe(spellsPrepared).length - invalidPreparedSpellIds.length;
+    dedupe(state.spellsPrepared).length - invalidPreparedSpellIds.length;
   const maxPreparedSpells = classSpellcastingSummaries.reduce(
     (total, summary) => total + summary.maxPreparedSpells,
     0,
@@ -243,20 +331,26 @@ export const useSpellcasting = () => {
     invalidKnownSpellIds,
     invalidPreparedSpellIds,
     knownSpellOverflow: Math.max(0, validKnownSpellCount - maxSpellsKnown),
-    preparedSpellOverflow: Math.max(0, validPreparedSpellCount - maxPreparedSpells),
+    preparedSpellOverflow: Math.max(
+      0,
+      validPreparedSpellCount - maxPreparedSpells,
+    ),
   };
 
-  // --- Innate spellcasting (Traits)
+  // #endregion
+
+  // #region --- Innate Spellcasting ---
+
   const allTraits = getAllCharacterTraits(
-    level,
-    raceId,
-    subraceId,
-    classId,
-    subclassId,
+    state.level,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
     false,
-    choicesByLevel,
-    acquiredFeats,
-    classTracks,
+    state.choicesByLevel,
+    state.acquiredFeats,
+    state.classTracks,
   );
   const innateSpells: InnateSpellcastingEntry[] = [];
 
@@ -268,7 +362,7 @@ export const useSpellcasting = () => {
       if (
         effect.type === "spell_grant" &&
         effect.target &&
-        (effect.levelAvailable || 1) <= level
+        (effect.levelAvailable || 1) <= state.level
       ) {
         const spellId = effect.target;
         const spell = getSpellByID(spellId);
@@ -290,34 +384,58 @@ export const useSpellcasting = () => {
     });
   });
 
-  // A level 1 fighter with high elf cantrip is a spellcaster still
-  const isSpellcaster = spellcastingTracks.length > 0 || innateSpells.length > 0;
+  // #endregion
 
-  // --- Calculate spell math ---
+  // #region --- Build Return Object ---
+
+  // A level 1 fighter with high elf cantrip is a spellcaster still
+  const isSpellcaster =
+    spellcastingTracks.length > 0 || innateSpells.length > 0;
+
   const statMod = spellcastingAbility ? modifiers[spellcastingAbility] || 0 : 0;
   const spellSaveDC = 8 + proficiencyBonus + statMod;
   const spellAttackBonus = proficiencyBonus + statMod;
 
-  // Return the data needed to build the spellbook UI
+  const casting = {
+    ability: spellcastingAbility ?? null,
+    preparationType: preparationType ?? null,
+    saveDC: spellSaveDC,
+    attackBonus: spellAttackBonus,
+  };
+
+  const pools = {
+    known: {
+      selected: state.spellsKnown,
+      max: maxSpellsKnown,
+    },
+    prepared: {
+      selected: state.spellsPrepared,
+      max: maxPreparedSpells,
+    },
+    cantrips: {
+      max: maxCantrips,
+    },
+    innate: innateSpells,
+  };
+
+  const slots = {
+    shared: slotStatusByLevel,
+    pact: pactMagicInfo,
+  };
+
+  const diagnostics = {
+    selections: spellSelectionDiagnostics,
+    classBreakdown: classSpellcastingSummaries,
+  };
+
   return {
     isSpellcaster,
-    preparationType,
-    spellcastingAbility,
-    spellSaveDC,
-    spellAttackBonus,
-
-    slotStatusByLevel,
-    pactMagicInfo,
-
-    maxCantrips,
-    maxSpellsKnown,
-    maxPreparedSpells,
-    spellsPrepared,
-    spellsKnown,
-    classSpellcastingSummaries,
-    spellSelectionDiagnostics,
-    innateSpells,
-
     canCastSpells: !isArmorPenalized,
+    casting,
+    pools,
+    slots,
+    diagnostics,
   };
+
+  // #endregion
 };

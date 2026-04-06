@@ -60,32 +60,48 @@ describe("SpellbookBlock", () => {
   it("renders diagnostics for invalid selections and overflow", () => {
     vi.mocked(useSpellcasting).mockReturnValue({
       isSpellcaster: true,
-      preparationType: "prepared",
-      spellSaveDC: 14,
-      spellAttackBonus: 6,
-      maxSpellsKnown: 0,
-      maxPreparedSpells: 2,
-      classSpellcastingSummaries: [
-        {
-          classId: "class_wizard",
-          classLevel: 4,
-          preparationType: "prepared",
-          spellcastingAbility: "int",
-          maxCantrips: 3,
-          maxSpellsKnown: 0,
-          maxPreparedSpells: 2,
-        },
-      ],
-      spellSelectionDiagnostics: {
-        invalidKnownSpellIds: ["spell_healing_word"],
-        invalidPreparedSpellIds: ["spell_healing_word"],
-        knownSpellOverflow: 1,
-        preparedSpellOverflow: 1,
-      },
-      spellsKnown: ["spell_magic_missile", "spell_healing_word"],
-      spellsPrepared: ["spell_magic_missile", "spell_healing_word"],
-      innateSpells: [],
       canCastSpells: true,
+      casting: {
+        ability: "int",
+        preparationType: "prepared",
+        saveDC: 14,
+        attackBonus: 6,
+      },
+      pools: {
+        known: {
+          selected: ["spell_magic_missile", "spell_healing_word"],
+          max: 0,
+        },
+        prepared: {
+          selected: ["spell_magic_missile", "spell_healing_word"],
+          max: 2,
+        },
+        cantrips: { max: 3 },
+        innate: [],
+      },
+      slots: {
+        shared: {},
+        pact: null,
+      },
+      diagnostics: {
+        classBreakdown: [
+          {
+            classId: "class_wizard",
+            classLevel: 4,
+            preparationType: "prepared",
+            spellcastingAbility: "int",
+            maxCantrips: 3,
+            maxSpellsKnown: 0,
+            maxPreparedSpells: 2,
+          },
+        ],
+        selections: {
+          invalidKnownSpellIds: ["spell_healing_word"],
+          invalidPreparedSpellIds: ["spell_healing_word"],
+          knownSpellOverflow: 1,
+          preparedSpellOverflow: 1,
+        },
+      },
     } as any);
 
     render(<SpellbookBlock />);
@@ -102,41 +118,51 @@ describe("SpellbookBlock", () => {
   it("filters add-spell options using all multiclass casting class ids", () => {
     vi.mocked(useSpellcasting).mockReturnValue({
       isSpellcaster: true,
-      preparationType: "known",
-      spellSaveDC: 14,
-      spellAttackBonus: 6,
-      maxSpellsKnown: 5,
-      maxPreparedSpells: 0,
-      classSpellcastingSummaries: [
-        {
-          classId: "class_wizard",
-          classLevel: 3,
-          preparationType: "prepared",
-          spellcastingAbility: "int",
-          maxCantrips: 3,
-          maxSpellsKnown: 0,
-          maxPreparedSpells: 6,
-        },
-        {
-          classId: "class_cleric",
-          classLevel: 2,
-          preparationType: "prepared",
-          spellcastingAbility: "wis",
-          maxCantrips: 3,
-          maxSpellsKnown: 0,
-          maxPreparedSpells: 5,
-        },
-      ],
-      spellSelectionDiagnostics: {
-        invalidKnownSpellIds: [],
-        invalidPreparedSpellIds: [],
-        knownSpellOverflow: 0,
-        preparedSpellOverflow: 0,
-      },
-      spellsKnown: [],
-      spellsPrepared: [],
-      innateSpells: [],
       canCastSpells: true,
+      casting: {
+        ability: "int",
+        preparationType: "known",
+        saveDC: 14,
+        attackBonus: 6,
+      },
+      pools: {
+        known: { selected: [], max: 5 },
+        prepared: { selected: [], max: 0 },
+        cantrips: { max: 3 },
+        innate: [],
+      },
+      slots: {
+        shared: {},
+        pact: null,
+      },
+      diagnostics: {
+        classBreakdown: [
+          {
+            classId: "class_wizard",
+            classLevel: 3,
+            preparationType: "prepared",
+            spellcastingAbility: "int",
+            maxCantrips: 3,
+            maxSpellsKnown: 0,
+            maxPreparedSpells: 6,
+          },
+          {
+            classId: "class_cleric",
+            classLevel: 2,
+            preparationType: "prepared",
+            spellcastingAbility: "wis",
+            maxCantrips: 3,
+            maxSpellsKnown: 0,
+            maxPreparedSpells: 5,
+          },
+        ],
+        selections: {
+          invalidKnownSpellIds: [],
+          invalidPreparedSpellIds: [],
+          knownSpellOverflow: 0,
+          preparedSpellOverflow: 0,
+        },
+      },
     } as any);
 
     render(<SpellbookBlock />);

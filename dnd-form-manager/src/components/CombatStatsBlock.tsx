@@ -7,7 +7,7 @@ export const CombatStatsBlock = () => {
   const currentLevel = useCharacterStore((state) => state.level);
 
   // Grab the fully calculated math from the custom hook
-  const { maxHp, initiative, armorClass, proficiencyBonus } = useCharacterStats();
+  const { combat } = useCharacterStats();
 
   return (
     <div className="combat-stats-container">
@@ -16,22 +16,22 @@ export const CombatStatsBlock = () => {
       <div className="stat-grid">
         <div className="stat-box">
           <label>Armor Class </label>
-          <span>{armorClass}</span>
+          <span>{combat.armorClass}</span>
         </div>
 
         <div className="stat-box">
           <label>Initiative </label>
-          <span>{initiative >= 0 ? `+${initiative}` : initiative}</span>
+          <span>{combat.initiative >= 0 ? `+${combat.initiative}` : combat.initiative}</span>
         </div>
 
         <div className="stat-box">
           <label>Max HP </label>
-          <span>{maxHp}</span>
+          <span>{combat.hp.max}</span>
         </div>
 
         <div className="stat-box">
           <label>Proficiency </label>
-          <span>+{proficiencyBonus}</span>
+          <span>+{combat.proficiencyBonus}</span>
         </div>
       </div>
 

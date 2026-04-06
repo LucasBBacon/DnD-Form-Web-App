@@ -27,15 +27,7 @@ import {
 } from "../utils/progressionUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 
-const resolveSubclassScalingBonus = (
-  value: string | number | undefined,
-  modifiers: Record<Ability, number>,
-): number => {
-  if (typeof value === "number") return value;
-  if (!value) return 0;
-
-  return modifiers[value as Ability] ?? 0;
-};
+// #region --- Type Constants ---
 
 const SUBCLASS_SCALING_KEYS: Record<
   "initiative" | "ac" | "speed",
@@ -46,6 +38,32 @@ const SUBCLASS_SCALING_KEYS: Record<
   speed: ["speed"],
 };
 
+// #endregion
+
+// #region --- Public Types ---
+
+/**
+ * Resolves the subclass scaling bonus for a given value and ability modifiers.
+ * @param value The value to resolve, which can be a number or an ability key.
+ * @param modifiers The ability modifiers to use for resolution.
+ * @returns The resolved subclass scaling bonus.
+ */
+const resolveSubclassScalingBonus = (
+  value: string | number | undefined,
+  modifiers: Record<Ability, number>,
+): number => {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+
+  return modifiers[value as Ability] ?? 0;
+};
+
+/**
+ * Retrieves the first defined value from a subclass-specific scaling object based on the provided keys.
+ * @param scaling The subclass-specific scaling object to evaluate.
+ * @param keys An array of keys to check in order of priority.
+ * @returns The first defined value found for the given keys, or undefined if none are found.
+ */
 const getFirstDefinedScalingValue = (
   scaling: SubclassSpecificScaling,
   keys: KnownSubclassStatScalingKey[],
@@ -57,8 +75,67 @@ const getFirstDefinedScalingValue = (
   return undefined;
 };
 
-export const useCharacterStats = () => {
-  // Pull raw data from zustand
+// #endregion
+
+export interface CharacterStatsContext {
+  totalScores: Record<Ability, number>;
+  modifiers: Record<Ability, number>;
+  proficiencyBonus: number;
+  maxHp: number;
+  currentHp: number;
+  initiative: number;
+  armorClass: number;
+  isArmorPenalized: boolean;
+  totalWeight: number;
+  isEncumbered: boolean;
+  speed: number;
+}
+
+export interface UseCharacterStatsReturn {
+  abilities: {
+    scores: Record<Ability, number>;
+    modifiers: Record<Ability, number>;
+  };
+  combat: {
+    proficiencyBonus: number;
+    hp: {
+      max: number;
+      current: number;
+    };
+    initiative: number;
+    armorClass: number;
+    isArmorPenalized: boolean;
+    speed: number;
+  };
+  encumbrance: {
+    totalWeight: number;
+    carryingCapacity: number;
+    isEncumbered: boolean;
+  };
+}
+
+export const toCharacterStatsContext = (
+  stats: UseCharacterStatsReturn,
+): CharacterStatsContext => ({
+  totalScores: stats.abilities.scores,
+  modifiers: stats.abilities.modifiers,
+  proficiencyBonus: stats.combat.proficiencyBonus,
+  maxHp: stats.combat.hp.max,
+  currentHp: stats.combat.hp.current,
+  initiative: stats.combat.initiative,
+  armorClass: stats.combat.armorClass,
+  isArmorPenalized: stats.combat.isArmorPenalized,
+  totalWeight: stats.encumbrance.totalWeight,
+  isEncumbered: stats.encumbrance.isEncumbered,
+  speed: stats.combat.speed,
+});
+
+/**
+ * Custom hook to calculate the character's derived stats based on their base ability scores,
+ * racial and subracial bonuses, class and subclass features, and other traits.
+ */
+export const useCharacterStats = (): UseCharacterStatsReturn => {
+  // #region --- Get Character State and Static Data ---
   const state = useCharacterStore();
 
   // fetch static definitions
@@ -66,6 +143,10 @@ export const useCharacterStats = () => {
   const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
   const subclassData = state.subclassId ? getSubclassById(state.subclassId) : null;
+
+  // #endregion
+
+  // #region --- Calculate Total Ability Scores and Modifiers ---
 
   const allTraits = getAllCharacterTraits(
     state.level,
@@ -107,6 +188,10 @@ export const useCharacterStats = () => {
     {} as Record<Ability, number>,
   );
 
+  // #endregion
+
+  // #region --- Calculate Subclass-Specific Scaling Bonuses ---
+
   const subclassScaling = mergeSubclassSpecificScaling(
     subclassData?.progression ?? [],
     state.level,
@@ -125,6 +210,10 @@ export const useCharacterStats = () => {
     modifiers,
   );
 
+  // #endregion
+
+  // #region --- Calculate Total Weight and Encumbrance ---
+
   // Calculate total weight from inventory
   const totalWeight = state.inventory.reduce((total, record) => {
     const itemData = getItemById(record.itemId);
@@ -134,8 +223,16 @@ export const useCharacterStats = () => {
   const carryingCapacity = totalScores.str * 15;
   const isEncumbered = totalWeight > carryingCapacity;
 
+  // #endregion
+
+  // #region --- Calculate Proficiencies for Armor, Weapons, Tools, etc. ---
+
   // Calculate Derived Combat Stats
   const proficiencyBonus = calculateProficiencyBonus(state.level);
+
+  // #endregion
+
+  // #region --- Calculate Hit Points ---
 
   const hitDieByLevel: Record<number, HitDie | undefined> = {};
 
@@ -161,6 +258,10 @@ export const useCharacterStats = () => {
   );
 
   const currentHp = Math.max(0, maxHp - state.damageTaken);
+
+  // #endregion
+
+  // #region --- Calculate Initiative, Armor Class, Speed, and Other Derived Stats ---
 
   const baseInitiative = calculateInitiative(
     modifiers.dex,
@@ -218,6 +319,10 @@ export const useCharacterStats = () => {
     isWearingShield,
   );
   const baseArmorClassWithSubclassBonuses = baseArmorClass + subclassAcBonus;
+
+  // #endregion
+
+  // #region --- Apply Trait-Based Modifiers ---
 
   // Apply trait-based stat modifiers
   let finalArmorClass = baseArmorClassWithSubclassBonuses;
@@ -293,17 +398,28 @@ export const useCharacterStats = () => {
     });
   });
 
+  // #endregion
+
   return {
-    totalScores,
-    modifiers,
-    proficiencyBonus,
-    maxHp,
-    currentHp,
-    initiative: finalInitiative,
-    armorClass: finalArmorClass,
-    isArmorPenalized,
-    totalWeight,
-    isEncumbered,
-    speed: finalSpeed,
+    abilities: {
+      scores: totalScores,
+      modifiers,
+    },
+    combat: {
+      proficiencyBonus,
+      hp: {
+        max: maxHp,
+        current: currentHp,
+      },
+      initiative: finalInitiative,
+      armorClass: finalArmorClass,
+      isArmorPenalized,
+      speed: finalSpeed,
+    },
+    encumbrance: {
+      totalWeight,
+      carryingCapacity,
+      isEncumbered,
+    },
   };
 };

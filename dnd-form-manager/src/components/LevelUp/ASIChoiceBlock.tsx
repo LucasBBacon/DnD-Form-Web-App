@@ -18,7 +18,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
   onChange,
 }) => {
   const state = useCharacterStore();
-  const { totalScores } = useCharacterStats();
+  const { abilities } = useCharacterStats();
   const [choiceType, setChoiceType] = useState<"asi" | "feat">("asi");
   const [asiSelections, setAsiSelections] = useState<Record<Ability, number>>({
     str: 0,
@@ -64,7 +64,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
             subraceId: state.subraceId,
             classId: state.classId,
             subclassId: state.subclassId,
-            totalScores,
+            totalScores: abilities.scores,
             choicesByLevel: state.choicesByLevel,
             acquiredFeats: state.acquiredFeats,
           }),
@@ -76,7 +76,7 @@ export const ASIChoiceBlock: React.FC<ASIChoiceBlockProps> = ({
       state.raceId,
       state.subclassId,
       state.subraceId,
-      totalScores,
+      abilities.scores,
     ],
   );
 

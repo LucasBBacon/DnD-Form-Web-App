@@ -14,7 +14,7 @@ export const CombatDashboard = () => {
     takeLongRest,
   } = useCharacterStore();
 
-  const { maxHp, currentHp } = useCharacterStats();
+  const { combat } = useCharacterStats();
 
   const [inputValue, setInputValue] = useState<number | "">("");
 
@@ -31,14 +31,14 @@ export const CombatDashboard = () => {
     setInputValue(""); // clear input after applying
   };
 
-  const isUnconscious = currentHp === 0;
+  const isUnconscious = combat.hp.current === 0;
 
   return (
     <div className="combat-dashboard">
       <div className="health-block">
         <div className="hp-display">
           <h2>
-            HP: {currentHp} / {maxHp}
+            HP: {combat.hp.current} / {combat.hp.max}
           </h2>
           {tempHp > 0 && <span className="temp-hp">+{tempHp} Temp</span>}
         </div>

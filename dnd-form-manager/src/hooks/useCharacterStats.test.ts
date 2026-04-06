@@ -101,24 +101,24 @@ describe("useCharacterStats", () => {
     it("should calculate total ability scores for all abilities", () => {
       const result = useCharacterStats();
 
-      expect(result.totalScores).toBeDefined();
-      expect(result.totalScores.str).toBe(15);
-      expect(result.totalScores.dex).toBe(14);
-      expect(result.totalScores.con).toBe(13);
-      expect(result.totalScores.int).toBe(10);
-      expect(result.totalScores.wis).toBe(12);
-      expect(result.totalScores.cha).toBe(8);
+      expect(result.abilities.scores).toBeDefined();
+      expect(result.abilities.scores.str).toBe(15);
+      expect(result.abilities.scores.dex).toBe(14);
+      expect(result.abilities.scores.con).toBe(13);
+      expect(result.abilities.scores.int).toBe(10);
+      expect(result.abilities.scores.wis).toBe(12);
+      expect(result.abilities.scores.cha).toBe(8);
     });
 
     it("should calculate modifiers from ability scores", () => {
       const result = useCharacterStats();
 
-      expect(result.modifiers.str).toBe(2); // (15-10)/2
-      expect(result.modifiers.dex).toBe(2); // (14-10)/2
-      expect(result.modifiers.con).toBe(1); // (13-10)/2
-      expect(result.modifiers.int).toBe(0); // (10-10)/2
-      expect(result.modifiers.wis).toBe(1); // (12-10)/2
-      expect(result.modifiers.cha).toBe(-1); // (8-10)/2
+      expect(result.abilities.modifiers.str).toBe(2); // (15-10)/2
+      expect(result.abilities.modifiers.dex).toBe(2); // (14-10)/2
+      expect(result.abilities.modifiers.con).toBe(1); // (13-10)/2
+      expect(result.abilities.modifiers.int).toBe(0); // (10-10)/2
+      expect(result.abilities.modifiers.wis).toBe(1); // (12-10)/2
+      expect(result.abilities.modifiers.cha).toBe(-1); // (8-10)/2
     });
 
     it("should call calculateTotalAbilityScore for each ability", () => {
@@ -191,8 +191,8 @@ describe("useCharacterStats", () => {
         false,
         2
       );
-      expect(result.armorClass).toBe(11);
-      expect(result.speed).toBe(45);
+      expect(result.combat.armorClass).toBe(11);
+      expect(result.combat.speed).toBe(45);
     });
   });
 
@@ -322,7 +322,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.isArmorPenalized).toBe(true);
+      expect(result.combat.isArmorPenalized).toBe(true);
     });
 
     it("should not penalize AC when wearing proficient armor", () => {
@@ -358,7 +358,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.isArmorPenalized).toBe(false);
+      expect(result.combat.isArmorPenalized).toBe(false);
     });
 
     it("should penalize AC when wearing shield without shield proficiency", () => {
@@ -374,7 +374,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.isArmorPenalized).toBe(true);
+      expect(result.combat.isArmorPenalized).toBe(true);
     });
 
     it("should not penalize AC when wearing shield with shield proficiency", () => {
@@ -399,7 +399,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.isArmorPenalized).toBe(false);
+      expect(result.combat.isArmorPenalized).toBe(false);
     });
   });
 
@@ -408,7 +408,7 @@ describe("useCharacterStats", () => {
       const result = useCharacterStats();
 
       expect(acUtils.calculateArmorClass).toHaveBeenCalled();
-      expect(result.armorClass).toBe(10);
+      expect(result.combat.armorClass).toBe(10);
     });
 
     it("should apply AC modifiers from active traits", () => {
@@ -431,7 +431,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.armorClass).toBeDefined();
+      expect(result.combat.armorClass).toBeDefined();
     });
 
     it("should apply numeric AC bonuses from traits", () => {
@@ -455,7 +455,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.armorClass).toBe(11); // 10 + 1
+      expect(result.combat.armorClass).toBe(11); // 10 + 1
     });
 
     it("should not apply AC modifiers from inactive traits", () => {
@@ -479,7 +479,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.armorClass).toBe(10); // No modification applied
+      expect(result.combat.armorClass).toBe(10); // No modification applied
     });
   });
 
@@ -488,7 +488,7 @@ describe("useCharacterStats", () => {
       const result = useCharacterStats();
 
       expect(progressionUtils.calculateProficiencyBonus).toHaveBeenCalledWith(1);
-      expect(result.proficiencyBonus).toBe(2);
+      expect(result.combat.proficiencyBonus).toBe(2);
     });
 
     it("should calculate max HP from level, hit die, and CON modifier", () => {
@@ -500,7 +500,7 @@ describe("useCharacterStats", () => {
         1,
         [6, 5, 4]
       );
-      expect(result.maxHp).toBe(10);
+      expect(result.combat.hp.max).toBe(10);
     });
 
     it("should calculate current HP as max HP minus damage taken", () => {
@@ -513,7 +513,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.currentHp).toBe(7); // 10 - 3
+      expect(result.combat.hp.current).toBe(7); // 10 - 3
     });
 
     it("should clamp current HP to minimum of 0", () => {
@@ -526,7 +526,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.currentHp).toBe(0);
+      expect(result.combat.hp.current).toBe(0);
     });
 
     it("should calculate initiative from DEX modifier", () => {
@@ -538,7 +538,7 @@ describe("useCharacterStats", () => {
         false,
         2
       );
-      expect(result.initiative).toBe(2);
+      expect(result.combat.initiative).toBe(2);
     });
 
     it("should apply numeric initiative modifiers from active traits", () => {
@@ -570,7 +570,7 @@ describe("useCharacterStats", () => {
         false,
         2
       );
-      expect(result.initiative).toBe(7);
+      expect(result.combat.initiative).toBe(7);
     });
 
     it("should apply ability-based initiative modifiers from active traits", () => {
@@ -614,7 +614,7 @@ describe("useCharacterStats", () => {
         false,
         2
       );
-      expect(result.initiative).toBe(6);
+      expect(result.combat.initiative).toBe(6);
     });
 
     it("should apply Jack of All Trades to initiative", () => {
@@ -645,7 +645,7 @@ describe("useCharacterStats", () => {
         true,
         3
       );
-      expect(result.initiative).toBe(3);
+      expect(result.combat.initiative).toBe(3);
     });
   });
 
@@ -669,13 +669,13 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.totalWeight).toBe(20); // (5 * 2) + (10 * 1)
+      expect(result.encumbrance.totalWeight).toBe(20); // (5 * 2) + (10 * 1)
     });
 
     it("should calculate carrying capacity as STR score * 15", () => {
       const result = useCharacterStats();
 
-      expect(result.totalWeight).toBe(0);
+      expect(result.encumbrance.totalWeight).toBe(0);
       // carryingCapacity = 15 * 15 = 225
     });
 
@@ -702,7 +702,7 @@ describe("useCharacterStats", () => {
       const result = useCharacterStats();
 
       // weight: 20 * 20 = 400, capacity: 10 * 15 = 150
-      expect(result.isEncumbered).toBe(true);
+      expect(result.encumbrance.isEncumbered).toBe(true);
     });
 
     it("should not identify encumbrance when weight is within capacity", () => {
@@ -720,7 +720,7 @@ describe("useCharacterStats", () => {
       const result = useCharacterStats();
 
       // weight: 2 * 5 = 10, capacity: 15 * 15 = 225
-      expect(result.isEncumbered).toBe(false);
+      expect(result.encumbrance.isEncumbered).toBe(false);
     });
   });
 
@@ -783,7 +783,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.speed).toBe(40); // 30 + 10
+      expect(result.combat.speed).toBe(40); // 30 + 10
     });
 
     it("should accumulate multiple speed modifiers", () => {
@@ -819,7 +819,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.speed).toBe(45); // 30 + 5 + 10
+      expect(result.combat.speed).toBe(45); // 30 + 5 + 10
     });
 
     it("should ignore non-stat_modifier effects", () => {
@@ -841,7 +841,7 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.speed).toBe(30); // Unchanged
+      expect(result.combat.speed).toBe(30); // Unchanged
     });
   });
 
@@ -849,33 +849,37 @@ describe("useCharacterStats", () => {
     it("should return all required stat properties", () => {
       const result = useCharacterStats();
 
-      expect(result).toHaveProperty("totalScores");
-      expect(result).toHaveProperty("modifiers");
-      expect(result).toHaveProperty("proficiencyBonus");
-      expect(result).toHaveProperty("maxHp");
-      expect(result).toHaveProperty("currentHp");
-      expect(result).toHaveProperty("initiative");
-      expect(result).toHaveProperty("armorClass");
-      expect(result).toHaveProperty("isArmorPenalized");
-      expect(result).toHaveProperty("totalWeight");
-      expect(result).toHaveProperty("isEncumbered");
-      expect(result).toHaveProperty("speed");
+      expect(result).toHaveProperty("abilities");
+      expect(result).toHaveProperty("abilities.scores");
+      expect(result).toHaveProperty("abilities.modifiers");
+      expect(result).toHaveProperty("combat");
+      expect(result).toHaveProperty("combat.proficiencyBonus");
+      expect(result).toHaveProperty("combat.hp.max");
+      expect(result).toHaveProperty("combat.hp.current");
+      expect(result).toHaveProperty("combat.initiative");
+      expect(result).toHaveProperty("combat.armorClass");
+      expect(result).toHaveProperty("combat.isArmorPenalized");
+      expect(result).toHaveProperty("combat.speed");
+      expect(result).toHaveProperty("encumbrance");
+      expect(result).toHaveProperty("encumbrance.totalWeight");
+      expect(result).toHaveProperty("encumbrance.carryingCapacity");
+      expect(result).toHaveProperty("encumbrance.isEncumbered");
     });
 
     it("should have correct types for all properties", () => {
       const result = useCharacterStats();
 
-      expect(typeof result.totalScores.str).toBe("number");
-      expect(typeof result.modifiers.dex).toBe("number");
-      expect(typeof result.proficiencyBonus).toBe("number");
-      expect(typeof result.maxHp).toBe("number");
-      expect(typeof result.currentHp).toBe("number");
-      expect(typeof result.initiative).toBe("number");
-      expect(typeof result.armorClass).toBe("number");
-      expect(typeof result.isArmorPenalized).toBe("boolean");
-      expect(typeof result.totalWeight).toBe("number");
-      expect(typeof result.isEncumbered).toBe("boolean");
-      expect(typeof result.speed).toBe("number");
+      expect(typeof result.abilities.scores.str).toBe("number");
+      expect(typeof result.abilities.modifiers.dex).toBe("number");
+      expect(typeof result.combat.proficiencyBonus).toBe("number");
+      expect(typeof result.combat.hp.max).toBe("number");
+      expect(typeof result.combat.hp.current).toBe("number");
+      expect(typeof result.combat.initiative).toBe("number");
+      expect(typeof result.combat.armorClass).toBe("number");
+      expect(typeof result.combat.isArmorPenalized).toBe("boolean");
+      expect(typeof result.encumbrance.totalWeight).toBe("number");
+      expect(typeof result.encumbrance.isEncumbered).toBe("boolean");
+      expect(typeof result.combat.speed).toBe("number");
     });
   });
 
@@ -946,10 +950,10 @@ describe("useCharacterStats", () => {
       const result = useCharacterStats();
 
       expect(result).not.toHaveProperty("level");
-      expect(result.maxHp).toBe(45);
-      expect(result.currentHp).toBe(40);
-      expect(result.proficiencyBonus).toBe(3);
-      expect(result.isArmorPenalized).toBe(false);
+      expect(result.combat.hp.max).toBe(45);
+      expect(result.combat.hp.current).toBe(40);
+      expect(result.combat.proficiencyBonus).toBe(3);
+      expect(result.combat.isArmorPenalized).toBe(false);
     });
 
     it("should handle a rogue with no armor equipment", () => {
@@ -982,9 +986,9 @@ describe("useCharacterStats", () => {
 
       const result = useCharacterStats();
 
-      expect(result.armorClass).toBe(15);
-      expect(result.isArmorPenalized).toBe(false);
-      expect(result.initiative).toBe(3);
+      expect(result.combat.armorClass).toBe(15);
+      expect(result.combat.isArmorPenalized).toBe(false);
+      expect(result.combat.initiative).toBe(3);
     });
   });
 });

@@ -14,8 +14,8 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
     useCharacterStore();
 
   // Pull Con mod and current HP state
-  const { modifiers, currentHp, maxHp } = useCharacterStats();
-  const conMod = modifiers.con;
+  const { abilities, combat } = useCharacterStats();
+  const conMod = abilities.modifiers.con;
 
   const classData = classId ? getClassById(classId) : null;
   const hitDie: HitDie = classData?.hitDie ?? 6; // Fallback to d6 if no class
@@ -24,7 +24,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
 
   // Math variables
   const availableDice = Math.max(0, level - expendedHitDice);
-  const isFullyHealed = currentHp >= maxHp;
+  const isFullyHealed = combat.hp.current >= combat.hp.max;
 
   // region Actions
 
@@ -61,7 +61,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
 
       <div className="rest-stats">
         <span>
-          <strong>HP:</strong> {currentHp} / {maxHp}
+          <strong>HP:</strong> {combat.hp.current} / {combat.hp.max}
         </span>
         <span>
           <strong>Available Hit Dice</strong> {availableDice}d{hitDie}

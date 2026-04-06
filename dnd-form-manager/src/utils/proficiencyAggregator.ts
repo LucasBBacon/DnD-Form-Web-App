@@ -1,4 +1,4 @@
-import type { useCharacterStats } from "../hooks/useCharacterStats";
+import type { CharacterStatsContext } from "../hooks/useCharacterStats";
 import type { useCharacterStore } from "../store/useCharacterStore";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
@@ -8,8 +8,10 @@ import { SKILL_ABILITY_MAP } from "./constants";
 import { evaluateAllPredicates } from "./predicateEngine";
 import { getClassById } from "../data/staticDataApi";
 
+// #region Public Types
+
 export type CharacterState = ReturnType<typeof useCharacterStore.getState>;
-export type DerivedStats = ReturnType<typeof useCharacterStats>;
+export type DerivedStats = CharacterStatsContext;
 export type ProficiencySourceKind = "static" | "choice" | "trait";
 
 export interface ProficiencyGrant<T extends string> {
@@ -93,6 +95,10 @@ export interface AggregateNonSkillProficienciesMulticlassOptions {
   stats: DerivedStats;
 }
 
+// #endregion
+
+// #region Domain Constants
+
 const skillKeys = new Set(Object.keys(SKILL_ABILITY_MAP) as Skill[]);
 const abilityKeys = new Set<Ability>([
   "str",
@@ -134,54 +140,52 @@ const toolCategoryTargets = new Set([
   "category_artisans_tools",
   "category_musical_instrument",
 ]);
+
+// #endregion
+
+// #region Domain Guards
+
+/**
+ * Determines if a target string belongs to the weapon domain.
+ * @param target The target string to check.
+ * @returns True if the target is a weapon domain target, false otherwise.
+ */
 const isWeaponDomainTarget = (target: string): boolean =>
   !!weaponCategoryAliases[target] ||
   target.startsWith("weapon_") ||
   target.startsWith("category_weapon_");
+/**
+ * Determines if a target string belongs to the armor domain.
+ * @param target The target string to check.
+ * @returns True if the target is an armor domain target, false otherwise.
+ */
 const isArmorDomainTarget = (target: string): boolean =>
   !!armorCategoryAliases[target] ||
   target.startsWith("armor_") ||
   target.startsWith("category_armor_");
+/**
+ * Determines if a target string belongs to the tool domain.
+ * @param target The target string to check.
+ * @returns True if the target is a tool domain target, false otherwise.
+ */
 const isToolDomainTarget = (target: string): boolean =>
   toolCategoryTargets.has(target) || target.startsWith("tool_");
 
-const createAggregatedProficiencies = <T extends string>(
-  set: Set<T>,
-  grants: ProficiencyGrant<T>[],
-  bySource: AggregatedProficiencies<T>["bySource"],
-): AggregatedProficiencies<T> => ({
-  set,
-  list: Array.from(set),
-  grants,
-  bySource,
-  has: (value: T) => set.has(value),
-});
-
-const mergeAggregatedProficiencies = <T extends string>(
-  ...results: AggregatedProficiencies<T>[]
-): AggregatedProficiencies<T> => {
-  const set = new Set<T>();
-  const grants: ProficiencyGrant<T>[] = [];
-  const bySource: AggregatedProficiencies<T>["bySource"] = {
-    static: [],
-    choice: [],
-    trait: [],
-  };
-
-  results.forEach((result) => {
-    result.list.forEach((value) => set.add(value));
-    grants.push(...result.grants);
-    bySource.static.push(...result.bySource.static);
-    bySource.choice.push(...result.bySource.choice);
-    bySource.trait.push(...result.bySource.trait);
-  });
-
-  return createAggregatedProficiencies(set, grants, bySource);
-};
-
+/**
+ * Determines if a target string is a known skill.
+ */
 const isKnownSkill = (target: string): target is Skill =>
   skillKeys.has(target as Skill);
 
+// #endregion
+
+// #region Target Normalization
+
+/**
+ * Normalizes a weapon target string.
+ * @param target The target string to normalize.
+ * @returns The normalized weapon target string, or null if it cannot be normalized.
+ */
 const normalizeWeaponTarget = (target: string): string | null => {
   if (weaponCategoryAliases[target]) return weaponCategoryAliases[target];
 
@@ -208,10 +212,20 @@ const normalizeWeaponTarget = (target: string): string | null => {
   return null;
 };
 
+/**
+ * Normalizes an armor target string.
+ * @param target The target string to normalize.
+ * @returns The normalized armor target string, or null if it cannot be normalized.
+ */
 const normalizeArmorTarget = (target: string): string | null => {
   return armorCategoryAliases[target] || null;
 };
 
+/**
+ * Normalizes a tool target string.
+ * @param target The target string to normalize.
+ * @returns The normalized tool target string, or null if it cannot be normalized.
+ */
 const normalizeToolTarget = (target: string): string | null => {
   if (toolCategoryTargets.has(target)) return target;
   if (target.startsWith("tool_")) return target;
@@ -231,6 +245,11 @@ const normalizeToolTarget = (target: string): string | null => {
   return null;
 };
 
+/**
+ * Normalizes a language or other target string.
+ * @param target The target string to normalize.
+ * @returns The normalized language or other target string, or null if it cannot be normalized.
+ */
 const normalizeLanguageOrOtherTarget = (target: string): string | null => {
   if (isKnownSkill(target) || abilityKeys.has(target as Ability)) return null;
   if (
@@ -244,57 +263,64 @@ const normalizeLanguageOrOtherTarget = (target: string): string | null => {
   return target;
 };
 
+// #endregion
+
+// #region Aggregation Helpers
+
 /**
- * Extracts multiclass_proficiencies for a class if joining as secondary class.
- * When a character joins a non-primary class, they gain its multiclass proficiencies.
- * The primary class always grants its full starting proficiencies (handled elsewhere).
+ * Creates an aggregated proficiencies object from a set of proficiencies, grants, and sources.
  */
-const extractMulticlassProficiencies = (
-  classId: string,
-  isPrimaryClass: boolean,
-): { weapons?: string[]; armor?: string[]; tools?: string[] } => {
-  if (isPrimaryClass) return {};
+const createAggregatedProficiencies = <T extends string>(
+  set: Set<T>,
+  grants: ProficiencyGrant<T>[],
+  bySource: AggregatedProficiencies<T>["bySource"],
+): AggregatedProficiencies<T> => ({
+  set,
+  list: Array.from(set),
+  grants,
+  bySource,
+  has: (value: T) => set.has(value),
+});
 
-  const classData = getClassById(classId);
-  if (!classData?.multiclassProficiencies) return {};
-
-  return {
-    weapons: classData.multiclassProficiencies.weapons,
-    armor: classData.multiclassProficiencies.armor,
-    tools: classData.multiclassProficiencies.tools,
+/**
+ * Merges multiple aggregated proficiencies into a single aggregated proficiencies object.
+ */
+const mergeAggregatedProficiencies = <T extends string>(
+  ...results: AggregatedProficiencies<T>[]
+): AggregatedProficiencies<T> => {
+  const set = new Set<T>();
+  const grants: ProficiencyGrant<T>[] = [];
+  const bySource: AggregatedProficiencies<T>["bySource"] = {
+    static: [],
+    choice: [],
+    trait: [],
   };
-};
 
-/**
- * Collects saving throws from all active class tracks (PHB multiclass rule).
- */
-/**
- * Collects saving throws from all active class tracks (PHB multiclass rule).
- */
-const collectSavingThrowsFromTracks = (
-  classTracks: CharacterClassTrack[] | undefined,
-): Ability[] => {
-  const savingThrows = new Set<Ability>();
-
-  if (!classTracks || classTracks.length === 0) {
-    return [];
-  }
-
-  classTracks.forEach((track) => {
-    const classData = getClassById(track.classId);
-    classData?.proficiencies.savingThrows?.forEach((ability: Ability) => {
-      savingThrows.add(ability);
-    });
+  results.forEach((result) => {
+    result.list.forEach((value) => set.add(value));
+    grants.push(...result.grants);
+    bySource.static.push(...result.bySource.static);
+    bySource.choice.push(...result.bySource.choice);
+    bySource.trait.push(...result.bySource.trait);
   });
 
-  return Array.from(savingThrows);
+  return createAggregatedProficiencies(set, grants, bySource);
 };
 
+/**
+ * Determines if a trait effect is active for the given level.
+ */
 export const isEffectActiveForLevel = (
   effect: TraitEffect,
   currentLevel: number,
 ): boolean => (effect.levelAvailable || 1) <= currentLevel;
 
+/**
+ * Groups choice values by level based on a selector function.
+ * @param choicesByLevel The choices organized by level.
+ * @param selector A function to select the values from each choice.
+ * @returns An object mapping levels to the selected values.
+ */
 export const groupChoiceValuesByLevel = <T extends string>(
   choicesByLevel: Record<number, LevelChoice>,
   selector: (choice: LevelChoice) => readonly T[] | undefined,
@@ -311,6 +337,43 @@ export const groupChoiceValuesByLevel = <T extends string>(
   return grouped;
 };
 
+const getNonSkillChoiceBucketsByLevel = (
+  choicesByLevel: Record<number, LevelChoice>,
+) => {
+  const weaponChoicesByLevel = groupChoiceValuesByLevel(choicesByLevel, (choice) =>
+    choice.weaponChoices
+      ?.map(normalizeWeaponTarget)
+      .filter((value): value is string => value !== null),
+  );
+
+  const toolChoicesByLevel = groupChoiceValuesByLevel(choicesByLevel, (choice) =>
+    choice.toolChoices
+      ?.map(normalizeToolTarget)
+      .filter((value): value is string => value !== null),
+  );
+
+  const languageChoicesByLevel = groupChoiceValuesByLevel(
+    choicesByLevel,
+    (choice) =>
+      choice.languageChoices
+        ?.map(normalizeLanguageOrOtherTarget)
+        .filter((value): value is string => value !== null),
+  );
+
+  return {
+    weaponChoicesByLevel,
+    toolChoicesByLevel,
+    languageChoicesByLevel,
+  };
+};
+
+// #endregion
+
+// #region Primary Aggregators
+
+/**
+ * Aggregates proficiencies from various sources including static values, choices, and traits.
+ */
 export const aggregateProficiencies = <T extends string>(
   options: AggregateProficienciesOptions<T>,
 ): AggregatedProficiencies<T> => {
@@ -373,6 +436,9 @@ export const aggregateProficiencies = <T extends string>(
   return createAggregatedProficiencies(set, grants, bySource);
 };
 
+/**
+ * Aggregates skill proficiencies and expertise from various sources including static values, choices, and traits.
+ */
 export const aggregateSkillProficiencies = (
   options: AggregateSkillProficienciesOptions,
 ): {
@@ -415,6 +481,9 @@ export const aggregateSkillProficiencies = (
   return { proficiencies, expertise };
 };
 
+/**
+ * Aggregates saving throw proficiencies from various sources including class features and traits.
+ */
 export const aggregateSaveProficiencies = (
   options: AggregateSaveProficienciesOptions,
 ): AggregatedProficiencies<Ability> => {
@@ -430,6 +499,9 @@ export const aggregateSaveProficiencies = (
   });
 };
 
+/**
+ * Aggregates non-skill proficiencies from various sources including choices and traits.
+ */
 export const aggregateNonSkillProficiencies = (
   options: AggregateNonSkillProficienciesOptions,
 ): {
@@ -439,27 +511,8 @@ export const aggregateNonSkillProficiencies = (
   tools: AggregatedProficiencies<string>;
   languagesAndOther: AggregatedProficiencies<string>;
 } => {
-  const weaponChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.weaponChoices
-        ?.map(normalizeWeaponTarget)
-        .filter((value): value is string => value !== null),
-  );
-  const toolChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.toolChoices
-        ?.map(normalizeToolTarget)
-        .filter((value): value is string => value !== null),
-  );
-  const languageChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.languageChoices
-        ?.map(normalizeLanguageOrOtherTarget)
-        .filter((value): value is string => value !== null),
-  );
+  const { weaponChoicesByLevel, toolChoicesByLevel, languageChoicesByLevel } =
+    getNonSkillChoiceBucketsByLevel(options.choicesByLevel);
 
   const weapons = aggregateProficiencies<string>({
     currentLevel: options.currentLevel,
@@ -509,6 +562,55 @@ export const aggregateNonSkillProficiencies = (
   };
 };
 
+// #endregion
+
+// #region Multiclass Helpers
+
+/**
+ * Extracts multiclass proficiencies for a class if joining as a secondary class.
+ */
+const extractMulticlassProficiencies = (
+  classId: string,
+  isPrimaryClass: boolean,
+): { weapons?: string[]; armor?: string[]; tools?: string[] } => {
+  if (isPrimaryClass) return {};
+
+  const classData = getClassById(classId);
+  if (!classData?.multiclassProficiencies) return {};
+
+  return {
+    weapons: classData.multiclassProficiencies.weapons,
+    armor: classData.multiclassProficiencies.armor,
+    tools: classData.multiclassProficiencies.tools,
+  };
+};
+
+/**
+ * Collects saving throws from all active class tracks (PHB multiclass rule).
+ */
+const collectSavingThrowsFromTracks = (
+  classTracks: CharacterClassTrack[] | undefined,
+): Ability[] => {
+  const savingThrows = new Set<Ability>();
+
+  if (!classTracks || classTracks.length === 0) {
+    return [];
+  }
+
+  classTracks.forEach((track) => {
+    const classData = getClassById(track.classId);
+    classData?.proficiencies.savingThrows?.forEach((ability: Ability) => {
+      savingThrows.add(ability);
+    });
+  });
+
+  return Array.from(savingThrows);
+};
+
+// #endregion
+
+// #region Multiclass Aggregators
+
 /**
  * Aggregates saving throw proficiencies from all active class tracks.
  * In multiclass, a character gains saving throw proficiencies from all classes.
@@ -516,7 +618,7 @@ export const aggregateNonSkillProficiencies = (
 export const aggregateSaveProficienciesMulticlass = (
   options: AggregateSaveProficienciesMulticlassOptions,
 ): AggregatedProficiencies<Ability> => {
-  // FALLBACK: If no multiclass tracks, use single-class logic based on primary classId
+  // Fallback to single-class logic based on primary classId.
   if (!options.classTracks || options.classTracks.length === 0) {
     const primaryClass = options.state.classId;
     const classData = getClassById(primaryClass);
@@ -559,7 +661,7 @@ export const aggregateNonSkillProficienciesMulticlass = (
   tools: AggregatedProficiencies<string>;
   languagesAndOther: AggregatedProficiencies<string>;
 } => {
-  // FALLBACK: If no multiclass tracks, use single-class logic based on primary classId
+  // Fallback to single-class logic based on primary classId.
   if (!options.classTracks || options.classTracks.length === 0) {
     return aggregateNonSkillProficiencies({
       choicesByLevel: options.choicesByLevel,
@@ -570,7 +672,6 @@ export const aggregateNonSkillProficienciesMulticlass = (
     });
   }
 
-  // Collect static proficiencies from all class tracks
   const staticWeapons: string[] = [];
   const staticArmor: string[] = [];
   const staticTools: string[] = [];
@@ -582,12 +683,10 @@ export const aggregateNonSkillProficienciesMulticlass = (
     const isPrimary = trackIndex === 0;
     const mcProfs = extractMulticlassProficiencies(track.classId, isPrimary);
 
-    // For primary class, use starting proficiencies
     if (isPrimary) {
       classData.proficiencies.weapons?.forEach((w) => staticWeapons.push(w));
     }
 
-    // For secondary classes, use multiclass_proficiencies
     if (mcProfs.weapons) {
       mcProfs.weapons.forEach((w) => staticWeapons.push(w));
     }
@@ -599,27 +698,8 @@ export const aggregateNonSkillProficienciesMulticlass = (
     }
   });
 
-  const weaponChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.weaponChoices
-        ?.map(normalizeWeaponTarget)
-        .filter((value): value is string => value !== null),
-  );
-  const toolChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.toolChoices
-        ?.map(normalizeToolTarget)
-        .filter((value): value is string => value !== null),
-  );
-  const languageChoicesByLevel = groupChoiceValuesByLevel(
-    options.choicesByLevel,
-    (choice) =>
-      choice.languageChoices
-        ?.map(normalizeLanguageOrOtherTarget)
-        .filter((value): value is string => value !== null),
-  );
+  const { weaponChoicesByLevel, toolChoicesByLevel, languageChoicesByLevel } =
+    getNonSkillChoiceBucketsByLevel(options.choicesByLevel);
 
   const weapons = aggregateProficiencies<string>({
     currentLevel: options.currentLevel,
@@ -671,3 +751,5 @@ export const aggregateNonSkillProficienciesMulticlass = (
     languagesAndOther,
   };
 };
+
+// #endregion

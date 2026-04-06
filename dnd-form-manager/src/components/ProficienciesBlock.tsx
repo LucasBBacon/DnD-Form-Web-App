@@ -7,7 +7,20 @@ import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAg
 
 export const ProficienciesBlock = () => {
   const state = useCharacterStore();
-  const derivedStats = useCharacterStats();
+  const { abilities, combat, encumbrance } = useCharacterStats();
+  const derivedStats = {
+    totalScores: abilities.scores,
+    modifiers: abilities.modifiers,
+    proficiencyBonus: combat.proficiencyBonus,
+    maxHp: combat.hp.max,
+    currentHp: combat.hp.current,
+    initiative: combat.initiative,
+    armorClass: combat.armorClass,
+    isArmorPenalized: combat.isArmorPenalized,
+    totalWeight: encumbrance.totalWeight,
+    isEncumbered: encumbrance.isEncumbered,
+    speed: combat.speed,
+  };
 
   const allTraits = getAllCharacterTraits(
     state.level,

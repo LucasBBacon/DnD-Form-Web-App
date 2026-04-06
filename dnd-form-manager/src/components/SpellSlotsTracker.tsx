@@ -2,13 +2,13 @@ import { useSpellcasting } from "../hooks/useSpellcasting";
 import { useCharacterStore } from "../store/useCharacterStore";
 
 export const SpellSlotsTracker = () => {
-  const { isSpellcaster, slotStatusByLevel, pactMagicInfo } = useSpellcasting();
+  const { isSpellcaster, slots } = useSpellcasting();
   const { expendSpellSlot, expendPactSlot } = useCharacterStore();
 
   if (!isSpellcaster) return null;
 
-  const hasSharedSlots = Object.keys(slotStatusByLevel).length > 0;
-  const hasPactSlots = !!pactMagicInfo;
+  const hasSharedSlots = Object.keys(slots.shared).length > 0;
+  const hasPactSlots = !!slots.pact;
 
   return (
     <div className="spell-slots">
@@ -18,7 +18,7 @@ export const SpellSlotsTracker = () => {
         <div className="standard-slots-grid">
           <h4>Shared Spell Slots</h4>
 
-          {Object.entries(slotStatusByLevel).map(([level, data]) => (
+          {Object.entries(slots.shared).map(([level, data]) => (
             <div key={level} className="slot-row">
               <span>Level {level} Slots:</span>
 
@@ -42,17 +42,20 @@ export const SpellSlotsTracker = () => {
         </div>
       )}
 
-      {hasPactSlots && pactMagicInfo && (
-        <div className="pact-magic-block">
+      {hasPactSlots && slots.pact && (
+        (() => {
+          const pact = slots.pact;
+          return (
+            <div className="pact-magic-block">
           <h4>Pact Slots</h4>
           <div className="slot-header">
             <span>Pact Slots</span>
-            <span className="slot-level-tag">Level {pactMagicInfo.level}</span>
+            <span className="slot-level-tag">Level {pact.level}</span>
           </div>
 
           <div className="checkbox-row">
-            {Array.from({ length: pactMagicInfo.total }).map((_, idx) => {
-              const isExpended = idx < pactMagicInfo.expended;
+            {Array.from({ length: pact.total }).map((_, idx) => {
+              const isExpended = idx < pact.expended;
               return (
                 <button
                   key={`pact-${idx}`}
@@ -66,7 +69,9 @@ export const SpellSlotsTracker = () => {
             })}
           </div>
           <small className="help-text">Refreshes on a Short Rest.</small>
-        </div>
+            </div>
+          );
+        })()
       )}
 
       {!hasSharedSlots && !hasPactSlots && (

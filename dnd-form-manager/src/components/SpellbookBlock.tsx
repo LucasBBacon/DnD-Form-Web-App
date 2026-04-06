@@ -8,17 +8,10 @@ export const SpellbookBlock = () => {
     useCharacterStore();
   const {
     isSpellcaster,
-    preparationType,
-    spellSaveDC,
-    spellAttackBonus,
-    maxSpellsKnown,
-    maxPreparedSpells,
-    classSpellcastingSummaries,
-    spellSelectionDiagnostics,
-    spellsKnown,
-    spellsPrepared,
-    innateSpells,
     canCastSpells,
+    casting,
+    pools,
+    diagnostics,
   } = useSpellcasting();
 
   const [selectedSpellId, setSelectedSpellId] = useState<string>("");
@@ -27,11 +20,13 @@ export const SpellbookBlock = () => {
   if (!isSpellcaster) return null;
 
   // Figure out which paradigm is being used
-  const isPreparedCaster = preparationType === "prepared";
-  const activeSpells = isPreparedCaster ? spellsPrepared : spellsKnown;
+  const isPreparedCaster = casting.preparationType === "prepared";
+  const activeSpells = isPreparedCaster
+    ? pools.prepared.selected
+    : pools.known.selected;
   const eligibleClassIds =
-    classSpellcastingSummaries.length > 0
-      ? classSpellcastingSummaries.map((summary) => summary.classId)
+    diagnostics.classBreakdown.length > 0
+      ? diagnostics.classBreakdown.map((summary) => summary.classId)
       : classId
         ? [classId]
         : [];
@@ -41,8 +36,8 @@ export const SpellbookBlock = () => {
     (spell) => spell.classes.some((spellClassId) => eligibleClassIds.includes(spellClassId)),
   );
 
-  const uniqueKnownCount = new Set(spellsKnown).size;
-  const uniquePreparedCount = new Set(spellsPrepared).size;
+  const uniqueKnownCount = new Set(pools.known.selected).size;
+  const uniquePreparedCount = new Set(pools.prepared.selected).size;
 
   const resolveSpellName = (spellId: string) => {
     const spell = getSpellByID(spellId);
@@ -50,10 +45,10 @@ export const SpellbookBlock = () => {
   };
 
   const hasDiagnostics =
-    spellSelectionDiagnostics.invalidKnownSpellIds.length > 0 ||
-    spellSelectionDiagnostics.invalidPreparedSpellIds.length > 0 ||
-    spellSelectionDiagnostics.knownSpellOverflow > 0 ||
-    spellSelectionDiagnostics.preparedSpellOverflow > 0;
+    diagnostics.selections.invalidKnownSpellIds.length > 0 ||
+    diagnostics.selections.invalidPreparedSpellIds.length > 0 ||
+    diagnostics.selections.knownSpellOverflow > 0 ||
+    diagnostics.selections.preparedSpellOverflow > 0;
 
   const handleAddSpell = () => {
     if (!selectedSpellId) return;
@@ -88,10 +83,10 @@ export const SpellbookBlock = () => {
         <h2>Spellbook</h2>
         <div className="spell-stats">
           <span>
-            <strong>Spell Save DC:</strong> {spellSaveDC}
+            <strong>Spell Save DC:</strong> {casting.saveDC}
           </span>
           <span>
-            <strong>Spell Attack:</strong> +{spellAttackBonus}
+            <strong>Spell Attack:</strong> +{casting.attackBonus}
           </span>
         </div>
       </div>
@@ -99,11 +94,11 @@ export const SpellbookBlock = () => {
       <div className="spellbook-capacity" style={{ marginBottom: "0.75rem" }}>
         {isPreparedCaster ? (
           <p>
-            Prepared Capacity: {uniquePreparedCount}/{maxPreparedSpells}
+            Prepared Capacity: {uniquePreparedCount}/{pools.prepared.max}
           </p>
         ) : (
           <p>
-            Known Capacity: {uniqueKnownCount}/{maxSpellsKnown}
+            Known Capacity: {uniqueKnownCount}/{pools.known.max}
           </p>
         )}
       </div>
@@ -121,34 +116,34 @@ export const SpellbookBlock = () => {
         >
           <h3 style={{ marginTop: 0 }}>Spell Selection Warnings</h3>
 
-          {spellSelectionDiagnostics.knownSpellOverflow > 0 && (
+          {diagnostics.selections.knownSpellOverflow > 0 && (
             <p>
-              Known spells exceed limit by {spellSelectionDiagnostics.knownSpellOverflow}.
+              Known spells exceed limit by {diagnostics.selections.knownSpellOverflow}.
             </p>
           )}
 
-          {spellSelectionDiagnostics.preparedSpellOverflow > 0 && (
+          {diagnostics.selections.preparedSpellOverflow > 0 && (
             <p>
-              Prepared spells exceed limit by {spellSelectionDiagnostics.preparedSpellOverflow}.
+              Prepared spells exceed limit by {diagnostics.selections.preparedSpellOverflow}.
             </p>
           )}
 
-          {spellSelectionDiagnostics.invalidKnownSpellIds.length > 0 && (
+          {diagnostics.selections.invalidKnownSpellIds.length > 0 && (
             <div>
               <strong>Invalid known spells:</strong>
               <ul>
-                {spellSelectionDiagnostics.invalidKnownSpellIds.map((spellId) => (
+                {diagnostics.selections.invalidKnownSpellIds.map((spellId) => (
                   <li key={`invalid-known-${spellId}`}>{resolveSpellName(spellId)}</li>
                 ))}
               </ul>
             </div>
           )}
 
-          {spellSelectionDiagnostics.invalidPreparedSpellIds.length > 0 && (
+          {diagnostics.selections.invalidPreparedSpellIds.length > 0 && (
             <div>
               <strong>Invalid prepared spells:</strong>
               <ul>
-                {spellSelectionDiagnostics.invalidPreparedSpellIds.map((spellId) => (
+                {diagnostics.selections.invalidPreparedSpellIds.map((spellId) => (
                   <li key={`invalid-prepared-${spellId}`}>
                     {resolveSpellName(spellId)}
                   </li>
@@ -160,11 +155,11 @@ export const SpellbookBlock = () => {
       )}
 
       {/* --- Innate Spells --- */}
-      {innateSpells && innateSpells.length > 0 && (
+      {pools.innate.length > 0 && (
         <div className="innate-spells-block">
           <h3>Innate Magic and Traits</h3>
           <ul className="innate-spell-list">
-            {innateSpells.map((innate, idx) => (
+            {pools.innate.map((innate, idx) => (
               <li key={`innate-${idx}`} className="spell-row">
                 <div className="spell-info">
                   <strong>
