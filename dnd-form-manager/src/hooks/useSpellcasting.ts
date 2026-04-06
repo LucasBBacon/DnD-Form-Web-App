@@ -258,6 +258,8 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
 
   // #region --- Class Summaries and Spell Counts ---
 
+  // Generate a summary of each class's contribution to the character's spellcasting, 
+  // used for diagnostics and UI display
   const classSpellcastingSummaries: ClassSpellcastingSummary[] =
     spellcastingTracks.map((track) => {
       const abilityMod = modifiers[track.spellcastingBase.ability] || 0;
@@ -290,6 +292,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
   // #region --- Spell Selection Diagnostics ---
 
   const allSpells = getAllSpells();
+  // Identify any known or prepared spells that are invalid based on the character's current class spellcasting options
   const knownEligibleClassIds = classSpellcastingSummaries
     .filter((summary) => summary.preparationType === "known")
     .map((summary) => summary.classId);
@@ -297,6 +300,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     .filter((summary) => summary.preparationType === "prepared")
     .map((summary) => summary.classId);
 
+  // Check for any known or prepared spells that are not eligible for the character's classes
   const invalidKnownSpellIds = dedupe(
     state.spellsKnown.filter((spellId) => {
       const spell = allSpells.find((entry) => entry.id === spellId);

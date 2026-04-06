@@ -40,7 +40,7 @@ const SUBCLASS_SCALING_KEYS: Record<
 
 // #endregion
 
-// #region --- Public Types ---
+// #region --- Helper Functions ---
 
 /**
  * Resolves the subclass scaling bonus for a given value and ability modifiers.
@@ -75,7 +75,30 @@ const getFirstDefinedScalingValue = (
   return undefined;
 };
 
+/**
+ * Converts the character stats from the useCharacterStats hook into a CharacterStatsContext object.
+ * @param stats The character stats returned by the useCharacterStats hook.
+ * @returns A CharacterStatsContext object containing the derived stats.
+ */
+export const toCharacterStatsContext = (
+  stats: UseCharacterStatsReturn,
+): CharacterStatsContext => ({
+  totalScores: stats.abilities.scores,
+  modifiers: stats.abilities.modifiers,
+  proficiencyBonus: stats.combat.proficiencyBonus,
+  maxHp: stats.combat.hp.max,
+  currentHp: stats.combat.hp.current,
+  initiative: stats.combat.initiative,
+  armorClass: stats.combat.armorClass,
+  isArmorPenalized: stats.combat.isArmorPenalized,
+  totalWeight: stats.encumbrance.totalWeight,
+  isEncumbered: stats.encumbrance.isEncumbered,
+  speed: stats.combat.speed,
+});
+
 // #endregion
+
+// #region --- Return Types ---
 
 export interface CharacterStatsContext {
   totalScores: Record<Ability, number>;
@@ -114,21 +137,7 @@ export interface UseCharacterStatsReturn {
   };
 }
 
-export const toCharacterStatsContext = (
-  stats: UseCharacterStatsReturn,
-): CharacterStatsContext => ({
-  totalScores: stats.abilities.scores,
-  modifiers: stats.abilities.modifiers,
-  proficiencyBonus: stats.combat.proficiencyBonus,
-  maxHp: stats.combat.hp.max,
-  currentHp: stats.combat.hp.current,
-  initiative: stats.combat.initiative,
-  armorClass: stats.combat.armorClass,
-  isArmorPenalized: stats.combat.isArmorPenalized,
-  totalWeight: stats.encumbrance.totalWeight,
-  isEncumbered: stats.encumbrance.isEncumbered,
-  speed: stats.combat.speed,
-});
+// #endregion
 
 /**
  * Custom hook to calculate the character's derived stats based on their base ability scores,
@@ -400,6 +409,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   // #endregion
 
+  // #region --- Return Final Derived Stats ---
   return {
     abilities: {
       scores: totalScores,
@@ -422,4 +432,5 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
       isEncumbered,
     },
   };
+  // #endregion
 };

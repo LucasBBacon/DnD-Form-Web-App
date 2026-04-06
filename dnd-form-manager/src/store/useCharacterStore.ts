@@ -9,6 +9,8 @@ export interface InventoryRecord {
   quantity: number;
 }
 
+// #region --- Helper Functions ---
+
 const clampAbilityScore = (score: number): number =>
   Math.max(1, Math.min(20, score));
 
@@ -66,7 +68,12 @@ const upsertClassTrack = (
   );
 };
 
+// #endregion
+
+// #region --- Store Types ---
 interface CharacterState {
+  // #region --- Core Character State ---
+
   name: string;
   level: number;
   raceId: string | null;
@@ -87,87 +94,331 @@ interface CharacterState {
   choicesByLevel: Record<number, LevelChoice>;
   acquiredFeats: FeatAcquisitionEntry[];
 
-  // region Spells state
+  // #endregion
+
+  // #region --- Spells State ---
+
   // IDs of spells permanently learned (Bards, Sorcerers, Warlocks...)
   spellsKnown: string[];
   // IDs of spells prepared today (Clerics, Druids, Wizards...)
   spellsPrepared: string[];
-
   // Maps spell level (1-9) to how many slots are USED
   expendedSpellSlots: Record<number, number>;
   // Warlocks are weird, track separately
   expendedPactSlots: number;
 
-  // region Inventory State
+  // #endregion
+
+  // #region --- Inventory State ---
+
   inventory: InventoryRecord[];
   equippedArmorId: string | null;
   equippedShieldId: string | null;
   equippedWeaponIds: string[];
 
-  // region Combat State
+  // #endregion
+
+  // #region --- Combat State ---
+
   damageTaken: number;
   tempHp: number;
   deathSaves: { successes: number; failures: number };
   expendedHitDice: number;
 
   isSetupComplete: boolean;
+
+  // #endregion
 }
 
 interface CharacterActions {
-  setName: (name: string) => void;
-  setRace: (raceId: string) => void;
-  setSubrace: (subraceId: string | null) => void;
-  setClass: (classId: string) => void;
-  setSubclass: (subclassId: string | null) => void;
-  setClassTracks: (tracks: CharacterClassTrack[]) => void;
-  addClassTrack: (classId: string, startingLevel?: number) => void;
-  removeClassTrack: (classId: string) => void;
-  setClassTrackLevel: (classId: string, level: number) => void;
-  setClassTrackSubclass: (classId: string, subclassId: string | null) => void;
-  setBackground: (background: string) => void;
+  // #region --- Character Setup Actions ---
 
+  /**
+   * Sets the name of the character.
+   * @param name - The new name for the character.
+   * @returns void
+   */
+  setName: (name: string) => void;
+  /**
+   * Sets the race of the character.
+   * @param raceId - The ID of the new race for the character.
+   * @returns void
+   */
+  setRace: (raceId: string) => void;
+  /**
+   * Sets the subrace of the character.
+   * @param subraceId - The ID of the new subrace for the character, or null to remove it.
+   * @returns void
+   */
+  setSubrace: (subraceId: string | null) => void;
+  /**
+   * Sets the class of the character.
+   * @param classId - The ID of the new class for the character.
+   * @returns void
+   */
+  setClass: (classId: string) => void;
+  /**
+   * Sets the subclass of the character.
+   * @param subclassId - The ID of the new subclass for the character, or null to remove it.
+   * @returns void
+   */
+  setSubclass: (subclassId: string | null) => void;
+
+  // #region --- Multi-Classing Actions ---
+
+  /**
+   * Sets the class tracks of the character.
+   * @param tracks - An array of CharacterClassTrack objects representing the new class tracks for the character.
+   * @returns void
+   */
+  setClassTracks: (tracks: CharacterClassTrack[]) => void;
+  /**
+   * Adds a new class track to the character.
+   * @param classId - The ID of the class to add.
+   * @param startingLevel - The starting level for the new class track (optional).
+   * @returns void
+   */
+  addClassTrack: (classId: string, startingLevel?: number) => void;
+  /**
+   * Removes a class track from the character.
+   * @param classId - The ID of the class track to remove.
+   * @returns void
+   */
+  removeClassTrack: (classId: string) => void;
+  /**
+   * Sets the level of a specific class track.
+   * @param classId - The ID of the class track to update.
+   * @param level - The new level for the class track.
+   * @returns void
+   */
+  setClassTrackLevel: (classId: string, level: number) => void;
+  /**
+   * Sets the subclass of a specific class track.
+   * @param classId - The ID of the class track to update.
+   * @param subclassId - The ID of the new subclass for the class track, or null to remove it.
+   * @returns void
+   */
+  setClassTrackSubclass: (classId: string, subclassId: string | null) => void;
+
+  // #endregion
+
+  // #region --- Background and Ability Actions ---
+
+  /**
+   * Sets the background of the character.
+   * @param background - The ID of the new background for the character.
+   * @returns void
+   */
+  setBackground: (background: string) => void;
+  /**
+   * Sets the level of the character.
+   * @param level - The new level for the character.
+   * @returns void
+   */
   setLevel: (level: number) => void;
+  /**
+   * Updates the choices for a specific level.
+   * @param level - The level to update.
+   * @param updates - Partial updates to apply to the level's choices.
+   * @returns void
+   */
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
+  /**
+   * Sets the base ability score for a specific ability.
+   * @param ability - The ability to update.
+   * @param score - The new score for the ability.
+   * @returns void
+   */
   setBaseAbilityScore: (ability: Ability, score: number) => void;
+  /**
+   * Sets the base ability scores for the character.
+   * @param scores - An object mapping abilities to their new scores.
+   * @returns void
+   */
   setBaseAbilityScores: (scores: Record<Ability, number>) => void;
+  /**
+   * Sets the racial skills for the character.
+   * @param skills - An array of Skill objects representing the new racial skills for the character.
+   * @returns void
+   */
   setRacialSkills: (skills: Skill[]) => void;
+  /**
+   * Sets the chosen racial bonuses for the character.
+   * @param bonuses - An object mapping abilities to their chosen racial bonuses.
+   * @returns void
+   */
   setChosenRacialBonuses: (bonuses: Partial<Record<Ability, number>>) => void;
+  /**
+   * Sets the background skills for the character.
+   * @param skills - An array of Skill objects representing the new background skills for the character.
+   * @returns void
+   */
   setBackgroundSkills: (skills: Skill[]) => void;
+  /**
+   * Sets the origin feat for the character.
+   * @param featId - The ID of the new origin feat for the character, or null to remove it.
+   * @returns void
+   */
   setOriginFeat: (featId: string | null) => void;
 
+  // #endregion
+
+  // #endregion
+
+  // #region --- Spell Actions ---
+
+  /**
+   * Adds a spell to the character's known spells list.
+   * @param spellId - The ID of the spell to add.
+   * @returns void
+   */
   learnSpell: (spellId: string) => void;
+  /**
+   * Prepares a spell for the character.
+   * @param spellId - The ID of the spell to prepare.
+   * @returns void
+   */
   prepareSpell: (spellId: string) => void;
+  /**
+   * Unprepares a spell for the character.
+   * @param spellId - The ID of the spell to unprepare.
+   * @returns void
+   */
   unprepareSpell: (spellId: string) => void;
 
-  // Combat Actions
+  // #endregion
+
+  // #region --- Combat Actions ---
+
+  /**
+   * Expends a spell slot of a given level for the character.
+   * @param level - The level of the spell slot to expend.
+   * @returns void
+   */
   expendSpellSlot: (level: number) => void;
+  /**
+   * Restores a spell slot of a given level for the character.
+   * @param level - The level of the spell slot to restore.
+   * @returns void
+   */
   restoreSpellSlot: (level: number) => void;
+  /**
+   * Expends a pact spell slot for the character.
+   * @returns void
+   */
   expendPactSlot: () => void;
 
-  // Resting Actions
+  // #endregion
+
+  // #region --- Resting Actions ---
+
+  /**
+   * Handles the character taking a long rest, which restores spell slots, heals the character, and regains hit dice.
+   * @returns void
+   */
   takeLongRest: () => void;
+  /**
+   * Handles the character taking a short rest, which allows them to spend hit dice to regain health.
+   * @returns void
+   */
   takeShortRest: () => void;
 
-  // Inventory Actions
+  // #endregion
+
+  // #region --- Inventory Actions ---
+
+  /**
+   * Adds an item to the character's inventory.
+   * @param itemId - The ID of the item to add.
+   * @param quantity - The quantity of the item to add.
+   * @returns void
+   */
   addInventoryItem: (itemId: string, quantity: number) => void;
+  /**
+   * Removes an item from the character's inventory.
+   * @param itemId - The ID of the item to remove.
+   * @param quantity - The quantity of the item to remove.
+   * @returns void
+   */
   removeInventoryItem: (itemId: string, quantity: number) => void;
+  /**
+   * Equips an armor item for the character.
+   * @param itemId - The ID of the armor item to equip, or null to unequip.
+   * @returns void
+   */
   equipArmor: (itemId: string | null) => void;
+  /**
+   * Equips a shield item for the character.
+   * @param itemId - The ID of the shield item to equip, or null to unequip.
+   * @returns void
+   */
   equipShield: (itemId: string | null) => void;
 
-  // Combat Actions
+  // #endregion
+
+  // #region --- Combat Actions ---
+
+  /**
+   * Applies damage to the character, reducing their current hit points.
+   * @param amount - The amount of damage to apply.
+   * @returns void
+   */
   takeDamage: (amount: number) => void;
+  /**
+   * Heals the character, increasing their current hit points.
+   * @param amount - The amount of healing to apply.
+   * @returns void
+   */
   heal: (amount: number) => void;
+  /**
+   * Sets the temporary hit points for the character.
+   * @param amount - The amount of temporary hit points to set.
+   * @returns void
+   */
   setTempHp: (amount: number) => void;
+  /**
+   * Records a death saving throw for the character.
+   * @param type - The type of death save ("successes" or "failures").
+   * @param value - The value to record (true for success, false for failure).
+   * @returns void
+   */
   recordDeathSave: (type: "successes" | "failures", value: boolean) => void;
+  /**
+   * Expends a hit die for the character.
+   * @returns void
+   */
   expendHitDie: () => void;
 
+  // #endregion
+
+  // #region --- Character Saving Actions ---
+
+  /**
+   * Marks the character's setup as complete.
+   * @returns void
+   */
   completeSetup: () => void;
+  /**
+   * Resets the character to its initial state.
+   * @returns void
+   */
   resetCharacter: () => void;
+
+  // #endregion
 }
 
 type CharacterStore = CharacterState & CharacterActions;
 
+// #endregion
+
+/**
+ * Zustand store for managing the state of a D&D character, including core character info, spells, inventory, and combat status.
+ * Provides actions for updating character details, managing spells, handling inventory changes,
+ * and tracking combat-related information like damage and death saves.
+ */
 export const useCharacterStore = create<CharacterStore>((set) => ({
+  // #region --- Initial State ---
+
   name: "",
   level: 1,
   raceId: null,
@@ -208,7 +459,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   isSetupComplete: false,
 
-  // --- Actions ---
+  // #endregion
+
+  // #region --- Setup Actions ---
+
   setName: (name) => set({ name }),
 
   setLevel: (newLevel) =>
@@ -216,8 +470,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       // If leveled DOWN, should theoretically clear choices for levels lost to prevent ghost stats from applying
       const clampedLevel = clampCharacterLevel(newLevel);
 
+      // If the character has a class and the new level is below the subclass choice level, remove the subclass
       let updatedSubclassId = state.subclassId;
-
       if (state.classId && updatedSubclassId) {
         const currentClass = getClassById(state.classId);
         if (
@@ -236,30 +490,33 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         }
       });
 
+      // Remove any feats acquired through level up that are now above the new level
       const updatedAcquiredFeats = state.acquiredFeats.filter((entry) => {
         if (entry.source !== "level_up") return true;
         return (entry.sourceLevel ?? 0) <= clampedLevel;
       });
+
+      // If the character has only one class track and its level is now above the new total level, adjust it down to match
+      const updatedClassTracks =
+        state.classTracks.length === 1 &&
+        state.classId === state.classTracks[0].classId
+          ? upsertClassTrack(state.classTracks, state.classTracks[0].classId, {
+              level: clampedLevel,
+            })
+          : state.classTracks;
 
       return {
         level: clampedLevel,
         choicesByLevel: updatedChoices,
         acquiredFeats: updatedAcquiredFeats,
         subclassId: updatedSubclassId,
-        classTracks:
-          state.classTracks.length === 1 &&
-          state.classId === state.classTracks[0].classId
-            ? upsertClassTrack(state.classTracks, state.classTracks[0].classId, {
-                level: clampedLevel,
-              })
-            : state.classTracks,
-        // (Wire up the exact level check in derivation engine)
+        classTracks: updatedClassTracks,
       };
     }),
 
-  // Action to save a specific choice made at a specific level
   updateLevelChoice: (level, updates) =>
     set((state) => {
+      // Update the choices for the specified level with the provided updates, merging with existing choices if present
       const nextChoicesByLevel = {
         ...state.choicesByLevel,
         [level]: {
@@ -268,10 +525,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         },
       };
 
+      // If a feat choice is being updated, we need to update the acquired feats list accordingly
       const nextAcquiredFeats = state.acquiredFeats.filter(
-        (entry) => !(entry.source === "level_up" && entry.sourceLevel === level),
+        (entry) =>
+          !(entry.source === "level_up" && entry.sourceLevel === level),
       );
 
+      // If a new feat is being added at this level, add it to the acquired feats list with the appropriate source and level information
       if (Object.prototype.hasOwnProperty.call(updates, "featId")) {
         const levelFeatId = updates.featId;
         if (typeof levelFeatId === "string" && levelFeatId.trim().length > 0) {
@@ -294,23 +554,29 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       raceId,
       subraceId: null, // Reset subrace if the main race changes
       chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
-      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+      acquiredFeats: state.acquiredFeats.filter(
+        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the race
+      ),
     })),
 
   setSubrace: (subraceId) =>
     set((state) => ({
       subraceId,
-      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+      acquiredFeats: state.acquiredFeats.filter(
+        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subrace
+      ),
     })),
 
   setClass: (classId) =>
     set((state) => ({
       classId,
       classTracks: upsertClassTrack(state.classTracks, classId, {
-        subclassId: null,
-        level: state.level,
+        subclassId: null, // Reset subclass when changing class
+        level: state.level, // Default new class track to the character's current level, will be clamped in the reducer
       }),
-      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+      acquiredFeats: state.acquiredFeats.filter(
+        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the class
+      ),
     })),
 
   setSubclass: (subclassId) =>
@@ -318,12 +584,18 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       subclassId,
       classTracks: state.classId
         ? upsertClassTrack(state.classTracks, state.classId, { subclassId })
-        : state.classTracks,
-      acquiredFeats: state.acquiredFeats.filter((entry) => entry.source !== "origin"),
+        : state.classTracks, // If there's no class, we can't associate the subclass with a track, so just update the state and rely on the UI to handle this edge case <- TODO: Maybe should just prevent setting a subclass if there's no class?
+      acquiredFeats: state.acquiredFeats.filter(
+        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subclass
+      ),
     })),
+
+  // #region --- Setup Multi-Classing Actions ---
 
   setClassTracks: (tracks) =>
     set((state) => {
+      // Sanitize the incoming tracks to ensure they are valid and consistent, 
+      // then determine the primary track and total level for the character based on the sanitized tracks
       const sanitizedTracks = sanitizeClassTracks(tracks);
       const primaryTrack = sanitizedTracks[0] || null;
       const totalLevel =
@@ -341,6 +613,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   addClassTrack: (classId, startingLevel = 1) =>
     set((state) => {
+      // Add a new class track for the specified class ID, defaulting to the character's current level or 1 if not provided, 
+      // then determine the primary track and total level for the character based on the updated tracks
       const nextTracks = upsertClassTrack(state.classTracks, classId, {
         level: Math.max(1, Math.floor(startingLevel)),
       });
@@ -359,7 +633,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   removeClassTrack: (classId) =>
     set((state) => {
-      const nextTracks = state.classTracks.filter((track) => track.classId !== classId);
+      const nextTracks = state.classTracks.filter(
+        (track) => track.classId !== classId,
+      );
       const primaryTrack = nextTracks[0] || null;
 
       return {
@@ -404,6 +680,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
           : state.subclassId,
     })),
 
+  // #endregion
+
+  // #region --- Setup Background and Ability Actions ---
+
   setBackground: (backgroundId) =>
     set({
       backgroundId,
@@ -435,7 +715,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     }),
 
   setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
+
   setChosenRacialBonuses: (bonuses) => set({ chosenRacialBonuses: bonuses }),
+
   setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
 
   setOriginFeat: (featId) =>
@@ -460,7 +742,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       };
     }),
 
-  // region Spell Actions
+  // #endregion
+
+  // #region --- Spell Actions ---
 
   learnSpell: (spellId) =>
     set((state) => {
@@ -489,9 +773,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
     })),
 
-  // endregion
+  // #endregion
 
-  // region Combat Actions
+  // #region --- Combat Actions ---
 
   expendSpellSlot: (level) =>
     set((state) => {
@@ -538,9 +822,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       expendedPactSlots: state.expendedPactSlots + 1,
     })),
 
-  // endregion
+  // #endregion
 
-  // region Rest Actions
+  // #region --- Rest Actions ---
 
   takeLongRest: () =>
     set((state) => ({
@@ -561,9 +845,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       // Normal spell slots remain untouched
     })),
 
-  // endregion
+  // #endregion
 
-  // region Inventory Actions
+  // #region --- Inventory Actions ---
+
   addInventoryItem: (itemId, quantity) =>
     set((state) => {
       const existing = state.inventory.find((i) => i.itemId === itemId);
@@ -608,7 +893,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   equipShield: (itemId) => set({ equippedShieldId: itemId }),
 
-  // endregion
+  // #endregion
+
+  // #region --- Combat Actions ---
 
   takeDamage: (amount) =>
     set((state) => {
@@ -663,20 +950,26 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       expendedHitDice: state.expendedHitDice + 1,
     })),
 
-  // region Character Saving Actions
-  completeSetup: () => set({ isSetupComplete: true}),
+  // #endregion
 
-  resetCharacter: () => set({
-    isSetupComplete: false,
-    name: '',
-    level: 1,
-    raceId: null,
-    subraceId: null,
-    classId: null,
-    subclassId: null,
-    classTracks: [],
-    inventory: [],
-    choicesByLevel: {},
-    acquiredFeats: [],
-  })
+  // #region --- Character Saving Actions ---
+
+  completeSetup: () => set({ isSetupComplete: true }),
+
+  resetCharacter: () =>
+    set({
+      isSetupComplete: false,
+      name: "",
+      level: 1,
+      raceId: null,
+      subraceId: null,
+      classId: null,
+      subclassId: null,
+      classTracks: [],
+      inventory: [],
+      choicesByLevel: {},
+      acquiredFeats: [],
+    }),
+
+  // #endregion
 }));
