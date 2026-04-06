@@ -1,5 +1,11 @@
 type ProficiencyCategory = "Armor" | "Weapons" | "Tools" | "Languages & Other";
 
+export const formatAbilityModifier = (value: number): string => {
+  if (value > 0) return `+${value}`;
+  if (value < 0) return `${value}`;
+  return "0";
+};
+
 const toTitleCase = (value: string): string => {
   return value
     .split("_")

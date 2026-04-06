@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
-import type { Ability } from "../types/common";
 import {
   getClassById,
   getRaceById,
@@ -16,8 +15,7 @@ import { SpellSlotsTracker } from "./SpellSlotsTracker";
 import { SpellbookBlock } from "./SpellbookBlock";
 import { LevelUpModal } from "./LevelUp/LevelUpModal";
 import { AttacksBlock } from "./AttacksBlock";
-
-const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+import { AbilityScoresBlock } from "./AbilityScoreBlock/AbilityScoresBlock.tsx";
 
 export const CharacterSheet = () => {
   const { name, level, raceId, subraceId, classId, subclassId } =
@@ -25,6 +23,10 @@ export const CharacterSheet = () => {
   const { abilities } = useCharacterStats();
 
   const [isLevelingUp, setIsLevelingUp] = useState(false);
+
+  // Temporary iteration mode for sheet styling work.
+  const showAbilityScoresOnly =
+    import.meta.env.DEV && import.meta.env.VITE_DEV_ABILITIES_ONLY !== "false";
 
   // Safely fetch static names for header
   const raceName = raceId ? getRaceById(raceId)?.name : "Unknown Race";
@@ -35,6 +37,17 @@ export const CharacterSheet = () => {
   // Helpers
   const fullRace = subraceName ? `${subraceName} ${raceName}` : raceName;
   const fullClass = subclassName ? `${subclassName} ${className}` : className;
+
+  if (showAbilityScoresOnly) {
+    return (
+      <div className="character-sheet-layout ability-scores-dev-view">
+        <AbilityScoresBlock
+          scores={abilities.scores}
+          modifiers={abilities.modifiers}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="character-sheet-layout">
@@ -58,19 +71,10 @@ export const CharacterSheet = () => {
       <div className="sheet-grid">
         {/* Col 1: Physics and Proficiencies */}
         <div className="sheet-column left-column">
-          {/* Quick Ability Score display */}
-          <div className="ability-scores-row">
-            {ABILITIES.map((stat) => (
-              <div key={stat} className="ability-box">
-                <span className="ability-name">{stat.toUpperCase()}</span>
-                <span className="ability-mod">
-                  {abilities.modifiers[stat] >= 0
-                    ? `+${abilities.modifiers[stat]}`
-                    : abilities.modifiers[stat]}
-                </span>
-              </div>
-            ))}
-          </div>
+          <AbilityScoresBlock
+            scores={abilities.scores}
+            modifiers={abilities.modifiers}
+          />
 
           <SkillAndSavesBlock />
         </div>

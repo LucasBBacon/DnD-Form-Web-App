@@ -25,7 +25,7 @@ function App() {
         </nav>
       )}
 
-      {/* Conditional core renderer */}
+      {/* Conditional core renderer 
       {!isSetupComplete ? (
         <CharacterCreationWizard />
       ) : (
@@ -41,7 +41,10 @@ function App() {
             </div>
           )}
         </>
-      )}
+      )}*/}
+        <>
+          <CharacterSheet />
+        </>
     </div>
   );
 }
