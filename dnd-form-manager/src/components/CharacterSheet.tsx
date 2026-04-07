@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCharacterStats } from "../hooks/useCharacterStats";
+import { useSkills } from "../hooks/useSkills";
 import { useCharacterStore } from "../store/useCharacterStore";
 import {
   getClassById,
@@ -7,7 +8,8 @@ import {
   getSubclassById,
   getSubraceById,
 } from "../data/staticDataApi";
-import { SkillAndSavesBlock } from "./SkillAndSavesBlock";
+import { SavingThrowsBlock } from "./SavingThrowsBlock/SavingThrowsBlock.tsx";
+import { SkillsBlock } from "./SkillsBlock/SkillsBlock";
 import { CombatDashboard } from "./CombatDashboard";
 import { CombatStatsBlock } from "./CombatStatsBlock";
 import { InventoryBlock } from "./InventoryBlock";
@@ -21,11 +23,12 @@ export const CharacterSheet = () => {
   const { name, level, raceId, subraceId, classId, subclassId } =
     useCharacterStore();
   const { abilities } = useCharacterStats();
+  const { calculatedSkills } = useSkills();
 
   const [isLevelingUp, setIsLevelingUp] = useState(false);
 
   // Temporary iteration mode for sheet styling work.
-  const showAbilityScoresOnly =
+  const showDevSingleBlock =
     import.meta.env.DEV && import.meta.env.VITE_DEV_ABILITIES_ONLY !== "false";
 
   // Safely fetch static names for header
@@ -38,13 +41,10 @@ export const CharacterSheet = () => {
   const fullRace = subraceName ? `${subraceName} ${raceName}` : raceName;
   const fullClass = subclassName ? `${subclassName} ${className}` : className;
 
-  if (showAbilityScoresOnly) {
+  if (showDevSingleBlock) {
     return (
-      <div className="character-sheet-layout ability-scores-dev-view">
-        <AbilityScoresBlock
-          scores={abilities.scores}
-          modifiers={abilities.modifiers}
-        />
+      <div className="character-sheet-layout single-block-dev-view">
+        <SkillsBlock calculatedSkills={calculatedSkills} />
       </div>
     );
   }
@@ -76,7 +76,8 @@ export const CharacterSheet = () => {
             modifiers={abilities.modifiers}
           />
 
-          <SkillAndSavesBlock />
+          <SavingThrowsBlock />
+          <SkillsBlock calculatedSkills={calculatedSkills} />
         </div>
 
         {/* Col 2: Combat Engine */}

@@ -1,0 +1,84 @@
+.skills-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 12px 10px;
+  width: 100%;
+  max-width: 280px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.skills-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 11px 3ch 1fr;
+  align-items: center;
+  column-gap: 8px;
+  text-align: left;
+}
+
+.skill-indicator {
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid #111;
+  border-radius: 999px;
+  background: transparent;
+  flex: 0 0 auto;
+}
+
+.skill-indicator.filled {
+  background: #111;
+}
+
+.skill-value-wrap {
+  min-width: 3ch;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid #111;
+  padding-bottom: 0;
+}
+
+.skill-value {
+  min-width: 3ch;
+  text-align: center;
+  font-size: 0.94rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.skill-name {
+  font-size: 0.9rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.skill-name-group {
+  font-size: 0.9rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+
+.skill-ability {
+  color: #666;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+}
+
+.skills-footer {
+  margin-top: 2px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
