@@ -186,7 +186,7 @@
 .character-sheet-layout {
   position: relative;
   width: min(92vw, 860px);
-  aspect-ratio: 210 / 297;
+  aspect-ratio: 17 / 22;
   margin: 0 auto;
   background: #fff;
   border: 2px solid #111;
@@ -226,6 +226,9 @@
   height: 100%;
   padding: 8%;
   box-sizing: border-box;
+  background-image: url("./assets/5E_CharacterSheet_Fillable-1.png");
+  background-position: center;
+  background-size: contain;
 }
 
 .sheet-canvas.layout-guides-visible::before {
@@ -252,10 +255,10 @@
 }
 
 .sheet-item-skills {
-  --sheet-item-top: 8.08%;
-  --sheet-item-left: 11.43%;
-  --sheet-item-width: 8.8%;
-  --sheet-item-height: 90%;
+  --sheet-item-top: 39.25%;
+  --sheet-item-left: 15.6%;
+  --sheet-item-width: 16%;
+  --sheet-item-height: 100%;
 }
 
 @media (max-width: 900px) {

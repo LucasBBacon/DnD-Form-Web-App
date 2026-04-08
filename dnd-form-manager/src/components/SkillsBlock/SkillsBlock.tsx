@@ -34,7 +34,7 @@ export const SkillsBlock = ({ calculatedSkills }: SkillsBlockProps) => {
   return (
     <div className="skills-block" aria-label="Skills">
       <ul className="skills-list">
-        {sortedSkills.map(([skillKey, skillData]) => {
+        {sortedSkills.reverse().map(([skillKey, skillData]) => {
           const skill = skillKey as Skill;
           const rowClassName = skillData.isProficient
             ? "skill-row proficient"
