@@ -1,0 +1,5 @@
+.armor-class-block, .initiative-block, .speed-block, .hit-points-block, .hit-points-temp-block {
+    width: 100%;
+    height: 100%;
+    background: rgba(231, 16, 9, 0.664);
+}

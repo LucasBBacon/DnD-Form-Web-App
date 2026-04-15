@@ -1,194 +1,11 @@
-.counter {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.3s;
-  margin-bottom: 24px;
-
-  &:hover {
-    border-color: var(--accent-border);
-  }
-  &:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-}
-
-.hero {
-  position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
-}
-
-#center {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  place-content: center;
-  place-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 1024px) {
-    padding: 32px 20px 24px;
-    gap: 18px;
-  }
-}
-
-#next-steps {
-  display: flex;
-  border-top: 1px solid var(--border);
-  text-align: left;
-
-  & > div {
-    flex: 1 1 0;
-    padding: 32px;
-    @media (max-width: 1024px) {
-      padding: 24px 20px;
-    }
-  }
-
-  .icon {
-    margin-bottom: 16px;
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    text-align: center;
-  }
-}
-
-#docs {
-  border-right: 1px solid var(--border);
-
-  @media (max-width: 1024px) {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-}
-
-#next-steps ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 8px;
-  margin: 32px 0 0;
-
-  .logo {
-    height: 18px;
-  }
-
-  a {
-    color: var(--text-h);
-    font-size: 16px;
-    border-radius: 6px;
-    background: var(--social-bg);
-    display: flex;
-    padding: 6px 12px;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    transition: box-shadow 0.3s;
-
-    &:hover {
-      box-shadow: var(--shadow);
-    }
-    .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    li {
-      flex: 1 1 calc(50% - 8px);
-    }
-
-    a {
-      width: 100%;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-  }
-}
-
-#spacer {
-  height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
-    height: 48px;
-  }
-}
-
-.ticks {
-  position: relative;
-  width: 100%;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    top: -4.5px;
-    border: 5px solid transparent;
-  }
-
-  &::before {
-    left: 0;
-    border-left-color: var(--border);
-  }
-  &::after {
-    right: 0;
-    border-right-color: var(--border);
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 .character-sheet-layout {
   position: relative;
   width: min(92vw, 860px);
-  aspect-ratio: 17 / 22;
   margin: 0 auto;
-  background: #fff;
   border: 2px solid #111;
   border-radius: 10px;
   box-shadow: 0 12px 30px rgb(0 0 0 / 0.14);
@@ -223,12 +40,14 @@
 .sheet-canvas {
   position: relative;
   width: 100%;
-  height: 100%;
-  padding: 8%;
-  box-sizing: border-box;
-  background-image: url("./assets/5E_CharacterSheet_Fillable-1.png");
-  background-position: center;
-  background-size: contain;
+}
+
+.sheet-background-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
 }
 
 .sheet-canvas.layout-guides-visible::before {
@@ -252,27 +71,79 @@
   left: var(--sheet-item-left, 0);
   width: var(--sheet-item-width, auto);
   height: var(--sheet-item-height, auto);
+
+  max-width: var(--sheet-item-max-width, none);
+  overflow: hidden;
+}
+
+.sheet-item-abilities {
+  --sheet-item-top: 15.77%;
+  --sheet-item-left: 4.45%;
+  --sheet-item-width: 9.925%;
+  --sheet-item-height: 57.3%;
+
+  --sheet-item-max-width: 9.925%;
+}
+
+.sheet-item-inspiration {
+  --sheet-item-top: 15.77%;
+  --sheet-item-left: 15.1%;
+  --sheet-item-width: 18.77%;
+  --sheet-item-height: 3.75%;
+
+  --sheet-item-max-width: 18.77%;
+}
+
+.sheet-item-proficiency-bonus {
+  --sheet-item-top: 20.3%;
+  --sheet-item-left: 15.1%;
+  --sheet-item-width: 18.77%;
+  --sheet-item-height: 4.2%;
+
+  --sheet-item-max-width: 18.77%;
+}
+
+.sheet-item-saving-throws {
+  --sheet-item-top: 25.4%;
+  --sheet-item-left: 15.6%;
+  --sheet-item-width: 17.8%;
+  --sheet-item-height: 12.6%;
+
+  --sheet-item-max-width: 17.8%;
 }
 
 .sheet-item-skills {
-  --sheet-item-top: 39.25%;
+  --sheet-item-top: 39.4%;
   --sheet-item-left: 15.6%;
-  --sheet-item-width: 16%;
-  --sheet-item-height: 100%;
+  --sheet-item-width: 17.8%;
+  --sheet-item-height: 33.7%;
+
+  --sheet-item-max-width: 17.8%;
 }
 
-@media (max-width: 900px) {
-  .character-sheet-layout {
-    width: 96vw;
-  }
+.sheet-item-passive-perception {
+  --sheet-item-top: 73.9%;
+  --sheet-item-left: 4.45%;
+  --sheet-item-width: 29.4%;
+  --sheet-item-height: 3.55%;
 
-  .sheet-canvas {
-    padding: 6%;
-  }
+  --sheet-item-max-width: 30%;
+}
 
-  .sheet-item-skills {
-    --sheet-item-top: 5.39%;
-    --sheet-item-left: 7.62%;
-    --sheet-item-width: 27.62%;
-  }
+.sheet-item-proficiencies-languages {
+  --sheet-item-top: 78.5%;
+  --sheet-item-left: 4.45%;
+  --sheet-item-width: 29.4%;
+  --sheet-item-height: 18.45%;
+
+  --sheet-item-max-width: 30%;
+}
+
+.sheet-item-combat-stats {
+  --sheet-item-top: 15.77%;
+  --sheet-item-left: 35.3%;
+  --sheet-item-width: 29.5%;
+  --sheet-item-height: 31.35%;
+
+  --sheet-item-max-width: 29.5%;
 }

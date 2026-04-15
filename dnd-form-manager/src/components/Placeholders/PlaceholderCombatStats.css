@@ -1,0 +1,62 @@
+.placeholder-combat-block.placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(231, 24, 9, 0.205);
+}
+
+.combat-item {
+  position: absolute;
+  z-index: 3;
+  top: var(--combat-item-top, 0);
+  left: var(--combat-item-left, 0);
+  width: var(--combat-item-width, auto);
+  height: var(--combat-item-height, auto);
+
+  max-width: var(--combat-item-max-width, none);
+  overflow: hidden;
+}
+
+.combat-item-armor-class {
+  --combat-item-top: 3%;
+  --combat-item-left: 4.28%;
+  --combat-item-width: 26.58%;
+  --combat-item-height: 22.3%;
+
+  --combat-item-max-width: 26.58%;
+}
+
+.combat-item-initiative {
+  --combat-item-top: 4.2%;
+  --combat-item-left: 34.28%;
+  --combat-item-width: 29.1%;
+  --combat-item-height: 19.94%;
+
+  --combat-item-max-width: 29.1%;
+}
+
+.combat-item-speed {
+  --combat-item-top: 4.2%;
+  --combat-item-left: 66.7%;
+  --combat-item-width: 29.1%;
+  --combat-item-height: 19.94%;
+
+  --combat-item-max-width: 29.1%;
+}
+
+.combat-item-hit-points {
+  --combat-item-top: 27.31%;
+  --combat-item-left: 4.28%;
+  --combat-item-width: 91.5%;
+  --combat-item-height: 25.05%;
+
+  --combat-item-max-width: 100%;
+}
+
+.combat-item-hit-points-temp {
+  --combat-item-top: 53.3%;
+  --combat-item-left: 4.28%;
+  --combat-item-width: 91.5%;
+  --combat-item-height: 20.35%;
+
+  --combat-item-max-width: 100%;
+}
