@@ -1,0 +1,99 @@
+.identity-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--surface-color, #fff);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.character-name-box {
+  display: flex;
+  align-items: flex-end;
+}
+
+.identity-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.labeled-field-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.field-value-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field-value {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.field-label {
+  font-size: 0.75rem;
+  color: #666666;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+.edit-icon {
+  font-size: 0.8rem;
+  color: #aaaaaa;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.labeled-field-container.mode-inline {
+  cursor: text;
+}
+
+.labeled-field-container.mode-inline:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 2px solid #ccc;
+}
+
+.labeled-field-container.mode-inline:hover .edit-icon {
+  opacity: 1;
+}
+
+.field-input {
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  background: transparent;
+  outline: none;
+  border-bottom: 2px solid #0056b3;
+  padding: 0;
+  width: 100%;
+}
+
+.labeled-field-container.mode-modal {
+  cursor: pointer;
+}
+
+.labeled-field-container.mode-modal:hover {
+  background-color: rgba(0, 86, 179, 0.05);
+  border-bottom: 2px solid #0056b3;
+}
+
+.labeled-field-container.mode-modal:hover .edit-icon {
+  opacity: 1;
+  color: #0056b3;
+}
+
+@media (max-width: 800px) {
+  .identity-header {
+    /* Stack the Character Name above the details grid on smaller screens */
+    grid-template-columns: 1fr; 
+  }
+}

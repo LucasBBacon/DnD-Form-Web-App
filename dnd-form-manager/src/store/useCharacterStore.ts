@@ -73,8 +73,11 @@ const upsertClassTrack = (
 // #region --- Store Types ---
 interface CharacterState {
   // #region --- Core Character State ---
-
+  
+  playerName: string;
   name: string;
+  alignment: string;
+  xp: number;
   level: number;
   raceId: string | null;
   subraceId: string | null;
@@ -133,12 +136,15 @@ interface CharacterState {
 interface CharacterActions {
   // #region --- Character Setup Actions ---
 
+  setPlayerName: (playerName: string) => void;
   /**
    * Sets the name of the character.
    * @param name - The new name for the character.
    * @returns void
    */
   setName: (name: string) => void;
+  setAlignment: (alignment: string) => void;
+  setXp: (xp: number) => void;
   /**
    * Sets the race of the character.
    * @param raceId - The ID of the new race for the character.
@@ -419,7 +425,10 @@ type CharacterStore = CharacterState & CharacterActions;
 export const useCharacterStore = create<CharacterStore>((set) => ({
   // #region --- Initial State ---
 
+  playerName: "",
   name: "",
+  alignment: "",
+  xp: 0,
   level: 1,
   raceId: null,
   subraceId: null,
@@ -463,7 +472,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   // #region --- Setup Actions ---
 
+  setPlayerName: (playerName) => set({ playerName }),
+
   setName: (name) => set({ name }),
+
+  setAlignment: (alignment) => set({ alignment }),
+
+  setXp: (xp) => set({ xp }),
 
   setLevel: (newLevel) =>
     set((state) => {
