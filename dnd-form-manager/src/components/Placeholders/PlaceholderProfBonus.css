@@ -1,5 +1,30 @@
 .prof-bonus-block.placeholder {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 200, 0.5);
+  background: rgba(100, 0, 0, 0.2);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  line-height: 1;
+  padding: 0;
+}
+
+.prof-bonus-value {
+  background: rgba(100, 0, 0, 0.2);
+  font-weight: 500;
+  font-size: 1.35em;
+  letter-spacing: 0.01em;
+  margin-left: 6%;
+  color: #111;
+}
+
+.prof-bonus-label {
+  background: rgba(100, 0, 0, 0.2);
+  font-weight: 700;
+  font-size: 0.47rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin-top: 0.2%;
+  margin-left: 15%;
+  color: #111;
 }
