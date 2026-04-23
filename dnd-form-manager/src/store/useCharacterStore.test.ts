@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it } from "vitest";
-import { useCharacterStore } from "./useCharacterStore";
+import { useCharacterStore, BASELINE_CHARACTER_STATE } from "./useCharacterStore";
 
 describe("useCharacterStore feat acquisition state", () => {
   beforeEach(() => {
@@ -112,5 +112,57 @@ describe("useCharacterStore feat acquisition state", () => {
     expect(useCharacterStore.getState().classId).toBe("class_wizard");
     expect(useCharacterStore.getState().subclassId).toBe("subclass_evocation");
     expect(useCharacterStore.getState().level).toBe(2);
+  });
+});
+
+describe("useCharacterStore hydrateCharacter and resetCharacter", () => {
+  beforeEach(() => {
+    useCharacterStore.setState({ ...BASELINE_CHARACTER_STATE } as any);
+  });
+
+  it("hydrateCharacter merges overrides onto baseline and sets isSetupComplete", () => {
+    useCharacterStore.getState().hydrateCharacter({
+      name: "Scenario Hero",
+      level: 7,
+      raceId: "race_elf",
+      classId: "class_wizard",
+    });
+
+    const state = useCharacterStore.getState();
+    expect(state.name).toBe("Scenario Hero");
+    expect(state.level).toBe(7);
+    expect(state.raceId).toBe("race_elf");
+    expect(state.classId).toBe("class_wizard");
+    expect(state.isSetupComplete).toBe(true);
+    // Unspecified fields remain at baseline values
+    expect(state.damageTaken).toBe(0);
+    expect(state.baseAbilityScores).toEqual(BASELINE_CHARACTER_STATE.baseAbilityScores);
+  });
+
+  it("hydrateCharacter always forces isSetupComplete true even when override passes false", () => {
+    useCharacterStore.getState().hydrateCharacter({ isSetupComplete: false } as any);
+    expect(useCharacterStore.getState().isSetupComplete).toBe(true);
+  });
+
+  it("resetCharacter returns the store to the full baseline", () => {
+    useCharacterStore.getState().hydrateCharacter({
+      name: "Dirty State",
+      level: 12,
+      raceId: "race_dwarf",
+      damageTaken: 50,
+      tempHp: 10,
+      spellsKnown: ["spell_acid_splash"],
+    });
+
+    useCharacterStore.getState().resetCharacter();
+
+    const state = useCharacterStore.getState();
+    expect(state.name).toBe(BASELINE_CHARACTER_STATE.name);
+    expect(state.level).toBe(BASELINE_CHARACTER_STATE.level);
+    expect(state.raceId).toBe(BASELINE_CHARACTER_STATE.raceId);
+    expect(state.damageTaken).toBe(0);
+    expect(state.tempHp).toBe(0);
+    expect(state.spellsKnown).toEqual([]);
+    expect(state.isSetupComplete).toBe(false);
   });
 });

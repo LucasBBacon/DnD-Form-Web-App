@@ -1,3 +1,4 @@
+import { CoreStatsBoard } from "./CoreStatsBoard";
 import { IdentityHeader } from "./IdentityHeader";
 import { VitalsDashboard } from "./VitalsDashboard";
 
@@ -11,6 +12,7 @@ export const CharacterSheet = () => {
         <IdentityHeader />
         <VitalsDashboard />
       </div>
+        <CoreStatsBoard />
     </div>
   );
 };

@@ -71,7 +71,7 @@ const upsertClassTrack = (
 // #endregion
 
 // #region --- Store Types ---
-interface CharacterState {
+export interface CharacterState {
   // #region --- Core Character State ---
   
   playerName: string;
@@ -409,6 +409,13 @@ interface CharacterActions {
    * @returns void
    */
   resetCharacter: () => void;
+  /**
+   * Replaces the character state with the baseline merged with the given overrides,
+   * and marks setup as complete so the character sheet renders immediately.
+   * Intended for dev-only scenario injection.
+   * @param overrides - Partial state to overlay on top of the baseline.
+   */
+  hydrateCharacter: (overrides: Partial<CharacterState>) => void;
 
   // #endregion
 }
@@ -417,14 +424,8 @@ type CharacterStore = CharacterState & CharacterActions;
 
 // #endregion
 
-/**
- * Zustand store for managing the state of a D&D character, including core character info, spells, inventory, and combat status.
- * Provides actions for updating character details, managing spells, handling inventory changes,
- * and tracking combat-related information like damage and death saves.
- */
-export const useCharacterStore = create<CharacterStore>((set) => ({
-  // #region --- Initial State ---
-
+// Baseline snapshot used for store initialisation and full resets.
+export const BASELINE_CHARACTER_STATE: CharacterState = {
   playerName: "",
   name: "",
   alignment: "",
@@ -435,14 +436,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   classId: null,
   subclassId: null,
   classTracks: [],
-  baseAbilityScores: {
-    str: 10,
-    dex: 10,
-    con: 10,
-    int: 10,
-    wis: 10,
-    cha: 10,
-  },
+  baseAbilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
   hpRolls: {},
   chosenRacialBonuses: {},
   backgroundId: null,
@@ -465,8 +459,18 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   tempHp: 0,
   deathSaves: { successes: 0, failures: 0 },
   expendedHitDice: 0,
-
   isSetupComplete: false,
+};
+
+/**
+ * Zustand store for managing the state of a D&D character, including core character info, spells, inventory, and combat status.
+ * Provides actions for updating character details, managing spells, handling inventory changes,
+ * and tracking combat-related information like damage and death saves.
+ */
+export const useCharacterStore = create<CharacterStore>((set) => ({
+  // #region --- Initial State ---
+
+  ...BASELINE_CHARACTER_STATE,
 
   // #endregion
 
@@ -971,20 +975,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   completeSetup: () => set({ isSetupComplete: true }),
 
-  resetCharacter: () =>
-    set({
-      isSetupComplete: false,
-      name: "",
-      level: 1,
-      raceId: null,
-      subraceId: null,
-      classId: null,
-      subclassId: null,
-      classTracks: [],
-      inventory: [],
-      choicesByLevel: {},
-      acquiredFeats: [],
-    }),
+  resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
+
+  hydrateCharacter: (overrides) =>
+    set({ ...BASELINE_CHARACTER_STATE, ...overrides, isSetupComplete: true }),
 
   // #endregion
 }));

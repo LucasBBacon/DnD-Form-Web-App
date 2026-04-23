@@ -35,7 +35,7 @@ const addProgressionTraitIds = (
   // Iterate through the filtered progression entries and add their feature IDs to the traitIds set
   progression
     .filter(levelFilter)
-    .forEach((entry) => entry.features.forEach((id) => traitIds.add(id)));
+    .forEach((entry) => entry.features?.forEach((id) => traitIds.add(id)));
 };
 
 /**
