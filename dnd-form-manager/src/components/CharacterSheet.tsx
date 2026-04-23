@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useSkills } from "../hooks/useSkills";
 import { IdentityHeader } from "./IdentityHeader";
+import { VitalsDashboard } from "./VitalsDashboard";
 
 export const CharacterSheet = () => {
   return (
@@ -10,6 +9,7 @@ export const CharacterSheet = () => {
         aria-label="Character Sheet"
       >
         <IdentityHeader />
+        <VitalsDashboard />
       </div>
     </div>
   );
