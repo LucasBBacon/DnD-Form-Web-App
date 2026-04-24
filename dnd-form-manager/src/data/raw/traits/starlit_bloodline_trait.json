@@ -1,0 +1,36 @@
+{
+    "id": "trait_starlit_bloodline",
+    "name": "Starlit Bloodline",
+    "lore": {
+        "shortDescription": "An inherited celestial spark grants innate magic at key milestones.",
+        "fullText": "Your bloodline resonates with old starlight. Certain spells arise naturally in your magic and are cast innately rather than learned from a spellbook."
+    },
+    "effects": [
+        {
+            "type": "spell_grant",
+            "target": "spell_ember_spark",
+            "levelAvailable": 1,
+            "spellcastingAbility": "cha"
+        },
+        {
+            "type": "spell_grant",
+            "target": "spell_lunar_step",
+            "levelAvailable": 5,
+            "spellcastingAbility": "cha",
+            "uses": {
+                "count": 1,
+                "reset": "long_rest"
+            }
+        },
+        {
+            "type": "spell_grant",
+            "target": "spell_starfall_seal",
+            "levelAvailable": 9,
+            "spellcastingAbility": "cha",
+            "uses": {
+                "count": 1,
+                "reset": "long_rest"
+            }
+        }
+    ]
+}

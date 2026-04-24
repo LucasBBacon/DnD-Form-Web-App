@@ -1,5 +1,8 @@
 import type React from "react";
-import type { UseSpellcastingReturn } from "../hooks/useSpellcasting";
+import type {
+  InnateSpellcastingEntry,
+  UseSpellcastingReturn,
+} from "../hooks/useSpellcasting";
 import { useMemo, useState } from "react";
 import { getSpellByID } from "../data/staticDataApi";
 import "./SpellBookView.css"
@@ -14,6 +17,9 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
   // State to track which spell accordion is currently open
   const [expandedSpellId, setExpandedSpellId] = useState<string | null>(null);
 
+  const formatAttackBonus = (bonus: number) =>
+    bonus >= 0 ? `+${bonus}` : String(bonus);
+
   // Hydrate and group spells
   const groupedSpells = useMemo(() => {
     // Combine all standard spell IDs (known + prepared) and deduplicate
@@ -27,7 +33,7 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
     const allSpells = standardIds
       .map((id) => getSpellByID(id))
       .filter(
-        (spell): spell is NonNullable<typeof spell> => spell !== undefined,
+        (spell): spell is NonNullable<typeof spell> => spell != null,
       );
 
     // Group by Level (0 = cantrips)
@@ -39,6 +45,30 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
 
     return grouped;
   }, [spellcasting.pools.known.selected, spellcasting.pools.prepared.selected]);
+
+  const groupedInnateSpells = useMemo(() => {
+    const grouped: Record<
+      number,
+      Array<{
+        entry: InnateSpellcastingEntry;
+        index: number;
+        spell: NonNullable<ReturnType<typeof getSpellByID>>;
+      }>
+    > = {};
+
+    spellcasting.pools.innate.forEach((entry, index) => {
+      const spell = getSpellByID(entry.spellId);
+      if (!spell) return;
+
+      if (!grouped[spell.level]) {
+        grouped[spell.level] = [];
+      }
+
+      grouped[spell.level].push({ entry, index, spell });
+    });
+
+    return grouped;
+  }, [spellcasting.pools.innate]);
 
   const toggleSpell = (id: string) => {
     setExpandedSpellId((prev) => (prev === id ? null : id));
@@ -56,6 +86,10 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
 
   // Render spellbook
   const levels = Object.keys(groupedSpells)
+    .map(Number)
+    .sort((a, b) => a - b);
+
+  const innateLevels = Object.keys(groupedInnateSpells)
     .map(Number)
     .sort((a, b) => a - b);
 
@@ -104,16 +138,18 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
                           <strong>School:</strong> {spell.school}
                         </div>
                         <div className="meta-item highlight">
-                          {/* TODO: Implement save DC and attack bonus */}
-                          <strong>Save DC:</strong> TO BE IMPLEMENTED
+                          <strong>Save DC:</strong> {spellcasting.casting.saveDC}
+                        </div>
+                        <div className="meta-item highlight">
+                          <strong>Spell Attack:</strong>{" "}
+                          {formatAttackBonus(spellcasting.casting.attackBonus)}
                         </div>
                       </div>
 
                       <hr className="divider" />
 
                       <div className="spell-description">
-                        {/* TODO: implement spell desc */}
-                        TO BE IMPLEMENTED
+                        {spell.lore?.fullText?.trim() || "No description available."}
                       </div>
                     </div>
                   )}
@@ -124,7 +160,81 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
         </div>
       ))}
 
-      {/* TODO: Implement innate spells by looping over here, so that it always shows at the bottom */}
+      {innateLevels.length > 0 && (
+        <div className="innate-spellbook-section">
+          <h3 className="level-header innate-level-header">
+            INNATE SPELLCASTING - TRAITS AND FEATURES
+          </h3>
+
+          {innateLevels.map((level) => (
+            <div key={`innate-spell-lvl-${level}`} className="spell-level-group">
+              <h4 className="innate-level-subheader">
+                {level === 0 ? "INNATE CANTRIPS" : `INNATE LEVEL ${level}`}
+              </h4>
+
+              <div className="spell-list innate-spell-list">
+                {groupedInnateSpells[level].map(({ entry, index, spell }) => {
+                  const cardId = `innate:${entry.spellId}:${entry.sourceTraitName}:${index}`;
+                  const isExpanded = expandedSpellId === cardId;
+
+                  return (
+                    <div
+                      key={cardId}
+                      className={`spell-card innate-spell-card ${isExpanded ? "expanded" : ""}`}
+                    >
+                      <button
+                        className="spell-header-btn"
+                        onClick={() => toggleSpell(cardId)}
+                      >
+                        <span className="spell-name">{spell.name}</span>
+                        <div className="spell-quick-stats">
+                          <span className="quick-stat innate-mode-pill">Innate</span>
+                          <span className="quick-stat">{spell.castingTime}</span>
+                          <span className="quick-stat">{spell.range}</span>
+                        </div>
+                      </button>
+
+                      {isExpanded && (
+                        <div className="spell-details innate-spell-details">
+                          <div className="spell-meta-grid">
+                            <div className="meta-item">
+                              <strong>Duration:</strong> {spell.duration}
+                            </div>
+                            <div className="meta-item">
+                              <strong>School:</strong> {spell.school}
+                            </div>
+                            <div className="meta-item">
+                              <strong>Source:</strong> {entry.sourceTraitName}
+                            </div>
+                            {entry.uses && (
+                              <div className="meta-item">
+                                <strong>Uses:</strong> {entry.uses.count} / {entry.uses.reset.replace("_", " ")}
+                              </div>
+                            )}
+                            <div className="meta-item highlight innate-highlight">
+                              <strong>Save DC:</strong> {entry.spellSaveDC}
+                            </div>
+                            <div className="meta-item highlight innate-highlight">
+                              <strong>Spell Attack:</strong>{" "}
+                              {formatAttackBonus(entry.spellAttackBonus)}
+                            </div>
+                          </div>
+
+                          <hr className="divider" />
+
+                          <div className="spell-description">
+                            {spell.lore?.fullText?.trim() || "No description available."}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

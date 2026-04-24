@@ -1,0 +1,22 @@
+{
+	"id": "spell_lunar_step",
+	"name": "Lunar Step",
+	"level": 2,
+	"school": "conjuration",
+	"classes": ["class_warlock", "class_wizard"],
+	"castingTime": "1 bonus action",
+	"range": "Self",
+	"duration": "Instantaneous",
+	"concentration": false,
+	"ritual": false,
+	"components": {
+		"vocal": true,
+		"somatic": false,
+		"material": true,
+		"materialMaterials": "A silver thread"
+	},
+	"lore": {
+		"shortDescription": "You blink through moonlight to a safer position.",
+		"fullText": "You teleport up to 30 feet to an unoccupied space you can see. Until the start of your next turn, your movement does not provoke opportunity attacks."
+	}
+}

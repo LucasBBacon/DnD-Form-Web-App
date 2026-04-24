@@ -1,0 +1,23 @@
+{
+	"id": "spell_ember_veil",
+	"name": "Ember Veil",
+	"level": 4,
+	"school": "abjuration",
+	"classes": ["class_warlock", "class_sorcerer"],
+	"castingTime": "1 action",
+	"range": "Self (10-foot radius)",
+	"duration": "Concentration, up to 10 minutes",
+	"concentration": true,
+	"ritual": false,
+	"components": {
+		"vocal": true,
+		"somatic": true,
+		"material": true,
+		"materialMaterials": "Ash from a burned letter"
+	},
+	"lore": {
+		"shortDescription": "A protective ring of cinders blunts incoming harm.",
+		"fullText": "A ring of smoldering cinders surrounds you in a 10-foot radius aura. You and creatures of your choice in the aura have resistance to cold damage. A hostile creature that enters the aura for the first time on a turn or ends its turn there takes 2d8 fire damage.",
+		"higherLevel": "When you cast this spell using a slot of 5th level or higher, the fire damage increases by 1d8 for each slot level above 4th."
+	}
+}

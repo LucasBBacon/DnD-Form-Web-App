@@ -1,0 +1,21 @@
+{
+    "id": "feat_starlit_bloodline",
+    "name": "Starlit Bloodline",
+    "category": "general",
+    "source": "homebrew",
+    "prerequisites": {
+        "requiresSpellcasting": true,
+        "minimumLevel": 4
+    },
+    "grantedTraits": [
+        "trait_starlit_bloodline"
+    ],
+    "lore": {
+        "shortDescription": "You awaken latent star-magic and gain innate spells keyed to Charisma.",
+        "fullText": "The old stars answer your call. You gain an innate cantrip immediately and unlock stronger innate spells as you gain levels."
+    },
+    "tags": [
+        "spellcasting",
+        "innate_magic"
+    ]
+}

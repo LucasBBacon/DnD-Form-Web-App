@@ -63,6 +63,43 @@ describe("buildScenarioState", () => {
     expect(state.level).toBe(8);
   });
 
+  it("warlock_pact_l7 includes homebrew pact test spells", () => {
+    const state = buildScenarioState("warlock_pact_l7")!;
+    expect(state.classId).toBe("class_warlock");
+    expect(state.level).toBe(7);
+    expect(state.spellsKnown).toEqual(
+      expect.arrayContaining([
+        "spell_ember_spark",
+        "spell_hexfire_bolt",
+        "spell_void_grasp",
+        "spell_ember_veil",
+      ]),
+    );
+  });
+
+  it("warlock_pact_innate_l7 includes innate feat acquisition", () => {
+    const state = buildScenarioState("warlock_pact_innate_l7")!;
+    expect(state.acquiredFeats).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ featId: "feat_starlit_bloodline" }),
+      ]),
+    );
+  });
+
+  it("wizard_warlock_mixed_innate_l9 includes multiclass tracks and mixed spells", () => {
+    const state = buildScenarioState("wizard_warlock_mixed_innate_l9")!;
+    expect(state.classTracks).toHaveLength(2);
+    expect(state.level).toBe(9);
+    expect(state.spellsPrepared).toEqual(
+      expect.arrayContaining(["spell_lunar_step", "spell_starfall_seal"]),
+    );
+    expect(state.acquiredFeats).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ featId: "feat_starlit_bloodline" }),
+      ]),
+    );
+  });
+
   it("near_death scenario has failed death saves", () => {
     const state = buildScenarioState("near_death")!;
     expect(state.deathSaves.failures).toBeGreaterThan(0);

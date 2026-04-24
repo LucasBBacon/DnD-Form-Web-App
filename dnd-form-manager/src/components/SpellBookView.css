@@ -109,4 +109,50 @@
 
 .spell-description {
   line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.innate-spellbook-section {
+  border-top: 2px dashed #9f1239;
+  padding-top: 0.75rem;
+}
+
+.innate-level-header {
+  color: #9f1239;
+  border-bottom-color: #fecdd3;
+}
+
+.innate-level-subheader {
+  margin: 0.5rem 0;
+  color: #be123c;
+  font-size: 0.8rem;
+  letter-spacing: 0.4px;
+}
+
+.innate-spell-list {
+  gap: 0.65rem;
+}
+
+.innate-spell-card {
+  border-color: #fecdd3;
+}
+
+.innate-spell-card.expanded {
+  border-color: #fb7185;
+  box-shadow: 0 4px 6px rgba(225, 29, 72, 0.12);
+}
+
+.innate-spell-details {
+  background: #fff1f2;
+}
+
+.innate-mode-pill {
+  background: #ffe4e6;
+  color: #9f1239;
+  font-weight: 700;
+}
+
+.innate-highlight {
+  color: #9f1239;
 }

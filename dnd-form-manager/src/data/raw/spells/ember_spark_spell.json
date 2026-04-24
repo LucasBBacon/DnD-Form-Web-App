@@ -1,0 +1,21 @@
+{
+	"id": "spell_ember_spark",
+	"name": "Ember Spark",
+	"level": 0,
+	"school": "evocation",
+	"classes": ["class_warlock", "class_sorcerer"],
+	"castingTime": "1 action",
+	"range": "60 feet",
+	"duration": "Instantaneous",
+	"concentration": false,
+	"ritual": false,
+	"components": {
+		"vocal": true,
+		"somatic": true,
+		"material": false
+	},
+	"lore": {
+		"shortDescription": "A cinder mote lashes a nearby target.",
+		"fullText": "You snap your fingers and launch a cinder mote at one creature you can see within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 fire damage. The spell's damage increases by 1d8 at 5th level, 11th level, and 17th level."
+	}
+}

@@ -148,6 +148,121 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
     xp: 34000,
   },
 
+  // ── Warlock 7 pact caster with homebrew test spells ───────────────────────
+  warlock_pact_l7: {
+    name: "Mirel Nightglass",
+    playerName: "Dev",
+    raceId: "race_human",
+    classId: "class_warlock",
+    classTracks: [{ classId: "class_warlock", subclassId: null, level: 7 }],
+    level: 7,
+    baseAbilityScores: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 18 },
+    hpRolls: { 1: 8, 2: 6, 3: 5, 4: 7, 5: 6, 6: 5, 7: 7 },
+    choicesByLevel: {
+      1: { hpGained: 8 },
+      2: { hpGained: 6 },
+      3: { hpGained: 5 },
+      4: { hpGained: 7 },
+      5: { hpGained: 6 },
+      6: { hpGained: 5 },
+      7: { hpGained: 7 },
+    },
+    spellsKnown: [
+      "spell_ember_spark",
+      "spell_hexfire_bolt",
+      "spell_void_grasp",
+      "spell_ember_veil",
+    ],
+    spellsPrepared: [],
+    expendedPactSlots: 1,
+    inventory: [{ itemId: "item_backpack", quantity: 1 }],
+    alignment: "Neutral",
+    xp: 23000,
+  },
+
+  // ── Warlock 7 pact + innate trait-granted spells via feat ─────────────────
+  warlock_pact_innate_l7: {
+    name: "Seren Ashwake",
+    playerName: "Dev",
+    raceId: "race_human",
+    classId: "class_warlock",
+    classTracks: [{ classId: "class_warlock", subclassId: null, level: 7 }],
+    level: 7,
+    baseAbilityScores: { str: 8, dex: 14, con: 14, int: 12, wis: 10, cha: 18 },
+    hpRolls: { 1: 8, 2: 5, 3: 6, 4: 5, 5: 7, 6: 5, 7: 6 },
+    choicesByLevel: {
+      1: { hpGained: 8 },
+      2: { hpGained: 5 },
+      3: { hpGained: 6 },
+      4: { hpGained: 5 },
+      5: { hpGained: 7 },
+      6: { hpGained: 5 },
+      7: { hpGained: 6 },
+    },
+    spellsKnown: [
+      "spell_ember_spark",
+      "spell_hexfire_bolt",
+      "spell_void_grasp",
+    ],
+    spellsPrepared: [],
+    acquiredFeats: [
+      {
+        featId: "feat_starlit_bloodline",
+        source: "level_up",
+        sourceLevel: 4,
+      },
+    ],
+    expendedPactSlots: 1,
+    inventory: [{ itemId: "item_backpack", quantity: 1 }],
+    alignment: "Chaotic Neutral",
+    xp: 23000,
+  },
+
+  // ── Wizard 5 / Warlock 4 multiclass with innate trait spells ──────────────
+  wizard_warlock_mixed_innate_l9: {
+    name: "Iria Starbrand",
+    playerName: "Dev",
+    raceId: "race_half_elf",
+    classId: "class_wizard",
+    classTracks: [
+      { classId: "class_wizard", subclassId: null, level: 5 },
+      { classId: "class_warlock", subclassId: null, level: 4 },
+    ],
+    level: 9,
+    baseAbilityScores: { str: 8, dex: 14, con: 14, int: 18, wis: 12, cha: 16 },
+    hpRolls: { 1: 6, 2: 4, 3: 5, 4: 4, 5: 6, 6: 8, 7: 5, 8: 6, 9: 5 },
+    choicesByLevel: {
+      1: { hpGained: 6 },
+      2: { hpGained: 4 },
+      3: { hpGained: 5 },
+      4: { hpGained: 4 },
+      5: { hpGained: 6 },
+      6: { hpGained: 8 },
+      7: { hpGained: 5 },
+      8: { hpGained: 6 },
+      9: { hpGained: 5 },
+    },
+    spellsKnown: ["spell_ember_spark", "spell_hexfire_bolt", "spell_void_grasp"],
+    spellsPrepared: [
+      "spell_acid_splash",
+      "spell_lunar_step",
+      "spell_ember_veil",
+      "spell_starfall_seal",
+    ],
+    acquiredFeats: [
+      {
+        featId: "feat_starlit_bloodline",
+        source: "level_up",
+        sourceLevel: 4,
+      },
+    ],
+    expendedSpellSlots: { 1: 2, 2: 1 },
+    expendedPactSlots: 1,
+    inventory: [{ itemId: "item_backpack", quantity: 1 }],
+    alignment: "Neutral Good",
+    xp: 48000,
+  },
+
   // ── Near-death state — stress-tests the vitals / death-save layout ────────
   near_death: {
     name: "Dying Hero",

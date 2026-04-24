@@ -1,0 +1,21 @@
+{
+	"id": "spell_void_grasp",
+	"name": "Void Grasp",
+	"level": 3,
+	"school": "necromancy",
+	"classes": ["class_warlock"],
+	"castingTime": "1 action",
+	"range": "60 feet",
+	"duration": "Concentration, up to 1 minute",
+	"concentration": true,
+	"ritual": false,
+	"components": {
+		"vocal": true,
+		"somatic": true,
+		"material": false
+	},
+	"lore": {
+		"shortDescription": "Shadow tendrils bind and drain a creature.",
+		"fullText": "Choose one creature you can see within range. The target must make a Strength saving throw. On a failure, it is restrained by tendrils of void-energy. While restrained this way, it takes 2d6 necrotic damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, ending the effect on a success."
+	}
+}

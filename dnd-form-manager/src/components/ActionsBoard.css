@@ -164,7 +164,7 @@
   border-color: #d946ef;
 }
 
-.pact-slot .slot-box:checked {
+.pact-slot .slot-checkbox:checked {
   background: #c027d3;
   border-color: #c027d3;
 }
