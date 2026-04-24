@@ -4,6 +4,7 @@ import { useAttacks } from "../hooks/useAttacks";
 import { useSpellcasting } from "../hooks/useSpellcasting";
 import { useCharacterStore } from "../store/useCharacterStore";
 import "./ActionsBoard.css";
+import { SpellBookView } from "./SpellBookView";
 
 type ActionTab = "at-will" | "spells";
 
@@ -138,11 +139,8 @@ export const ActionsBoard: React.FC = () => {
               )}
             </div>
 
-            {/* TODO: List of spells, grouped by level */}
             <div className="spell-book-hint">
-              {/* TODO: Map out state.spellsPrepared / state.spellsKnown here,
-              use an Accordion for each spell level */}
-              <p className="empty-state">Spell list accordions go here...</p>
+              <SpellBookView spellcasting={spellcasting} />
             </div>
           </div>
         )}

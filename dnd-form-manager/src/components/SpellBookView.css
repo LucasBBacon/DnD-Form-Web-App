@@ -1,0 +1,112 @@
+.spellbook-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.spell-error-state {
+  background: #fef2f2;
+  border: 2px solid #ef4444;
+  columns: #b91c1c;
+  padding: 1rem;
+  border-radius: 1px;
+  text-align: center;
+}
+
+.level-header {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #0369a1;
+  border-bottom: 2px solid #bae6fd;
+  margin: 0 0 0 0.75rem 0;
+  padding-bottom: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
+.spell-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.spell-card {
+  background: #fff;
+  border: 1px solid #e4e4e7;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.spell-card.expanded {
+  border-color: #38bdf8;
+  box-shadow: 0 4px 6px rgba(14, 165, 233, 0.1);
+}
+
+.spell-header-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0.75rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.spell-header-btn:hover {
+  background: #f0f9ff;
+}
+
+.spell-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #18181b;
+}
+
+.spell-quick-stats {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: #71717a;
+}
+
+.quick-stat {
+  background: #f4f4f5;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.spell-details {
+  padding: 0 1rem 1rem 1rem;
+  font-size: 0.85rem;
+  color: #3f3f46;
+}
+
+.spell-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  background: #f8fafc;
+  padding: 0.75rem;
+  gap: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.meta-item {
+  color: #52525b;
+}
+
+.meta-item.highlight {
+  color: #0369a1;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #e4e4e7;
+  margin: 1rem 0;
+}
+
+.spell-description {
+  line-height: 1.5;
+}
