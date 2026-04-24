@@ -1,34 +1,40 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useState } from "react";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllItems, getItemById } from "../data/staticDataApi";
+import type { UUID } from "../types/common";
 
 export const InventoryBlock = () => {
-  // pull actions and state from zustand
   const {
-    inventory,
-    equippedArmorId,
-    equippedShieldId,
+    inventoryStacks,
+    inventoryInstances,
+    equippedArmorInstanceId,
+    equippedShieldInstanceId,
+    equippedWeaponInstanceIds,
     addInventoryItem,
     removeInventoryItem,
-    equipArmor,
-    equipShield,
+    equipArmorInstance,
+    equipShieldInstance,
+    equipWeaponInstance,
+    unequipWeaponInstance,
   } = useCharacterStore();
 
-  // Pull derived stats from hook
   const { encumbrance, combat } = useCharacterStats();
-
-  // Local state for 'Add Item' dropdown
   const [selectedItemId, setSelectedItemId] = useState<string>("");
 
-  const handleEquipToggle = (itemId: string, armorType: string) => {
+  const handleArmorEquipToggle = (instanceId: UUID, armorType: string) => {
     if (armorType === "shield") {
-      equippedShieldId === itemId ? equipShield(null) : equipShield(itemId);
+      equippedShieldInstanceId === instanceId
+        ? equipShieldInstance(null)
+        : equipShieldInstance(instanceId);
     } else {
-      equippedArmorId === itemId ? equipArmor(null) : equipArmor(itemId);
+      equippedArmorInstanceId === instanceId
+        ? equipArmorInstance(null)
+        : equipArmorInstance(instanceId);
     }
   };
+
+  const hasItems = inventoryStacks.length > 0 || inventoryInstances.length > 0;
 
   return (
     <div className="inventory-container">
@@ -70,63 +76,98 @@ export const InventoryBlock = () => {
 
       {/* --- Backpack list --- */}
       <div className="inventory-list">
-        {inventory.length === 0 ? (
+        {!hasItems ? (
           <p>Your backpack is empty.</p>
         ) : (
-          inventory.map((record) => {
-            const itemData = getItemById(record.itemId);
-            if (!itemData) return null;
+          <>
+            {/* Stacked items */}
+            {inventoryStacks.map((stack) => {
+              const itemData = getItemById(stack.baseItemId);
+              if (!itemData) return null;
 
-            const isEquippedArmor = equippedArmorId === record.itemId;
-            const isEquippedShield = equippedShieldId === record.itemId;
-            const isEquipped = isEquippedArmor || isEquippedShield;
-
-            return (
-              <div
-                key={record.itemId}
-                className={`inventory-item ${isEquipped ? "equipped" : ""}`}
-              >
-                <div className="item-details">
-                  <strong>{itemData.name}</strong>
-                  <span className="item-weight">
-                    {itemData.weight} lbs (Total:{" "}
-                    {itemData.weight * record.quantity} lbs)
-                  </span>
-                  <p className="item-lore">{itemData.lore.shortDescription}</p>
-                </div>
-
-                <div className="item-actions">
-                  {/* Quantity Controls */}
-                  <div className="quantity-controls">
-                    <button
-                      onClick={() => removeInventoryItem(record.itemId, 1)}
-                    >
-                      -
-                    </button>
-                    <span>{record.quantity}</span>
-                    <button onClick={() => addInventoryItem(record.itemId, 1)}>
-                      +
-                    </button>
+              return (
+                <div key={stack.stackId} className="inventory-item">
+                  <div className="item-details">
+                    <strong>{itemData.name}</strong>
+                    <span className="item-weight">
+                      {itemData.weight} lbs (Total:{" "}
+                      {itemData.weight * stack.quantity} lbs)
+                    </span>
+                    <p className="item-lore">{itemData.lore.shortDescription}</p>
                   </div>
-
-                  {/* Equip Button (only shows if item is sword/shield) */}
-                  {itemData.type === "armor" && itemData.armorProperties && (
-                    <button
-                      className={isEquipped ? "unequip-btn" : "equip-btn"}
-                      onClick={() =>
-                        handleEquipToggle(
-                          record.itemId,
-                          itemData.armorProperties!.armorType,
-                        )
-                      }
-                    >
-                      {isEquipped ? "Unequip" : "Equip"}
-                    </button>
-                  )}
+                  <div className="item-actions">
+                    <div className="quantity-controls">
+                      <button onClick={() => removeInventoryItem(stack.baseItemId, 1)}>
+                        -
+                      </button>
+                      <span>{stack.quantity}</span>
+                      <button onClick={() => addInventoryItem(stack.baseItemId, 1)}>
+                        +
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+
+            {/* Instance items */}
+            {inventoryInstances.map((instance) => {
+              const itemData = getItemById(instance.baseItemId);
+              if (!itemData) return null;
+
+              const isEquippedArmor = equippedArmorInstanceId === instance.instanceId;
+              const isEquippedShield = equippedShieldInstanceId === instance.instanceId;
+              const isEquippedWeapon = equippedWeaponInstanceIds.includes(instance.instanceId);
+              const isEquipped = isEquippedArmor || isEquippedShield || isEquippedWeapon;
+
+              return (
+                <div
+                  key={instance.instanceId}
+                  className={`inventory-item ${isEquipped ? "equipped" : ""}`}
+                >
+                  <div className="item-details">
+                    <strong>{instance.customName ?? itemData.name}</strong>
+                    <span className="item-weight">{itemData.weight} lbs</span>
+                    <p className="item-lore">{itemData.lore.shortDescription}</p>
+                  </div>
+                  <div className="item-actions">
+                    <button onClick={() => removeInventoryItem(instance.baseItemId, 1)}>
+                      Drop
+                    </button>
+
+                    {/* Armor / shield equip toggle */}
+                    {itemData.type === "armor" && itemData.armorProperties && (
+                      <button
+                        className={isEquipped ? "unequip-btn" : "equip-btn"}
+                        onClick={() =>
+                          handleArmorEquipToggle(
+                            instance.instanceId,
+                            itemData.armorProperties!.armorType,
+                          )
+                        }
+                      >
+                        {isEquipped ? "Unequip" : "Equip"}
+                      </button>
+                    )}
+
+                    {/* Weapon equip toggle */}
+                    {itemData.type === "weapon" && (
+                      <button
+                        className={isEquippedWeapon ? "unequip-btn" : "equip-btn"}
+                        onClick={() =>
+                          isEquippedWeapon
+                            ? unequipWeaponInstance(instance.instanceId)
+                            : equipWeaponInstance(instance.instanceId)
+                        }
+                      >
+                        {isEquippedWeapon ? "Unequip" : "Equip"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </>
         )}
       </div>
     </div>

@@ -27,14 +27,18 @@
         "spellbooks",
         "Spellcaster",
         "Spellcasting",
+        "stackable",
         "subracial",
         "tiefling",
         "tieflings",
+        "unattune",
         "undeath",
         "unequip",
         "unprepare",
         "Unprepares",
         "unproficient",
+        "upserted",
+        "Upserts",
         "warhammer"
     ],
     "json.schemas": [

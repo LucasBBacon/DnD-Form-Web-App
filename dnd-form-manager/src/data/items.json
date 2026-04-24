@@ -3,10 +3,6 @@
     "id": "item_ammo_bolt",
     "name": "Crossbow Bolt",
     "type": "gear",
-    "stacking": {
-      "mode": "stack",
-      "bundleSize": 20
-    },
     "weight": 0.075,
     "lore": {
       "shortDescription": "Standard ammunition for crossbows.",
@@ -17,9 +13,6 @@
     "id": "item_armor_leather",
     "name": "Leather Armor",
     "type": "armor",
-    "stacking": {
-      "mode": "instance"
-    },
     "weight": 10,
     "lore": {
       "shortDescription": "Light armor made from treated leather, offering basic protection with full mobility.",
@@ -35,9 +28,6 @@
     "id": "item_weapon_club",
     "name": "Club",
     "type": "weapon",
-    "stacking": {
-      "mode": "instance"
-    },
     "weight": 2,
     "lore": {
       "shortDescription": "A simple wooden bludgeon that is easy to carry and use.",
@@ -57,9 +47,6 @@
     "id": "item_weapon_crossbow_light",
     "name": "Light Crossbow",
     "type": "weapon",
-    "stacking": {
-      "mode": "instance"
-    },
     "weight": 5,
     "lore": {
       "shortDescription": "A simple ranged crossbow that fires bolts with solid range and stopping power.",

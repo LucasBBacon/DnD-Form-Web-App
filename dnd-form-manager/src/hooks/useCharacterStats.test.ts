@@ -42,9 +42,11 @@ describe("useCharacterStats", () => {
       hpRolls: [6, 5, 4],
       chosenRacialBonuses: {},
       choicesByLevel: {},
-      inventory: [],
-      equippedArmorId: null,
-      equippedShieldId: null,
+      inventoryStacks: [],
+      inventoryInstances: [],
+      equippedArmorInstanceId: null,
+      equippedShieldInstanceId: null,
+      attunedInstanceIds: [],
       damageTaken: 0,
       classTracks: [],
     } as any;
@@ -200,7 +202,7 @@ describe("useCharacterStats", () => {
     it("should set equippedArmor to null when no armor is equipped", () => {
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: null,
+        equippedArmorInstanceId: null,
       } as any);
 
       useCharacterStats();
@@ -223,7 +225,8 @@ describe("useCharacterStats", () => {
 
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: armorId,
+        equippedArmorInstanceId: "test-armor-instance",
+        inventoryInstances: [{ instanceId: "test-armor-instance", baseItemId: armorId }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
@@ -242,7 +245,8 @@ describe("useCharacterStats", () => {
 
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: itemId,
+        equippedArmorInstanceId: "test-item-instance",
+        inventoryInstances: [{ instanceId: "test-item-instance", baseItemId: itemId }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockItem as any);
@@ -262,7 +266,8 @@ describe("useCharacterStats", () => {
 
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: armorId,
+        equippedArmorInstanceId: "test-armor-instance",
+        inventoryInstances: [{ instanceId: "test-armor-instance", baseItemId: armorId }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
@@ -277,7 +282,8 @@ describe("useCharacterStats", () => {
     it("should identify when shield is equipped", () => {
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedShieldId: "wooden_shield",
+        equippedShieldInstanceId: "test-shield-instance",
+        inventoryInstances: [{ instanceId: "test-shield-instance", baseItemId: "wooden_shield" }],
       } as any);
 
       const result = useCharacterStats();
@@ -288,7 +294,7 @@ describe("useCharacterStats", () => {
     it("should identify when no shield is equipped", () => {
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedShieldId: null,
+        equippedShieldInstanceId: null,
       } as any);
 
       const result = useCharacterStats();
@@ -311,7 +317,8 @@ describe("useCharacterStats", () => {
 
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: armorId,
+        equippedArmorInstanceId: "test-armor-instance",
+        inventoryInstances: [{ instanceId: "test-armor-instance", baseItemId: armorId }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
@@ -338,7 +345,8 @@ describe("useCharacterStats", () => {
 
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedArmorId: armorId,
+        equippedArmorInstanceId: "test-armor-instance",
+        inventoryInstances: [{ instanceId: "test-armor-instance", baseItemId: armorId }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue(mockArmor as any);
@@ -364,7 +372,8 @@ describe("useCharacterStats", () => {
     it("should penalize AC when wearing shield without shield proficiency", () => {
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedShieldId: "wooden_shield",
+        equippedShieldInstanceId: "test-shield-instance",
+        inventoryInstances: [{ instanceId: "test-shield-instance", baseItemId: "wooden_shield" }],
       } as any);
 
       vi.mocked(staticDataApi.getClassById).mockReturnValue({
@@ -380,7 +389,8 @@ describe("useCharacterStats", () => {
     it("should not penalize AC when wearing shield with shield proficiency", () => {
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        equippedShieldId: "wooden_shield",
+        equippedShieldInstanceId: "test-shield-instance",
+        inventoryInstances: [{ instanceId: "test-shield-instance", baseItemId: "wooden_shield" }],
       } as any);
 
       vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
@@ -651,14 +661,12 @@ describe("useCharacterStats", () => {
 
   describe("Encumbrance Calculation", () => {
     it("should calculate total weight from inventory", () => {
-      const mockItems = [
-        { itemId: "item1", quantity: 2 },
-        { itemId: "item2", quantity: 1 },
-      ];
-
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        inventory: mockItems,
+        inventoryStacks: [
+          { stackId: "stack-1", baseItemId: "item1", quantity: 2 },
+          { stackId: "stack-2", baseItemId: "item2", quantity: 1 },
+        ],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockImplementation((id) => {
@@ -680,11 +688,9 @@ describe("useCharacterStats", () => {
     });
 
     it("should identify encumbrance when weight exceeds capacity", () => {
-      const mockItems = [{ itemId: "heavy_item", quantity: 20 }];
-
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        inventory: mockItems,
+        inventoryStacks: [{ stackId: "stack-1", baseItemId: "heavy_item", quantity: 20 }],
         baseAbilityScores: {
           str: 10,
           dex: 14,
@@ -706,11 +712,9 @@ describe("useCharacterStats", () => {
     });
 
     it("should not identify encumbrance when weight is within capacity", () => {
-      const mockItems = [{ itemId: "light_item", quantity: 5 }];
-
       vi.mocked(useCharacterStore).mockReturnValue({
         ...createDefaultCharacterState(),
-        inventory: mockItems,
+        inventoryStacks: [{ stackId: "stack-1", baseItemId: "light_item", quantity: 5 }],
       } as any);
 
       vi.mocked(staticDataApi.getItemById).mockReturnValue({
@@ -908,13 +912,17 @@ describe("useCharacterStats", () => {
         hpRolls: [10, 8, 9, 7, 8],
         chosenRacialBonuses: {},
         choicesByLevel: { 4: { str: 2 } },
-        inventory: [
-          { itemId: "plate_armor", quantity: 1 },
-          { itemId: "longsword", quantity: 1 },
-          { itemId: "backpack", quantity: 1 },
+        inventoryStacks: [
+          { stackId: "stack-1", baseItemId: "longsword", quantity: 1 },
+          { stackId: "stack-2", baseItemId: "backpack", quantity: 1 },
         ],
-        equippedArmorId: "plate_armor",
-        equippedShieldId: "shield",
+        inventoryInstances: [
+          { instanceId: "armor-instance-1", baseItemId: "plate_armor" },
+          { instanceId: "shield-instance-1", baseItemId: "shield" },
+        ],
+        equippedArmorInstanceId: "armor-instance-1",
+        equippedShieldInstanceId: "shield-instance-1",
+        attunedInstanceIds: [],
         damageTaken: 5,
       } as any);
 
@@ -974,9 +982,11 @@ describe("useCharacterStats", () => {
         hpRolls: [7, 5, 6],
         chosenRacialBonuses: {},
         choicesByLevel: {},
-        inventory: [{ itemId: "dagger", quantity: 2 }],
-        equippedArmorId: null,
-        equippedShieldId: null,
+        inventoryStacks: [{ stackId: "stack-1", baseItemId: "dagger", quantity: 2 }],
+        inventoryInstances: [],
+        equippedArmorInstanceId: null,
+        equippedShieldInstanceId: null,
+        attunedInstanceIds: [],
         damageTaken: 0,
       } as any);
 

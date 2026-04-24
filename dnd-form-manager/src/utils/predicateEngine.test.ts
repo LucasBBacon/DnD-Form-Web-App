@@ -19,9 +19,10 @@ const createState = () =>
     subraceId: "subrace_high_elf",
     classId: "class_wizard",
     subclassId: "subclass_evocation",
-    equippedArmorId: null,
-    equippedShieldId: null,
-    equippedWeaponIds: [],
+    equippedArmorInstanceId: null,
+    equippedShieldInstanceId: null,
+    equippedWeaponInstanceIds: [],
+    inventoryInstances: [],
     choicesByLevel: {},
   }) as any;
 
@@ -139,7 +140,11 @@ describe("evaluatePredicate", () => {
 
       const result = evaluatePredicate(
         { type: "weapon_property", target: "finesse" },
-        { ...createState(), equippedWeaponIds: ["item_rapier"] },
+        {
+          ...createState(),
+          equippedWeaponInstanceIds: ["inst-rapier"],
+          inventoryInstances: [{ instanceId: "inst-rapier", baseItemId: "item_rapier" }],
+        },
         createStats(),
       );
 
@@ -156,7 +161,11 @@ describe("evaluatePredicate", () => {
 
       const result = evaluatePredicate(
         { type: "weapon_property", target: "finesse" },
-        { ...createState(), equippedWeaponIds: ["item_club"] },
+        {
+          ...createState(),
+          equippedWeaponInstanceIds: ["inst-club"],
+          inventoryInstances: [{ instanceId: "inst-club", baseItemId: "item_club" }],
+        },
         createStats(),
       );
 
@@ -173,7 +182,11 @@ describe("evaluatePredicate", () => {
 
       const result = evaluatePredicate(
         { type: "weapon_property", target: "ranged" },
-        { ...createState(), equippedWeaponIds: ["item_shortbow"] },
+        {
+          ...createState(),
+          equippedWeaponInstanceIds: ["inst-shortbow"],
+          inventoryInstances: [{ instanceId: "inst-shortbow", baseItemId: "item_shortbow" }],
+        },
         createStats(),
       );
 
@@ -197,7 +210,14 @@ describe("evaluatePredicate", () => {
 
       const result = evaluatePredicate(
         { type: "weapon_property", target: "reach" },
-        { ...createState(), equippedWeaponIds: ["item_club", "item_whip"] },
+        {
+          ...createState(),
+          equippedWeaponInstanceIds: ["inst-club", "inst-whip"],
+          inventoryInstances: [
+            { instanceId: "inst-club", baseItemId: "item_club" },
+            { instanceId: "inst-whip", baseItemId: "item_whip" },
+          ],
+        },
         createStats(),
       );
 
@@ -211,7 +231,11 @@ describe("evaluatePredicate", () => {
 
       const result = evaluatePredicate(
         { type: "weapon_property", target: "finesse" },
-        { ...createState(), equippedWeaponIds: ["item_torch"] },
+        {
+          ...createState(),
+          equippedWeaponInstanceIds: ["inst-torch"],
+          inventoryInstances: [{ instanceId: "inst-torch", baseItemId: "item_torch" }],
+        },
         createStats(),
       );
 
@@ -229,7 +253,8 @@ describe("evaluatePredicate", () => {
         { type: "armor_prohibited", value: "heavy" },
         {
           ...createState(),
-          equippedArmorId: "item_plate_armor",
+          equippedArmorInstanceId: "inst-plate",
+          inventoryInstances: [{ instanceId: "inst-plate", baseItemId: "item_plate_armor" }],
         },
         createStats(),
       );

@@ -155,7 +155,9 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   const raceData = state.raceId ? getRaceById(state.raceId) : null;
   const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
-  const subclassData = state.subclassId ? getSubclassById(state.subclassId) : null;
+  const subclassData = state.subclassId
+    ? getSubclassById(state.subclassId)
+    : null;
 
   // #endregion
 
@@ -211,7 +213,10 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   );
 
   const subclassInitiativeBonus = resolveSubclassScalingBonus(
-    getFirstDefinedScalingValue(subclassScaling, SUBCLASS_SCALING_KEYS.initiative),
+    getFirstDefinedScalingValue(
+      subclassScaling,
+      SUBCLASS_SCALING_KEYS.initiative,
+    ),
     modifiers,
   );
   const subclassAcBonus = resolveSubclassScalingBonus(
@@ -227,11 +232,16 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   // #region --- Calculate Total Weight and Encumbrance ---
 
-  // Calculate total weight from inventory
-  const totalWeight = state.inventory.reduce((total, record) => {
-    const itemData = getItemById(record.itemId);
-    return total + (itemData?.weight || 0) * record.quantity;
-  }, 0);
+  // Calculate total weight from UUID-backed inventory
+  const totalWeight =
+    state.inventoryStacks.reduce((total, stack) => {
+      const itemData = getItemById(stack.baseItemId);
+      return total + (itemData?.weight ?? 0) * stack.quantity;
+    }, 0) +
+    state.inventoryInstances.reduce((total, instance) => {
+      const itemData = getItemById(instance.baseItemId);
+      return total + (itemData?.weight ?? 0);
+    }, 0);
 
   const carryingCapacity = totalScores.str * 15;
   const isEncumbered = totalWeight > carryingCapacity;
@@ -291,16 +301,20 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   const equippedArmorData = equippedArmorInstance
     ? getItemById(equippedArmorInstance.baseItemId)
-    : state.equippedArmorId
-      ? getItemById(state.equippedArmorId)
-      : null;
+    : null;
 
   const equippedArmor: Parameters<typeof calculateArmorClass>[1] = (() => {
-    if (!equippedArmorData?.armorProperties || equippedArmorData.type !== "armor") {
+    if (
+      !equippedArmorData?.armorProperties ||
+      equippedArmorData.type !== "armor"
+    ) {
       return null;
     }
     const mergedArmorProps = equippedArmorInstance?.overrides?.armorProperties
-      ? { ...equippedArmorData.armorProperties, ...equippedArmorInstance.overrides.armorProperties }
+      ? {
+          ...equippedArmorData.armorProperties,
+          ...equippedArmorInstance.overrides.armorProperties,
+        }
       : equippedArmorData.armorProperties;
     return {
       ...equippedArmorData,
@@ -314,8 +328,9 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     state.inventoryInstances,
   );
 
-  const isWearingShield = !!state.equippedShieldInstanceId || !!state.equippedShieldId;
-  const armorStealthDisadvantage = !!equippedArmor?.armorProperties?.stealthDisadvantage;
+  const isWearingShield = !!state.equippedShieldInstanceId;
+  const armorStealthDisadvantage =
+    !!equippedArmor?.armorProperties?.stealthDisadvantage;
 
   // Build local stats snapshot for predicate checks used during proficiency aggregation
   const proficiencyEvaluationStats = {
@@ -343,9 +358,11 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   });
 
   const isArmorPenalized =
-    (!!(state.equippedArmorInstanceId || state.equippedArmorId) &&
+    (!!state.equippedArmorInstanceId &&
       equippedArmor?.armorProperties &&
-      !nonSkillProficiencies.armor.has(equippedArmor.armorProperties.armorType)) ||
+      !nonSkillProficiencies.armor.has(
+        equippedArmor.armorProperties.armorType,
+      )) ||
     (isWearingShield && !nonSkillProficiencies.armor.has("shield"));
 
   // Magic AC bonuses from equipped items (attunement-gated)

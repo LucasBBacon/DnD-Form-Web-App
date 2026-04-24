@@ -4,32 +4,68 @@ import type { FeatAcquisitionEntry } from "../types/feat";
 import type { ItemData, ItemInstanceData } from "../types/item";
 import type { LevelChoice } from "../types/progression";
 import { getClassById, getItemById } from "../data/staticDataApi";
-import { generateUuidV4, isUuidV4 } from "../utils/uuidUtils";
+import { generateUuidV4 } from "../utils/uuidUtils";
 
-export interface InventoryRecord {
-  itemId: string;
-  quantity: number;
+// #region --- Types and Interfaces ---
+
+/** 
+ * CharacterClassTrack represents a single class track for a character, used to manage multi-classing by tracking the class ID, optional subclass ID, and level for each class track the character has.
+ * This allows for flexible multi-classing support while maintaining clear associations between classes and their respective levels and subclasses.
+ */
+export interface CharacterClassTrack {
+  classId: string;
+  subclassId: string | null;
+  level: number;
 }
 
+/** 
+ * Inventory types used for managing the character's inventory state, including stack-based and instance-based items
+ */
 export interface InventoryStackRecord {
+  //  Unique identifier for this stack of items, used for tracking and updating specific stacks in the inventory
   stackId: UUID;
+  // The ID of the base item that this stack represents, used to look up item details and properties from static data
   baseItemId: string;
+  // The quantity of items in this stack, used for stackable items like consumables or ammunition; should be a positive integer
   quantity: number;
 }
 
+// Represents a single instance of an item in the character's inventory, used for non-stackable items like weapons and armor that may have unique properties or custom names
 export type InventoryInstanceRecord = ItemInstanceData;
+
+// #endregion
 
 // #region --- Helper Functions ---
 
+/**
+ * Clamps an ability score to be within the valid range of 1 to 20, ensuring that any updates to ability scores do not exceed the maximum or minimum allowed values in D&D 5e.
+ * @param score The ability score to clamp.
+ * @returns The clamped ability score.
+ */
 const clampAbilityScore = (score: number): number =>
   Math.max(1, Math.min(20, score));
 
+/**
+ * Clamps a character level to be within the valid range of 1 to 20, ensuring that any updates to character levels do not exceed the maximum or minimum allowed values in D&D 5e.
+ * @param level The character level to clamp.
+ * @returns The clamped character level.
+ */
 const clampCharacterLevel = (level: number): number =>
   Math.max(1, Math.min(20, level));
 
+/**
+ * Normalizes a quantity to be a positive integer, ensuring that any updates to item quantities do not result in negative or fractional values.
+ * @param quantity The quantity to normalize.
+ * @returns The normalized quantity.
+ */
 const normalizeQuantity = (quantity: number): number =>
   Math.max(1, Math.floor(quantity));
 
+/**
+ * Determines the default stacking mode for an item based on its type and metadata.
+ * @param itemData The item data to determine the stacking mode for, which may include static metadata about the item such as its type and any specific stacking rules defined in the data.
+ * @returns The default stacking mode for the item, which can be either "stack" for items that should be grouped together in the inventory (like consumables) or "instance" for items that should be tracked individually (like weapons and armor). The function uses sensible defaults based on item type if specific stacking metadata is not provided.
+ */
 const defaultStackMode = (itemData: ItemData | null): "stack" | "instance" => {
   if (itemData?.stacking?.mode) {
     return itemData.stacking.mode;
@@ -37,85 +73,48 @@ const defaultStackMode = (itemData: ItemData | null): "stack" | "instance" => {
 
   // Sensible defaults when static metadata is missing.
   if (!itemData) return "stack";
-  if (itemData.type === "weapon" || itemData.type === "armor" || itemData.type === "magic_item") {
+  if (
+    itemData.type === "weapon" ||
+    itemData.type === "armor" ||
+    itemData.type === "magic_item"
+  ) {
     return "instance";
   }
 
   return "stack";
 };
 
-const ensureUuid = (value: string | null | undefined): UUID =>
-  isUuidV4(value) ? value : generateUuidV4();
-
-const toStackRecord = (baseItemId: string, quantity: number): InventoryStackRecord => ({
+/**
+ * Creates a new inventory stack record for a given base item ID and quantity.
+ * @param baseItemId The ID of the base item to create a stack for.
+ * @param quantity The quantity of items in the stack.
+ * @returns A new inventory stack record with a unique stack ID and normalized quantity.
+ */
+const toStackRecord = (
+  baseItemId: string,
+  quantity: number,
+): InventoryStackRecord => ({
   stackId: generateUuidV4(),
   baseItemId,
   quantity: normalizeQuantity(quantity),
 });
 
+/**
+ * Creates a new inventory instance record for a given base item ID.
+ * @param baseItemId The ID of the base item to create an instance for.
+ * @returns A new inventory instance record with a unique instance ID.
+ */
 const toInstanceRecord = (baseItemId: string): InventoryInstanceRecord => ({
   instanceId: generateUuidV4(),
   baseItemId,
 });
 
-const findFirstInstanceIdByBaseItem = (
-  instances: InventoryInstanceRecord[],
-  baseItemId: string | null,
-): UUID | null => {
-  if (!baseItemId) return null;
-  const found = instances.find((instance) => instance.baseItemId === baseItemId);
-  return found?.instanceId ?? null;
-};
-
-const migrateLegacyInventory = (
-  inventory: InventoryRecord[],
-  existingStacks: InventoryStackRecord[],
-  existingInstances: InventoryInstanceRecord[],
-) => {
-  if (existingStacks.length > 0 || existingInstances.length > 0) {
-    return {
-      inventoryStacks: existingStacks.map((stack) => ({
-        ...stack,
-        stackId: ensureUuid(stack.stackId),
-        quantity: normalizeQuantity(stack.quantity),
-      })),
-      inventoryInstances: existingInstances.map((instance) => ({
-        ...instance,
-        instanceId: ensureUuid(instance.instanceId),
-      })),
-    };
-  }
-
-  const generatedStacks: InventoryStackRecord[] = [];
-  const generatedInstances: InventoryInstanceRecord[] = [];
-
-  inventory.forEach((record) => {
-    const itemData = getItemById(record.itemId);
-    const mode = defaultStackMode(itemData);
-    const quantity = normalizeQuantity(record.quantity);
-
-    if (mode === "instance") {
-      for (let index = 0; index < quantity; index += 1) {
-        generatedInstances.push(toInstanceRecord(record.itemId));
-      }
-      return;
-    }
-
-    generatedStacks.push(toStackRecord(record.itemId, quantity));
-  });
-
-  return {
-    inventoryStacks: generatedStacks,
-    inventoryInstances: generatedInstances,
-  };
-};
-
-export interface CharacterClassTrack {
-  classId: string;
-  subclassId: string | null;
-  level: number;
-}
-
+/**
+ * Sanitizes an array of character class tracks by removing invalid entries and normalizing levels.
+ * Invalid entries include tracks with missing class IDs or non-positive levels. The function also ensures that all levels are integers and at least 1.
+ * @param tracks The array of character class tracks to sanitize.
+ * @returns A new array of sanitized character class tracks.
+ */
 const sanitizeClassTracks = (
   tracks: CharacterClassTrack[],
 ): CharacterClassTrack[] =>
@@ -124,12 +123,26 @@ const sanitizeClassTracks = (
     .map((track) => ({
       classId: track.classId,
       subclassId: track.subclassId ?? null,
-      level: Math.max(1, Math.floor(track.level)),
+      level: clampCharacterLevel(Math.floor(track.level)),
     }));
 
+/**
+ * Calculates the total levels across all character class tracks.
+ * @param tracks The array of character class tracks to calculate the total levels for.
+ * @returns The total levels of all character class tracks.
+ */
 const getTotalClassTrackLevels = (tracks: CharacterClassTrack[]): number =>
   tracks.reduce((total, track) => total + track.level, 0);
 
+/**
+ * Upserts a character class track in the array of tracks. 
+ * If a track with the specified class ID already exists, it updates that track with the provided updates. 
+ * If no such track exists, it creates a new track with the given class ID and updates.
+ * @param tracks The array of character class tracks to update.
+ * @param classId The ID of the class track to upsert.
+ * @param updates The updates to apply to the class track.
+ * @returns A new array of character class tracks with the upserted track.
+ */
 const upsertClassTrack = (
   tracks: CharacterClassTrack[],
   classId: string,
@@ -138,7 +151,7 @@ const upsertClassTrack = (
   const existingIndex = tracks.findIndex((track) => track.classId === classId);
 
   if (existingIndex === -1) {
-    const baseLevel = Math.max(1, Math.floor(updates.level ?? 1));
+    const baseLevel = clampCharacterLevel(Math.floor(updates.level ?? 1));
     return [
       ...tracks,
       {
@@ -156,7 +169,7 @@ const upsertClassTrack = (
           ...track,
           ...updates,
           subclassId: updates.subclassId ?? track.subclassId,
-          level: Math.max(1, Math.floor(updates.level ?? track.level)),
+          level: clampCharacterLevel(Math.floor(updates.level ?? track.level)),
         },
   );
 };
@@ -164,206 +177,153 @@ const upsertClassTrack = (
 // #endregion
 
 // #region --- Store Types ---
+
+/**
+ * CharacterState represents the complete state of a D&D character, including core character information, spells, inventory, and combat status. 
+ * This interface defines all the properties that make up the character's state, which is managed by the Zustand store. 
+ * It includes fields for player and character names, alignment, experience, level, race, class, and various other attributes.
+ */
 export interface CharacterState {
   // #region --- Core Character State ---
-  
+
+  // The name of the player controlling the character
   playerName: string;
+  // The name of the character, used for display purposes on the character sheet and in the UI
   name: string;
+  // The character's alignment, which can be used for role-playing and may interact with certain traits or spells that have alignment-based effects
   alignment: string;
+  // The total experience points the character has accumulated, which determines their level and progression through the game
   xp: number;
+  // The character's current level, derived from their experience points
   level: number;
+  // The ID of the character's race, used to look up race-specific traits and abilities
   raceId: string | null;
+  // The ID of the character's subrace, if applicable, used to look up subrace-specific traits and abilities
   subraceId: string | null;
+  // The ID of the character's primary class, used to look up class-specific traits and abilities
   classId: string | null;
+  // The ID of the character's subclass, if applicable, used to look up subclass-specific traits and abilities
   subclassId: string | null;
+  // An array of the character's class tracks, used to manage multi-classing by tracking each class the character has levels in along with their respective levels and subclasses
   classTracks: CharacterClassTrack[];
 
-  // The raw numbers before racial bonuses or feats are applied
+  // The character's base ability scores for each of the six abilities (str, dex, con, int, wis, cha)
   baseAbilityScores: Record<Ability, number>;
-  // Level up HP rolls
+  // A record of the character's hit point rolls by level, used to track the HP gained at each level for accurate calculations of current and maximum HP
   hpRolls: Record<number, number>;
+  // The character's chosen racial bonuses, which are applied to their base ability scores and may be selected during character creation
   chosenRacialBonuses: Partial<Record<Ability, number>>;
+  // The ID of the character's background, used to look up background-specific traits and abilities
   backgroundId: string | null;
+  // The skills chosen from the character's racial options
   chosenRacialSkills: Skill[];
+  // The skills chosen from the character's background options
   chosenBackgroundSkills: Skill[];
-  // Master record of everything chosen at each level
+  // A record of the character's choices made at each level, such as ability score improvements, feat selections, etc...
   choicesByLevel: Record<number, LevelChoice>;
+  // An array of feats acquired by the character, including the level at which they were acquired and any relevant metadata about the feat acquisition
   acquiredFeats: FeatAcquisitionEntry[];
 
   // #endregion
 
   // #region --- Spells State ---
 
-  // IDs of spells permanently learned (Bards, Sorcerers, Warlocks...)
+  // An array of spell IDs representing the spells known by the character
   spellsKnown: string[];
-  // IDs of spells prepared today (Clerics, Druids, Wizards...)
+  // An array of spell IDs representing the spells prepared by the character
   spellsPrepared: string[];
-  // Maps spell level (1-9) to how many slots are USED
+  // A record of expended spell slots by spell level, used to track the character's available spell slots for casting spells and managing spell slot recovery during rests
   expendedSpellSlots: Record<number, number>;
-  // Warlocks are weird, track separately
+  // The number of expended pact magic slots, used to track the character's available pact slots for warlocks and manage their recovery during rests
   expendedPactSlots: number;
 
   // #endregion
 
   // #region --- Inventory State ---
 
-  inventory: InventoryRecord[];
+  // An array of inventory stack records representing the character's stackable items, where each record includes a unique stack ID, the base item ID, and the quantity of items in the stack
   inventoryStacks: InventoryStackRecord[];
+  // An array of inventory instance records representing the character's individual items, where each record includes a unique instance ID, the base item ID, and any relevant metadata about the item
   inventoryInstances: InventoryInstanceRecord[];
-  equippedArmorId: string | null;
-  equippedShieldId: string | null;
-  equippedWeaponIds: string[];
+  // The ID of the armor instance currently equipped by the character, or null if no armor is equipped
   equippedArmorInstanceId: UUID | null;
+  // The ID of the shield instance currently equipped by the character, or null if no shield is equipped
   equippedShieldInstanceId: UUID | null;
+  // An array of weapon instance IDs currently equipped by the character
   equippedWeaponInstanceIds: UUID[];
+  // An array of item instance IDs that are currently attuned, used to track which magic items the character has attuned and manage attunement limits
   attunedInstanceIds: UUID[];
 
   // #endregion
 
   // #region --- Combat State ---
 
+  // The current hit points of the character, which can be modified by taking damage or healing
   damageTaken: number;
+  // The current temporary hit points of the character, which can be set by certain spells or abilities and are lost before regular hit points when taking damage
   tempHp: number;
+  // An object tracking the number of successful and failed death saving throws, used to manage the character's status when at 0 HP and determine if they stabilize or die after three successes or failures
   deathSaves: { successes: number; failures: number };
+  // The number of hit dice expended by the character, used to track the character's available hit dice for healing during rests
   expendedHitDice: number;
 
-  isSetupComplete: boolean;
-
   // #endregion
+
+  // A boolean indicating whether the character setup is complete, used to determine if the character is ready for gameplay
+  isSetupComplete: boolean;
 }
 
 interface CharacterActions {
   // #region --- Character Setup Actions ---
 
   setPlayerName: (playerName: string) => void;
-  /**
-   * Sets the name of the character.
-   * @param name - The new name for the character.
-   * @returns void
-   */
+  
   setName: (name: string) => void;
+  
   setAlignment: (alignment: string) => void;
+  
   setXp: (xp: number) => void;
-  /**
-   * Sets the race of the character.
-   * @param raceId - The ID of the new race for the character.
-   * @returns void
-   */
+  
   setRace: (raceId: string) => void;
-  /**
-   * Sets the subrace of the character.
-   * @param subraceId - The ID of the new subrace for the character, or null to remove it.
-   * @returns void
-   */
+  
   setSubrace: (subraceId: string | null) => void;
-  /**
-   * Sets the class of the character.
-   * @param classId - The ID of the new class for the character.
-   * @returns void
-   */
+  
   setClass: (classId: string) => void;
-  /**
-   * Sets the subclass of the character.
-   * @param subclassId - The ID of the new subclass for the character, or null to remove it.
-   * @returns void
-   */
+  
   setSubclass: (subclassId: string | null) => void;
 
   // #region --- Multi-Classing Actions ---
 
-  /**
-   * Sets the class tracks of the character.
-   * @param tracks - An array of CharacterClassTrack objects representing the new class tracks for the character.
-   * @returns void
-   */
   setClassTracks: (tracks: CharacterClassTrack[]) => void;
-  /**
-   * Adds a new class track to the character.
-   * @param classId - The ID of the class to add.
-   * @param startingLevel - The starting level for the new class track (optional).
-   * @returns void
-   */
+  
   addClassTrack: (classId: string, startingLevel?: number) => void;
-  /**
-   * Removes a class track from the character.
-   * @param classId - The ID of the class track to remove.
-   * @returns void
-   */
+  
   removeClassTrack: (classId: string) => void;
-  /**
-   * Sets the level of a specific class track.
-   * @param classId - The ID of the class track to update.
-   * @param level - The new level for the class track.
-   * @returns void
-   */
+  
   setClassTrackLevel: (classId: string, level: number) => void;
-  /**
-   * Sets the subclass of a specific class track.
-   * @param classId - The ID of the class track to update.
-   * @param subclassId - The ID of the new subclass for the class track, or null to remove it.
-   * @returns void
-   */
+  
   setClassTrackSubclass: (classId: string, subclassId: string | null) => void;
 
   // #endregion
 
   // #region --- Background and Ability Actions ---
 
-  /**
-   * Sets the background of the character.
-   * @param background - The ID of the new background for the character.
-   * @returns void
-   */
   setBackground: (background: string) => void;
-  /**
-   * Sets the level of the character.
-   * @param level - The new level for the character.
-   * @returns void
-   */
+  
   setLevel: (level: number) => void;
-  /**
-   * Updates the choices for a specific level.
-   * @param level - The level to update.
-   * @param updates - Partial updates to apply to the level's choices.
-   * @returns void
-   */
+  
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
-  /**
-   * Sets the base ability score for a specific ability.
-   * @param ability - The ability to update.
-   * @param score - The new score for the ability.
-   * @returns void
-   */
+  
   setBaseAbilityScore: (ability: Ability, score: number) => void;
-  /**
-   * Sets the base ability scores for the character.
-   * @param scores - An object mapping abilities to their new scores.
-   * @returns void
-   */
+  
   setBaseAbilityScores: (scores: Record<Ability, number>) => void;
-  /**
-   * Sets the racial skills for the character.
-   * @param skills - An array of Skill objects representing the new racial skills for the character.
-   * @returns void
-   */
+  
   setRacialSkills: (skills: Skill[]) => void;
-  /**
-   * Sets the chosen racial bonuses for the character.
-   * @param bonuses - An object mapping abilities to their chosen racial bonuses.
-   * @returns void
-   */
+  
   setChosenRacialBonuses: (bonuses: Partial<Record<Ability, number>>) => void;
-  /**
-   * Sets the background skills for the character.
-   * @param skills - An array of Skill objects representing the new background skills for the character.
-   * @returns void
-   */
+  
   setBackgroundSkills: (skills: Skill[]) => void;
-  /**
-   * Sets the origin feat for the character.
-   * @param featId - The ID of the new origin feat for the character, or null to remove it.
-   * @returns void
-   */
+  
   setOriginFeat: (featId: string | null) => void;
 
   // #endregion
@@ -372,154 +332,79 @@ interface CharacterActions {
 
   // #region --- Spell Actions ---
 
-  /**
-   * Adds a spell to the character's known spells list.
-   * @param spellId - The ID of the spell to add.
-   * @returns void
-   */
   learnSpell: (spellId: string) => void;
-  /**
-   * Prepares a spell for the character.
-   * @param spellId - The ID of the spell to prepare.
-   * @returns void
-   */
+  
   prepareSpell: (spellId: string) => void;
-  /**
-   * Unprepares a spell for the character.
-   * @param spellId - The ID of the spell to unprepare.
-   * @returns void
-   */
+  
   unprepareSpell: (spellId: string) => void;
 
   // #endregion
 
   // #region --- Combat Actions ---
 
-  /**
-   * Expends a spell slot of a given level for the character.
-   * @param level - The level of the spell slot to expend.
-   * @returns void
-   */
   expendSpellSlot: (level: number) => void;
-  /**
-   * Restores a spell slot of a given level for the character.
-   * @param level - The level of the spell slot to restore.
-   * @returns void
-   */
+  
   restoreSpellSlot: (level: number) => void;
-  /**
-   * Expends a pact spell slot for the character.
-   * @returns void
-   */
+  
   expendPactSlot: () => void;
 
   // #endregion
 
   // #region --- Resting Actions ---
 
-  /**
-   * Handles the character taking a long rest, which restores spell slots, heals the character, and regains hit dice.
-   * @returns void
-   */
   takeLongRest: () => void;
-  /**
-   * Handles the character taking a short rest, which allows them to spend hit dice to regain health.
-   * @returns void
-   */
+  
   takeShortRest: () => void;
 
   // #endregion
 
   // #region --- Inventory Actions ---
 
-  /**
-   * Adds an item to the character's inventory.
-   * @param itemId - The ID of the item to add.
-   * @param quantity - The quantity of the item to add.
-   * @returns void
-   */
   addInventoryItem: (itemId: string, quantity: number) => void;
-  /**
-   * Removes an item from the character's inventory.
-   * @param itemId - The ID of the item to remove.
-   * @param quantity - The quantity of the item to remove.
-   * @returns void
-   */
+  
   removeInventoryItem: (itemId: string, quantity: number) => void;
-  /**
-   * Equips an armor item for the character.
-   * @param itemId - The ID of the armor item to equip, or null to unequip.
-   * @returns void
-   */
-  equipArmor: (itemId: string | null) => void;
-  /**
-   * Equips a shield item for the character.
-   * @param itemId - The ID of the shield item to equip, or null to unequip.
-   * @returns void
-   */
-  equipShield: (itemId: string | null) => void;
+  
   equipArmorInstance: (instanceId: UUID | null) => void;
+  
   equipShieldInstance: (instanceId: UUID | null) => void;
+  
   equipWeaponInstance: (instanceId: UUID) => void;
+  
   unequipWeaponInstance: (instanceId: UUID) => void;
+  
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
+  
   attuneInstance: (instanceId: UUID) => void;
+  
   unattuneInstance: (instanceId: UUID) => void;
 
   // #endregion
 
   // #region --- Combat Actions ---
 
-  /**
-   * Applies damage to the character, reducing their current hit points.
-   * @param amount - The amount of damage to apply.
-   * @returns void
-   */
   takeDamage: (amount: number) => void;
-  /**
-   * Heals the character, increasing their current hit points.
-   * @param amount - The amount of healing to apply.
-   * @returns void
-   */
+  
   heal: (amount: number) => void;
-  /**
-   * Sets the temporary hit points for the character.
-   * @param amount - The amount of temporary hit points to set.
-   * @returns void
-   */
+  
   setTempHp: (amount: number) => void;
-  /**
-   * Records a death saving throw for the character.
-   * @param type - The type of death save ("successes" or "failures").
-   * @param value - The value to record (true for success, false for failure).
-   * @returns void
-   */
+  
   recordDeathSave: (type: "successes" | "failures", value: boolean) => void;
-  /**
-   * Expends a hit die for the character.
-   * @returns void
-   */
+  
   expendHitDie: () => void;
 
   // #endregion
 
   // #region --- Character Saving Actions ---
 
-  /**
-   * Marks the character's setup as complete.
-   * @returns void
-   */
   completeSetup: () => void;
-  /**
-   * Resets the character to its initial state.
-   * @returns void
-   */
+  
   resetCharacter: () => void;
+  
   /**
    * Replaces the character state with the baseline merged with the given overrides,
    * and marks setup as complete so the character sheet renders immediately.
-   * Intended for dev-only scenario injection.
-   * @param overrides - Partial state to overlay on top of the baseline.
+   * Accepts UUID-backed character state overrides. All inventory fields must use UUID-based
+   * structures (`inventoryStacks`, `inventoryInstances`, `equippedArmorInstanceId`, etc.).
    */
   hydrateCharacter: (overrides: Partial<CharacterState>) => void;
 
@@ -530,8 +415,16 @@ type CharacterStore = CharacterState & CharacterActions;
 
 // #endregion
 
-// Baseline snapshot used for store initialisation and full resets.
+// #region --- Full Store Implementation ---
+
+/**
+ * Baseline character state used for initializing the store and resetting the character. 
+ * This state represents a level 1 character with no race, class, or equipment, and serves as the default state for a new character before any choices are made. 
+ * It includes sensible defaults for all fields to ensure that the character sheet can render without errors even when no data is present.
+ */
 export const BASELINE_CHARACTER_STATE: CharacterState = {
+  // #region --- Core Character State ---
+  
   playerName: "",
   name: "",
   alignment: "",
@@ -550,27 +443,41 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   chosenBackgroundSkills: [],
   choicesByLevel: {},
   acquiredFeats: [],
+
+  // #endregion
+
+  // #region --- Spells State ---
+
   spellsKnown: [],
   spellsPrepared: [],
   expendedSpellSlots: {},
   expendedPactSlots: 0,
-  inventory: [
-    { itemId: "item_backpack", quantity: 1 },
-    { itemId: "item_torch", quantity: 10 },
+
+  // #endregion
+
+  // #region --- Inventory State ---
+
+  inventoryStacks: [
+    toStackRecord("item_backpack", 1),
+    toStackRecord("item_torch", 10),
   ],
-  inventoryStacks: [],
   inventoryInstances: [],
-  equippedArmorId: null,
-  equippedShieldId: null,
-  equippedWeaponIds: [],
   equippedArmorInstanceId: null,
   equippedShieldInstanceId: null,
   equippedWeaponInstanceIds: [],
   attunedInstanceIds: [],
+
+  // #endregion
+
+  // #region --- Combat State ---
+
   damageTaken: 0,
   tempHp: 0,
   deathSaves: { successes: 0, failures: 0 },
   expendedHitDice: 0,
+  
+  // #endregion
+  
   isSetupComplete: false,
 };
 
@@ -656,7 +563,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         },
       };
 
-      // If a feat choice is being updated, we need to update the acquired feats list accordingly
+      // If a feat choice is being updated, update the acquired feats list accordingly
       const nextAcquiredFeats = state.acquiredFeats.filter(
         (entry) =>
           !(entry.source === "level_up" && entry.sourceLevel === level),
@@ -715,17 +622,17 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       subclassId,
       classTracks: state.classId
         ? upsertClassTrack(state.classTracks, state.classId, { subclassId })
-        : state.classTracks, // If there's no class, we can't associate the subclass with a track, so just update the state and rely on the UI to handle this edge case <- TODO: Maybe should just prevent setting a subclass if there's no class?
+        : state.classTracks, // If there's no class, subclass can't be associated with a track, so just update the state and rely on the UI to handle this edge case <- TODO: Maybe should just prevent setting a subclass if there's no class?
       acquiredFeats: state.acquiredFeats.filter(
         (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subclass
       ),
     })),
 
-  // #region --- Setup Multi-Classing Actions ---
+  // #region --- Setup Multi Class Actions ---
 
   setClassTracks: (tracks) =>
     set((state) => {
-      // Sanitize the incoming tracks to ensure they are valid and consistent, 
+      // Sanitize the incoming tracks to ensure they are valid and consistent,
       // then determine the primary track and total level for the character based on the sanitized tracks
       const sanitizedTracks = sanitizeClassTracks(tracks);
       const primaryTrack = sanitizedTracks[0] || null;
@@ -744,7 +651,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   addClassTrack: (classId, startingLevel = 1) =>
     set((state) => {
-      // Add a new class track for the specified class ID, defaulting to the character's current level or 1 if not provided, 
+      // Add a new class track for the specified class ID, defaulting to the character's current level or 1 if not provided,
       // then determine the primary track and total level for the character based on the updated tracks
       const nextTracks = upsertClassTrack(state.classTracks, classId, {
         level: Math.max(1, Math.floor(startingLevel)),
@@ -767,22 +674,22 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       const nextTracks = state.classTracks.filter(
         (track) => track.classId !== classId,
       );
-      const primaryTrack = nextTracks[0] || null;
+      const primaryTrack = nextTracks[0] || null; // After removing the specified class track, determine the new primary track and total level for the character based on the remaining tracks
 
       return {
         classTracks: nextTracks,
         classId:
           state.classId === classId
             ? (primaryTrack?.classId ?? null)
-            : state.classId,
+            : state.classId, // If the removed track was the primary track, update the primary class ID to the new primary track's class ID or null if no tracks remain; otherwise, keep the existing primary class ID
         subclassId:
           state.classId === classId
             ? (primaryTrack?.subclassId ?? null)
-            : state.subclassId,
+            : state.subclassId, // If the removed track was the primary track, update the subclass ID to match the new primary track's subclass ID or null if no tracks remain; otherwise, keep the existing subclass ID
         level:
           nextTracks.length > 0
             ? clampCharacterLevel(getTotalClassTrackLevels(nextTracks))
-            : 1,
+            : 1, // If there are remaining tracks, recalculate the total level; if no tracks remain, reset to level 1
       };
     }),
 
@@ -833,6 +740,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => {
       const nextScores = { ...state.baseAbilityScores };
 
+      // Iterate over the provided scores and clamp each one to ensure they are within valid bounds, while also validating that the incoming values are numbers
       (Object.keys(scores) as Ability[]).forEach((ability) => {
         const incoming = scores[ability];
         if (typeof incoming === "number" && Number.isFinite(incoming)) {
@@ -914,7 +822,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         return state;
       }
 
-      const currentUsed = state.expendedSpellSlots[level] ?? 0;
+      const currentUsed = state.expendedSpellSlots[level] ?? 0; // If the character has already expended all their slots for this level, don't allow further expenditure
       return {
         expendedSpellSlots: {
           ...state.expendedSpellSlots,
@@ -983,7 +891,6 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   addInventoryItem: (itemId, quantity) =>
     set((state) => {
       const normalizedQuantity = normalizeQuantity(quantity);
-      const existing = state.inventory.find((i) => i.itemId === itemId);
       const itemData = getItemById(itemId);
       const stackMode = defaultStackMode(itemData);
 
@@ -997,7 +904,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         if (existingStackIndex >= 0) {
           nextInventoryStacks[existingStackIndex] = {
             ...nextInventoryStacks[existingStackIndex],
-            quantity: nextInventoryStacks[existingStackIndex].quantity + normalizedQuantity,
+            quantity:
+              nextInventoryStacks[existingStackIndex].quantity +
+              normalizedQuantity,
           };
         } else {
           nextInventoryStacks.push(toStackRecord(itemId, normalizedQuantity));
@@ -1008,20 +917,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         }
       }
 
-      if (existing) {
-        return {
-          inventory: state.inventory.map((i) =>
-            i.itemId === itemId
-              ? { ...i, quantity: i.quantity + normalizedQuantity }
-              : i,
-          ),
-          inventoryStacks: nextInventoryStacks,
-          inventoryInstances: nextInventoryInstances,
-        };
-      }
-
       return {
-        inventory: [...state.inventory, { itemId, quantity: normalizedQuantity }],
         inventoryStacks: nextInventoryStacks,
         inventoryInstances: nextInventoryInstances,
       };
@@ -1030,14 +926,6 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   removeInventoryItem: (itemId, quantity) =>
     set((state) => {
       const normalizedQuantity = normalizeQuantity(quantity);
-      // Logic to subtract quantity
-      const updatedInventory = state.inventory
-        .map((i) =>
-          i.itemId === itemId
-            ? { ...i, quantity: i.quantity - normalizedQuantity }
-            : i,
-        )
-        .filter((i) => i.quantity > 0);
 
       const nextInventoryStacks = state.inventoryStacks
         .map((stack) =>
@@ -1050,33 +938,21 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       const toRemoveCount = normalizedQuantity;
       let removedCount = 0;
       const removedInstanceIds = new Set<UUID>();
-      const nextInventoryInstances = state.inventoryInstances.filter((instance) => {
-        if (instance.baseItemId !== itemId || removedCount >= toRemoveCount) {
-          return true;
-        }
+      const nextInventoryInstances = state.inventoryInstances.filter(
+        (instance) => {
+          if (instance.baseItemId !== itemId || removedCount >= toRemoveCount) {
+            return true;
+          }
 
-        removedInstanceIds.add(instance.instanceId);
-        removedCount += 1;
-        return false;
-      });
-
-      // Check if the item was completely removed
-      const isItemFullyRemoved = !updatedInventory.some(
-        (i) => i.itemId === itemId,
+          removedInstanceIds.add(instance.instanceId);
+          removedCount += 1;
+          return false;
+        },
       );
+
       return {
-        inventory: updatedInventory,
         inventoryStacks: nextInventoryStacks,
         inventoryInstances: nextInventoryInstances,
-        // Strip the ID if they just dropped equipped gear
-        equippedArmorId:
-          isItemFullyRemoved && state.equippedArmorId === itemId
-            ? null
-            : state.equippedArmorId,
-        equippedShieldId:
-          isItemFullyRemoved && state.equippedShieldId === itemId
-            ? null
-            : state.equippedShieldId,
         equippedArmorInstanceId:
           state.equippedArmorInstanceId &&
           removedInstanceIds.has(state.equippedArmorInstanceId)
@@ -1096,47 +972,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       };
     }),
 
-  equipArmor: (itemId) =>
-    set((state) => ({
-      equippedArmorId: itemId,
-      equippedArmorInstanceId: findFirstInstanceIdByBaseItem(
-        state.inventoryInstances,
-        itemId,
-      ),
-    })),
-
-  equipShield: (itemId) =>
-    set((state) => ({
-      equippedShieldId: itemId,
-      equippedShieldInstanceId: findFirstInstanceIdByBaseItem(
-        state.inventoryInstances,
-        itemId,
-      ),
-    })),
-
   equipArmorInstance: (instanceId) =>
-    set((state) => {
-      const equippedInstance = instanceId
-        ? state.inventoryInstances.find((instance) => instance.instanceId === instanceId)
-        : null;
-
-      return {
-        equippedArmorInstanceId: instanceId,
-        equippedArmorId: equippedInstance?.baseItemId ?? null,
-      };
-    }),
+    set(() => ({
+      equippedArmorInstanceId: instanceId,
+    })),
 
   equipShieldInstance: (instanceId) =>
-    set((state) => {
-      const equippedInstance = instanceId
-        ? state.inventoryInstances.find((instance) => instance.instanceId === instanceId)
-        : null;
-
-      return {
-        equippedShieldInstanceId: instanceId,
-        equippedShieldId: equippedInstance?.baseItemId ?? null,
-      };
-    }),
+    set(() => ({
+      equippedShieldInstanceId: instanceId,
+    })),
 
   equipWeaponInstance: (instanceId) =>
     set((state) => {
@@ -1146,37 +990,20 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       if (!instance) return state;
       if (state.equippedWeaponInstanceIds.includes(instanceId)) return state;
 
-      const nextWeaponIds = state.equippedWeaponIds.includes(instance.baseItemId)
-        ? state.equippedWeaponIds
-        : [...state.equippedWeaponIds, instance.baseItemId];
-
       return {
-        equippedWeaponInstanceIds: [...state.equippedWeaponInstanceIds, instanceId],
-        equippedWeaponIds: nextWeaponIds,
+        equippedWeaponInstanceIds: [
+          ...state.equippedWeaponInstanceIds,
+          instanceId,
+        ],
       };
     }),
 
   unequipWeaponInstance: (instanceId) =>
-    set((state) => {
-      const nextEquippedInstances = state.equippedWeaponInstanceIds.filter(
+    set((state) => ({
+      equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
         (id) => id !== instanceId,
-      );
-
-      const stillEquippedBaseIds = new Set(
-        nextEquippedInstances
-          .map((id) =>
-            state.inventoryInstances.find((instance) => instance.instanceId === id)?.baseItemId,
-          )
-          .filter((id): id is string => !!id),
-      );
-
-      return {
-        equippedWeaponInstanceIds: nextEquippedInstances,
-        equippedWeaponIds: state.equippedWeaponIds.filter((id) =>
-          stillEquippedBaseIds.has(id),
-        ),
-      };
-    }),
+      ),
+    })),
 
   createItemInstance: (baseItemId, quantity = 1) => {
     const normalizedQuantity = normalizeQuantity(quantity);
@@ -1186,13 +1013,6 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
     set((state) => ({
       inventoryInstances: [...state.inventoryInstances, ...createdInstances],
-      inventory: state.inventory.some((record) => record.itemId === baseItemId)
-        ? state.inventory.map((record) =>
-            record.itemId === baseItemId
-              ? { ...record, quantity: record.quantity + normalizedQuantity }
-              : record,
-          )
-        : [...state.inventory, { itemId: baseItemId, quantity: normalizedQuantity }],
     }));
 
     return createdInstances.map((instance) => instance.instanceId);
@@ -1209,7 +1029,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   unattuneInstance: (instanceId) =>
     set((state) => ({
-      attunedInstanceIds: state.attunedInstanceIds.filter((id) => id !== instanceId),
+      attunedInstanceIds: state.attunedInstanceIds.filter(
+        (id) => id !== instanceId,
+      ),
     })),
 
   // #endregion
@@ -1278,54 +1100,13 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
 
   hydrateCharacter: (overrides) =>
-    set(() => {
-      const mergedState = {
-        ...BASELINE_CHARACTER_STATE,
-        ...overrides,
-      };
-
-      const migratedInventory = migrateLegacyInventory(
-        mergedState.inventory,
-        mergedState.inventoryStacks,
-        mergedState.inventoryInstances,
-      );
-
-      const equippedArmorInstanceId =
-        mergedState.equippedArmorInstanceId ??
-        findFirstInstanceIdByBaseItem(
-          migratedInventory.inventoryInstances,
-          mergedState.equippedArmorId,
-        );
-
-      const equippedShieldInstanceId =
-        mergedState.equippedShieldInstanceId ??
-        findFirstInstanceIdByBaseItem(
-          migratedInventory.inventoryInstances,
-          mergedState.equippedShieldId,
-        );
-
-      const equippedWeaponInstanceIds =
-        mergedState.equippedWeaponInstanceIds.length > 0
-          ? mergedState.equippedWeaponInstanceIds.map((id) => ensureUuid(id))
-          : mergedState.equippedWeaponIds
-              .map((baseItemId) =>
-                findFirstInstanceIdByBaseItem(
-                  migratedInventory.inventoryInstances,
-                  baseItemId,
-                ),
-              )
-              .filter((id): id is UUID => id !== null);
-
-      return {
-        ...mergedState,
-        ...migratedInventory,
-        equippedArmorInstanceId,
-        equippedShieldInstanceId,
-        equippedWeaponInstanceIds,
-        attunedInstanceIds: mergedState.attunedInstanceIds.map((id) => ensureUuid(id)),
-        isSetupComplete: true,
-      };
-    }),
+    set(() => ({
+      ...BASELINE_CHARACTER_STATE,
+      ...overrides,
+      isSetupComplete: true,
+    })),
 
   // #endregion
 }));
+
+// #endregion

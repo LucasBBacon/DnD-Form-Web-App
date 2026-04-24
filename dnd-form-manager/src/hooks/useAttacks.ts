@@ -65,28 +65,26 @@ export const useAttacks = () => {
 
   // #region --- Calculate Attacks ---
 
-  // Normalize to a unified source list: instance-based when available, legacy template fallback.
+  // Unified weapon source list from equipped instance IDs.
   type WeaponSource = {
     instanceId: UUID | null;
     baseItemId: string;
     instanceData: ItemInstanceData | null;
   };
 
-  const weaponSources: WeaponSource[] =
-    state.equippedWeaponInstanceIds.length > 0
-      ? state.equippedWeaponInstanceIds.map((instanceId) => {
-          const instanceData = resolveInstance(instanceId, state.inventoryInstances);
-          return {
-            instanceId,
-            baseItemId: instanceData?.baseItemId ?? "",
-            instanceData,
-          };
-        })
-      : state.equippedWeaponIds.map((weaponId) => ({
-          instanceId: null,
-          baseItemId: weaponId,
-          instanceData: null,
-        }));
+  const weaponSources: WeaponSource[] = state.equippedWeaponInstanceIds.map(
+    (instanceId) => {
+      const instanceData = resolveInstance(
+        instanceId,
+        state.inventoryInstances,
+      );
+      return {
+        instanceId,
+        baseItemId: instanceData?.baseItemId ?? "",
+        instanceData,
+      };
+    },
+  );
 
   const attacks = weaponSources
     .map(({ instanceId, baseItemId, instanceData }) => {
@@ -146,7 +144,9 @@ export const useAttacks = () => {
 
       // #region --- Calculate to-hit and damage ---
       const toHit =
-        statMod + (isProficient ? derivedStats.proficiencyBonus : 0) + magicAttackBonus;
+        statMod +
+        (isProficient ? derivedStats.proficiencyBonus : 0) +
+        magicAttackBonus;
       const damageBonus = statMod + magicDamageBonus;
       // #endregion
 
@@ -156,13 +156,13 @@ export const useAttacks = () => {
       let canAttack = true;
 
       if (props.properties.includes("ammunition") && props.ammoItemId) {
-        // If the weapon uses ammunition, check the inventory for the ammo item and count
+        // If the weapon uses ammunition, check the inventory stacks for the ammo item and count
         const ammoItem = getItemById(props.ammoItemId);
-        const inventoryRecord = state.inventory.find(
-          (i) => i.itemId === props.ammoItemId,
+        const ammoStack = state.inventoryStacks.find(
+          (stack) => stack.baseItemId === props.ammoItemId,
         );
 
-        ammoCount = inventoryRecord?.quantity || 0;
+        ammoCount = ammoStack?.quantity ?? 0;
         ammoName = ammoItem?.name || "Ammunition";
 
         if (ammoCount === 0) canAttack = false;

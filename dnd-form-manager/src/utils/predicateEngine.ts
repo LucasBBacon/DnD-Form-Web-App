@@ -4,6 +4,7 @@ import type { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import type { WeaponProperty } from "../types/item";
 import type { Predicate } from "../types/predicate";
+import { resolveInstance } from "./inventoryUtils";
 import { getAllCharacterTraits } from "./traitUtils";
 
 const hasCharacterTrait = (
@@ -35,8 +36,10 @@ const hasEquippedWeaponProperty = (
   state: ReturnType<typeof useCharacterStore.getState>,
   propertyTarget: string,
 ): boolean =>
-  state.equippedWeaponIds.some((weaponId) => {
-    const weapon = getItemById(weaponId);
+  state.equippedWeaponInstanceIds.some((instanceId) => {
+    const instance = resolveInstance(instanceId, state.inventoryInstances);
+    if (!instance) return false;
+    const weapon = getItemById(instance.baseItemId);
     if (!weapon?.weaponProperties) return false;
     if (propertyTarget === "ranged") {
       return weapon.weaponProperties.category.includes("ranged");
@@ -54,24 +57,26 @@ export const evaluatePredicate = (
   switch (predicate.type) {
     case "armor_required": {
       // if no armor equipped, fail
-      if (!state.equippedArmorId) return false;
+      if (!state.equippedArmorInstanceId) return false;
 
-      const armor = getItemById(state.equippedArmorId);
-      if (predicate.value === "any") return true;
+      const instance = resolveInstance(state.equippedArmorInstanceId, state.inventoryInstances);
+      const armor = instance ? getItemById(instance.baseItemId) : null;
+      if (predicate.value === "any") return !!armor;
       return armor?.armorProperties?.armorType === predicate.value;
     }
 
     case "armor_prohibited": {
-      if (!state.equippedArmorId) return true;
+      if (!state.equippedArmorInstanceId) return true;
       // 'any' means all armor categories are prohibited
       if (predicate.value === "any") return false;
-      const armor = getItemById(state.equippedArmorId);
+      const instance = resolveInstance(state.equippedArmorInstanceId, state.inventoryInstances);
+      const armor = instance ? getItemById(instance.baseItemId) : null;
       // Return false if the equipped armor matches the prohibited category
       return armor?.armorProperties?.armorType !== predicate.value;
     }
 
     case "shield_prohibited": {
-      const hasShield = !!state.equippedShieldId;
+      const hasShield = !!state.equippedShieldInstanceId;
       // If predicate.value is true (shield IS prohibited), we return true if they DON'T have a shield
       return predicate.value === true ? !hasShield : hasShield;
     }

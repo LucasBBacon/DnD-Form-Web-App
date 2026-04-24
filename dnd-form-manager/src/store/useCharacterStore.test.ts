@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it } from "vitest";
-import { isUuidV4 } from "../utils/uuidUtils";
 import { useCharacterStore, BASELINE_CHARACTER_STATE } from "./useCharacterStore";
 
 describe("useCharacterStore feat acquisition state", () => {
@@ -145,21 +144,19 @@ describe("useCharacterStore hydrateCharacter and resetCharacter", () => {
     expect(useCharacterStore.getState().isSetupComplete).toBe(true);
   });
 
-  it("hydrates legacy inventory into UUID-backed stack and instance records", () => {
+  it("hydrateCharacter preserves existing UUID inventory when no legacy fields are present", () => {
+    const instanceId = useCharacterStore.getState().createItemInstance("item_weapon_club")[0];
+    useCharacterStore.getState().equipWeaponInstance(instanceId);
+
     useCharacterStore.getState().hydrateCharacter({
-      inventory: [
-        { itemId: "item_ammo_bolt", quantity: 20 },
-        { itemId: "item_weapon_club", quantity: 2 },
-      ],
-      equippedWeaponIds: ["item_weapon_club"],
+      inventoryInstances: [{ instanceId, baseItemId: "item_weapon_club" }],
+      equippedWeaponInstanceIds: [instanceId],
     });
 
     const state = useCharacterStore.getState();
-
-    expect(state.inventoryStacks.some((stack) => stack.baseItemId === "item_ammo_bolt")).toBe(true);
-    expect(state.inventoryInstances.filter((instance) => instance.baseItemId === "item_weapon_club")).toHaveLength(2);
-    expect(state.equippedWeaponInstanceIds).toHaveLength(1);
-    expect(isUuidV4(state.equippedWeaponInstanceIds[0])).toBe(true);
+    expect(state.inventoryInstances).toHaveLength(1);
+    expect(state.inventoryInstances[0].instanceId).toBe(instanceId);
+    expect(state.equippedWeaponInstanceIds).toContain(instanceId);
   });
 
   it("enforces an attunement cap of 3 instance IDs", () => {
