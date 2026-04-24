@@ -1,0 +1,177 @@
+.actions-board-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-controls {
+  display: flex;
+  border-bottom: 2px solid #e4e4e7;
+  margin-bottom: 1rem;
+}
+
+.tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 0.75rem;
+  font-weight: 700;
+  color: #a1a1aa;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover:not(:disabled) {
+  color: #18181b;
+  background: #f4f4f5;
+}
+
+.tab-btn.active {
+  color: #18181b;
+  border-bottom-color: #ef4444;
+}
+
+.tab-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.attack-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.list-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #71717a;
+  padding: 0 0 0.5rem 0.25rem 0.5rem;
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.attack-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  align-items: center;
+  background: #f4f4f5;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #e4e4e7;
+}
+
+.atk-name-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.atk-subtext {
+  font-size: 0.7rem;
+  color: #71717a;
+}
+
+.atk-bonus-col {
+  display: flex;
+  justify-content: center;
+}
+
+.roll-btn {
+  background: #18181b;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.roll-btn:hover {
+  background: #3f3f46;
+}
+
+.atk-dmg-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 600;
+  text-align: right;
+}
+
+.ammo-tracker {
+  font-size: 0.7rem;
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.slot-trackers-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #e4e4e7;
+}
+
+.slot-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.pact-slot {
+  background: #fdf4ff;
+  border-color: #e879f9;
+}
+
+.slot-label {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #0369a1;
+}
+
+.pact-slot .slot-label {
+  color: #a21caf;
+}
+
+.slot-bubbles {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.slot-checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #38bdf8;
+  border-radius: 4px;
+  cursor: pointer;
+  background: white;
+}
+
+.slot-checkbox:checked {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+}
+
+.pact-slot .slot-checkbox {
+  border-color: #d946ef;
+}
+
+.pact-slot .slot-box:checked {
+  background: #c027d3;
+  border-color: #c027d3;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #a1a1aa;
+  font-style: italic;
+}
