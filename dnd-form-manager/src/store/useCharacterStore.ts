@@ -1,13 +1,23 @@
 import { create } from "zustand";
-import type { Ability, Skill } from "../types/common";
+import type { Ability, Skill, UUID } from "../types/common";
 import type { FeatAcquisitionEntry } from "../types/feat";
+import type { ItemData, ItemInstanceData } from "../types/item";
 import type { LevelChoice } from "../types/progression";
-import { getClassById } from "../data/staticDataApi";
+import { getClassById, getItemById } from "../data/staticDataApi";
+import { generateUuidV4, isUuidV4 } from "../utils/uuidUtils";
 
 export interface InventoryRecord {
   itemId: string;
   quantity: number;
 }
+
+export interface InventoryStackRecord {
+  stackId: UUID;
+  baseItemId: string;
+  quantity: number;
+}
+
+export type InventoryInstanceRecord = ItemInstanceData;
 
 // #region --- Helper Functions ---
 
@@ -16,6 +26,89 @@ const clampAbilityScore = (score: number): number =>
 
 const clampCharacterLevel = (level: number): number =>
   Math.max(1, Math.min(20, level));
+
+const normalizeQuantity = (quantity: number): number =>
+  Math.max(1, Math.floor(quantity));
+
+const defaultStackMode = (itemData: ItemData | null): "stack" | "instance" => {
+  if (itemData?.stacking?.mode) {
+    return itemData.stacking.mode;
+  }
+
+  // Sensible defaults when static metadata is missing.
+  if (!itemData) return "stack";
+  if (itemData.type === "weapon" || itemData.type === "armor" || itemData.type === "magic_item") {
+    return "instance";
+  }
+
+  return "stack";
+};
+
+const ensureUuid = (value: string | null | undefined): UUID =>
+  isUuidV4(value) ? value : generateUuidV4();
+
+const toStackRecord = (baseItemId: string, quantity: number): InventoryStackRecord => ({
+  stackId: generateUuidV4(),
+  baseItemId,
+  quantity: normalizeQuantity(quantity),
+});
+
+const toInstanceRecord = (baseItemId: string): InventoryInstanceRecord => ({
+  instanceId: generateUuidV4(),
+  baseItemId,
+});
+
+const findFirstInstanceIdByBaseItem = (
+  instances: InventoryInstanceRecord[],
+  baseItemId: string | null,
+): UUID | null => {
+  if (!baseItemId) return null;
+  const found = instances.find((instance) => instance.baseItemId === baseItemId);
+  return found?.instanceId ?? null;
+};
+
+const migrateLegacyInventory = (
+  inventory: InventoryRecord[],
+  existingStacks: InventoryStackRecord[],
+  existingInstances: InventoryInstanceRecord[],
+) => {
+  if (existingStacks.length > 0 || existingInstances.length > 0) {
+    return {
+      inventoryStacks: existingStacks.map((stack) => ({
+        ...stack,
+        stackId: ensureUuid(stack.stackId),
+        quantity: normalizeQuantity(stack.quantity),
+      })),
+      inventoryInstances: existingInstances.map((instance) => ({
+        ...instance,
+        instanceId: ensureUuid(instance.instanceId),
+      })),
+    };
+  }
+
+  const generatedStacks: InventoryStackRecord[] = [];
+  const generatedInstances: InventoryInstanceRecord[] = [];
+
+  inventory.forEach((record) => {
+    const itemData = getItemById(record.itemId);
+    const mode = defaultStackMode(itemData);
+    const quantity = normalizeQuantity(record.quantity);
+
+    if (mode === "instance") {
+      for (let index = 0; index < quantity; index += 1) {
+        generatedInstances.push(toInstanceRecord(record.itemId));
+      }
+      return;
+    }
+
+    generatedStacks.push(toStackRecord(record.itemId, quantity));
+  });
+
+  return {
+    inventoryStacks: generatedStacks,
+    inventoryInstances: generatedInstances,
+  };
+};
 
 export interface CharacterClassTrack {
   classId: string;
@@ -115,9 +208,15 @@ export interface CharacterState {
   // #region --- Inventory State ---
 
   inventory: InventoryRecord[];
+  inventoryStacks: InventoryStackRecord[];
+  inventoryInstances: InventoryInstanceRecord[];
   equippedArmorId: string | null;
   equippedShieldId: string | null;
   equippedWeaponIds: string[];
+  equippedArmorInstanceId: UUID | null;
+  equippedShieldInstanceId: UUID | null;
+  equippedWeaponInstanceIds: UUID[];
+  attunedInstanceIds: UUID[];
 
   // #endregion
 
@@ -359,6 +458,13 @@ interface CharacterActions {
    * @returns void
    */
   equipShield: (itemId: string | null) => void;
+  equipArmorInstance: (instanceId: UUID | null) => void;
+  equipShieldInstance: (instanceId: UUID | null) => void;
+  equipWeaponInstance: (instanceId: UUID) => void;
+  unequipWeaponInstance: (instanceId: UUID) => void;
+  createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
+  attuneInstance: (instanceId: UUID) => void;
+  unattuneInstance: (instanceId: UUID) => void;
 
   // #endregion
 
@@ -452,9 +558,15 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
     { itemId: "item_backpack", quantity: 1 },
     { itemId: "item_torch", quantity: 10 },
   ],
+  inventoryStacks: [],
+  inventoryInstances: [],
   equippedArmorId: null,
   equippedShieldId: null,
   equippedWeaponIds: [],
+  equippedArmorInstanceId: null,
+  equippedShieldInstanceId: null,
+  equippedWeaponInstanceIds: [],
+  attunedInstanceIds: [],
   damageTaken: 0,
   tempHp: 0,
   deathSaves: { successes: 0, failures: 0 },
@@ -870,25 +982,83 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   addInventoryItem: (itemId, quantity) =>
     set((state) => {
+      const normalizedQuantity = normalizeQuantity(quantity);
       const existing = state.inventory.find((i) => i.itemId === itemId);
+      const itemData = getItemById(itemId);
+      const stackMode = defaultStackMode(itemData);
+
+      const nextInventoryStacks = [...state.inventoryStacks];
+      const nextInventoryInstances = [...state.inventoryInstances];
+
+      if (stackMode === "stack") {
+        const existingStackIndex = nextInventoryStacks.findIndex(
+          (stack) => stack.baseItemId === itemId,
+        );
+        if (existingStackIndex >= 0) {
+          nextInventoryStacks[existingStackIndex] = {
+            ...nextInventoryStacks[existingStackIndex],
+            quantity: nextInventoryStacks[existingStackIndex].quantity + normalizedQuantity,
+          };
+        } else {
+          nextInventoryStacks.push(toStackRecord(itemId, normalizedQuantity));
+        }
+      } else {
+        for (let index = 0; index < normalizedQuantity; index += 1) {
+          nextInventoryInstances.push(toInstanceRecord(itemId));
+        }
+      }
+
       if (existing) {
         return {
           inventory: state.inventory.map((i) =>
-            i.itemId === itemId ? { ...i, quantity: i.quantity + quantity } : i,
+            i.itemId === itemId
+              ? { ...i, quantity: i.quantity + normalizedQuantity }
+              : i,
           ),
+          inventoryStacks: nextInventoryStacks,
+          inventoryInstances: nextInventoryInstances,
         };
       }
-      return { inventory: [...state.inventory, { itemId, quantity }] };
+
+      return {
+        inventory: [...state.inventory, { itemId, quantity: normalizedQuantity }],
+        inventoryStacks: nextInventoryStacks,
+        inventoryInstances: nextInventoryInstances,
+      };
     }),
 
   removeInventoryItem: (itemId, quantity) =>
     set((state) => {
+      const normalizedQuantity = normalizeQuantity(quantity);
       // Logic to subtract quantity
       const updatedInventory = state.inventory
         .map((i) =>
-          i.itemId === itemId ? { ...i, quantity: i.quantity - quantity } : i,
+          i.itemId === itemId
+            ? { ...i, quantity: i.quantity - normalizedQuantity }
+            : i,
         )
         .filter((i) => i.quantity > 0);
+
+      const nextInventoryStacks = state.inventoryStacks
+        .map((stack) =>
+          stack.baseItemId === itemId
+            ? { ...stack, quantity: stack.quantity - normalizedQuantity }
+            : stack,
+        )
+        .filter((stack) => stack.quantity > 0);
+
+      const toRemoveCount = normalizedQuantity;
+      let removedCount = 0;
+      const removedInstanceIds = new Set<UUID>();
+      const nextInventoryInstances = state.inventoryInstances.filter((instance) => {
+        if (instance.baseItemId !== itemId || removedCount >= toRemoveCount) {
+          return true;
+        }
+
+        removedInstanceIds.add(instance.instanceId);
+        removedCount += 1;
+        return false;
+      });
 
       // Check if the item was completely removed
       const isItemFullyRemoved = !updatedInventory.some(
@@ -896,6 +1066,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       );
       return {
         inventory: updatedInventory,
+        inventoryStacks: nextInventoryStacks,
+        inventoryInstances: nextInventoryInstances,
         // Strip the ID if they just dropped equipped gear
         equippedArmorId:
           isItemFullyRemoved && state.equippedArmorId === itemId
@@ -905,12 +1077,140 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
           isItemFullyRemoved && state.equippedShieldId === itemId
             ? null
             : state.equippedShieldId,
+        equippedArmorInstanceId:
+          state.equippedArmorInstanceId &&
+          removedInstanceIds.has(state.equippedArmorInstanceId)
+            ? null
+            : state.equippedArmorInstanceId,
+        equippedShieldInstanceId:
+          state.equippedShieldInstanceId &&
+          removedInstanceIds.has(state.equippedShieldInstanceId)
+            ? null
+            : state.equippedShieldInstanceId,
+        equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
+          (instanceId) => !removedInstanceIds.has(instanceId),
+        ),
+        attunedInstanceIds: state.attunedInstanceIds.filter(
+          (instanceId) => !removedInstanceIds.has(instanceId),
+        ),
       };
     }),
 
-  equipArmor: (itemId) => set({ equippedArmorId: itemId }),
+  equipArmor: (itemId) =>
+    set((state) => ({
+      equippedArmorId: itemId,
+      equippedArmorInstanceId: findFirstInstanceIdByBaseItem(
+        state.inventoryInstances,
+        itemId,
+      ),
+    })),
 
-  equipShield: (itemId) => set({ equippedShieldId: itemId }),
+  equipShield: (itemId) =>
+    set((state) => ({
+      equippedShieldId: itemId,
+      equippedShieldInstanceId: findFirstInstanceIdByBaseItem(
+        state.inventoryInstances,
+        itemId,
+      ),
+    })),
+
+  equipArmorInstance: (instanceId) =>
+    set((state) => {
+      const equippedInstance = instanceId
+        ? state.inventoryInstances.find((instance) => instance.instanceId === instanceId)
+        : null;
+
+      return {
+        equippedArmorInstanceId: instanceId,
+        equippedArmorId: equippedInstance?.baseItemId ?? null,
+      };
+    }),
+
+  equipShieldInstance: (instanceId) =>
+    set((state) => {
+      const equippedInstance = instanceId
+        ? state.inventoryInstances.find((instance) => instance.instanceId === instanceId)
+        : null;
+
+      return {
+        equippedShieldInstanceId: instanceId,
+        equippedShieldId: equippedInstance?.baseItemId ?? null,
+      };
+    }),
+
+  equipWeaponInstance: (instanceId) =>
+    set((state) => {
+      const instance = state.inventoryInstances.find(
+        (entry) => entry.instanceId === instanceId,
+      );
+      if (!instance) return state;
+      if (state.equippedWeaponInstanceIds.includes(instanceId)) return state;
+
+      const nextWeaponIds = state.equippedWeaponIds.includes(instance.baseItemId)
+        ? state.equippedWeaponIds
+        : [...state.equippedWeaponIds, instance.baseItemId];
+
+      return {
+        equippedWeaponInstanceIds: [...state.equippedWeaponInstanceIds, instanceId],
+        equippedWeaponIds: nextWeaponIds,
+      };
+    }),
+
+  unequipWeaponInstance: (instanceId) =>
+    set((state) => {
+      const nextEquippedInstances = state.equippedWeaponInstanceIds.filter(
+        (id) => id !== instanceId,
+      );
+
+      const stillEquippedBaseIds = new Set(
+        nextEquippedInstances
+          .map((id) =>
+            state.inventoryInstances.find((instance) => instance.instanceId === id)?.baseItemId,
+          )
+          .filter((id): id is string => !!id),
+      );
+
+      return {
+        equippedWeaponInstanceIds: nextEquippedInstances,
+        equippedWeaponIds: state.equippedWeaponIds.filter((id) =>
+          stillEquippedBaseIds.has(id),
+        ),
+      };
+    }),
+
+  createItemInstance: (baseItemId, quantity = 1) => {
+    const normalizedQuantity = normalizeQuantity(quantity);
+    const createdInstances = Array.from({ length: normalizedQuantity }, () =>
+      toInstanceRecord(baseItemId),
+    );
+
+    set((state) => ({
+      inventoryInstances: [...state.inventoryInstances, ...createdInstances],
+      inventory: state.inventory.some((record) => record.itemId === baseItemId)
+        ? state.inventory.map((record) =>
+            record.itemId === baseItemId
+              ? { ...record, quantity: record.quantity + normalizedQuantity }
+              : record,
+          )
+        : [...state.inventory, { itemId: baseItemId, quantity: normalizedQuantity }],
+    }));
+
+    return createdInstances.map((instance) => instance.instanceId);
+  },
+
+  attuneInstance: (instanceId) =>
+    set((state) => {
+      if (state.attunedInstanceIds.includes(instanceId)) return state;
+      if (state.attunedInstanceIds.length >= 3) return state;
+      return {
+        attunedInstanceIds: [...state.attunedInstanceIds, instanceId],
+      };
+    }),
+
+  unattuneInstance: (instanceId) =>
+    set((state) => ({
+      attunedInstanceIds: state.attunedInstanceIds.filter((id) => id !== instanceId),
+    })),
 
   // #endregion
 
@@ -978,7 +1278,54 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
 
   hydrateCharacter: (overrides) =>
-    set({ ...BASELINE_CHARACTER_STATE, ...overrides, isSetupComplete: true }),
+    set(() => {
+      const mergedState = {
+        ...BASELINE_CHARACTER_STATE,
+        ...overrides,
+      };
+
+      const migratedInventory = migrateLegacyInventory(
+        mergedState.inventory,
+        mergedState.inventoryStacks,
+        mergedState.inventoryInstances,
+      );
+
+      const equippedArmorInstanceId =
+        mergedState.equippedArmorInstanceId ??
+        findFirstInstanceIdByBaseItem(
+          migratedInventory.inventoryInstances,
+          mergedState.equippedArmorId,
+        );
+
+      const equippedShieldInstanceId =
+        mergedState.equippedShieldInstanceId ??
+        findFirstInstanceIdByBaseItem(
+          migratedInventory.inventoryInstances,
+          mergedState.equippedShieldId,
+        );
+
+      const equippedWeaponInstanceIds =
+        mergedState.equippedWeaponInstanceIds.length > 0
+          ? mergedState.equippedWeaponInstanceIds.map((id) => ensureUuid(id))
+          : mergedState.equippedWeaponIds
+              .map((baseItemId) =>
+                findFirstInstanceIdByBaseItem(
+                  migratedInventory.inventoryInstances,
+                  baseItemId,
+                ),
+              )
+              .filter((id): id is UUID => id !== null);
+
+      return {
+        ...mergedState,
+        ...migratedInventory,
+        equippedArmorInstanceId,
+        equippedShieldInstanceId,
+        equippedWeaponInstanceIds,
+        attunedInstanceIds: mergedState.attunedInstanceIds.map((id) => ensureUuid(id)),
+        isSetupComplete: true,
+      };
+    }),
 
   // #endregion
 }));

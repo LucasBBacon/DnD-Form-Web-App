@@ -1,6 +1,7 @@
 export type Ability = "str" | "dex" | "con" | "int" | "wis" | "cha";
 export type HitDie = 6 | 8 | 10 | 12;
 export type Size = "tiny" | "small" | "medium" | "large";
+export type UUID = string;
 
 export type Skill =
   | "acrobatics"

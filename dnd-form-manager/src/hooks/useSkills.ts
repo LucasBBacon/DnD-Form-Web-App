@@ -30,6 +30,7 @@ export const useSkills = () => {
     initiative: combat.initiative,
     armorClass: combat.armorClass,
     isArmorPenalized: combat.isArmorPenalized,
+    armorStealthDisadvantage: combat.armorStealthDisadvantage,
     totalWeight: encumbrance.totalWeight,
     isEncumbered: encumbrance.isEncumbered,
     speed: combat.speed,
@@ -158,9 +159,9 @@ export const useSkills = () => {
       });
     });
 
-    // D&D 5e rule: Stealth checks have disadvantage when armor imposes stealth penalty.
-    if (skill === "stealth" && derivedStats.isArmorPenalized) {
-      disadvantageSources.push("Armor Penalty");
+    // D&D 5e rule: Stealth checks have disadvantage when armor imposes stealth disadvantage.
+    if (skill === "stealth" && derivedStats.armorStealthDisadvantage) {
+      disadvantageSources.push("Armor Stealth Disadvantage");
     }
 
     calculatedSkills[skill] = {

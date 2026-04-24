@@ -44,6 +44,32 @@
 				"shortDescription"
 			]
 		},
+		"stacking": {
+			"type": "object",
+			"properties": {
+				"mode": {
+					"type": "string",
+					"enum": [
+						"stack",
+						"instance"
+					],
+					"description": "How this item is represented in inventory state."
+				},
+				"bundleSize": {
+					"type": "number",
+					"minimum": 1,
+					"description": "Default purchase/display bundle size for this item (e.g. arrows are listed in packs of 20)."
+				},
+				"maxBundleCount": {
+					"type": "number",
+					"minimum": 1,
+					"description": "Optional practical stack cap for UI or optional rules modes."
+				}
+			},
+			"required": [
+				"mode"
+			]
+		},
 		"armorProperties": {
 			"type": "object",
 			"properties": {
@@ -93,6 +119,10 @@
 					"type": "string",
 					"description": "Damage dice expression, e.g. 1d8."
 				},
+				"versatileDamageDice": {
+					"type": "string",
+					"description": "Optional two-handed damage dice for versatile weapons, e.g. 1d10."
+				},
 				"damageType": {
 					"type": "string",
 					"description": "Damage type dealt by the weapon, e.g. slashing."
@@ -109,7 +139,8 @@
 							"thrown",
 							"ammunition",
 							"versatile",
-							"reach"
+							"reach",
+							"loading"
 						]
 					},
 					"description": "Rules properties associated with this weapon."
@@ -130,6 +161,30 @@
 				"damageType",
 				"properties",
 				"range"
+			]
+		},
+		"magicItemProperties": {
+			"type": "object",
+			"properties": {
+				"bonusToAttack": {
+					"type": "number",
+					"description": "Flat bonus applied to attack rolls."
+				},
+				"bonusToDamage": {
+					"type": "number",
+					"description": "Flat bonus applied to damage rolls."
+				},
+				"bonusToAc": {
+					"type": "number",
+					"description": "Flat bonus applied to armor class calculations."
+				},
+				"requiresAttunement": {
+					"type": "boolean",
+					"description": "Whether this item requires attunement before bonuses apply."
+				}
+			},
+			"required": [
+				"requiresAttunement"
 			]
 		}
 	},

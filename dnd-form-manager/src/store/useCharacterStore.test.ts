@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it } from "vitest";
+import { isUuidV4 } from "../utils/uuidUtils";
 import { useCharacterStore, BASELINE_CHARACTER_STATE } from "./useCharacterStore";
 
 describe("useCharacterStore feat acquisition state", () => {
@@ -142,6 +143,34 @@ describe("useCharacterStore hydrateCharacter and resetCharacter", () => {
   it("hydrateCharacter always forces isSetupComplete true even when override passes false", () => {
     useCharacterStore.getState().hydrateCharacter({ isSetupComplete: false } as any);
     expect(useCharacterStore.getState().isSetupComplete).toBe(true);
+  });
+
+  it("hydrates legacy inventory into UUID-backed stack and instance records", () => {
+    useCharacterStore.getState().hydrateCharacter({
+      inventory: [
+        { itemId: "item_ammo_bolt", quantity: 20 },
+        { itemId: "item_weapon_club", quantity: 2 },
+      ],
+      equippedWeaponIds: ["item_weapon_club"],
+    });
+
+    const state = useCharacterStore.getState();
+
+    expect(state.inventoryStacks.some((stack) => stack.baseItemId === "item_ammo_bolt")).toBe(true);
+    expect(state.inventoryInstances.filter((instance) => instance.baseItemId === "item_weapon_club")).toHaveLength(2);
+    expect(state.equippedWeaponInstanceIds).toHaveLength(1);
+    expect(isUuidV4(state.equippedWeaponInstanceIds[0])).toBe(true);
+  });
+
+  it("enforces an attunement cap of 3 instance IDs", () => {
+    const ids = useCharacterStore.getState().createItemInstance("item_weapon_club", 4);
+
+    useCharacterStore.getState().attuneInstance(ids[0]);
+    useCharacterStore.getState().attuneInstance(ids[1]);
+    useCharacterStore.getState().attuneInstance(ids[2]);
+    useCharacterStore.getState().attuneInstance(ids[3]);
+
+    expect(useCharacterStore.getState().attunedInstanceIds).toEqual([ids[0], ids[1], ids[2]]);
   });
 
   it("resetCharacter returns the store to the full baseline", () => {

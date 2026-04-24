@@ -26,6 +26,7 @@ import {
   mergeSubclassSpecificScaling,
 } from "../utils/progressionUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
+import { resolveInstance } from "../utils/inventoryUtils";
 
 // #region --- Type Constants ---
 
@@ -91,6 +92,7 @@ export const toCharacterStatsContext = (
   initiative: stats.combat.initiative,
   armorClass: stats.combat.armorClass,
   isArmorPenalized: stats.combat.isArmorPenalized,
+  armorStealthDisadvantage: stats.combat.armorStealthDisadvantage,
   totalWeight: stats.encumbrance.totalWeight,
   isEncumbered: stats.encumbrance.isEncumbered,
   speed: stats.combat.speed,
@@ -109,6 +111,7 @@ export interface CharacterStatsContext {
   initiative: number;
   armorClass: number;
   isArmorPenalized: boolean;
+  armorStealthDisadvantage: boolean;
   totalWeight: number;
   isEncumbered: boolean;
   speed: number;
@@ -128,6 +131,7 @@ export interface UseCharacterStatsReturn {
     initiative: number;
     armorClass: number;
     isArmorPenalized: boolean;
+    armorStealthDisadvantage: boolean;
     speed: number;
   };
   encumbrance: {
@@ -279,18 +283,39 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     proficiencyBonus,
   );
 
-  // Resolve equipment data
-  const equippedArmorData = state.equippedArmorId
-    ? getItemById(state.equippedArmorId)
-    : null;
-  const equippedArmor: Parameters<typeof calculateArmorClass>[1] =
-    equippedArmorData?.type === "armor" && equippedArmorData.armorProperties
-      ? (equippedArmorData as Exclude<
-          Parameters<typeof calculateArmorClass>[1],
-          null
-        >)
+  // Resolve equipment data (instance-first with template fallback)
+  const equippedArmorInstance = resolveInstance(
+    state.equippedArmorInstanceId,
+    state.inventoryInstances,
+  );
+
+  const equippedArmorData = equippedArmorInstance
+    ? getItemById(equippedArmorInstance.baseItemId)
+    : state.equippedArmorId
+      ? getItemById(state.equippedArmorId)
       : null;
-  const isWearingShield = !!state.equippedShieldId;
+
+  const equippedArmor: Parameters<typeof calculateArmorClass>[1] = (() => {
+    if (!equippedArmorData?.armorProperties || equippedArmorData.type !== "armor") {
+      return null;
+    }
+    const mergedArmorProps = equippedArmorInstance?.overrides?.armorProperties
+      ? { ...equippedArmorData.armorProperties, ...equippedArmorInstance.overrides.armorProperties }
+      : equippedArmorData.armorProperties;
+    return {
+      ...equippedArmorData,
+      armorProperties: mergedArmorProps,
+    } as Exclude<Parameters<typeof calculateArmorClass>[1], null>;
+  })();
+
+  // Resolve shield instance for magic AC bonus
+  const equippedShieldInstance = resolveInstance(
+    state.equippedShieldInstanceId,
+    state.inventoryInstances,
+  );
+
+  const isWearingShield = !!state.equippedShieldInstanceId || !!state.equippedShieldId;
+  const armorStealthDisadvantage = !!equippedArmor?.armorProperties?.stealthDisadvantage;
 
   // Build local stats snapshot for predicate checks used during proficiency aggregation
   const proficiencyEvaluationStats = {
@@ -302,6 +327,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     initiative: baseInitiative,
     armorClass: 0,
     isArmorPenalized: false,
+    armorStealthDisadvantage,
     totalWeight,
     isEncumbered,
     speed: 30 + subclassSpeedBonus,
@@ -317,15 +343,47 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   });
 
   const isArmorPenalized =
-    (!!state.equippedArmorId &&
+    (!!(state.equippedArmorInstanceId || state.equippedArmorId) &&
       equippedArmor?.armorProperties &&
       !nonSkillProficiencies.armor.has(equippedArmor.armorProperties.armorType)) ||
     (isWearingShield && !nonSkillProficiencies.armor.has("shield"));
+
+  // Magic AC bonuses from equipped items (attunement-gated)
+  const armorMagicAcBonus = (() => {
+    if (!equippedArmorInstance) return 0;
+    const magicProps =
+      equippedArmorInstance.overrides?.magicItemProperties ??
+      equippedArmorData?.magicItemProperties ??
+      null;
+    if (!magicProps) return 0;
+    const isAttuned = state.attunedInstanceIds.includes(
+      equippedArmorInstance.instanceId,
+    );
+    const bonusActive = !magicProps.requiresAttunement || isAttuned;
+    return bonusActive ? (magicProps.bonusToAc ?? 0) : 0;
+  })();
+
+  const shieldMagicAcBonus = (() => {
+    if (!equippedShieldInstance) return 0;
+    const shieldData = getItemById(equippedShieldInstance.baseItemId);
+    const magicProps =
+      equippedShieldInstance.overrides?.magicItemProperties ??
+      shieldData?.magicItemProperties ??
+      null;
+    if (!magicProps) return 0;
+    const isAttuned = state.attunedInstanceIds.includes(
+      equippedShieldInstance.instanceId,
+    );
+    const bonusActive = !magicProps.requiresAttunement || isAttuned;
+    return bonusActive ? (magicProps.bonusToAc ?? 0) : 0;
+  })();
 
   const baseArmorClass = calculateArmorClass(
     modifiers.dex,
     equippedArmor,
     isWearingShield,
+    undefined,
+    armorMagicAcBonus + shieldMagicAcBonus,
   );
   const baseArmorClassWithSubclassBonuses = baseArmorClass + subclassAcBonus;
 
@@ -351,6 +409,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
         initiative: finalInitiative,
         armorClass: finalArmorClass,
         isArmorPenalized,
+        armorStealthDisadvantage,
         totalWeight,
         isEncumbered,
         speed: finalSpeed,
@@ -407,6 +466,14 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     });
   });
 
+  if (
+    equippedArmor?.armorProperties?.armorType === "heavy" &&
+    equippedArmor.armorProperties.strengthRequirement !== undefined &&
+    totalScores.str < equippedArmor.armorProperties.strengthRequirement
+  ) {
+    finalSpeed -= 10;
+  }
+
   // #endregion
 
   // #region --- Return Final Derived Stats ---
@@ -424,6 +491,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
       initiative: finalInitiative,
       armorClass: finalArmorClass,
       isArmorPenalized,
+      armorStealthDisadvantage,
       speed: finalSpeed,
     },
     encumbrance: {

@@ -1,5 +1,8 @@
 import { getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
+import type { UUID } from "../types/common";
+import type { ItemInstanceData } from "../types/item";
+import { resolveInstance } from "../utils/inventoryUtils";
 import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
@@ -23,6 +26,7 @@ export const useAttacks = () => {
     initiative: combat.initiative,
     armorClass: combat.armorClass,
     isArmorPenalized: combat.isArmorPenalized,
+    armorStealthDisadvantage: combat.armorStealthDisadvantage,
     totalWeight: encumbrance.totalWeight,
     isEncumbered: encumbrance.isEncumbered,
     speed: combat.speed,
@@ -61,16 +65,60 @@ export const useAttacks = () => {
 
   // #region --- Calculate Attacks ---
 
-  const attacks = state.equippedWeaponIds
-    .map((weaponId) => {
-      const weaponData = getItemById(weaponId);
-      // If weapon data is missing, skip this weapon
-      if (!weaponData || !weaponData.weaponProperties) return null;
+  // Normalize to a unified source list: instance-based when available, legacy template fallback.
+  type WeaponSource = {
+    instanceId: UUID | null;
+    baseItemId: string;
+    instanceData: ItemInstanceData | null;
+  };
 
-      const props = weaponData.weaponProperties;
+  const weaponSources: WeaponSource[] =
+    state.equippedWeaponInstanceIds.length > 0
+      ? state.equippedWeaponInstanceIds.map((instanceId) => {
+          const instanceData = resolveInstance(instanceId, state.inventoryInstances);
+          return {
+            instanceId,
+            baseItemId: instanceData?.baseItemId ?? "",
+            instanceData,
+          };
+        })
+      : state.equippedWeaponIds.map((weaponId) => ({
+          instanceId: null,
+          baseItemId: weaponId,
+          instanceData: null,
+        }));
+
+  const attacks = weaponSources
+    .map(({ instanceId, baseItemId, instanceData }) => {
+      if (!baseItemId) return null;
+      const baseItem = getItemById(baseItemId);
+      // If weapon data is missing, skip this weapon
+      if (!baseItem?.weaponProperties) return null;
+
+      const effectiveProps =
+        instanceData?.overrides?.weaponProperties ?? baseItem.weaponProperties;
+      const effectiveName = instanceData?.customName ?? baseItem.name;
+
+      // #region --- Attunement-gated magic bonuses ---
+      let magicAttackBonus = 0;
+      let magicDamageBonus = 0;
+      if (instanceId) {
+        const magicProps =
+          instanceData?.overrides?.magicItemProperties ??
+          baseItem.magicItemProperties ??
+          null;
+        if (magicProps) {
+          const isAttuned = state.attunedInstanceIds.includes(instanceId);
+          const bonusActive = !magicProps.requiresAttunement || isAttuned;
+          magicAttackBonus = bonusActive ? (magicProps.bonusToAttack ?? 0) : 0;
+          magicDamageBonus = bonusActive ? (magicProps.bonusToDamage ?? 0) : 0;
+        }
+      }
+      // #endregion
+
+      const props = effectiveProps;
 
       // #region Determine governing stat (str vs dex)
-      
       let attackStat = "str";
       if (props.category.includes("ranged")) {
         attackStat = "dex";
@@ -84,23 +132,22 @@ export const useAttacks = () => {
 
       // Calculate the stat modifier for the attacking stat
       const statMod = derivedStats.modifiers[attackStat as "str" | "dex"] || 0;
-      
       // #endregion
 
       // #region --- Proficiency Check ---
-      // Ask if unified set if contains the broad category or weapon id
+      // Check the broad category or the specific base item catalog id
       const isProficient =
         (activeWeaponProficiencies.has("simple") &&
           props.category.includes("simple")) ||
         (activeWeaponProficiencies.has("martial") &&
           props.category.includes("martial")) ||
-        activeWeaponProficiencies.has(weaponData.id);
+        activeWeaponProficiencies.has(baseItemId);
       // #endregion
 
       // #region --- Calculate to-hit and damage ---
       const toHit =
-        statMod + (isProficient ? derivedStats.proficiencyBonus : 0);
-      const damageBonus = statMod;
+        statMod + (isProficient ? derivedStats.proficiencyBonus : 0) + magicAttackBonus;
+      const damageBonus = statMod + magicDamageBonus;
       // #endregion
 
       // #region --- Ammunition check ---
@@ -123,12 +170,14 @@ export const useAttacks = () => {
       // #endregion
 
       return {
-        weaponId: weaponData.id,
-        name: weaponData.name,
+        instanceId,
+        weaponId: baseItemId,
+        name: effectiveName,
         toHit,
         damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
         properties: props.properties,
         range: props.range,
+        versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId
           ? { id: props.ammoItemId, name: ammoName, count: ammoCount }
           : null,
