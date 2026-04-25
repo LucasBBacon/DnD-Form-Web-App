@@ -7,6 +7,10 @@
     "lore": {
       "shortDescription": "Standard ammunition for crossbows.",
       "fullText": "A metal-tipped bolt sized for crossbow use. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+    },
+    "stacking": {
+      "mode": "stack",
+      "bundleSize": 20
     }
   },
   {
@@ -22,6 +26,33 @@
       "armorType": "light",
       "baseAc": 11,
       "stealthDisadvantage": false
+    }
+  },
+  {
+    "id": "item_backpack",
+    "name": "Backpack",
+    "type": "gear",
+    "weight": 5,
+    "lore": {
+      "shortDescription": "A sturdy leather pack worn on the back, capable of holding up to 30 pounds or 1 cubic foot of gear.",
+      "fullText": "A backpack is a leather pack carried on the back, fastened with two straps that go over the shoulders. It can hold up to 30 pounds of gear, with a capacity of 1 cubic foot. It is an essential piece of adventuring equipment for storing supplies, equipment, and loot."
+    },
+    "stacking": {
+      "mode": "instance"
+    }
+  },
+  {
+    "id": "item_torch",
+    "name": "Torch",
+    "type": "gear",
+    "weight": 1,
+    "lore": {
+      "shortDescription": "A wooden stick tipped with oil-soaked cloth that burns for 1 hour, shedding bright light in a 20-foot radius.",
+      "fullText": "A torch burns for 1 hour, providing bright light in a 20-foot radius and dim light for an additional 20 feet. If you make a melee attack with a burning torch and hit, it deals 1 fire damage."
+    },
+    "stacking": {
+      "mode": "stack",
+      "bundleSize": 1
     }
   },
   {

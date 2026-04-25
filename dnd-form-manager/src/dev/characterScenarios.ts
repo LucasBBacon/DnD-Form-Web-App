@@ -21,18 +21,22 @@ import { generateUuidV4 } from "../utils/uuidUtils";
 // fighter_l1 (Aldric)
 const aldricArmorId = generateUuidV4();
 const aldricClubId = generateUuidV4();
+const aldricBackpackId = generateUuidV4();
 
 // barbarian_l5 (Grond)
 const grondClubId = generateUuidV4();
+const grondBackpackId = generateUuidV4();
 
 // wizard_l12 (Elara)
 const elaraCrossbowId = generateUuidV4();
+const elaraBackpackId = generateUuidV4();
 
 // fighter_rogue_mc (Sable)
 const sableArmorId = generateUuidV4();
 const sableClub1Id = generateUuidV4();
 const sableClub2Id = generateUuidV4();
 const sableCrossbowId = generateUuidV4();
+const sableBackpackId = generateUuidV4();
 
 // Partial overrides keyed by scenario name.
 const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
@@ -55,10 +59,10 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
     hpRolls: { 1: 10 },
     choicesByLevel: { 1: { hpGained: 10 } },
     inventoryStacks: [
-      { stackId: generateUuidV4(), baseItemId: "item_backpack", quantity: 1 },
       { stackId: generateUuidV4(), baseItemId: "item_torch", quantity: 10 },
     ],
     inventoryInstances: [
+      { instanceId: aldricBackpackId, baseItemId: "item_backpack" },
       { instanceId: aldricArmorId, baseItemId: "item_armor_leather" },
       { instanceId: aldricClubId, baseItemId: "item_weapon_club" },
     ],
@@ -93,10 +97,10 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
       5: { hpGained: 10 },
     },
     inventoryStacks: [
-      { stackId: generateUuidV4(), baseItemId: "item_backpack", quantity: 1 },
       { stackId: generateUuidV4(), baseItemId: "item_torch", quantity: 5 },
     ],
     inventoryInstances: [
+      { instanceId: grondBackpackId, baseItemId: "item_backpack" },
       { instanceId: grondClubId, baseItemId: "item_weapon_club" },
     ],
     equippedWeaponInstanceIds: [grondClubId],
@@ -128,11 +132,11 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
     spellsPrepared: ["spell_acid_splash"],
     expendedSpellSlots: { 1: 3, 2: 2, 3: 1 },
     inventoryStacks: [
-      { stackId: generateUuidV4(), baseItemId: "item_backpack", quantity: 1 },
       { stackId: generateUuidV4(), baseItemId: "item_torch", quantity: 3 },
       { stackId: generateUuidV4(), baseItemId: "item_ammo_bolt", quantity: 20 },
     ],
     inventoryInstances: [
+      { instanceId: elaraBackpackId, baseItemId: "item_backpack" },
       { instanceId: elaraCrossbowId, baseItemId: "item_weapon_crossbow_light" },
     ],
     equippedWeaponInstanceIds: [elaraCrossbowId],
@@ -161,10 +165,10 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
       ]),
     ),
     inventoryStacks: [
-      { stackId: generateUuidV4(), baseItemId: "item_backpack", quantity: 1 },
       { stackId: generateUuidV4(), baseItemId: "item_ammo_bolt", quantity: 30 },
     ],
     inventoryInstances: [
+      { instanceId: sableBackpackId, baseItemId: "item_backpack" },
       { instanceId: sableArmorId, baseItemId: "item_armor_leather" },
       { instanceId: sableClub1Id, baseItemId: "item_weapon_club" },
       { instanceId: sableClub2Id, baseItemId: "item_weapon_club" },

@@ -192,3 +192,142 @@ describe("useCharacterStore hydrateCharacter and resetCharacter", () => {
     expect(state.isSetupComplete).toBe(false);
   });
 });
+
+describe("useCharacterStore inventory instance actions", () => {
+  beforeEach(() => {
+    useCharacterStore.setState({ ...BASELINE_CHARACTER_STATE } as any);
+  });
+
+  it("removeInventoryInstance removes only the targeted instance by instanceId", () => {
+    const [id1, id2] = useCharacterStore
+      .getState()
+      .createItemInstance("item_weapon_club", 2);
+
+    useCharacterStore.getState().removeInventoryInstance(id1);
+
+    const state = useCharacterStore.getState();
+    expect(state.inventoryInstances).toHaveLength(1);
+    expect(state.inventoryInstances[0].instanceId).toBe(id2);
+  });
+
+  it("removeInventoryInstance clears equipped armor ref when that instance is dropped", () => {
+    const [id] = useCharacterStore
+      .getState()
+      .createItemInstance("item_armor_leather", 1);
+    useCharacterStore.getState().equipArmorInstance(id);
+    expect(useCharacterStore.getState().equippedArmorInstanceId).toBe(id);
+
+    useCharacterStore.getState().removeInventoryInstance(id);
+
+    expect(useCharacterStore.getState().equippedArmorInstanceId).toBeNull();
+  });
+
+  it("removeInventoryInstance does not clear equipped armor ref when a different instance is dropped", () => {
+    const [id1, id2] = useCharacterStore
+      .getState()
+      .createItemInstance("item_armor_leather", 2);
+    useCharacterStore.getState().equipArmorInstance(id1);
+
+    useCharacterStore.getState().removeInventoryInstance(id2);
+
+    expect(useCharacterStore.getState().equippedArmorInstanceId).toBe(id1);
+  });
+
+  it("removeInventoryInstance removes the target instance from equippedWeaponInstanceIds", () => {
+    const [id1, id2] = useCharacterStore
+      .getState()
+      .createItemInstance("item_weapon_club", 2);
+    useCharacterStore.getState().equipWeaponInstance(id1);
+    useCharacterStore.getState().equipWeaponInstance(id2);
+
+    useCharacterStore.getState().removeInventoryInstance(id1);
+
+    expect(useCharacterStore.getState().equippedWeaponInstanceIds).toEqual([id2]);
+  });
+
+  it("removeInventoryInstance clears attunement for the dropped instance only", () => {
+    const [id1, id2] = useCharacterStore
+      .getState()
+      .createItemInstance("item_weapon_club", 2);
+    useCharacterStore.getState().attuneInstance(id1);
+    useCharacterStore.getState().attuneInstance(id2);
+
+    useCharacterStore.getState().removeInventoryInstance(id1);
+
+    expect(useCharacterStore.getState().attunedInstanceIds).toEqual([id2]);
+  });
+
+  it("addInventoryItem for instance-mode items creates one record per call and does not merge into quantity", () => {
+    useCharacterStore.getState().addInventoryItem("item_weapon_club", 1);
+    expect(useCharacterStore.getState().inventoryInstances).toHaveLength(1);
+
+    useCharacterStore.getState().addInventoryItem("item_weapon_club", 1);
+    expect(useCharacterStore.getState().inventoryInstances).toHaveLength(2);
+
+    // Both records should have unique instanceIds
+    const ids = useCharacterStore
+      .getState()
+      .inventoryInstances.map((i) => i.instanceId);
+    expect(new Set(ids).size).toBe(2);
+  });
+
+  it("hydrateCharacter deduplicates instance records with identical instanceIds", () => {
+    const sharedId = "test-uuid-dupe";
+    useCharacterStore.getState().hydrateCharacter({
+      inventoryInstances: [
+        { instanceId: sharedId, baseItemId: "item_weapon_club" },
+        { instanceId: sharedId, baseItemId: "item_weapon_club" },
+        { instanceId: "test-uuid-other", baseItemId: "item_weapon_dagger" },
+      ],
+    } as any);
+
+    expect(useCharacterStore.getState().inventoryInstances).toHaveLength(2);
+  });
+
+  it("hydrateCharacter preserves equipped ref after deduplication when instanceId still exists", () => {
+    const duplicateId = "dupe-uuid";
+    useCharacterStore.getState().hydrateCharacter({
+      inventoryInstances: [
+        { instanceId: duplicateId, baseItemId: "item_armor_leather" },
+        { instanceId: duplicateId, baseItemId: "item_armor_leather" },
+      ],
+      equippedArmorInstanceId: duplicateId,
+    } as any);
+
+    // Instance survives (deduplicated to 1), equipped ref must be preserved
+    expect(useCharacterStore.getState().inventoryInstances).toHaveLength(1);
+    expect(useCharacterStore.getState().equippedArmorInstanceId).toBe(duplicateId);
+  });
+
+  it("hydrateCharacter reclassifies instance-mode items from inventoryStacks to inventoryInstances", () => {
+    useCharacterStore.getState().hydrateCharacter({
+      inventoryStacks: [
+        { stackId: "stack-backpack", baseItemId: "item_backpack", quantity: 1 },
+        { stackId: "stack-torch", baseItemId: "item_torch", quantity: 5 },
+      ],
+    } as any);
+
+    const state = useCharacterStore.getState();
+    // Backpack (instance-mode) must move to inventoryInstances
+    expect(state.inventoryStacks).toHaveLength(1);
+    expect(state.inventoryStacks[0].baseItemId).toBe("item_torch");
+    expect(state.inventoryInstances).toHaveLength(1);
+    expect(state.inventoryInstances[0].baseItemId).toBe("item_backpack");
+  });
+
+  it("hydrateCharacter expands instance-mode stacks with quantity > 1 into separate instance records", () => {
+    useCharacterStore.getState().hydrateCharacter({
+      inventoryStacks: [
+        { stackId: "stack-backpack", baseItemId: "item_backpack", quantity: 3 },
+      ],
+    } as any);
+
+    const state = useCharacterStore.getState();
+    expect(state.inventoryStacks).toHaveLength(0);
+    expect(state.inventoryInstances).toHaveLength(3);
+    expect(state.inventoryInstances.every((i) => i.baseItemId === "item_backpack")).toBe(true);
+    // Each reclassified record must have a unique instanceId
+    const ids = state.inventoryInstances.map((i) => i.instanceId);
+    expect(new Set(ids).size).toBe(3);
+  });
+});

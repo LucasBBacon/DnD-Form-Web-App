@@ -1,0 +1,13 @@
+{
+	"id": "item_backpack",
+	"name": "Backpack",
+	"type": "gear",
+	"weight": 5,
+	"lore": {
+		"shortDescription": "A sturdy leather pack worn on the back, capable of holding up to 30 pounds or 1 cubic foot of gear.",
+		"fullText": "A backpack is a leather pack carried on the back, fastened with two straps that go over the shoulders. It can hold up to 30 pounds of gear, with a capacity of 1 cubic foot. It is an essential piece of adventuring equipment for storing supplies, equipment, and loot."
+	},
+	"stacking": {
+		"mode": "instance"
+	}
+}

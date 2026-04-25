@@ -363,6 +363,9 @@ interface CharacterActions {
   addInventoryItem: (itemId: string, quantity: number) => void;
   
   removeInventoryItem: (itemId: string, quantity: number) => void;
+
+  /** Removes a single instance item by its exact instanceId, cleaning up all equipped and attuned references for that instance. */
+  removeInventoryInstance: (instanceId: UUID) => void;
   
   equipArmorInstance: (instanceId: UUID | null) => void;
   
@@ -457,10 +460,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
 
   // #region --- Inventory State ---
 
-  inventoryStacks: [
-    toStackRecord("item_backpack", 1),
-    toStackRecord("item_torch", 10),
-  ],
+  inventoryStacks: [],
   inventoryInstances: [],
   equippedArmorInstanceId: null,
   equippedShieldInstanceId: null,
@@ -972,6 +972,27 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       };
     }),
 
+  removeInventoryInstance: (instanceId) =>
+    set((state) => ({
+      inventoryInstances: state.inventoryInstances.filter(
+        (instance) => instance.instanceId !== instanceId,
+      ),
+      equippedArmorInstanceId:
+        state.equippedArmorInstanceId === instanceId
+          ? null
+          : state.equippedArmorInstanceId,
+      equippedShieldInstanceId:
+        state.equippedShieldInstanceId === instanceId
+          ? null
+          : state.equippedShieldInstanceId,
+      equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
+        (id) => id !== instanceId,
+      ),
+      attunedInstanceIds: state.attunedInstanceIds.filter(
+        (id) => id !== instanceId,
+      ),
+    })),
+
   equipArmorInstance: (instanceId) =>
     set(() => ({
       equippedArmorInstanceId: instanceId,
@@ -1100,11 +1121,61 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
 
   hydrateCharacter: (overrides) =>
-    set(() => ({
-      ...BASELINE_CHARACTER_STATE,
-      ...overrides,
-      isSetupComplete: true,
-    })),
+    set(() => {
+      const merged = {
+        ...BASELINE_CHARACTER_STATE,
+        ...overrides,
+        isSetupComplete: true,
+      };
+
+      // Migration: reclassify stack records whose item catalog now specifies
+      // "instance" mode. Each unit of quantity becomes its own instance record.
+      const reclassifiedInstances: InventoryInstanceRecord[] = [];
+      const correctedStacks = merged.inventoryStacks.filter((stack) => {
+        const itemData = getItemById(stack.baseItemId);
+        if (defaultStackMode(itemData) === "instance") {
+          for (let i = 0; i < stack.quantity; i += 1) {
+            reclassifiedInstances.push(toInstanceRecord(stack.baseItemId));
+          }
+          return false;
+        }
+        return true;
+      });
+
+      // Migration: deduplicate instance records with the same instanceId
+      // (a sign of legacy copy-paste / bad serialization).
+      const seenInstanceIds = new Set<UUID>();
+      const cleanedInstances = [
+        ...merged.inventoryInstances,
+        ...reclassifiedInstances,
+      ].filter((instance) => {
+        if (seenInstanceIds.has(instance.instanceId)) return false;
+        seenInstanceIds.add(instance.instanceId);
+        return true;
+      });
+
+      // Drop equipped/attuned refs that no longer point to a valid instance.
+      const validIds = new Set(cleanedInstances.map((i) => i.instanceId));
+      return {
+        ...merged,
+        inventoryStacks: correctedStacks,
+        inventoryInstances: cleanedInstances,
+        equippedArmorInstanceId:
+          merged.equippedArmorInstanceId &&
+          validIds.has(merged.equippedArmorInstanceId)
+            ? merged.equippedArmorInstanceId
+            : null,
+        equippedShieldInstanceId:
+          merged.equippedShieldInstanceId &&
+          validIds.has(merged.equippedShieldInstanceId)
+            ? merged.equippedShieldInstanceId
+            : null,
+        equippedWeaponInstanceIds:
+          merged.equippedWeaponInstanceIds.filter((id) => validIds.has(id)),
+        attunedInstanceIds:
+          merged.attunedInstanceIds.filter((id) => validIds.has(id)),
+      };
+    }),
 
   // #endregion
 }));

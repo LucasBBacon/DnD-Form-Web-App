@@ -1,6 +1,7 @@
 import { ActionsBoard } from "./ActionsBoard";
 import { CoreStatsBoard } from "./CoreStatsBoard";
 import { IdentityHeader } from "./IdentityHeader";
+import { InventoryBoard } from "./InventoryBoard";
 import { VitalsDashboard } from "./VitalsDashboard";
 
 export const CharacterSheet = () => {
@@ -14,6 +15,7 @@ export const CharacterSheet = () => {
         <VitalsDashboard />
         <CoreStatsBoard />
         <ActionsBoard />
+        <InventoryBoard />
       </div>
     </div>
   );
