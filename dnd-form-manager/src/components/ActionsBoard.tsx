@@ -125,9 +125,11 @@ export const ActionsBoard: React.FC = () => {
                             type="checkbox"
                             checked={i < slotData.expended}
                             onChange={(e) => {
-                              e.target.checked
-                                ? expendSpellSlot(lvlNum)
-                                : restoreSpellSlot(lvlNum);
+                              if (e.target.checked) {
+                                expendSpellSlot(lvlNum);
+                              } else {
+                                restoreSpellSlot(lvlNum);
+                              }
                             }}
                             className="slot-checkbox"
                           />

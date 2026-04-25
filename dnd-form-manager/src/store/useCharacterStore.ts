@@ -192,6 +192,33 @@ export interface CharacterState {
   name: string;
   // The character's alignment, which can be used for role-playing and may interact with certain traits or spells that have alignment-based effects
   alignment: string;
+  // The character's age, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have age-related traits or story elements
+  age: string;
+  // The character's height, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have height-related traits or story elements
+  height: string;
+  // The character's weight, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have weight-related traits or story elements
+  weight: string;
+  // The character's eye color, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have eye color-related traits or story elements
+  eyes: string;
+  // The character's skin color, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have skin color-related traits or story elements
+  skin: string;
+  // The character's hair color, used for flavor and role-playing purposes, and may be relevant for certain races or backgrounds that have hair color-related traits or story elements
+  hair: string;
+  // A description of the character's overall appearance, which can include details about clothing, accessories, and other visual elements
+  appearance: string;
+  // The character's backstory, providing context for their motivations, history, and personality
+  backstory: string;
+  // The character's personality traits, which can influence their behavior and interactions with others
+  personalityTraits: string;
+  // The character's ideals, which represent their core beliefs and guiding principles
+  ideals: string;
+  // The character's bonds, which represent their connections to people, places, or events
+  bonds: string;
+  // The character's flaws, which represent their weaknesses or vulnerabilities
+  flaws: string;
+  // The character's affiliations with allies and organizations, which can influence their actions and story
+  alliesAndOrganizations: string;
+
   // The total experience points the character has accumulated, which determines their level and progression through the game
   xp: number;
   // The character's current level, derived from their experience points
@@ -281,6 +308,8 @@ interface CharacterActions {
   setName: (name: string) => void;
   
   setAlignment: (alignment: string) => void;
+
+  updateRoleplayField: (field: keyof CharacterState, value: string) => void;
   
   setXp: (xp: number) => void;
   
@@ -431,6 +460,19 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   playerName: "",
   name: "",
   alignment: "",
+  age: "",
+  height: "",
+  weight: "",
+  eyes: "",
+  skin: "",
+  hair: "",
+  appearance: "",
+  backstory: "",
+  personalityTraits: "",
+  ideals: "",
+  bonds: "",
+  flaws: "",
+  alliesAndOrganizations: "",
   xp: 0,
   level: 1,
   raceId: null,
@@ -500,6 +542,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setName: (name) => set({ name }),
 
   setAlignment: (alignment) => set({ alignment }),
+
+  updateRoleplayField: (field, value) => set({ [field]: value }),
 
   setXp: (xp) => set({ xp }),
 
