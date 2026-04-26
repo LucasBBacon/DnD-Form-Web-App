@@ -1,0 +1,58 @@
+.character-sheet-layout {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "vitals"
+    "stats"
+    "actions"
+    "inventory"
+    "roleplay";
+}
+
+.sheet-area-header {
+  grid-area: header;
+}
+.sheet-area-stats {
+  grid-area: stats;
+}
+.sheet-area-vitals {
+  grid-area: vitals;
+}
+.sheet-area-actions {
+  grid-area: actions;
+}
+.sheet-area-inventory {
+  grid-area: inventory;
+}
+.sheet-area-roleplay {
+  grid-area: roleplay;
+}
+
+@media (min-width: 900px) {
+  .character-sheet-layout {
+    grid-template-columns: 300px 1fr; /* Stats locked to 300px, rest flexes */
+    grid-template-areas:
+      "header header"
+      "stats vitals"
+      "stats actions"
+      "inventory inventory"
+      "roleplay roleplay";
+  }
+}
+
+/* DESKTOP / NORMAL ZOOM: 3 Columns */
+@media (min-width: 1300px) {
+  .character-sheet-layout {
+    grid-template-columns: 320px 1fr 400px; 
+    grid-template-areas:
+      "header header header"
+      "stats vitals inventory"
+      "stats actions roleplay";
+  }
+}
