@@ -1,0 +1,8 @@
+{
+    "id": "trait_dwarf_speed_resilience",
+    "name": "Dwarf Speed Resilience",
+    "lore": {
+        "shortDescription": "No heavy armor speed reduction.",
+        "fullText": "Your speed is not reduced by wearing heavy armor."
+    }
+}

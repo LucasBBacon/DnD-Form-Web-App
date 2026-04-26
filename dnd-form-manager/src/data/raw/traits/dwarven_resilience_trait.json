@@ -1,0 +1,18 @@
+{
+    "id": "trait_dwarven_resilience",
+    "name": "Dwarven Resilience",
+    "lore": {
+        "shortDescription": "Gain advantage and resistance against poison.",
+        "fullText": "You have advantage on saving throws against poison, and you have resistance against poison damage."
+    },
+    "effects": [
+        {
+            "type": "advantage",
+            "target": "saving_throws_against_poison"
+        },
+        {
+            "type": "other",
+            "target": "damage_resistance_poison"
+        }
+    ]
+}

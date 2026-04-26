@@ -1,0 +1,8 @@
+{
+    "id": "trait_dwarf_tool_proficiency",
+    "name": "Dwarf Tool Proficiency",
+    "lore": {
+        "shortDescription": "Gain proficiency with your artisan's tool of choice.",
+        "fullText": "You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools."
+    }
+}

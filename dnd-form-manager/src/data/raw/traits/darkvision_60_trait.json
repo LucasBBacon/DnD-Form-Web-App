@@ -1,0 +1,15 @@
+{
+	"id": "trait_darkvision_60",
+	"name": "Darkvision",
+	"lore": {
+		"shortDescription": "See in dim light as if bright light, and in darkness as if dim light, to 60 feet.",
+		"fullText": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+	},
+	"effects": [
+		{
+			"type": "sense",
+			"target": "darkvision",
+			"value": 60
+		}
+	]
+}

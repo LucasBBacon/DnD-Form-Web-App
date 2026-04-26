@@ -2,7 +2,8 @@
     "id": "trait_barbarian_proficiencies",
     "name": "Barbarian Proficiencies",
     "lore": {
-        "shortDescription": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
+        "shortDescription": "Proficiency with light/medium armor, shields, and simple/martial weapons.",
+        "fullText": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
     },
     "effects": [
         {

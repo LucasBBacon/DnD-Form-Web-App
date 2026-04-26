@@ -3,7 +3,8 @@
     "id": "trait_barbarian_proficiencies",
     "name": "Barbarian Proficiencies",
     "lore": {
-      "shortDescription": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
+      "shortDescription": "Proficiency with light/medium armor, shields, and simple/martial weapons.",
+      "fullText": "Gain proficiency with light and medium armor, and shields. Gain proficiency with simple and martial weapons."
     },
     "effects": [
       {
@@ -32,7 +33,8 @@
     "id": "trait_barbarian_skills",
     "name": "Barbarian Skills",
     "lore": {
-      "shortDescription": ""
+      "shortDescription": "Choice of proficiencies: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival.",
+      "fullText": "Gain proficiency in two of the following skills: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival."
     },
     "effects": [
       {
@@ -179,6 +181,21 @@
     ]
   },
   {
+    "id": "trait_darkvision_60",
+    "name": "Darkvision",
+    "lore": {
+      "shortDescription": "See in dim light as if bright light, and in darkness as if dim light, to 60 feet.",
+      "fullText": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+    },
+    "effects": [
+      {
+        "type": "sense",
+        "target": "darkvision",
+        "value": 60
+      }
+    ]
+  },
+  {
     "id": "trait_diamond_soul",
     "name": "Diamond Soul",
     "lore": {
@@ -298,6 +315,66 @@
             "survival"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_dwarf_speed_resilience",
+    "name": "Dwarf Speed Resilience",
+    "lore": {
+      "shortDescription": "No heavy armor speed reduction.",
+      "fullText": "Your speed is not reduced by wearing heavy armor."
+    }
+  },
+  {
+    "id": "trait_dwarf_tool_proficiency",
+    "name": "Dwarf Tool Proficiency",
+    "lore": {
+      "shortDescription": "Gain proficiency with your artisan's tool of choice.",
+      "fullText": "You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools."
+    }
+  },
+  {
+    "id": "trait_dwarven_combat_training",
+    "name": "Dwarven Combat Training",
+    "lore": {
+      "shortDescription": "Gain proficiency with battleaxe, handaxe, light hammer, and warhammer.",
+      "fullText": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "weapon_battleaxe"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_handaxe"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_light_hammer"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_warhammer"
+      }
+    ]
+  },
+  {
+    "id": "trait_dwarven_resilience",
+    "name": "Dwarven Resilience",
+    "lore": {
+      "shortDescription": "Gain advantage and resistance against poison.",
+      "fullText": "You have advantage on saving throws against poison, and you have resistance against poison damage."
+    },
+    "effects": [
+      {
+        "type": "advantage",
+        "target": "saving_throws_against_poison"
+      },
+      {
+        "type": "other",
+        "target": "damage_resistance_poison"
       }
     ]
   },
@@ -842,6 +919,14 @@
         }
       }
     ]
+  },
+  {
+    "id": "trait_stonecutting",
+    "name": "Stonecutting",
+    "lore": {
+      "shortDescription": "Gain proficiency and expertise with History checks related to stonework.",
+      "fullText": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+    }
   },
   {
     "id": "trait_unarmored_defense_barbarian",

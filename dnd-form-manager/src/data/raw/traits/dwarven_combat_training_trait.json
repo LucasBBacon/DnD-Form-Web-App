@@ -1,0 +1,26 @@
+{
+    "id": "trait_dwarven_combat_training",
+    "name": "Dwarven Combat Training",
+    "lore": {
+        "shortDescription": "Gain proficiency with battleaxe, handaxe, light hammer, and warhammer.",
+        "fullText": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon_battleaxe"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_handaxe"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_light_hammer"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_warhammer"
+        }
+    ]
+}

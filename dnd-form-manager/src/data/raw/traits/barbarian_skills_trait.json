@@ -2,7 +2,8 @@
     "id": "trait_barbarian_skills",
     "name": "Barbarian Skills",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Choice of proficiencies: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival.",
+        "fullText": "Gain proficiency in two of the following skills: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival."
     },
     "effects": [
         {
