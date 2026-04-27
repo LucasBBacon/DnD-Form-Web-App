@@ -46,6 +46,11 @@ export interface SubclassData {
     name: string; // e.g., 'Champion'
     parentClassId: string; // e.g., 'class_fighter'
 
+    lore?: {
+        shortDescription: string;
+        fullText?: string;
+    };
+
     // Overrides the base class casting if necessary
     spellcastingOverride?: SpellcastingBase | null;
 

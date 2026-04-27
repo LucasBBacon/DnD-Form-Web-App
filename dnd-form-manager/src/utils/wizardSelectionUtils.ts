@@ -1,5 +1,7 @@
 import {
   getSubraceById,
+  getSubracesForRace,
+  getSubclassesForClass,
   getTraitById,
 } from "../data/staticDataApi";
 import type { ClassData } from "../types/class";
@@ -53,12 +55,22 @@ export const toRaceSelectionOption = (
       : [];
   const traitIds = [...(race.traits ?? []), ...subraceTraitIds];
 
+  const subraces = getSubracesForRace(race.id);
+  const subOptions = subraces.map((sub) => ({
+    id: sub.id,
+    name: sub.name,
+    tagline: sub.lore.shortDescription,
+    description: sub.lore.fullText || sub.lore.shortDescription,
+    traits: resolveTraitSegments(sub.traitsAdded),
+  }));
+
   return {
     id: race.id,
     name: race.name,
     tagline: race.lore.shortDescription,
     description: race.lore.fullText || race.lore.shortDescription,
     traits: resolveTraitSegments(traitIds),
+    ...(subOptions.length > 0 && { subOptions, subOptionLabel: "Subrace" }),
   };
 };
 
@@ -66,11 +78,25 @@ export const toClassSelectionOption = (classData: ClassData): SelectionOption =>
   const levelOneTraits =
     classData.progression.find((level) => level.level === 1)?.features ?? [];
 
+  const subclasses = getSubclassesForClass(classData.id);
+  const subOptions = subclasses.map((sub) => {
+    const levelThreeTraits =
+      sub.progression.find((level) => level.level === 3)?.features ?? [];
+    return {
+      id: sub.id,
+      name: sub.name,
+      tagline: sub.lore?.shortDescription ?? `${classData.name} subclass`,
+      description: sub.lore?.fullText ?? sub.lore?.shortDescription ?? `${sub.name} is a subclass of ${classData.name}.`,
+      traits: resolveTraitSegments(levelThreeTraits),
+    };
+  });
+
   return {
     id: classData.id,
     name: classData.name,
     tagline: `Hit Die: d${classData.hitDie}`,
     description: classData.lore.fullText || classData.lore.shortDescription,
     traits: resolveTraitSegments(levelOneTraits),
+    ...(subOptions.length > 0 && { subOptions, subOptionLabel: "Subclass" }),
   };
 };

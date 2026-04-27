@@ -2,6 +2,16 @@ export interface TraitSegment {
   name: string;
   shortDescription: string;
   fullDescription: string;
+  source?: "base" | "sub";
+  isOverride?: boolean;
+}
+
+export interface SubSelectionOption {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  traits: TraitSegment[];
 }
 
 export interface SelectionOption {
@@ -10,4 +20,6 @@ export interface SelectionOption {
   tagline: string;
   description: string;
   traits: TraitSegment[];
+  subOptions?: SubSelectionOption[];
+  subOptionLabel?: string;
 }

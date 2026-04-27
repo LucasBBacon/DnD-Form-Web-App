@@ -1,0 +1,18 @@
+{
+    "id": "trait_dwarven_armor_training",
+    "name": "Dwarven Armor Training",
+    "lore": {
+        "shortDescription": "Proficiency with light and medium armor.",
+        "fullText": "You have proficiency with light and medium armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor_light"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor_medium"
+        }
+    ]
+}

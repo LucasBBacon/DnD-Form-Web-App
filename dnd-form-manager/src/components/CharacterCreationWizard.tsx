@@ -51,8 +51,10 @@ export const CharacterCreationWizard: React.FC = () => {
             title="Race"
             options={raceOptions}
             currentSelectionId={store.raceId}
-            onSelect={(id) => {
-              store.setRace(id);
+            currentSubSelectionId={store.subraceId}
+            onSelect={(baseId, subId) => {
+              store.setRace(baseId);
+              store.setSubrace(subId)
               advanceStep();
             }}
           />
@@ -63,8 +65,10 @@ export const CharacterCreationWizard: React.FC = () => {
             title="Class"
             options={classOptions}
             currentSelectionId={store.classId}
-            onSelect={(id) => {
-              store.setClass(id);
+            currentSubSelectionId={store.subclassId}
+            onSelect={(baseId, subId) => {
+              store.setClass(baseId);
+              store.setSubclass(subId);
               advanceStep();
             }}
           />

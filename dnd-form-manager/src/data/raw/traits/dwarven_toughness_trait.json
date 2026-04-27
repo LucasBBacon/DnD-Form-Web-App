@@ -1,0 +1,8 @@
+{
+    "id": "trait_dwarven_toughness",
+    "name": "Dwarven Toughness",
+    "lore": {
+        "shortDescription": "Gain a 1 HP increase per level.",
+        "fullText": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+    }
+}

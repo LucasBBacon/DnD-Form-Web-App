@@ -335,6 +335,24 @@
     }
   },
   {
+    "id": "trait_dwarven_armor_training",
+    "name": "Dwarven Armor Training",
+    "lore": {
+      "shortDescription": "Proficiency with light and medium armor.",
+      "fullText": "You have proficiency with light and medium armor."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "armor_light"
+      },
+      {
+        "type": "proficiency",
+        "target": "armor_medium"
+      }
+    ]
+  },
+  {
     "id": "trait_dwarven_combat_training",
     "name": "Dwarven Combat Training",
     "lore": {
@@ -377,6 +395,14 @@
         "target": "damage_resistance_poison"
       }
     ]
+  },
+  {
+    "id": "trait_dwarven_toughness",
+    "name": "Dwarven Toughness",
+    "lore": {
+      "shortDescription": "Gain a 1 HP increase per level.",
+      "fullText": "Your hit point maximum increases by 1, and it increases by 1 every time you gain a level."
+    }
   },
   {
     "id": "trait_feat_alert",

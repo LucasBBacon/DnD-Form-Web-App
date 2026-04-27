@@ -1,31 +1,37 @@
 import type React from "react";
 import "./WizardSelectionStage.css";
 import { useState } from "react";
-import type { SelectionOption } from "../types/wizardSelection";
+import type { SelectionOption, TraitSegment } from "../types/wizardSelection";
 
 interface WizardSelectionStageProps {
   title: string;
   options: SelectionOption[];
-  onSelect: (id: string) => void;
   currentSelectionId: string | null;
+  currentSubSelectionId: string | null;
+  onSelect: (baseId: string, subId: string | null) => void;
 }
 
 export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
   title,
   options,
-  onSelect,
   currentSelectionId,
+  currentSubSelectionId,
+  onSelect,
 }) => {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedBaseId] = useState<string | null>(null);
+  const [expandedSubId, setExpandedSubId] = useState<string | null>(null);
   const [expandedTraitIndex, setExpandedTraitIndex] = useState<number | null>(
     null,
   );
 
-  const expandedOption = options.find((opt) => opt.id === expandedId);
+  const expandedBase = options.find((opt) => opt.id === expandedId);
+  const expandedSub = expandedBase?.subOptions?.find(
+    (sub) => sub.id === expandedSubId,
+  );
 
   // #region Card Grid
 
-  if (!expandedOption) {
+  if (!expandedBase) {
     return (
       <div className="selection-stage">
         <h2 className="stage-title">Choose your {title}</h2>
@@ -36,7 +42,7 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
               <div
                 key={opt.id}
                 className={`option-card ${isSelected ? "selected" : ""}`}
-                onClick={() => setExpandedId(opt.id)}
+                onClick={() => setExpandedBaseId(opt.id)}
               >
                 {isSelected && <div className="selected-badge">CHOSEN</div>}
                 <div className="card-visual-placeholder">
@@ -58,6 +64,43 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
   // #endregion
 
   // #region Expanded focus card
+
+  // Prepare traits
+  let displayTraits: TraitSegment[] = expandedBase.traits.map((t) => ({
+    ...t,
+    source: "base" as const,
+  }));
+  if (expandedSub) {
+    const subTraits = expandedSub.traits.map((t) => ({
+      ...t,
+      source: "sub" as const,
+    }));
+    displayTraits = [...subTraits, ...displayTraits];
+  }
+
+  const activeName = expandedSub ? expandedSub.name : expandedBase.name;
+  const activeDescription = expandedSub
+    ? expandedSub.description
+    : expandedBase.description;
+  const isCurrentSavedChoice =
+    expandedBase.id === currentSelectionId &&
+    expandedSub?.id === currentSubSelectionId;
+
+  // Sub-option requirement logic
+  const hasSubOptions =
+    expandedBase.subOptions && expandedBase.subOptions.length > 0;
+  // Disable confirmation if sub-option exists but none is currently selected
+  const isConfirmDisabled = hasSubOptions && !expandedSubId;
+
+  let confirmText = "";
+  if (isCurrentSavedChoice) {
+    confirmText = "CURRENT CHOICE";
+  } else if (isConfirmDisabled) {
+    confirmText = `SELECT A ${expandedBase.subOptionLabel?.toUpperCase() || "SUB-OPTION"}`;
+  } else {
+    confirmText = `CHOOSE ${activeName.toUpperCase()}`;
+  }
+
   return (
     <div className="expanded-focus-view">
       {/* Navigation header */}
@@ -65,30 +108,78 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
         <button
           className="back-btn"
           onClick={() => {
-            setExpandedId(null);
+            if (expandedSubId) {
+              setExpandedSubId(null);
+            } else {
+              setExpandedBaseId(null);
+            }
             setExpandedTraitIndex(null);
           }}
         >
-          Back to {title}s
+          ← Back to {expandedSubId ? expandedBase.name : `${title}s`}
         </button>
+
+        {/* Dynamic confirmation button */}
         <button
           className="confirm-choice-btn"
+          disabled={isConfirmDisabled}
           onClick={() => {
-            onSelect(expandedOption.id);
+            onSelect(expandedBase.id, expandedSub?.id || null);
             // TODO: advance stepper here or let parent handle it
           }}
         >
-          {currentSelectionId === expandedOption.id
-            ? "CURRENT CHOICE"
-            : `CHOOSE ${expandedOption.name.toUpperCase()}`}
+          {confirmText}
         </button>
       </div>
 
       <div className="focus-content-scroll">
+        {expandedSub && (
+          <div className="sub-breadcrumb">
+            Base {title}: <strong>{expandedBase.name}</strong>
+          </div>
+        )}
+
         <div className="focus-hero">
-          <h2 className="focus-title">{expandedOption.name}</h2>
-          <p className="focus-description">{expandedOption.description}</p>
+          <h2 className="focus-title">{activeName}</h2>
+          <p className="focus-description">{activeDescription}</p>
         </div>
+
+        {/* Nested sub-options grid */}
+        {!expandedSub && hasSubOptions && (
+          <div className="sub-options-section">
+            <h3 className="traits-header">
+              {expandedBase.subOptionLabel || "Sub-Options"}
+            </h3>
+            <p className="sub-options-instruction">
+              You must select a{" "}
+              {expandedBase.subOptionLabel?.toLowerCase() || "sub-option"} to
+              continue.
+            </p>
+            <div className="options-grid sub-grid">
+              {expandedBase.subOptions!.map((sub) => {
+                const isSubSelected = sub.id === currentSubSelectionId;
+                return (
+                  <div
+                    key={sub.id}
+                    className={`option-card sub-card ${isSubSelected ? "selected" : ""}`}
+                    onClick={() => {
+                      setExpandedSubId(sub.id);
+                      setExpandedTraitIndex(null);
+                    }}
+                  >
+                    {isSubSelected && (
+                      <div className="selected-badge">CHOSEN</div>
+                    )}
+                    <div className="card-footer">
+                      <h3 className="card-name">{sub.name}</h3>
+                      <p className="card-tagline">{sub.tagline}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <hr className="divider" />
 
@@ -96,13 +187,14 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
 
         {/* Accordion for traits/segments */}
         <div className="traits-accordion-list">
-          {expandedOption.traits.map((trait, index) => {
+          {displayTraits.map((trait, index) => {
             const isTraitExpanded = expandedTraitIndex === index;
+            const isSubTrait = trait.source !== "base";
 
             return (
               <div
                 key={`${trait.name}-${index}`}
-                className={`trait-accordion ${isTraitExpanded ? "open" : ""}`}
+                className={`trait-accordion ${isTraitExpanded ? "open" : ""} ${isSubTrait ? "sub-trait-highlight" : ""}`}
               >
                 <button
                   className="trait-toggle-btn"
@@ -111,7 +203,11 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
                   }
                 >
                   <div className="trait-toggle-text">
-                    <span className="trait-name">{trait.name}</span>
+                    <div className="trait-title-row">
+                      <span className="trait-name">{trait.name}</span>
+                      {isSubTrait && <span className="trait-badge sub">Added by {expandedSub?.name}</span>}
+                      {trait.isOverride && <span className="trait-badge override">Overrides Base</span>}
+                    </div>
                     {!isTraitExpanded && (
                       <span className="trait-short-desc">
                         {trait.shortDescription}

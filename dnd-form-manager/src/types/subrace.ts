@@ -33,6 +33,7 @@ export interface SubraceData {
     };
   };
 
+  // Lore and flavor text for the subrace
   lore: {
     shortDescription: string;
     fullText?: string;
