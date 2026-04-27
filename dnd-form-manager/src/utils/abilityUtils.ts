@@ -1,7 +1,5 @@
 import type { Ability } from "../types/common";
 import type { LevelChoice } from "../types/progression";
-import type { Race } from "../types/race";
-import type { SubraceData } from "../types/subrace";
 
 /**
  * Converts a total ability score into its corresponding modifier.
@@ -14,44 +12,22 @@ export const calculateModifier = (score: number): number => {
 /**
  * Calculates the final score for a specific ability score.
  *
- * The result starts with the base score, then adds any fixed racial bonus,
- * any user-selected racial bonus, and the aggregated ASI bonus for that ability.
- *
- * @param ability Ability to calculate the total for.
- * @param baseScore Starting score before racial bonuses or ASIs.
- * @param race Selected race used to apply fixed racial bonuses.
- * @param userChosenRacialBonuses User-selected racial bonuses keyed by ability.
- * @param totalAsiBonus Total ASI bonus already aggregated for this ability.
- * @param featBonuses Aggregated feat-driven bonuses keyed by ability.
- * @returns The final ability score after all applied bonuses.
+ * The result starts with the base score, then adds fixed ancestry bonuses,
+ * user-selected ancestry bonuses, and the aggregated ASI/feat bonuses.
  */
 export const calculateTotalAbilityScore = (
   ability: Ability,
   baseScore: number,
-  race: Race | null,
-  subrace: SubraceData | null,
-  userChosenRacialBonuses: Partial<Record<Ability, number>> = {},
+  fixedAncestryBonuses: Partial<Record<Ability, number>> = {},
+  userChosenAncestryBonuses: Partial<Record<Ability, number>> = {},
   totalAsiBonus?: number,
   featBonuses: Partial<Record<Ability, number>> = {},
 ): number => {
   let total = baseScore;
 
-  if (race) {
-    // Add fixed racial bonuses (if the race has one for this ability)
-    total += race.abilityBonuses.fixed[ability] || 0;
-  }
-
-  if (subrace) {
-    total += subrace.abilityBonuses?.fixed?.[ability] || 0;
-  }
-
-  // Add any user-selected racial bonuses
-  total += userChosenRacialBonuses[ability] || 0;
-
-  // Add ASI bonus
+  total += fixedAncestryBonuses[ability] || 0;
+  total += userChosenAncestryBonuses[ability] || 0;
   total += totalAsiBonus || 0;
-
-  // Add feat-driven bonuses
   total += featBonuses[ability] || 0;
 
   return total;

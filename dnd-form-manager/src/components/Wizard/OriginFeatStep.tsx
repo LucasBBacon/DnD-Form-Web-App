@@ -1,9 +1,11 @@
 import { useMemo } from "react";
-import { getFeatsByCategory, getRaceById, getSubraceById } from "../../data/staticDataApi";
+import { getFeatsByCategory } from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { Ability } from "../../types/common";
 import { calculateTotalAbilityScore } from "../../utils/abilityUtils";
 import { isFeatEligible } from "../../utils/featUtils";
+import { resolveFixedAbilityBonusesFromTraits } from "../../utils/traitEffectResolvers";
+import { getAllCharacterTraits } from "../../utils/traitUtils";
 
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -23,8 +25,22 @@ export const OriginFeatStep: React.FC<OriginFeatStepProps> = ({
     state.acquiredFeats.find((entry) => entry.source === "origin")?.featId ??
     "";
 
-  const raceData = state.raceId ? getRaceById(state.raceId) : null;
-  const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
+  const ancestryTraits = getAllCharacterTraits(
+    1,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
+    true,
+    state.choicesByLevel,
+    state.acquiredFeats,
+    state.classTracks,
+  );
+
+  const fixedAncestryBonuses = useMemo(
+    () => resolveFixedAbilityBonusesFromTraits(ancestryTraits, 1),
+    [ancestryTraits],
+  );
 
   const totalScores = useMemo(() => {
     return ABILITIES.reduce(
@@ -32,8 +48,7 @@ export const OriginFeatStep: React.FC<OriginFeatStepProps> = ({
         acc[ability] = calculateTotalAbilityScore(
           ability,
           state.baseAbilityScores[ability],
-          raceData,
-          subraceData,
+          fixedAncestryBonuses,
           state.chosenRacialBonuses,
           0,
         );
@@ -41,7 +56,7 @@ export const OriginFeatStep: React.FC<OriginFeatStepProps> = ({
       },
       {} as Record<Ability, number>,
     );
-  }, [raceData, state.baseAbilityScores, state.chosenRacialBonuses, subraceData]);
+  }, [fixedAncestryBonuses, state.baseAbilityScores, state.chosenRacialBonuses]);
 
   const eligibleOriginFeats = useMemo(() => {
     return getFeatsByCategory("origin").filter((feat) =>

@@ -227,8 +227,12 @@
                             "expertise",
                             "spell_grant",
                             "stat_modifier",
+                            "ability_bonus_fixed",
+                            "ability_bonus_choice",
+                            "size_set",
                             "ac_calculation",
                             "proficiency_choice",
+                            "language_grant",
                             "other"
                         ],
                         "description": "The kind of effect this entry applies."
@@ -303,6 +307,10 @@
                             "count": {
                                 "type": "number",
                                 "description": "The number of items to choose from the pool."
+                            },
+                            "bonus": {
+                                "type": "number",
+                                "description": "Bonus value to apply for each selected choice, used by ability_bonus_choice effects."
                             },
                             "pool": {
                                 "anyOf": [

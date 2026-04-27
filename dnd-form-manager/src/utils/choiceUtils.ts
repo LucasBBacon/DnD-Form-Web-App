@@ -50,8 +50,14 @@ export interface SelectedProficiencyChoices {
  * @param pool The raw pool from trait data.
  * @returns A concrete list of skills that may be selected.
  */
-export const resolveSkillChoicePool = (pool: Skill[] | "any"): Skill[] => {
-  return pool === "any" ? (Object.keys(SKILL_ABILITY_MAP) as Skill[]) : pool;
+export const resolveSkillChoicePool = (
+  pool: readonly string[] | "any",
+): Skill[] => {
+  if (pool === "any") {
+    return Object.keys(SKILL_ABILITY_MAP) as Skill[];
+  }
+
+  return pool.filter((value): value is Skill => value in SKILL_ABILITY_MAP);
 };
 
 /**

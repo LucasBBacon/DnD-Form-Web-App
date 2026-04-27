@@ -1,7 +1,11 @@
 import { useState } from "react";
-import { getRaceById, getSubraceById } from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { Ability } from "../../types/common";
+import {
+  getPendingAbilityBonusChoicesFromTraits,
+  resolveFixedAbilityBonusesFromTraits,
+} from "../../utils/traitEffectResolvers";
+import { getAllCharacterTraits } from "../../utils/traitUtils";
 import { roll4d6DropLowest } from "../../utils/dice";
 import {
   calculateModifier,
@@ -11,15 +15,24 @@ import {
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
 export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
-  const {
-    setBaseAbilityScores,
-    setChosenRacialBonuses,
-    raceId,
-    subraceId,
-  } = useCharacterStore();
+  const state = useCharacterStore();
+  const { setBaseAbilityScores, setChosenRacialBonuses } = state;
 
-  const raceData = raceId ? getRaceById(raceId) : null;
-  const subraceData = subraceId ? getSubraceById(subraceId) : null;
+  const ancestryTraits = getAllCharacterTraits(
+    1,
+    state.raceId,
+    state.subraceId,
+    state.classId,
+    state.subclassId,
+    true,
+    state.choicesByLevel,
+    state.acquiredFeats,
+    state.classTracks,
+  );
+  const fixedAncestryBonuses = resolveFixedAbilityBonusesFromTraits(
+    ancestryTraits,
+    1,
+  );
 
   // local state for raw numbers rolled/inputted (default 10)
   const [rawScores, setRawScores] = useState<Record<Ability, number>>({
@@ -31,17 +44,14 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
     cha: 10,
   });
 
-  // aggregate all choice blocks from both race, subrace, give unique IDs
-  const availableChoices = [
-    ...(raceData?.abilityBonuses?.choices || []).map((c, i) => ({
-      ...c,
-      id: `race_choice_${i}`,
-    })),
-    ...(subraceData?.abilityBonuses?.choices || []).map((c, i) => ({
-      ...c,
-      id: `subrace_choice_${i}`,
-    })),
-  ];
+  // Aggregate all ancestry ability-choice blocks from trait effects.
+  const availableChoices = getPendingAbilityBonusChoicesFromTraits(
+    ancestryTraits,
+    1,
+  ).map((choice, index) => ({
+    ...choice,
+    id: `${choice.sourceId}_${index}`,
+  }));
 
   // State maps choice block ID to an array of selected abilities
   const [floatingSelections, setFloatingSelections] = useState<
@@ -185,8 +195,7 @@ export const AbilityScoreStep = ({ onFinish }: { onFinish: () => void }) => {
           const totalScore = calculateTotalAbilityScore(
             stat,
             rawScores[stat],
-            raceData,
-            subraceData,
+            fixedAncestryBonuses,
             localChosenBonuses,
             0,
           );

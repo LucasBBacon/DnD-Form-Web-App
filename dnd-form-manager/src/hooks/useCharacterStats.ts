@@ -1,10 +1,4 @@
-import {
-  getClassById,
-  getItemById,
-  getRaceById,
-  getSubclassById,
-  getSubraceById,
-} from "../data/staticDataApi";
+import { getClassById, getItemById, getSubclassById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, HitDie } from "../types/common";
 import type {
@@ -25,6 +19,10 @@ import {
   calculateProficiencyBonus,
   mergeSubclassSpecificScaling,
 } from "../utils/progressionUtils";
+import {
+  resolveBaseSpeedFromTraits,
+  resolveFixedAbilityBonusesFromTraits,
+} from "../utils/traitEffectResolvers";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { resolveInstance } from "../utils/inventoryUtils";
 
@@ -152,8 +150,6 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   const state = useCharacterStore();
 
   // fetch static definitions
-  const raceData = state.raceId ? getRaceById(state.raceId) : null;
-  const subraceData = state.subraceId ? getSubraceById(state.subraceId) : null;
   const classData = state.classId ? getClassById(state.classId) : null;
   const subclassData = state.subclassId
     ? getSubclassById(state.subclassId)
@@ -177,6 +173,10 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   // Aggregate all ASI choices from level 1 to current level
   const totalAsiBonuses = calculateTotalASI(state.level, state.choicesByLevel);
+  const fixedAncestryBonuses = resolveFixedAbilityBonusesFromTraits(
+    allTraits,
+    state.level,
+  );
 
   // Calculate all ability scores and modifiers in one pass
   const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
@@ -185,8 +185,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
       acc[ability] = calculateTotalAbilityScore(
         ability,
         state.baseAbilityScores[ability],
-        raceData,
-        subraceData,
+        fixedAncestryBonuses,
         state.chosenRacialBonuses,
         totalAsiBonuses[ability],
       );
@@ -303,6 +302,8 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     ? getItemById(equippedArmorInstance.baseItemId)
     : null;
 
+  const baseSpeed = resolveBaseSpeedFromTraits(allTraits, state.level, 30);
+
   const equippedArmor: Parameters<typeof calculateArmorClass>[1] = (() => {
     if (
       !equippedArmorData?.armorProperties ||
@@ -345,7 +346,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     armorStealthDisadvantage,
     totalWeight,
     isEncumbered,
-    speed: 30 + subclassSpeedBonus,
+    speed: baseSpeed + subclassSpeedBonus,
   };
 
   const nonSkillProficiencies = aggregateNonSkillProficienciesMulticlass({
@@ -410,7 +411,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   // Apply trait-based stat modifiers
   let finalArmorClass = baseArmorClassWithSubclassBonuses;
-  let finalSpeed = 30 + subclassSpeedBonus;
+  let finalSpeed = baseSpeed + subclassSpeedBonus;
   let initiativeFlatBonuses = 0;
   let hasJackOfAllTrades = false;
   let finalInitiative = baseInitiative;

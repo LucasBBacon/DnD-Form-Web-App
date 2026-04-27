@@ -1,22 +1,13 @@
 {
     "id": "race_dragonborn",
     "name": "Dragonborn",
-    "size": "medium",
-    "speed": {
-        "walk": 30
-    },
-    "abilityBonuses": {
-        "fixed": {
-            "str": 2,
-            "cha": 1
-        }
-    },
-    "languages": {
-        "known": [
-            "lang_common",
-            "lang_draconic"
-        ]
-    },
+    "traits": [
+        "trait_dragonborn_age",
+        "trait_dragonborn_size",
+        "trait_dragonborn_speed",
+        "trait_dragonborn_ability_bonuses",
+        "trait_dragonborn_languages"
+    ],
     "subraceInfo": {
         "optionsPool": "subraces_dragonborn",
         "display_label": "Draconic Ancestry"

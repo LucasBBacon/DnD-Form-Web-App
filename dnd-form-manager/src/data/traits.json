@@ -229,6 +229,69 @@
     ]
   },
   {
+    "id": "trait_dragonborn_ability_bonuses",
+    "name": "Ability Bonuses",
+    "lore": {
+      "shortDescription": "+2 Strength, +1 Charisma.",
+      "fullText": "Your Strength score increases by 2, and your Charisma score increases by 1."
+    }
+  },
+  {
+    "id": "trait_dragonborn_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood at 15, and live to be around 80.",
+      "fullText": "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80."
+    }
+  },
+  {
+    "id": "trait_dragonborn_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and Draconic.",
+      "fullText": "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "value": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "value": "lang_draconic"
+      }
+    ]
+  },
+  {
+    "id": "trait_dragonborn_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Medium.",
+      "fullText": "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_dragonborn_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
+      }
+    ]
+  },
+  {
     "id": "trait_druid_proficiencies",
     "name": "Druid Proficiencies",
     "lore": {

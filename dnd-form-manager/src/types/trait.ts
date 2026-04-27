@@ -1,4 +1,4 @@
-import type { Ability, Skill } from "./common";
+import type { Ability, Size, Skill } from "./common";
 import type { Predicate } from "./predicate";
 
 export interface TraitEffect {
@@ -13,11 +13,14 @@ export interface TraitEffect {
     | "expertise"
     | "spell_grant"
     | "stat_modifier"
+    | "ability_bonus_fixed"
+    | "ability_bonus_choice"
+    | "size_set"
     | "ac_calculation"
     | "other"; // TODO: further additions in accordance to old schema
   levelAvailable?: number;
   target?: string; // For spell_grant, this is the spellId (e.g., 'spell_hellish_rebuke')
-  value?: number;
+  value?: number | string | boolean;
   spellcastingAbility?: Ability; // The stat used specifically for this spell
   uses?: {
     count: number | string;
@@ -26,9 +29,12 @@ export interface TraitEffect {
   predicates?: Predicate[];
   choice?: {
     count: number;
-    pool: Skill[] | "any";
+    pool: Skill[] | Ability[] | "any";
+    bonus?: number;
   };
 }
+
+export type TraitSizeValue = Size;
 
 export interface TraitData {
   id: string; // e.g., 'trait_darkvision', 'trait_fey_ancestry'

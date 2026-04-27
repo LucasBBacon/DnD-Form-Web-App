@@ -16,69 +16,10 @@
       "type": "string",
       "description": "REQUIRED. Links back to the parent class."
     },
-    "abilityBonuses": {
-      "$ref": "definitions.json#/definitions/AbilityBonuses"
-    },
     "traitsAdded": {
       "type": "array",
       "items": {
         "type": "string"
-      }
-    },
-    "languagesAdded": {
-      "type": "object",
-      "properties": {
-        "known": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Array of language IDs granted automatically."
-        },
-        "choices": {
-          "type": "object",
-          "properties": {
-            "count": {
-              "type": "integer",
-              "description": "Number of additional languages the player can choose."
-            },
-            "uniqueChoices": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        }
-      }
-    },
-    "overrides": {
-      "type": "object",
-      "description": "Omit if the subrace does not change base physics.",
-      "properties": {
-        "speed": {
-          "type": "object",
-          "properties": {
-            "walk": {
-              "type": "integer",
-              "description": "Base walking speed in feet."
-            },
-            "fly": {
-              "type": "integer",
-              "default": 0
-            },
-            "swim": {
-              "type": "integer",
-              "default": 0
-            },
-            "climb": {
-              "type": "integer",
-              "default": 0
-            }
-          }
-        },
-        "size": {
-          "$ref": "definitions.json#/definitions/Size",
-          "description": "The creature's size category."
-        }
       }
     },
     "lore": {
@@ -118,7 +59,10 @@
     }
   },
   "required": [
+    "id",
     "name",
-    "parentRaceId"
+    "parentRaceId",
+    "traitsAdded",
+    "lore"
   ]
 }

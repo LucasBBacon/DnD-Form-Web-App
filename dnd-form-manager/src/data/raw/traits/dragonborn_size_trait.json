@@ -1,0 +1,14 @@
+{
+    "id": "trait_dragonborn_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium.",
+        "fullText": "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "medium"
+        }
+    ]
+}

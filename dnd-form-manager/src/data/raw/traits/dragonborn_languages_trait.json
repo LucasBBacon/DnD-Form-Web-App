@@ -1,0 +1,18 @@
+{
+    "id": "trait_dragonborn_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common and Draconic.",
+        "fullText": "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "value": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "value": "lang_draconic"
+        }
+    ]
+}
