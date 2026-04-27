@@ -39,28 +39,18 @@
   {
     "id": "race_dwarf",
     "name": "Dwarf",
-    "size": "medium",
-    "speed": {
-      "walk": 25
-    },
-    "abilityBonuses": {
-      "fixed": {
-        "con": 2
-      }
-    },
-    "languages": {
-      "known": [
-        "lang_common",
-        "lang_dwarvish"
-      ]
-    },
     "traits": [
+      "trait_dwarf_ability_bonuses",
+      "trait_dwarf_age",
+      "trait_dwarf_size",
+      "trait_dwarf_speed",
       "trait_dwarf_speed_resilience",
-      "trait_darkvision_60",
       "trait_dwarven_resilience",
+      "trait_darkvision_60",
       "trait_dwarven_combat_training",
       "trait_dwarf_tool_proficiency",
-      "trait_stonecutting"
+      "trait_stonecutting",
+      "trait_dwarf_languages"
     ],
     "subraceInfo": {
       "optionsPool": "subraces_dwarf"

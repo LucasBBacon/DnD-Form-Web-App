@@ -1,0 +1,8 @@
+{
+    "id": "trait_dwarf_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood at 50, you live about 350 years.",
+        "fullText": "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years."
+    }
+}

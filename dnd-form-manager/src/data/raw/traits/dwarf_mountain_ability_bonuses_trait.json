@@ -1,0 +1,15 @@
+{
+    "id": "trait_dwarf_mountain_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+2 Strength.",
+        "fullText": "Your Strength score increases by 2."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "str",
+            "value": 2
+        }
+    ]
+}

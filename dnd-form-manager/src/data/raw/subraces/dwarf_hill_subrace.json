@@ -2,12 +2,8 @@
 	"id": "subrace_dwarf_hill",
 	"name": "Hill Dwarf",
 	"parentRaceId": "race_dwarf",
-	"abilityBonuses": {
-		"fixed": {
-			"wis": 1
-		}
-	},
 	"traitsAdded": [
+		"trait_dwarf_hill_ability_bonuses",
 		"trait_dwarven_toughness"
 	],
 	"lore": {

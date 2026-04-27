@@ -2,12 +2,8 @@
     "id": "subrace_dwarf_mountain",
     "name": "Mountain Dwarf",
     "parentRaceId": "race_dwarf",
-    "abilityBonuses": {
-        "fixed": {
-            "str": 2
-        }
-    },
     "traitsAdded": [
+        "trait_dwarf_mountain_ability_bonuses",
         "trait_dwarven_armor_training"
     ],
     "lore": {

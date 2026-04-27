@@ -1,0 +1,15 @@
+{
+    "id": "trait_dwarf_hill_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+1 Wisdom.",
+        "fullText": "Your Wisdom score increases by 1."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "wis",
+            "value": 1
+        }
+    ]
+}

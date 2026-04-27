@@ -1,0 +1,15 @@
+{
+    "id": "trait_dwarf_speed",
+    "name": "Speed",
+    "lore": {
+        "shortDescription": "Your base walking speed is 25 feet.",
+        "fullText": "Your base walking speed is 25 feet."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "base_speed",
+            "value": 25
+        }
+    ]
+}

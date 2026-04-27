@@ -1,0 +1,14 @@
+{
+    "id": "trait_dwarf_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium.",
+        "fullText": "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "medium"
+        }
+    ]
+}

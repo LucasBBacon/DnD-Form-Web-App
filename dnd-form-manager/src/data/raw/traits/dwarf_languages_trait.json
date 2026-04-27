@@ -1,0 +1,18 @@
+{
+    "id": "trait_dwarf_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common and Dwarvish.",
+        "fullText": "You can speak, read, and write Common and Dwarvish. Dwarvish is full of hard consonants and guttural sounds, and those characteristics spill over into whatever other language a dwarf might speak."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "value": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "value": "lang_dwarvish"
+        }
+    ]
+}
