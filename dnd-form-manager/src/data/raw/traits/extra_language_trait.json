@@ -1,0 +1,17 @@
+{
+    "id": "trait_extra_language",
+    "name": "Extra Language",
+    "lore": {
+        "shortDescription": "You can speak, read, and write one extra language of your choice.",
+        "fullText": "You can speak, read, and write one extra language of your choice."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "choice": {
+                "count": 1,
+                "pool": "any"
+            }
+        }
+    ]
+}

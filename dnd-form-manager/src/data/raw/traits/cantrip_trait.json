@@ -1,0 +1,17 @@
+{
+    "id": "trait_cantrip",
+    "name": "Cantrip",
+    "lore": {
+        "shortDescription": "You know one cantrip of your choice.",
+        "fullText": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."
+    },
+    "effects": [
+        {
+            "type": "spell_grant",
+            "choice": {
+                "count": 1,
+                "pool": ["wizard_spell_list"]
+            }
+        }
+    ]
+}

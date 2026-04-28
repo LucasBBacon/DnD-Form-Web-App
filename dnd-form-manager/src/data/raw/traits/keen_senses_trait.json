@@ -2,7 +2,8 @@
     "id": "trait_keen_senses",
     "name": "Keen Senses",
     "lore": {
-        "shortDescription": "You have proficiency in the Perception skill."
+        "shortDescription": "You have proficiency in the Perception skill.",
+        "fullText": "You have proficiency in the Perception skill."
     },
     "effects": [
         {

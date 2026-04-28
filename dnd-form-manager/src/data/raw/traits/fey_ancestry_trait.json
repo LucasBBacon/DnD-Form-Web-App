@@ -1,0 +1,15 @@
+{
+    "id": "trait_fey_ancestry",
+    "name": "Fey Ancestry",
+    "lore": {
+        "shortDescription": "You gain advantage against charm and can't be put to sleep.",
+        "fullText": "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
+    },
+    "effects": [
+        {
+            "type": "advantage",
+            "target": "saving_throw",
+            "value": "charmed"
+        }
+    ]
+}

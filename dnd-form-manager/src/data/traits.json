@@ -182,6 +182,25 @@
     }
   },
   {
+    "id": "trait_cantrip",
+    "name": "Cantrip",
+    "lore": {
+      "shortDescription": "You know one cantrip of your choice.",
+      "fullText": "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."
+    },
+    "effects": [
+      {
+        "type": "spell_grant",
+        "choice": {
+          "count": 1,
+          "pool": [
+            "wizard_spell_list"
+          ]
+        }
+      }
+    ]
+  },
+  {
     "id": "trait_cleric_proficiencies",
     "name": "Cleric Proficiencies",
     "lore": {
@@ -686,6 +705,149 @@
     }
   },
   {
+    "id": "trait_elf_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+2 Dexterity.",
+      "fullText": "Your Dexterity score increases by 2."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "dex",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood at around 100 years old, and live to be 750.",
+      "fullText": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+    }
+  },
+  {
+    "id": "trait_elf_high_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 Intelligence.",
+      "fullText": "Your Intelligence score increases by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "int",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and Elvish.",
+      "fullText": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_elvish"
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Medium.",
+      "fullText": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_weapon_training",
+    "name": "Elf Weapon Training",
+    "lore": {
+      "shortDescription": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+      "fullText": "You have proficiency with the longsword, shortsword, shortbow, and longbow."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "weapon_longsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_shortsword"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_shortbow"
+      },
+      {
+        "type": "proficiency",
+        "target": "weapon_longbow"
+      }
+    ]
+  },
+  {
+    "id": "trait_elf_wood_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 Wisdom.",
+      "fullText": "Your Wisdom score increases by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "wis",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_extra_language",
+    "name": "Extra Language",
+    "lore": {
+      "shortDescription": "You can speak, read, and write one extra language of your choice.",
+      "fullText": "You can speak, read, and write one extra language of your choice."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "choice": {
+          "count": 1,
+          "pool": "any"
+        }
+      }
+    ]
+  },
+  {
     "id": "trait_feat_alert",
     "name": "Alert",
     "lore": {
@@ -788,6 +950,21 @@
     ]
   },
   {
+    "id": "trait_fey_ancestry",
+    "name": "Fey Ancestry",
+    "lore": {
+      "shortDescription": "You gain advantage against charm and can't be put to sleep.",
+      "fullText": "You have advantage on saving throws against being charmed, and magic can't put you to sleep."
+    },
+    "effects": [
+      {
+        "type": "advantage",
+        "target": "saving_throw",
+        "value": "charmed"
+      }
+    ]
+  },
+  {
     "id": "trait_fighter_proficiencies",
     "name": "Fighter Proficiencies",
     "lore": {
@@ -866,6 +1043,21 @@
     ]
   },
   {
+    "id": "trait_fleet_of_foot",
+    "name": "Fleet of Foot",
+    "lore": {
+      "shortDescription": "Your base walking speed increases to 35 feet.",
+      "fullText": "Your base walking speed increases to 35 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 35
+      }
+    ]
+  },
+  {
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {
@@ -883,7 +1075,8 @@
     "id": "trait_keen_senses",
     "name": "Keen Senses",
     "lore": {
-      "shortDescription": "You have proficiency in the Perception skill."
+      "shortDescription": "You have proficiency in the Perception skill.",
+      "fullText": "You have proficiency in the Perception skill."
     },
     "effects": [
       {
@@ -891,6 +1084,14 @@
         "target": "perception"
       }
     ]
+  },
+  {
+    "id": "trait_mask_of_the_wild",
+    "name": "Mask of the Wild",
+    "lore": {
+      "shortDescription": "You can attempt to hide in lightly obscured natural environments.",
+      "fullText": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
+    }
   },
   {
     "id": "trait_monk_proficiencies",
@@ -1233,6 +1434,14 @@
     "lore": {
       "shortDescription": "Gain proficiency and expertise with History checks related to stonework.",
       "fullText": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+    }
+  },
+  {
+    "id": "trait_trance",
+    "name": "Trance",
+    "lore": {
+      "shortDescription": "You gain the effects of 8 hours of rest from 4 hours of meditation.",
+      "fullText": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is “trance.”) While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep."
     }
   },
   {

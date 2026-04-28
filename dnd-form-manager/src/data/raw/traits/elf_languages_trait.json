@@ -1,0 +1,18 @@
+{
+    "id": "trait_elf_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common and Elvish.",
+        "fullText": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "target": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "target": "lang_elvish"
+        }
+    ]
+}

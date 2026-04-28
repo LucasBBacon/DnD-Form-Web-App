@@ -1,0 +1,8 @@
+{
+    "id": "trait_mask_of_the_wild",
+    "name": "Mask of the Wild",
+    "lore": {
+        "shortDescription": "You can attempt to hide in lightly obscured natural environments.",
+        "fullText": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
+    }
+}

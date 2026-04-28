@@ -1,0 +1,26 @@
+{
+    "id": "trait_elf_weapon_training",
+    "name": "Elf Weapon Training",
+    "lore": {
+        "shortDescription": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+        "fullText": "You have proficiency with the longsword, shortsword, shortbow, and longbow."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon_longsword"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_shortsword"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_shortbow"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon_longbow"
+        }
+    ]
+}

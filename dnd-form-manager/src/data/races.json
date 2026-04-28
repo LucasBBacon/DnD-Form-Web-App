@@ -73,26 +73,16 @@
   {
     "id": "race_elf",
     "name": "Elf",
-    "size": "medium",
-    "speed": {
-      "walk": 30
-    },
-    "abilityBonuses": {
-      "fixed": {
-        "dex": 2
-      }
-    },
-    "languages": {
-      "known": [
-        "lang_common",
-        "lang_elvish"
-      ]
-    },
     "traits": [
+      "trait_elf_ability_bonuses",
+      "trait_elf_age",
+      "trait_elf_size",
+      "trait_elf_speed",
       "trait_darkvision_60",
       "trait_keen_senses",
       "trait_fey_ancestry",
-      "trait_trance"
+      "trait_trance",
+      "trait_elf_languages"
     ],
     "subraceInfo": {
       "optionsPool": "subraces_elf"

@@ -1,0 +1,15 @@
+{
+    "id": "trait_fleet_of_foot",
+    "name": "Fleet of Foot",
+    "lore": {
+        "shortDescription": "Your base walking speed increases to 35 feet.",
+        "fullText": "Your base walking speed increases to 35 feet."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "base_speed",
+            "value": 35
+        }
+    ]
+}
