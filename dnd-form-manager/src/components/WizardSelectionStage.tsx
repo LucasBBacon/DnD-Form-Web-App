@@ -148,7 +148,7 @@ export const WizardSelectionStage: React.FC<WizardSelectionStageProps> = ({
         {!expandedSub && hasSubOptions && (
           <div className="sub-options-section">
             <h3 className="traits-header">
-              {expandedBase.subOptionLabel || "Sub-Options"}
+              {expandedBase.subOptionLabel || "Sub-option"}
             </h3>
             <p className="sub-options-instruction">
               You must select a{" "}

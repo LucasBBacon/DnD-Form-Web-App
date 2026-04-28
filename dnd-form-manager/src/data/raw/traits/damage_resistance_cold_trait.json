@@ -1,0 +1,14 @@
+{
+    "id": "trait_damage_resistance_cold",
+    "name": "Damage Resistance: Cold",
+    "lore": {
+        "shortDescription": "You have resistance to cold damage.",
+        "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "damage_cold"
+        }
+    ]
+}

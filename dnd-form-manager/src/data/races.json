@@ -3,15 +3,15 @@
     "id": "race_dragonborn",
     "name": "Dragonborn",
     "traits": [
+      "trait_dragonborn_ability_bonuses",
       "trait_dragonborn_age",
       "trait_dragonborn_size",
       "trait_dragonborn_speed",
-      "trait_dragonborn_ability_bonuses",
       "trait_dragonborn_languages"
     ],
     "subraceInfo": {
       "optionsPool": "subraces_dragonborn",
-      "display_label": "Draconic Ancestry"
+      "displayLabel": "Draconic Ancestry"
     },
     "lore": {
       "shortDescription": "Humanoids descended from dragons, bearing draconic heritage and power. Some serve as faithful dragon warriors, while others find their own path.",

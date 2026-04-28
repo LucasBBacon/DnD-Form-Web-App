@@ -1,0 +1,14 @@
+{
+    "id": "trait_damage_resistance_acid",
+    "name": "Damage Resistance: Acid",
+    "lore": {
+        "shortDescription": "You have resistance to acid damage.",
+        "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "damage_acid"
+        }
+    ]
+}

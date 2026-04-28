@@ -1,0 +1,14 @@
+{
+    "id": "trait_damage_resistance_lightning",
+    "name": "Damage Resistance: Lightning",
+    "lore": {
+        "shortDescription": "You have resistance to lightning damage.",
+        "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "damage_lightning"
+        }
+    ]
+}

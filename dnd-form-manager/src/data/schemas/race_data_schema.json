@@ -29,6 +29,10 @@
         "optionsPool": {
           "type": "string",
           "description": "e.g., 'subraces_elf'"
+        },
+        "displayLabel": {
+          "type": "string",
+          "description": "e.g., 'Draconic Ancestry'"
         }
       }
     },

@@ -47,7 +47,6 @@
         "warhammer"
     ],
     "json.schemas": [
-
         {
             "fileMatch": [
                 "races/*_race.json"
@@ -81,5 +80,10 @@
     ],
     "chat.tools.terminal.autoApprove": {
         "npx tsc": true
+    },
+    "launch": {
+        
+        "configurations": [],
+        "compounds": []
     }
 }

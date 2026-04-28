@@ -83,6 +83,7 @@ export interface ClassData {
     name: string;
     choiceLevel: number;
     optionsPool: string;
+    displayLabel?: string;
   };
   progression: ProgressionLevel[];
   lore: {

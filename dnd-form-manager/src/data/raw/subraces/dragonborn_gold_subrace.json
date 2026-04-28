@@ -1,0 +1,13 @@
+{
+    "id": "subrace_dragonborn_gold",
+    "name": "Gold Dragon",
+    "parentRaceId": "race_dragonborn",
+    "lore": {
+        "shortDescription": "",
+        "fullText": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type."
+    },
+    "traitsAdded": [
+        "trait_breath_weapon_fire_cone",
+        "trait_damage_resistance_fire"
+    ]
+}

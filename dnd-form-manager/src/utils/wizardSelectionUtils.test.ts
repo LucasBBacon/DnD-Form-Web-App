@@ -36,7 +36,17 @@ describe("toRaceSelectionOption", () => {
     expect(option.id).toBe("race_dwarf");
     expect(option.name).toBe("Dwarf");
     expect(option.traits.length).toBeGreaterThan(0);
-    expect(option.traits[0].name).toContain("Unknown Trait");
+    expect(option.traits.every((trait) => trait.name.length > 0)).toBe(true);
+    expect(option.subOptionLabel).toBe("Subrace");
+  });
+
+  it("uses race subraceInfo.displayLabel when present", () => {
+    const race = getRaceById("race_dragonborn");
+    expect(race).not.toBeNull();
+
+    const option = toRaceSelectionOption(race!, null);
+
+    expect(option.subOptionLabel).toBe("Draconic Ancestry");
   });
 
   it("includes selected subrace traits when the subrace belongs to the race", () => {
@@ -63,5 +73,6 @@ describe("toClassSelectionOption", () => {
     expect(
       option.traits.some((trait) => trait.name === "Barbarian Proficiencies"),
     ).toBe(true);
+    expect(option.subOptionLabel).toBe("Subclass");
   });
 });

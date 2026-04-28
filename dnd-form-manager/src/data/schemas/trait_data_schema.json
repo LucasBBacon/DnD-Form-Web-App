@@ -220,6 +220,7 @@
                         "enum": [
                             "advantage",
                             "disadvantage",
+                            "resistance",
                             "sense",
                             "proficiency",
                             "save_proficiency",

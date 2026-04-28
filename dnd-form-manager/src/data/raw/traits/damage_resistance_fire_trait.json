@@ -1,0 +1,14 @@
+{
+    "id": "trait_damage_resistance_fire",
+    "name": "Damage Resistance: Fire",
+    "lore": {
+        "shortDescription": "You have resistance to fire damage.",
+        "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "damage_fire"
+        }
+    ]
+}

@@ -134,6 +134,54 @@
     ]
   },
   {
+    "id": "trait_breath_weapon_acid_line",
+    "name": "Breath Weapon: Acid (5 by 30 ft. line Dex. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a acid 5 by 30 ft. line (Dex. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
+    "id": "trait_breath_weapon_cold_cone",
+    "name": "Breath Weapon: Cold (15 ft. cone Con. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a cold 15 ft. cone (Con. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
+    "id": "trait_breath_weapon_fire_cone",
+    "name": "Breath Weapon: Fire (15 ft. cone Dex. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a fire 15 ft. cone (Dex. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
+    "id": "trait_breath_weapon_fire_line",
+    "name": "Breath Weapon: Fire (5 by 30 ft. line Dex. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a fire 5 by 30 ft. line (Dex. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
+    "id": "trait_breath_weapon_lightning_line",
+    "name": "Breath Weapon: Lightning (5 by 30 ft. line Dex. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a lightning 5 by 30 ft. line (Dex. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
+    "id": "trait_breath_weapon_poison_cone",
+    "name": "Breath Weapon: Poison (15 ft. cone Con. save)",
+    "lore": {
+      "shortDescription": "You can use your action to exhale destructive energy as a poison 15 ft. cone (Con. save).",
+      "fullText": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you can't use it again until you complete a short or long rest."
+    }
+  },
+  {
     "id": "trait_cleric_proficiencies",
     "name": "Cleric Proficiencies",
     "lore": {
@@ -177,6 +225,76 @@
             "religion"
           ]
         }
+      }
+    ]
+  },
+  {
+    "id": "trait_damage_resistance_acid",
+    "name": "Damage Resistance: Acid",
+    "lore": {
+      "shortDescription": "You have resistance to acid damage.",
+      "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "damage_acid"
+      }
+    ]
+  },
+  {
+    "id": "trait_damage_resistance_cold",
+    "name": "Damage Resistance: Cold",
+    "lore": {
+      "shortDescription": "You have resistance to cold damage.",
+      "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "damage_cold"
+      }
+    ]
+  },
+  {
+    "id": "trait_damage_resistance_fire",
+    "name": "Damage Resistance: Fire",
+    "lore": {
+      "shortDescription": "You have resistance to fire damage.",
+      "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "damage_fire"
+      }
+    ]
+  },
+  {
+    "id": "trait_damage_resistance_poison",
+    "name": "Damage Resistance: Poison",
+    "lore": {
+      "shortDescription": "You have resistance to poison damage.",
+      "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "damage_poison"
+      }
+    ]
+  },
+  {
+    "id": "trait_damage_resistance_lightning",
+    "name": "Damage Resistance: Lightning",
+    "lore": {
+      "shortDescription": "You have resistance to lightning damage.",
+      "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "damage_lightning"
       }
     ]
   },

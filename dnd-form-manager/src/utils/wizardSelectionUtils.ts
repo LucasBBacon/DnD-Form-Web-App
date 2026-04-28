@@ -56,6 +56,8 @@ export const toRaceSelectionOption = (
   const traitIds = [...(race.traits ?? []), ...subraceTraitIds];
 
   const subraces = getSubracesForRace(race.id);
+  const subOptionLabel =
+    race.subraceInfo?.displayLabel?.trim() || "Subrace";
   const subOptions = subraces.map((sub) => ({
     id: sub.id,
     name: sub.name,
@@ -70,7 +72,7 @@ export const toRaceSelectionOption = (
     tagline: race.lore.shortDescription,
     description: race.lore.fullText || race.lore.shortDescription,
     traits: resolveTraitSegments(traitIds),
-    ...(subOptions.length > 0 && { subOptions, subOptionLabel: "Subrace" }),
+    ...(subOptions.length > 0 && { subOptions, subOptionLabel }),
   };
 };
 
@@ -79,6 +81,8 @@ export const toClassSelectionOption = (classData: ClassData): SelectionOption =>
     classData.progression.find((level) => level.level === 1)?.features ?? [];
 
   const subclasses = getSubclassesForClass(classData.id);
+  const subOptionLabel =
+    classData.subclassInfo.displayLabel?.trim() || "Subclass";
   const subOptions = subclasses.map((sub) => {
     const levelThreeTraits =
       sub.progression.find((level) => level.level === 3)?.features ?? [];
@@ -97,6 +101,6 @@ export const toClassSelectionOption = (classData: ClassData): SelectionOption =>
     tagline: `Hit Die: d${classData.hitDie}`,
     description: classData.lore.fullText || classData.lore.shortDescription,
     traits: resolveTraitSegments(levelOneTraits),
-    ...(subOptions.length > 0 && { subOptions, subOptionLabel: "Subclass" }),
+    ...(subOptions.length > 0 && { subOptions, subOptionLabel }),
   };
 };

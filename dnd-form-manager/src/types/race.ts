@@ -5,6 +5,7 @@ export interface Race {
   traits?: string[]; // Trait IDs
   subraceInfo: {
     optionsPool: string; // Subrace grouping ID
+    displayLabel?: string;
   } | null;
   lore: {
     shortDescription: string;

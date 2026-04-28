@@ -1,0 +1,14 @@
+{
+    "id": "trait_damage_resistance_poison",
+    "name": "Damage Resistance: Poison",
+    "lore": {
+        "shortDescription": "You have resistance to poison damage.",
+        "fullText": "You have resistance to the damage type associated with your draconic ancestry."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "damage_poison"
+        }
+    ]
+}
