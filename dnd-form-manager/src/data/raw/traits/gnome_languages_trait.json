@@ -1,0 +1,18 @@
+{
+    "id": "trait_gnome_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common and Gnomish.",
+        "fullText": "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "target": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "target": "lang_gnomish"
+        }
+    ]
+}

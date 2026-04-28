@@ -1,0 +1,18 @@
+{
+    "id": "subrace_gnome_deep",
+    "name": "Deep Gnome",
+    "parentRaceId": "race_gnome",
+    "lore": {
+        "shortDescription": "Guarded, and suspicious of outsiders, svirfneblin are cunning and taciturn, but can be just as kind-hearted, loyal, and compassionate as their surface cousins.",
+        "fullText": "Forest gnomes and rock gnomes are the gnomes most commonly encountered in the lands of the surface world. There is another subrace of gnomes rarely seen by any surface-dweller: deep gnomes, also known as svirfneblin. Guarded, and suspicious of outsiders, svirfneblin are cunning and taciturn, but can be just as kind-hearted, loyal, and compassionate as their surface cousins."
+    },
+    "traitsAdded": [
+        "trait_gnome_deep_ability_bonuses",
+        "trait_gnome_deep_age",
+        "trait_gnome_deep_alignment",
+        "trait_gnome_deep_size",
+        "trait_darkvision_superior",
+        "trait_stone_camouflage",
+        "trait_gnome_deep_languages"
+    ]
+}

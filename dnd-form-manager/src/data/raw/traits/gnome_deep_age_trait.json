@@ -1,0 +1,8 @@
+{
+    "id": "trait_gnome_deep_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood at 25, and live 200 to 250 years.",
+        "fullText": "Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time."
+    }
+}

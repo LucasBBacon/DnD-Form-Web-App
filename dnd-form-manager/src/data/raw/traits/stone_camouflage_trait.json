@@ -1,0 +1,8 @@
+{
+    "id": "trait_stone_camouflage",
+    "name": "Stone Camouflage",
+    "lore": {
+        "shortDescription": "Advantage on Stealth checks while in rocky terrain.",
+        "fullText": "You have advantage on Dexterity (Stealth) checks to hide in rocky terrain."
+    }
+}

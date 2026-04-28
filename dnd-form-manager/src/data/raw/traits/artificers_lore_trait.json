@@ -1,0 +1,8 @@
+{
+    "id": "trait_artificers_lore",
+    "name": "Artificer's Lore",
+    "lore": {
+        "shortDescription": "Add double proficiency to any History check related to: magic items, alchemical objects, and technological devices.",
+        "fullText": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply."
+    }
+}

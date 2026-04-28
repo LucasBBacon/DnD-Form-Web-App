@@ -1,0 +1,8 @@
+{
+    "id": "trait_gnome_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood around age 40. You live 350 to almost 500 years.",
+        "fullText": "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years."
+    }
+}

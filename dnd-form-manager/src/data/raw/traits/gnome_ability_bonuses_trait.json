@@ -1,0 +1,15 @@
+{
+    "id": "trait_gnome_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+2 Intelligence.",
+        "fullText": "Your Intelligence score increases by 2."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "int",
+            "value": 2
+        }
+    ]
+}

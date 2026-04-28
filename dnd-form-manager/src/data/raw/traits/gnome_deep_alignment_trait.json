@@ -1,0 +1,8 @@
+{
+    "id": "trait_gnome_deep_alignment",
+    "name": "Alignment",
+    "lore": {
+        "shortDescription": "You favor neutral alignments.",
+        "fullText": "Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others."
+    }
+}

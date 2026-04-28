@@ -1,0 +1,15 @@
+{
+    "id": "trait_darkvision_superior",
+    "name": "Superior Darkvision",
+    "lore": {
+        "shortDescription": "Your darkvision has a radius of 120 feet.",
+        "fullText": "Your darkvision has a radius of 120 feet."
+    },
+    "effects": [
+		{
+			"type": "sense",
+			"target": "darkvision",
+			"value": 120
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+    "id": "trait_gnome_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Small.",
+        "fullText": "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "small"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "id": "trait_gnome_rock_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+1 Constitution",
+        "fullText": "Your Constitution score increases by 1."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "con",
+            "value": 1
+        }
+    ]
+}

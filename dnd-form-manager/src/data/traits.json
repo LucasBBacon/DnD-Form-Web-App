@@ -1,5 +1,13 @@
 [
   {
+    "id": "trait_artificers_lore",
+    "name": "Artificer's Lore",
+    "lore": {
+      "shortDescription": "Add double proficiency to any History check related to: magic items, alchemical objects, and technological devices.",
+      "fullText": "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply."
+    }
+  },
+  {
     "id": "trait_barbarian_proficiencies",
     "name": "Barbarian Proficiencies",
     "lore": {
@@ -329,6 +337,21 @@
         "type": "sense",
         "target": "darkvision",
         "value": 60
+      }
+    ]
+  },
+  {
+    "id": "trait_darkvision_superior",
+    "name": "Superior Darkvision",
+    "lore": {
+      "shortDescription": "Your darkvision has a radius of 120 feet.",
+      "fullText": "Your darkvision has a radius of 120 feet."
+    },
+    "effects": [
+      {
+        "type": "sense",
+        "target": "darkvision",
+        "value": 120
       }
     ]
   },
@@ -1058,6 +1081,183 @@
     ]
   },
   {
+    "id": "trait_gnome_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+2 Intelligence.",
+      "fullText": "Your Intelligence score increases by 2."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "int",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood around age 40. You live 350 to almost 500 years.",
+      "fullText": "Gnomes mature at the same rate humans do, and most are expected to settle down into an adult life by around age 40. They can live 350 to almost 500 years."
+    }
+  },
+  {
+    "id": "trait_gnome_cunning",
+    "name": "Gnome Cunning",
+    "lore": {
+      "shortDescription": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+      "fullText": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+    },
+    "effects": [
+      {
+        "type": "advantage",
+        "target": "int_saving_throw",
+        "value": "magic"
+      },
+      {
+        "type": "advantage",
+        "target": "wis_saving_throw",
+        "value": "magic"
+      },
+      {
+        "type": "advantage",
+        "target": "cha_saving_throw",
+        "value": "magic"
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_deep_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 Constitution.",
+      "fullText": "Your Constitution score increases by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "con",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_deep_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood at 25, and live 200 to 250 years.",
+      "fullText": "Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time."
+    }
+  },
+  {
+    "id": "trait_gnome_deep_alignment",
+    "name": "Alignment",
+    "lore": {
+      "shortDescription": "You favor neutral alignments.",
+      "fullText": "Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others."
+    }
+  },
+  {
+    "id": "trait_gnome_deep_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common, Gnomish, and Undercommon.",
+      "fullText": "You can speak, read, and write Common, Gnomish, and Undercommon. The svirfneblin dialect is more guttural than surface Gnomish, and most svirfneblin know only a little bit of Common, but those who deal with outsiders (and that includes you as an adventurer) pick up enough Common to get by in other lands."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_gnomish"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_undercommon"
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_deep_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Small.",
+      "fullText": "A typical svirfneblin stands about 3 to 3½ feet tall and weighs 80 to 120 pounds. Your size is Small."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "small"
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and Gnomish.",
+      "fullText": "You can speak, read, and write Common and Gnomish. The Gnomish language, which uses the Dwarvish script, is renowned for its technical treatises and its catalogs of knowledge about the natural world."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_gnomish"
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_rock_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 Constitution",
+      "fullText": "Your Constitution score increases by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "con",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Small.",
+      "fullText": "Gnomes are between 3 and 4 feet tall and average about 40 pounds. Your size is Small."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "small"
+      }
+    ]
+  },
+  {
+    "id": "trait_gnome_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 25 feet.",
+      "fullText": "Your base walking speed is 25 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 25
+      }
+    ]
+  },
+  {
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {
@@ -1429,11 +1629,27 @@
     ]
   },
   {
+    "id": "trait_stone_camouflage",
+    "name": "Stone Camouflage",
+    "lore": {
+      "shortDescription": "Advantage on Stealth checks while in rocky terrain.",
+      "fullText": "You have advantage on Dexterity (Stealth) checks to hide in rocky terrain."
+    }
+  },
+  {
     "id": "trait_stonecutting",
     "name": "Stonecutting",
     "lore": {
       "shortDescription": "Gain proficiency and expertise with History checks related to stonework.",
       "fullText": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+    }
+  },
+  {
+    "id": "trait_tinker",
+    "name": "Tinker",
+    "lore": {
+      "shortDescription": "Gain proficiency with artisan's tools, and the ability to create a tiny clockwork device.",
+      "fullText": "You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time.\nWhen you create a device, choose one of the following options:\nClockwork Toy. This toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents.\nFire Starter. The device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action.\nMusic Box. When opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song’s end or when it is closed."
     }
   },
   {
