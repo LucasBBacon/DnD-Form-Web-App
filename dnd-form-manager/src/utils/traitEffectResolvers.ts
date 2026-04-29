@@ -1,5 +1,7 @@
 import type { Ability, Size } from "../types/common";
 import type { TraitData } from "../types/trait";
+import type { ActionData } from "../types/action";
+import { getActionsByIds } from "../data/staticDataApi";
 
 const ABILITY_KEYS: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -120,4 +122,23 @@ export const resolveSizeFromTraits = (
   });
 
   return size;
+};
+
+export const resolveGrantedActionsFromTraits = (
+  traits: TraitData[],
+  currentLevel: number,
+): ActionData[] => {
+  const actionIds = new Set<string>();
+
+  traits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      if (effect.type !== "action_grant") return;
+      if (!isEffectActiveForLevel(effect.levelAvailable, currentLevel)) return;
+      if (typeof effect.value !== "string") return;
+
+      actionIds.add(effect.value);
+    });
+  });
+
+  return getActionsByIds(Array.from(actionIds));
 };

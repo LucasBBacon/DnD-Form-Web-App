@@ -7,6 +7,7 @@
         "countercharm",
         "Daewar",
         "darkvision",
+        "debuffs",
         "dragonborn",
         "dragonfire",
         "Dragonlance",
@@ -91,6 +92,12 @@
                 "traits/*_trait.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/trait_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "actions/*_action.json"
+            ],
+            "url": "/dnd-form-manager/src/data/schemas/action_data_schema.json"
         }
     ],
     "chat.tools.terminal.autoApprove": {

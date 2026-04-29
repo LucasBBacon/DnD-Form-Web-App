@@ -2,17 +2,20 @@ import type React from "react";
 import { useState } from "react";
 import { useAttacks } from "../hooks/useAttacks";
 import { useSpellcasting } from "../hooks/useSpellcasting";
+import { useTraitActions } from "../hooks/useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import "./ActionsBoard.css";
 import { SpellBookView } from "./SpellBookView";
+import { TraitActionsView } from "./TraitActionsView";
 
-type ActionTab = "at-will" | "spells";
+type ActionTab = "at-will" | "spells" | "traits";
 
 export const ActionsBoard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActionTab>("at-will");
 
   const attacks = useAttacks();
   const spellcasting = useSpellcasting();
+  const traitActions = useTraitActions();
   const { expendSpellSlot, restoreSpellSlot, expendPactSlot } =
     useCharacterStore();
 
@@ -36,6 +39,12 @@ export const ActionsBoard: React.FC = () => {
           disabled={!hasSpells}
         >
           SPELLS & SLOTS
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "traits" ? "active" : ""}`}
+          onClick={() => setActiveTab("traits")}
+        >
+          TRAIT ACTIONS
         </button>
       </div>
 
@@ -144,6 +153,12 @@ export const ActionsBoard: React.FC = () => {
             <div className="spell-book-hint">
               <SpellBookView spellcasting={spellcasting} />
             </div>
+          </div>
+        )}
+
+        {activeTab === "traits" && (
+          <div className="trait-actions-view">
+            <TraitActionsView actions={traitActions.actions} />
           </div>
         )}
       </div>

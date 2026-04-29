@@ -6,6 +6,7 @@ import type { ItemData } from "../types/item";
 import type { SpellData } from "../types/spell";
 import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
+import type { ActionData } from "../types/action";
 
 import rawRacesData from "./races.json";
 import rawSubracesData from "./subraces.json";
@@ -15,6 +16,7 @@ import rawItemsData from "./items.json";
 import rawSpellsData from "./spells.json";
 import rawFeatsData from "./feats.json";
 import rawTraitsData from "./traits.json"
+import rawActionsData from "./actions.json";
 
 // region Race API
 const racesArray = rawRacesData as unknown as Race[];
@@ -155,6 +157,28 @@ export const getTraitById = (id: string): TraitData | null => {
 export const getTraitsByIds = (ids: string[]): TraitData[] => {
   return ids.map(id => traitDictionary[id]).filter((t): t is TraitData => t !== undefined);
 }
+
+// region Actions API
+const actionsArray = rawActionsData as ActionData[];
+const actionDictionary: Record<string, ActionData> = {};
+actionsArray.forEach((action) => {
+  actionDictionary[action.id] = action;
+});
+
+export const getActionById = (id: string | null): ActionData | null => {
+  if (!id) return null;
+  return actionDictionary[id] || null;
+};
+
+export const getActionsByIds = (ids: string[]): ActionData[] => {
+  return ids
+    .map((id) => actionDictionary[id])
+    .filter((action): action is ActionData => action !== undefined);
+};
+
+export const getAllActions = (): ActionData[] => {
+  return actionsArray;
+};
 
 // Mock getter
 // export const getTraitsByIds = (ids: string[]) => {

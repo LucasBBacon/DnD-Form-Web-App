@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { getRaceById, getSubracesForRace } from "./staticDataApi";
+import {
+  getActionById,
+  getActionsByIds,
+  getRaceById,
+  getSubracesForRace,
+} from "./staticDataApi";
 
 describe("getSubracesForRace", () => {
   it("derives children from parentRaceId links", () => {
@@ -21,5 +26,25 @@ describe("getSubracesForRace", () => {
     expect(race).not.toBeNull();
     expect(race?.subraceInfo).not.toBeNull();
     expect("optionsPool" in (race?.subraceInfo ?? {})).toBe(false);
+  });
+});
+
+describe("Actions static API", () => {
+  it("resolves an action by id", () => {
+    const action = getActionById("action_breath_weapon_cold_cone");
+
+    expect(action).not.toBeNull();
+    expect(action?.name).toBe("Cold Breath");
+    expect(action?.activation.actionType).toBe("action");
+  });
+
+  it("filters unresolved action ids when resolving in bulk", () => {
+    const actions = getActionsByIds([
+      "action_breath_weapon_cold_cone",
+      "action_missing",
+    ]);
+
+    expect(actions).toHaveLength(1);
+    expect(actions[0].id).toBe("action_breath_weapon_cold_cone");
   });
 });

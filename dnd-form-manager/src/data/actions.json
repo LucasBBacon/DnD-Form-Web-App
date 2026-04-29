@@ -1,0 +1,42 @@
+[
+  {
+    "id": "action_breath_weapon_cold_cone",
+    "name": "Cold Breath",
+    "activation": {
+      "actionType": "action"
+    },
+    "range": {
+      "type": "self"
+    },
+    "areaOfEffect": {
+      "shape": "cone",
+      "size": 15
+    },
+    "savingThrow": {
+      "ability": "con",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "con"
+      },
+      "onSave": "half_damage"
+    },
+    "output": {
+      "damage": [
+        {
+          "type": "cold",
+          "roll": "2d6",
+          "addModifier": false,
+          "scaling": {
+            "type": "character_level",
+            "thresholds": {
+              "6": "3d6",
+              "11": "4d6",
+              "15": "5d6"
+            }
+          }
+        }
+      ]
+    }
+  }
+]

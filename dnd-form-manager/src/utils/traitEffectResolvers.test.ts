@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { TraitData } from "../types/trait";
 import {
   getPendingAbilityBonusChoicesFromTraits,
+  resolveGrantedActionsFromTraits,
   resolveBaseSpeedFromTraits,
   resolveFixedAbilityBonusesFromTraits,
   resolveSizeFromTraits,
@@ -87,5 +88,37 @@ describe("traitEffectResolvers", () => {
     expect(resolveBaseSpeedFromTraits(traits, 3, 30)).toBe(35);
     expect(resolveSizeFromTraits(traits, 1, "medium")).toBe("small");
     expect(resolveSizeFromTraits(traits, 5, "small")).toBe("medium");
+  });
+
+  it("resolves trait-granted actions with level gating and de-duplication", () => {
+    const traits: TraitData[] = [
+      {
+        id: "trait_breath",
+        name: "Breath",
+        lore: { shortDescription: "" },
+        effects: [
+          { type: "action_grant", value: "action_breath_weapon_cold_cone" },
+          {
+            type: "action_grant",
+            value: "action_breath_weapon_cold_cone",
+            levelAvailable: 3,
+          },
+        ],
+      },
+      {
+        id: "trait_unknown",
+        name: "Unknown",
+        lore: { shortDescription: "" },
+        effects: [{ type: "action_grant", value: "action_does_not_exist" }],
+      },
+    ];
+
+    const levelOne = resolveGrantedActionsFromTraits(traits, 1);
+    expect(levelOne).toHaveLength(1);
+    expect(levelOne[0].id).toBe("action_breath_weapon_cold_cone");
+
+    const levelThree = resolveGrantedActionsFromTraits(traits, 3);
+    expect(levelThree).toHaveLength(1);
+    expect(levelThree[0].id).toBe("action_breath_weapon_cold_cone");
   });
 });

@@ -218,6 +218,7 @@
                     "type": {
                         "type": "string",
                         "enum": [
+                            "action_grant",
                             "advantage",
                             "disadvantage",
                             "resistance",

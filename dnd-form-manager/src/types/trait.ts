@@ -3,6 +3,7 @@ import type { Predicate } from "./predicate";
 
 export interface TraitEffect {
   type:
+    | "action_grant"
     | "advantage"
     | "disadvantage"
     | "sense"
