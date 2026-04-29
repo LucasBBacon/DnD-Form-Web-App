@@ -45,6 +45,7 @@ export const getSubraceById = (id: string | null): SubraceData | null => {
 };
 
 export const getSubracesForRace = (raceId: string): SubraceData[] => {
+  // Canonical race->subrace relationship: subrace.parentRaceId matches race.id.
   return subracesArray.filter((sr) => sr.parentRaceId === raceId);
 };
 

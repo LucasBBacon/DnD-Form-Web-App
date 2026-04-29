@@ -24,12 +24,8 @@
         "object",
         "null"
       ],
-      "description": "If null, this race has no subraces. If present, forces a choice.",
+      "description": "If null, this race has no subraces. If present, metadata is provided for subrace UI labeling.",
       "properties": {
-        "optionsPool": {
-          "type": "string",
-          "description": "e.g., 'subraces_elf'"
-        },
         "displayLabel": {
           "type": "string",
           "description": "e.g., 'Draconic Ancestry'"

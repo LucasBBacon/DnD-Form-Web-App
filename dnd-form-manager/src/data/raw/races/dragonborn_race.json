@@ -9,7 +9,6 @@
         "trait_dragonborn_languages"
     ],
     "subraceInfo": {
-        "optionsPool": "subraces_dragonborn",
         "displayLabel": "Draconic Ancestry"
     },
     "lore": {

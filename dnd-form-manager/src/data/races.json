@@ -10,7 +10,6 @@
       "trait_dragonborn_languages"
     ],
     "subraceInfo": {
-      "optionsPool": "subraces_dragonborn",
       "displayLabel": "Draconic Ancestry"
     },
     "lore": {
@@ -53,7 +52,7 @@
       "trait_dwarf_languages"
     ],
     "subraceInfo": {
-      "optionsPool": "subraces_dwarf"
+      "displayLabel": "Subrace"
     },
     "lore": {
       "shortDescription": "Mountain-dwelling craftspeople of ancient strongholds, bound by fierce clan loyalty and a long memory for both tradition and grudges.",
@@ -85,7 +84,7 @@
       "trait_elf_languages"
     ],
     "subraceInfo": {
-      "optionsPool": "subraces_elf"
+      "displayLabel": "Subrace"
     },
     "lore": {
       "shortDescription": "Graceful, magical beings with an otherworldly nature, devoted to beauty, art, and the wonders of the natural world.",
@@ -105,7 +104,7 @@
       "trait_gnome_languages"
     ],
     "subraceInfo": {
-      "optionsPool": "subraces_gnome"
+      "displayLabel": "Subrace"
     },
     "lore": {
       "shortDescription": "Clever inventors and tinkerers living in close-knit communities, driven by boundless curiosity, creativity, and an infectious love of life's adventures.",
@@ -258,7 +257,7 @@
       "trait_halfling_languages"
     ],
     "subraceInfo": {
-      "optionsPool": "subraces_halfling"
+      "displayLabel": "Subrace"
     },
     "lore": {
       "shortDescription": "Peace-loving folk who prize hearth, good food, and quiet communities, whether settled in villages or wandering the open road.",

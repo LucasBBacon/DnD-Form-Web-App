@@ -15,7 +15,7 @@
         "trait_dwarf_languages"
     ],
     "subraceInfo": {
-        "optionsPool": "subraces_dwarf"
+        "displayLabel": "Subrace"
     },
     "lore": {
         "shortDescription": "Mountain-dwelling craftspeople of ancient strongholds, bound by fierce clan loyalty and a long memory for both tradition and grudges.",

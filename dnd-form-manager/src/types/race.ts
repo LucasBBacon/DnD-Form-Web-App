@@ -4,7 +4,6 @@ export interface Race {
   description?: string;
   traits?: string[]; // Trait IDs
   subraceInfo: {
-    optionsPool: string; // Subrace grouping ID
     displayLabel?: string;
   } | null;
   lore: {

@@ -27,7 +27,7 @@
         "trait_halfling_languages"
     ],
     "subraceInfo": {
-        "optionsPool": "subraces_halfling"
+        "displayLabel": "Subrace"
     },
     "lore": {
         "shortDescription": "Peace-loving folk who prize hearth, good food, and quiet communities, whether settled in villages or wandering the open road.",

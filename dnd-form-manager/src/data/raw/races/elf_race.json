@@ -13,7 +13,7 @@
         "trait_elf_languages"
     ],
     "subraceInfo": {
-        "optionsPool": "subraces_elf"
+        "displayLabel": "Subrace"
     },
     "lore": {
         "shortDescription": "Graceful, magical beings with an otherworldly nature, devoted to beauty, art, and the wonders of the natural world.",

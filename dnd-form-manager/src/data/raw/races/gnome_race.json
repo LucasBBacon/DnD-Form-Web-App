@@ -11,7 +11,7 @@
         "trait_gnome_languages"
     ],
     "subraceInfo": {
-        "optionsPool": "subraces_gnome"
+        "displayLabel": "Subrace"
     },
     "lore": {
         "shortDescription": "Clever inventors and tinkerers living in close-knit communities, driven by boundless curiosity, creativity, and an infectious love of life's adventures.",
