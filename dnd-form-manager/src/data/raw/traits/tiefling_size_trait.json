@@ -1,0 +1,14 @@
+{
+    "id": "trait_tiefling_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium.",
+        "fullText": "Tieflings are about the same size and build as humans. Your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "target": "medium"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "id": "trait_tiefling_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+1 Intelligence, +2 Charisma",
+        "fullText": "Your Intelligence score increases by 1, and your Charisma score increases by 2."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "int",
+            "value": 1
+        },
+        {
+            "type": "ability_bonus_fixed",
+            "target": "cha",
+            "value": 2
+        }
+    ]
+}

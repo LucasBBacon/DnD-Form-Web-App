@@ -19,7 +19,8 @@
                     "lang_dwarvish",
                     "lang_orc",
                     "lang_halfling",
-                    "lang_draconic"
+                    "lang_draconic",
+                    "lang_infernal"
                 ]
             }
         }

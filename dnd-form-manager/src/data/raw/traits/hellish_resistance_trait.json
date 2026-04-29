@@ -1,0 +1,14 @@
+{
+    "id": "trait_hellish_resistance",
+    "name": "Hellish Resistance",
+    "lore": {
+        "shortDescription": "You have resistance to fire damage.",
+        "fullText": "You have resistance to fire damage."
+    },
+    "effects": [
+        {
+            "type": "resistance",
+            "target": "fire_damage"
+        }
+    ]
+}

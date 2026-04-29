@@ -1,0 +1,8 @@
+{
+    "id": "trait_tiefling_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood around 19 and live less than 100 years.",
+        "fullText": "Tieflings mature at the same rate as humans but live a few years longer."
+    }
+}

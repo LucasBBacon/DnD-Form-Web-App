@@ -1552,6 +1552,20 @@
     ]
   },
   {
+    "id": "trait_hellish_resistance",
+    "name": "Hellish Resistance",
+    "lore": {
+      "shortDescription": "You have resistance to fire damage.",
+      "fullText": "You have resistance to fire damage."
+    },
+    "effects": [
+      {
+        "type": "resistance",
+        "target": "fire_damage"
+      }
+    ]
+  },
+  {
     "id": "trait_human_ability_bonuses",
     "name": "Ability Score Increase",
     "lore": {
@@ -1620,7 +1634,8 @@
             "lang_dwarvish",
             "lang_orc",
             "lang_halfling",
-            "lang_draconic"
+            "lang_draconic",
+            "lang_infernal"
           ]
         }
       }
@@ -1654,6 +1669,14 @@
         "value": 30
       }
     ]
+  },
+  {
+    "id": "trait_infernal_legacy",
+    "name": "Infernal Legacy",
+    "lore": {
+      "shortDescription": "You gain knowledge of certain spells related to your infernal heritage.",
+      "fullText": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+    }
   },
   {
     "id": "trait_jack_of_all_trades",
@@ -2121,6 +2144,81 @@
       {
         "type": "resistance",
         "target": "poison_damage"
+      }
+    ]
+  },
+  {
+    "id": "trait_tiefling_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 Intelligence, +2 Charisma",
+      "fullText": "Your Intelligence score increases by 1, and your Charisma score increases by 2."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "int",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "cha",
+        "value": 2
+      }
+    ]
+  },
+  {
+    "id": "trait_tiefling_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood around 19 and live less than 100 years.",
+      "fullText": "Tieflings mature at the same rate as humans but live a few years longer."
+    }
+  },
+  {
+    "id": "trait_tiefling_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and Infernal.",
+      "fullText": "You can speak, read, and write Common and Infernal."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_infernal"
+      }
+    ]
+  },
+  {
+    "id": "trait_tiefling_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Medium.",
+      "fullText": "Tieflings are about the same size and build as humans. Your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "target": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_tiefling_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
       }
     ]
   },

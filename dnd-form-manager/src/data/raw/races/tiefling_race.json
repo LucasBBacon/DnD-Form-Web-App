@@ -18,9 +18,14 @@
         ]
     },
     "traits": [
+        "trait_tiefling_ability_bonuses",
+        "trait_tiefling_age",
+        "trait_tiefling_size",
+        "trait_tiefling_speed",
         "trait_darkvision_60",
         "trait_hellish_resistance",
-        "trait_infernal_legacy"
+        "trait_infernal_legacy",
+        "trait_tiefling_language"
     ],
     "lore": {
         "shortDescription": "Marked by infernal blood and burdened by ancient prejudice, tieflings endure mistrust with resilience and defiant self-determination.",
