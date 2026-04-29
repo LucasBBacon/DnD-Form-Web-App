@@ -1,0 +1,14 @@
+{
+    "id": "trait_half_elf_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium",
+        "fullText": "Half-elves are about the same size as humans, ranging from 5 to 6 feet tall. Your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "medium"
+        }
+    ]
+}

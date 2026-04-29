@@ -1,0 +1,23 @@
+{
+    "id": "trait_half_elf_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+2 Charisma, +1 to two other ability scores of your choice.",
+        "fullText": "Your Charisma score increases by 2, and two other ability scores of your choice increase by 1."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "cha",
+            "value": 2
+        },
+        {
+            "type": "ability_bonus_choice",
+            "choice": {
+                "count": 2,
+                "bonus": 1,
+                "pool": ["str", "dex", "con", "int", "wis"]
+            }
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "id": "trait_skill_versatility",
+    "name": "Skill Versatility",
+    "lore": {
+        "shortDescription": "You gain proficiency in two skills of your choice.",
+        "fullText": "You gain proficiency in two skills of your choice."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "skill",
+            "choice": {
+                "count": 2,
+                "pool": "any"
+            }
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+    "id": "trait_half_elf_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common, Elvish, and one extra language of your choice.",
+        "fullText": "You can speak, read, and write Common, Elvish, and one extra language of your choice."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "target": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "target": "lang_elvish"
+        },
+        {
+            "type": "language_choice",
+            "choice": {
+                "count": 1,
+                "pool": ["lang_dwarvish", "lang_giant", "lang_gnomish", "lang_orc", "lang_undercommon"]
+            }
+        }
+    ]
+}

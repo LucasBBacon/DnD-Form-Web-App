@@ -234,6 +234,7 @@
                             "ac_calculation",
                             "proficiency_choice",
                             "language_grant",
+                            "language_choice",
                             "other"
                         ],
                         "description": "The kind of effect this entry applies."

@@ -1,0 +1,8 @@
+{
+    "id": "trait_half_elf_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood at around 20, and live often exceeding 180 years.",
+        "fullText": "Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years."
+    }
+}

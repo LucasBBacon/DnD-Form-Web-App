@@ -141,24 +141,6 @@
     "speed": {
       "walk": 30
     },
-    "abilityBonuses": {
-      "fixed": {
-        "cha": 2
-      },
-      "choices": [
-        {
-          "count": 2,
-          "bonus": 1,
-          "options": [
-            "str",
-            "dex",
-            "con",
-            "int",
-            "wis"
-          ]
-        }
-      ]
-    },
     "languages": {
       "known": [
         "lang_common",
@@ -170,9 +152,14 @@
       }
     },
     "traits": [
+      "trait_half_elf_ability_bonuses",
+      "trait_half_elf_age",
+      "trait_half_elf_size",
+      "trait_half_elf_speed",
       "trait_darkvision_60",
       "trait_fey_ancestry",
-      "trait_skill_versatility"
+      "trait_skill_versatility",
+      "trait_half_elf_languages"
     ],
     "lore": {
       "shortDescription": "Caught between two worlds, half-elves blend human ambition and curiosity with elven grace and artistry, often becoming wanderers and adventurers.",

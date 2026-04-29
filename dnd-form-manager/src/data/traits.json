@@ -1258,6 +1258,103 @@
     ]
   },
   {
+    "id": "trait_half_elf_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+2 Charisma, +1 to two other ability scores of your choice.",
+      "fullText": "Your Charisma score increases by 2, and two other ability scores of your choice increase by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "cha",
+        "value": 2
+      },
+      {
+        "type": "ability_bonus_choice",
+        "choice": {
+          "count": 2,
+          "bonus": 1,
+          "pool": [
+            "str",
+            "dex",
+            "con",
+            "int",
+            "wis"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_half_elf_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood at around 20, and live often exceeding 180 years.",
+      "fullText": "Half-elves mature at the same rate humans do and reach adulthood around the age of 20. They live much longer than humans, however, often exceeding 180 years."
+    }
+  },
+  {
+    "id": "trait_half_elf_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common, Elvish, and one extra language of your choice.",
+      "fullText": "You can speak, read, and write Common, Elvish, and one extra language of your choice."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_elvish"
+      },
+      {
+        "type": "language_choice",
+        "choice": {
+          "count": 1,
+          "pool": [
+            "lang_dwarvish",
+            "lang_giant",
+            "lang_gnomish",
+            "lang_orc",
+            "lang_undercommon"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_half_elf_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Medium",
+      "fullText": "Half-elves are about the same size as humans, ranging from 5 to 6 feet tall. Your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_half_elf_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
+      }
+    ]
+  },
+  {
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {
@@ -1537,6 +1634,24 @@
             "value": "dim_light"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "trait_skill_versatility",
+    "name": "Skill Versatility",
+    "lore": {
+      "shortDescription": "You gain proficiency in two skills of your choice.",
+      "fullText": "You gain proficiency in two skills of your choice."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "skill",
+        "choice": {
+          "count": 2,
+          "pool": "any"
+        }
       }
     ]
   },
