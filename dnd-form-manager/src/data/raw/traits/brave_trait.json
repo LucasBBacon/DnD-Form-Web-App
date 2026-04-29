@@ -1,0 +1,14 @@
+{
+    "id": "trait_brave",
+    "name": "Brave",
+    "lore": {
+        "shortDescription": "You have advantage on saving throws against being frightened.",
+        "fullText": "You have advantage on saving throws against being frightened."
+    },
+    "effects": [
+        {
+            "type": "advantage",
+            "target": "against_frightened"
+        }
+    ]
+}

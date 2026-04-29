@@ -1,0 +1,15 @@
+{
+    "id": "trait_halfling_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+2 Dexterity",
+        "fullText": "Your Dexterity score increases by 2."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "dex",
+            "value": 2
+        }
+    ]
+}

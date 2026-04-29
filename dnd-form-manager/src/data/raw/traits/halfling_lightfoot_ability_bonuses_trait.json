@@ -1,0 +1,15 @@
+{
+    "id": "trait_halfling_lightfoot_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+1 Charisma",
+        "fullText": "Your Charisma score increases by 1."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "cha",
+            "value": 1
+        }
+    ]
+}

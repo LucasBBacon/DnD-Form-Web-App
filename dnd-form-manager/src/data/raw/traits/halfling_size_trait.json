@@ -1,0 +1,14 @@
+{
+    "id": "trait_halfling_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Small.",
+        "fullText": "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "small"
+        }
+    ]
+}

@@ -248,9 +248,14 @@
       ]
     },
     "traits": [
+      "trait_halfling_ability_bonuses",
+      "trait_halfling_age",
+      "trait_halfling_size",
+      "trait_halfling_speed",
       "trait_lucky",
       "trait_brave",
-      "trait_halfling_nimbleness"
+      "trait_halfling_nimbleness",
+      "trait_halfling_languages"
     ],
     "subraceInfo": {
       "optionsPool": "subraces_halfling"

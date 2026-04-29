@@ -1,0 +1,8 @@
+{
+    "id": "trait_halfling_nimbleness",
+    "name": "Halfling Nimbleness",
+    "lore": {
+        "shortDescription": "You can move through the space of any creature that is of a size larger than yours.",
+        "fullText": "You can move through the space of any creature that is of a size larger than yours."
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "id": "trait_halfling_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood at 20, and usually live into your mid first or second century.",
+        "fullText": "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century."
+    }
+}

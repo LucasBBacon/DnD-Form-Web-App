@@ -1,0 +1,13 @@
+{
+    "id": "subrace_halfling_stout",
+    "name": "Stout Halfling",
+    "parentRaceId": "race_halfling",
+    "lore": {
+        "shortDescription": "Stout halflings are hardy and resilient, often with a touch of dwarven blood.",
+        "fullText": "As a stout halfling, you're hardier than average and have some resistance to poison. Some say that stouts have dwarven blood. In the Forgotten Realms, these halflings are called stronghearts, and they're most common in the south."
+    },
+    "traitsAdded": [
+        "trait_halfling_stout_ability_bonuses",
+        "trait_stout_resilience"
+    ]
+}

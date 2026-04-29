@@ -226,5 +226,31 @@
       "trait_artificers_lore",
       "trait_tinker"
     ]
+  },
+  {
+    "id": "subrace_halfling_lightfoot",
+    "name": "Lightfoot Halfling",
+    "parentRaceId": "race_halfling",
+    "lore": {
+      "shortDescription": "Lightfoot halflings are nimble and sociable, often blending into their surroundings.",
+      "fullText": "As a lightfoot halfling, you can easily hide from notice, even using other people as cover. You're inclined to be affable and get along well with others. In the Forgotten Realms, lightfoot halflings have spread the farthest and thus are the most common variety.\nLightfoots are more prone to wanderlust than other halflings, and often dwell alongside other races or take up a nomadic life. In the world of Greyhawk, these halflings are called hairfeet or tallfellows."
+    },
+    "traitsAdded": [
+      "trait_halfling_lightfoot_ability_bonuses",
+      "trait_naturally_stealthy"
+    ]
+  },
+  {
+    "id": "subrace_halfling_stout",
+    "name": "Stout Halfling",
+    "parentRaceId": "race_halfling",
+    "lore": {
+      "shortDescription": "Stout halflings are hardy and resilient, often with a touch of dwarven blood.",
+      "fullText": "As a stout halfling, you're hardier than average and have some resistance to poison. Some say that stouts have dwarven blood. In the Forgotten Realms, these halflings are called stronghearts, and they're most common in the south."
+    },
+    "traitsAdded": [
+      "trait_halfling_stout_ability_bonuses",
+      "trait_stout_resilience"
+    ]
   }
 ]

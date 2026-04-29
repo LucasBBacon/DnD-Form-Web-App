@@ -1,0 +1,8 @@
+{
+    "id": "trait_naturally_stealthy",
+    "name": "Naturally Stealthy",
+    "lore": {
+        "shortDescription": "You can attempt to hide even when you are only lightly obscured.",
+        "fullText": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+    }
+}
