@@ -1,0 +1,20 @@
+{
+    "id": "trait_half_orc_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+        "shortDescription": "+2 Strength, +1 Constitution",
+        "fullText": "Your Strength score increases by 2, and your Constitution score increases by 1."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "str",
+            "value": 2
+        },
+        {
+            "type": "ability_bonus_fixed",
+            "target": "con",
+            "value": 1
+        }
+    ]
+}

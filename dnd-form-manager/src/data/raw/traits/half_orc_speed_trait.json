@@ -1,0 +1,15 @@
+{
+    "id": "trait_half_orc_speed",
+    "name": "Speed",
+    "lore": {
+        "shortDescription": "Base walking speed of 30 feet.",
+        "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+        {
+            "type": "stat_modifier",
+            "target": "base_speed",
+            "value": 30
+        }
+    ]
+}

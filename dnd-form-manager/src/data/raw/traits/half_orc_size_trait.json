@@ -1,0 +1,14 @@
+{
+    "id": "trait_half_orc_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium.",
+        "fullText": "Half-orcs are somewhat larger and bulkier than humans, and they range from 5 to well over 6 feet tall. Your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "value": "medium"
+        }
+    ]
+}

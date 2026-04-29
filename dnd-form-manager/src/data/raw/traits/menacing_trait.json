@@ -1,0 +1,14 @@
+{
+    "id": "trait_menacing",
+    "name": "Menacing",
+    "lore": {
+        "shortDescription": "You gain proficiency in the Intimidation skill.",
+        "fullText": "You gain proficiency in the Intimidation skill."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "intimidation"
+        }
+    ]
+}

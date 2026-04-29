@@ -1,0 +1,18 @@
+{
+    "id": "trait_half_orc_languages",
+    "name": "Languages",
+    "lore": {
+        "shortDescription": "You can speak, read, and write Common and Orc.",
+        "fullText": "You can speak, read, and write Common and Orc. Orc is a harsh, grating language with hard consonants. It has no script of its own but is written in the Dwarvish script."
+    },
+    "effects": [
+        {
+            "type": "language_grant",
+            "target": "lang_common"
+        },
+        {
+            "type": "language_grant",
+            "target": "lang_orc"
+        }
+    ]
+}

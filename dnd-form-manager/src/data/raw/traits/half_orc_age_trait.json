@@ -1,0 +1,8 @@
+{
+    "id": "trait_half_orc_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood at age 14, and rarely live longer than 75 years.",
+        "fullText": "Half-orcs mature a little faster than humans, reaching adulthood around age 14. They age noticeably faster and rarely live longer than 75 years."
+    }
+}

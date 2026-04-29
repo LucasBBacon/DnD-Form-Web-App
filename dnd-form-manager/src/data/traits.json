@@ -1355,6 +1355,81 @@
     ]
   },
   {
+    "id": "trait_half_orc_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+2 Strength, +1 Constitution",
+      "fullText": "Your Strength score increases by 2, and your Constitution score increases by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "str",
+        "value": 2
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "con",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_half_orc_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood at age 14, and rarely live longer than 75 years.",
+      "fullText": "Half-orcs mature a little faster than humans, reaching adulthood around age 14. They age noticeably faster and rarely live longer than 75 years."
+    }
+  },
+  {
+    "id": "trait_half_orc_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and Orc.",
+      "fullText": "You can speak, read, and write Common and Orc. Orc is a harsh, grating language with hard consonants. It has no script of its own but is written in the Dwarvish script."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_grant",
+        "target": "lang_orc"
+      }
+    ]
+  },
+  {
+    "id": "trait_half_orc_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Medium",
+      "fullText": "Half-orcs are somewhat larger and bulkier than humans, and they range from 5 to well over 6 feet tall. Your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "value": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_half_orc_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Base walking speed of 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
+      }
+    ]
+  },
+  {
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {
@@ -1389,6 +1464,20 @@
       "shortDescription": "You can attempt to hide in lightly obscured natural environments.",
       "fullText": "You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
     }
+  },
+  {
+    "id": "trait_menacing",
+    "name": "Menacing",
+    "lore": {
+      "shortDescription": "You gain proficiency in the Intimidation skill.",
+      "fullText": "You gain proficiency in the Intimidation skill."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "target": "intimidation"
+      }
+    ]
   },
   {
     "id": "trait_monk_proficiencies",
@@ -1549,6 +1638,14 @@
     ]
   },
   {
+    "id": "trait_relentless_endurance",
+    "name": "Relentless Endurance",
+    "lore": {
+      "shortDescription": "Drop to 1 hit point instead of 0 once per long rest.",
+      "fullText": "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest."
+    }
+  },
+  {
     "id": "trait_rogue_proficiencies",
     "name": "Rogue Proficiencies",
     "lore": {
@@ -1612,6 +1709,14 @@
         }
       }
     ]
+  },
+  {
+    "id": "trait_savage_attacks",
+    "name": "Savage Attacks",
+    "lore": {
+      "shortDescription": "Roll one of the weapon's damage dice one additional time on a critical hit.",
+      "fullText": "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
+    }
   },
   {
     "id": "trait_shadow_stalker",

@@ -208,10 +208,15 @@
       ]
     },
     "traits": [
+      "trait_half_orc_ability_bonuses",
+      "trait_half_orc_age",
+      "trait_half_orc_size",
+      "trait_half_orc_speed",
       "trait_darkvision_60",
       "trait_menacing",
       "trait_relentless_endurance",
-      "trait_savage_attacks"
+      "trait_savage_attacks",
+      "trait_half_orc_languages"
     ],
     "lore": {
       "shortDescription": "Born of human and orc blood, half-orcs are powerful, fierce, and driven to prove their strength in both savage and civilized worlds.",
