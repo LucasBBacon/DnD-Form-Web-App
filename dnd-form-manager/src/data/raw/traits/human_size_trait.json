@@ -1,0 +1,14 @@
+{
+    "id": "trait_human_size",
+    "name": "Size",
+    "lore": {
+        "shortDescription": "Your size is Medium.",
+        "fullText": "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium."
+    },
+    "effects": [
+        {
+            "type": "size_set",
+            "target": "medium"
+        }
+    ]
+}

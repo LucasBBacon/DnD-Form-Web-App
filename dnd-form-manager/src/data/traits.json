@@ -1552,6 +1552,110 @@
     ]
   },
   {
+    "id": "trait_human_ability_bonuses",
+    "name": "Ability Score Increase",
+    "lore": {
+      "shortDescription": "+1 to all ability scores",
+      "fullText": "Your ability scores each increase by 1."
+    },
+    "effects": [
+      {
+        "type": "ability_bonus_fixed",
+        "target": "wis",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "int",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "str",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "dex",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "con",
+        "value": 1
+      },
+      {
+        "type": "ability_bonus_fixed",
+        "target": "cha",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "trait_human_age",
+    "name": "Age",
+    "lore": {
+      "shortDescription": "You reach adulthood around 19 and live less than 100 years.",
+      "fullText": "Humans reach adulthood in their late teens and live less than a century."
+    }
+  },
+  {
+    "id": "trait_human_languages",
+    "name": "Languages",
+    "lore": {
+      "shortDescription": "You can speak, read, and write Common and one extra language of your choice.",
+      "fullText": "You can speak, read, and write Common and one extra language of your choice. Humans typically learn the languages of other peoples they deal with, including obscure dialects. They are fond of sprinkling their speech with words borrowed from other tongues: Orc curses, Elvish musical expressions, Dwarvish military phrases, and so on."
+    },
+    "effects": [
+      {
+        "type": "language_grant",
+        "target": "lang_common"
+      },
+      {
+        "type": "language_choice",
+        "choice": {
+          "count": 1,
+          "pool": [
+            "lang_elvish",
+            "lang_dwarvish",
+            "lang_orc",
+            "lang_halfling",
+            "lang_draconic"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "trait_human_size",
+    "name": "Size",
+    "lore": {
+      "shortDescription": "Your size is Medium.",
+      "fullText": "Humans vary widely in height and build, from barely 5 feet to well over 6 feet tall. Regardless of your position in that range, your size is Medium."
+    },
+    "effects": [
+      {
+        "type": "size_set",
+        "target": "medium"
+      }
+    ]
+  },
+  {
+    "id": "trait_human_speed",
+    "name": "Speed",
+    "lore": {
+      "shortDescription": "Your base walking speed is 30 feet.",
+      "fullText": "Your base walking speed is 30 feet."
+    },
+    "effects": [
+      {
+        "type": "stat_modifier",
+        "target": "base_speed",
+        "value": 30
+      }
+    ]
+  },
+  {
     "id": "trait_jack_of_all_trades",
     "name": "Jack of All Trades",
     "lore": {

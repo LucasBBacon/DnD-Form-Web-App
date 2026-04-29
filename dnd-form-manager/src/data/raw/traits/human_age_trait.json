@@ -1,0 +1,8 @@
+{
+    "id": "trait_human_age",
+    "name": "Age",
+    "lore": {
+        "shortDescription": "You reach adulthood around 19 and live less than 100 years.",
+        "fullText": "Humans reach adulthood in their late teens and live less than a century."
+    }
+}
