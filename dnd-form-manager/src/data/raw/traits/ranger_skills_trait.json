@@ -1,5 +1,6 @@
 {
     "id": "trait_ranger_skills",
+    "isStartingProficiency": true,
     "name": "Ranger Skills",
     "lore": {
         "shortDescription": ""

@@ -1,0 +1,12 @@
+{
+    "id": "trait_paladin_mult_prof_weapons",
+    "name": "Multiclass Weapon Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with simple and martial weapons.",
+        "fullText": "If you multiclass into Paladin, you gain proficiency with simple and martial weapons."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "weapons", "value": "simple" },
+        { "type": "proficiency", "target": "weapons", "value": "martial" }
+    ]
+}

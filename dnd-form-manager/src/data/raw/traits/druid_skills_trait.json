@@ -1,5 +1,6 @@
 {
     "id": "trait_druid_skills",
+    "isStartingProficiency": true,
     "name": "Druid Skills",
     "lore": {
         "shortDescription": ""

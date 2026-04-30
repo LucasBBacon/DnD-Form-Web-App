@@ -1,0 +1,21 @@
+{
+    "id": "trait_bard_prof_saving_throw",
+    "isStartingProficiency": true,
+    "name": "Saving Throws Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency in Dexterity and Charisma saving throws.",
+        "fullText": "Gain proficiency in Dexterity and Charisma saving throws."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "dex"
+        },
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "cha"
+        }
+    ]
+}

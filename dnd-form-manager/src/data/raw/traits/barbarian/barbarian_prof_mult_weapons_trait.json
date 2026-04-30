@@ -1,0 +1,15 @@
+{
+    "id": "trait_barbarian_mult_prof_weapons",
+    "name": "Multiclass Weapon Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with martial weapons.",
+        "fullText": "If you multiclass into Barbarian, you gain proficiency with martial weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapons",
+            "value": "martial"
+        }
+    ]
+}

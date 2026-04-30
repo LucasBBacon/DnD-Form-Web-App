@@ -1,0 +1,11 @@
+{
+    "id": "trait_warlock_mult_prof_weapons",
+    "name": "Multiclass Weapon Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with simple weapons.",
+        "fullText": "If you multiclass into Warlock, you gain proficiency with simple weapons."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "weapons", "value": "simple" }
+    ]
+}

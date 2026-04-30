@@ -1,5 +1,6 @@
 {
     "id": "trait_monk_skills",
+    "isStartingProficiency": true,
     "name": "Monk Skills",
     "lore": {
         "shortDescription": ""

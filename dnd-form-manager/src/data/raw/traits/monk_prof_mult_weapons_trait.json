@@ -1,0 +1,12 @@
+{
+    "id": "trait_monk_mult_prof_weapons",
+    "name": "Multiclass Weapon Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with simple weapons and shortswords.",
+        "fullText": "If you multiclass into Monk, you gain proficiency with simple weapons and shortswords."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "weapons", "value": "simple" },
+        { "type": "proficiency", "target": "weapons", "value": "shortsword" }
+    ]
+}

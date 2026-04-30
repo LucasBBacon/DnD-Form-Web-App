@@ -1,5 +1,6 @@
 {
     "id": "trait_druid_proficiencies",
+    "isStartingProficiency": true,
     "name": "Druid Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor, medium armor, shields, druid weapons, and the herbalism kit."

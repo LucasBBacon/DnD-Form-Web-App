@@ -1,0 +1,15 @@
+{
+    "id": "trait_barbarian_mult_prof_armor",
+    "name": "Multiclass Armor Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with shields.",
+        "fullText": "If you multiclass into Barbarian, you gain proficiency with shields."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "shields"
+        }
+    ]
+}

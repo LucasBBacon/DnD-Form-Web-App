@@ -8,6 +8,7 @@ import {
   getSubclassById,
   getSubraceById,
   getTraitsByIds,
+  getTraitById,
 } from "../data/staticDataApi";
 
 vi.mock("../data/staticDataApi", () => ({
@@ -17,6 +18,7 @@ vi.mock("../data/staticDataApi", () => ({
   getSubclassById: vi.fn(),
   getSubraceById: vi.fn(),
   getTraitsByIds: vi.fn(),
+  getTraitById: vi.fn(),
 }));
 
 const createProgressionEntry = (level: number, features: string[] = []) =>

@@ -1,0 +1,15 @@
+{
+    "id": "trait_bard_mult_prof_armor",
+    "name": "Multiclass Armor Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency with light armor.",
+        "fullText": "Gain proficiency with light armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        }
+    ]
+}

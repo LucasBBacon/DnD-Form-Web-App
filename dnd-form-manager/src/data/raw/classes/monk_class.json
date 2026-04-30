@@ -1,311 +1,300 @@
 {
-    "id": "class_monk",
-    "name": "Monk",
-    "hitDie": 8,
-    "proficiencies": {
-        "savingThrows": [
-            "str",
-            "dex"
-        ]
-    },
-    "multiclassProficiencies": {
-        "armor": [],
-        "weapons": [
-            "category_weapon_simple",
-            "weapon_shortsword"
-        ],
-        "tools": [],
-        "skills": {}
-    },
-    "startingEquipment": {
-        "given": [
-            {
-                "itemId": "weapon_dart",
-                "quantity": 10
-            }
-        ],
-        "choices": [
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "weapon_shortsword",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "category_weapon_simple",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_dungeoneers",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_explorers",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "subclassInfo": {
-        "choiceLevel": 3,
-        "optionsPool": "subclasses_monk"
-    },
-    "progression": [
-        {
-            "level": 1,
-            "features": [
-                "trait_monk_proficiencies",
-                "trait_monk_skills",
-                "trait_unarmored_defense_monk",
-                "trait_martial_arts"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d4",
-                "ki_points": 0,
-                "unarmored_movement_bonus": 0
-            }
-        },
-        {
-            "level": 2,
-            "features": [
-                "trait_ki",
-                "trait_unarmored_movement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d4",
-                "ki_points": 2,
-                "unarmored_movement_bonus": 10
-            }
-        },
-        {
-            "level": 3,
-            "features": [
-                "trait_monastic_tradition",
-                "trait_deflect_missiles"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d4",
-                "ki_points": 3,
-                "unarmored_movement_bonus": 10
-            }
-        },
-        {
-            "level": 4,
-            "features": [
-                "trait_ability_score_improvement",
-                "trait_slow_fall"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d4",
-                "ki_points": 4,
-                "unarmored_movement_bonus": 10
-            }
-        },
-        {
-            "level": 5,
-            "features": [
-                "trait_extra_attack",
-                "trait_stunning_strike"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 5,
-                "unarmored_movement_bonus": 10
-            }
-        },
-        {
-            "level": 6,
-            "features": [
-                "trait_ki_empowered_strikes",
-                "trait_monastic_tradition_feature"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 6,
-                "unarmored_movement_bonus": 15
-            }
-        },
-        {
-            "level": 7,
-            "features": [
-                "trait_evasion_monk",
-                "trait_stillness_of_mind"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 7,
-                "unarmored_movement_bonus": 15
-            }
-        },
-        {
-            "level": 8,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 8,
-                "unarmored_movement_bonus": 15
-            }
-        },
-        {
-            "level": 9,
-            "features": [
-                "trait_unarmored_movement_improvement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 9,
-                "unarmored_movement_bonus": 15
-            }
-        },
-        {
-            "level": 10,
-            "features": [
-                "trait_purity_of_body"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d6",
-                "ki_points": 10,
-                "unarmored_movement_bonus": 20
-            }
-        },
-        {
-            "level": 11,
-            "features": [
-                "trait_monastic_tradition_feature"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 11,
-                "unarmored_movement_bonus": 20
-            }
-        },
-        {
-            "level": 12,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 12,
-                "unarmored_movement_bonus": 20
-            }
-        },
-        {
-            "level": 13,
-            "features": [
-                "trait_tongue_of_the_sun_and_moon"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 13,
-                "unarmored_movement_bonus": 20
-            }
-        },
-        {
-            "level": 14,
-            "features": [
-                "trait_diamond_soul"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 14,
-                "unarmored_movement_bonus": 25
-            }
-        },
-        {
-            "level": 15,
-            "features": [
-                "trait_timeless_body"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 15,
-                "unarmored_movement_bonus": 25
-            }
-        },
-        {
-            "level": 16,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d8",
-                "ki_points": 16,
-                "unarmored_movement_bonus": 25
-            }
-        },
-        {
-            "level": 17,
-            "features": [
-                "trait_monastic_tradition_feature"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d10",
-                "ki_points": 17,
-                "unarmored_movement_bonus": 25
-            }
-        },
-        {
-            "level": 18,
-            "features": [
-                "trait_empty_body"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d10",
-                "ki_points": 18,
-                "unarmored_movement_bonus": 30
-            }
-        },
-        {
-            "level": 19,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d10",
-                "ki_points": 19,
-                "unarmored_movement_bonus": 30
-            }
-        },
-        {
-            "level": 20,
-            "features": [
-                "trait_perfect_self"
-            ],
-            "classSpecificScaling": {
-                "martial_arts_dice": "1d10",
-                "ki_points": 20,
-                "unarmored_movement_bonus": 30
-            }
-        }
+  "id": "class_monk",
+  "name": "Monk",
+  "hitDie": 8,
+  "multiclassTraits": [
+    "trait_monk_mult_prof_weapons"
+  ],
+  "startingEquipment": {
+    "given": [
+      {
+        "itemId": "weapon_dart",
+        "quantity": 10
+      }
     ],
-    "lore": {
-        "shortDescription": "Disciplined warriors who harness mystical inner energy to strike swiftly and defend with supernatural grace.",
-        "fullText": "Her fists a blur as they deflect an incoming hail of arrows, a half-elf springs over a barricade and throws herself into the massed ranks of hobgoblins on the other side. She whirls among them, knocking their blows aside and sending them reeling, until at last she stands alone.\nTaking a deep breath. a human covered in tattoos settles into a battle stance. As the first charging orcs reach him, he exhales and a blast of fire roars from his mouth, engulfing his foes.\nMoving with the silence of the night, a black-clad halfling steps into a shadow beneath an arch and emerges from another inky shadow on a balcony a stone's throw away. She slides her blade free of its cloth wrapped scabbard and peers through the open window at the tyrant prince, so vulnerable in the grip of sleep.\nWhatever their discipline, monks are united in their ability to magically harness the energy that flows in their bodies. Whether channeled as a striking display of combat prowess or a subtler focus of defensive ability and speed, this energy infuses all that a monk does."
+    "choices": [
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "weapon_shortsword",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "category_weapon_simple",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_dungeoneers",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_explorers",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "subclassInfo": {
+    "choiceLevel": 3,
+    "optionsPool": "subclasses_monk"
+  },
+  "progression": [
+    {
+      "level": 1,
+      "features": [
+        "trait_monk_prof_saving_throw",
+        "trait_monk_proficiencies",
+        "trait_monk_skills",
+        "trait_unarmored_defense_monk",
+        "trait_martial_arts"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d4",
+        "ki_points": 0,
+        "unarmored_movement_bonus": 0
+      }
+    },
+    {
+      "level": 2,
+      "features": [
+        "trait_ki",
+        "trait_unarmored_movement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d4",
+        "ki_points": 2,
+        "unarmored_movement_bonus": 10
+      }
+    },
+    {
+      "level": 3,
+      "features": [
+        "trait_monastic_tradition",
+        "trait_deflect_missiles"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d4",
+        "ki_points": 3,
+        "unarmored_movement_bonus": 10
+      }
+    },
+    {
+      "level": 4,
+      "features": [
+        "trait_ability_score_improvement",
+        "trait_slow_fall"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d4",
+        "ki_points": 4,
+        "unarmored_movement_bonus": 10
+      }
+    },
+    {
+      "level": 5,
+      "features": [
+        "trait_extra_attack",
+        "trait_stunning_strike"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 5,
+        "unarmored_movement_bonus": 10
+      }
+    },
+    {
+      "level": 6,
+      "features": [
+        "trait_ki_empowered_strikes",
+        "trait_monastic_tradition_feature"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 6,
+        "unarmored_movement_bonus": 15
+      }
+    },
+    {
+      "level": 7,
+      "features": [
+        "trait_evasion_monk",
+        "trait_stillness_of_mind"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 7,
+        "unarmored_movement_bonus": 15
+      }
+    },
+    {
+      "level": 8,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 8,
+        "unarmored_movement_bonus": 15
+      }
+    },
+    {
+      "level": 9,
+      "features": [
+        "trait_unarmored_movement_improvement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 9,
+        "unarmored_movement_bonus": 15
+      }
+    },
+    {
+      "level": 10,
+      "features": [
+        "trait_purity_of_body"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d6",
+        "ki_points": 10,
+        "unarmored_movement_bonus": 20
+      }
+    },
+    {
+      "level": 11,
+      "features": [
+        "trait_monastic_tradition_feature"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 11,
+        "unarmored_movement_bonus": 20
+      }
+    },
+    {
+      "level": 12,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 12,
+        "unarmored_movement_bonus": 20
+      }
+    },
+    {
+      "level": 13,
+      "features": [
+        "trait_tongue_of_the_sun_and_moon"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 13,
+        "unarmored_movement_bonus": 20
+      }
+    },
+    {
+      "level": 14,
+      "features": [
+        "trait_diamond_soul"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 14,
+        "unarmored_movement_bonus": 25
+      }
+    },
+    {
+      "level": 15,
+      "features": [
+        "trait_timeless_body"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 15,
+        "unarmored_movement_bonus": 25
+      }
+    },
+    {
+      "level": 16,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d8",
+        "ki_points": 16,
+        "unarmored_movement_bonus": 25
+      }
+    },
+    {
+      "level": 17,
+      "features": [
+        "trait_monastic_tradition_feature"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d10",
+        "ki_points": 17,
+        "unarmored_movement_bonus": 25
+      }
+    },
+    {
+      "level": 18,
+      "features": [
+        "trait_empty_body"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d10",
+        "ki_points": 18,
+        "unarmored_movement_bonus": 30
+      }
+    },
+    {
+      "level": 19,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d10",
+        "ki_points": 19,
+        "unarmored_movement_bonus": 30
+      }
+    },
+    {
+      "level": 20,
+      "features": [
+        "trait_perfect_self"
+      ],
+      "classSpecificScaling": {
+        "martial_arts_dice": "1d10",
+        "ki_points": 20,
+        "unarmored_movement_bonus": 30
+      }
     }
+  ],
+  "lore": {
+    "shortDescription": "Disciplined warriors who harness mystical inner energy to strike swiftly and defend with supernatural grace.",
+    "fullText": "Her fists a blur as they deflect an incoming hail of arrows, a half-elf springs over a barricade and throws herself into the massed ranks of hobgoblins on the other side. She whirls among them, knocking their blows aside and sending them reeling, until at last she stands alone.\nTaking a deep breath. a human covered in tattoos settles into a battle stance. As the first charging orcs reach him, he exhales and a blast of fire roars from his mouth, engulfing his foes.\nMoving with the silence of the night, a black-clad halfling steps into a shadow beneath an arch and emerges from another inky shadow on a balcony a stone's throw away. She slides her blade free of its cloth wrapped scabbard and peers through the open window at the tyrant prince, so vulnerable in the grip of sleep.\nWhatever their discipline, monks are united in their ability to magically harness the energy that flows in their bodies. Whether channeled as a striking display of combat prowess or a subtler focus of defensive ability and speed, this energy infuses all that a monk does."
+  }
 }

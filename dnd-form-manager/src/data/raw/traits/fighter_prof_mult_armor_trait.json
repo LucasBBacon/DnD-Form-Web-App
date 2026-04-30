@@ -1,0 +1,13 @@
+{
+    "id": "trait_fighter_mult_prof_armor",
+    "name": "Multiclass Armor Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with light armor, medium armor, and shields.",
+        "fullText": "If you multiclass into Fighter, you gain proficiency with light armor, medium armor, and shields."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "armor", "value": "light" },
+        { "type": "proficiency", "target": "armor", "value": "medium" },
+        { "type": "proficiency", "target": "armor", "value": "shields" }
+    ]
+}

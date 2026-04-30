@@ -1,5 +1,6 @@
 {
     "id": "trait_fighter_proficiencies",
+    "isStartingProficiency": true,
     "name": "Fighter Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."

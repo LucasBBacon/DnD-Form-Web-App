@@ -1,0 +1,21 @@
+{
+    "id": "trait_monk_prof_saving_throw",
+    "isStartingProficiency": true,
+    "name": "Saving Throws Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency in Strength and Dexterity saving throws.",
+        "fullText": "Gain proficiency in Strength and Dexterity saving throws."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "str"
+        },
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "dex"
+        }
+    ]
+}

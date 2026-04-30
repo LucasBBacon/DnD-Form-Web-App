@@ -1,5 +1,6 @@
 {
     "id": "trait_warlock_skills",
+    "isStartingProficiency": true,
     "name": "Warlock Skills",
     "lore": {
         "shortDescription": ""

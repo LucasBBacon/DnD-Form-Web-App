@@ -38,23 +38,6 @@ export interface SpellcastingProgressionPayload {
   spellSlots?: Record<number, number>;
 }
 
-/**
- * Simple interface for user choice during multiclassing for skills.
- */
-export interface MulticlassSkillChoice {
-  choose: number;
-  options?: string[];
-}
-
-/**
- * Payload for proficiencies definition of multiclassing.
- */
-export interface MulticlassProficiencies {
-  armor?: string[];
-  weapons?: string[];
-  tools?: string[];
-  skills?: MulticlassSkillChoice;
-}
 
 export type SpellcastingProgression = SpellcastingProgressionPayload | null;
 
@@ -69,16 +52,12 @@ export interface ClassData {
   id: string;
   name: string;
   hitDie: HitDie;
-  proficiencies: {
-    weapons?: string[]; // Weapon category IDs
-    savingThrows: Ability[];
-  };
+  multiclassTraits?: string[];
   startingEquipment: {
     given: EquipmentItem[];
     choices: EquipmentChoiceGroup[];
   };
   spellcastingBase: SpellcastingBase | null;
-  multiclassProficiencies?: MulticlassProficiencies;
   subclassInfo: {
     name: string;
     choiceLevel: number;

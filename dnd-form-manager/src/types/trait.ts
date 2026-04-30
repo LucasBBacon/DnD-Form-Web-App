@@ -9,7 +9,6 @@ export interface TraitEffect {
     | "sense"
     | "half_proficiency"
     | "proficiency"
-    | "save_proficiency"
     | "proficiency_choice"
     | "expertise"
     | "spell_grant"
@@ -40,6 +39,7 @@ export type TraitSizeValue = Size;
 export interface TraitData {
   id: string; // e.g., 'trait_darkvision', 'trait_fey_ancestry'
   name: string; // e.g., 'Darkvision', 'Fey Ancestry'
+  isStartingProficiency?: boolean;
   lore: {
     shortDescription: string; // e.g., "You can see in dim light ..."
     fullText?: string;

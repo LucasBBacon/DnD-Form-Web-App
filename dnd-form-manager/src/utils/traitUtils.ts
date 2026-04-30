@@ -3,6 +3,7 @@ import {
   getRaceById,
   getSubclassById,
   getSubraceById,
+  getTraitById,
   getTraitsByIds,
 } from "../data/staticDataApi";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
@@ -124,14 +125,37 @@ export const getAllCharacterTraits = (
     } else {
       // If not filtering by exact level, simply add traits from all class tracks up to the current level
       // Iterate through each class track and add traits from their class and subclass progression for all levels up to the current level
-      classTracks.forEach((track) => {
+      classTracks.forEach((track, trackIndex) => {
         const trackClassData = getClassById(track.classId);
-        addProgressionTraitIds(
-          traitIds,
-          trackClassData?.progression,
-          track.level,
-          false,
-        );
+        const isPrimary = trackIndex === 0;
+
+        if (isPrimary) {
+          // Primary class: add all progression traits including starting proficiency traits
+          addProgressionTraitIds(
+            traitIds,
+            trackClassData?.progression,
+            track.level,
+            false,
+          );
+        } else {
+          // Non-primary (multiclass): skip traits marked isStartingProficiency,
+          // and inject the class's designated multiclassTraits instead
+          if (trackClassData?.progression) {
+            const candidateIds = new Set<string>();
+            addProgressionTraitIds(
+              candidateIds,
+              trackClassData.progression,
+              track.level,
+              false,
+            );
+            candidateIds.forEach((id) => {
+              if (!getTraitById(id)?.isStartingProficiency) {
+                traitIds.add(id);
+              }
+            });
+          }
+          trackClassData?.multiclassTraits?.forEach((id) => traitIds.add(id));
+        }
 
         const trackSubclassData = track.subclassId
           ? getSubclassById(track.subclassId)

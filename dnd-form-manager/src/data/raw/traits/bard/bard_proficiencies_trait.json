@@ -1,0 +1,26 @@
+{
+    "id": "trait_bard_prof_tools",
+    "isStartingProficiency": true,
+    "name": "Tools Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency with three musical instruments.",
+        "fullText": "Gain proficiency with three musical instruments."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "category_musical_instrument"
+        },
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "category_musical_instrument"
+        },
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "category_musical_instrument"
+        }
+    ]
+}

@@ -54,7 +54,7 @@ describe("proficiencyAggregator", () => {
         id: "trait_duplicate_simple",
         name: "Duplicate Simple",
         lore: { shortDescription: "Simple weapons again." },
-        effects: [{ type: "proficiency", target: "weapon_simple" }],
+        effects: [{ type: "proficiency", target: "weapons", value: "simple" }],
       },
     ];
 
@@ -68,7 +68,7 @@ describe("proficiencyAggregator", () => {
       },
       traits,
       matchEffectTypes: ["proficiency"],
-      mapTarget: (target) => (target === "weapon_simple" ? "simple" : target),
+      mapTarget: (value) => value || null,
     });
 
     expect(result.list).toEqual(["simple", "weapon_longsword"]);
@@ -80,21 +80,30 @@ describe("proficiencyAggregator", () => {
     vi.mocked(predicateEngine.evaluateAllPredicates).mockReturnValue(false);
 
     const result = aggregateSaveProficiencies({
-      classSavingThrows: ["str"],
       currentLevel: 14,
       state,
       stats,
       traits: [
         {
+          id: "trait_fighter_prof_saving_throw",
+          name: "Saving Throws Proficiencies",
+          isStartingProficiency: true,
+          lore: { shortDescription: "STR and CON saves." },
+          effects: [
+            { type: "proficiency", target: "saving_throws", value: "str" },
+            { type: "proficiency", target: "saving_throws", value: "con" },
+          ],
+        },
+        {
           id: "trait_diamond_soul",
           name: "Diamond Soul",
           lore: { shortDescription: "All saves." },
-          effects: [{ type: "save_proficiency", target: "dex" }],
+          effects: [{ type: "proficiency", target: "saving_throws", value: "dex" }],
         },
       ],
     });
 
-    expect(result.list).toEqual(["str"]);
+    expect(result.list).toEqual([]);
   });
 
   it("aggregates skill proficiencies and expertise from all configured sources", () => {
@@ -111,13 +120,13 @@ describe("proficiencyAggregator", () => {
           id: "trait_keen_senses",
           name: "Keen Senses",
           lore: { shortDescription: "Perception proficiency." },
-          effects: [{ type: "proficiency", target: "insight" }],
+          effects: [{ type: "proficiency", target: "skills", value: "insight" }],
         },
         {
           id: "trait_expertise",
           name: "Expertise",
           lore: { shortDescription: "Stealth expertise" },
-          effects: [{ type: "expertise", target: "perception" }],
+          effects: [{ type: "expertise", target: "skills", value: "perception" }],
         },
       ],
       state,
@@ -133,20 +142,29 @@ describe("proficiencyAggregator", () => {
     expect(result.expertise.list).toEqual(["stealth", "perception"]);
   });
 
-  it("maps save proficiency effects only for valid abilities", () => {
+  it("aggregates save proficiencies from trait effects", () => {
     const result = aggregateSaveProficiencies({
-      classSavingThrows: ["str", "dex"],
       currentLevel: 14,
       state,
       stats,
       traits: [
         {
+          id: "trait_fighter_prof_saving_throw",
+          name: "Saving Throws Proficiencies",
+          isStartingProficiency: true,
+          lore: { shortDescription: "STR and CON saves." },
+          effects: [
+            { type: "proficiency", target: "saving_throws", value: "str" },
+            { type: "proficiency", target: "saving_throws", value: "dex" },
+          ],
+        },
+        {
           id: "trait_diamond_soul",
           name: "Diamond Soul",
           lore: { shortDescription: "All saves." },
           effects: [
-            { type: "save_proficiency", target: "wis" },
-            { type: "save_proficiency", target: "not_a_save" },
+            { type: "proficiency", target: "saving_throws", value: "wis" },
+            { type: "proficiency", target: "saving_throws", value: "not_a_save" },
           ],
         },
       ],
@@ -173,9 +191,9 @@ describe("proficiencyAggregator", () => {
           name: "Fighter Proficiencies",
           lore: { shortDescription: "Armor and Martial weapons." },
           effects: [
-            { type: "proficiency", target: "armor_shields" },
-            { type: "proficiency", target: "weapon_martial" },
-            { type: "proficiency", target: "category_artisans_tools" },
+            { type: "proficiency", target: "armor", value: "shields" },
+            { type: "proficiency", target: "weapons", value: "martial" },
+            { type: "proficiency", target: "tools", value: "category_artisans_tools" },
           ],
         },
       ],

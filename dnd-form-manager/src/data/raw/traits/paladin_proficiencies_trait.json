@@ -1,5 +1,6 @@
 {
     "id": "trait_paladin_proficiencies",
+    "isStartingProficiency": true,
     "name": "Paladin Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor, medium armor, heavy armor, shields, and simple and martial weapons."

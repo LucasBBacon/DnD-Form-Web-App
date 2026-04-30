@@ -16,15 +16,12 @@
       "$ref": "definitions.json#/definitions/HitDie",
       "description": "Faces of the hit die (e.g., 8 for d8)."
     },
-    "proficiencies": {
-      "type": "object",
-      "properties": {
-        "savingThrows": {
-          "type": "array",
-          "items": {
-            "$ref": "definitions.json#/definitions/AbilityScore"
-          }
-        }
+    "multiclassTraits": {
+      "type": "array",
+      "description": "Trait IDs granted when this class is taken as a secondary (multiclass) class.",
+      "items": {
+        "type": "string",
+        "pattern": "^trait_[a-z0-9_]+$"
       }
     },
     "startingEquipment": {
@@ -238,7 +235,6 @@
     "id",
     "name",
     "hitDie",
-    "proficiencies",
     "subclassInfo",
     "progression"
   ]

@@ -1,0 +1,26 @@
+{
+    "id": "trait_barbarian_prof_skills",
+    "isStartingProficiency": true,
+    "name": "Skill Proficiencies",
+    "lore": {
+        "shortDescription": "Choice of proficiencies: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival.",
+        "fullText": "Gain proficiency in two of the following skills: Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival."
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "target": "skills",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "animal_handling",
+                    "athletics",
+                    "intimidation",
+                    "nature",
+                    "perception",
+                    "survival"
+                ]
+            }
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 {
     "id": "trait_wizard_skills",
+    "isStartingProficiency": true,
     "name": "Wizard Skills",
     "lore": {
         "shortDescription": ""

@@ -1,5 +1,6 @@
 {
     "id": "trait_rogue_proficiencies",
+    "isStartingProficiency": true,
     "name": "Rogue Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor, simple weapons, hand crossbows, longswords, rapiers, shortswords, and thieves' tools."

@@ -1,5 +1,6 @@
 {
     "id": "trait_monk_proficiencies",
+    "isStartingProficiency": true,
     "name": "Monk Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with simple weapons, shortswords, one artisan tool type, and one musical instrument type."

@@ -224,7 +224,6 @@
                             "resistance",
                             "sense",
                             "proficiency",
-                            "save_proficiency",
                             "half_proficiency",
                             "expertise",
                             "spell_grant",
@@ -346,6 +345,10 @@
                 ],
                 "additionalProperties": false
             }
+        },
+        "isStartingProficiency": {
+            "type": "boolean",
+            "description": "When true, this trait is skipped for non-primary (multiclass) class tracks."
         }
     },
     "required": [

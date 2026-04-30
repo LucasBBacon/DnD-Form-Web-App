@@ -29,7 +29,9 @@
         "lightfoot",
         "Lightfoots",
         "longsword",
+        "longswords",
         "metamagic",
+        "mult",
         "multiclass",
         "Multiclassing",
         "owlbear",
@@ -38,6 +40,7 @@
         "Roleplay",
         "shortbow",
         "shortsword",
+        "shortswords",
         "Silvanesti",
         "spellbook",
         "spellbooks",
@@ -90,7 +93,8 @@
         },
         {
             "fileMatch": [
-                "traits/*_trait.json"
+                "traits/*_trait.json",
+                "traits/**/*_trait.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/trait_data_schema.json"
         },

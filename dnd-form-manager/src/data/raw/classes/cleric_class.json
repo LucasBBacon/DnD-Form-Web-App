@@ -1,492 +1,480 @@
 {
-    "id": "class_cleric",
-    "name": "Cleric",
-    "hitDie": 8,
-    "proficiencies": {
-        "savingThrows": [
-            "wis",
-            "cha"
-        ]
-    },
-    "multiclassProficiencies": {
-        "armor": [
-            "category_armor_light",
-            "category_armor_medium",
-            "category_armor_shield"
-        ],
-        "weapons": [],
-        "tools": [],
-        "skills": {}
-    },
-    "startingEquipment": {
-        "given": [
-            {
-                "itemId": "category_armor_shield",
-                "quantity": 1
-            },
-            {
-                "itemId": "category_holy_symbol",
-                "quantity": 1
-            }
-        ],
-        "choices": [
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "weapon_mace",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "weapon_warhammer",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "armor_scale_mail",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "armor_leather",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "armor_chain_mail",
-                                "quantity": 1,
-                                "condition": "proficiency_category_armor_heavy"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "weapon_light_crossbow",
-                                "quantity": 1
-                            },
-                            {
-                                "itemId": "weapon_crossbow_bolt",
-                                "quantity": 20
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "category_weapon_simple",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_priests",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_explorers",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "spellcastingBase": {
-        "ability": "wis",
-        "preparationType": "prepared",
-        "ritualCasting": true
-    },
-    "subclassInfo": {
-        "choiceLevel": 1,
-        "optionsPool": "subclasses_cleric"
-    },
-    "progression": [
-        {
-            "level": 1,
-            "features": [
-                "trait_cleric_proficiencies",
-                "trait_cleric_skills",
-                "trait_spellcasting_cleric",
-                "trait_divine_domain"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 3,
-                "spellSlots": {
-                    "1": 2
-                }
-            }
-        },
-        {
-            "level": 2,
-            "features": [
-                "trait_channel_divinity",
-                "trait_divine_domain_feature"
-            ],
-            "classSpecificScaling": {
-                "channel_divinity_uses_between_rests": 1
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 3,
-                "spellSlots": {
-                    "1": 3
-                }
-            }
-        },
-        {
-            "level": 3,
-            "spellcastingProgression": {
-                "cantripsKnown": 3,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 2
-                }
-            }
-        },
-        {
-            "level": 4,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3
-                }
-            }
-        },
-        {
-            "level": 5,
-            "features": [
-                "trait_destroy_undead"
-            ],
-            "classSpecificScaling": {
-                "destroy_undead_max_cr": 0.5
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 2
-                }
-            }
-        },
-        {
-            "level": 6,
-            "features": [
-                "trait_channel_divinity",
-                "trait_divine_domain_feature"
-            ],
-            "classSpecificScaling": {
-                "channel_divinity_uses_between_rests": 2
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3
-                }
-            }
-        },
-        {
-            "level": 7,
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 1
-                }
-            }
-        },
-        {
-            "level": 8,
-            "features": [
-                "trait_ability_score_improvement",
-                "trait_destroy_undead",
-                "trait_divine_domain_feature"
-            ],
-            "classSpecificScaling": {
-                "destroy_undead_max_cr": 1
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 2
-                }
-            }
-        },
-        {
-            "level": 9,
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 1
-                }
-            }
-        },
-        {
-            "level": 10,
-            "features": [
-                "trait_divine_intervention"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2
-                }
-            }
-        },
-        {
-            "level": 11,
-            "features": [
-                "trait_destroy_undead"
-            ],
-            "classSpecificScaling": {
-                "destroy_undead_max_cr": 2
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1
-                }
-            }
-        },
-        {
-            "level": 12,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1
-                }
-            }
-        },
-        {
-            "level": 13,
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1
-                }
-            }
-        },
-        {
-            "level": 14,
-            "features": [
-                "trait_destroy_undead"
-            ],
-            "classSpecificScaling": {
-                "destroy_undead_max_cr": 3
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1
-                }
-            }
-        },
-        {
-            "level": 15,
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1
-                }
-            }
-        },
-        {
-            "level": 16,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1
-                }
-            }
-        },
-        {
-            "level": 17,
-            "features": [
-                "trait_destroy_undead",
-                "trait_divine_domain_feature"
-            ],
-            "classSpecificScaling": {
-                "destroy_undead_max_cr": 4
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 18,
-            "features": [
-                "trait_channel_divinity"
-            ],
-            "classSpecificScaling": {
-                "channel_divinity_uses_between_rests": 3
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 19,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 2,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 20,
-            "features": [
-                "trait_divine_intervention_improvement"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 2,
-                    "7": 2,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        }
+  "id": "class_cleric",
+  "name": "Cleric",
+  "hitDie": 8,
+  "multiclassTraits": [
+    "trait_cleric_mult_prof_armor"
+  ],
+  "startingEquipment": {
+    "given": [
+      {
+        "itemId": "category_armor_shield",
+        "quantity": 1
+      },
+      {
+        "itemId": "category_holy_symbol",
+        "quantity": 1
+      }
     ],
-    "lore": {
-        "shortDescription": "Divine intermediaries imbued with godly power, channeling miracles to heal the wounded and smite the wicked.",
-        "fullText": "Arms and eyes upraised toward the sun and a prayer on his lips, an elf begins to glow with an inner light that spills out to heal his battle-worn companions.\nChanting a song of glory, a dwarf swings his axe in wide swaths to cut through the ranks of orcs arrayed against him, shouting praise to the gods with every foe's fall.\nCalling down a curse upon the forces of undeath, a human lifts her holy symbol as light pours from it to drive back the zombies crowding in on her companions.\nClerics are intermediaries between the mortal world and the distant planes of the gods. As varied as the gods they serve, clerics strive to embody the handiwork of their deities. No ordinary priest, a cleric is imbued with divine magic."
+    "choices": [
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "weapon_mace",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "weapon_warhammer",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "armor_scale_mail",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "armor_leather",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "armor_chain_mail",
+                "quantity": 1,
+                "condition": "proficiency_category_armor_heavy"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "weapon_light_crossbow",
+                "quantity": 1
+              },
+              {
+                "itemId": "weapon_crossbow_bolt",
+                "quantity": 20
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "category_weapon_simple",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_priests",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_explorers",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "spellcastingBase": {
+    "ability": "wis",
+    "preparationType": "prepared",
+    "ritualCasting": true
+  },
+  "subclassInfo": {
+    "choiceLevel": 1,
+    "optionsPool": "subclasses_cleric"
+  },
+  "progression": [
+    {
+      "level": 1,
+      "features": [
+        "trait_cleric_prof_saving_throw",
+        "trait_cleric_proficiencies",
+        "trait_cleric_skills",
+        "trait_spellcasting_cleric",
+        "trait_divine_domain"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 3,
+        "spellSlots": {
+          "1": 2
+        }
+      }
+    },
+    {
+      "level": 2,
+      "features": [
+        "trait_channel_divinity",
+        "trait_divine_domain_feature"
+      ],
+      "classSpecificScaling": {
+        "channel_divinity_uses_between_rests": 1
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 3,
+        "spellSlots": {
+          "1": 3
+        }
+      }
+    },
+    {
+      "level": 3,
+      "spellcastingProgression": {
+        "cantripsKnown": 3,
+        "spellSlots": {
+          "1": 4,
+          "2": 2
+        }
+      }
+    },
+    {
+      "level": 4,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3
+        }
+      }
+    },
+    {
+      "level": 5,
+      "features": [
+        "trait_destroy_undead"
+      ],
+      "classSpecificScaling": {
+        "destroy_undead_max_cr": 0.5
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 2
+        }
+      }
+    },
+    {
+      "level": 6,
+      "features": [
+        "trait_channel_divinity",
+        "trait_divine_domain_feature"
+      ],
+      "classSpecificScaling": {
+        "channel_divinity_uses_between_rests": 2
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3
+        }
+      }
+    },
+    {
+      "level": 7,
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 1
+        }
+      }
+    },
+    {
+      "level": 8,
+      "features": [
+        "trait_ability_score_improvement",
+        "trait_destroy_undead",
+        "trait_divine_domain_feature"
+      ],
+      "classSpecificScaling": {
+        "destroy_undead_max_cr": 1
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 2
+        }
+      }
+    },
+    {
+      "level": 9,
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 1
+        }
+      }
+    },
+    {
+      "level": 10,
+      "features": [
+        "trait_divine_intervention"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2
+        }
+      }
+    },
+    {
+      "level": 11,
+      "features": [
+        "trait_destroy_undead"
+      ],
+      "classSpecificScaling": {
+        "destroy_undead_max_cr": 2
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      }
+    },
+    {
+      "level": 12,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      }
+    },
+    {
+      "level": 13,
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      }
+    },
+    {
+      "level": 14,
+      "features": [
+        "trait_destroy_undead"
+      ],
+      "classSpecificScaling": {
+        "destroy_undead_max_cr": 3
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      }
+    },
+    {
+      "level": 15,
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      }
+    },
+    {
+      "level": 16,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      }
+    },
+    {
+      "level": 17,
+      "features": [
+        "trait_destroy_undead",
+        "trait_divine_domain_feature"
+      ],
+      "classSpecificScaling": {
+        "destroy_undead_max_cr": 4
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 18,
+      "features": [
+        "trait_channel_divinity"
+      ],
+      "classSpecificScaling": {
+        "channel_divinity_uses_between_rests": 3
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 19,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 20,
+      "features": [
+        "trait_divine_intervention_improvement"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 2,
+          "8": 1,
+          "9": 1
+        }
+      }
     }
+  ],
+  "lore": {
+    "shortDescription": "Divine intermediaries imbued with godly power, channeling miracles to heal the wounded and smite the wicked.",
+    "fullText": "Arms and eyes upraised toward the sun and a prayer on his lips, an elf begins to glow with an inner light that spills out to heal his battle-worn companions.\nChanting a song of glory, a dwarf swings his axe in wide swaths to cut through the ranks of orcs arrayed against him, shouting praise to the gods with every foe's fall.\nCalling down a curse upon the forces of undeath, a human lifts her holy symbol as light pours from it to drive back the zombies crowding in on her companions.\nClerics are intermediaries between the mortal world and the distant planes of the gods. As varied as the gods they serve, clerics strive to embody the handiwork of their deities. No ordinary priest, a cleric is imbued with divine magic."
+  }
 }

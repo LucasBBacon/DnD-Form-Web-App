@@ -1,5 +1,6 @@
 {
     "id": "trait_paladin_skills",
+    "isStartingProficiency": true,
     "name": "Paladin Skills",
     "lore": {
         "shortDescription": ""

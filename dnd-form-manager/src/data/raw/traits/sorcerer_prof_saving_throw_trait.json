@@ -1,0 +1,21 @@
+{
+    "id": "trait_sorcerer_prof_saving_throw",
+    "isStartingProficiency": true,
+    "name": "Saving Throws Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency in Constitution and Charisma saving throws.",
+        "fullText": "Gain proficiency in Constitution and Charisma saving throws."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "con"
+        },
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "cha"
+        }
+    ]
+}

@@ -6,7 +6,6 @@ import type { LevelChoice } from "../types/progression";
 import type { TraitData, TraitEffect } from "../types/trait";
 import { SKILL_ABILITY_MAP } from "./constants";
 import { evaluateAllPredicates } from "./predicateEngine";
-import { getClassById } from "../data/staticDataApi";
 
 // #region Public Types
 
@@ -63,7 +62,6 @@ export interface AggregateSkillProficienciesOptions {
 }
 
 export interface AggregateSaveProficienciesOptions {
-  classSavingThrows: readonly Ability[];
   currentLevel: number;
   traits: TraitData[];
   state: CharacterState;
@@ -97,6 +95,35 @@ export interface AggregateNonSkillProficienciesMulticlassOptions {
 
 // #endregion
 
+// #region Domain Helpers
+
+/**
+ * Set of category tokens used by the new proficiency effect format.
+ * New format: { type: "proficiency", target: "<category>", value: "<item>" }
+ */
+const PROFICIENCY_CATEGORY_TARGETS = new Set([
+  "armor",
+  "weapons",
+  "tools",
+  "saving_throws",
+  "skills",
+]);
+
+/**
+ * Extracts the resolved proficiency value from a trait effect.
+ * Only supports the new-format effects where `target` is a category token and
+ * `value` holds the specific item. Old-format effects (target = value) are not supported.
+ */
+export const extractProficiencyValue = (
+  effect: TraitEffect,
+): string | undefined => {
+  if (!effect.target || !PROFICIENCY_CATEGORY_TARGETS.has(effect.target))
+    return undefined;
+  return typeof effect.value === "string" ? effect.value : undefined;
+};
+
+// #endregion
+
 // #region Domain Constants
 
 const skillKeys = new Set(Object.keys(SKILL_ABILITY_MAP) as Skill[]);
@@ -121,6 +148,7 @@ const armorCategoryAliases: Record<string, string> = {
   medium: "medium",
   heavy: "heavy",
   shield: "shield",
+  shields: "shield",
   armor_light: "light",
   armor_medium: "medium",
   armor_heavy: "heavy",
@@ -413,7 +441,9 @@ export const aggregateProficiencies = <T extends string>(
 
       if (!isActive || !effect.target) return;
 
-      const mappedTarget = options.mapTarget(effect.target);
+      const extractedValue = extractProficiencyValue(effect);
+      if (!extractedValue) return;
+      const mappedTarget = options.mapTarget(extractedValue);
       if (!mappedTarget) return;
 
       set.add(mappedTarget);
@@ -482,7 +512,7 @@ export const aggregateSkillProficiencies = (
 };
 
 /**
- * Aggregates saving throw proficiencies from various sources including class features and traits.
+ * Aggregates saving throw proficiencies purely from traits (target: "saving_throws", value: ability).
  */
 export const aggregateSaveProficiencies = (
   options: AggregateSaveProficienciesOptions,
@@ -491,9 +521,8 @@ export const aggregateSaveProficiencies = (
     currentLevel: options.currentLevel,
     state: options.state,
     stats: options.stats,
-    staticValues: options.classSavingThrows,
     traits: options.traits,
-    matchEffectTypes: ["save_proficiency"],
+    matchEffectTypes: ["proficiency"],
     mapTarget: (target) =>
       abilityKeys.has(target as Ability) ? (target as Ability) : null,
   });
@@ -564,93 +593,29 @@ export const aggregateNonSkillProficiencies = (
 
 // #endregion
 
-// #region Multiclass Helpers
-
-/**
- * Extracts multiclass proficiencies for a class if joining as a secondary class.
- */
-const extractMulticlassProficiencies = (
-  classId: string,
-  isPrimaryClass: boolean,
-): { weapons?: string[]; armor?: string[]; tools?: string[] } => {
-  if (isPrimaryClass) return {};
-
-  const classData = getClassById(classId);
-  if (!classData?.multiclassProficiencies) return {};
-
-  return {
-    weapons: classData.multiclassProficiencies.weapons,
-    armor: classData.multiclassProficiencies.armor,
-    tools: classData.multiclassProficiencies.tools,
-  };
-};
-
-/**
- * Collects saving throws from all active class tracks (PHB multiclass rule).
- */
-const collectSavingThrowsFromTracks = (
-  classTracks: CharacterClassTrack[] | undefined,
-): Ability[] => {
-  const savingThrows = new Set<Ability>();
-
-  if (!classTracks || classTracks.length === 0) {
-    return [];
-  }
-
-  classTracks.forEach((track) => {
-    const classData = getClassById(track.classId);
-    classData?.proficiencies.savingThrows?.forEach((ability: Ability) => {
-      savingThrows.add(ability);
-    });
-  });
-
-  return Array.from(savingThrows);
-};
-
-// #endregion
-
 // #region Multiclass Aggregators
 
 /**
- * Aggregates saving throw proficiencies from all active class tracks.
- * In multiclass, a character gains saving throw proficiencies from all classes.
+ * Aggregates saving throw proficiencies for a multiclass character.
+ * Per D&D 5E rules, saving throw proficiencies are granted only by the primary
+ * (first) class. The primary class's saving throw traits are already included
+ * in the full trait list by traitUtils, so this simply delegates.
  */
 export const aggregateSaveProficienciesMulticlass = (
   options: AggregateSaveProficienciesMulticlassOptions,
 ): AggregatedProficiencies<Ability> => {
-  // Fallback to single-class logic based on primary classId.
-  if (!options.classTracks || options.classTracks.length === 0) {
-    const primaryClass = options.state.classId;
-    const classData = getClassById(primaryClass);
-    const savingThrows = classData?.proficiencies.savingThrows || [];
-
-    return aggregateSaveProficiencies({
-      classSavingThrows: savingThrows,
-      currentLevel: options.currentLevel,
-      state: options.state,
-      stats: options.stats,
-      traits: options.traits,
-    });
-  }
-
-  const allSavingThrows = collectSavingThrowsFromTracks(options.classTracks);
-
-  return aggregateProficiencies<Ability>({
+  return aggregateSaveProficiencies({
     currentLevel: options.currentLevel,
     state: options.state,
     stats: options.stats,
-    staticValues: allSavingThrows,
     traits: options.traits,
-    matchEffectTypes: ["save_proficiency"],
-    mapTarget: (target) =>
-      abilityKeys.has(target as Ability) ? (target as Ability) : null,
   });
 };
 
 /**
- * Aggregates weapon/armor/tool proficiencies from all active class tracks.
- * When joining a secondary class, the character gains its multiclass_proficiencies.
- * The primary class always grants its starting proficiencies.
+ * Aggregates weapon/armor/tool proficiencies for a multiclass character.
+ * Starting proficiency traits are filtered at the trait collection level (traitUtils),
+ * so multiclass traits are already correctly represented in the trait list.
  */
 export const aggregateNonSkillProficienciesMulticlass = (
   options: AggregateNonSkillProficienciesMulticlassOptions,
@@ -661,95 +626,13 @@ export const aggregateNonSkillProficienciesMulticlass = (
   tools: AggregatedProficiencies<string>;
   languagesAndOther: AggregatedProficiencies<string>;
 } => {
-  // Fallback to single-class logic based on primary classId.
-  if (!options.classTracks || options.classTracks.length === 0) {
-    return aggregateNonSkillProficiencies({
-      choicesByLevel: options.choicesByLevel,
-      currentLevel: options.currentLevel,
-      state: options.state,
-      stats: options.stats,
-      traits: options.traits,
-    });
-  }
-
-  const staticWeapons: string[] = [];
-  const staticArmor: string[] = [];
-  const staticTools: string[] = [];
-
-  options.classTracks.forEach((track, trackIndex) => {
-    const classData = getClassById(track.classId);
-    if (!classData) return;
-
-    const isPrimary = trackIndex === 0;
-    const mcProfs = extractMulticlassProficiencies(track.classId, isPrimary);
-
-    if (isPrimary) {
-      classData.proficiencies.weapons?.forEach((w) => staticWeapons.push(w));
-    }
-
-    if (mcProfs.weapons) {
-      mcProfs.weapons.forEach((w) => staticWeapons.push(w));
-    }
-    if (mcProfs.armor) {
-      mcProfs.armor.forEach((a) => staticArmor.push(a));
-    }
-    if (mcProfs.tools) {
-      mcProfs.tools.forEach((t) => staticTools.push(t));
-    }
-  });
-
-  const { weaponChoicesByLevel, toolChoicesByLevel, languageChoicesByLevel } =
-    getNonSkillChoiceBucketsByLevel(options.choicesByLevel);
-
-  const weapons = aggregateProficiencies<string>({
+  return aggregateNonSkillProficiencies({
+    choicesByLevel: options.choicesByLevel,
     currentLevel: options.currentLevel,
     state: options.state,
     stats: options.stats,
-    staticValues: staticWeapons,
-    choiceValuesByLevel: weaponChoicesByLevel,
     traits: options.traits,
-    matchEffectTypes: ["proficiency"],
-    mapTarget: normalizeWeaponTarget,
   });
-
-  const armor = aggregateProficiencies<string>({
-    currentLevel: options.currentLevel,
-    state: options.state,
-    stats: options.stats,
-    staticValues: staticArmor,
-    traits: options.traits,
-    matchEffectTypes: ["proficiency"],
-    mapTarget: normalizeArmorTarget,
-  });
-
-  const tools = aggregateProficiencies<string>({
-    currentLevel: options.currentLevel,
-    state: options.state,
-    stats: options.stats,
-    staticValues: staticTools,
-    choiceValuesByLevel: toolChoicesByLevel,
-    traits: options.traits,
-    matchEffectTypes: ["proficiency"],
-    mapTarget: normalizeToolTarget,
-  });
-
-  const languagesAndOther = aggregateProficiencies<string>({
-    currentLevel: options.currentLevel,
-    state: options.state,
-    stats: options.stats,
-    choiceValuesByLevel: languageChoicesByLevel,
-    traits: options.traits,
-    matchEffectTypes: ["proficiency"],
-    mapTarget: normalizeLanguageOrOtherTarget,
-  });
-
-  return {
-    all: mergeAggregatedProficiencies(weapons, armor, tools, languagesAndOther),
-    weapons,
-    armor,
-    tools,
-    languagesAndOther,
-  };
 };
 
 // #endregion

@@ -1,5 +1,6 @@
 {
     "id": "trait_warlock_proficiencies",
+    "isStartingProficiency": true,
     "name": "Warlock Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor and simple weapons."

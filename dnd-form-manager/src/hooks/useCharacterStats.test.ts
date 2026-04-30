@@ -356,7 +356,8 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "heavy",
+              target: "armor",
+              value: "heavy",
               predicates: [],
             },
           ],
@@ -376,10 +377,7 @@ describe("useCharacterStats", () => {
         inventoryInstances: [{ instanceId: "test-shield-instance", baseItemId: "wooden_shield" }],
       } as any);
 
-      vi.mocked(staticDataApi.getClassById).mockReturnValue({
-        hitDie: 10,
-        proficiencies: { armor: [] },
-      } as any);
+      vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([] as any);
 
       const result = useCharacterStats();
 
@@ -399,7 +397,8 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "shield",
+              target: "armor",
+              value: "shield",
               predicates: [],
             },
           ],
@@ -934,7 +933,6 @@ describe("useCharacterStats", () => {
       });
       vi.mocked(staticDataApi.getClassById).mockReturnValue({
         hitDie: 10,
-        proficiencies: { armor: ["heavy", "category_armor_shield"] },
       } as any);
       vi.mocked(traitUtils.getAllCharacterTraits).mockReturnValue([
         {
@@ -942,12 +940,14 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "heavy",
+              target: "armor",
+              value: "heavy",
               predicates: [],
             },
             {
               type: "proficiency",
-              target: "shield",
+              target: "armor",
+              value: "shield",
               predicates: [],
             },
           ],

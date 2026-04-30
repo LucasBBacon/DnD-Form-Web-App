@@ -1,0 +1,11 @@
+{
+    "id": "trait_warlock_mult_prof_armor",
+    "name": "Multiclass Armor Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with light armor.",
+        "fullText": "If you multiclass into Warlock, you gain proficiency with light armor."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "armor", "value": "light" }
+    ]
+}

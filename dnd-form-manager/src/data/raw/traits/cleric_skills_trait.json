@@ -1,5 +1,6 @@
 {
     "id": "trait_cleric_skills",
+    "isStartingProficiency": true,
     "name": "Cleric Skills",
     "lore": {
         "shortDescription": ""

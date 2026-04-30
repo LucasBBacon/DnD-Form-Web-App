@@ -1,0 +1,38 @@
+{
+    "id": "trait_bard_prof_mult_skills",
+    "name": "Multiclass Skills Proficiency",
+    "isStartingProficiency": false,
+    "lore": {
+        "shortDescription": "Proficiency with skill of choice.",
+        "fullText": "Gain proficiency with one skill of your choice."
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "target": "skills",
+            "choice": {
+                "count": 1,
+                "pool": [
+                    "acrobatics",
+                    "animal_handling",
+                    "arcana",
+                    "athletics",
+                    "deception",
+                    "history",
+                    "insight",
+                    "intimidation",
+                    "investigation",
+                    "medicine",
+                    "nature",
+                    "perception",
+                    "performance",
+                    "persuasion",
+                    "religion",
+                    "sleight_of_hand",
+                    "stealth",
+                    "survival"
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+    "id": "trait_bard_prof_mult_tools",
+    "name": "Multiclass Tools Proficiency",
+    "isStartingProficiency": false,
+    "lore": {
+        "shortDescription": "Proficiency with musical instrument.",
+        "fullText": "Gain proficiency with one musical instrument of your choice."
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "target": "tools",
+            "choice": {
+                "count": 1,
+                "pool": "any"
+            }
+        }
+    ]
+}

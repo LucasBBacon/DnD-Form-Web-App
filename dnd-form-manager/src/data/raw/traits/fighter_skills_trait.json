@@ -1,5 +1,6 @@
 {
     "id": "trait_fighter_skills",
+    "isStartingProficiency": true,
     "name": "Fighter Skills",
     "lore": {
         "shortDescription": ""

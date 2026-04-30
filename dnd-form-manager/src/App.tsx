@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useCharacterStore } from "./store/useCharacterStore";
 import { CharacterSheet } from "./components/CharacterSheet";
-import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
 import { CharacterCreationWizard } from "./components/CharacterCreationWizard";
 
 function App() {

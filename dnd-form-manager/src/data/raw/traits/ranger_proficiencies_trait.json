@@ -1,5 +1,6 @@
 {
     "id": "trait_ranger_proficiencies",
+    "isStartingProficiency": true,
     "name": "Ranger Proficiencies",
     "lore": {
         "shortDescription": "Gain proficiency with light armor, medium armor, shields, and simple and martial weapons."

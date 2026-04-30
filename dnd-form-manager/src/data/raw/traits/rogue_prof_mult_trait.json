@@ -1,0 +1,24 @@
+{
+    "id": "trait_rogue_mult_prof",
+    "name": "Multiclass Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with light armor, one skill you are already proficient with, and thieves' tools.",
+        "fullText": "If you multiclass into Rogue, you gain proficiency with light armor, one skill from the Rogue list in which you are not already proficient, and thieves' tools."
+    },
+    "effects": [
+        { "type": "proficiency", "target": "armor", "value": "light" },
+        {
+            "type": "proficiency_choice",
+            "target": "skills",
+            "choice": {
+                "count": 1,
+                "pool": [
+                    "acrobatics", "athletics", "deception", "insight", "intimidation",
+                    "investigation", "perception", "performance", "persuasion",
+                    "sleight_of_hand", "stealth"
+                ]
+            }
+        },
+        { "type": "proficiency", "target": "tools", "value": "tool_thieves_tools" }
+    ]
+}

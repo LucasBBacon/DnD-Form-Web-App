@@ -1,500 +1,490 @@
 {
-    "id": "class_sorcerer",
-    "name": "Sorcerer",
-    "hitDie": 6,
-    "proficiencies": {
-        "savingThrows": [
-            "con",
-            "cha"
-        ]
-    },
-    "multiclassProficiencies": {
-        "armor": [],
-        "weapons": [],
-        "tools": [],
-        "skills": {}
-    },
-    "startingEquipment": {
-        "given": [
-            {
-                "itemId": "weapon_dagger",
-                "quantity": 2
-            }
-        ],
-        "choices": [
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "weapon_light_crossbow",
-                                "quantity": 1
-                            },
-                            {
-                                "itemId": "weapon_crossbow_bolt",
-                                "quantity": 20
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "category_weapon_simple",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "gear_component_pouch",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "category_arcane_focus",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "choose": 1,
-                "options": [
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_dungeoneers",
-                                "quantity": 1
-                            }
-                        ]
-                    },
-                    {
-                        "equipmentBundle": [
-                            {
-                                "itemId": "pack_explorers",
-                                "quantity": 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "spellcastingBase": {
-        "ability": "cha",
-        "preparationType": "known",
-        "ritualCasting": false
-    },
-    "subclassInfo": {
-        "choiceLevel": 1,
-        "optionsPool": "subclasses_sorcerer"
-    },
-    "progression": [
-        {
-            "level": 1,
-            "features": [
-                "trait_sorcerer_proficiencies",
-                "trait_sorcerer_skills",
-                "trait_spellcasting_sorcerer",
-                "trait_sorcerous_origin"
-            ],
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellsKnown": 2,
-                "spellSlots": {
-                    "1": 2
-                }
-            }
-        },
-        {
-            "level": 2,
-            "features": [
-                "trait_font_of_magic"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 2
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellsKnown": 3,
-                "spellSlots": {
-                    "1": 3
-                }
-            }
-        },
-        {
-            "level": 3,
-            "features": [
-                "trait_metamagic"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 3
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 4,
-                "spellsKnown": 4,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 2
-                }
-            }
-        },
-        {
-            "level": 4,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 4
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 5,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 2
-                }
-            }
-        },
-        {
-            "level": 5,
-            "classSpecificScaling": {
-                "sorcery_points": 5
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 6,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 2
-                }
-            }
-        },
-        {
-            "level": 6,
-            "features": [
-                "trait_sorcerous_origin_feature"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 6
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 7,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3
-                }
-            }
-        },
-        {
-            "level": 7,
-            "features": [],
-            "classSpecificScaling": {
-                "sorcery_points": 7
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 8,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 1
-                }
-            }
-        },
-        {
-            "level": 8,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 8
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 9,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 2
-                }
-            }
-        },
-        {
-            "level": 9,
-            "classSpecificScaling": {
-                "sorcery_points": 9
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 5,
-                "spellsKnown": 10,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 1
-                }
-            }
-        },
-        {
-            "level": 10,
-            "features": [
-                "trait_metamagic"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 10
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 11,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2
-                }
-            }
-        },
-        {
-            "level": 11,
-            "classSpecificScaling": {
-                "sorcery_points": 11
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 12,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1
-                }
-            }
-        },
-        {
-            "level": 12,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 12
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 12,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1
-                }
-            }
-        },
-        {
-            "level": 13,
-            "classSpecificScaling": {
-                "sorcery_points": 13
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 13,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1
-                }
-            }
-        },
-        {
-            "level": 14,
-            "features": [
-                "trait_sorcerous_origin_feature"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 14
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 13,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1
-                }
-            }
-        },
-        {
-            "level": 15,
-            "classSpecificScaling": {
-                "sorcery_points": 15
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 14,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1
-                }
-            }
-        },
-        {
-            "level": 16,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 16
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 14,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1
-                }
-            }
-        },
-        {
-            "level": 17,
-            "features": [
-                "trait_metamagic"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 17
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 15,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 2,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 18,
-            "features": [
-                "trait_sorcerous_origin_feature"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 18
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 15,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 1,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 19,
-            "features": [
-                "trait_ability_score_improvement"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 19
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 15,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 2,
-                    "7": 1,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        },
-        {
-            "level": 20,
-            "features": [
-                "trait_sorcerous_restoration"
-            ],
-            "classSpecificScaling": {
-                "sorcery_points": 20
-            },
-            "spellcastingProgression": {
-                "cantripsKnown": 6,
-                "spellsKnown": 15,
-                "spellSlots": {
-                    "1": 4,
-                    "2": 3,
-                    "3": 3,
-                    "4": 3,
-                    "5": 3,
-                    "6": 2,
-                    "7": 2,
-                    "8": 1,
-                    "9": 1
-                }
-            }
-        }
+  "id": "class_sorcerer",
+  "name": "Sorcerer",
+  "hitDie": 6,
+  "multiclassTraits": [],
+  "startingEquipment": {
+    "given": [
+      {
+        "itemId": "weapon_dagger",
+        "quantity": 2
+      }
     ],
-    "lore": {
-        "shortDescription": "Born with innate magical power from exotic bloodlines or cosmic forces, sorcerers channel raw arcane energy.",
-        "fullText": "Golden eyes flashing, a human stretches out her hand and unleashes the dragonfire that burns in her veins. As an inferno rages around her foes, leathery wings spread from her back and she takes to the air.\nLong hair whipped bya conjured wind, a half.elf spreads his arms wide and throws his head back. Lifting him momentarily off the ground. a wave of magic surges up in him, through him, and out from him in a mighty blast of lightning.\nCrouching behind a stalagmite, a halfling points a finger at a charging troglodyte. A blast of fire springs from her finger to strike the creature. She ducks back behind the rock formation with a grin, unaware that her wild magic has turned her skin bright blue.\nSorcerers carry a magical birthright conferred upon them by an exotic bloodline, some otherworldly influence. or exposure to unknown cosmic forces. One can't study sorcery as one learns a language, any more than one can learn to live a legendary life. No one chooses sorcery; the power chooses the sorcerer."
+    "choices": [
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "weapon_light_crossbow",
+                "quantity": 1
+              },
+              {
+                "itemId": "weapon_crossbow_bolt",
+                "quantity": 20
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "category_weapon_simple",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "gear_component_pouch",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "category_arcane_focus",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "choose": 1,
+        "options": [
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_dungeoneers",
+                "quantity": 1
+              }
+            ]
+          },
+          {
+            "equipmentBundle": [
+              {
+                "itemId": "pack_explorers",
+                "quantity": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "spellcastingBase": {
+    "ability": "cha",
+    "preparationType": "known",
+    "ritualCasting": false
+  },
+  "subclassInfo": {
+    "choiceLevel": 1,
+    "optionsPool": "subclasses_sorcerer"
+  },
+  "progression": [
+    {
+      "level": 1,
+      "features": [
+        "trait_sorcerer_prof_saving_throw",
+        "trait_sorcerer_proficiencies",
+        "trait_sorcerer_skills",
+        "trait_spellcasting_sorcerer",
+        "trait_sorcerous_origin"
+      ],
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellsKnown": 2,
+        "spellSlots": {
+          "1": 2
+        }
+      }
+    },
+    {
+      "level": 2,
+      "features": [
+        "trait_font_of_magic"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 2
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellsKnown": 3,
+        "spellSlots": {
+          "1": 3
+        }
+      }
+    },
+    {
+      "level": 3,
+      "features": [
+        "trait_metamagic"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 3
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 4,
+        "spellsKnown": 4,
+        "spellSlots": {
+          "1": 4,
+          "2": 2
+        }
+      }
+    },
+    {
+      "level": 4,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 4
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 5,
+        "spellSlots": {
+          "1": 4,
+          "2": 2
+        }
+      }
+    },
+    {
+      "level": 5,
+      "classSpecificScaling": {
+        "sorcery_points": 5
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 6,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 2
+        }
+      }
+    },
+    {
+      "level": 6,
+      "features": [
+        "trait_sorcerous_origin_feature"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 6
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 7,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3
+        }
+      }
+    },
+    {
+      "level": 7,
+      "features": [],
+      "classSpecificScaling": {
+        "sorcery_points": 7
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 8,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 1
+        }
+      }
+    },
+    {
+      "level": 8,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 8
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 9,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 2
+        }
+      }
+    },
+    {
+      "level": 9,
+      "classSpecificScaling": {
+        "sorcery_points": 9
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 5,
+        "spellsKnown": 10,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 1
+        }
+      }
+    },
+    {
+      "level": 10,
+      "features": [
+        "trait_metamagic"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 10
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 11,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2
+        }
+      }
+    },
+    {
+      "level": 11,
+      "classSpecificScaling": {
+        "sorcery_points": 11
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 12,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      }
+    },
+    {
+      "level": 12,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 12
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 12,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      }
+    },
+    {
+      "level": 13,
+      "classSpecificScaling": {
+        "sorcery_points": 13
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 13,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      }
+    },
+    {
+      "level": 14,
+      "features": [
+        "trait_sorcerous_origin_feature"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 14
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 13,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      }
+    },
+    {
+      "level": 15,
+      "classSpecificScaling": {
+        "sorcery_points": 15
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 14,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      }
+    },
+    {
+      "level": 16,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 16
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 14,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      }
+    },
+    {
+      "level": 17,
+      "features": [
+        "trait_metamagic"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 17
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 15,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 18,
+      "features": [
+        "trait_sorcerous_origin_feature"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 18
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 15,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 19,
+      "features": [
+        "trait_ability_score_improvement"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 19
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 15,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      }
+    },
+    {
+      "level": 20,
+      "features": [
+        "trait_sorcerous_restoration"
+      ],
+      "classSpecificScaling": {
+        "sorcery_points": 20
+      },
+      "spellcastingProgression": {
+        "cantripsKnown": 6,
+        "spellsKnown": 15,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 2,
+          "8": 1,
+          "9": 1
+        }
+      }
     }
+  ],
+  "lore": {
+    "shortDescription": "Born with innate magical power from exotic bloodlines or cosmic forces, sorcerers channel raw arcane energy.",
+    "fullText": "Golden eyes flashing, a human stretches out her hand and unleashes the dragonfire that burns in her veins. As an inferno rages around her foes, leathery wings spread from her back and she takes to the air.\nLong hair whipped bya conjured wind, a half.elf spreads his arms wide and throws his head back. Lifting him momentarily off the ground. a wave of magic surges up in him, through him, and out from him in a mighty blast of lightning.\nCrouching behind a stalagmite, a halfling points a finger at a charging troglodyte. A blast of fire springs from her finger to strike the creature. She ducks back behind the rock formation with a grin, unaware that her wild magic has turned her skin bright blue.\nSorcerers carry a magical birthright conferred upon them by an exotic bloodline, some otherworldly influence. or exposure to unknown cosmic forces. One can't study sorcery as one learns a language, any more than one can learn to live a legendary life. No one chooses sorcery; the power chooses the sorcerer."
+  }
 }

@@ -1,0 +1,21 @@
+{
+    "id": "trait_rogue_prof_saving_throw",
+    "isStartingProficiency": true,
+    "name": "Saving Throws Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency in Dexterity and Intelligence saving throws.",
+        "fullText": "Gain proficiency in Dexterity and Intelligence saving throws."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "dex"
+        },
+        {
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "int"
+        }
+    ]
+}
