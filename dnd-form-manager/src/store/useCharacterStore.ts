@@ -263,6 +263,8 @@ export interface CharacterState {
   expendedSpellSlots: Record<number, number>;
   // The number of expended pact magic slots, used to track the character's available pact slots for warlocks and manage their recovery during rests
   expendedPactSlots: number;
+  // Tracks expended uses for trait-granted actions keyed by action id
+  expendedTraitActionUses: Record<string, number>;
 
   // #endregion
 
@@ -376,6 +378,10 @@ interface CharacterActions {
   restoreSpellSlot: (level: number) => void;
   
   expendPactSlot: () => void;
+
+  expendTraitActionUse: (actionId: string) => void;
+
+  restoreTraitActionUse: (actionId: string) => void;
 
   // #endregion
 
@@ -497,6 +503,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   spellsPrepared: [],
   expendedSpellSlots: {},
   expendedPactSlots: 0,
+  expendedTraitActionUses: {},
 
   // #endregion
 
@@ -905,6 +912,38 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       expendedPactSlots: state.expendedPactSlots + 1,
     })),
 
+  expendTraitActionUse: (actionId) =>
+    set((state) => {
+      if (!actionId) return state;
+      const current = state.expendedTraitActionUses[actionId] ?? 0;
+      return {
+        expendedTraitActionUses: {
+          ...state.expendedTraitActionUses,
+          [actionId]: current + 1,
+        },
+      };
+    }),
+
+  restoreTraitActionUse: (actionId) =>
+    set((state) => {
+      if (!actionId) return state;
+      const current = state.expendedTraitActionUses[actionId] ?? 0;
+      if (current <= 0) return state;
+
+      const updated = {
+        ...state.expendedTraitActionUses,
+        [actionId]: current - 1,
+      };
+
+      if (updated[actionId] === 0) {
+        delete updated[actionId];
+      }
+
+      return {
+        expendedTraitActionUses: updated,
+      };
+    }),
+
   // #endregion
 
   // #region --- Rest Actions ---
@@ -913,6 +952,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       expendedSpellSlots: {}, // Wipes all normal slot usage
       expendedPactSlots: 0, // Wipes pact slot usage
+      expendedTraitActionUses: {}, // Resets tracked trait action usage
       damageTaken: 0, // fully heal
       tempHp: 0, // temp HP stops after long rest
       // 5e rule: regain half total hit dice (min 1)
@@ -925,6 +965,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   takeShortRest: () =>
     set(() => ({
       expendedPactSlots: 0, // Warlocks get spell slots back after short rest
+      expendedTraitActionUses: {}, // Resets tracked trait action usage
       // Normal spell slots remain untouched
     })),
 

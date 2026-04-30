@@ -1,166 +1,201 @@
 import type React from "react";
-import { useState } from "react";
-import { useAttacks } from "../hooks/useAttacks";
-import { useSpellcasting } from "../hooks/useSpellcasting";
-import { useTraitActions } from "../hooks/useTraitActions";
+import { useMemo } from "react";
+import {
+  useCombatActions,
+  type CombatActionSection,
+} from "../hooks/useCombatActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import "./ActionsBoard.css";
-import { SpellBookView } from "./SpellBookView";
-import { TraitActionsView } from "./TraitActionsView";
 
-type ActionTab = "at-will" | "spells" | "traits";
+const SECTION_ORDER: CombatActionSection[] = [
+  "action",
+  "bonus_action",
+  "reaction",
+];
+
+const SECTION_LABELS: Record<CombatActionSection, string> = {
+  action: "Actions",
+  bonus_action: "Bonus Actions",
+  reaction: "Reactions",
+};
+
+const renderPips = (remaining: number, total: number) => {
+  const normalizedTotal = Math.max(total, 1);
+  return Array.from({ length: normalizedTotal }).map((_, index) => (
+    <span
+      key={`pip-${index}`}
+      className={`cost-pip ${index < remaining ? "filled" : "empty"}`}
+      aria-hidden="true"
+    />
+  ));
+};
 
 export const ActionsBoard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActionTab>("at-will");
+  const { spellcasting, sections, toRomanNumeral } = useCombatActions();
+  const { expendTraitActionUse, restoreTraitActionUse } = useCharacterStore();
 
-  const attacks = useAttacks();
-  const spellcasting = useSpellcasting();
-  const traitActions = useTraitActions();
-  const { expendSpellSlot, restoreSpellSlot, expendPactSlot } =
-    useCharacterStore();
+  const slotHud = useMemo(() => {
+    const rows: Array<{ label: string; text: string }> = [];
 
-  // Helper to check if there are spells, disables tab if not
-  const hasSpells =
-    spellcasting.isSpellcaster || spellcasting.pools.innate.length > 0;
+    Object.entries(spellcasting.slots.shared).forEach(([level, slotData]) => {
+      if (slotData.total <= 0) return;
+      const remaining = Math.max(slotData.total - slotData.expended, 0);
+      const bubbles = "o".repeat(remaining).padEnd(slotData.total, " ");
+      rows.push({
+        label: `Lvl ${level}`,
+        text: `[${bubbles}]`,
+      });
+    });
+
+    if (spellcasting.slots.pact && spellcasting.slots.pact.total > 0) {
+      const remaining = Math.max(
+        spellcasting.slots.pact.total - spellcasting.slots.pact.expended,
+        0,
+      );
+      const bubbles = "o"
+        .repeat(remaining)
+        .padEnd(spellcasting.slots.pact.total, " ");
+      rows.push({
+        label: `Pact ${spellcasting.slots.pact.level}`,
+        text: `[${bubbles}]`,
+      });
+    }
+
+    return rows;
+  }, [spellcasting.slots.pact, spellcasting.slots.shared]);
 
   return (
     <section className="actions-board-container card">
-      {/* Segmented control (tabs) */}
-      <div className="tab-controls">
-        <button
-          className={`tab-btn ${activeTab === "at-will" ? "active" : ""}`}
-          onClick={() => setActiveTab("at-will")}
-        >
-          AT-WILL ATTACKS
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "spells" ? "active" : ""}`}
-          onClick={() => setActiveTab("spells")}
-          disabled={!hasSpells}
-        >
-          SPELLS & SLOTS
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "traits" ? "active" : ""}`}
-          onClick={() => setActiveTab("traits")}
-        >
-          TRAIT ACTIONS
-        </button>
+      <div className="combat-header-row">
+        <div>
+          <h2 className="combat-title">Combat Actions</h2>
+          <p className="combat-subtitle">
+            Unified action economy view. Spell preparation and long-form reading
+            live in Spellbook management.
+          </p>
+        </div>
       </div>
 
-      <div className="tab-content">
-        {/* --- TAB 1: AT-WILL (Weapons) --- */}
-        {activeTab === "at-will" && (
-          <div className="attack-list">
-            <div className="list-header">
-              <span className="col-name">WEAPON</span>
-              <span className="col-atk">ATK BONUS</span>
-              <span className="col-dmg">DAMAGE/TYPE</span>
-            </div>
+      <div className="spell-slot-hud" aria-label="Available spell slots">
+        <span className="hud-label">Spell Slots</span>
+        <div className="hud-track-list">
+          {slotHud.length === 0 ? (
+            <span className="hud-empty">No spell slots</span>
+          ) : (
+            slotHud.map((entry) => (
+              <span key={entry.label} className="hud-track">
+                <strong>{entry.label}:</strong> {entry.text}
+              </span>
+            ))
+          )}
+        </div>
+      </div>
 
-            {attacks.attacks.length === 0 ? (
-              <div className="empty-state">No equipped weapons.</div>
-            ) : (
-              attacks.attacks.map((atk, index) => (
-                <div key={`${atk?.weaponId}-${index}`} className="attack-row">
-                  <div className="atk-name-col">
-                    <strong>{atk?.name}</strong>
-                    {atk?.range && (
-                      <span className="atk-subtext">{atk.range}</span>
-                    )}
-                  </div>
-                  <div className="atk-bonus-col">
-                    <button className="roll-btn">
-                      {(atk?.toHit ?? 0) >= 0
-                        ? `+${atk?.toHit ?? 0}`
-                        : atk?.toHit}
-                    </button>
-                  </div>
-                  <div className="atk-dmg-col">
-                    <span className="dmg-string">{atk?.damageString}</span>
-                    {/* Ammo tracker inline */}
-                    {atk?.ammo && (
-                      <span className="ammo-tracker">
-                        Ammo: {atk?.ammo.count}
-                      </span>
-                    )}
-                  </div>
+      <div className="combat-sections">
+        {SECTION_ORDER.map((section) => {
+          const entries = sections[section];
+
+          return (
+            <div key={section} className="combat-section">
+              <h3 className="combat-section-header">{SECTION_LABELS[section]}</h3>
+
+              {entries.length === 0 ? (
+                <div className="empty-state">
+                  No {SECTION_LABELS[section].toLowerCase()} available.
                 </div>
-              ))
-            )}
-            {/* TODO: map cantrips here */}
-          </div>
-        )}
+              ) : (
+                <div className="combat-card-list">
+                  {entries.map((entry) => (
+                    <article
+                      key={entry.id}
+                      className={`combat-action-card ${entry.isExhausted ? "is-exhausted" : ""}`}
+                    >
+                      <header className="combat-action-header">
+                        <div className="combat-action-title-wrap">
+                          <h4 className="combat-action-title">{entry.name}</h4>
+                          <span className="combat-action-source">
+                            {entry.subtitle || entry.source}
+                          </span>
+                        </div>
 
-        {/* --- TAB 2: SPELLS AND SLOTS --- */}
-        {activeTab === "spells" && hasSpells && (
-          <div className="spells-view">
-            {/* Slots tracker pinned to top */}
-            <div className="slot-trackers-grid">
-              {/* Pact slots (if applicable) */}
-              {spellcasting.slots.pact && (
-                <div className="slot-box pact-slot">
-                  <span className="slot-label">
-                    PACT (LVL {spellcasting.slots.pact.level})
-                  </span>
-                  <div className="slot-bubbles">
-                    {Array.from({ length: spellcasting.slots.pact.total }).map(
-                      (_, i) => (
-                        <input
-                          key={`pact-${i}`}
-                          type="checkbox"
-                          checked={i < (spellcasting.slots.pact?.expended ?? 0)}
-                          onChange={expendPactSlot}
-                          className="slot-checkbox"
-                        />
-                      ),
-                    )}
-                  </div>
-                </div>
-              )}
+                        <div className="combat-action-cost-wrap">
+                          {entry.source === "spell" &&
+                            typeof entry.spellLevel === "number" && (
+                              <span
+                                className={`cost-badge spell-level lvl-${Math.min(
+                                  Math.max(entry.spellLevel, 0),
+                                  9,
+                                )}`}
+                                title={
+                                  entry.spellLevel === 0
+                                    ? "Cantrip"
+                                    : `Spell Slot Level ${entry.spellLevel}`
+                                }
+                              >
+                                {toRomanNumeral(entry.spellLevel)}
+                              </span>
+                            )}
 
-              {/* Shared Slots (lvl 1-9) */}
-              {Object.entries(spellcasting.slots.shared).map(
-                ([level, slotData]) => {
-                  if (slotData.total === 0) return null;
-                  const lvlNum = parseInt(level);
-                  return (
-                    <div key={`slot-lvl-${level}`} className="slot-box">
-                      <span className="slot-label">LEVEL {level}</span>
-                      <div className="slot-bubbles">
-                        {Array.from({ length: slotData.total }).map((_, i) => (
-                          <input
-                            key={`shared-${level}-${i}`}
-                            type="checkbox"
-                            checked={i < slotData.expended}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                expendSpellSlot(lvlNum);
-                              } else {
-                                restoreSpellSlot(lvlNum);
-                              }
-                            }}
-                            className="slot-checkbox"
-                          />
+                          {entry.uses && (
+                            <span
+                              className="cost-badge uses"
+                              title={`${entry.uses.remaining} of ${entry.uses.total} uses remaining`}
+                            >
+                              {renderPips(entry.uses.remaining, entry.uses.total)}
+                            </span>
+                          )}
+
+                          {entry.source === "attack" && (
+                            <span className="cost-badge at-will">AT-WILL</span>
+                          )}
+                        </div>
+                      </header>
+
+                      <div className="combat-action-stats">
+                        {entry.quickStats.map((stat, index) => (
+                          <span key={`${entry.id}-stat-${index}`} className="quick-stat">
+                            {stat}
+                          </span>
                         ))}
                       </div>
-                    </div>
-                  );
-                },
+
+                      {entry.description && (
+                        <p className="combat-action-description">{entry.description}</p>
+                      )}
+
+                      {entry.uses && (
+                        <div className="trait-use-controls">
+                          <button
+                            type="button"
+                            className="mini-use-btn"
+                            onClick={() => expendTraitActionUse(entry.id.replace("trait:", ""))}
+                            disabled={entry.uses.remaining <= 0}
+                          >
+                            Use
+                          </button>
+                          <button
+                            type="button"
+                            className="mini-use-btn secondary"
+                            onClick={() =>
+                              restoreTraitActionUse(entry.id.replace("trait:", ""))
+                            }
+                            disabled={entry.uses.remaining >= entry.uses.total}
+                          >
+                            Restore
+                          </button>
+                        </div>
+                      )}
+
+                      {entry.isExhausted && (
+                        <p className="exhausted-note">Resource exhausted.</p>
+                      )}
+                    </article>
+                  ))}
+                </div>
               )}
             </div>
-
-            <div className="spell-book-hint">
-              <SpellBookView spellcasting={spellcasting} />
-            </div>
-          </div>
-        )}
-
-        {activeTab === "traits" && (
-          <div className="trait-actions-view">
-            <TraitActionsView actions={traitActions.actions} />
-          </div>
-        )}
+          );
+        })}
       </div>
     </section>
   );

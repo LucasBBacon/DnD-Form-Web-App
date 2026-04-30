@@ -1,269 +1,300 @@
 .actions-board-container {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
 }
 
-.tab-controls {
+.combat-header-row {
   display: flex;
-  border-bottom: 2px solid #e4e4e7;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.tab-btn {
-  flex: 1;
-  background: transparent;
-  border: none;
-  padding: 0.75rem;
-  font-weight: 700;
-  color: #a1a1aa;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
+.combat-title {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
 }
 
-.tab-btn:hover:not(:disabled) {
-  color: #18181b;
-  background: #f4f4f5;
+.combat-subtitle {
+  margin: 0.25rem 0 0;
+  color: #52525b;
+  font-size: 0.82rem;
 }
 
-.tab-btn.active {
-  color: #18181b;
-  border-bottom-color: #ef4444;
-}
-
-.tab-btn.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.attack-list {
+.spell-slot-hud {
+  border: 1px solid #bfdbfe;
+  background: linear-gradient(120deg, #eff6ff, #f8fafc);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.hud-label {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  color: #1d4ed8;
+}
+
+.hud-track-list {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.list-header {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #71717a;
-  padding: 0 0 0.5rem 0.25rem 0.5rem;
-  border-bottom: 1px solid #e4e4e7;
+.hud-track {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.8rem;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #dbeafe;
+  color: #1e3a8a;
 }
 
-.attack-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
-  align-items: center;
-  background: #f4f4f5;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #e4e4e7;
+.hud-empty {
+  font-size: 0.8rem;
+  color: #64748b;
 }
 
-.atk-name-col {
+.combat-sections {
   display: flex;
   flex-direction: column;
+  gap: 0.9rem;
 }
 
-.atk-subtext {
-  font-size: 0.7rem;
-  color: #71717a;
-}
-
-.atk-bonus-col {
-  display: flex;
-  justify-content: center;
-}
-
-.roll-btn {
-  background: #18181b;
-  color: white;
-  border: none;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-.roll-btn:hover {
-  background: #3f3f46;
-}
-
-.atk-dmg-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-weight: 600;
-  text-align: right;
-}
-
-.ammo-tracker {
-  font-size: 0.7rem;
-  color: #ef4444;
-  font-weight: bold;
-}
-
-.slot-trackers-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px dashed #e4e4e7;
-}
-
-.slot-box {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  padding: 0.5rem;
-  border-radius: 6px;
-}
-
-.pact-slot {
-  background: #fdf4ff;
-  border-color: #e879f9;
-}
-
-.slot-label {
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: #0369a1;
-}
-
-.pact-slot .slot-label {
-  color: #a21caf;
-}
-
-.slot-bubbles {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.slot-checkbox {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #38bdf8;
-  border-radius: 4px;
-  cursor: pointer;
-  background: white;
-}
-
-.slot-checkbox:checked {
-  background: #0ea5e9;
-  border-color: #0ea5e9;
-}
-
-.pact-slot .slot-checkbox {
-  border-color: #d946ef;
-}
-
-.pact-slot .slot-checkbox:checked {
-  background: #c027d3;
-  border-color: #c027d3;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 2rem;
-  color: #a1a1aa;
-  font-style: italic;
-}
-
-.trait-actions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.trait-action-card {
-  border: 1px solid #e4e4e7;
-  border-radius: 10px;
+.combat-section {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: clip;
   background: #fafafa;
-  overflow: hidden;
-  transition: border-color 0.2s ease;
 }
 
-.trait-action-card.expanded {
-  border-color: #38bdf8;
+.combat-section-header {
+  position: sticky;
+  top: 0;
+  margin: 0;
+  z-index: 1;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+  color: #111827;
+  background: #e2e8f0;
+  border-bottom: 1px solid #cbd5e1;
+  padding: 0.45rem 0.7rem;
 }
 
-.trait-action-header {
-  width: 100%;
-  border: none;
-  background: transparent;
+.combat-card-list {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.65rem;
+}
+
+.combat-action-card {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.62rem;
+  transition: opacity 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+}
+
+.combat-action-card.is-exhausted {
+  opacity: 0.56;
+  filter: grayscale(0.28);
+  border-color: #d4d4d8;
+}
+
+.combat-action-header {
+  display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 0.75rem;
-  padding: 0.75rem;
-  cursor: pointer;
-  text-align: left;
 }
 
-.trait-action-header:hover {
-  background: #f4f4f5;
+.combat-action-title-wrap {
+  min-width: 0;
 }
 
-.trait-action-name {
-  font-weight: 700;
-  color: #18181b;
+.combat-action-title {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #111827;
 }
 
-.trait-action-quick-stats {
+.combat-action-source {
+  display: inline-block;
+  margin-top: 0.16rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.combat-action-cost-wrap {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.cost-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #1f2937;
+  padding: 0 0.45rem;
+}
+
+.cost-badge.spell-level {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  letter-spacing: 0.06em;
+}
+
+.cost-badge.lvl-0 {
+  color: #1e3a8a;
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.cost-badge.lvl-1,
+.cost-badge.lvl-2,
+.cost-badge.lvl-3 {
+  color: #1d4ed8;
+  border-color: #60a5fa;
+  background: #dbeafe;
+}
+
+.cost-badge.lvl-4,
+.cost-badge.lvl-5,
+.cost-badge.lvl-6 {
+  color: #6d28d9;
+  border-color: #c4b5fd;
+  background: #f3e8ff;
+}
+
+.cost-badge.lvl-7,
+.cost-badge.lvl-8,
+.cost-badge.lvl-9 {
+  color: #9f1239;
+  border-color: #f9a8d4;
+  background: #fce7f3;
+}
+
+.cost-badge.uses {
+  min-width: 2.7rem;
+  gap: 0.2rem;
+}
+
+.cost-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid #94a3b8;
+}
+
+.cost-pip.filled {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.cost-pip.empty {
+  background: #ffffff;
+}
+
+.cost-badge.at-will {
+  color: #166534;
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.combat-action-stats {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  justify-content: flex-end;
 }
 
 .quick-stat {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #d4d4d8;
+  border: 1px solid #e2e8f0;
   border-radius: 999px;
-  padding: 0.12rem 0.55rem;
+  padding: 0.12rem 0.5rem;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #3f3f46;
-  background: #fff;
+  color: #334155;
+  background: #f8fafc;
 }
 
-.trait-action-details {
-  padding: 0.75rem;
+.combat-action-description {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #334155;
 }
 
-.trait-action-meta-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.5rem;
+.trait-use-controls {
+  margin-top: 0.55rem;
+  display: flex;
+  gap: 0.4rem;
 }
 
-.meta-item {
-  font-size: 0.85rem;
-  color: #3f3f46;
+.mini-use-btn {
+  border: 1px solid #d1d5db;
+  background: #f8fafc;
+  color: #111827;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
 }
 
-.meta-item.highlight {
-  color: #0c4a6e;
+.mini-use-btn.secondary {
+  color: #475569;
+}
+
+.mini-use-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.exhausted-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.72rem;
+  color: #9f1239;
   font-weight: 700;
 }
 
-.divider {
-  border: none;
-  border-top: 1px solid #e4e4e7;
-  margin: 0.75rem 0;
+.empty-state {
+  text-align: center;
+  padding: 1rem;
+  color: #6b7280;
+  font-style: italic;
 }
 
-.trait-action-description {
-  font-size: 0.85rem;
-  line-height: 1.45;
-  color: #18181b;
-  white-space: pre-wrap;
+@media (max-width: 768px) {
+  .combat-action-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .combat-action-cost-wrap {
+    align-self: stretch;
+    justify-content: flex-start;
+  }
 }

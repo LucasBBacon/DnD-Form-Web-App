@@ -200,10 +200,8 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
       7: { hpGained: 7 },
     },
     spellsKnown: [
-      "spell_ember_spark",
-      "spell_hexfire_bolt",
-      "spell_void_grasp",
-      "spell_ember_veil",
+      "spell_chill_touch",
+      "spell_hex"
     ],
     spellsPrepared: [],
     expendedPactSlots: 1,
@@ -231,9 +229,8 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
       7: { hpGained: 6 },
     },
     spellsKnown: [
-      "spell_ember_spark",
-      "spell_hexfire_bolt",
-      "spell_void_grasp",
+      "spell_chill_touch",
+      "spell_hex"
     ],
     spellsPrepared: [],
     acquiredFeats: [

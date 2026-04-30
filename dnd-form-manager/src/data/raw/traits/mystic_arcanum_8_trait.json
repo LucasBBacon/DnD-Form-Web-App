@@ -1,0 +1,8 @@
+{
+    "id": "trait_mystic_arcanum_8",
+    "name": "Mystic Arcanum (8th level)",
+    "lore": {
+        "shortDescription": "At 15th level your patron grants you an 8th-level spell to cast once per long rest without expending a spell slot.",
+        "fullText": "At 15th level, you gain a third arcanum. Choose one 8th-level spell from the warlock spell list. You can cast it once without expending a spell slot, and you must finish a long rest before you can do so again."
+    }
+}

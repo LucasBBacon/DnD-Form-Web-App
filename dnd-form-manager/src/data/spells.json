@@ -8,8 +8,11 @@
       "class_sorcerer",
       "class_wizard"
     ],
-    "castingTime": "1 action",
-    "range": "60 feet",
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
     "duration": "Instantaneous",
     "concentration": false,
     "ritual": false,
@@ -17,6 +20,31 @@
       "vocal": true,
       "somatic": true,
       "material": false
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "no_damage"
+    },
+    "output": {
+      "damage": [
+        {
+          "type": "acid",
+          "roll": "1d6",
+          "scaling": {
+            "type": "character_level",
+            "thresholds": {
+              "5": "2d6",
+              "11": "3d6",
+              "17": "4d6"
+            }
+          }
+        }
+      ]
     },
     "lore": {
       "shortDescription": "You hurl a bubble of acid that harms one or two nearby creatures.",
@@ -24,17 +52,21 @@
     }
   },
   {
-    "id": "spell_ember_spark",
-    "name": "Ember Spark",
+    "id": "spell_chill_touch",
+    "name": "Chill Touch",
     "level": 0,
-    "school": "evocation",
+    "school": "necromancy",
     "classes": [
+      "class_sorcerer",
       "class_warlock",
-      "class_sorcerer"
+      "class_wizard"
     ],
-    "castingTime": "1 action",
-    "range": "60 feet",
-    "duration": "Instantaneous",
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "1 round",
     "concentration": false,
     "ritual": false,
     "components": {
@@ -42,134 +74,73 @@
       "somatic": true,
       "material": false
     },
-    "lore": {
-      "shortDescription": "A cinder mote lashes a nearby target.",
-      "fullText": "You snap your fingers and launch a cinder mote at one creature you can see within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 fire damage. The spell's damage increases by 1d8 at 5th level, 11th level, and 17th level."
-    }
-  },
-  {
-    "id": "spell_ember_veil",
-    "name": "Ember Veil",
-    "level": 4,
-    "school": "abjuration",
-    "classes": [
-      "class_warlock",
-      "class_sorcerer"
-    ],
-    "castingTime": "1 action",
-    "range": "Self (10-foot radius)",
-    "duration": "Concentration, up to 10 minutes",
-    "concentration": true,
-    "ritual": false,
-    "components": {
-      "vocal": true,
-      "somatic": true,
-      "material": true,
-      "materialMaterials": "Ash from a burned letter"
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "no_damage"
+    },
+    "output": {
+      "damage": [
+        {
+          "type": "necrotic",
+          "addModifier": false,
+          "roll": "1d8",
+          "scaling": {
+            "type": "character_level",
+            "thresholds": {
+              "5": "2d8",
+              "11": "3d8",
+              "17": "4d8"
+            }
+          }
+        }
+      ]
     },
     "lore": {
-      "shortDescription": "A protective ring of cinders blunts incoming harm.",
-      "fullText": "A ring of smoldering cinders surrounds you in a 10-foot radius aura. You and creatures of your choice in the aura have resistance to cold damage. A hostile creature that enters the aura for the first time on a turn or ends its turn there takes 2d8 fire damage.",
-      "higherLevel": "When you cast this spell using a slot of 5th level or higher, the fire damage increases by 1d8 for each slot level above 4th."
+      "shortDescription": "A ghostly, skeletal hand strikes a creature, dealing necrotic damage and preventing it from healing.",
+      "fullText": "You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell attack against the creature to assail it with the chill of the grave. On a hit, the target takes 1d8 necrotic damage, and it can’t regain hit points until the start of your next turn. Until then, the hand clings to the target. If you hit an undead target, it also has disadvantage on attack rolls against you until the end of your next turn.",
+      "higherLevel": "This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)."
     }
   },
   {
-    "id": "spell_hexfire_bolt",
-    "name": "Hexfire Bolt",
+    "id": "spell_hex",
+    "name": "Hex",
     "level": 1,
     "school": "enchantment",
     "classes": [
       "class_warlock"
     ],
-    "castingTime": "1 action",
-    "range": "90 feet",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "components": {
-      "vocal": true,
-      "somatic": true,
-      "material": true,
-      "materialMaterials": "A charred thorn"
+    "actionType": "bonus_action",
+    "range": {
+      "type": "ranged",
+      "distance": 90
     },
-    "lore": {
-      "shortDescription": "A cursed bolt scorches and unbalances a foe.",
-      "fullText": "You hurl a streak of black-red fire at one creature within range. Make a ranged spell attack. On a hit, the target takes 2d8 fire damage and has disadvantage on the next saving throw it makes before the end of your next turn.",
-      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st."
-    }
-  },
-  {
-    "id": "spell_lunar_step",
-    "name": "Lunar Step",
-    "level": 2,
-    "school": "conjuration",
-    "classes": [
-      "class_warlock",
-      "class_wizard"
-    ],
-    "castingTime": "1 bonus action",
-    "range": "Self",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "components": {
-      "vocal": true,
-      "somatic": false,
-      "material": true,
-      "materialMaterials": "A silver thread"
+    "output": {
+      "damage": [
+        {
+          "type": "necrotic",
+          "addModifier": true,
+          "roll": "1d6"
+        }
+      ]
     },
-    "lore": {
-      "shortDescription": "You blink through moonlight to a safer position.",
-      "fullText": "You teleport up to 30 feet to an unoccupied space you can see. Until the start of your next turn, your movement does not provoke opportunity attacks."
-    }
-  },
-  {
-    "id": "spell_starfall_seal",
-    "name": "Starfall Seal",
-    "level": 5,
-    "school": "evocation",
-    "classes": [
-      "class_warlock",
-      "class_cleric"
-    ],
-    "castingTime": "1 action",
-    "range": "120 feet",
-    "duration": "Instantaneous",
-    "concentration": false,
-    "ritual": false,
-    "components": {
-      "vocal": true,
-      "somatic": true,
-      "material": true,
-      "materialMaterials": "A shard of meteoric iron"
-    },
-    "lore": {
-      "shortDescription": "A falling sigil detonates in radiant fire.",
-      "fullText": "You mark a point you can see within range and call down a stellar sigil. Creatures in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw. A creature takes 6d8 radiant damage and 6d8 fire damage on a failed save, or half as much damage on a successful one.",
-      "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, both damage rolls increase by 1d8 for each slot level above 5th."
-    }
-  },
-  {
-    "id": "spell_void_grasp",
-    "name": "Void Grasp",
-    "level": 3,
-    "school": "necromancy",
-    "classes": [
-      "class_warlock"
-    ],
-    "castingTime": "1 action",
-    "range": "60 feet",
-    "duration": "Concentration, up to 1 minute",
+    "duration": "1 hour",
     "concentration": true,
     "ritual": false,
     "components": {
       "vocal": true,
       "somatic": true,
-      "material": false
+      "material": true,
+      "materialMaterials": "The petrified eye of a newt."
     },
     "lore": {
-      "shortDescription": "Shadow tendrils bind and drain a creature.",
-      "fullText": "Choose one creature you can see within range. The target must make a Strength saving throw. On a failure, it is restrained by tendrils of void-energy. While restrained this way, it takes 2d6 necrotic damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, ending the effect on a success."
+      "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
+      "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
+      "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
     }
   }
 ]

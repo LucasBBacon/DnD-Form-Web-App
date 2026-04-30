@@ -3,7 +3,7 @@ import type { SubraceData } from "../types/subrace";
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemData } from "../types/item";
-import type { SpellData } from "../types/spell";
+import type { SpellData, SpellRawData } from "../types/spell";
 import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
 import type { ActionData } from "../types/action";
@@ -17,6 +17,7 @@ import rawSpellsData from "./spells.json";
 import rawFeatsData from "./feats.json";
 import rawTraitsData from "./traits.json"
 import rawActionsData from "./actions.json";
+import { normalizeSpells } from "./spellNormalizer";
 
 // region Race API
 const racesArray = rawRacesData as unknown as Race[];
@@ -100,7 +101,7 @@ export const getAllItems = (): ItemData[] => {
 };
 
 // region Spells API
-const spellsArray = rawSpellsData as SpellData[];
+const spellsArray = normalizeSpells(rawSpellsData as SpellRawData[]);
 const spellsDictionary: Record<string, SpellData> = {};
 spellsArray.forEach((s) => {
   spellsDictionary[s.id] = s;

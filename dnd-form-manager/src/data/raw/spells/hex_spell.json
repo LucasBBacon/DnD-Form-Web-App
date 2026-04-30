@@ -1,0 +1,37 @@
+{
+    "id": "spell_hex",
+    "name": "Hex",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+        "class_warlock"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+        "type": "ranged",
+        "distance": 90
+    },
+    "output": {
+        "damage": [
+            {
+                "type": "necrotic",
+                "addModifier": true,
+                "roll": "1d6"
+            }
+        ]
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "The petrified eye of a newt."
+    },
+    "lore": {
+        "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
+        "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
+        "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
+    }
+}

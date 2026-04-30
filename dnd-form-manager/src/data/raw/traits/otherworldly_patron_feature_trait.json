@@ -1,0 +1,8 @@
+{
+    "id": "trait_otherworldly_patron_feature",
+    "name": "Otherworldly Patron Feature",
+    "lore": {
+        "shortDescription": "Your patron grants you a feature as determined by your subclass.",
+        "fullText": "At certain levels your otherworldly patron grants you special features. The specific feature depends on the patron you chose at 1st level."
+    }
+}

@@ -748,6 +748,22 @@
     }
   },
   {
+    "id": "trait_eldritch_invocations",
+    "name": "Eldritch Invocations",
+    "lore": {
+      "shortDescription": "In your study of occult lore you have unearthed eldritch invocations — fragments of forbidden knowledge that imbue you with a permanent magical ability.",
+      "fullText": "In your study of occult lore, you have unearthed eldritch invocations, fragments of forbidden knowledge that imbue you with an abiding magical ability. At 2nd level, you gain two eldritch invocations of your choice. Your invocation options are detailed at the end of the class description. When you gain certain warlock levels, you gain additional invocations of your choice. Additionally, when you gain a level in this class, you can choose one of the invocations you know and replace it with another invocation that you could learn at that level."
+    }
+  },
+  {
+    "id": "trait_eldritch_master",
+    "name": "Eldritch Master",
+    "lore": {
+      "shortDescription": "At 20th level you can spend 1 minute entreating your patron to regain all expended Pact Magic spell slots.",
+      "fullText": "At 20th level, you can draw on your inner reserve of mystical power while entreating your patron to regain expended spell slots. You can spend 1 minute entreating your patron for aid to regain all your expended Pact Magic spell slots. Once you regain spell slots with this feature, you must finish a long rest before you can do so again."
+    }
+  },
+  {
     "id": "trait_elf_ability_bonuses",
     "name": "Ability Score Increase",
     "lore": {
@@ -1791,11 +1807,75 @@
     ]
   },
   {
+    "id": "trait_mystic_arcanum_6",
+    "name": "Mystic Arcanum (6th level)",
+    "lore": {
+      "shortDescription": "At 11th level your patron bestows a magical secret — choose one 6th-level spell to cast once per long rest without expending a spell slot.",
+      "fullText": "At 11th level, your patron bestows upon you a magical secret called an arcanum. Choose one 6th-level spell from the warlock spell list as this arcanum. You can cast your arcanum spell once without expending a spell slot. You must finish a long rest before you can do so again. Higher levels of this class grant additional arcanums: a 7th-level spell at 13th level, an 8th-level spell at 15th level, and a 9th-level spell at 17th level. You regain all uses of your Mystic Arcanum when you finish a long rest."
+    }
+  },
+  {
+    "id": "trait_mystic_arcanum_7",
+    "name": "Mystic Arcanum (7th level)",
+    "lore": {
+      "shortDescription": "At 13th level your patron grants you a 7th-level spell to cast once per long rest without expending a spell slot.",
+      "fullText": "At 13th level, you gain a second arcanum. Choose one 7th-level spell from the warlock spell list. You can cast it once without expending a spell slot, and you must finish a long rest before you can do so again."
+    }
+  },
+  {
+    "id": "trait_mystic_arcanum_8",
+    "name": "Mystic Arcanum (8th level)",
+    "lore": {
+      "shortDescription": "At 15th level your patron grants you an 8th-level spell to cast once per long rest without expending a spell slot.",
+      "fullText": "At 15th level, you gain a third arcanum. Choose one 8th-level spell from the warlock spell list. You can cast it once without expending a spell slot, and you must finish a long rest before you can do so again."
+    }
+  },
+  {
+    "id": "trait_mystic_arcanum_9",
+    "name": "Mystic Arcanum (9th level)",
+    "lore": {
+      "shortDescription": "At 17th level your patron grants you a 9th-level spell to cast once per long rest without expending a spell slot.",
+      "fullText": "At 17th level, you gain a fourth arcanum. Choose one 9th-level spell from the warlock spell list. You can cast it once without expending a spell slot, and you must finish a long rest before you can do so again."
+    }
+  },
+  {
     "id": "trait_naturally_stealthy",
     "name": "Naturally Stealthy",
     "lore": {
       "shortDescription": "You can attempt to hide even when you are only lightly obscured.",
       "fullText": "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."
+    }
+  },
+  {
+    "id": "trait_otherworldly_patron_feature",
+    "name": "Otherworldly Patron Feature",
+    "lore": {
+      "shortDescription": "Your patron grants you a feature as determined by your subclass.",
+      "fullText": "At certain levels your otherworldly patron grants you special features. The specific feature depends on the patron you chose at 1st level."
+    }
+  },
+  {
+    "id": "trait_otherworldly_patron",
+    "name": "Otherworldly Patron",
+    "lore": {
+      "shortDescription": "You have struck a bargain with an otherworldly being of immense power.",
+      "fullText": "At 1st level, you have struck a bargain with an otherworldly being of immense power that has granted you your magical abilities. Your choice of patron shapes many of your powers as you advance in levels, as well as the spells available to you."
+    }
+  },
+  {
+    "id": "trait_pact_boon",
+    "name": "Pact Boon",
+    "lore": {
+      "shortDescription": "At 3rd level your patron bestows a gift on you for your loyal service: Pact of the Chain, Pact of the Blade, or Pact of the Tome.",
+      "fullText": "At 3rd level, your otherworldly patron bestows a gift upon you for your loyal service. You gain one of the following features of your choice. Pact of the Chain: You learn the find familiar spell and can cast it as a ritual. Pact of the Blade: You can use your action to create a pact weapon in your empty hand. Pact of the Tome: Your patron gives you a grimoire called a Book of Shadows. When you gain this feature, choose three cantrips from any class's spell list."
+    }
+  },
+  {
+    "id": "trait_pact_magic",
+    "name": "Pact Magic",
+    "lore": {
+      "shortDescription": "Your arcane research and pact grant you a small number of powerful spell slots that recharge on a short or long rest.",
+      "fullText": "Your arcane research and the magic bestowed on you by your patron have given you facility with spells. You know two cantrips of your choice from the warlock spell list. You regain all expended Pact Magic spell slots when you finish a short or long rest. All your Pact Magic spell slots are the same level, determined by your warlock level, and you gain additional slots and higher slot levels as you advance."
     }
   },
   {

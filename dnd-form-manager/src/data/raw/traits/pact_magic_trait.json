@@ -1,0 +1,8 @@
+{
+    "id": "trait_pact_magic",
+    "name": "Pact Magic",
+    "lore": {
+        "shortDescription": "Your arcane research and pact grant you a small number of powerful spell slots that recharge on a short or long rest.",
+        "fullText": "Your arcane research and the magic bestowed on you by your patron have given you facility with spells. You know two cantrips of your choice from the warlock spell list. You regain all expended Pact Magic spell slots when you finish a short or long rest. All your Pact Magic spell slots are the same level, determined by your warlock level, and you gain additional slots and higher slot levels as you advance."
+    }
+}

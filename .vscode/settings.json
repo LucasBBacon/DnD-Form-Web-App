@@ -63,6 +63,7 @@
         "warhammer"
     ],
     "json.schemas": [
+
         {
             "fileMatch": [
                 "races/*_race.json"
@@ -92,6 +93,12 @@
                 "traits/*_trait.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/trait_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "spells/*_spell.json"
+            ],
+            "url": "/dnd-form-manager/src/data/schemas/spell_data_schema.json"
         },
         {
             "fileMatch": [

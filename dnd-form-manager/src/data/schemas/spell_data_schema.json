@@ -39,14 +39,182 @@
 			},
 			"description": "Class IDs that can access this spell."
 		},
-		"castingTime": {
+		"actionType": {
 			"type": "string",
-			"description": "Casting time text, e.g. '1 action'."
+			"enum": [
+				"action",
+				"bonus_action",
+				"reaction",
+				"legendary_action",
+				"special",
+				"minute",
+				"hour"
+			],
+			"description": "The type of action (e.g., 'action', 'bonus_action', 'reaction')."
 		},
 		"range": {
-			"type": "string",
-			"description": "Range text, e.g. '150 feet' or 'Touch'."
+			"type": "object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"enum": [
+						"self",
+						"touch",
+						"ranged",
+						"sight",
+						"unlimited"
+					]
+				},
+				"distance": {
+					"type": "integer",
+					"description": "Range in feet. Null if touch or self"
+				},
+				"maxDistance": {
+					"type": "integer",
+					"description": "Long range for weapons (e.g., 120 for a shortbow)."
+				}
+			}
 		},
+		"areaOfEffect": {
+            "type": "object",
+            "description": "Optional. Defines if the action hits an area.",
+            "properties": {
+                "shape": {
+                    "type": "string",
+                    "enum": [
+                        "cone",
+                        "cube",
+                        "cylinder",
+                        "line",
+                        "sphere"
+                    ]
+                },
+                "size": {
+                    "type": "integer",
+                    "description": "Size in feet."
+                }
+            },
+            "required": [
+                "shape",
+                "size"
+            ]
+        },
+		"savingThrow": {
+            "type": "object",
+            "description": "Optional. Present if the action forces a saving throw.",
+            "properties": {
+                "ability": {
+                    "type": "string",
+                    "enum": [
+                        "str",
+                        "dex",
+                        "con",
+                        "int",
+                        "wis",
+                        "cha"
+                    ]
+                },
+                "dcCalculation": {
+                    "type": "object",
+                    "properties": {
+                        "base": {
+                            "type": "integer",
+                            "default": 8
+                        },
+                        "includeProficiency": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "modifierStat": {
+                            "type": "string",
+                            "enum": [
+                                "str",
+                                "dex",
+                                "con",
+                                "int",
+                                "wis",
+                                "cha",
+								"spellcasting"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "base",
+                        "modifierStat"
+                    ]
+                },
+                "onSave": {
+                    "type": "string",
+                    "enum": [
+                        "half_damage",
+                        "no_damage",
+                        "special"
+                    ]
+                }
+            },
+            "required": [
+                "ability",
+                "dcCalculation",
+                "onSave"
+            ]
+        },
+		"output": {
+            "type": "object",
+            "description": "What happens when the action connects.",
+            "properties": {
+                "damage": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string",
+                                "description": "e.g., 'fire', 'slashing', 'radiant'"
+                            },
+                            "roll": {
+                                "type": "string",
+                                "description": "Base dice pool (e.g., '2d6')"
+                            },
+                            "addModifier": {
+                                "type": "boolean",
+                                "description": "True if you add the attack ability modifier to the damage (like standard weapons)."
+                            },
+                            "scaling": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "character_level",
+                                            "class_level",
+                                            "spell_slot"
+                                        ]
+                                    },
+                                    "thresholds": {
+                                        "type": "object",
+                                        "additionalProperties": {
+                                            "type": "string"
+                                        },
+                                        "description": "e.g., { '6': '3d6', '11': '4d6' }"
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "type",
+                            "roll"
+                        ]
+                    }
+                },
+                "healing": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "IDs referencing temporary buffs and debuffs"
+                    }
+                }
+            }
+        },
 		"duration": {
 			"type": "string",
 			"description": "Duration text, e.g. 'Instantaneous' or '1 hour'."
@@ -76,7 +244,11 @@
 					"description": "Material details, e.g. 'A pinch of sulfur'."
 				}
 			},
-			"required": ["vocal", "somatic", "material"]
+			"required": [
+				"vocal",
+				"somatic",
+				"material"
+			]
 		},
 		"lore": {
 			"type": "object",
@@ -94,7 +266,10 @@
 					"description": "Additional effects when cast using a higher-level spell slot."
 				}
 			},
-			"required": ["shortDescription", "fullText"]
+			"required": [
+				"shortDescription",
+				"fullText"
+			]
 		}
 	},
 	"required": [
@@ -103,7 +278,7 @@
 		"level",
 		"school",
 		"classes",
-		"castingTime",
+		"actionType",
 		"range",
 		"duration",
 		"concentration",

@@ -3,9 +3,15 @@
 	"name": "Acid Splash",
 	"level": 0,
 	"school": "conjuration",
-	"classes": ["class_sorcerer", "class_wizard"],
-	"castingTime": "1 action",
-	"range": "60 feet",
+	"classes": [
+		"class_sorcerer",
+		"class_wizard"
+	],
+	"actionType": "action",
+	"range": {
+		"type": "ranged",
+		"distance": 60
+	},
 	"duration": "Instantaneous",
 	"concentration": false,
 	"ritual": false,
@@ -13,6 +19,31 @@
 		"vocal": true,
 		"somatic": true,
 		"material": false
+	},
+	"savingThrow": {
+		"ability": "dex",
+		"dcCalculation": {
+			"base": 8,
+			"includeProficiency": true,
+			"modifierStat": "spellcasting"
+		},
+		"onSave": "no_damage"
+	},
+	"output": {
+		"damage": [
+			{
+				"type": "acid",
+				"roll": "1d6",
+				"scaling": {
+					"type": "character_level",
+					"thresholds": {
+						"5": "2d6",
+						"11": "3d6",
+						"17": "4d6"
+					}
+				}
+			}
+		]
 	},
 	"lore": {
 		"shortDescription": "You hurl a bubble of acid that harms one or two nearby creatures.",

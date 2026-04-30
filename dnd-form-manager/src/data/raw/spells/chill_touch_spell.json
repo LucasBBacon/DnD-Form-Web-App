@@ -1,0 +1,55 @@
+{
+    "id": "spell_chill_touch",
+    "name": "Chill Touch",
+    "level": 0,
+    "school": "necromancy",
+    "classes": [
+        "class_sorcerer",
+        "class_warlock",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 120
+    },
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "savingThrow": {
+        "ability": "dex",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "no_damage"
+    },
+    "output": {
+        "damage": [
+            {
+                "type": "necrotic",
+                "addModifier": false,
+                "roll": "1d8",
+                "scaling": {
+                    "type": "character_level",
+                    "thresholds": {
+                        "5": "2d8",
+                        "11": "3d8",
+                        "17": "4d8"
+                    }
+                }
+            }
+        ]
+    },
+    "lore": {
+        "shortDescription": "A ghostly, skeletal hand strikes a creature, dealing necrotic damage and preventing it from healing.",
+        "fullText": "You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell attack against the creature to assail it with the chill of the grave. On a hit, the target takes 1d8 necrotic damage, and it can’t regain hit points until the start of your next turn. Until then, the hand clings to the target. If you hit an undead target, it also has disadvantage on attack rolls against you until the end of your next turn.",
+        "higherLevel": "This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)."
+    }
+}

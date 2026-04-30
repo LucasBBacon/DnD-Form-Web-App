@@ -1,0 +1,8 @@
+{
+    "id": "trait_mystic_arcanum_7",
+    "name": "Mystic Arcanum (7th level)",
+    "lore": {
+        "shortDescription": "At 13th level your patron grants you a 7th-level spell to cast once per long rest without expending a spell slot.",
+        "fullText": "At 13th level, you gain a second arcanum. Choose one 7th-level spell from the warlock spell list. You can cast it once without expending a spell slot, and you must finish a long rest before you can do so again."
+    }
+}

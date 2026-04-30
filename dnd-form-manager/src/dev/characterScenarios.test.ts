@@ -63,18 +63,14 @@ describe("buildScenarioState", () => {
     expect(state.level).toBe(8);
   });
 
-  it("warlock_pact_l7 includes homebrew pact test spells", () => {
+  it("warlock_pact_l7 has known spells and expended pact slots", () => {
     const state = buildScenarioState("warlock_pact_l7")!;
     expect(state.classId).toBe("class_warlock");
     expect(state.level).toBe(7);
     expect(state.spellsKnown).toEqual(
-      expect.arrayContaining([
-        "spell_ember_spark",
-        "spell_hexfire_bolt",
-        "spell_void_grasp",
-        "spell_ember_veil",
-      ]),
+      expect.arrayContaining(["spell_chill_touch"]),
     );
+    expect(state.expendedPactSlots).toBe(1);
   });
 
   it("warlock_pact_innate_l7 includes innate feat acquisition", () => {

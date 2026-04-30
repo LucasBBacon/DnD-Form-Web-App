@@ -1,0 +1,8 @@
+{
+    "id": "trait_pact_boon",
+    "name": "Pact Boon",
+    "lore": {
+        "shortDescription": "At 3rd level your patron bestows a gift on you for your loyal service: Pact of the Chain, Pact of the Blade, or Pact of the Tome.",
+        "fullText": "At 3rd level, your otherworldly patron bestows a gift upon you for your loyal service. You gain one of the following features of your choice. Pact of the Chain: You learn the find familiar spell and can cast it as a ritual. Pact of the Blade: You can use your action to create a pact weapon in your empty hand. Pact of the Tome: Your patron gives you a grimoire called a Book of Shadows. When you gain this feature, choose three cantrips from any class's spell list."
+    }
+}
