@@ -1,9 +1,10 @@
 {
-    "id": "trait_fighter_skills",
+    "id": "trait_fighter_prof_skills",
     "isStartingProficiency": true,
-    "name": "Fighter Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency in two skills of your choice.",
+        "fullText": "Choose two skills from the following list to gain proficiency in: Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, Survival."
     },
     "effects": [
         {

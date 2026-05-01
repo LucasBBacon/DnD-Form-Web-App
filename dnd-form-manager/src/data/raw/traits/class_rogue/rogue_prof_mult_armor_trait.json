@@ -1,0 +1,16 @@
+{
+    "id": "trait_rogue_mult_prof_armor",
+    "name": "Multiclass Armor Proficiency",
+    "isStartingProficiency": false,
+    "lore": {
+        "shortDescription": "Gain proficiency with light armor.",
+        "fullText": "If you multiclass into Rogue, you gain proficiency with light armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        }
+    ]
+}

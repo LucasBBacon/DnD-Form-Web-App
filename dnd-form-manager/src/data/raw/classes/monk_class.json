@@ -66,8 +66,9 @@
       "level": 1,
       "features": [
         "trait_monk_prof_saving_throw",
-        "trait_monk_proficiencies",
-        "trait_monk_skills",
+        "trait_monk_prof_weapons",
+        "trait_monk_prof_tools",
+        "trait_monk_prof_skills",
         "trait_unarmored_defense_monk",
         "trait_martial_arts"
       ],

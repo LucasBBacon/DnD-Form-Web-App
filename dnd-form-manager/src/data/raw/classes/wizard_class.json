@@ -90,8 +90,8 @@
       "level": 1,
       "features": [
         "trait_wizard_prof_saving_throw",
-        "trait_wizard_proficiencies",
-        "trait_wizard_skills",
+        "trait_wizard_prof_weapons",
+        "trait_wizard_prof_skills",
         "trait_spellcasting_wizard",
         "trait_arcane_recovery"
       ],

@@ -1,9 +1,10 @@
 {
-    "id": "trait_wizard_skills",
+    "id": "trait_wizard_prof_skills",
     "isStartingProficiency": true,
-    "name": "Wizard Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency in two skills of your choice from the Wizard skill list.",
+        "fullText": "Gain proficiency in two skills of your choice from the following list: Arcana, History, Insight, Investigation, Medicine, Religion."
     },
     "effects": [
         {

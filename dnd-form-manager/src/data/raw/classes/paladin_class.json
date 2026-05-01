@@ -101,8 +101,9 @@
       "level": 1,
       "features": [
         "trait_paladin_prof_saving_throw",
-        "trait_paladin_proficiencies",
-        "trait_paladin_skills",
+        "trait_paladin_prof_armor",
+        "trait_paladin_prof_weapons",
+        "trait_paladin_prof_skills",
         "trait_divine_sense",
         "trait_lay_on_hands"
       ]

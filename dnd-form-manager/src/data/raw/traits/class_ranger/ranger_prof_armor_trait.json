@@ -1,0 +1,26 @@
+{
+    "id": "trait_ranger_prof_armor",
+    "name": "Armor Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with light armor, medium armor, and shields.",
+        "fullText": "Gain proficiency with light armor, medium armor, and shields."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "medium"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "shields"
+        }
+    ]
+}

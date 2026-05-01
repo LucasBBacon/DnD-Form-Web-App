@@ -1,0 +1,31 @@
+{
+    "id": "trait_paladin_prof_armor",
+    "name": "Armor Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with light/medium/heavy armor, and shields.",
+        "fullText": "Gain proficiency in light, medium, and heavy armor, and shields."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "medium"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "heavy"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "shields"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "id": "trait_rogue_prof_skills",
+    "isStartingProficiency": true,
+    "name": "Skills Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency in four skills of your choice from the Rogue skill list.",
+        "fullText": "Gain proficiency in four skills of your choice from the following list: Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth."
+    },
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "choice": {
+                "count": 4,
+                "pool": [
+                    "acrobatics",
+                    "athletics",
+                    "deception",
+                    "insight",
+                    "intimidation",
+                    "investigation",
+                    "perception",
+                    "performance",
+                    "persuasion",
+                    "sleight_of_hand",
+                    "stealth"
+                ]
+            }
+        }
+    ]
+}

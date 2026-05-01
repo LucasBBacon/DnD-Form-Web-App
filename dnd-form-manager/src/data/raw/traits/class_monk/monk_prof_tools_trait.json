@@ -1,0 +1,21 @@
+{
+    "id": "trait_monk_prof_tools",
+    "isStartingProficiency": true,
+    "name": "Tools Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency with one artisan tool type, and one musical instrument type.",
+        "fullText": "Gain proficiency with one type of artisan's tools, and one type of musical instrument."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "category_artisans_tools"
+        },
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "category_musical_instrument"
+        }
+    ]
+}

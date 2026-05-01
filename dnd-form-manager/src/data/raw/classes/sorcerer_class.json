@@ -94,8 +94,8 @@
       "level": 1,
       "features": [
         "trait_sorcerer_prof_saving_throw",
-        "trait_sorcerer_proficiencies",
-        "trait_sorcerer_skills",
+        "trait_sorcerer_prof_weapons",
+        "trait_sorcerer_prof_skills",
         "trait_spellcasting_sorcerer",
         "trait_sorcerous_origin"
       ],

@@ -101,8 +101,9 @@
       "level": 1,
       "features": [
         "trait_ranger_prof_saving_throw",
-        "trait_ranger_proficiencies",
-        "trait_ranger_skills",
+        "trait_ranger_prof_armor",
+        "trait_ranger_prof_weapons",
+        "trait_ranger_prof_skills",
         "trait_favored_enemy",
         "trait_natural_explorer"
       ]

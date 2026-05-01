@@ -1,9 +1,10 @@
 {
-    "id": "trait_sorcerer_skills",
+    "id": "trait_sorcerer_prof_skills",
     "isStartingProficiency": true,
-    "name": "Sorcerer Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency in two skills of your choice from the Sorcerer skill list.",
+        "fullText": "Gain proficiency in two skills of your choice from the following list: Arcana, Deception, Insight, Intimidation, Persuasion, Religion."
     },
     "effects": [
         {

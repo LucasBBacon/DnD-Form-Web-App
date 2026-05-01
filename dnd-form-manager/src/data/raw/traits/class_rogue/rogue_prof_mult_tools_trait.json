@@ -1,0 +1,16 @@
+{
+    "id": "trait_rogue_mult_prof_tools",
+    "name": "Multiclass Tools Proficiency",
+    "isStartingProficiency": false,
+    "lore": {
+        "shortDescription": "Gain proficiency with thieves' tools.",
+        "fullText": "If you multiclass into Rogue, you gain proficiency with thieves' tools."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "tools",
+            "value": "tool_thieves_tools"
+        }
+    ]
+}

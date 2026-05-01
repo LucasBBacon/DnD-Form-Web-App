@@ -1,0 +1,36 @@
+{
+    "id": "trait_rogue_prof_weapons",
+    "name": "Weapons Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with simple weapons, hand crossbows, longswords, rapiers, and shortswords.",
+        "fullText": "Gain proficiency with simple weapons, hand crossbows, longswords, rapiers, and shortswords."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_hand_crossbow"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_longsword"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_rapier"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_shortsword"
+        }
+    ]
+}

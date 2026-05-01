@@ -1,0 +1,16 @@
+{
+    "id": "trait_rogue_prof_armor",
+    "name": "Armor Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with light armor.",
+        "fullText": "Gain proficiency with light armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        }
+    ]
+}

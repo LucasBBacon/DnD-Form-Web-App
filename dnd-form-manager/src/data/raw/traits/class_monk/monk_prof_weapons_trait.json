@@ -1,0 +1,21 @@
+{
+    "id": "trait_monk_prof_weapons",
+    "name": "Weapons Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with shortswords and simple weapons.",
+        "fullText": "Gain proficiency with shortswords and simple weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_shortsword"
+        }
+    ]
+}

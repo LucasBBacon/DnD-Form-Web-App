@@ -1,0 +1,36 @@
+{
+    "id": "trait_wizard_prof_weapons",
+    "name": "Weapons Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows.",
+        "fullText": "Gain proficiency with daggers, darts, slings, quarterstaffs, and light crossbows."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_dagger"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_dart"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_sling"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_quarterstaff"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_light_crossbow"
+        }
+    ]
+}

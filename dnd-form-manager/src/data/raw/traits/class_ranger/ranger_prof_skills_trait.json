@@ -1,9 +1,10 @@
 {
-    "id": "trait_ranger_skills",
+    "id": "trait_ranger_prof_skills",
     "isStartingProficiency": true,
-    "name": "Ranger Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency in three skills of your choice from the Ranger skill list.",
+        "fullText": "Gain proficiency in three skills of your choice from the following list: Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, Survival."
     },
     "effects": [
         {

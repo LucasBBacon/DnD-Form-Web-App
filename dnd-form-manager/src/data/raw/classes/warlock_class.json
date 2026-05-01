@@ -105,8 +105,9 @@
       "level": 1,
       "features": [
         "trait_warlock_prof_saving_throw",
-        "trait_warlock_proficiencies",
-        "trait_warlock_skills",
+        "trait_warlock_prof_armor",
+        "trait_warlock_prof_weapons",
+        "trait_warlock_prof_skills",
         "trait_otherworldly_patron",
         "trait_pact_magic"
       ],

@@ -1,0 +1,21 @@
+{
+    "id": "trait_paladin_prof_weapons",
+    "isStartingProficiency": true,
+    "name": "Weapons Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with simple and martial weapons.",
+        "fullText": "Gain proficiency in all simple and martial weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "martial"
+        }
+    ]
+}

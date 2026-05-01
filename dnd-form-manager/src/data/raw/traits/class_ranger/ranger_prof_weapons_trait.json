@@ -1,0 +1,21 @@
+{
+    "id": "trait_ranger_prof_weapons",
+    "name": "Weapons Proficiencies",
+    "isStartingProficiency": true,
+    "lore": {
+        "shortDescription": "Proficiency with simple and martial weapons.",
+        "fullText": "Gain proficiency with simple and martial weapons."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "simple"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "martial"
+        }
+    ]
+}

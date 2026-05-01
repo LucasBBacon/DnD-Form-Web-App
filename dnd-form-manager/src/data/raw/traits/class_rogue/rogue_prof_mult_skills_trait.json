@@ -1,15 +1,17 @@
 {
-    "id": "trait_rogue_skills",
-    "isStartingProficiency": true,
-    "name": "Rogue Skills",
+    "id": "trait_rogue_mult_prof_skills",
+    "name": "Multiclass Skills Proficiency",
+    "isStartingProficiency": false,
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency with one Rogue skill of your choice.",
+        "fullText": "If you multiclass into Rogue, you gain proficiency with one skill of your choice from the Rogue skill list."
     },
     "effects": [
         {
             "type": "proficiency_choice",
+            "target": "skills",
             "choice": {
-                "count": 4,
+                "count": 1,
                 "pool": [
                     "acrobatics",
                     "athletics",

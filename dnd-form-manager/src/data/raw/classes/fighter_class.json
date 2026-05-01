@@ -120,8 +120,9 @@
       "level": 1,
       "features": [
         "trait_fighter_prof_saving_throw",
-        "trait_fighter_proficiencies",
-        "trait_fighter_skills",
+        "trait_fighter_prof_armor",
+        "trait_fighter_prof_weapons",
+        "trait_fighter_prof_skills",
         "trait_fighting_style",
         "trait_second_wind"
       ]

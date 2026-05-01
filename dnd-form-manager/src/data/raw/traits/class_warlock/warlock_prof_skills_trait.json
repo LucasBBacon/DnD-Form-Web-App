@@ -1,9 +1,10 @@
 {
-    "id": "trait_warlock_skills",
+    "id": "trait_warlock_prof_skills",
     "isStartingProficiency": true,
-    "name": "Warlock Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Gain proficiency in two skills of your choice from the Warlock skill list.",
+        "fullText": "Gain proficiency in two skills of your choice from the following list: Arcana, Deception, History, Intimidation, Investigation, Nature, Religion."
     },
     "effects": [
         {
@@ -15,7 +16,6 @@
                     "deception",
                     "history",
                     "intimidation",
-                    "investigation",
                     "investigation",
                     "nature",
                     "religion"

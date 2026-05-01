@@ -3,7 +3,9 @@
   "name": "Rogue",
   "hitDie": 8,
   "multiclassTraits": [
-    "trait_rogue_mult_prof"
+    "trait_rogue_mult_prof_armor",
+    "trait_rogue_mult_prof_skills",
+    "trait_rogue_mult_prof_tools"
   ],
   "startingEquipment": {
     "given": [
@@ -111,8 +113,10 @@
       "level": 1,
       "features": [
         "trait_rogue_prof_saving_throw",
-        "trait_rogue_proficiencies",
-        "trait_rogue_skills",
+        "trait_rogue_prof_armor",
+        "trait_rogue_prof_weapons",
+        "trait_rogue_prof_tools",
+        "trait_rogue_prof_skills",
         "trait_expertise",
         "trait_sneak_attack",
         "trait_thieves_cant"
