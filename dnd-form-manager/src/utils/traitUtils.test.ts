@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { getAllCharacterTraits } from "./traitUtils";
+import {
+  getAllCharacterTraits,
+  getAllCharacterTraitsWithSources,
+} from "./traitUtils";
 import {
   getClassById,
+  getFeatById,
   getFeatsByIds,
   getRaceById,
   getSubclassById,
@@ -13,6 +17,7 @@ import {
 
 vi.mock("../data/staticDataApi", () => ({
   getClassById: vi.fn(),
+  getFeatById: vi.fn(),
   getFeatsByIds: vi.fn(),
   getRaceById: vi.fn(),
   getSubclassById: vi.fn(),
@@ -29,21 +34,29 @@ const createProgressionEntry = (level: number, features: string[] = []) =>
 
 const createRace = (traits: string[] = []) =>
   ({
+    id: "race_id",
+    name: "Race Name",
     traits,
   }) as any;
 
 const createSubrace = (traitsAdded: string[] = []) =>
   ({
+    id: "subrace_id",
+    name: "Subrace Name",
     traitsAdded,
   }) as any;
 
 const createClass = (progression: any[] = []) =>
   ({
+    id: "class_id",
+    name: "Class Name",
     progression,
   }) as any;
 
 const createSubclass = (progression: any[] = []) =>
   ({
+    id: "subclass_id",
+    name: "Subclass Name",
     progression,
   }) as any;
 
@@ -55,6 +68,14 @@ describe("getAllCharacterTraits", () => {
       ids.map((id) => ({ id, name: `Trait ${id}` })) as any,
     );
     vi.mocked(getFeatsByIds).mockReturnValue([] as any);
+    vi.mocked(getTraitById).mockImplementation(
+      (id: string) =>
+        ({
+          id,
+          name: `Trait ${id}`,
+          lore: { shortDescription: `Description for ${id}` },
+        }) as any,
+    );
   });
 
   describe("base behavior", () => {
@@ -628,6 +649,153 @@ describe("getAllCharacterTraits", () => {
 
       expect(getFeatsByIds).toHaveBeenCalledWith(["feat_gifted_mind"]);
       expect(getTraitsByIds).toHaveBeenCalledWith(["trait_feat_gifted_mind"]);
+    });
+  });
+
+  describe("getAllCharacterTraitsWithSources", () => {
+    it("attaches concrete race, subrace, class, and subclass labels", () => {
+      vi.mocked(getRaceById).mockReturnValue({
+        id: "race_elf",
+        name: "Elf",
+        traits: ["darkvision"],
+      } as any);
+      vi.mocked(getSubraceById).mockReturnValue({
+        id: "subrace_high_elf",
+        name: "High Elf",
+        traitsAdded: ["cantrip"],
+      } as any);
+      vi.mocked(getClassById).mockReturnValue({
+        id: "class_fighter",
+        name: "Fighter",
+        progression: [createProgressionEntry(2, ["action-surge"])],
+      } as any);
+      vi.mocked(getSubclassById).mockReturnValue({
+        id: "subclass_champion",
+        name: "Champion",
+        progression: [createProgressionEntry(3, ["improved-critical"])],
+      } as any);
+
+      const result = getAllCharacterTraitsWithSources(
+        3,
+        "race_elf",
+        "subrace_high_elf",
+        "class_fighter",
+        "subclass_champion",
+      );
+
+      expect(result).toEqual([
+        {
+          trait: {
+            id: "darkvision",
+            name: "Trait darkvision",
+            lore: { shortDescription: "Description for darkvision" },
+          },
+          sources: [
+            {
+              kind: "race",
+              label: "Elf",
+              sourceId: "race_elf",
+              sourceName: "Elf",
+            },
+          ],
+        },
+        {
+          trait: {
+            id: "cantrip",
+            name: "Trait cantrip",
+            lore: { shortDescription: "Description for cantrip" },
+          },
+          sources: [
+            {
+              kind: "subrace",
+              label: "High Elf",
+              sourceId: "subrace_high_elf",
+              sourceName: "High Elf",
+            },
+          ],
+        },
+        {
+          trait: {
+            id: "action-surge",
+            name: "Trait action-surge",
+            lore: { shortDescription: "Description for action-surge" },
+          },
+          sources: [
+            {
+              kind: "class",
+              label: "Fighter level 2",
+              sourceId: "class_fighter",
+              sourceName: "Fighter",
+              level: 2,
+            },
+          ],
+        },
+        {
+          trait: {
+            id: "improved-critical",
+            name: "Trait improved-critical",
+            lore: { shortDescription: "Description for improved-critical" },
+          },
+          sources: [
+            {
+              kind: "subclass",
+              label: "Champion level 3",
+              sourceId: "subclass_champion",
+              sourceName: "Champion",
+              level: 3,
+            },
+          ],
+        },
+      ]);
+    });
+
+    it("retains multiple distinct sources for the same deduplicated trait", () => {
+      vi.mocked(getRaceById).mockReturnValue({
+        id: "race_elf",
+        name: "Elf",
+        traits: ["darkvision"],
+      } as any);
+      vi.mocked(getFeatById).mockReturnValue({
+        id: "feat_shadow_touched",
+        name: "Shadow Touched",
+        grantedTraits: ["darkvision"],
+      } as any);
+
+      const result = getAllCharacterTraitsWithSources(
+        4,
+        "race_elf",
+        null,
+        null,
+        null,
+        false,
+        {
+          4: { featId: "feat_shadow_touched" },
+        },
+      );
+
+      expect(result).toEqual([
+        {
+          trait: {
+            id: "darkvision",
+            name: "Trait darkvision",
+            lore: { shortDescription: "Description for darkvision" },
+          },
+          sources: [
+            {
+              kind: "race",
+              label: "Elf",
+              sourceId: "race_elf",
+              sourceName: "Elf",
+            },
+            {
+              kind: "feat",
+              label: "Feat: Shadow Touched",
+              sourceId: "feat_shadow_touched",
+              sourceName: "Shadow Touched",
+            },
+          ],
+        },
+      ]);
     });
   });
 });

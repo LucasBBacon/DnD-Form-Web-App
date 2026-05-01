@@ -1,4 +1,5 @@
 import {
+  getFeatById,
   getClassById,
   getRaceById,
   getSubclassById,
@@ -9,7 +10,8 @@ import {
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { FeatAcquisitionEntry } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
-import { getOwnedFeats } from "./featUtils";
+import type { SourcedTrait, TraitSource } from "../types/trait";
+import { getOwnedFeats, getOwnedFeatsWithSources } from "./featUtils";
 
 /**
  * Adds trait IDs from a progression to the provided set of trait IDs.
@@ -37,6 +39,129 @@ const addProgressionTraitIds = (
   progression
     .filter(levelFilter)
     .forEach((entry) => entry.features?.forEach((id) => traitIds.add(id)));
+};
+
+const addSourcedTrait = (
+  sourcedTraits: Map<string, SourcedTrait>,
+  traitId: string,
+  source: TraitSource,
+) => {
+  const trait = getTraitById(traitId);
+  if (!trait) return;
+
+  const existing = sourcedTraits.get(traitId);
+  if (!existing) {
+    sourcedTraits.set(traitId, {
+      trait,
+      sources: [source],
+    });
+    return;
+  }
+
+  const alreadyHasSource = existing.sources.some(
+    (candidate) =>
+      candidate.kind === source.kind &&
+      candidate.sourceId === source.sourceId &&
+      candidate.level === source.level &&
+      candidate.label === source.label,
+  );
+
+  if (!alreadyHasSource) {
+    existing.sources.push(source);
+  }
+};
+
+const buildRaceSource = (
+  raceId: string | null,
+): TraitSource | null => {
+  const race = raceId ? getRaceById(raceId) : null;
+  if (!raceId) return null;
+
+  return {
+    kind: "race",
+    label: race?.name ?? "Race",
+    sourceId: raceId,
+    sourceName: race?.name,
+  };
+};
+
+const buildSubraceSource = (
+  subraceId: string | null,
+): TraitSource | null => {
+  const subrace = subraceId ? getSubraceById(subraceId) : null;
+  if (!subraceId) return null;
+
+  return {
+    kind: "subrace",
+    label: subrace?.name ?? "Subrace",
+    sourceId: subraceId,
+    sourceName: subrace?.name,
+  };
+};
+
+const buildClassSource = (
+  classId: string,
+  level: number,
+): TraitSource => {
+  const classData = getClassById(classId);
+
+  return {
+    kind: "class",
+    label: classData?.name ? `${classData.name} level ${level}` : `Class level ${level}`,
+    sourceId: classId,
+    sourceName: classData?.name,
+    level,
+  };
+};
+
+const buildSubclassSource = (
+  subclassId: string,
+  level: number,
+): TraitSource => {
+  const subclassData = getSubclassById(subclassId);
+
+  return {
+    kind: "subclass",
+    label: subclassData?.name
+      ? `${subclassData.name} level ${level}`
+      : `Subclass level ${level}`,
+    sourceId: subclassId,
+    sourceName: subclassData?.name,
+    level,
+  };
+};
+
+const buildFeatSource = (
+  featId: string,
+): TraitSource => {
+  const feat = getFeatById(featId);
+
+  return {
+    kind: "feat",
+    label: feat?.name ? `Feat: ${feat.name}` : "Feat",
+    sourceId: featId,
+    sourceName: feat?.name,
+  };
+};
+
+const addProgressionSourcedTraits = (
+  sourcedTraits: Map<string, SourcedTrait>,
+  progression: Array<{ level: number; features: string[] }> | undefined,
+  level: number,
+  exactLevel: boolean,
+  buildSource: (level: number) => TraitSource,
+) => {
+  if (!progression) return;
+
+  const levelFilter = exactLevel
+    ? (entry: { level: number }) => entry.level === level
+    : (entry: { level: number }) => entry.level <= level;
+
+  progression.filter(levelFilter).forEach((entry) => {
+    entry.features?.forEach((traitId) => {
+      addSourcedTrait(sourcedTraits, traitId, buildSource(entry.level));
+    });
+  });
 };
 
 /**
@@ -197,4 +322,151 @@ export const getAllCharacterTraits = (
   // #endregion
 
   return getTraitsByIds(Array.from(traitIds));
+};
+
+export const getAllCharacterTraitsWithSources = (
+  level: number,
+  raceId: string | null,
+  subraceId: string | null,
+  classId: string | null,
+  subclassId: string | null,
+  exactLevel = false,
+  choicesByLevel: Record<number, LevelChoice> = {},
+  acquiredFeats: FeatAcquisitionEntry[] = [],
+  classTracks: CharacterClassTrack[] = [],
+): SourcedTrait[] => {
+  const sourcedTraits = new Map<string, SourcedTrait>();
+  const raceSource = buildRaceSource(raceId);
+  const subraceSource = buildSubraceSource(subraceId);
+  const raceData = raceId ? getRaceById(raceId) : null;
+  const subraceData = subraceId ? getSubraceById(subraceId) : null;
+  const classData = classId ? getClassById(classId) : null;
+  const subclassData = subclassId ? getSubclassById(subclassId) : null;
+
+  if (!exactLevel || level === 1) {
+    if (raceSource) {
+      raceData?.traits?.forEach((traitId) => {
+        addSourcedTrait(sourcedTraits, traitId, raceSource);
+      });
+    }
+
+    if (subraceSource) {
+      subraceData?.traitsAdded?.forEach((traitId) => {
+        addSourcedTrait(sourcedTraits, traitId, subraceSource);
+      });
+    }
+  }
+
+  if (classTracks.length > 0) {
+    if (exactLevel) {
+      const selectedClassId =
+        choicesByLevel[level]?.selectedClassId ||
+        classTracks[0]?.classId ||
+        classId;
+      const selectedTrack = selectedClassId
+        ? classTracks.find((track) => track.classId === selectedClassId)
+        : null;
+
+      if (selectedTrack) {
+        const selectedClassData = getClassById(selectedTrack.classId);
+        addProgressionSourcedTraits(
+          sourcedTraits,
+          selectedClassData?.progression,
+          selectedTrack.level,
+          true,
+          (traitLevel) => buildClassSource(selectedTrack.classId, traitLevel),
+        );
+
+        if (selectedTrack.subclassId) {
+          const selectedSubclassData = getSubclassById(selectedTrack.subclassId);
+          addProgressionSourcedTraits(
+            sourcedTraits,
+            selectedSubclassData?.progression,
+            selectedTrack.level,
+            true,
+            (traitLevel) =>
+              buildSubclassSource(selectedTrack.subclassId as string, traitLevel),
+          );
+        }
+      }
+    } else {
+      classTracks.forEach((track, trackIndex) => {
+        const trackClassData = getClassById(track.classId);
+        const isPrimary = trackIndex === 0;
+
+        if (isPrimary) {
+          addProgressionSourcedTraits(
+            sourcedTraits,
+            trackClassData?.progression,
+            track.level,
+            false,
+            (traitLevel) => buildClassSource(track.classId, traitLevel),
+          );
+        } else {
+          trackClassData?.progression
+            ?.filter((entry) => entry.level <= track.level)
+            .forEach((entry) => {
+              entry.features.forEach((traitId) => {
+                if (!getTraitById(traitId)?.isStartingProficiency) {
+                  addSourcedTrait(
+                    sourcedTraits,
+                    traitId,
+                    buildClassSource(track.classId, entry.level),
+                  );
+                }
+              });
+            });
+
+          trackClassData?.multiclassTraits?.forEach((traitId) => {
+            addSourcedTrait(
+              sourcedTraits,
+              traitId,
+              buildClassSource(track.classId, 1),
+            );
+          });
+        }
+
+        if (track.subclassId) {
+          const trackSubclassData = getSubclassById(track.subclassId);
+          addProgressionSourcedTraits(
+            sourcedTraits,
+            trackSubclassData?.progression,
+            track.level,
+            false,
+            (traitLevel) => buildSubclassSource(track.subclassId as string, traitLevel),
+          );
+        }
+      });
+    }
+  } else {
+    if (classId) {
+      addProgressionSourcedTraits(
+        sourcedTraits,
+        classData?.progression,
+        level,
+        exactLevel,
+        (traitLevel) => buildClassSource(classId, traitLevel),
+      );
+    }
+
+    if (subclassId) {
+      addProgressionSourcedTraits(
+        sourcedTraits,
+        subclassData?.progression,
+        level,
+        exactLevel,
+        (traitLevel) => buildSubclassSource(subclassId, traitLevel),
+      );
+    }
+  }
+
+  getOwnedFeatsWithSources(level, choicesByLevel, acquiredFeats, exactLevel).forEach(
+    ({ feat }) => {
+      feat.grantedTraits.forEach((traitId) => {
+        addSourcedTrait(sourcedTraits, traitId, buildFeatSource(feat.id));
+      });
+    },
+  );
+
+  return Array.from(sourcedTraits.values());
 };

@@ -11,6 +11,26 @@ import type { Ability } from "../types/common";
 import type { FeatAcquisitionEntry, FeatData } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
 
+export interface OwnedFeatWithSource {
+  feat: FeatData;
+  source: FeatAcquisitionEntry["source"];
+  sourceLevel?: number;
+}
+
+const isFeatEligibleAtLevel = (
+  currentLevel: number,
+  sourceLevel: number | undefined,
+  exactLevel: boolean,
+): boolean => {
+  if (sourceLevel === undefined) {
+    return !exactLevel;
+  }
+
+  return exactLevel
+    ? sourceLevel === currentLevel
+    : sourceLevel <= currentLevel;
+};
+
 export interface FeatEligibilityContext {
   level: number;
   raceId: string | null;
@@ -87,6 +107,59 @@ export const getOwnedFeats = (
   return getFeatsByIds(
     getSelectedFeatIds(currentLevel, choicesByLevel, acquiredFeats, exactLevel),
   );
+};
+
+export const getOwnedFeatsWithSources = (
+  currentLevel: number,
+  choicesByLevel: Record<number, LevelChoice>,
+  acquiredFeats: FeatAcquisitionEntry[] = [],
+  exactLevel = false,
+): OwnedFeatWithSource[] => {
+  const ownedFeatsById = new Map<string, OwnedFeatWithSource>();
+
+  Object.entries(choicesByLevel).forEach(([levelKey, levelChoice]) => {
+    const parsedLevel = Number(levelKey);
+    if (!Number.isInteger(parsedLevel) || !levelChoice.featId) return;
+    if (!isFeatEligibleAtLevel(currentLevel, parsedLevel, exactLevel)) return;
+
+    const feat = getFeatById(levelChoice.featId);
+    if (!feat) return;
+
+    ownedFeatsById.set(levelChoice.featId, {
+      feat,
+      source: "level_up",
+      sourceLevel: parsedLevel,
+    });
+  });
+
+  acquiredFeats.forEach((entry) => {
+    const isEligible =
+      entry.source === "origin"
+        ? !exactLevel || currentLevel === 1
+        : isFeatEligibleAtLevel(currentLevel, entry.sourceLevel, exactLevel);
+
+    if (!isEligible) return;
+
+    const feat = getFeatById(entry.featId);
+    if (!feat) return;
+
+    const existing = ownedFeatsById.get(entry.featId);
+    if (
+      existing &&
+      existing.source === "level_up" &&
+      existing.sourceLevel !== undefined
+    ) {
+      return;
+    }
+
+    ownedFeatsById.set(entry.featId, {
+      feat,
+      source: entry.source,
+      sourceLevel: entry.sourceLevel,
+    });
+  });
+
+  return Array.from(ownedFeatsById.values());
 };
 
 const matchesRequiredIdPool = (

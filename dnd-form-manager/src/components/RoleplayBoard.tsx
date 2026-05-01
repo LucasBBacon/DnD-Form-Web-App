@@ -2,7 +2,7 @@ import type React from "react";
 import "./RoleplayBoard.css";
 import { useMemo, useState } from "react";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { getAllCharacterTraits } from "../utils/traitUtils";
+import { getAllCharacterTraitsWithSources } from "../utils/traitUtils";
 
 type RoleplayTab = "features" | "characteristics" | "biography";
 
@@ -14,7 +14,7 @@ export const RoleplayBoard: React.FC = () => {
   // #region Mechanical Features
 
   const activeFeatures = useMemo(() => {
-    return getAllCharacterTraits(
+    return getAllCharacterTraitsWithSources(
       store.level,
       store.raceId,
       store.subraceId,
@@ -72,12 +72,20 @@ export const RoleplayBoard: React.FC = () => {
             {activeFeatures.length === 0 ? (
               <p className="empty-state">No features acquired yet.</p>
             ) : (
-              activeFeatures.map((trait, idx) => (
+              activeFeatures.map(({ trait, sources }, idx) => (
                 <div key={`${trait.name}-${idx}`} className="feature-card">
                   <div className="feature-header">
                     <span className="feature-name">{trait.name}</span>
-                    {/* TODO: Add source property to traits, like "Fighter level 2" or "Racial" */}
-                    <span className="feature-source">TODO</span>
+                    <span className="feature-source" aria-label="Feature sources">
+                      {sources.map((source) => (
+                        <span
+                          key={`${trait.id}-${source.kind}-${source.sourceId ?? source.label}-${source.level ?? 0}`}
+                          className={`feature-source-badge feature-source-badge--${source.kind}`}
+                        >
+                          {source.label}
+                        </span>
+                      ))}
+                    </span>
                   </div>
                   <div className="feature-description">
                     {trait.lore.shortDescription}

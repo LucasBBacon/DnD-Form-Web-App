@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  getOwnedFeatsWithSources,
   getSelectedFeatIds,
   isFeatEligible,
   resolveGrantedTraitIdsForSelectedFeats,
@@ -248,6 +249,63 @@ describe("featUtils", () => {
       );
 
       expect(result).toEqual(["trait_feat_gifted_mind"]);
+    });
+  });
+
+  describe("getOwnedFeatsWithSources", () => {
+    it("preserves level-up and origin provenance for owned feats", () => {
+      vi.mocked(getFeatById)
+        .mockImplementation((featId) => {
+          const featMap: Record<string, any> = {
+            feat_alert: {
+              id: "feat_alert",
+              name: "Alert",
+              grantedTraits: ["trait_feat_alert"],
+            },
+            feat_origin_gift: {
+              id: "feat_origin_gift",
+              name: "Origin Gift",
+              grantedTraits: ["trait_origin_gift"],
+            },
+          };
+
+          return featMap[String(featId)] ?? null;
+        });
+
+      const result = getOwnedFeatsWithSources(
+        4,
+        {
+          4: { featId: "feat_alert" },
+        },
+        [
+          {
+            featId: "feat_origin_gift",
+            source: "origin",
+            sourceLevel: 1,
+          },
+        ],
+      );
+
+      expect(result).toEqual([
+        {
+          feat: {
+            id: "feat_alert",
+            name: "Alert",
+            grantedTraits: ["trait_feat_alert"],
+          },
+          source: "level_up",
+          sourceLevel: 4,
+        },
+        {
+          feat: {
+            id: "feat_origin_gift",
+            name: "Origin Gift",
+            grantedTraits: ["trait_origin_gift"],
+          },
+          source: "origin",
+          sourceLevel: 1,
+        },
+      ]);
     });
   });
 });

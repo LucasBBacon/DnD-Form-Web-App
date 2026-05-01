@@ -56,3 +56,23 @@ export interface TraitData {
   };
   effects?: TraitEffect[];
 }
+
+export type TraitSourceKind =
+  | "race"
+  | "subrace"
+  | "class"
+  | "subclass"
+  | "feat";
+
+export interface TraitSource {
+  kind: TraitSourceKind;
+  label: string;
+  sourceId?: string;
+  sourceName?: string;
+  level?: number;
+}
+
+export interface SourcedTrait {
+  trait: TraitData;
+  sources: TraitSource[];
+}
