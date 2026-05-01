@@ -9,18 +9,18 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "category_musical_instrument"
+            "category": "tools",
+            "item": "category_musical_instrument"
         },
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "category_musical_instrument"
+            "category": "tools",
+            "item": "category_musical_instrument"
         },
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "category_musical_instrument"
+            "category": "tools",
+            "item": "category_musical_instrument"
         }
     ]
 }

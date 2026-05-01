@@ -6,6 +6,10 @@
         "fullText": "If you multiclass into Warlock, you gain proficiency with light armor."
     },
     "effects": [
-        { "type": "proficiency", "target": "armor", "value": "light" }
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "light"
+        }
     ]
 }

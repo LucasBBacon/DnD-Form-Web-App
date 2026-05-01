@@ -9,18 +9,18 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "armor",
-            "value": "light"
+            "category": "armor",
+            "item": "light"
         },
         {
             "type": "proficiency",
-            "target": "armor",
-            "value": "medium"
+            "category": "armor",
+            "item": "medium"
         },
         {
             "type": "proficiency",
-            "target": "armor",
-            "value": "shields"
+            "category": "armor",
+            "item": "shields"
         }
     ]
 }

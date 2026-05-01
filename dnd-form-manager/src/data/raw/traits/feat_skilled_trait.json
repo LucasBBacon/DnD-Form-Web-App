@@ -7,6 +7,7 @@
     "effects": [
         {
             "type": "proficiency_choice",
+            "category": "skills",
             "choice": {
                 "count": 3,
                 "pool": "any"

@@ -9,13 +9,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "saving_throws",
-            "value": "str"
+            "category": "saving_throws",
+            "item": "str"
         },
         {
             "type": "proficiency",
-            "target": "saving_throws",
-            "value": "dex"
+            "category": "saving_throws",
+            "item": "dex"
         }
     ]
 }

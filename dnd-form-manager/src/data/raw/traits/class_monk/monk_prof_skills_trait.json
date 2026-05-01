@@ -19,7 +19,8 @@
                     "religion",
                     "stealth"
                 ]
-            }
+            },
+            "category": "skills"
         }
     ]
 }

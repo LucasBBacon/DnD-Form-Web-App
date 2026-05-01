@@ -9,8 +9,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapons",
-            "value": "weapon_category_simple"
+            "category": "weapons",
+            "item": "weapon_category_simple"
         }
     ]
 }

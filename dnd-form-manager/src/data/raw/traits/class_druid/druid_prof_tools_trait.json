@@ -9,8 +9,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "tool",
-            "value": "tool_herbalism_kit"
+            "category": "tools",
+            "item": "tool_herbalism_kit"
         }
     ]
 }

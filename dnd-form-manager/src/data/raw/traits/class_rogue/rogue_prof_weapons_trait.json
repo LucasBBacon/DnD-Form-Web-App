@@ -9,28 +9,28 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "simple"
+            "category": "weapons",
+            "item": "simple"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_hand_crossbow"
+            "category": "weapons",
+            "item": "weapon_hand_crossbow"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_longsword"
+            "category": "weapons",
+            "item": "weapon_longsword"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_rapier"
+            "category": "weapons",
+            "item": "weapon_rapier"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_shortsword"
+            "category": "weapons",
+            "item": "weapon_shortsword"
         }
     ]
 }

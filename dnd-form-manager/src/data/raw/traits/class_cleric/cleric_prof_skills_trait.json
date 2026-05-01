@@ -18,7 +18,8 @@
                     "persuasion",
                     "religion"
                 ]
-            }
+            },
+            "category": "skills"
         }
     ]
 }

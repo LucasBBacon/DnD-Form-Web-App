@@ -9,7 +9,6 @@
     "effects": [
         {
             "type": "proficiency_choice",
-            "target": "skills",
             "choice": {
                 "count": 1,
                 "pool": [
@@ -32,7 +31,8 @@
                     "stealth",
                     "survival"
                 ]
-            }
+            },
+            "category": "skills"
         }
     ]
 }

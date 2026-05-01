@@ -9,13 +9,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "saving_throws",
-            "value": "int"
+            "category": "saving_throws",
+            "item": "int"
         },
         {
             "type": "proficiency",
-            "target": "saving_throws",
-            "value": "wis"
+            "category": "saving_throws",
+            "item": "wis"
         }
     ]
 }

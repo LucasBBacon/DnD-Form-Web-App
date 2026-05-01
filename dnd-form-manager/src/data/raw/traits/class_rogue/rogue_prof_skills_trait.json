@@ -24,7 +24,8 @@
                     "sleight_of_hand",
                     "stealth"
                 ]
-            }
+            },
+            "category": "skills"
         }
     ]
 }

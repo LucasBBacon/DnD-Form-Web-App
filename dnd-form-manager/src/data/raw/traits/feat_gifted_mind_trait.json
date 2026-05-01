@@ -7,11 +7,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "skill_arcana"
+            "category": "skills",
+            "item": "arcana"
         },
         {
             "type": "proficiency",
-            "target": "skill_history"
+            "category": "skills",
+            "item": "history"
         }
     ]
 }

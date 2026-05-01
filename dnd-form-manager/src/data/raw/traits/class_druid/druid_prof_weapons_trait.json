@@ -9,53 +9,53 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_club"
+            "category": "weapons",
+            "item": "weapon_club"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_dagger"
+            "category": "weapons",
+            "item": "weapon_dagger"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_dart"
+            "category": "weapons",
+            "item": "weapon_dart"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_javelin"
+            "category": "weapons",
+            "item": "weapon_javelin"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_mace"
+            "category": "weapons",
+            "item": "weapon_mace"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_quarterstaff"
+            "category": "weapons",
+            "item": "weapon_quarterstaff"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_scimitar"
+            "category": "weapons",
+            "item": "weapon_scimitar"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_sickle"
+            "category": "weapons",
+            "item": "weapon_sickle"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_sling"
+            "category": "weapons",
+            "item": "weapon_sling"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_spear"
+            "category": "weapons",
+            "item": "weapon_spear"
         }
     ]
 }

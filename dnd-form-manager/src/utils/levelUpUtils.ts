@@ -2,12 +2,13 @@ import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { ClassData } from "../types/class";
 import type { LevelChoice } from "../types/progression";
 import type { SubclassData } from "../types/subclass";
-import { getPendingSkillChoices } from "./choiceUtils";
+import { getPendingProficiencyChoices } from "./choiceUtils";
 import { MECHANIC_IDS } from "./constants";
 
 export interface LevelUpRequirements {
   requiresAsiOrFeat: boolean;
   requiresSubclass: boolean;
+  requiresProficiencySelection: boolean;
   requiresSkillSelection: boolean;
   newCantripsToLearn: number;
   newSpellsToLearn: number;
@@ -41,6 +42,7 @@ export const getLevelUpRequirements = (
   const requirements: LevelUpRequirements = {
     requiresAsiOrFeat: false,
     requiresSubclass: false,
+    requiresProficiencySelection: false,
     requiresSkillSelection: false,
     newCantripsToLearn: 0,
     newSpellsToLearn: 0,
@@ -55,7 +57,7 @@ export const getLevelUpRequirements = (
   // #endregion
 
   // #region Skill Choice Check
-  const pendingSkillChoices = getPendingSkillChoices(
+  const pendingProficiencyChoices = getPendingProficiencyChoices(
     targetLevel,
     raceId,
     subraceId,
@@ -65,8 +67,11 @@ export const getLevelUpRequirements = (
     classTracks,
   );
 
-  if (pendingSkillChoices.length > 0) {
-    requirements.requiresSkillSelection = true;
+  if (pendingProficiencyChoices.length > 0) {
+    requirements.requiresProficiencySelection = true;
+    requirements.requiresSkillSelection = pendingProficiencyChoices.some(
+      (choice) => choice.category === "skills",
+    );
   }
   // #endregion
 

@@ -9,13 +9,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "category_artisans_tools"
+            "category": "tools",
+            "item": "category_artisans_tools"
         },
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "category_musical_instrument"
+            "category": "tools",
+            "item": "category_musical_instrument"
         }
     ]
 }

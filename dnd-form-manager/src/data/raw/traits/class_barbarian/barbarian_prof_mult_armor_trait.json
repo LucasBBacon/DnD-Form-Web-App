@@ -8,8 +8,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "armor",
-            "value": "shields"
+            "category": "armor",
+            "item": "shields"
         }
     ]
 }

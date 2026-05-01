@@ -6,6 +6,10 @@
         "fullText": "If you multiclass into Warlock, you gain proficiency with simple weapons."
     },
     "effects": [
-        { "type": "proficiency", "target": "weapons", "value": "simple" }
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "simple"
+        }
     ]
 }

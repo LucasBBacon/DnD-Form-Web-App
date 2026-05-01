@@ -54,7 +54,7 @@ describe("proficiencyAggregator", () => {
         id: "trait_duplicate_simple",
         name: "Duplicate Simple",
         lore: { shortDescription: "Simple weapons again." },
-        effects: [{ type: "proficiency", target: "weapons", value: "simple" }],
+        effects: [{ type: "proficiency", category: "weapons", item: "simple" }],
       },
     ];
 
@@ -90,15 +90,17 @@ describe("proficiencyAggregator", () => {
           isStartingProficiency: true,
           lore: { shortDescription: "STR and CON saves." },
           effects: [
-            { type: "proficiency", target: "saving_throws", value: "str" },
-            { type: "proficiency", target: "saving_throws", value: "con" },
+            { type: "proficiency", category: "saving_throws", item: "str" },
+            { type: "proficiency", category: "saving_throws", item: "con" },
           ],
         },
         {
           id: "trait_diamond_soul",
           name: "Diamond Soul",
           lore: { shortDescription: "All saves." },
-          effects: [{ type: "proficiency", target: "saving_throws", value: "dex" }],
+          effects: [
+            { type: "proficiency", category: "saving_throws", item: "dex" },
+          ],
         },
       ],
     });
@@ -120,7 +122,7 @@ describe("proficiencyAggregator", () => {
           id: "trait_keen_senses",
           name: "Keen Senses",
           lore: { shortDescription: "Perception proficiency." },
-          effects: [{ type: "proficiency", target: "skills", value: "insight" }],
+          effects: [{ type: "proficiency", category: "skills", item: "insight" }],
         },
         {
           id: "trait_expertise",
@@ -154,8 +156,8 @@ describe("proficiencyAggregator", () => {
           isStartingProficiency: true,
           lore: { shortDescription: "STR and CON saves." },
           effects: [
-            { type: "proficiency", target: "saving_throws", value: "str" },
-            { type: "proficiency", target: "saving_throws", value: "dex" },
+            { type: "proficiency", category: "saving_throws", item: "str" },
+            { type: "proficiency", category: "saving_throws", item: "dex" },
           ],
         },
         {
@@ -163,8 +165,12 @@ describe("proficiencyAggregator", () => {
           name: "Diamond Soul",
           lore: { shortDescription: "All saves." },
           effects: [
-            { type: "proficiency", target: "saving_throws", value: "wis" },
-            { type: "proficiency", target: "saving_throws", value: "not_a_save" },
+            { type: "proficiency", category: "saving_throws", item: "wis" },
+            {
+              type: "proficiency",
+              category: "saving_throws",
+              item: "not_a_save",
+            },
           ],
         },
       ],
@@ -191,9 +197,13 @@ describe("proficiencyAggregator", () => {
           name: "Fighter Proficiencies",
           lore: { shortDescription: "Armor and Martial weapons." },
           effects: [
-            { type: "proficiency", target: "armor", value: "shields" },
-            { type: "proficiency", target: "weapons", value: "martial" },
-            { type: "proficiency", target: "tools", value: "category_artisans_tools" },
+            { type: "proficiency", category: "armor", item: "shields" },
+            { type: "proficiency", category: "weapons", item: "martial" },
+            {
+              type: "proficiency",
+              category: "tools",
+              item: "category_artisans_tools",
+            },
           ],
         },
       ],

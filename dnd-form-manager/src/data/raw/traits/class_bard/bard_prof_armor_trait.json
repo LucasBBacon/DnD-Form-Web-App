@@ -9,8 +9,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "armor",
-            "value": "light"
+            "category": "armor",
+            "item": "light"
         }
     ]
 }

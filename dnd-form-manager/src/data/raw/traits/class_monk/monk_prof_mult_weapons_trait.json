@@ -6,7 +6,15 @@
         "fullText": "If you multiclass into Monk, you gain proficiency with simple weapons and shortswords."
     },
     "effects": [
-        { "type": "proficiency", "target": "weapons", "value": "simple" },
-        { "type": "proficiency", "target": "weapons", "value": "shortsword" }
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "simple"
+        },
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "shortsword"
+        }
     ]
 }

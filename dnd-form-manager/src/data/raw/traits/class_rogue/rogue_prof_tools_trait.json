@@ -9,8 +9,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "tools",
-            "value": "tool_thieves_tools"
+            "category": "tools",
+            "item": "tool_thieves_tools"
         }
     ]
 }

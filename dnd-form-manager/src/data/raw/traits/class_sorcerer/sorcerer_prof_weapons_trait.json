@@ -9,28 +9,28 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_dagger"
+            "category": "weapons",
+            "item": "weapon_dagger"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_dart"
+            "category": "weapons",
+            "item": "weapon_dart"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_sling"
+            "category": "weapons",
+            "item": "weapon_sling"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_quarterstaff"
+            "category": "weapons",
+            "item": "weapon_quarterstaff"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "weapon_light_crossbow"
+            "category": "weapons",
+            "item": "weapon_light_crossbow"
         }
     ]
 }

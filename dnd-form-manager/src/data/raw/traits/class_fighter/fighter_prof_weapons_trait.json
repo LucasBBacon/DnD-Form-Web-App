@@ -9,13 +9,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "simple"
+            "category": "weapons",
+            "item": "simple"
         },
         {
             "type": "proficiency",
-            "target": "weapon",
-            "value": "martial"
+            "category": "weapons",
+            "item": "martial"
         }
     ]
 }

@@ -9,11 +9,11 @@
     "effects": [
         {
             "type": "proficiency_choice",
-            "target": "tools",
             "choice": {
                 "count": 1,
                 "pool": "any"
-            }
+            },
+            "category": "tools"
         }
     ]
 }

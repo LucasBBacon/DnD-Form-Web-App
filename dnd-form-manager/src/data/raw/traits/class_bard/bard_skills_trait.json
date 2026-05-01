@@ -31,7 +31,8 @@
                     "stealth",
                     "survival"
                 ]
-            }
+            },
+            "category": "skills"
         }
     ]
 }

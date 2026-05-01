@@ -1,8 +1,14 @@
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
+import type { ProficiencyCategory } from "../types/trait";
 import { SKILL_ABILITY_MAP } from "./constants";
 import { getAllCharacterTraits } from "./traitUtils";
+
+export type ProficiencyChoiceCategory = Extract<
+  ProficiencyCategory,
+  "skills" | "weapons" | "tools" | "languages"
+>;
 
 /**
  * Describes a single skill-pick prompt granted by a trait at a specific level.
@@ -15,6 +21,14 @@ export interface PendingSkillChoice {
   sourceName: string;
   count: number;
   pool: Skill[];
+}
+
+export interface PendingProficiencyChoice {
+  sourceId: string;
+  sourceName: string;
+  category: ProficiencyChoiceCategory;
+  count: number;
+  pool: string[];
 }
 
 /**
@@ -58,6 +72,36 @@ export const resolveSkillChoicePool = (
   }
 
   return pool.filter((value): value is Skill => value in SKILL_ABILITY_MAP);
+};
+
+const PROFICIENCY_CHOICE_CATEGORIES = new Set<ProficiencyChoiceCategory>([
+  "skills",
+  "weapons",
+  "tools",
+  "languages",
+]);
+
+const isProficiencyChoiceCategory = (
+  category: string,
+): category is ProficiencyChoiceCategory =>
+  PROFICIENCY_CHOICE_CATEGORIES.has(category as ProficiencyChoiceCategory);
+
+/**
+ * Resolves a proficiency-choice pool into concrete values for a category.
+ */
+export const resolveProficiencyChoicePool = (
+  category: ProficiencyChoiceCategory,
+  pool: readonly string[] | "any",
+): string[] => {
+  if (category === "skills") {
+    return resolveSkillChoicePool(pool);
+  }
+
+  if (pool === "any") {
+    return [];
+  }
+
+  return pool.filter((value) => typeof value === "string" && value.trim() !== "");
 };
 
 /**
@@ -145,7 +189,7 @@ export const getSelectedProficiencyChoices = (
  * @param subclassId The selected subclass identifier, if any.
  * @returns Pending skill choice groups for that level.
  */
-export const getPendingSkillChoices = (
+export const getPendingProficiencyChoices = (
   level: number,
   raceId: string | null,
   subraceId: string | null,
@@ -167,18 +211,27 @@ export const getPendingSkillChoices = (
     classTracks,
   );
 
-  const pendingChoices: PendingSkillChoice[] = [];
+  const pendingChoices: PendingProficiencyChoice[] = [];
 
   allTraits.forEach((trait) => {
     trait.effects?.forEach((effect) => {
-      if (effect.type === "proficiency_choice" && effect.choice) {
+      if (
+        effect.type === "proficiency_choice" &&
+        effect.choice &&
+        effect.category &&
+        isProficiencyChoiceCategory(effect.category)
+      ) {
         // Normalize trait data before returning it so the UI never has to know
         // about schema sentinels like `"any"`.
-        const resolvedPool = resolveSkillChoicePool(effect.choice.pool);
+        const resolvedPool = resolveProficiencyChoicePool(
+          effect.category,
+          effect.choice.pool,
+        );
 
         pendingChoices.push({
           sourceId: trait.id,
           sourceName: trait.name,
+          category: effect.category,
           count: effect.choice.count,
           pool: resolvedPool,
         });
@@ -188,3 +241,32 @@ export const getPendingSkillChoices = (
 
   return pendingChoices;
 };
+
+/**
+ * Backward-compatible skill-only helper used by existing consumers.
+ */
+export const getPendingSkillChoices = (
+  level: number,
+  raceId: string | null,
+  subraceId: string | null,
+  classId: string | null,
+  subclassId: string | null,
+  choicesByLevel: Record<number, LevelChoice> = {},
+  classTracks: CharacterClassTrack[] = [],
+): PendingSkillChoice[] =>
+  getPendingProficiencyChoices(
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+    choicesByLevel,
+    classTracks,
+  )
+    .filter((choice) => choice.category === "skills")
+    .map((choice) => ({
+      sourceId: choice.sourceId,
+      sourceName: choice.sourceName,
+      count: choice.count,
+      pool: choice.pool.filter((value): value is Skill => value in SKILL_ABILITY_MAP),
+    }));

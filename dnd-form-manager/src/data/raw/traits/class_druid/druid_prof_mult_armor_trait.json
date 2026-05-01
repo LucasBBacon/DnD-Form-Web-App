@@ -6,8 +6,20 @@
         "fullText": "If you multiclass into Druid, you gain proficiency with light armor, medium armor, and shields. Druids will not wear armor made of metal."
     },
     "effects": [
-        { "type": "proficiency", "target": "armor", "value": "light" },
-        { "type": "proficiency", "target": "armor", "value": "medium" },
-        { "type": "proficiency", "target": "armor", "value": "shields" }
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "light"
+        },
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "medium"
+        },
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "shields"
+        }
     ]
 }

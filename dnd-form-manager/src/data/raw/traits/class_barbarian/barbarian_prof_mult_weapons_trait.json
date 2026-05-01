@@ -8,8 +8,8 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapons",
-            "value": "martial"
+            "category": "weapons",
+            "item": "martial"
         }
     ]
 }

@@ -3,7 +3,11 @@ import type { useCharacterStore } from "../store/useCharacterStore";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
-import type { TraitData, TraitEffect } from "../types/trait";
+import type {
+  ProficiencyCategory,
+  TraitData,
+  TraitEffect,
+} from "../types/trait";
 import { SKILL_ABILITY_MAP } from "./constants";
 import { evaluateAllPredicates } from "./predicateEngine";
 
@@ -47,6 +51,7 @@ export interface AggregateProficienciesOptions<T extends string> {
   choiceValuesByLevel?: Partial<Record<number, readonly T[]>>;
   traits: TraitData[];
   matchEffectTypes: readonly TraitEffect["type"][];
+  matchCategories?: readonly ProficiencyCategory[];
   mapTarget: (target: string) => T | null;
   includeEffect?: (effect: TraitEffect, currentLevel: number) => boolean;
 }
@@ -99,27 +104,59 @@ export interface AggregateNonSkillProficienciesMulticlassOptions {
 
 /**
  * Set of category tokens used by the new proficiency effect format.
- * New format: { type: "proficiency", target: "<category>", value: "<item>" }
+ * New format: { type: "proficiency", category: "<category>", item: "<item>" }
  */
-const PROFICIENCY_CATEGORY_TARGETS = new Set([
+const PROFICIENCY_CATEGORIES = new Set<ProficiencyCategory>([
   "armor",
   "weapons",
   "tools",
   "saving_throws",
   "skills",
+  "languages",
 ]);
 
 /**
- * Extracts the resolved proficiency value from a trait effect.
- * Only supports the new-format effects where `target` is a category token and
- * `value` holds the specific item. Old-format effects (target = value) are not supported.
+ * Extracts the proficiency category/item pair from a trait effect.
  */
-export const extractProficiencyValue = (
+export const extractProficiencyItem = (
   effect: TraitEffect,
-): string | undefined => {
-  if (!effect.target || !PROFICIENCY_CATEGORY_TARGETS.has(effect.target))
+): { category: ProficiencyCategory; item: string } | undefined => {
+  if (!effect.category || !PROFICIENCY_CATEGORIES.has(effect.category)) {
     return undefined;
-  return typeof effect.value === "string" ? effect.value : undefined;
+  }
+
+  if (typeof effect.item !== "string") {
+    return undefined;
+  }
+
+  return {
+    category: effect.category,
+    item: effect.item,
+  };
+};
+
+const extractEffectValue = (
+  effect: TraitEffect,
+): { category?: ProficiencyCategory; value: string } | undefined => {
+  if (effect.type === "proficiency") {
+    const extracted = extractProficiencyItem(effect);
+    if (!extracted) return undefined;
+
+    return {
+      category: extracted.category,
+      value: extracted.item,
+    };
+  }
+
+  if (typeof effect.value === "string") {
+    return { value: effect.value };
+  }
+
+  if (typeof effect.target === "string") {
+    return { value: effect.target };
+  }
+
+  return undefined;
 };
 
 // #endregion
@@ -413,6 +450,9 @@ export const aggregateProficiencies = <T extends string>(
     trait: [],
   };
   const includeEffect = options.includeEffect || isEffectActiveForLevel;
+  const matchCategorySet = options.matchCategories
+    ? new Set(options.matchCategories)
+    : null;
 
   options.staticValues?.forEach((value) => {
     set.add(value);
@@ -439,11 +479,17 @@ export const aggregateProficiencies = <T extends string>(
         options.stats,
       );
 
-      if (!isActive || !effect.target) return;
+      if (!isActive) return;
 
-      const extractedValue = extractProficiencyValue(effect);
-      if (!extractedValue) return;
-      const mappedTarget = options.mapTarget(extractedValue);
+      const extracted = extractEffectValue(effect);
+      if (!extracted) return;
+      if (matchCategorySet) {
+        if (!extracted.category || !matchCategorySet.has(extracted.category)) {
+          return;
+        }
+      }
+
+      const mappedTarget = options.mapTarget(extracted.value);
       if (!mappedTarget) return;
 
       set.add(mappedTarget);
@@ -495,6 +541,7 @@ export const aggregateSkillProficiencies = (
     choiceValuesByLevel: skillChoicesByLevel,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["skills"],
     mapTarget: (target) => (isKnownSkill(target) ? target : null),
   });
 
@@ -523,6 +570,7 @@ export const aggregateSaveProficiencies = (
     stats: options.stats,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["saving_throws"],
     mapTarget: (target) =>
       abilityKeys.has(target as Ability) ? (target as Ability) : null,
   });
@@ -550,6 +598,7 @@ export const aggregateNonSkillProficiencies = (
     choiceValuesByLevel: weaponChoicesByLevel,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["weapons"],
     mapTarget: normalizeWeaponTarget,
   });
 
@@ -559,6 +608,7 @@ export const aggregateNonSkillProficiencies = (
     stats: options.stats,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["armor"],
     mapTarget: normalizeArmorTarget,
   });
 
@@ -569,6 +619,7 @@ export const aggregateNonSkillProficiencies = (
     choiceValuesByLevel: toolChoicesByLevel,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["tools"],
     mapTarget: normalizeToolTarget,
   });
 
@@ -579,6 +630,7 @@ export const aggregateNonSkillProficiencies = (
     choiceValuesByLevel: languageChoicesByLevel,
     traits: options.traits,
     matchEffectTypes: ["proficiency"],
+    matchCategories: ["languages"],
     mapTarget: normalizeLanguageOrOtherTarget,
   });
 

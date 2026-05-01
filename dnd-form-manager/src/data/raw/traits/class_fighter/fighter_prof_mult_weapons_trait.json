@@ -6,7 +6,15 @@
         "fullText": "If you multiclass into Fighter, you gain proficiency with simple and martial weapons."
     },
     "effects": [
-        { "type": "proficiency", "target": "weapons", "value": "simple" },
-        { "type": "proficiency", "target": "weapons", "value": "martial" }
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "simple"
+        },
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "martial"
+        }
     ]
 }

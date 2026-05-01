@@ -1,6 +1,14 @@
 import type { Ability, Size, Skill } from "./common";
 import type { Predicate } from "./predicate";
 
+export type ProficiencyCategory =
+  | "armor"
+  | "weapons"
+  | "tools"
+  | "saving_throws"
+  | "skills"
+  | "languages";
+
 export interface TraitEffect {
   type:
     | "action_grant"
@@ -19,8 +27,10 @@ export interface TraitEffect {
     | "ac_calculation"
     | "other"; // TODO: further additions in accordance to old schema
   levelAvailable?: number;
-  target?: string; // For spell_grant, this is the spellId (e.g., 'spell_hellish_rebuke')
+  target?: string; // For spell_grant and non-proficiency effects, this is the target key or spell id.
   value?: number | string | boolean;
+  category?: ProficiencyCategory; // For proficiency/proficiency_choice effects.
+  item?: string; // For proficiency effects.
   spellcastingAbility?: Ability; // The stat used specifically for this spell
   uses?: {
     count: number | string;
@@ -29,7 +39,7 @@ export interface TraitEffect {
   predicates?: Predicate[];
   choice?: {
     count: number;
-    pool: Skill[] | Ability[] | "any";
+    pool: Skill[] | Ability[] | string[] | "any";
     bonus?: number;
   };
 }

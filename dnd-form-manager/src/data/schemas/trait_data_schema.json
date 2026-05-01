@@ -247,6 +247,22 @@
                         "type": "string",
                         "description": "What this effect modifies; for spell_grant this is typically a spell id."
                     },
+                    "category": {
+                        "type": "string",
+                        "enum": [
+                            "armor",
+                            "weapons",
+                            "tools",
+                            "saving_throws",
+                            "skills",
+                            "languages"
+                        ],
+                        "description": "Proficiency category used by proficiency and proficiency_choice effects."
+                    },
+                    "item": {
+                        "type": "string",
+                        "description": "Specific proficiency identifier granted by a proficiency effect."
+                    },
                     "value": {
                         "type": [
                             "boolean",
@@ -342,6 +358,77 @@
                 },
                 "required": [
                     "type"
+                ],
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "proficiency"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ]
+                        },
+                        "then": {
+                            "required": [
+                                "category",
+                                "item"
+                            ],
+                            "not": {
+                                "anyOf": [
+                                    {
+                                        "required": [
+                                            "target"
+                                        ]
+                                    },
+                                    {
+                                        "required": [
+                                            "value"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "type": {
+                                    "const": "proficiency_choice"
+                                }
+                            },
+                            "required": [
+                                "type"
+                            ]
+                        },
+                        "then": {
+                            "required": [
+                                "category",
+                                "choice"
+                            ],
+                            "not": {
+                                "anyOf": [
+                                    {
+                                        "required": [
+                                            "target"
+                                        ]
+                                    },
+                                    {
+                                        "required": [
+                                            "item"
+                                        ]
+                                    },
+                                    {
+                                        "required": [
+                                            "value"
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
                 ],
                 "additionalProperties": false
             }

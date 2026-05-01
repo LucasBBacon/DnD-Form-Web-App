@@ -2,12 +2,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getLevelUpRequirements } from "./levelUpUtils";
 import { MECHANIC_IDS } from "./constants";
-import { getPendingSkillChoices } from "./choiceUtils";
+import { getPendingProficiencyChoices } from "./choiceUtils";
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 
 vi.mock("./choiceUtils", () => ({
-  getPendingSkillChoices: vi.fn(),
+  getPendingProficiencyChoices: vi.fn(),
 }));
 
 const createLevelData = (
@@ -51,13 +51,14 @@ const createClassData = ({
 describe("getLevelUpRequirements", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(getPendingSkillChoices).mockReturnValue([]);
+    vi.mocked(getPendingProficiencyChoices).mockReturnValue([]);
   });
 
   it("returns the default requirements when class data is missing", () => {
     expect(getLevelUpRequirements(2, "human", null, null, null)).toEqual({
       requiresAsiOrFeat: false,
       requiresSubclass: false,
+      requiresProficiencySelection: false,
       requiresSkillSelection: false,
       newCantripsToLearn: 0,
       newSpellsToLearn: 0,
@@ -85,7 +86,15 @@ describe("getLevelUpRequirements", () => {
   describe("skill selection", () => {
     it("requires skill selection when pending skill choices exist", () => {
       const classData = createClassData({ id: "rogue" });
-      vi.mocked(getPendingSkillChoices).mockReturnValue(["stealth"] as any);
+      vi.mocked(getPendingProficiencyChoices).mockReturnValue([
+        {
+          sourceId: "trait_rogue_prof_skills",
+          sourceName: "Skills Proficiencies",
+          category: "skills",
+          count: 1,
+          pool: ["stealth"],
+        },
+      ] as any);
 
       const result = getLevelUpRequirements(
         2,
@@ -95,15 +104,17 @@ describe("getLevelUpRequirements", () => {
         null,
       );
 
+      expect(result.requiresProficiencySelection).toBe(true);
       expect(result.requiresSkillSelection).toBe(true);
     });
 
     it("does not require skill selection when no pending skill choices exist", () => {
       const classData = createClassData({ id: "fighter" });
-      vi.mocked(getPendingSkillChoices).mockReturnValue([]);
+      vi.mocked(getPendingProficiencyChoices).mockReturnValue([]);
 
       const result = getLevelUpRequirements(2, "human", null, classData, null);
 
+      expect(result.requiresProficiencySelection).toBe(false);
       expect(result.requiresSkillSelection).toBe(false);
     });
 
@@ -112,7 +123,7 @@ describe("getLevelUpRequirements", () => {
 
       getLevelUpRequirements(4, "elf", "high-elf", classData, null);
 
-      expect(getPendingSkillChoices).toHaveBeenCalledWith(
+      expect(getPendingProficiencyChoices).toHaveBeenCalledWith(
         4,
         "elf",
         "high-elf",
@@ -129,7 +140,7 @@ describe("getLevelUpRequirements", () => {
 
       getLevelUpRequirements(5, "elf", null, classData, subclassData);
 
-      expect(getPendingSkillChoices).toHaveBeenCalledWith(
+      expect(getPendingProficiencyChoices).toHaveBeenCalledWith(
         5,
         "elf",
         null,
@@ -244,7 +255,15 @@ describe("getLevelUpRequirements", () => {
       });
       const subclassData = { id: "lore" } as SubclassData;
 
-      vi.mocked(getPendingSkillChoices).mockReturnValue(["arcana"] as any);
+      vi.mocked(getPendingProficiencyChoices).mockReturnValue([
+        {
+          sourceId: "trait_bard_prof_skills",
+          sourceName: "Skills Proficiencies",
+          category: "skills",
+          count: 1,
+          pool: ["arcana"],
+        },
+      ] as any);
 
       const result = getLevelUpRequirements(
         3,
@@ -256,6 +275,7 @@ describe("getLevelUpRequirements", () => {
 
       expect(result).toEqual({
         requiresAsiOrFeat: true,
+        requiresProficiencySelection: true,
         requiresSubclass: true,
         requiresSkillSelection: true,
         newCantripsToLearn: 1,
@@ -269,11 +289,20 @@ describe("getLevelUpRequirements", () => {
         subclassChoiceLevel: 3,
         progression: [createLevelData(2)],
       });
-      vi.mocked(getPendingSkillChoices).mockReturnValue(["perception"] as any);
+      vi.mocked(getPendingProficiencyChoices).mockReturnValue([
+        {
+          sourceId: "trait_rogue_prof_skills",
+          sourceName: "Skills Proficiencies",
+          category: "skills",
+          count: 1,
+          pool: ["perception"],
+        },
+      ] as any);
 
       const result = getLevelUpRequirements(3, "human", null, classData, null);
 
       expect(result.requiresSubclass).toBe(true);
+      expect(result.requiresProficiencySelection).toBe(true);
       expect(result.requiresSkillSelection).toBe(true);
       expect(result.requiresAsiOrFeat).toBe(false);
       expect(result.newSpellsToLearn).toBe(0);
