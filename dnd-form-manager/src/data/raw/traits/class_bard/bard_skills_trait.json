@@ -1,9 +1,10 @@
 {
-    "id": "trait_bard_skills",
+    "id": "trait_bard_prof_skills",
     "isStartingProficiency": true,
-    "name": "Bard Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Proficiency in three skills of your choice.",
+        "fullText": "Gain proficiency in three skills of your choice."
     },
     "effects": [
         {

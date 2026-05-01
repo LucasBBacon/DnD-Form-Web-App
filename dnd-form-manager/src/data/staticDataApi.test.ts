@@ -5,6 +5,8 @@ import {
   getAllSpells,
   getRaceById,
   getSpellByID,
+  getTraitById,
+  getTraitsByIds,
   getSubracesForRace,
 } from "./staticDataApi";
 
@@ -69,5 +71,31 @@ describe("Spells static API", () => {
     expect(typeof rangedSpell?.range).toBe("string");
     // Every spell in the array should have a string range after normalization
     expect(spells.every((s) => typeof s.range === "string")).toBe(true);
+  });
+});
+
+describe("Traits static API", () => {
+  it("resolves a nested trait id from class/race subdirectories", () => {
+    const classTrait = getTraitById("trait_barbarian_prof_armor");
+    const raceTrait = getTraitById("trait_elf_speed");
+
+    expect(classTrait).not.toBeNull();
+    expect(classTrait?.name).toContain("Armor");
+    expect(raceTrait).not.toBeNull();
+    expect(raceTrait?.name).toContain("Speed");
+  });
+
+  it("filters unresolved trait ids when resolving in bulk", () => {
+    const traits = getTraitsByIds([
+      "trait_barbarian_prof_armor",
+      "trait_missing",
+      "trait_elf_speed",
+    ]);
+
+    expect(traits).toHaveLength(2);
+    expect(traits.map((trait) => trait.id)).toEqual([
+      "trait_barbarian_prof_armor",
+      "trait_elf_speed",
+    ]);
   });
 });

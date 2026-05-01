@@ -6,28 +6,34 @@
     },
     "effects": [
         {
-            "type": "save_proficiency",
-            "target": "str"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "str"
         },
         {
-            "type": "save_proficiency",
-            "target": "dex"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "dex"
         },
         {
-            "type": "save_proficiency",
-            "target": "con"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "con"
         },
         {
-            "type": "save_proficiency",
-            "target": "int"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "int"
         },
         {
-            "type": "save_proficiency",
-            "target": "wis"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "wis"
         },
         {
-            "type": "save_proficiency",
-            "target": "cha"
+            "type": "proficiency",
+            "target": "saving_throws",
+            "value": "cha"
         }
     ]
 }

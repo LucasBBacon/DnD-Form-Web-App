@@ -10,7 +10,7 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 
@@ -74,6 +74,41 @@ const validateAction = ajv.compile(actionSchema);
 
 type ValidateFn = ReturnType<typeof ajv.compile>;
 
+type JsonSourceFile = {
+  filePath: string;
+  relativePath: string;
+};
+
+function collectJsonFilesRecursive(
+  rootPath: string,
+  currentPath: string = rootPath,
+): JsonSourceFile[] {
+  const entries = readdirSync(currentPath, { withFileTypes: true })
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const files: JsonSourceFile[] = [];
+
+  for (const entry of entries) {
+    const entryPath = resolve(currentPath, entry.name);
+
+    if (entry.isDirectory()) {
+      files.push(...collectJsonFilesRecursive(rootPath, entryPath));
+      continue;
+    }
+
+    if (!entry.isFile() || !entry.name.endsWith('.json')) {
+      continue;
+    }
+
+    files.push({
+      filePath: entryPath,
+      relativePath: relative(rootPath, entryPath).replaceAll('\\', '/'),
+    });
+  }
+
+  return files;
+}
+
 // ---------------------------------------------------------------------------
 // Core compilation helper
 // ---------------------------------------------------------------------------
@@ -84,21 +119,18 @@ function compileFolder(
   outputFileName: string,
 ): void {
   const folderPath = resolve(rawDir, folderName);
-  const files = readdirSync(folderPath)
-    .filter((f: string) => f.endsWith('.json'))
-    .sort();
+  const files = collectJsonFilesRecursive(folderPath);
 
   let hasErrors = false;
   const compiled: unknown[] = [];
 
   for (const file of files) {
-    const filePath = resolve(folderPath, file);
     let data: unknown;
 
     try {
-      data = JSON.parse(readFileSync(filePath, 'utf-8'));
+      data = JSON.parse(readFileSync(file.filePath, 'utf-8'));
     } catch (err) {
-      console.error(`[ERROR] Could not parse ${folderName}/${file}: ${(err as Error).message}`);
+      console.error(`[ERROR] Could not parse ${folderName}/${file.relativePath}: ${(err as Error).message}`);
       hasErrors = true;
       continue;
     }
@@ -109,7 +141,7 @@ function compileFolder(
       hasErrors = true;
       for (const error of validate.errors ?? []) {
         const location = error.instancePath || '(root)';
-        console.error(`[ERROR] ${folderName}/${file} → ${location}: ${error.message}`);
+        console.error(`[ERROR] ${folderName}/${file.relativePath} → ${location}: ${error.message}`);
       }
     }
   }
