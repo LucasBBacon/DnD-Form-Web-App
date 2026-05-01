@@ -79,8 +79,10 @@
       "level": 1,
       "features": [
         "trait_druid_prof_saving_throw",
-        "trait_druid_proficiencies",
-        "trait_druid_skills",
+        "trait_druid_prof_armor",
+        "trait_druid_prof_weapons",
+        "trait_druid_prof_tools",
+        "trait_druid_prof_skills",
         "trait_druidic",
         "trait_spellcasting_druid"
       ],

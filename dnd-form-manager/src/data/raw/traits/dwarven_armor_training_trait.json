@@ -8,11 +8,13 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "armor_light"
+            "target": "armor",
+            "value": "light"
         },
         {
             "type": "proficiency",
-            "target": "armor_medium"
+            "target": "armor",
+            "value": "medium"
         }
     ]
 }

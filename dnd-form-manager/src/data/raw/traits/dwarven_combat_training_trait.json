@@ -8,19 +8,23 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon_battleaxe"
+            "target": "weapon",
+            "value": "weapon_battleaxe"
         },
         {
             "type": "proficiency",
-            "target": "weapon_handaxe"
+            "target": "weapon",
+            "value": "weapon_handaxe"
         },
         {
             "type": "proficiency",
-            "target": "weapon_light_hammer"
+            "target": "weapon",
+            "value": "weapon_light_hammer"
         },
         {
             "type": "proficiency",
-            "target": "weapon_warhammer"
+            "target": "weapon",
+            "value": "weapon_warhammer"
         }
     ]
 }

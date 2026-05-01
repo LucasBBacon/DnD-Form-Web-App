@@ -1,0 +1,26 @@
+{
+    "id": "trait_druid_prof_armor",
+    "isStartingProficiency": true,
+    "name": "Armor Proficiencies",
+    "lore": {
+        "shortDescription": "Gain proficiency with light armor, medium armor, and shields.",
+        "fullText": "Gain proficiency with light armor, medium armor, and shields. Druids will not wear armor or use shields made of metal."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "light"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "medium"
+        },
+        {
+            "type": "proficiency",
+            "target": "armor",
+            "value": "shields"
+        }
+    ]
+}

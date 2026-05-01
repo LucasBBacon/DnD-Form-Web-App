@@ -1,0 +1,61 @@
+{
+    "id": "trait_druid_prof_weapons",
+    "isStartingProficiency": true,
+    "name": "Weapons Proficiency",
+    "lore": {
+        "shortDescription": "Proficiency with clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, and spears.",
+        "fullText": "Druids are proficient with the following weapons: clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, and spears."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_club"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_dagger"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_dart"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_javelin"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_mace"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_quarterstaff"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_scimitar"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_sickle"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_sling"
+        },
+        {
+            "type": "proficiency",
+            "target": "weapon",
+            "value": "weapon_spear"
+        }
+    ]
+}

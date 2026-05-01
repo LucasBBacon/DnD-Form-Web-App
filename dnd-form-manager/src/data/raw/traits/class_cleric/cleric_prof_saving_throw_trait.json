@@ -1,7 +1,7 @@
 {
     "id": "trait_cleric_prof_saving_throw",
-    "isStartingProficiency": true,
     "name": "Saving Throws Proficiencies",
+    "isStartingProficiency": true,
     "lore": {
         "shortDescription": "Proficiency in Wisdom and Charisma saving throws.",
         "fullText": "Gain proficiency in Wisdom and Charisma saving throws."

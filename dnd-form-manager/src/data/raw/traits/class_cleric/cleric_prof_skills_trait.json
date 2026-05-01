@@ -1,9 +1,10 @@
 {
-    "id": "trait_cleric_skills",
+    "id": "trait_cleric_prof_skills",
     "isStartingProficiency": true,
-    "name": "Cleric Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Proficiency in two skills from History, Insight, Medicine, Persuasion, and Religion.",
+        "fullText": "Gain proficiency in two skills from the following: History, Insight, Medicine, Persuasion, and Religion."
     },
     "effects": [
         {

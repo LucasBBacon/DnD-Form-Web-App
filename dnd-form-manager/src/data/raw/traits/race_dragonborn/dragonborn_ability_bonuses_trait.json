@@ -1,0 +1,20 @@
+{
+    "id": "trait_dragonborn_ability_bonuses",
+    "name": "Ability Bonuses",
+    "lore": {
+        "shortDescription": "+2 Strength, +1 Charisma.",
+        "fullText": "Your Strength score increases by 2, and your Charisma score increases by 1."
+    },
+    "effects": [
+        {
+            "type": "ability_bonus_fixed",
+            "target": "str",
+            "value": 2
+        },
+        {
+            "type": "ability_bonus_fixed",
+            "target": "cha",
+            "value": 1
+        }
+    ]
+}

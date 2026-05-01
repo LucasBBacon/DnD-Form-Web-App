@@ -3,7 +3,8 @@
   "name": "Cleric",
   "hitDie": 8,
   "multiclassTraits": [
-    "trait_cleric_mult_prof_armor"
+    "trait_cleric_mult_prof_armor",
+    "trait_cleric_mult_prof_weapons"
   ],
   "startingEquipment": {
     "given": [
@@ -130,8 +131,9 @@
       "level": 1,
       "features": [
         "trait_cleric_prof_saving_throw",
-        "trait_cleric_proficiencies",
-        "trait_cleric_skills",
+        "trait_cleric_prof_armor",
+        "trait_cleric_prof_weapons",
+        "trait_cleric_prof_skills",
         "trait_spellcasting_cleric",
         "trait_divine_domain"
       ],

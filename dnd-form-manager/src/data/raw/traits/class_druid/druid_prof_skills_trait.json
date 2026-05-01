@@ -1,9 +1,10 @@
 {
-    "id": "trait_druid_skills",
+    "id": "trait_druid_prof_skills",
     "isStartingProficiency": true,
-    "name": "Druid Skills",
+    "name": "Skills Proficiencies",
     "lore": {
-        "shortDescription": ""
+        "shortDescription": "Proficiency with two skills of your choice.",
+        "fullText": "Choose two skills from the following list: Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, Survival."
     },
     "effects": [
         {

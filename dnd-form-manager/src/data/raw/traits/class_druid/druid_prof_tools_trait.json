@@ -1,0 +1,16 @@
+{
+    "id": "trait_druid_prof_tools",
+    "isStartingProficiency": true,
+    "name": "Tools Proficiencies",
+    "lore": {
+        "shortDescription": "Proficiency with the herbalism kit.",
+        "fullText": "Gain proficiency with the herbalism kit."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "target": "tool",
+            "value": "tool_herbalism_kit"
+        }
+    ]
+}

@@ -8,19 +8,23 @@
     "effects": [
         {
             "type": "proficiency",
-            "target": "weapon_longsword"
+            "target": "weapon",
+            "value": "weapon_longsword"
         },
         {
             "type": "proficiency",
-            "target": "weapon_shortsword"
+            "target": "weapon",
+            "value": "weapon_shortsword"
         },
         {
             "type": "proficiency",
-            "target": "weapon_shortbow"
+            "target": "weapon",
+            "value": "weapon_shortbow"
         },
         {
             "type": "proficiency",
-            "target": "weapon_longbow"
+            "target": "weapon",
+            "value": "weapon_longbow"
         }
     ]
 }
