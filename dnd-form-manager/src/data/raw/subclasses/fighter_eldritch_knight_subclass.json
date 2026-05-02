@@ -1,0 +1,18 @@
+{
+    "id": "subclass_fighter_eldritch_knight",
+    "name": "Eldritch Knight",
+    "parentClassId": "class_fighter",
+    "spellcastingOverride": {
+        "ability": "int",
+        "preparationType": "known",
+        "schoolRestrictions": ["abjuration", "evocation"]
+    },
+    "progression": [
+        {
+            "level": 3,
+            "features": [
+                "trait_fighter_eldritch_knight_spellcasting"
+            ]
+        }
+    ]
+}

@@ -124,7 +124,8 @@
   },
   "subclassInfo": {
     "choiceLevel": 1,
-    "optionsPool": "subclasses_cleric"
+    "optionsPool": "subclasses_cleric",
+    "optionLabel": "Divine Domain"
   },
   "progression": [
     {

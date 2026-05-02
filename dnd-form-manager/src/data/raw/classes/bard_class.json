@@ -99,7 +99,8 @@
   },
   "subclassInfo": {
     "choiceLevel": 3,
-    "optionsPool": "subclasses_bard"
+    "optionsPool": "subclasses_bard",
+    "displayLabel": "Bard College"
   },
   "progression": [
     {

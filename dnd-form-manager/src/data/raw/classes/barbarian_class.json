@@ -64,7 +64,8 @@
   },
   "subclassInfo": {
     "choiceLevel": 3,
-    "optionsPool": "subclasses_barbarian"
+    "optionsPool": "subclasses_barbarian",
+    "displayLabel": "Primal Path"
   },
   "progression": [
     {

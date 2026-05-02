@@ -1,0 +1,41 @@
+{
+    "id": "subclass_cleric_knowledge",
+    "name": "Knowledge Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_blessings_of_knowledge"
+            ]
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_cd_knowledge_of_the_ages"
+            ]
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_cd_read_thoughts"
+            ]
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_potent_spellcasting"
+            ]
+        },
+        {
+            "level": 17,
+            "features": [
+                "trait_visions_of_the_past"
+            ]
+        }
+    ],
+    "lore": {
+        "shortDescription": "The gods of knowledge value learning and understanding above all.",
+        "fullText": "The gods of knowledge - including Oghma, Boccob, Gilean, Aureon, and Thoth - value learning and understanding above all. Some teach that knowledge is to be gathered and shared in libraries and universities, or promote the practical knowledge of craft and invention. Some deities hoard knowledge and keep its secrets to themselves. And some promise their followers that they will gain tremendous power if they unlock the secrets of the multiverse. Followers of these gods study esoteric lore, collect old tomes, delve into the secret places of the earth, and learn all they can. Some gods of knowledge promote the practical knowledge of craft and invention, including smith deities like Gond, Reorx, Onatar, Moradin, Hephaestus, and Goibhniu.\nIn Amonkhet, knowledge is the second virtue of society. Kefnet's task is to pass on this teaching of the God-Pharaoh and elucidate its meaning. He teaches that the afterlife will be inhabited only by those who have proved by their wits that they are worthy of dwelling in the glorious presence of the God-Pharaoh. He trains acolytes and initiates to push their limits and challenge their mental capacity with spells of ever-greater power."
+    }
+}

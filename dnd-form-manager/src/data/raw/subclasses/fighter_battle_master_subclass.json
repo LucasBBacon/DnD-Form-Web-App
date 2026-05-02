@@ -1,0 +1,37 @@
+{
+    "id": "subclass_fighter_battle_master",
+    "name": "Battle Master",
+    "parentClassId": "class_fighter",
+    "spellcastingOverride": null,
+    "progression": [
+        {
+            "level": 3,
+            "features": [
+                "trait_combat_superiority",
+                "trait_student_of_war"
+            ]
+        },
+        {
+            "level": 7,
+            "features": [
+                "trait_know_your_enemy"
+            ]
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_improved_combat_superiority"
+            ]
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_relentless"
+            ]
+        }
+    ],
+    "lore": {
+        "shortDescription": "Masters of martial techniques, Battle Masters are skilled in the art of combat, using their knowledge and tactics to outmaneuver their opponents on the battlefield.",
+        "fullText": "Those who emulate the archetypal Battle Master employ martial techniques passed down through generations. To a Battle Master, combat is an academic field, sometimes including subjects beyond battle such as weaponsmithing and calligraphy. Not every fighter absorbs the lessons of history, theory, and artistry that are reflected in the Battle Master archetype, but those who do are well-rounded fighters of great skill and knowledge."
+    }
+}

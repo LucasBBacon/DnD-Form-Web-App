@@ -1,0 +1,42 @@
+{
+    "id": "subclass_fighter_champion",
+    "name": "Champion",
+    "parentClassId": "class_fighter",
+    "spellcastingOverride": null,
+    "progression": [
+        {
+            "level": 3,
+            "features": [
+                "trait_improved_critical"
+            ]
+        },
+        {
+            "level": 7,
+            "features": [
+                "trait_remarkable_athlete"
+            ]
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_additional_fighting_style"
+            ]
+        },
+        {
+            "level": 15,
+            "features": [
+                "trait_superior_critical"
+            ]
+        },
+        {
+            "level": 18,
+            "features": [
+                "trait_survivor"
+            ]
+        }
+    ],
+    "lore": {
+        "shortDescription": "Champions are the epitome of martial prowess, relying on their physical strength and skill to dominate the battlefield.",
+        "fullText": "The archetypal Champion focuses on the development of raw physical power honed to deadly perfection. Those who model themselves on this archetype combine rigorous training with physical excellence to deal devastating blows."
+    }
+}

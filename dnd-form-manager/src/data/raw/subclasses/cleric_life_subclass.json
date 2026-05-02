@@ -1,0 +1,38 @@
+{
+    "id": "subclass_cleric_life",
+    "name": "Life Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+        {
+            "level": 1,
+            "features": [
+                "trait_bonus_proficiency",
+                "trait_disciple_of_life"
+            ]
+        },
+        {
+            "level": 2,
+            "features": [
+                "trait_cd_preserve_life"
+            ]
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_blessed_healer"
+            ]
+        },
+        {
+            "level": 8,
+            "features": [
+                "trait_divine_strike"
+            ]
+        },
+        {
+            "level": 17,
+            "features": [
+                "trait_supreme_healing"
+            ]
+        }
+    ]
+}

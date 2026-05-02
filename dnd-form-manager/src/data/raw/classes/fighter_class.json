@@ -113,7 +113,8 @@
   },
   "subclassInfo": {
     "choiceLevel": 3,
-    "optionsPool": "subclasses_fighter"
+    "optionsPool": "subclasses_fighter",
+    "optionLabel": "Martial Archetype"
   },
   "progression": [
     {
