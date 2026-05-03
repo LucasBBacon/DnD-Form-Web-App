@@ -743,3 +743,352 @@ describe("useSpellcasting race spellcasting", () => {
     expect(result.casting.ability).toBe("cha");
   });
 });
+
+describe("useSpellcasting spell list expansion/restrictions", () => {
+  const baseStoreState = {
+    raceId: null,
+    subraceId: null,
+    choicesByLevel: {},
+    acquiredFeats: [],
+    expendedSpellSlots: {},
+    expendedPactSlots: 0,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(useCharacterStats).mockReturnValue({
+      abilities: {
+        scores: { str: 10, dex: 10, con: 10, int: 16, wis: 10, cha: 10 },
+        modifiers: { str: 0, dex: 0, con: 0, int: 3, wis: 0, cha: 0 },
+      },
+      combat: {
+        proficiencyBonus: 3,
+        hp: { max: 30, current: 30 },
+        initiative: 0,
+        armorClass: 14,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: { totalWeight: 0, carryingCapacity: 150, isEncumbered: false },
+    } as any);
+    vi.mocked(getRaceById).mockReturnValue(null);
+    vi.mocked(getSubraceById).mockReturnValue(null);
+    vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
+  });
+
+  it("populates bonusPrepared from active progression entries", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 5,
+      classId: "class_paladin",
+      subclassId: "subclass_devotion",
+      classTracks: [{ classId: "class_paladin", subclassId: "subclass_devotion", level: 5 }],
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      progression: [{ level: 5, features: ["trait_paladin_spellcasting"] }],
+    } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_devotion_sacred_weapons"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      const results: any[] = [];
+      if (ids.includes("trait_paladin_spellcasting")) {
+        results.push({
+          id: "trait_paladin_spellcasting",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [{ level: 5, cantripsKnown: 0, spellSlots: { 1: 4, 2: 2 } }],
+          },
+        });
+      }
+      if (ids.includes("trait_devotion_sacred_weapons")) {
+        results.push({
+          id: "trait_devotion_sacred_weapons",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [
+              { level: 3, bonusSpells: ["spell_protection_from_evil"] },
+              { level: 5, bonusSpells: ["spell_protection_from_evil", "spell_zone_of_truth"] },
+            ],
+          },
+        });
+      }
+      return results;
+    });
+
+    const result = useSpellcasting();
+
+    expect(result.pools.bonusPrepared).toContain("spell_protection_from_evil");
+    expect(result.pools.bonusPrepared).toContain("spell_zone_of_truth");
+    expect(result.pools.bonusPrepared).toHaveLength(2);
+  });
+
+  it("bonusPrepared spells are not counted against prepared overflow", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 5,
+      classId: "class_paladin",
+      subclassId: "subclass_devotion",
+      classTracks: [{ classId: "class_paladin", subclassId: "subclass_devotion", level: 5 }],
+      spellsPrepared: ["spell_protection_from_evil", "spell_zone_of_truth"],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      progression: [{ level: 5, features: ["trait_paladin_spellcasting"] }],
+    } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_devotion_sacred_weapons"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      const results: any[] = [];
+      if (ids.includes("trait_paladin_spellcasting")) {
+        results.push({
+          id: "trait_paladin_spellcasting",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [{ level: 5, cantripsKnown: 0, spellSlots: { 1: 4, 2: 2 } }],
+          },
+        });
+      }
+      if (ids.includes("trait_devotion_sacred_weapons")) {
+        results.push({
+          id: "trait_devotion_sacred_weapons",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [
+              { level: 3, bonusSpells: ["spell_protection_from_evil"] },
+              { level: 5, bonusSpells: ["spell_protection_from_evil", "spell_zone_of_truth"] },
+            ],
+          },
+        });
+      }
+      return results;
+    });
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_protection_from_evil", classes: ["class_paladin"], school: "abjuration" },
+      { id: "spell_zone_of_truth", classes: ["class_paladin"], school: "enchantment" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    expect(result.diagnostics.selections.preparedSpellOverflow).toBe(0);
+    expect(result.diagnostics.selections.invalidPreparedSpellIds).toEqual([]);
+  });
+
+  it("spellsAddedToList makes a spell eligible for a prepared track", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 5,
+      classId: "class_paladin",
+      subclassId: "subclass_devotion",
+      classTracks: [{ classId: "class_paladin", subclassId: "subclass_devotion", level: 5 }],
+      spellsPrepared: ["spell_crown_of_madness"],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      progression: [{ level: 5, features: ["trait_paladin_spellcasting"] }],
+    } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_devotion_expanded"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      const results: any[] = [];
+      if (ids.includes("trait_paladin_spellcasting")) {
+        results.push({
+          id: "trait_paladin_spellcasting",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [{ level: 5, cantripsKnown: 0, spellSlots: { 1: 4, 2: 2 } }],
+          },
+        });
+      }
+      if (ids.includes("trait_devotion_expanded")) {
+        results.push({
+          id: "trait_devotion_expanded",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "prepared",
+            ritualCasting: false,
+            progressionByLevel: [
+              { level: 3, spellsAddedToList: ["spell_crown_of_madness"] },
+            ],
+          },
+        });
+      }
+      return results;
+    });
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_crown_of_madness", classes: ["class_wizard"], school: "enchantment" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    expect(result.diagnostics.selections.invalidPreparedSpellIds).toEqual([]);
+  });
+
+  it("flags a known spell of wrong school for a restricted known track", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 7,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 7 }],
+      spellsPrepared: [],
+      spellsKnown: ["spell_charm_person"],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({ progression: [] } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_ek_spellcasting"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_ek_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "known",
+          ritualCasting: false,
+          schoolRestrictions: ["abjuration", "evocation"],
+          spellListSource: ["class_wizard"],
+          progressionByLevel: [
+            { level: 3, cantripsKnown: 2, spellsKnown: 3, spellSlots: { 1: 2 } },
+            { level: 7, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_charm_person", classes: ["class_wizard"], school: "enchantment" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    // enchantment is not in schoolRestrictions → invalid even though it's on the wizard list
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toContain("spell_charm_person");
+  });
+
+  it("EK can select wizard abjuration/evocation spells via spellListSource + schoolRestrictions", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 7,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 7 }],
+      spellsPrepared: [],
+      spellsKnown: ["spell_shield", "spell_absorb_elements"],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({ progression: [] } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_ek_spellcasting"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_ek_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "known",
+          ritualCasting: false,
+          schoolRestrictions: ["abjuration", "evocation"],
+          spellListSource: ["class_wizard"],
+          progressionByLevel: [
+            { level: 7, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_shield", classes: ["class_wizard"], school: "abjuration" },
+      { id: "spell_absorb_elements", classes: ["class_wizard"], school: "abjuration" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    // wizard abjuration — valid for EK (spellListSource: wizard, schoolRestrictions: abjuration/evocation)
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toEqual([]);
+  });
+
+  it("spell valid for an unrestricted track is not flagged when a restricted track also exists", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 9,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [
+        { classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 6 },
+        { classId: "class_wizard", subclassId: null, level: 3 },
+      ],
+      spellsPrepared: [],
+      spellsKnown: ["spell_charm_person"],
+    } as any);
+
+    vi.mocked(getClassById).mockImplementation((id) => {
+      if (id === "class_fighter") return { progression: [] } as any;
+      if (id === "class_wizard") {
+        return { progression: [{ level: 3, features: ["trait_wiz_spellcasting"] }] } as any;
+      }
+      return null;
+    });
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_ek_spellcasting"] }],
+    } as any);
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      const results: any[] = [];
+      if (ids.includes("trait_ek_spellcasting")) {
+        results.push({
+          id: "trait_ek_spellcasting",
+          spellcasting: {
+            ability: "int",
+            preparationType: "known",
+            ritualCasting: false,
+            schoolRestrictions: ["abjuration", "evocation"],
+            spellListSource: ["class_wizard"],
+            progressionByLevel: [
+              { level: 3, cantripsKnown: 2, spellsKnown: 3, spellSlots: { 1: 2 } },
+              { level: 6, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+            ],
+          },
+        });
+      }
+      if (ids.includes("trait_wiz_spellcasting")) {
+        results.push({
+          id: "trait_wiz_spellcasting",
+          spellcasting: {
+            ability: "int",
+            preparationType: "known",
+            ritualCasting: true,
+            progressionByLevel: [
+              { level: 3, cantripsKnown: 3, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+            ],
+          },
+        });
+      }
+      return results;
+    });
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_charm_person", classes: ["class_wizard"], school: "enchantment" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    // charm person is invalid for EK (enchantment), but valid for the unrestricted wizard track
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toEqual([]);
+  });
+});

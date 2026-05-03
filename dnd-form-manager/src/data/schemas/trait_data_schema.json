@@ -475,6 +475,13 @@
                         ]
                     }
                 },
+                "spellListSource": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^class_[a-z0-9_]+$"
+                    }
+                },
                 "progressionByLevel": {
                     "type": "array",
                     "items": {

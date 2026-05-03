@@ -1424,6 +1424,9 @@
         "abjuration",
         "evocation"
       ],
+      "spellListSource": [
+        "class_wizard"
+      ],
       "progressionByLevel": [
         {
           "level": 3,

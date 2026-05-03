@@ -39,6 +39,7 @@ export interface TraitSpellcastingDefinition {
   preparationType: SpellPreparationType;
   ritualCasting: boolean;
   schoolRestrictions?: SpellSchool[];
+  spellListSource?: string[];
   progressionByLevel: SpellcastingProgressionEntry[];
 }
 

@@ -11,6 +11,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import type { SpellcastingProgression } from "../types/class";
+import type { SpellSchool } from "../types/trait";
 import {
   calculateMulticlassCasterLevel,
   getMostRecentProgressionProperty,
@@ -40,6 +41,9 @@ export interface ClassSpellcastingSummary {
   maxCantrips: number;
   maxSpellsKnown: number;
   maxPreparedSpells: number;
+  schoolRestrictions: SpellSchool[] | null;
+  expandedSpellIds: string[];
+  spellListSource: string[] | null;
 }
 
 export interface SpellSelectionDiagnostics {
@@ -70,6 +74,7 @@ export interface UseSpellcastingReturn {
     cantrips: {
       max: number;
     };
+    bonusPrepared: string[];
     innate: InnateSpellcastingEntry[];
   };
   slots: {
@@ -142,6 +147,10 @@ const getSpellcastingTraitsForTrack = (
     ritualCasting: boolean;
   };
   progression: Exclude<SpellcastingProgression, null>;
+  schoolRestrictions: SpellSchool[] | null;
+  expandedSpellIds: string[];
+  bonusPreparedSpellIds: string[];
+  spellListSource: string[] | null;
 }> => {
   const classData = getClassById(track.classId);
   if (!classData) return [];
@@ -181,6 +190,16 @@ const getSpellcastingTraitsForTrack = (
 
       if (!progression) return null;
 
+      const allLevelEntries = trait.spellcasting.progressionByLevel.filter(
+        (entry) => entry.level <= track.level,
+      );
+      const expandedSpellIds = dedupe(
+        allLevelEntries.flatMap((e) => e.spellsAddedToList ?? []),
+      );
+      const bonusPreparedSpellIds = dedupe(
+        allLevelEntries.flatMap((e) => e.bonusSpells ?? []),
+      );
+
       return {
         sourceType: "class" as const,
         classId: track.classId,
@@ -191,6 +210,10 @@ const getSpellcastingTraitsForTrack = (
           ritualCasting: trait.spellcasting.ritualCasting,
         },
         progression,
+        schoolRestrictions: trait.spellcasting.schoolRestrictions ?? null,
+        expandedSpellIds,
+        bonusPreparedSpellIds,
+        spellListSource: trait.spellcasting.spellListSource ?? null,
       };
     })
     .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
@@ -212,6 +235,10 @@ const getSpellcastingTraitsForRaceTrack = (
     ritualCasting: boolean;
   };
   progression: Exclude<SpellcastingProgression, null>;
+  schoolRestrictions: SpellSchool[] | null;
+  expandedSpellIds: string[];
+  bonusPreparedSpellIds: string[];
+  spellListSource: string[] | null;
 }> => {
   if (!raceId) return [];
 
@@ -240,6 +267,16 @@ const getSpellcastingTraitsForRaceTrack = (
 
       if (!progression) return null;
 
+      const allLevelEntries = trait.spellcasting.progressionByLevel.filter(
+        (entry) => entry.level <= level,
+      );
+      const expandedSpellIds = dedupe(
+        allLevelEntries.flatMap((e) => e.spellsAddedToList ?? []),
+      );
+      const bonusPreparedSpellIds = dedupe(
+        allLevelEntries.flatMap((e) => e.bonusSpells ?? []),
+      );
+
       return {
         sourceType: "race" as const,
         classId: raceId,
@@ -250,6 +287,10 @@ const getSpellcastingTraitsForRaceTrack = (
           ritualCasting: trait.spellcasting.ritualCasting,
         },
         progression,
+        schoolRestrictions: trait.spellcasting.schoolRestrictions ?? null,
+        expandedSpellIds,
+        bonusPreparedSpellIds,
+        spellListSource: trait.spellcasting.spellListSource ?? null,
       };
     })
     .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
@@ -364,6 +405,9 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
           track.spellcastingBase.preparationType === "prepared"
             ? resolvePreparedSpellLimit(track.classLevel, abilityMod)
             : 0,
+        schoolRestrictions: track.schoolRestrictions,
+        expandedSpellIds: track.expandedSpellIds,
+        spellListSource: track.spellListSource,
       };
     });
 
@@ -376,45 +420,61 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     0,
   );
 
+  const allBonusPreparedSpellIds = dedupe(
+    spellcastingTracks.flatMap((track) => track.bonusPreparedSpellIds),
+  );
+
   // #endregion
 
   // #region --- Spell Selection Diagnostics ---
 
   const allSpells = getAllSpells();
-  // Identify any known or prepared spells that are invalid based on the character's current class spellcasting options
-  const knownEligibleClassIds = classSpellcastingSummaries
-    .filter((summary) => summary.preparationType === "known")
-    .map((summary) => summary.classId);
-  const preparedEligibleClassIds = classSpellcastingSummaries
-    .filter((summary) => summary.preparationType === "prepared")
-    .map((summary) => summary.classId);
 
-  // Check for any known or prepared spells that are not eligible for the character's classes
+  const isSpellValidForTrack = (
+    spell: { id: string; classes: string[]; school: string },
+    summary: ClassSpellcastingSummary,
+  ): boolean => {
+    const effectiveClassIds = summary.spellListSource ?? [summary.classId];
+    const classMatch = effectiveClassIds.some((c) => spell.classes.includes(c));
+    const expandedMatch = summary.expandedSpellIds.includes(spell.id);
+    const schoolMatch =
+      !summary.schoolRestrictions ||
+      summary.schoolRestrictions.includes(spell.school as SpellSchool);
+    return (classMatch || expandedMatch) && schoolMatch;
+  };
+
+  const knownSummaries = classSpellcastingSummaries.filter(
+    (s) => s.preparationType === "known",
+  );
+  const preparedSummaries = classSpellcastingSummaries.filter(
+    (s) => s.preparationType === "prepared",
+  );
+
   const invalidKnownSpellIds = dedupe(
     state.spellsKnown.filter((spellId) => {
       const spell = allSpells.find((entry) => entry.id === spellId);
       if (!spell) return true;
-
-      return !spell.classes.some((spellClass) =>
-        knownEligibleClassIds.includes(spellClass),
-      );
+      return !knownSummaries.some((summary) => isSpellValidForTrack(spell, summary));
     }),
   );
   const invalidPreparedSpellIds = dedupe(
     state.spellsPrepared.filter((spellId) => {
+      if (allBonusPreparedSpellIds.includes(spellId)) return false;
       const spell = allSpells.find((entry) => entry.id === spellId);
       if (!spell) return true;
-
-      return !spell.classes.some((spellClass) =>
-        preparedEligibleClassIds.includes(spellClass),
-      );
+      return !preparedSummaries.some((summary) => isSpellValidForTrack(spell, summary));
     }),
   );
 
   const validKnownSpellCount =
     dedupe(state.spellsKnown).length - invalidKnownSpellIds.length;
+  const bonusPreparedCount = allBonusPreparedSpellIds.filter((id) =>
+    state.spellsPrepared.includes(id),
+  ).length;
   const validPreparedSpellCount =
-    dedupe(state.spellsPrepared).length - invalidPreparedSpellIds.length;
+    dedupe(state.spellsPrepared).length -
+    invalidPreparedSpellIds.length -
+    bonusPreparedCount;
   const maxPreparedSpells = classSpellcastingSummaries.reduce(
     (total, summary) => total + summary.maxPreparedSpells,
     0,
@@ -508,6 +568,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     cantrips: {
       max: maxCantrips,
     },
+    bonusPrepared: allBonusPreparedSpellIds,
     innate: innateSpells,
   };
 
