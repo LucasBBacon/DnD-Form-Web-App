@@ -1,0 +1,34 @@
+{
+    "id": "spell_healing_word",
+    "name": "Healing Word",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+        "class_bard",
+        "class_cleric",
+        "class_druid"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+        "type": "ranged",
+        "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": false,
+        "material": false
+    },
+    "output": {
+        "healing": [
+            "buff_healing_word"
+        ]
+    },
+    "lore": {
+        "shortDescription": "Heal a creature within range.",
+        "fullText": "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",
+        "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st."
+    }
+}

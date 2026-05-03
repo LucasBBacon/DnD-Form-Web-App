@@ -52,6 +52,74 @@
     }
   },
   {
+    "id": "spell_animal_friendship",
+    "name": "Animal Friendship",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "24 hours",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A morsel of food."
+    },
+    "lore": {
+      "shortDescription": "Charm a beast to be friendly towards you.",
+      "fullText": "This spell lets you convince a beast that you mean it no harm. Choose a beast that you can see within range. It must see and hear you. If the beast’s Intelligence is 4 or higher, the spell fails. Otherwise, the beast must succeed on a Wisdom saving throw or be charmed by you for the spell’s duration. If you or one of your companions harms the target, the spell ends.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional beast for each slot level above 1st"
+    }
+  },
+  {
+    "id": "spell_bane",
+    "name": "Bane",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A drop of blood."
+    },
+    "savingThrow": {
+      "ability": "cha",
+      "onSave": "special",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      }
+    },
+    "lore": {
+      "shortDescription": "Up to three creatures of your choice that you can see within range must make Charisma saving throws.",
+      "fullText": "Up to three creatures of your choice that you can see within range must make Charisma saving throws. Whenever a target that fails this saving throw makes an attack roll or a saving throw before the spell ends, the target must roll a d4 and subtract the number rolled from the attack roll or saving throw.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+    }
+  },
+  {
     "id": "spell_chill_touch",
     "name": "Chill Touch",
     "level": 0,
@@ -107,6 +175,35 @@
     }
   },
   {
+    "id": "spell_healing_word",
+    "name": "Healing Word",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_druid"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Heal a creature within range.",
+      "fullText": "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d4 for each slot level above 1st."
+    }
+  },
+  {
     "id": "spell_hex",
     "name": "Hex",
     "level": 1,
@@ -141,6 +238,95 @@
       "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
       "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
       "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
+    }
+  },
+  {
+    "id": "spell_light",
+    "name": "Light",
+    "level": 0,
+    "school": "evocation",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_cleric",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": true,
+      "materialMaterials": "A firefly or phosphorescent moss."
+    },
+    "lore": {
+      "shortDescription": "You touch an object to make it emit light.",
+      "fullText": "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.\nIf you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to avoid the spell."
+    }
+  },
+  {
+    "id": "spell_mage_hand",
+    "name": "Mage Hand",
+    "level": 0,
+    "school": "conjuration",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "A spectral, floating hand appears at a point you choose within range.",
+      "fullText": "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.\nYou can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial. You can move the hand up to 30 feet each time you use it.\nThe hand can’t attack, activate magical items, or carry more than 10 pounds."
+    }
+  },
+  {
+    "id": "spell_sleep",
+    "name": "Sleep",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 90
+    },
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A pinch of fine sand, rose petals, or a cricket."
+    },
+    "lore": {
+      "shortDescription": "Send creatures into a magical slumber.",
+      "fullText": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
     }
   }
 ]
