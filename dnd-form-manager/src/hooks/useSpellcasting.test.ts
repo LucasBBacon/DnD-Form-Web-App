@@ -5,8 +5,10 @@ import { useCharacterStats } from "./useCharacterStats";
 import {
   getAllSpells,
   getClassById,
+  getRaceById,
   getSpellByID,
   getSubclassById,
+  getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
 import { getAllCharacterTraits } from "../utils/traitUtils";
@@ -551,5 +553,193 @@ describe("useSpellcasting progression resolution", () => {
       "spell_healing_word",
     ]);
     expect(result.pools.prepared.max).toBe(7);
+  });
+});
+
+describe("useSpellcasting race spellcasting", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 3,
+      raceId: "race_test",
+      subraceId: null,
+      classId: null,
+      subclassId: null,
+      classTracks: [],
+      choicesByLevel: {},
+      acquiredFeats: [],
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(useCharacterStats).mockReturnValue({
+      abilities: {
+        scores: { str: 10, dex: 10, con: 10, int: 14, wis: 10, cha: 10 },
+        modifiers: { str: 0, dex: 0, con: 0, int: 2, wis: 0, cha: 0 },
+      },
+      combat: {
+        proficiencyBonus: 2,
+        hp: { max: 8, current: 8 },
+        initiative: 0,
+        armorClass: 10,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: { totalWeight: 0, carryingCapacity: 150, isEncumbered: false },
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue(null);
+    vi.mocked(getSubclassById).mockReturnValue(null);
+    vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
+    vi.mocked(getSubraceById).mockReturnValue(null);
+  });
+
+  it("resolves cantrips from a race trait with a spellcasting definition", () => {
+    vi.mocked(getRaceById).mockReturnValue({
+      id: "race_test",
+      traits: ["trait_race_spellcasting"],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_race_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "known",
+          ritualCasting: false,
+          progressionByLevel: [
+            { level: 1, cantripsKnown: 2 },
+            { level: 3, cantripsKnown: 3 },
+          ],
+        },
+      },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    expect(result.pools.cantrips.max).toBe(3);
+    expect(result.casting.ability).toBe("int");
+    expect(result.isSpellcaster).toBe(true);
+  });
+
+  it("race spellcasting does not inflate multiclass caster level", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 3,
+      raceId: "race_test",
+      subraceId: null,
+      classId: "class_wizard",
+      subclassId: null,
+      classTracks: [{ classId: "class_wizard", subclassId: null, level: 3 }],
+      choicesByLevel: {},
+      acquiredFeats: [],
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getRaceById).mockReturnValue({
+      id: "race_test",
+      traits: ["trait_race_spellcasting"],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_wiz_spellcasting"] }],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      const results: any[] = [];
+      if (ids.includes("trait_wiz_spellcasting")) {
+        results.push({
+          id: "trait_wiz_spellcasting",
+          spellcasting: {
+            ability: "int",
+            preparationType: "prepared",
+            ritualCasting: true,
+            progressionByLevel: [
+              { level: 3, cantripsKnown: 2, spellSlots: { 1: 4, 2: 2 } },
+            ],
+          },
+        });
+      }
+      if (ids.includes("trait_race_spellcasting")) {
+        results.push({
+          id: "trait_race_spellcasting",
+          spellcasting: {
+            ability: "cha",
+            preparationType: "known",
+            ritualCasting: false,
+            progressionByLevel: [
+              { level: 1, cantripsKnown: 1 },
+            ],
+          },
+        });
+      }
+      return results;
+    });
+
+    const result = useSpellcasting();
+
+    // wizard level 3 = full caster level 3 → slots: 1×4, 2×2
+    // race trait contributes 0 to caster level
+    expect(result.slots.shared).toEqual({
+      1: { total: 4, expended: 0 },
+      2: { total: 2, expended: 0 },
+    });
+    // cantrips stack: 2 from wizard + 1 from race
+    expect(result.pools.cantrips.max).toBe(3);
+  });
+
+  it("merges spellcasting from subrace trait alongside race trait", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 2,
+      raceId: "race_test",
+      subraceId: "subrace_test",
+      classId: null,
+      subclassId: null,
+      classTracks: [],
+      choicesByLevel: {},
+      acquiredFeats: [],
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
+      spellsPrepared: [],
+      spellsKnown: [],
+    } as any);
+
+    vi.mocked(getRaceById).mockReturnValue({
+      id: "race_test",
+      traits: [],
+    } as any);
+
+    vi.mocked(getSubraceById).mockReturnValue({
+      id: "subrace_test",
+      traitsAdded: ["trait_subrace_spellcasting"],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_subrace_spellcasting",
+        spellcasting: {
+          ability: "cha",
+          preparationType: "known",
+          ritualCasting: false,
+          progressionByLevel: [
+            { level: 1, cantripsKnown: 1, spellsKnown: 1 },
+            { level: 3, cantripsKnown: 1, spellsKnown: 2 },
+          ],
+        },
+      },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    expect(result.pools.cantrips.max).toBe(1);
+    expect(result.pools.known.max).toBe(1);
+    expect(result.casting.ability).toBe("cha");
   });
 });

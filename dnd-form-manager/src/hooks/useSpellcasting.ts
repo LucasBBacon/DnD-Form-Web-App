@@ -1,8 +1,10 @@
 import {
   getAllSpells,
   getClassById,
+  getRaceById,
   getSpellByID,
   getSubclassById,
+  getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
@@ -131,6 +133,7 @@ const dedupe = <T>(values: T[]): T[] => Array.from(new Set(values));
 const getSpellcastingTraitsForTrack = (
   track: CharacterClassTrack,
 ): Array<{
+  sourceType: "class";
   classId: string;
   classLevel: number;
   spellcastingBase: {
@@ -179,6 +182,7 @@ const getSpellcastingTraitsForTrack = (
       if (!progression) return null;
 
       return {
+        sourceType: "class" as const,
         classId: track.classId,
         classLevel: track.level,
         spellcastingBase: {
@@ -194,7 +198,62 @@ const getSpellcastingTraitsForTrack = (
   return traitSpellcastingProfiles;
 };
 
-// #endregion
+const getSpellcastingTraitsForRaceTrack = (
+  raceId: string | null,
+  subraceId: string | null,
+  level: number,
+): Array<{
+  sourceType: "race";
+  classId: string;
+  classLevel: number;
+  spellcastingBase: {
+    ability: Ability;
+    preparationType: "known" | "prepared" | "pact";
+    ritualCasting: boolean;
+  };
+  progression: Exclude<SpellcastingProgression, null>;
+}> => {
+  if (!raceId) return [];
+
+  const raceData = getRaceById(raceId);
+  if (!raceData) return [];
+
+  const subraceData = subraceId ? getSubraceById(subraceId) : null;
+  const traitIds = new Set<string>();
+
+  raceData.traits?.forEach((id) => traitIds.add(id));
+  subraceData?.traitsAdded?.forEach((id) => traitIds.add(id));
+
+  return (getTraitsByIds(Array.from(traitIds)) || [])
+    .map((trait) => {
+      if (!trait.spellcasting) return null;
+
+      const progression = getMostRecentProgressionProperty(
+        trait.spellcasting.progressionByLevel,
+        level,
+        (entry) => ({
+          cantripsKnown: entry.cantripsKnown,
+          spellsKnown: entry.spellsKnown,
+          spellSlots: entry.spellSlots,
+        }) as Exclude<SpellcastingProgression, null>,
+      );
+
+      if (!progression) return null;
+
+      return {
+        sourceType: "race" as const,
+        classId: raceId,
+        classLevel: level,
+        spellcastingBase: {
+          ability: trait.spellcasting.ability,
+          preparationType: trait.spellcasting.preparationType,
+          ritualCasting: trait.spellcasting.ritualCasting,
+        },
+        progression,
+      };
+    })
+    .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
+};
 
 /**
  * Custom hook to calculate the character's spellcasting-related values based on their class, subclass, level, and other relevant state.
@@ -222,9 +281,17 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     state.level,
   );
 
-  const spellcastingTracks = activeTracks.flatMap((track) =>
+  const classSpellcastingTracks = activeTracks.flatMap((track) =>
     getSpellcastingTraitsForTrack(track),
   );
+
+  const raceSpellcastingTracks = getSpellcastingTraitsForRaceTrack(
+    state.raceId,
+    state.subraceId,
+    state.level,
+  );
+
+  const spellcastingTracks = [...classSpellcastingTracks, ...raceSpellcastingTracks];
 
   const nonPactTracks = spellcastingTracks.filter(
     (track) => track.spellcastingBase.preparationType !== "pact",

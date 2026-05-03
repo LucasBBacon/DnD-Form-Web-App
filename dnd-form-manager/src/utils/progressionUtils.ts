@@ -11,6 +11,7 @@ import type { SpellPreparationType } from "../types/trait";
 export type CasterContributionType = "full" | "half" | "third" | "none";
 
 export interface SpellcastingTrackProfile {
+  sourceType: "class" | "race";
   classId: string;
   classLevel: number;
   spellcastingBase: {
@@ -92,6 +93,7 @@ const clampLevelToSupportedRange = (level: number): number =>
 export const getCasterContributionType = (
   profile: SpellcastingTrackProfile,
 ): CasterContributionType => {
+  if (profile.sourceType === "race") return "none";
   if (profile.spellcastingBase.preparationType === "pact") return "none";
   if (HALF_CASTER_CLASS_IDS.has(profile.classId)) return "half";
   if (THIRD_CASTER_CLASS_IDS.has(profile.classId)) return "third";

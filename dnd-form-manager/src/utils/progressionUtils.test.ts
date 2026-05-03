@@ -104,6 +104,7 @@ describe("multiclass spellcasting helpers", () => {
   it("classifies caster contribution types correctly", () => {
     expect(
       getCasterContributionType({
+        sourceType: "class",
         classId: "class_wizard",
         classLevel: 5,
         spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
@@ -112,6 +113,7 @@ describe("multiclass spellcasting helpers", () => {
 
     expect(
       getCasterContributionType({
+        sourceType: "class",
         classId: "class_paladin",
         classLevel: 6,
         spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
@@ -120,6 +122,7 @@ describe("multiclass spellcasting helpers", () => {
 
     expect(
       getCasterContributionType({
+        sourceType: "class",
         classId: "class_fighter",
         classLevel: 7,
         spellcastingBase: { ability: "int", preparationType: "known", ritualCasting: false },
@@ -128,6 +131,7 @@ describe("multiclass spellcasting helpers", () => {
 
     expect(
       getCasterContributionType({
+        sourceType: "class",
         classId: "class_warlock",
         classLevel: 5,
         spellcastingBase: { ability: "cha", preparationType: "pact", ritualCasting: false },
@@ -138,6 +142,7 @@ describe("multiclass spellcasting helpers", () => {
   it("calculates caster level contribution with half and third rounding down", () => {
     expect(
       getCasterLevelContribution({
+        sourceType: "class",
         classId: "class_wizard",
         classLevel: 3,
         spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
@@ -146,6 +151,7 @@ describe("multiclass spellcasting helpers", () => {
 
     expect(
       getCasterLevelContribution({
+        sourceType: "class",
         classId: "class_paladin",
         classLevel: 5,
         spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
@@ -154,6 +160,7 @@ describe("multiclass spellcasting helpers", () => {
 
     expect(
       getCasterLevelContribution({
+        sourceType: "class",
         classId: "class_fighter",
         classLevel: 8,
         spellcastingBase: { ability: "int", preparationType: "known", ritualCasting: false },
@@ -164,16 +171,19 @@ describe("multiclass spellcasting helpers", () => {
   it("sums multiclass effective caster level across tracks", () => {
     const effectiveLevel = calculateMulticlassCasterLevel([
       {
+        sourceType: "class",
         classId: "class_wizard",
         classLevel: 3,
         spellcastingBase: { ability: "int", preparationType: "prepared", ritualCasting: true },
       },
       {
+        sourceType: "class",
         classId: "class_paladin",
         classLevel: 4,
         spellcastingBase: { ability: "cha", preparationType: "prepared", ritualCasting: false },
       },
       {
+        sourceType: "class",
         classId: "class_warlock",
         classLevel: 3,
         spellcastingBase: { ability: "cha", preparationType: "pact", ritualCasting: false },
