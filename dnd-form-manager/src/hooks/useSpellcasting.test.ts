@@ -1092,3 +1092,209 @@ describe("useSpellcasting spell list expansion/restrictions", () => {
     expect(result.diagnostics.selections.invalidKnownSpellIds).toEqual([]);
   });
 });
+
+describe("useSpellcasting free-school designation", () => {
+  const baseStoreState = {
+    raceId: null,
+    subraceId: null,
+    choicesByLevel: {},
+    acquiredFeats: [],
+    expendedSpellSlots: {},
+    expendedPactSlots: 0,
+    spellsPrepared: [],
+  };
+
+  const ekTraitBase = {
+    id: "trait_ek_spellcasting",
+    spellcasting: {
+      ability: "int",
+      preparationType: "known",
+      ritualCasting: false,
+      schoolRestrictions: ["abjuration", "evocation"],
+      spellListSource: ["class_wizard"],
+    },
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(useCharacterStats).mockReturnValue({
+      abilities: {
+        scores: { str: 10, dex: 10, con: 10, int: 16, wis: 10, cha: 10 },
+        modifiers: { str: 0, dex: 0, con: 0, int: 3, wis: 0, cha: 0 },
+      },
+      combat: {
+        proficiencyBonus: 3,
+        hp: { max: 30, current: 30 },
+        initiative: 0,
+        armorClass: 14,
+        isArmorPenalized: false,
+        speed: 30,
+      },
+      encumbrance: { totalWeight: 0, carryingCapacity: 150, isEncumbered: false },
+    } as any);
+    vi.mocked(getRaceById).mockReturnValue(null);
+    vi.mocked(getSubraceById).mockReturnValue(null);
+    vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
+    vi.mocked(getClassById).mockReturnValue({ progression: [] } as any);
+    vi.mocked(getSubclassById).mockReturnValue({
+      progression: [{ level: 3, features: ["trait_ek_spellcasting"] }],
+    } as any);
+  });
+
+  it("resolves freeSchoolSpellSlots from progression: EK level 9 → 1 slot, level 15 → 2 slots", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 9,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 9 }],
+      spellsKnown: [],
+      freeSchoolKnownSpellIds: [],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        ...ekTraitBase,
+        spellcasting: {
+          ...ekTraitBase.spellcasting,
+          progressionByLevel: [
+            { level: 3, cantripsKnown: 2, spellsKnown: 3, spellSlots: { 1: 2 } },
+            { level: 8, cantripsKnown: 2, spellsKnown: 6, freeSchoolSpellSlots: 1, spellSlots: { 1: 4, 2: 2 } },
+            { level: 9, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    const result9 = useSpellcasting();
+    expect(result9.pools.freeSchoolSlots).toBe(1);
+
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 15,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 15 }],
+      spellsKnown: [],
+      freeSchoolKnownSpellIds: [],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        ...ekTraitBase,
+        spellcasting: {
+          ...ekTraitBase.spellcasting,
+          progressionByLevel: [
+            { level: 8, cantripsKnown: 2, spellsKnown: 6, freeSchoolSpellSlots: 1, spellSlots: { 1: 4, 2: 2 } },
+            { level: 14, cantripsKnown: 3, spellsKnown: 10, freeSchoolSpellSlots: 2, spellSlots: { 1: 4, 2: 3, 3: 2 } },
+            { level: 15, cantripsKnown: 3, spellsKnown: 10, spellSlots: { 1: 4, 2: 3, 3: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    const result15 = useSpellcasting();
+    expect(result15.pools.freeSchoolSlots).toBe(2);
+  });
+
+  it("designated free-school wizard spell bypasses EK school restriction", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 9,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 9 }],
+      spellsKnown: ["spell_charm_person"],
+      freeSchoolKnownSpellIds: ["spell_charm_person"],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        ...ekTraitBase,
+        spellcasting: {
+          ...ekTraitBase.spellcasting,
+          progressionByLevel: [
+            { level: 8, cantripsKnown: 2, spellsKnown: 6, freeSchoolSpellSlots: 1, spellSlots: { 1: 4, 2: 2 } },
+            { level: 9, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_charm_person", classes: ["class_wizard"], school: "enchantment" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    // charm person is enchantment (restricted), but it's designated as a free-school pick
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toEqual([]);
+  });
+
+  it("spell in freeSchoolKnownSpellIds but NOT on spellListSource remains invalid", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 9,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 9 }],
+      spellsKnown: ["spell_healing_word"],
+      freeSchoolKnownSpellIds: ["spell_healing_word"],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        ...ekTraitBase,
+        spellcasting: {
+          ...ekTraitBase.spellcasting,
+          progressionByLevel: [
+            { level: 8, cantripsKnown: 2, spellsKnown: 6, freeSchoolSpellSlots: 1, spellSlots: { 1: 4, 2: 2 } },
+            { level: 9, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    vi.mocked(getAllSpells).mockReturnValue([
+      // healing word is cleric-only, not on wizard list
+      { id: "spell_healing_word", classes: ["class_cleric"], school: "evocation" },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    // Designated but not on spellListSource → still invalid
+    expect(result.diagnostics.selections.invalidKnownSpellIds).toContain("spell_healing_word");
+  });
+
+  it("freeSchoolOverflow = 2 when 3 designations exist but only 1 slot available", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      ...baseStoreState,
+      level: 9,
+      classId: "class_fighter",
+      subclassId: "subclass_eldritch_knight",
+      classTracks: [{ classId: "class_fighter", subclassId: "subclass_eldritch_knight", level: 9 }],
+      spellsKnown: ["spell_a", "spell_b", "spell_c"],
+      freeSchoolKnownSpellIds: ["spell_a", "spell_b", "spell_c"],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        ...ekTraitBase,
+        spellcasting: {
+          ...ekTraitBase.spellcasting,
+          progressionByLevel: [
+            { level: 8, cantripsKnown: 2, spellsKnown: 6, freeSchoolSpellSlots: 1, spellSlots: { 1: 4, 2: 2 } },
+            { level: 9, cantripsKnown: 2, spellsKnown: 6, spellSlots: { 1: 4, 2: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    const result = useSpellcasting();
+
+    expect(result.pools.freeSchoolSlots).toBe(1);
+    expect(result.diagnostics.selections.freeSchoolOverflow).toBe(2);
+  });
+});

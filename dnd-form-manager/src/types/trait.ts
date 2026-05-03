@@ -27,6 +27,7 @@ export interface SpellcastingProgressionPayload {
   spellSlots?: Record<number, number>;
   bonusSpells?: string[];
   spellsAddedToList?: string[];
+  freeSchoolSpellSlots?: number;
 }
 
 export interface SpellcastingProgressionEntry

@@ -44,6 +44,7 @@ export interface ClassSpellcastingSummary {
   schoolRestrictions: SpellSchool[] | null;
   expandedSpellIds: string[];
   spellListSource: string[] | null;
+  freeSchoolSpellSlots: number;
 }
 
 export interface SpellSelectionDiagnostics {
@@ -51,6 +52,7 @@ export interface SpellSelectionDiagnostics {
   invalidPreparedSpellIds: string[];
   knownSpellOverflow: number;
   preparedSpellOverflow: number;
+  freeSchoolOverflow: number;
 }
 
 export interface UseSpellcastingReturn {
@@ -75,6 +77,8 @@ export interface UseSpellcastingReturn {
       max: number;
     };
     bonusPrepared: string[];
+    freeSchoolDesignated: string[];
+    freeSchoolSlots: number;
     innate: InnateSpellcastingEntry[];
   };
   slots: {
@@ -151,6 +155,7 @@ const getSpellcastingTraitsForTrack = (
   expandedSpellIds: string[];
   bonusPreparedSpellIds: string[];
   spellListSource: string[] | null;
+  freeSchoolSpellSlots: number;
 }> => {
   const classData = getClassById(track.classId);
   if (!classData) return [];
@@ -214,6 +219,12 @@ const getSpellcastingTraitsForTrack = (
         expandedSpellIds,
         bonusPreparedSpellIds,
         spellListSource: trait.spellcasting.spellListSource ?? null,
+        freeSchoolSpellSlots:
+          getMostRecentProgressionProperty(
+            trait.spellcasting.progressionByLevel,
+            track.level,
+            (entry) => entry.freeSchoolSpellSlots ?? null,
+          ) ?? 0,
       };
     })
     .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
@@ -239,6 +250,7 @@ const getSpellcastingTraitsForRaceTrack = (
   expandedSpellIds: string[];
   bonusPreparedSpellIds: string[];
   spellListSource: string[] | null;
+  freeSchoolSpellSlots: number;
 }> => {
   if (!raceId) return [];
 
@@ -291,6 +303,12 @@ const getSpellcastingTraitsForRaceTrack = (
         expandedSpellIds,
         bonusPreparedSpellIds,
         spellListSource: trait.spellcasting.spellListSource ?? null,
+        freeSchoolSpellSlots:
+          getMostRecentProgressionProperty(
+            trait.spellcasting.progressionByLevel,
+            level,
+            (entry) => entry.freeSchoolSpellSlots ?? null,
+          ) ?? 0,
       };
     })
     .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
@@ -408,6 +426,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
         schoolRestrictions: track.schoolRestrictions,
         expandedSpellIds: track.expandedSpellIds,
         spellListSource: track.spellListSource,
+        freeSchoolSpellSlots: track.freeSchoolSpellSlots,
       };
     });
 
@@ -423,6 +442,13 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
   const allBonusPreparedSpellIds = dedupe(
     spellcastingTracks.flatMap((track) => track.bonusPreparedSpellIds),
   );
+
+  // Sum of free-school slots across all known-type tracks that have school restrictions
+  const freeSchoolSlots = classSpellcastingSummaries
+    .filter(
+      (s) => s.preparationType === "known" && s.schoolRestrictions !== null,
+    )
+    .reduce((total, s) => total + s.freeSchoolSpellSlots, 0);
 
   // #endregion
 
@@ -440,7 +466,11 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     const schoolMatch =
       !summary.schoolRestrictions ||
       summary.schoolRestrictions.includes(spell.school as SpellSchool);
-    return (classMatch || expandedMatch) && schoolMatch;
+    const freeSchoolMatch =
+      summary.freeSchoolSpellSlots > 0 &&
+      (state.freeSchoolKnownSpellIds ?? []).includes(spell.id) &&
+      effectiveClassIds.some((c) => spell.classes.includes(c));
+    return (classMatch && schoolMatch) || expandedMatch || freeSchoolMatch;
   };
 
   const knownSummaries = classSpellcastingSummaries.filter(
@@ -487,6 +517,10 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     preparedSpellOverflow: Math.max(
       0,
       validPreparedSpellCount - maxPreparedSpells,
+    ),
+    freeSchoolOverflow: Math.max(
+      0,
+      (state.freeSchoolKnownSpellIds ?? []).length - freeSchoolSlots,
     ),
   };
 
@@ -569,6 +603,8 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
       max: maxCantrips,
     },
     bonusPrepared: allBonusPreparedSpellIds,
+    freeSchoolDesignated: state.freeSchoolKnownSpellIds ?? [],
+    freeSchoolSlots,
     innate: innateSpells,
   };
 

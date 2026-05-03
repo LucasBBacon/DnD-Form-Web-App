@@ -259,6 +259,8 @@ export interface CharacterState {
   spellsKnown: string[];
   // An array of spell IDs representing the spells prepared by the character
   spellsPrepared: string[];
+  // An array of spell IDs that have been designated as free-school picks (exempt from school restrictions)
+  freeSchoolKnownSpellIds: string[];
   // A record of expended spell slots by spell level, used to track the character's available spell slots for casting spells and managing spell slot recovery during rests
   expendedSpellSlots: Record<number, number>;
   // The number of expended pact magic slots, used to track the character's available pact slots for warlocks and manage their recovery during rests
@@ -368,6 +370,12 @@ interface CharacterActions {
   prepareSpell: (spellId: string) => void;
   
   unprepareSpell: (spellId: string) => void;
+
+  designateFreeSchoolSpell: (spellId: string) => void;
+
+  undesignateFreeSchoolSpell: (spellId: string) => void;
+
+  trimFreeSchoolDesignations: (limit: number) => void;
 
   // #endregion
 
@@ -501,6 +509,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
 
   spellsKnown: [],
   spellsPrepared: [],
+  freeSchoolKnownSpellIds: [],
   expendedSpellSlots: {},
   expendedPactSlots: 0,
   expendedTraitActionUses: {},
@@ -861,6 +870,28 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   unprepareSpell: (spellId) =>
     set((state) => ({
       spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
+    })),
+
+  designateFreeSchoolSpell: (spellId) =>
+    set((state) => {
+      if (!spellId || state.freeSchoolKnownSpellIds.includes(spellId)) {
+        return state;
+      }
+      return {
+        freeSchoolKnownSpellIds: [...state.freeSchoolKnownSpellIds, spellId],
+      };
+    }),
+
+  undesignateFreeSchoolSpell: (spellId) =>
+    set((state) => ({
+      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
+        (id) => id !== spellId,
+      ),
+    })),
+
+  trimFreeSchoolDesignations: (limit) =>
+    set((state) => ({
+      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.slice(0, limit),
     })),
 
   // #endregion

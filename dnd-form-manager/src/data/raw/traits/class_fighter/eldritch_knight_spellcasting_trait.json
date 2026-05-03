@@ -62,6 +62,7 @@
         "level": 8,
         "cantripsKnown": 2,
         "spellsKnown": 6,
+        "freeSchoolSpellSlots": 1,
         "spellSlots": {
           "1": 4,
           "2": 2
@@ -117,6 +118,7 @@
         "level": 14,
         "cantripsKnown": 3,
         "spellsKnown": 10,
+        "freeSchoolSpellSlots": 2,
         "spellSlots": {
           "1": 4,
           "2": 3,
@@ -178,6 +180,7 @@
         "level": 20,
         "cantripsKnown": 3,
         "spellsKnown": 13,
+        "freeSchoolSpellSlots": 3,
         "spellSlots": {
           "1": 4,
           "2": 3,

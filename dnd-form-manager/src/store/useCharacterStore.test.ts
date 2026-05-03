@@ -331,3 +331,36 @@ describe("useCharacterStore inventory instance actions", () => {
     expect(new Set(ids).size).toBe(3);
   });
 });
+
+describe("useCharacterStore free-school designation actions", () => {
+  beforeEach(() => {
+    useCharacterStore.getState().resetCharacter();
+  });
+
+  it("designateFreeSchoolSpell adds a spell id; duplicate call is a no-op", () => {
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_shield");
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_shield");
+    expect(useCharacterStore.getState().freeSchoolKnownSpellIds).toEqual([
+      "spell_shield",
+    ]);
+  });
+
+  it("undesignateFreeSchoolSpell removes the spell id", () => {
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_shield");
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_fireball");
+    useCharacterStore.getState().undesignateFreeSchoolSpell("spell_shield");
+    expect(useCharacterStore.getState().freeSchoolKnownSpellIds).toEqual([
+      "spell_fireball",
+    ]);
+  });
+
+  it("trimFreeSchoolDesignations(1) keeps only the first entry when array has 3", () => {
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_first");
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_second");
+    useCharacterStore.getState().designateFreeSchoolSpell("spell_third");
+    useCharacterStore.getState().trimFreeSchoolDesignations(1);
+    expect(useCharacterStore.getState().freeSchoolKnownSpellIds).toEqual([
+      "spell_first",
+    ]);
+  });
+});

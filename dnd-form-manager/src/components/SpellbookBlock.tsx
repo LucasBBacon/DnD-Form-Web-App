@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSpellcasting } from "../hooks/useSpellcasting";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllSpells, getSpellByID } from "../data/staticDataApi";
 
 export const SpellbookBlock = () => {
-  const { classId, learnSpell, prepareSpell, unprepareSpell } =
-    useCharacterStore();
+  const {
+    classId,
+    learnSpell,
+    prepareSpell,
+    unprepareSpell,
+    designateFreeSchoolSpell,
+    undesignateFreeSchoolSpell,
+    trimFreeSchoolDesignations,
+  } = useCharacterStore();
   const {
     isSpellcaster,
     canCastSpells,
@@ -15,6 +22,11 @@ export const SpellbookBlock = () => {
   } = useSpellcasting();
 
   const [selectedSpellId, setSelectedSpellId] = useState<string>("");
+
+  // Auto-clear excess free-school designations when available slots change
+  useEffect(() => {
+    trimFreeSchoolDesignations(pools.freeSchoolSlots);
+  }, [pools.freeSchoolSlots]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Safety check, don't render if a pure martial class
   if (!isSpellcaster) return null;
@@ -48,7 +60,8 @@ export const SpellbookBlock = () => {
     diagnostics.selections.invalidKnownSpellIds.length > 0 ||
     diagnostics.selections.invalidPreparedSpellIds.length > 0 ||
     diagnostics.selections.knownSpellOverflow > 0 ||
-    diagnostics.selections.preparedSpellOverflow > 0;
+    diagnostics.selections.preparedSpellOverflow > 0 ||
+    diagnostics.selections.freeSchoolOverflow > 0;
 
   const handleAddSpell = () => {
     if (!selectedSpellId) return;
@@ -99,6 +112,11 @@ export const SpellbookBlock = () => {
         ) : (
           <p>
             Known Capacity: {uniqueKnownCount}/{pools.known.max}
+            {pools.freeSchoolSlots > 0 && (
+              <span style={{ marginLeft: "1rem", color: "#6b48ff" }}>
+                Free ✦: {pools.freeSchoolDesignated.length}/{pools.freeSchoolSlots}
+              </span>
+            )}
           </p>
         )}
       </div>
@@ -125,6 +143,14 @@ export const SpellbookBlock = () => {
           {diagnostics.selections.preparedSpellOverflow > 0 && (
             <p>
               Prepared spells exceed limit by {diagnostics.selections.preparedSpellOverflow}.
+            </p>
+          )}
+
+          {diagnostics.selections.freeSchoolOverflow > 0 && (
+            <p>
+              Free-school designations exceed available slots by{" "}
+              {diagnostics.selections.freeSchoolOverflow}. Remove excess
+              designations.
             </p>
           )}
 
@@ -239,6 +265,40 @@ export const SpellbookBlock = () => {
                 </div>
 
                 <p className="spell-lore">{spell.lore.shortDescription}</p>
+
+                {/* Free-school designation toggle — shown on all known spells when slots are available */}
+                {!isPreparedCaster && pools.freeSchoolSlots > 0 && (
+                  <button
+                    style={{
+                      marginRight: "0.5rem",
+                      background: pools.freeSchoolDesignated.includes(spell.id)
+                        ? "#6b48ff"
+                        : "transparent",
+                      color: pools.freeSchoolDesignated.includes(spell.id)
+                        ? "white"
+                        : "#6b48ff",
+                      border: "1px solid #6b48ff",
+                      borderRadius: "4px",
+                      padding: "2px 8px",
+                      cursor:
+                        !pools.freeSchoolDesignated.includes(spell.id) &&
+                        pools.freeSchoolDesignated.length >= pools.freeSchoolSlots
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
+                    disabled={
+                      !pools.freeSchoolDesignated.includes(spell.id) &&
+                      pools.freeSchoolDesignated.length >= pools.freeSchoolSlots
+                    }
+                    onClick={() =>
+                      pools.freeSchoolDesignated.includes(spell.id)
+                        ? undesignateFreeSchoolSpell(spell.id)
+                        : designateFreeSchoolSpell(spell.id)
+                    }
+                  >
+                    Free ✦
+                  </button>
+                )}
 
                 {/* Clerics and Wizards can unprepare spells on the fly */}
                 {isPreparedCaster && (
