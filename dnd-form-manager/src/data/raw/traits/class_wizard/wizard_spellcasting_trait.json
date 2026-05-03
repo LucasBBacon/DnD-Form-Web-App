@@ -1,0 +1,262 @@
+{
+  "id": "trait_spellcasting_wizard",
+  "name": "Spellcasting",
+  "lore": {
+    "shortDescription": "This trait defines the character's spellcasting progression and casting rules."
+  },
+  "spellcasting": {
+    "ability": "int",
+    "preparationType": "prepared",
+    "ritualCasting": true,
+    "progressionByLevel": [
+      {
+        "level": 1,
+        "cantripsKnown": 3,
+        "spellsKnown": 6,
+        "spellSlots": {
+          "1": 2
+        }
+      },
+      {
+        "level": 2,
+        "cantripsKnown": 3,
+        "spellsKnown": 8,
+        "spellSlots": {
+          "1": 2
+        }
+      },
+      {
+        "level": 3,
+        "cantripsKnown": 3,
+        "spellsKnown": 10,
+        "spellSlots": {
+          "1": 4,
+          "2": 2
+        }
+      },
+      {
+        "level": 4,
+        "cantripsKnown": 4,
+        "spellsKnown": 12,
+        "spellSlots": {
+          "1": 4,
+          "2": 3
+        }
+      },
+      {
+        "level": 5,
+        "cantripsKnown": 4,
+        "spellsKnown": 14,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 2
+        }
+      },
+      {
+        "level": 6,
+        "cantripsKnown": 4,
+        "spellsKnown": 16,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3
+        }
+      },
+      {
+        "level": 7,
+        "cantripsKnown": 4,
+        "spellsKnown": 18,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 1
+        }
+      },
+      {
+        "level": 8,
+        "cantripsKnown": 4,
+        "spellsKnown": 20,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 2
+        }
+      },
+      {
+        "level": 9,
+        "cantripsKnown": 4,
+        "spellsKnown": 22,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 1
+        }
+      },
+      {
+        "level": 10,
+        "cantripsKnown": 5,
+        "spellsKnown": 24,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2
+        }
+      },
+      {
+        "level": 11,
+        "cantripsKnown": 5,
+        "spellsKnown": 26,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      },
+      {
+        "level": 12,
+        "cantripsKnown": 5,
+        "spellsKnown": 26,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1
+        }
+      },
+      {
+        "level": 13,
+        "cantripsKnown": 5,
+        "spellsKnown": 28,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      },
+      {
+        "level": 14,
+        "cantripsKnown": 5,
+        "spellsKnown": 30,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1
+        }
+      },
+      {
+        "level": 15,
+        "cantripsKnown": 5,
+        "spellsKnown": 32,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      },
+      {
+        "level": 16,
+        "cantripsKnown": 5,
+        "spellsKnown": 34,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1
+        }
+      },
+      {
+        "level": 17,
+        "cantripsKnown": 5,
+        "spellsKnown": 36,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      },
+      {
+        "level": 18,
+        "cantripsKnown": 5,
+        "spellsKnown": 38,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      },
+      {
+        "level": 19,
+        "cantripsKnown": 5,
+        "spellsKnown": 40,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        }
+      },
+      {
+        "level": 20,
+        "cantripsKnown": 5,
+        "spellsKnown": 42,
+        "spellSlots": {
+          "1": 4,
+          "2": 3,
+          "3": 3,
+          "4": 3,
+          "5": 3,
+          "6": 2,
+          "7": 2,
+          "8": 1,
+          "9": 1
+        }
+      }
+    ]
+  }
+}

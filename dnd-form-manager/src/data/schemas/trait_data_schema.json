@@ -433,6 +433,99 @@
                 "additionalProperties": false
             }
         },
+        "spellcasting": {
+            "type": "object",
+            "description": "Optional spellcasting definition owned by this trait.",
+            "properties": {
+                "ability": {
+                    "type": "string",
+                    "enum": [
+                        "str",
+                        "dex",
+                        "con",
+                        "int",
+                        "wis",
+                        "cha"
+                    ]
+                },
+                "preparationType": {
+                    "type": "string",
+                    "enum": [
+                        "known",
+                        "prepared",
+                        "pact"
+                    ]
+                },
+                "ritualCasting": {
+                    "type": "boolean"
+                },
+                "schoolRestrictions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "abjuration",
+                            "conjuration",
+                            "divination",
+                            "enchantment",
+                            "evocation",
+                            "illusion",
+                            "necromancy",
+                            "transmutation"
+                        ]
+                    }
+                },
+                "progressionByLevel": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "level": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20
+                            },
+                            "cantripsKnown": {
+                                "type": "integer"
+                            },
+                            "spellsKnown": {
+                                "type": "integer"
+                            },
+                            "spellSlots": {
+                                "type": "object",
+                                "description": "Mapping of spell level (1-9) to number of slots available.",
+                                "additionalProperties": {
+                                    "type": "integer"
+                                }
+                            },
+                            "bonusSpells": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "spellsAddedToList": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "level"
+                        ],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "required": [
+                "ability",
+                "preparationType",
+                "ritualCasting",
+                "progressionByLevel"
+            ],
+            "additionalProperties": false
+        },
         "isStartingProficiency": {
             "type": "boolean",
             "description": "When true, this trait is skipped for non-primary (multiclass) class tracks."

@@ -10,6 +10,7 @@ import {
   getSharedSpellSlotsForCasterLevel,
   mergeSubclassSpecificScaling,
 } from "./progressionUtils";
+import type { SubclassProgressionLevel } from "../types/subclass";
 
 describe("calculateProficiencyBonus", () => {
   it("clamps lower values to level 1", () => {
@@ -30,7 +31,7 @@ describe("calculateProficiencyBonus", () => {
 });
 
 describe("subclass progression helpers", () => {
-  const progression = [
+  const progression: SubclassProgressionLevel[] = [
     {
       level: 1,
       features: ["feature_a"],

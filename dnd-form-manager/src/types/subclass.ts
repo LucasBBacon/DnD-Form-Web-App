@@ -1,8 +1,3 @@
-import type {
-    SpellcastingBase,
-    SpellcastingProgression,
-} from "./class";
-
 /**
  * Scalar values supported by subclass progression scaling entries.
  * String values are typically ability references (e.g., "dex").
@@ -37,8 +32,6 @@ export interface SubclassProgressionLevel {
     // Spell IDs added to the class's valid spell list (Warlock Patron)
     spellsAddedToList?: string[];
 
-    // Used for eldritch Knight, Arcane Trickster
-    spellcastingProgressionAdditions?: SpellcastingProgression;
 }
 
 export interface SubclassData {
@@ -50,9 +43,6 @@ export interface SubclassData {
         shortDescription: string;
         fullText?: string;
     };
-
-    // Overrides the base class casting if necessary
-    spellcastingOverride?: SpellcastingBase | null;
 
     // Only contains items for the specific levels where this subclass grants features
     progression: SubclassProgressionLevel[];

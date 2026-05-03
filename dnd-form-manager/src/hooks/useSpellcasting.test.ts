@@ -7,6 +7,7 @@ import {
   getClassById,
   getSpellByID,
   getSubclassById,
+  getTraitsByIds,
 } from "../data/staticDataApi";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useSpellcasting } from "./useSpellcasting";
@@ -72,6 +73,7 @@ describe("useSpellcasting innate spell enrichment", () => {
     vi.mocked(getClassById).mockReturnValue(null);
     vi.mocked(getSubclassById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getTraitsByIds).mockReturnValue([] as any);
   });
 
   it("resolves innate spell name when spellId exists", () => {
@@ -190,41 +192,33 @@ describe("useSpellcasting progression resolution", () => {
     vi.mocked(getSpellByID).mockReturnValue(null);
     vi.mocked(getSubclassById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getTraitsByIds).mockReturnValue([] as any);
   });
 
   it("uses the latest class progression at or below current level", () => {
     vi.mocked(getClassById).mockReturnValue({
-      spellcastingBase: {
-        ability: "int",
-        preparationType: "known",
-      },
       progression: [
-        {
-          level: 1,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 2,
-            spellsKnown: 3,
-          },
-        },
-        {
-          level: 3,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 3,
-            spellsKnown: 4,
-          },
-        },
-        {
-          level: 5,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 4,
-            spellsKnown: 6,
-          },
-        },
+        { level: 1, features: ["trait_test_spellcasting"] },
+        { level: 3, features: [] },
+        { level: 5, features: [] },
       ],
     } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_test_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "known",
+          ritualCasting: false,
+          progressionByLevel: [
+            { level: 1, cantripsKnown: 2, spellsKnown: 3 },
+            { level: 3, cantripsKnown: 3, spellsKnown: 4 },
+            { level: 5, cantripsKnown: 4, spellsKnown: 6 },
+          ],
+        },
+      },
+    ] as any);
 
     const result = useSpellcasting();
 
@@ -232,7 +226,7 @@ describe("useSpellcasting progression resolution", () => {
     expect(result.pools.known.max).toBe(4);
   });
 
-  it("prefers subclass progression when subclass spellcasting override is present", () => {
+  it("picks spellcasting from subclass trait when present", () => {
     vi.mocked(useCharacterStore).mockReturnValue({
       level: 6,
       raceId: null,
@@ -255,43 +249,30 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(getClassById).mockReturnValue({
-      spellcastingBase: null,
-      progression: [
-        {
-          level: 1,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 99,
-            spellsKnown: 99,
-          },
-        },
-      ],
+      progression: [{ level: 1, features: [] }],
     } as any);
 
     vi.mocked(getSubclassById).mockReturnValue({
-      spellcastingOverride: {
-        ability: "int",
-        preparationType: "known",
-      },
       progression: [
-        {
-          level: 3,
-          features: [],
-          spellcastingProgressionAdditions: {
-            cantripsKnown: 1,
-            spellsKnown: 3,
-          },
-        },
-        {
-          level: 6,
-          features: [],
-          spellcastingProgressionAdditions: {
-            cantripsKnown: 2,
-            spellsKnown: 4,
-          },
-        },
+        { level: 3, features: ["trait_ek_spellcasting"] },
+        { level: 6, features: [] },
       ],
     } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_ek_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "known",
+          ritualCasting: false,
+          progressionByLevel: [
+            { level: 3, cantripsKnown: 1, spellsKnown: 3 },
+            { level: 6, cantripsKnown: 2, spellsKnown: 4 },
+          ],
+        },
+      },
+    ] as any);
 
     const result = useSpellcasting();
 
@@ -300,7 +281,7 @@ describe("useSpellcasting progression resolution", () => {
     expect(result.casting.ability).toBe("int");
   });
 
-  it("falls back to class progression when subclass exists without spellcasting override", () => {
+  it("ignores non-spellcasting subclass traits and uses class trait", () => {
     vi.mocked(useCharacterStore).mockReturnValue({
       level: 5,
       raceId: null,
@@ -323,35 +304,26 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(getClassById).mockReturnValue({
-      spellcastingBase: {
-        ability: "int",
-        preparationType: "prepared",
-      },
-      progression: [
-        {
-          level: 1,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 3,
-            spellsKnown: 6,
-          },
-        },
-      ],
+      progression: [{ level: 1, features: ["trait_wiz_spellcasting"] }],
     } as any);
 
     vi.mocked(getSubclassById).mockReturnValue({
-      spellcastingOverride: null,
-      progression: [
-        {
-          level: 3,
-          features: [],
-          spellcastingProgressionAdditions: {
-            cantripsKnown: 0,
-            spellsKnown: 0,
-          },
-        },
-      ],
+      progression: [{ level: 3, features: [] }],
     } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_wiz_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "prepared",
+          ritualCasting: true,
+          progressionByLevel: [
+            { level: 1, cantripsKnown: 3, spellsKnown: 6 },
+          ],
+        },
+      },
+    ] as any);
 
     const result = useSpellcasting();
 
@@ -382,45 +354,55 @@ describe("useSpellcasting progression resolution", () => {
     vi.mocked(getClassById).mockImplementation((id) => {
       if (id === "class_wizard") {
         return {
-          spellcastingBase: {
-            ability: "int",
-            preparationType: "prepared",
-            ritualCasting: true,
-          },
           progression: [
-            {
-              level: 3,
-              features: [],
-              spellcastingProgression: {
-                cantripsKnown: 3,
-                spellSlots: { 1: 4, 2: 2 },
-              },
-            },
+            { level: 3, features: ["trait_wiz_spellcasting"] },
           ],
         } as any;
       }
 
       if (id === "class_cleric") {
         return {
-          spellcastingBase: {
-            ability: "wis",
-            preparationType: "prepared",
-            ritualCasting: true,
-          },
           progression: [
-            {
-              level: 2,
-              features: [],
-              spellcastingProgression: {
-                cantripsKnown: 3,
-                spellSlots: { 1: 3 },
-              },
-            },
+            { level: 2, features: ["trait_cleric_spellcasting"] },
           ],
         } as any;
       }
 
       return null;
+    });
+
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      if (ids.includes("trait_wiz_spellcasting")) {
+        return [
+          {
+            id: "trait_wiz_spellcasting",
+            spellcasting: {
+              ability: "int",
+              preparationType: "prepared",
+              ritualCasting: true,
+              progressionByLevel: [
+                { level: 3, cantripsKnown: 3, spellSlots: { 1: 4, 2: 2 } },
+              ],
+            },
+          },
+        ] as any;
+      }
+      if (ids.includes("trait_cleric_spellcasting")) {
+        return [
+          {
+            id: "trait_cleric_spellcasting",
+            spellcasting: {
+              ability: "wis",
+              preparationType: "prepared",
+              ritualCasting: true,
+              progressionByLevel: [
+                { level: 2, cantripsKnown: 3, spellSlots: { 1: 3 } },
+              ],
+            },
+          },
+        ] as any;
+      }
+      return [] as any;
     });
 
     const result = useSpellcasting();
@@ -455,47 +437,55 @@ describe("useSpellcasting progression resolution", () => {
     vi.mocked(getClassById).mockImplementation((id) => {
       if (id === "class_warlock") {
         return {
-          spellcastingBase: {
-            ability: "cha",
-            preparationType: "pact",
-            ritualCasting: false,
-          },
           progression: [
-            {
-              level: 3,
-              features: [],
-              spellcastingProgression: {
-                cantripsKnown: 2,
-                spellsKnown: 4,
-                spellSlots: { 2: 2 },
-              },
-            },
+            { level: 3, features: ["trait_pact_magic"] },
           ],
         } as any;
       }
 
       if (id === "class_bard") {
         return {
-          spellcastingBase: {
-            ability: "cha",
-            preparationType: "known",
-            ritualCasting: true,
-          },
           progression: [
-            {
-              level: 2,
-              features: [],
-              spellcastingProgression: {
-                cantripsKnown: 2,
-                spellsKnown: 5,
-                spellSlots: { 1: 3 },
-              },
-            },
+            { level: 2, features: ["trait_bard_spellcasting"] },
           ],
         } as any;
       }
 
       return null;
+    });
+
+    vi.mocked(getTraitsByIds).mockImplementation((ids) => {
+      if (ids.includes("trait_pact_magic")) {
+        return [
+          {
+            id: "trait_pact_magic",
+            spellcasting: {
+              ability: "cha",
+              preparationType: "pact",
+              ritualCasting: false,
+              progressionByLevel: [
+                { level: 3, cantripsKnown: 2, spellsKnown: 4, spellSlots: { 2: 2 } },
+              ],
+            },
+          },
+        ] as any;
+      }
+      if (ids.includes("trait_bard_spellcasting")) {
+        return [
+          {
+            id: "trait_bard_spellcasting",
+            spellcasting: {
+              ability: "cha",
+              preparationType: "known",
+              ritualCasting: true,
+              progressionByLevel: [
+                { level: 2, cantripsKnown: 2, spellsKnown: 5, spellSlots: { 1: 3 } },
+              ],
+            },
+          },
+        ] as any;
+      }
+      return [] as any;
     });
 
     const result = useSpellcasting();
@@ -527,23 +517,24 @@ describe("useSpellcasting progression resolution", () => {
     } as any);
 
     vi.mocked(getClassById).mockReturnValue({
-      spellcastingBase: {
-        ability: "int",
-        preparationType: "prepared",
-        ritualCasting: true,
-      },
       progression: [
-        {
-          level: 4,
-          features: [],
-          spellcastingProgression: {
-            cantripsKnown: 3,
-            spellsKnown: 0,
-            spellSlots: { 1: 4, 2: 3 },
-          },
-        },
+        { level: 4, features: ["trait_wiz_spellcasting"] },
       ],
     } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_wiz_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "prepared",
+          ritualCasting: true,
+          progressionByLevel: [
+            { level: 4, cantripsKnown: 3, spellsKnown: 0, spellSlots: { 1: 4, 2: 3 } },
+          ],
+        },
+      },
+    ] as any);
 
     vi.mocked(getAllSpells).mockReturnValue([
       { id: "spell_magic_missile", classes: ["class_wizard"] },

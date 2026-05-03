@@ -1,4 +1,8 @@
-import type { Ability, HitDie } from "./common";
+import type { HitDie } from "./common";
+import type {
+  SpellcastingProgression,
+  SpellcastingProgressionPayload,
+} from "./trait";
 
 /**
  * Basic item representation for use in item management groups (inventory, etc).
@@ -18,28 +22,7 @@ export interface EquipmentChoiceGroup {
   options: { bundle: EquipmentItem[] }[];
 }
 
-/**
- * Payload for basic spellcaster data for a given class definition.
- * Used to check for how spellcasting will be function.
- */
-export interface SpellcastingBase {
-  ability: Ability;
-  preparationType: "known" | "prepared" | "pact";
-  ritualCasting: boolean;
-}
-
-/**
- * Payload for level spellcasting data for a given class definition.
- * Per class level update for the spellcasting abilities of a given class.
- */
-export interface SpellcastingProgressionPayload {
-  cantripsKnown?: number;
-  spellsKnown?: number;
-  spellSlots?: Record<number, number>;
-}
-
-
-export type SpellcastingProgression = SpellcastingProgressionPayload | null;
+export type { SpellcastingProgression, SpellcastingProgressionPayload };
 
 export interface ProgressionLevel {
   level: number;
@@ -57,7 +40,6 @@ export interface ClassData {
     given: EquipmentItem[];
     choices: EquipmentChoiceGroup[];
   };
-  spellcastingBase: SpellcastingBase | null;
   subclassInfo: {
     name: string;
     choiceLevel: number;

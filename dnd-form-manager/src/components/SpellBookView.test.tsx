@@ -7,7 +7,7 @@ import { getSpellByID } from "../data/staticDataApi";
 
 vi.mock("../data/staticDataApi");
 
-const buildSpellcasting = (overrides: Partial<any> = {}) => ({
+const buildSpellcasting = (overrides: Partial<any> = {}): any => ({
   isSpellcaster: true,
   canCastSpells: true,
   casting: {

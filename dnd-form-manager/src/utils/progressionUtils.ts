@@ -2,7 +2,9 @@ import type {
   SubclassProgressionLevel,
   SubclassSpecificScaling,
 } from "../types/subclass";
-import type { ClassData, SpellcastingBase } from "../types/class";
+import type { ClassData } from "../types/class";
+import type { Ability } from "../types/common";
+import type { SpellPreparationType } from "../types/trait";
 
 // #region Public Types
 
@@ -11,7 +13,11 @@ export type CasterContributionType = "full" | "half" | "third" | "none";
 export interface SpellcastingTrackProfile {
   classId: string;
   classLevel: number;
-  spellcastingBase: SpellcastingBase;
+  spellcastingBase: {
+    ability: Ability;
+    preparationType: SpellPreparationType;
+    ritualCasting: boolean;
+  };
 }
 
 // #endregion

@@ -91,11 +91,6 @@
       }
     ]
   },
-  "spellcastingBase": {
-    "ability": "cha",
-    "preparationType": "pact",
-    "ritualCasting": false
-  },
   "subclassInfo": {
     "choiceLevel": 1,
     "optionsPool": "subclasses_warlock"
@@ -110,249 +105,109 @@
         "trait_warlock_prof_skills",
         "trait_otherworldly_patron",
         "trait_pact_magic"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 2,
-        "spellsKnown": 2,
-        "spellSlots": {
-          "1": 1
-        }
-      }
+      ]
     },
     {
       "level": 2,
       "features": [
         "trait_eldritch_invocations"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 2,
-        "spellsKnown": 3,
-        "spellSlots": {
-          "1": 2
-        }
-      }
+      ]
     },
     {
       "level": 3,
       "features": [
         "trait_pact_boon"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 2,
-        "spellsKnown": 4,
-        "spellSlots": {
-          "2": 2
-        }
-      }
+      ]
     },
     {
       "level": 4,
       "features": [
         "trait_ability_score_improvement"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 5,
-        "spellSlots": {
-          "2": 2
-        }
-      }
+      ]
     },
     {
-      "level": 5,
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 6,
-        "spellSlots": {
-          "3": 2
-        }
-      }
+      "level": 5
     },
     {
       "level": 6,
       "features": [
         "trait_otherworldly_patron_feature"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 7,
-        "spellSlots": {
-          "3": 2
-        }
-      }
+      ]
     },
     {
-      "level": 7,
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 8,
-        "spellSlots": {
-          "4": 2
-        }
-      }
+      "level": 7
     },
     {
       "level": 8,
       "features": [
         "trait_ability_score_improvement"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 9,
-        "spellSlots": {
-          "4": 2
-        }
-      }
+      ]
     },
     {
-      "level": 9,
-      "spellcastingProgression": {
-        "cantripsKnown": 3,
-        "spellsKnown": 10,
-        "spellSlots": {
-          "5": 2
-        }
-      }
+      "level": 9
     },
     {
       "level": 10,
       "features": [
         "trait_otherworldly_patron_feature"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 10,
-        "spellSlots": {
-          "5": 2
-        }
-      }
+      ]
     },
     {
       "level": 11,
       "features": [
         "trait_mystic_arcanum_6"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 11,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 12,
       "features": [
         "trait_ability_score_improvement"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 11,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 13,
       "features": [
         "trait_mystic_arcanum_7"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 12,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 14,
       "features": [
         "trait_otherworldly_patron_feature"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 12,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 15,
       "features": [
         "trait_mystic_arcanum_8"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 13,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 16,
       "features": [
         "trait_ability_score_improvement"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 13,
-        "spellSlots": {
-          "5": 3
-        }
-      }
+      ]
     },
     {
       "level": 17,
       "features": [
         "trait_mystic_arcanum_9"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 14,
-        "spellSlots": {
-          "5": 4
-        }
-      }
+      ]
     },
     {
-      "level": 18,
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 14,
-        "spellSlots": {
-          "5": 4
-        }
-      }
+      "level": 18
     },
     {
       "level": 19,
       "features": [
         "trait_ability_score_improvement"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 15,
-        "spellSlots": {
-          "5": 4
-        }
-      }
+      ]
     },
     {
       "level": 20,
       "features": [
         "trait_eldritch_master"
-      ],
-      "spellcastingProgression": {
-        "cantripsKnown": 4,
-        "spellsKnown": 15,
-        "spellSlots": {
-          "5": 4
-        }
-      }
+      ]
     }
   ],
   "lore": {

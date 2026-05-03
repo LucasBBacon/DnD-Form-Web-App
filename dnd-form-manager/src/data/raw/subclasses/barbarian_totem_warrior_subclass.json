@@ -1,37 +1,36 @@
 {
-    "id": "subclass_barbarian_totem_warrior",
-    "name": "Path of the Totem Warrior",
-    "parentClassId": "class_barbarian",
-    "spellcastingOverride": null,
-    "progression": [
-        {
-            "level": 3,
-            "features": [
-                "trait_spirit_seeker",
-                "trait_totem_spirit"
-            ]
-        },
-        {
-            "level": 6,
-            "features": [
-                "trait_aspect_of_the_beast"
-            ]
-        },
-        {
-            "level": 10,
-            "features": [
-                "trait_spirit_walker"
-            ]
-        },
-        {
-            "level": 14,
-            "features": [
-                "trait_totemic_attunement"
-            ]
-        }
-    ],
-    "lore": {
-        "shortDescription": "Totem Warriors draw on the power of spirit animals to fuel their rage and guide their path.",
-        "fullText": "The Path of the Totem Warrior is a spiritual journey, as the barbarian accepts a spirit animal as guide, protector, and inspiration. In battle, your totem spirit fills you with supernatural might, adding magical fuel to your barbarian rage.\nMost barbarian tribes consider a totem animal to be kin to a particular clan. In such cases, it is unusual for an individual to have more than one totem animal spirit, though exceptions exist."
+  "id": "subclass_barbarian_totem_warrior",
+  "name": "Path of the Totem Warrior",
+  "parentClassId": "class_barbarian",
+  "progression": [
+    {
+      "level": 3,
+      "features": [
+        "trait_spirit_seeker",
+        "trait_totem_spirit"
+      ]
+    },
+    {
+      "level": 6,
+      "features": [
+        "trait_aspect_of_the_beast"
+      ]
+    },
+    {
+      "level": 10,
+      "features": [
+        "trait_spirit_walker"
+      ]
+    },
+    {
+      "level": 14,
+      "features": [
+        "trait_totemic_attunement"
+      ]
     }
+  ],
+  "lore": {
+    "shortDescription": "Totem Warriors draw on the power of spirit animals to fuel their rage and guide their path.",
+    "fullText": "The Path of the Totem Warrior is a spiritual journey, as the barbarian accepts a spirit animal as guide, protector, and inspiration. In battle, your totem spirit fills you with supernatural might, adding magical fuel to your barbarian rage.\nMost barbarian tribes consider a totem animal to be kin to a particular clan. In such cases, it is unusual for an individual to have more than one totem animal spirit, though exceptions exist."
+  }
 }

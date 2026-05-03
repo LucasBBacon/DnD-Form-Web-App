@@ -3,6 +3,7 @@ import {
   getClassById,
   getSpellByID,
   getSubclassById,
+  getTraitsByIds,
 } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
@@ -127,6 +128,72 @@ const resolvePreparedSpellLimit = (
  */
 const dedupe = <T>(values: T[]): T[] => Array.from(new Set(values));
 
+const getSpellcastingTraitsForTrack = (
+  track: CharacterClassTrack,
+): Array<{
+  classId: string;
+  classLevel: number;
+  spellcastingBase: {
+    ability: Ability;
+    preparationType: "known" | "prepared" | "pact";
+    ritualCasting: boolean;
+  };
+  progression: Exclude<SpellcastingProgression, null>;
+}> => {
+  const classData = getClassById(track.classId);
+  if (!classData) return [];
+
+  const subclassData = track.subclassId ? getSubclassById(track.subclassId) : null;
+  const traitIds = new Set<string>();
+
+  classData.progression
+    .filter((entry) => entry.level <= track.level)
+    .forEach((entry) => {
+      entry.features.forEach((featureId) => {
+        traitIds.add(featureId);
+      });
+    });
+
+  subclassData?.progression
+    .filter((entry) => entry.level <= track.level)
+    .forEach((entry) => {
+      entry.features.forEach((featureId) => {
+        traitIds.add(featureId);
+      });
+    });
+
+  const traitSpellcastingProfiles = (getTraitsByIds(Array.from(traitIds)) || [])
+    .map((trait) => {
+      if (!trait.spellcasting) return null;
+
+      const progression = getMostRecentProgressionProperty(
+        trait.spellcasting.progressionByLevel,
+        track.level,
+        (entry) => ({
+          cantripsKnown: entry.cantripsKnown,
+          spellsKnown: entry.spellsKnown,
+          spellSlots: entry.spellSlots,
+        }) as Exclude<SpellcastingProgression, null>,
+      );
+
+      if (!progression) return null;
+
+      return {
+        classId: track.classId,
+        classLevel: track.level,
+        spellcastingBase: {
+          ability: trait.spellcasting.ability,
+          preparationType: trait.spellcasting.preparationType,
+          ritualCasting: trait.spellcasting.ritualCasting,
+        },
+        progression,
+      };
+    })
+    .filter((profile): profile is NonNullable<typeof profile> => profile !== null);
+
+  return traitSpellcastingProfiles;
+};
+
 // #endregion
 
 /**
@@ -155,54 +222,9 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     state.level,
   );
 
-  const spellcastingTracks = activeTracks
-    .map((track) => {
-      const classData = getClassById(track.classId);
-      if (!classData) return null;
-
-      const subclassData = track.subclassId
-        ? getSubclassById(track.subclassId)
-        : null;
-      const activeSpellcastingBase =
-        subclassData?.spellcastingOverride || classData.spellcastingBase;
-
-      if (!activeSpellcastingBase) return null;
-
-      const progression = subclassData?.spellcastingOverride
-        ? getMostRecentProgressionProperty(
-            subclassData.progression,
-            track.level,
-            (entry) => entry.spellcastingProgressionAdditions,
-          )
-        : getMostRecentProgressionProperty(
-            classData.progression,
-            track.level,
-            (entry) => entry.spellcastingProgression,
-          );
-
-      if (!progression) return null;
-
-      return {
-        classId: track.classId,
-        classLevel: track.level,
-        spellcastingBase: activeSpellcastingBase,
-        progression,
-      };
-    })
-    .filter(
-      (
-        profile,
-      ): profile is {
-        classId: string;
-        classLevel: number;
-        spellcastingBase: {
-          ability: Ability;
-          preparationType: "known" | "prepared" | "pact";
-          ritualCasting: boolean;
-        };
-        progression: Exclude<SpellcastingProgression, null>;
-      } => profile !== null,
-    );
+  const spellcastingTracks = activeTracks.flatMap((track) =>
+    getSpellcastingTraitsForTrack(track),
+  );
 
   const nonPactTracks = spellcastingTracks.filter(
     (track) => track.spellcastingBase.preparationType !== "pact",

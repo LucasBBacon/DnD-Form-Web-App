@@ -3,7 +3,6 @@
     "id": "subclass_barbarian_berserker",
     "name": "Path of the Berserker",
     "parentClassId": "class_barbarian",
-    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -57,7 +56,6 @@
     "id": "subclass_barbarian_totem_warrior",
     "name": "Path of the Totem Warrior",
     "parentClassId": "class_barbarian",
-    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -94,7 +92,6 @@
     "id": "subclass_bard_lore",
     "name": "College of Lore",
     "parentClassId": "class_bard",
-    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -125,7 +122,6 @@
     "id": "subclass_bard_valor",
     "name": "College of Valor",
     "parentClassId": "class_bard",
-    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -153,10 +149,88 @@
     }
   },
   {
+    "id": "subclass_cleric_knowledge",
+    "name": "Knowledge Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_blessings_of_knowledge"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cd_knowledge_of_the_ages"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_cd_read_thoughts"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_potent_spellcasting"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_visions_of_the_past"
+        ]
+      }
+    ],
+    "lore": {
+      "shortDescription": "The gods of knowledge value learning and understanding above all.",
+      "fullText": "The gods of knowledge - including Oghma, Boccob, Gilean, Aureon, and Thoth - value learning and understanding above all. Some teach that knowledge is to be gathered and shared in libraries and universities, or promote the practical knowledge of craft and invention. Some deities hoard knowledge and keep its secrets to themselves. And some promise their followers that they will gain tremendous power if they unlock the secrets of the multiverse. Followers of these gods study esoteric lore, collect old tomes, delve into the secret places of the earth, and learn all they can. Some gods of knowledge promote the practical knowledge of craft and invention, including smith deities like Gond, Reorx, Onatar, Moradin, Hephaestus, and Goibhniu.\nIn Amonkhet, knowledge is the second virtue of society. Kefnet's task is to pass on this teaching of the God-Pharaoh and elucidate its meaning. He teaches that the afterlife will be inhabited only by those who have proved by their wits that they are worthy of dwelling in the glorious presence of the God-Pharaoh. He trains acolytes and initiates to push their limits and challenge their mental capacity with spells of ever-greater power."
+    }
+  },
+  {
+    "id": "subclass_cleric_life",
+    "name": "Life Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_bonus_proficiency",
+          "trait_disciple_of_life"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cd_preserve_life"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_blessed_healer"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_divine_strike"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_supreme_healing"
+        ]
+      }
+    ]
+  },
+  {
     "id": "subclass_fighter_battle_master",
     "name": "Battle Master",
     "parentClassId": "class_fighter",
-    "spellcastingOverride": null,
     "progression": [
       {
         "level": 3,
@@ -188,5 +262,59 @@
       "shortDescription": "Masters of martial techniques, Battle Masters are skilled in the art of combat, using their knowledge and tactics to outmaneuver their opponents on the battlefield.",
       "fullText": "Those who emulate the archetypal Battle Master employ martial techniques passed down through generations. To a Battle Master, combat is an academic field, sometimes including subjects beyond battle such as weaponsmithing and calligraphy. Not every fighter absorbs the lessons of history, theory, and artistry that are reflected in the Battle Master archetype, but those who do are well-rounded fighters of great skill and knowledge."
     }
+  },
+  {
+    "id": "subclass_fighter_champion",
+    "name": "Champion",
+    "parentClassId": "class_fighter",
+    "progression": [
+      {
+        "level": 3,
+        "features": [
+          "trait_improved_critical"
+        ]
+      },
+      {
+        "level": 7,
+        "features": [
+          "trait_remarkable_athlete"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_additional_fighting_style"
+        ]
+      },
+      {
+        "level": 15,
+        "features": [
+          "trait_superior_critical"
+        ]
+      },
+      {
+        "level": 18,
+        "features": [
+          "trait_survivor"
+        ]
+      }
+    ],
+    "lore": {
+      "shortDescription": "Champions are the epitome of martial prowess, relying on their physical strength and skill to dominate the battlefield.",
+      "fullText": "The archetypal Champion focuses on the development of raw physical power honed to deadly perfection. Those who model themselves on this archetype combine rigorous training with physical excellence to deal devastating blows."
+    }
+  },
+  {
+    "id": "subclass_fighter_eldritch_knight",
+    "name": "Eldritch Knight",
+    "parentClassId": "class_fighter",
+    "progression": [
+      {
+        "level": 3,
+        "features": [
+          "trait_fighter_eldritch_knight_spellcasting"
+        ]
+      }
+    ]
   }
 ]

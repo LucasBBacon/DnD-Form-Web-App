@@ -187,10 +187,6 @@ const hasSpellcastingAccess = ({
   const subclassData = subclassId ? getSubclassById(subclassId) : null;
   const activeTraitIds = new Set<string>();
 
-  if (classData?.spellcastingBase || subclassData?.spellcastingOverride) {
-    return true;
-  }
-
   raceData?.traits?.forEach((traitId) => {
     activeTraitIds.add(traitId);
   });
@@ -222,8 +218,10 @@ const hasSpellcastingAccess = ({
     },
   );
 
-  return getTraitsByIds(Array.from(activeTraitIds)).some((trait) =>
-    trait.effects?.some((effect) => effect.type === "spell_grant"),
+  return getTraitsByIds(Array.from(activeTraitIds)).some(
+    (trait) =>
+      !!trait.spellcasting ||
+      trait.effects?.some((effect) => effect.type === "spell_grant"),
   );
 };
 

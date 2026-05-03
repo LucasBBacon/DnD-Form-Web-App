@@ -99,29 +99,6 @@
         }
       }
     },
-    "spellcastingBase": {
-      "type": [
-        "object",
-        "null"
-      ],
-      "description": "Base rules for spellcasting, null if the class does not cast spells by default.",
-      "properties": {
-        "ability": {
-          "$ref": "definitions.json#/definitions/SpellcastingAbility"
-        },
-        "preparationType": {
-          "type": "string",
-          "enum": [
-            "known",
-            "prepared",
-            "pact"
-          ]
-        },
-        "ritualCasting": {
-          "type": "boolean"
-        }
-      }
-    },
     "subclassInfo": {
       "type": "object",
       "properties": {

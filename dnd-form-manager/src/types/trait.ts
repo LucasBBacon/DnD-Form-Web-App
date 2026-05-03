@@ -9,6 +9,41 @@ export type ProficiencyCategory =
   | "skills"
   | "languages";
 
+export type SpellPreparationType = "known" | "prepared" | "pact";
+
+export type SpellSchool =
+  | "abjuration"
+  | "conjuration"
+  | "divination"
+  | "enchantment"
+  | "evocation"
+  | "illusion"
+  | "necromancy"
+  | "transmutation";
+
+export interface SpellcastingProgressionPayload {
+  cantripsKnown?: number;
+  spellsKnown?: number;
+  spellSlots?: Record<number, number>;
+  bonusSpells?: string[];
+  spellsAddedToList?: string[];
+}
+
+export interface SpellcastingProgressionEntry
+  extends SpellcastingProgressionPayload {
+  level: number;
+}
+
+export interface TraitSpellcastingDefinition {
+  ability: Ability;
+  preparationType: SpellPreparationType;
+  ritualCasting: boolean;
+  schoolRestrictions?: SpellSchool[];
+  progressionByLevel: SpellcastingProgressionEntry[];
+}
+
+export type SpellcastingProgression = SpellcastingProgressionPayload | null;
+
 export interface TraitEffect {
   type:
     | "action_grant"
@@ -50,6 +85,7 @@ export interface TraitData {
   id: string; // e.g., 'trait_darkvision', 'trait_fey_ancestry'
   name: string; // e.g., 'Darkvision', 'Fey Ancestry'
   isStartingProficiency?: boolean;
+  spellcasting?: TraitSpellcastingDefinition;
   lore: {
     shortDescription: string; // e.g., "You can see in dim light ..."
     fullText?: string;
