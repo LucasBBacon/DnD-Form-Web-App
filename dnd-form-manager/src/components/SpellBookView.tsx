@@ -30,8 +30,15 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
       ]),
     );
 
+    const missingSpellIds: string[] = [];
     const allSpells = standardIds
-      .map((id) => getSpellByID(id))
+      .map((id) => {
+        const spell = getSpellByID(id);
+        if (!spell) {
+          missingSpellIds.push(id);
+        }
+        return spell;
+      })
       .filter(
         (spell): spell is NonNullable<typeof spell> => spell != null,
       );
@@ -43,7 +50,10 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
       grouped[spell.level].push(spell);
     });
 
-    return grouped;
+    return {
+      grouped,
+      missingSpellIds,
+    };
   }, [spellcasting.pools.known.selected, spellcasting.pools.prepared.selected]);
 
   const groupedInnateSpells = useMemo(() => {
@@ -56,9 +66,14 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
       }>
     > = {};
 
+    const missingSpellIds: string[] = [];
+
     spellcasting.pools.innate.forEach((entry, index) => {
       const spell = getSpellByID(entry.spellId);
-      if (!spell) return;
+      if (!spell) {
+        missingSpellIds.push(entry.spellId);
+        return;
+      }
 
       if (!grouped[spell.level]) {
         grouped[spell.level] = [];
@@ -67,8 +82,22 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
       grouped[spell.level].push({ entry, index, spell });
     });
 
-    return grouped;
+    return {
+      grouped,
+      missingSpellIds,
+    };
   }, [spellcasting.pools.innate]);
+
+  const missingSpellIds = useMemo(
+    () =>
+      Array.from(
+        new Set([
+          ...groupedSpells.missingSpellIds,
+          ...groupedInnateSpells.missingSpellIds,
+        ]),
+      ),
+    [groupedInnateSpells.missingSpellIds, groupedSpells.missingSpellIds],
+  );
 
   const toggleSpell = (id: string) => {
     setExpandedSpellId((prev) => (prev === id ? null : id));
@@ -85,20 +114,41 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
   }
 
   // Render spellbook
-  const levels = Object.keys(groupedSpells)
+  const levels = Object.keys(groupedSpells.grouped)
     .map(Number)
     .sort((a, b) => a - b);
 
-  const innateLevels = Object.keys(groupedInnateSpells)
+  const innateLevels = Object.keys(groupedInnateSpells.grouped)
     .map(Number)
     .sort((a, b) => a - b);
 
-  if (levels.length === 0 && spellcasting.pools.innate.length === 0) {
-    return <div className="empty-state">Your spellbook is empty.</div>;
+  if (levels.length === 0 && innateLevels.length === 0) {
+    return (
+      <div className="spellbook-container">
+        {missingSpellIds.length > 0 && (
+          <div className="spell-error-state">
+            <strong>Missing Spell References</strong>
+            {missingSpellIds.map((spellId) => (
+              <p key={`missing-spell-${spellId}`}>Missing spell reference: {spellId}</p>
+            ))}
+          </div>
+        )}
+        <div className="empty-state">Your spellbook is empty.</div>
+      </div>
+    );
   }
 
   return (
     <div className="spellbook-container">
+      {missingSpellIds.length > 0 && (
+        <div className="spell-error-state">
+          <strong>Missing Spell References</strong>
+          {missingSpellIds.map((spellId) => (
+            <p key={`missing-spell-${spellId}`}>Missing spell reference: {spellId}</p>
+          ))}
+        </div>
+      )}
+
       {/* Loop through levels */}
       {levels.map((level) => (
         <div key={`spell-lvl-${level}`} className="spell-level-group">
@@ -107,7 +157,7 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
           </h3>
 
           <div className="spell-list">
-            {groupedSpells[level].map((spell) => {
+            {groupedSpells.grouped[level].map((spell) => {
               const isExpanded = expandedSpellId === spell.id;
 
               return (
@@ -173,7 +223,7 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
               </h4>
 
               <div className="spell-list innate-spell-list">
-                {groupedInnateSpells[level].map(({ entry, index, spell }) => {
+                {groupedInnateSpells.grouped[level].map(({ entry, index, spell }) => {
                   const cardId = `innate:${entry.spellId}:${entry.sourceTraitName}:${index}`;
                   const isExpanded = expandedSpellId === cardId;
 

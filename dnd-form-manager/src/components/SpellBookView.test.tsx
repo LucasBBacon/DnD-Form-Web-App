@@ -188,7 +188,7 @@ describe("SpellBookView", () => {
     expect(screen.getAllByRole("button", { name: /shield/i })).toHaveLength(1);
   });
 
-  it("shows empty state when spell IDs cannot be resolved", () => {
+  it("shows missing reference message when spell IDs cannot be resolved", () => {
     vi.mocked(getSpellByID).mockReturnValue(null);
 
     render(
@@ -204,6 +204,8 @@ describe("SpellBookView", () => {
       />,
     );
 
+    expect(screen.getByText("Missing Spell References")).toBeInTheDocument();
+    expect(screen.getByText("Missing spell reference: spell_missing")).toBeInTheDocument();
     expect(screen.getByText("Your spellbook is empty.")).toBeInTheDocument();
   });
 

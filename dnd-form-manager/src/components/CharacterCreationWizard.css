@@ -209,9 +209,47 @@
     background 0.2s;
 }
 
-.massive-finish-btn:hover {
+.massive-finish-btn:hover:not(:disabled) {
   background: #15803d;
   transform: scale(1.02);
+}
+
+.massive-finish-btn:disabled {
+  background: #a1a1aa;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.finish-blocking-hint {
+  font-size: 0.8rem;
+  color: #b45309;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Continue button shown at the bottom of race / class stages */
+.wizard-continue-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.wizard-continue-btn:hover:not(:disabled) {
+  background: #4f46e5;
+}
+
+.wizard-continue-btn:disabled {
+  background: #a1a1aa;
+  cursor: not-allowed;
 }
 
 @media (max-width: 1200px) {

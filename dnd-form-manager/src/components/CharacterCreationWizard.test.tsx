@@ -102,4 +102,27 @@ describe("CharacterCreationWizard live draft", () => {
       expect(within(classProgressRow).getByText("Complete")).toBeInTheDocument();
     }
   });
+
+  it("does not require subclass before class subclass choiceLevel", () => {
+    render(<CharacterCreationWizard />);
+
+    act(() => {
+      useCharacterStore.getState().setClass("class_bard");
+      useCharacterStore.getState().setSubclass(null);
+      useCharacterStore.getState().setLevel(1);
+    });
+
+    const progressRows = Array.from(
+      document.querySelectorAll<HTMLElement>(".draft-progress-row"),
+    );
+    const subclassProgressRow = progressRows.find((row) =>
+      within(row).queryByText("Subclass"),
+    );
+
+    expect(subclassProgressRow).toBeDefined();
+
+    if (subclassProgressRow) {
+      expect(within(subclassProgressRow).getByText("Complete")).toBeInTheDocument();
+    }
+  });
 });

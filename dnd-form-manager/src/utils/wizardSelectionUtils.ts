@@ -76,24 +76,30 @@ export const toRaceSelectionOption = (
   };
 };
 
-export const toClassSelectionOption = (classData: ClassData): SelectionOption => {
+export const toClassSelectionOption = (
+  classData: ClassData,
+  characterLevel = 1,
+): SelectionOption => {
   const levelOneTraits =
     classData.progression.find((level) => level.level === 1)?.features ?? [];
+  const subclassChoiceLevel = classData.subclassInfo.choiceLevel;
 
   const subclasses = getSubclassesForClass(classData.id);
   const subOptionLabel =
     classData.subclassInfo.displayLabel?.trim() || "Subclass";
   const subOptions = subclasses.map((sub) => {
-    const levelThreeTraits =
-      sub.progression.find((level) => level.level === 3)?.features ?? [];
+    const levelChoiceTraits =
+      sub.progression.find((level) => level.level === subclassChoiceLevel)
+        ?.features ?? [];
     return {
       id: sub.id,
       name: sub.name,
       tagline: sub.lore?.shortDescription ?? `${classData.name} subclass`,
       description: sub.lore?.fullText ?? sub.lore?.shortDescription ?? `${sub.name} is a subclass of ${classData.name}.`,
-      traits: resolveTraitSegments(levelThreeTraits),
+      traits: resolveTraitSegments(levelChoiceTraits),
     };
   });
+  const canChooseSubclassNow = characterLevel >= subclassChoiceLevel;
 
   return {
     id: classData.id,
@@ -101,6 +107,6 @@ export const toClassSelectionOption = (classData: ClassData): SelectionOption =>
     tagline: `Hit Die: d${classData.hitDie}`,
     description: classData.lore.fullText || classData.lore.shortDescription,
     traits: resolveTraitSegments(levelOneTraits),
-    ...(subOptions.length > 0 && { subOptions, subOptionLabel }),
+    ...(canChooseSubclassNow && subOptions.length > 0 && { subOptions, subOptionLabel }),
   };
 };

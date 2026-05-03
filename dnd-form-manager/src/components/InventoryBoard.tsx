@@ -12,24 +12,51 @@ export const InventoryBoard: React.FC = () => {
   // #region Hydration
 
   // Hydrate instances
-  const hydratedInstances = useMemo(() => {
-    return store.inventoryInstances
+  const { hydratedInstances, missingInstanceItemIds } = useMemo(() => {
+    const missingItemIds: string[] = [];
+    const resolvedInstances = store.inventoryInstances
       .map((instance) => {
         const itemData = getItemById(instance.baseItemId);
+        if (!itemData) {
+          missingItemIds.push(instance.baseItemId);
+          return null;
+        }
+
         return { ...instance, itemData };
       })
-      .filter((i) => i.itemData !== undefined);
+      .filter((instance): instance is { instanceId: string; baseItemId: string; itemData: NonNullable<ReturnType<typeof getItemById>> } => instance !== null);
+
+    return {
+      hydratedInstances: resolvedInstances,
+      missingInstanceItemIds: Array.from(new Set(missingItemIds)),
+    };
   }, [store.inventoryInstances]);
 
   // Hydrate stacks
-  const hydratedStacks = useMemo(() => {
-    return store.inventoryStacks
+  const { hydratedStacks, missingStackItemIds } = useMemo(() => {
+    const missingItemIds: string[] = [];
+    const resolvedStacks = store.inventoryStacks
       .map((stack) => {
         const itemData = getItemById(stack.baseItemId);
+        if (!itemData) {
+          missingItemIds.push(stack.baseItemId);
+          return null;
+        }
+
         return { ...stack, itemData };
       })
-      .filter((s) => s.itemData !== undefined);
+      .filter((stack): stack is { stackId: string; baseItemId: string; quantity: number; itemData: NonNullable<ReturnType<typeof getItemById>> } => stack !== null);
+
+    return {
+      hydratedStacks: resolvedStacks,
+      missingStackItemIds: Array.from(new Set(missingItemIds)),
+    };
   }, [store.inventoryStacks]);
+
+  const missingItemIds = useMemo(
+    () => Array.from(new Set([...missingInstanceItemIds, ...missingStackItemIds])),
+    [missingInstanceItemIds, missingStackItemIds],
+  );
 
   // #endregion
 
@@ -105,6 +132,16 @@ export const InventoryBoard: React.FC = () => {
       </div>
 
       <hr className="divider" />
+
+      {missingItemIds.length > 0 && (
+        <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
+          {missingItemIds.map((itemId) => (
+            <div key={`missing-item-${itemId}`}>
+              Missing equipment reference: {itemId}
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Equipment (Instances) */}
       <div className="inventory-section">

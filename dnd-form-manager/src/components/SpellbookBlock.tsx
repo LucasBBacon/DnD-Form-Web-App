@@ -53,8 +53,22 @@ export const SpellbookBlock = () => {
 
   const resolveSpellName = (spellId: string) => {
     const spell = getSpellByID(spellId);
-    return spell?.name || `Unknown Spell (${spellId})`;
+    return spell?.name || `Missing spell reference: ${spellId}`;
   };
+
+  const missingActiveSpellIds = Array.from(
+    new Set(activeSpells.filter((spellId) => getSpellByID(spellId) === null)),
+  );
+  const missingInnateSpellIds = Array.from(
+    new Set(
+      pools.innate
+        .filter((innate) => !innate.isResolvedSpell)
+        .map((innate) => innate.spellId),
+    ),
+  );
+  const missingSpellIds = Array.from(
+    new Set([...missingActiveSpellIds, ...missingInnateSpellIds]),
+  );
 
   const hasDiagnostics =
     diagnostics.selections.invalidKnownSpellIds.length > 0 ||
@@ -120,6 +134,28 @@ export const SpellbookBlock = () => {
           </p>
         )}
       </div>
+
+      {missingSpellIds.length > 0 && (
+        <div
+          className="spellbook-diagnostics"
+          style={{
+            border: "1px solid #d89d00",
+            background: "#fff7e0",
+            padding: "0.75rem",
+            borderRadius: "6px",
+            marginBottom: "1rem",
+          }}
+        >
+          <h3 style={{ marginTop: 0 }}>Missing Spell References</h3>
+          <ul>
+            {missingSpellIds.map((spellId) => (
+              <li key={`missing-spell-${spellId}`}>
+                Missing spell reference: {spellId}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {hasDiagnostics && (
         <div

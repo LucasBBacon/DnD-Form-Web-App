@@ -19,7 +19,7 @@ export interface EquipmentItem {
  */
 export interface EquipmentChoiceGroup {
   choose: number;
-  options: { bundle: EquipmentItem[] }[];
+  options: { equipmentBundle: EquipmentItem[] }[];
 }
 
 export type { SpellcastingProgression, SpellcastingProgressionPayload };

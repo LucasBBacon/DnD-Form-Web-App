@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { WizardSelectionStage } from "./WizardSelectionStage";
+import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
+import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
 import {
   getAllClasses,
   getAllRaces,
@@ -9,14 +11,17 @@ import {
   getSubraceById,
   getSubclassById,
 } from "../data/staticDataApi";
-import type { Ability } from "../types/common";
+import type { Ability, Skill } from "../types/common";
+import type { SkillProficiencyRequirement } from "../types/creationRequirement";
 import {
   toClassSelectionOption,
   toRaceSelectionOption,
 } from "../utils/wizardSelectionUtils";
 import { calculateProficiencyBonus } from "../utils/progressionUtils";
 import { useCharacterStats } from "../hooks/useCharacterStats";
-import "./CharacterCreationWizard.css"
+import { useCreationRequirements } from "../hooks/useCreationRequirements";
+import "./CharacterCreationWizard.css";
+import "./WizardPickerStage.css";
 
 const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
 
@@ -43,19 +48,67 @@ const formatModifier = (modifier: number): string =>
 const WIZARD_STEPS = [
   { id: "race", label: "1. Race" },
   { id: "class", label: "2. Class" },
-  { id: "abilities", label: "3. Abilities" },
-  { id: "background", label: "4. Background" },
-  { id: "equipment", label: "5. Equipment" },
-  { id: "identity", label: "6. Identity" },
+  { id: "spells", label: "3. Spells" },
+  { id: "abilities", label: "4. Abilities" },
+  { id: "background", label: "5. Background" },
+  { id: "equipment", label: "6. Equipment" },
+  { id: "identity", label: "7. Identity" },
 ];
+
+// Converts a snake_case skill id to a display label
+const formatSkillName = (skill: string): string =>
+  skill
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+// Inline skill picker rendered at the bottom of the race / class stage
+const SkillPickerSection: React.FC<{
+  requirement: SkillProficiencyRequirement;
+  currentSelections: Skill[];
+  onToggle: (skill: Skill) => void;
+}> = ({ requirement, currentSelections, onToggle }) => {
+  const remaining = requirement.required - currentSelections.length;
+  return (
+    <div className="skill-picker-inline">
+      <div className="skill-picker-title">
+        {requirement.label}
+        {remaining <= 0 ? " ✓" : ` (${remaining} more needed)`}
+      </div>
+      <div className="skill-picker-grid">
+        {requirement.pool.map((skill) => {
+          const isSelected = currentSelections.includes(skill as Skill);
+          const isDisabled =
+            !isSelected && currentSelections.length >= requirement.required;
+          return (
+            <div
+              key={skill}
+              className={`skill-chip ${
+                isSelected ? "selected" : ""
+              } ${isDisabled ? "disabled" : ""}`}
+              onClick={() =>
+                !isDisabled && onToggle(skill as Skill)
+              }
+            >
+              {formatSkillName(skill)}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export const CharacterCreationWizard: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const store = useCharacterStore();
+  const { all: allRequirements, blocking, isStageComplete } =
+    useCreationRequirements();
   const raceOptions = getAllRaces().map((race) =>
     toRaceSelectionOption(race, store.subraceId),
   );
-  const classOptions = getAllClasses().map(toClassSelectionOption);
+  const classOptions = getAllClasses().map((classData) =>
+    toClassSelectionOption(classData, store.level),
+  );
   const selectedRace = getRaceById(store.raceId);
   const selectedSubrace = getSubraceById(store.subraceId);
   const selectedClass = getClassById(store.classId);
@@ -89,6 +142,10 @@ export const CharacterCreationWizard: React.FC = () => {
       label: "Background",
       isComplete: !!store.backgroundId,
     },
+    // Dynamic checks from the requirement engine (skills, spells, equipment)
+    ...allRequirements
+      .filter((r) => r.isBlocking)
+      .map((r) => ({ label: r.label, isComplete: r.isResolved })),
   ];
 
   // #region Actions
@@ -100,6 +157,25 @@ export const CharacterCreationWizard: React.FC = () => {
   };
 
   const handleCompleteCreation = () => {
+    if (blocking.length > 0) return;
+
+    // Apply given starting equipment items to inventory
+    const classData = getClassById(store.classId);
+    if (classData) {
+      classData.startingEquipment.given.forEach((item) => {
+        store.addInventoryItem(item.itemId, item.quantity);
+      });
+      classData.startingEquipment.choices.forEach((group, i) => {
+        const selectedOptionIndex = store.startingEquipmentSelections[i];
+        if (selectedOptionIndex !== undefined) {
+          const bundle = group.options[selectedOptionIndex]?.equipmentBundle ?? [];
+          bundle.forEach((item) => {
+            store.addInventoryItem(item.itemId, item.quantity);
+          });
+        }
+      });
+    }
+
     store.completeSetup();
   };
 
@@ -111,36 +187,132 @@ export const CharacterCreationWizard: React.FC = () => {
     const stepId = WIZARD_STEPS[currentStepIndex].id;
 
     switch (stepId) {
-      case "race":
-        return (
-          <WizardSelectionStage
-            title="Race"
-            options={raceOptions}
-            currentSelectionId={store.raceId}
-            currentSubSelectionId={store.subraceId}
-            onSelect={(baseId, subId) => {
-              store.setRace(baseId);
-              store.setSubrace(subId)
-              advanceStep();
-            }}
-          />
+      case "race": {
+        const racialSkillReqs = allRequirements.filter(
+          (r): r is SkillProficiencyRequirement =>
+            r.wizardStage === "race" && r.type === "skill_proficiency",
         );
-      case "class":
+        const stageReady =
+          !!store.raceId &&
+          (!subraceRequired || !!store.subraceId) &&
+          isStageComplete("race");
         return (
-          <WizardSelectionStage
-            title="Class"
-            options={classOptions}
-            currentSelectionId={store.classId}
-            currentSubSelectionId={store.subclassId}
-            onSelect={(baseId, subId) => {
-              store.setClass(baseId);
-              store.setSubclass(subId);
-              advanceStep();
-            }}
-          />
+          <>
+            <WizardSelectionStage
+              title="Race"
+              options={raceOptions}
+              currentSelectionId={store.raceId}
+              currentSubSelectionId={store.subraceId}
+              onSelect={(baseId, subId) => {
+                store.setRace(baseId);
+                store.setSubrace(subId);
+              }}
+            />
+            {racialSkillReqs.map((req) => (
+              <SkillPickerSection
+                key={req.id}
+                requirement={req}
+                currentSelections={store.chosenRacialSkills}
+                onToggle={(skill) => {
+                  const current = store.chosenRacialSkills;
+                  const next = current.includes(skill)
+                    ? current.filter((s) => s !== skill)
+                    : [...current, skill];
+                  store.setRacialSkills(next);
+                }}
+              />
+            ))}
+            {!!store.raceId && (
+              <button
+                className="wizard-continue-btn"
+                disabled={!stageReady}
+                onClick={() => stageReady && advanceStep()}
+              >
+                Continue →
+              </button>
+            )}
+          </>
         );
+      }
+
+      case "class": {
+        const classSkillReqs = allRequirements.filter(
+          (r): r is SkillProficiencyRequirement =>
+            r.wizardStage === "class" && r.type === "skill_proficiency",
+        );
+        const classLevel1Skills =
+          store.choicesByLevel[1]?.skillChoices ?? [];
+        const stageReady =
+          !!store.classId && isStageComplete("class");
+        return (
+          <>
+            <WizardSelectionStage
+              title="Class"
+              options={classOptions}
+              currentSelectionId={store.classId}
+              currentSubSelectionId={store.subclassId}
+              onSelect={(baseId, subId) => {
+                const classData = getClassById(baseId);
+                const canChooseSubclassNow =
+                  classData !== null &&
+                  store.level >= classData.subclassInfo.choiceLevel;
+                store.setClass(baseId);
+                store.setSubclass(canChooseSubclassNow ? subId : null);
+              }}
+            />
+            {classSkillReqs.map((req, reqIdx) => {
+              // Each requirement occupies a contiguous slice of classLevel1Skills
+              const priorCount = classSkillReqs
+                .slice(0, reqIdx)
+                .reduce((sum, r) => sum + r.required, 0);
+              const currentSlice = classLevel1Skills.slice(
+                priorCount,
+                priorCount + req.required,
+              );
+              return (
+                <SkillPickerSection
+                  key={req.id}
+                  requirement={req}
+                  currentSelections={currentSlice}
+                  onToggle={(skill) => {
+                    const allChosen = [...classLevel1Skills];
+                    const idx = allChosen.indexOf(skill);
+                    if (idx !== -1) {
+                      allChosen.splice(idx, 1);
+                    } else if (currentSlice.length < req.required) {
+                      // Insert into this requirement's slot
+                      allChosen.splice(priorCount + currentSlice.length, 0, skill);
+                    }
+                    store.updateLevelChoice(1, { skillChoices: allChosen });
+                  }}
+                />
+              );
+            })}
+            {!!store.classId && (
+              <button
+                className="wizard-continue-btn"
+                disabled={!stageReady}
+                onClick={() => stageReady && advanceStep()}
+              >
+                Continue →
+              </button>
+            )}
+          </>
+        );
+      }
+
+      case "spells":
+        return <WizardSpellSelectionStage />;
+
       case "abilities":
         return <div>Ability Score UI goes here</div>;
+
+      case "background":
+        return <div>Background selection — work in progress!</div>;
+
+      case "equipment":
+        return <WizardEquipmentSelectionStage />;
+
       case "identity":
         return (
           <div className="finish-stage">
@@ -148,10 +320,17 @@ export const CharacterCreationWizard: React.FC = () => {
             {/* TODO: Render Roleplay fields here */}
             <button
               className="massive-finish-btn"
+              disabled={blocking.length > 0}
               onClick={handleCompleteCreation}
             >
               COMPLETE CHARACTER
             </button>
+            {blocking.length > 0 && (
+              <p className="finish-blocking-hint">
+                {blocking.length} requirement{blocking.length !== 1 ? "s" : ""}{" "}
+                still pending
+              </p>
+            )}
           </div>
         );
 
@@ -171,7 +350,14 @@ export const CharacterCreationWizard: React.FC = () => {
           {WIZARD_STEPS.map((step, index) => {
             const isActive = currentStepIndex === index;
             // Basic locking logic; disable class if no race is selected
-            const isDisabled = index > 0 && !store.raceId;
+            // A step is locked when the previous step is not yet complete.
+            // Step 0 (Race) is always accessible.
+            const prevStep = WIZARD_STEPS[index - 1];
+            const isDisabled =
+              index > 0 &&
+              (!store.raceId ||
+                (prevStep !== undefined &&
+                  !isStageComplete(prevStep.id as Parameters<typeof isStageComplete>[0])));
 
             return (
               <button

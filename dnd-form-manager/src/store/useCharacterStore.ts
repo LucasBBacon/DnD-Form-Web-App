@@ -302,6 +302,9 @@ export interface CharacterState {
 
   // A boolean indicating whether the character setup is complete, used to determine if the character is ready for gameplay
   isSetupComplete: boolean;
+
+  // Records the selected option index (per choice-group index) for starting equipment bundles, set during character creation
+  startingEquipmentSelections: Record<number, number>;
 }
 
 interface CharacterActions {
@@ -359,6 +362,14 @@ interface CharacterActions {
   
   setOriginFeat: (featId: string | null) => void;
 
+  /**
+   * Records the user's equipment bundle choice for a given choice-group index and
+   * adds the selected bundle's items to the inventory. Re-selecting the same group
+   * index replaces the previous selection (old items are NOT auto-removed since
+   * inventory management is tracked externally during creation).
+   */
+  setStartingEquipmentSelection: (groupIndex: number, optionIndex: number) => void;
+
   // #endregion
 
   // #endregion
@@ -370,6 +381,9 @@ interface CharacterActions {
   prepareSpell: (spellId: string) => void;
   
   unprepareSpell: (spellId: string) => void;
+
+  /** Removes a spell from spellsKnown (used during character creation). */
+  unlearnSpell: (spellId: string) => void;
 
   designateFreeSchoolSpell: (spellId: string) => void;
 
@@ -537,6 +551,8 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   // #endregion
   
   isSetupComplete: false,
+
+  startingEquipmentSelections: {},
 };
 
 /**
@@ -675,6 +691,9 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       acquiredFeats: state.acquiredFeats.filter(
         (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the class
       ),
+      // Reset equipment bundle selections whenever the class changes since the
+      // choice groups are class-specific
+      startingEquipmentSelections: {},
     })),
 
   setSubclass: (subclassId) =>
@@ -841,6 +860,16 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       };
     }),
 
+  setStartingEquipmentSelection: (groupIndex, optionIndex) =>
+    set((state) => {
+      // Persist the selection index for requirement resolution
+      const updatedSelections = {
+        ...state.startingEquipmentSelections,
+        [groupIndex]: optionIndex,
+      };
+      return { startingEquipmentSelections: updatedSelections };
+    }),
+
   // #endregion
 
   // #region --- Spell Actions ---
@@ -870,6 +899,14 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   unprepareSpell: (spellId) =>
     set((state) => ({
       spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
+    })),
+
+  unlearnSpell: (spellId) =>
+    set((state) => ({
+      spellsKnown: state.spellsKnown.filter((id) => id !== spellId),
+      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
+        (id) => id !== spellId,
+      ),
     })),
 
   designateFreeSchoolSpell: (spellId) =>

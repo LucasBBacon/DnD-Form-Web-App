@@ -19,6 +19,9 @@ describe("SpellbookBlock", () => {
       learnSpell: vi.fn(),
       prepareSpell: vi.fn(),
       unprepareSpell: vi.fn(),
+      designateFreeSchoolSpell: vi.fn(),
+      undesignateFreeSchoolSpell: vi.fn(),
+      trimFreeSchoolDesignations: vi.fn(),
     } as any);
 
     vi.mocked(getAllSpells).mockReturnValue([
@@ -172,5 +175,44 @@ describe("SpellbookBlock", () => {
     expect(
       screen.queryByRole("option", { name: "Lvl 1: Dissonant Whispers" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("shows missing spell reference warnings for unresolved active spells", () => {
+    vi.mocked(useSpellcasting).mockReturnValue({
+      isSpellcaster: true,
+      canCastSpells: true,
+      casting: {
+        ability: "int",
+        preparationType: "prepared",
+        saveDC: 14,
+        attackBonus: 6,
+      },
+      pools: {
+        known: { selected: [], max: 5 },
+        prepared: { selected: ["spell_missing_reference"], max: 5 },
+        cantrips: { max: 3 },
+        innate: [],
+      },
+      slots: {
+        shared: {},
+        pact: null,
+      },
+      diagnostics: {
+        classBreakdown: [],
+        selections: {
+          invalidKnownSpellIds: [],
+          invalidPreparedSpellIds: [],
+          knownSpellOverflow: 0,
+          preparedSpellOverflow: 0,
+        },
+      },
+    } as any);
+
+    render(<SpellbookBlock />);
+
+    expect(screen.getByText("Missing Spell References")).toBeInTheDocument();
+    expect(
+      screen.getByText("Missing spell reference: spell_missing_reference"),
+    ).toBeInTheDocument();
   });
 });
