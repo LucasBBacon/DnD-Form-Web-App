@@ -6,10 +6,11 @@
  * plain function and re-used outside component trees if needed.
  */
 
-import type { Skill } from "../types/common";
+import type { Ability, Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import type {
   CreationRequirement,
+  AbilityAssignmentRequirement,
   EquipmentBundleRequirement,
   CantripKnownRequirement,
   SpellKnownRequirement,
@@ -18,6 +19,10 @@ import type {
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import { getClassById, getRaceById, getSubraceById, getSpellByID } from "../data/staticDataApi";
 import { getPendingProficiencyChoices } from "./choiceUtils";
+import {
+  isStandardArrayAssignment,
+  validatePointBuyAssignment,
+} from "./abilityAssignmentUtils";
 
 // ---------------------------------------------------------------------------
 // Public input types
@@ -51,6 +56,13 @@ export interface CreationRequirementState {
   startingEquipmentSelections: Record<number, number>;
   spellsKnown: string[];
   spellsPrepared: string[];
+  baseAbilityScores: Record<Ability, number>;
+  abilityAssignmentMethod: "rolling" | "standard_array" | "point_buy";
+  abilityRollingInputMode: "virtual" | "physical";
+  abilityPointBuyOverrideAccepted: boolean;
+  abilityAssignmentCompleted: boolean;
+  abilityVirtualRollTotals: number[];
+  abilityVirtualRollAssignments: Partial<Record<Ability, number>>;
 }
 
 // ---------------------------------------------------------------------------
@@ -262,6 +274,90 @@ function buildClassSkillRequirements(
   });
 }
 
+function isValidPhysicalRollScore(score: number): boolean {
+  const normalized = Math.floor(score);
+  return normalized >= 3 && normalized <= 18;
+}
+
+function areVirtualRollAssignmentsValid(state: CreationRequirementState): boolean {
+  if (state.abilityVirtualRollTotals.length !== 6) return false;
+
+  const assignedValues = Object.values(state.abilityVirtualRollAssignments);
+  if (assignedValues.length !== 6) return false;
+
+  const available = [...state.abilityVirtualRollTotals].sort((a, b) => a - b);
+  const assigned = assignedValues.map((score) => Math.floor(score)).sort((a, b) => a - b);
+
+  return assigned.every((score, idx) => score === available[idx]);
+}
+
+function buildAbilityRequirement(
+  state: CreationRequirementState,
+): AbilityAssignmentRequirement {
+  const base: AbilityAssignmentRequirement = {
+    id: "ability_assignment",
+    type: "ability_assignment",
+    wizardStage: "abilities",
+    label: "Assign ability scores",
+    isBlocking: true,
+    isResolved: false,
+    method: state.abilityAssignmentMethod,
+  };
+
+  if (!state.abilityAssignmentCompleted) {
+    return {
+      ...base,
+      detail: "Ability scores have not been confirmed yet.",
+    };
+  }
+
+  if (state.abilityAssignmentMethod === "standard_array") {
+    const valid = isStandardArrayAssignment(state.baseAbilityScores);
+    return {
+      ...base,
+      isResolved: valid,
+      detail: valid
+        ? "Standard array applied."
+        : "Base scores do not match the standard array.",
+    };
+  }
+
+  if (state.abilityAssignmentMethod === "point_buy") {
+    const pointBuy = validatePointBuyAssignment(state.baseAbilityScores);
+    const usesOverride = !pointBuy.isStrictlyValid && state.abilityPointBuyOverrideAccepted;
+    return {
+      ...base,
+      isResolved: pointBuy.isStrictlyValid || usesOverride,
+      usesOverride,
+      detail: pointBuy.isStrictlyValid
+        ? `Point buy valid (${pointBuy.totalCost}/27).`
+        : usesOverride
+          ? `Point buy override enabled (${pointBuy.totalCost}/27).`
+          : `Point buy invalid (${pointBuy.totalCost}/27).`,
+    };
+  }
+
+  if (state.abilityRollingInputMode === "virtual") {
+    const valid = areVirtualRollAssignmentsValid(state);
+    return {
+      ...base,
+      isResolved: valid,
+      detail: valid
+        ? "Virtual rolls assigned."
+        : "Virtual rolls are missing or assignments are invalid.",
+    };
+  }
+
+  const physicalValid = Object.values(state.baseAbilityScores).every(isValidPhysicalRollScore);
+  return {
+    ...base,
+    isResolved: physicalValid,
+    detail: physicalValid
+      ? "Physical roll scores entered."
+      : "Physical roll inputs must be between 3 and 18.",
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Public entry point
 // ---------------------------------------------------------------------------
@@ -279,6 +375,7 @@ export function resolveCreationRequirements(
   pools: CreationSpellcastingPools,
 ): CreationRequirement[] {
   const requirements: CreationRequirement[] = [
+    buildAbilityRequirement(state),
     ...buildRacialSkillRequirements(state),
     ...buildClassSkillRequirements(state),
     ...buildSpellRequirements(state, pools),

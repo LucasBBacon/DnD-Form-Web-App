@@ -24,6 +24,19 @@ interface CreationRequirementBase {
   isResolved: boolean;
 }
 
+// #region Abilities
+
+export interface AbilityAssignmentRequirement extends CreationRequirementBase {
+  type: "ability_assignment";
+  method: "rolling" | "standard_array" | "point_buy";
+  /** True when point-buy validation failed but explicit override is enabled. */
+  usesOverride?: boolean;
+  /** Helpful debug/details string for UI summaries and tests. */
+  detail?: string;
+}
+
+// #endregion
+
 // #region Equipment
 
 export interface EquipmentBundleRequirement extends CreationRequirementBase {
@@ -75,6 +88,7 @@ export interface SkillProficiencyRequirement extends CreationRequirementBase {
 // #region Union
 
 export type CreationRequirement =
+  | AbilityAssignmentRequirement
   | EquipmentBundleRequirement
   | CantripKnownRequirement
   | SpellKnownRequirement

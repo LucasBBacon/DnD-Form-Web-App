@@ -2,7 +2,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { useCharacterStats } from "./useCharacterStats";
-import { getClassById } from "../data/staticDataApi";
 import { aggregateSkills } from "../utils/skillUtils";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useSkills } from "./useSkills";
@@ -63,9 +62,6 @@ describe("useSkills", () => {
         isEncumbered: false,
       },
     } as any);
-    vi.mocked(getClassById).mockReturnValue({
-      proficiencies: { savingThrows: ["str", "dex"] },
-    } as any);
     vi.mocked(aggregateSkills).mockReturnValue({
       proficiencies: [],
       expertise: [],
@@ -73,7 +69,16 @@ describe("useSkills", () => {
   });
 
   it("keeps base class save proficiencies when no feature grant is present", () => {
-    vi.mocked(getAllCharacterTraits).mockReturnValue([]);
+    vi.mocked(getAllCharacterTraits).mockReturnValue([
+      {
+        id: "class_monk_saving_throws",
+        name: "Monk Saving Throws",
+        effects: [
+          { type: "proficiency", category: "saving_throws", item: "str" },
+          { type: "proficiency", category: "saving_throws", item: "dex" },
+        ],
+      },
+    ] as any);
 
     const result = useSkills();
 
@@ -98,33 +103,47 @@ describe("useSkills", () => {
   it("applies Diamond Soul save proficiencies at monk level 14", () => {
     vi.mocked(getAllCharacterTraits).mockReturnValue([
       {
+        id: "class_monk_saving_throws",
+        name: "Monk Saving Throws",
+        effects: [
+          { type: "proficiency", category: "saving_throws", item: "str" },
+          { type: "proficiency", category: "saving_throws", item: "dex" },
+        ],
+      },
+      {
         id: "trait_diamond_soul",
         name: "Diamond Soul",
         lore: { shortDescription: "All saves." },
         effects: [
           {
-            type: "save_proficiency",
-            target: "str",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "str",
           },
           {
-            type: "save_proficiency",
-            target: "dex",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "dex",
           },
           {
-            type: "save_proficiency",
-            target: "con",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "con",
           },
           {
-            type: "save_proficiency",
-            target: "int",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "int",
           },
           {
-            type: "save_proficiency",
-            target: "wis",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "wis",
           },
           {
-            type: "save_proficiency",
-            target: "cha",
+            type: "proficiency",
+            category: "saving_throws",
+            item: "cha",
           },
         ],
       },

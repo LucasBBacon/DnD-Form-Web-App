@@ -20,6 +20,13 @@ const EMPTY_STATE: CreationRequirementState = {
   startingEquipmentSelections: {},
   spellsKnown: [],
   spellsPrepared: [],
+  baseAbilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+  abilityAssignmentMethod: "standard_array",
+  abilityRollingInputMode: "virtual",
+  abilityPointBuyOverrideAccepted: false,
+  abilityAssignmentCompleted: false,
+  abilityVirtualRollTotals: [],
+  abilityVirtualRollAssignments: {},
 };
 
 const NON_CASTER_POOLS: CreationSpellcastingPools = {
@@ -46,7 +53,8 @@ const SORCERER_POOLS: CreationSpellcastingPools = {
 describe("resolveCreationRequirements", () => {
   it("returns empty array when no class or race selected", () => {
     const requirements = resolveCreationRequirements(EMPTY_STATE, NON_CASTER_POOLS);
-    expect(requirements).toHaveLength(0);
+    expect(requirements).toHaveLength(1);
+    expect(requirements[0]?.type).toBe("ability_assignment");
   });
 
   it("returns equipment bundle requirements for a class with choices", () => {
@@ -199,5 +207,36 @@ describe("resolveCreationRequirements", () => {
     // Cantrip requirement IS blocking
     const cantripReq = requirements.find((r) => r.type === "cantrip_known");
     expect(cantripReq?.isBlocking).toBe(true);
+  });
+
+  it("marks ability requirement resolved when standard array is confirmed", () => {
+    const requirements = resolveCreationRequirements(
+      {
+        ...EMPTY_STATE,
+        baseAbilityScores: { str: 15, dex: 14, con: 13, int: 12, wis: 10, cha: 8 },
+        abilityAssignmentMethod: "standard_array",
+        abilityAssignmentCompleted: true,
+      },
+      NON_CASTER_POOLS,
+    );
+
+    const abilityReq = requirements.find((r) => r.type === "ability_assignment");
+    expect(abilityReq?.isResolved).toBe(true);
+  });
+
+  it("allows point-buy override when strict validation fails", () => {
+    const requirements = resolveCreationRequirements(
+      {
+        ...EMPTY_STATE,
+        baseAbilityScores: { str: 18, dex: 15, con: 15, int: 8, wis: 8, cha: 8 },
+        abilityAssignmentMethod: "point_buy",
+        abilityPointBuyOverrideAccepted: true,
+        abilityAssignmentCompleted: true,
+      },
+      NON_CASTER_POOLS,
+    );
+
+    const abilityReq = requirements.find((r) => r.type === "ability_assignment");
+    expect(abilityReq?.isResolved).toBe(true);
   });
 });

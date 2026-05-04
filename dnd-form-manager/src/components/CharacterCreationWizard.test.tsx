@@ -2,6 +2,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { act } from "react";
 import { CharacterCreationWizard } from "./CharacterCreationWizard";
 import {
@@ -124,5 +125,73 @@ describe("CharacterCreationWizard live draft", () => {
     if (subclassProgressRow) {
       expect(within(subclassProgressRow).getByText("Complete")).toBeInTheDocument();
     }
+  });
+
+  it("keeps abilities continue disabled until ability scores are confirmed", async () => {
+    const user = userEvent.setup();
+    render(<CharacterCreationWizard />);
+
+    act(() => {
+      useCharacterStore.getState().setRace("race_human");
+      useCharacterStore.getState().setClass("class_fighter");
+      useCharacterStore.getState().setAbilityAssignmentMethod("standard_array");
+      useCharacterStore.getState().setBaseAbilityScores({
+        str: 15,
+        dex: 14,
+        con: 13,
+        int: 12,
+        wis: 10,
+        cha: 8,
+      });
+      // Bypass other stage blockers so we can navigate directly to abilities.
+      useCharacterStore.getState().setRacialSkills(["athletics"]);
+      useCharacterStore.getState().updateLevelChoice(1, { skillChoices: ["acrobatics", "history"] });
+      useCharacterStore.getState().setStartingEquipmentSelection(0, 0);
+      useCharacterStore.getState().setStartingEquipmentSelection(1, 0);
+    });
+
+    const abilitiesStepButton = screen.getByRole("button", { name: "4. Abilities" });
+    await user.click(abilitiesStepButton);
+
+    const continueButton = screen.getByRole("button", { name: "Continue →" });
+    expect(continueButton).toBeDisabled();
+  });
+
+  it("unlocks abilities continue after confirming a valid assignment", async () => {
+    const user = userEvent.setup();
+    render(<CharacterCreationWizard />);
+
+    act(() => {
+      useCharacterStore.getState().setRace("race_human");
+      useCharacterStore.getState().setClass("class_fighter");
+      useCharacterStore.getState().setAbilityAssignmentMethod("standard_array");
+      useCharacterStore.getState().setBaseAbilityScores({
+        str: 15,
+        dex: 14,
+        con: 13,
+        int: 12,
+        wis: 10,
+        cha: 8,
+      });
+      useCharacterStore.getState().setRacialSkills(["athletics"]);
+      useCharacterStore.getState().updateLevelChoice(1, { skillChoices: ["acrobatics", "history"] });
+      useCharacterStore.getState().setStartingEquipmentSelection(0, 0);
+      useCharacterStore.getState().setStartingEquipmentSelection(1, 0);
+    });
+
+    const abilitiesStepButton = screen.getByRole("button", { name: "4. Abilities" });
+    await user.click(abilitiesStepButton);
+
+    const confirmButton = screen.getByRole("button", { name: "Confirm Ability Scores" });
+    const continueButton = screen.getByRole("button", { name: "Continue →" });
+
+    expect(continueButton).toBeDisabled();
+    await user.click(confirmButton);
+    expect(useCharacterStore.getState().abilityAssignmentCompleted).toBe(true);
+    expect(continueButton).toBeEnabled();
+
+    await user.click(continueButton);
+
+    expect(screen.getByText("Background selection — work in progress!")).toBeInTheDocument();
   });
 });

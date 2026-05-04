@@ -39,6 +39,19 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
   );
   const spellsKnown = useCharacterStore((s) => s.spellsKnown);
   const spellsPrepared = useCharacterStore((s) => s.spellsPrepared);
+  const baseAbilityScores = useCharacterStore((s) => s.baseAbilityScores);
+  const abilityAssignmentMethod = useCharacterStore((s) => s.abilityAssignmentMethod);
+  const abilityRollingInputMode = useCharacterStore((s) => s.abilityRollingInputMode);
+  const abilityPointBuyOverrideAccepted = useCharacterStore(
+    (s) => s.abilityPointBuyOverrideAccepted,
+  );
+  const abilityAssignmentCompleted = useCharacterStore(
+    (s) => s.abilityAssignmentCompleted,
+  );
+  const abilityVirtualRolls = useCharacterStore((s) => s.abilityVirtualRolls);
+  const abilityVirtualRollAssignments = useCharacterStore(
+    (s) => s.abilityVirtualRollAssignments,
+  );
 
   const { isSpellcaster, pools, casting } = useSpellcasting();
 
@@ -73,6 +86,13 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
           startingEquipmentSelections,
           spellsKnown,
           spellsPrepared,
+          baseAbilityScores,
+          abilityAssignmentMethod,
+          abilityRollingInputMode,
+          abilityPointBuyOverrideAccepted,
+          abilityAssignmentCompleted,
+          abilityVirtualRollTotals: abilityVirtualRolls.map((roll) => roll.total),
+          abilityVirtualRollAssignments,
         },
         spellPools,
       ),
@@ -87,6 +107,13 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
       startingEquipmentSelections,
       spellsKnown,
       spellsPrepared,
+      baseAbilityScores,
+      abilityAssignmentMethod,
+      abilityRollingInputMode,
+      abilityPointBuyOverrideAccepted,
+      abilityAssignmentCompleted,
+      abilityVirtualRolls,
+      abilityVirtualRollAssignments,
       spellPools,
     ],
   );

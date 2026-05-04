@@ -356,8 +356,8 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "armor",
-              value: "heavy",
+              category: "armor",
+              item: "heavy",
               predicates: [],
             },
           ],
@@ -397,8 +397,8 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "armor",
-              value: "shield",
+              category: "armor",
+              item: "shield",
               predicates: [],
             },
           ],
@@ -940,14 +940,14 @@ describe("useCharacterStats", () => {
           effects: [
             {
               type: "proficiency",
-              target: "armor",
-              value: "heavy",
+              category: "armor",
+              item: "heavy",
               predicates: [],
             },
             {
               type: "proficiency",
-              target: "armor",
-              value: "shield",
+              category: "armor",
+              item: "shield",
               predicates: [],
             },
           ],

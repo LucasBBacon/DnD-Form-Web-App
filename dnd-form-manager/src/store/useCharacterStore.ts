@@ -6,6 +6,11 @@ import type { LevelUpDraft } from "../types/levelUpDraft";
 import type { LevelChoice, LevelUpMode } from "../types/progression";
 import { getClassById, getItemById } from "../data/staticDataApi";
 import { generateUuidV4 } from "../utils/uuidUtils";
+import type {
+  AbilityAssignmentMethod,
+  RollingInputMode,
+  VirtualAbilityRoll,
+} from "../utils/abilityAssignmentUtils";
 
 // #region --- Types and Interfaces ---
 
@@ -264,6 +269,18 @@ export interface CharacterState {
   hpRolls: Record<number, number>;
   // The character's chosen racial bonuses, which are applied to their base ability scores and may be selected during character creation
   chosenRacialBonuses: Partial<Record<Ability, number>>;
+  // Tracks which ability-assignment ruleset the user selected in character creation.
+  abilityAssignmentMethod: AbilityAssignmentMethod;
+  // Tracks whether rolling uses virtual dice generation or physical entry mode.
+  abilityRollingInputMode: RollingInputMode;
+  // Explicit acknowledgement for point-buy house-rule overrides.
+  abilityPointBuyOverrideAccepted: boolean;
+  // Becomes true when the user confirms the ability assignment step.
+  abilityAssignmentCompleted: boolean;
+  // Stores generated 4d6-drop-lowest virtual rolls for assignment.
+  abilityVirtualRolls: VirtualAbilityRoll[];
+  // Stores per-ability assignments chosen from virtual roll totals.
+  abilityVirtualRollAssignments: Partial<Record<Ability, number>>;
   // The ID of the character's background, used to look up background-specific traits and abilities
   backgroundId: string | null;
   // The skills chosen from the character's racial options
@@ -394,6 +411,23 @@ interface CharacterActions {
   setBaseAbilityScore: (ability: Ability, score: number) => void;
   
   setBaseAbilityScores: (scores: Record<Ability, number>) => void;
+
+  setAbilityAssignmentMethod: (method: AbilityAssignmentMethod) => void;
+
+  setAbilityRollingInputMode: (mode: RollingInputMode) => void;
+
+  setAbilityPointBuyOverrideAccepted: (accepted: boolean) => void;
+
+  setAbilityAssignmentCompleted: (completed: boolean) => void;
+
+  setAbilityVirtualRolls: (rolls: VirtualAbilityRoll[]) => void;
+
+  setAbilityVirtualRollAssignment: (
+    ability: Ability,
+    score: number | null,
+  ) => void;
+
+  clearAbilityVirtualRollAssignments: () => void;
   
   setRacialSkills: (skills: Skill[]) => void;
   
@@ -557,6 +591,12 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   baseAbilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
   hpRolls: {},
   chosenRacialBonuses: {},
+  abilityAssignmentMethod: "standard_array",
+  abilityRollingInputMode: "virtual",
+  abilityPointBuyOverrideAccepted: false,
+  abilityAssignmentCompleted: false,
+  abilityVirtualRolls: [],
+  abilityVirtualRollAssignments: {},
   backgroundId: null,
   chosenRacialSkills: [],
   chosenBackgroundSkills: [],
@@ -993,6 +1033,57 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       return {
         baseAbilityScores: nextScores,
       };
+    }),
+
+  setAbilityAssignmentMethod: (method) =>
+    set((state) => ({
+      abilityAssignmentMethod: method,
+      abilityAssignmentCompleted: false,
+      abilityPointBuyOverrideAccepted:
+        method === "point_buy"
+          ? state.abilityPointBuyOverrideAccepted
+          : false,
+      abilityVirtualRollAssignments: {},
+    })),
+
+  setAbilityRollingInputMode: (mode) =>
+    set({
+      abilityRollingInputMode: mode,
+      abilityAssignmentCompleted: false,
+      abilityVirtualRollAssignments: mode === "virtual" ? {} : {},
+    }),
+
+  setAbilityPointBuyOverrideAccepted: (accepted) =>
+    set({ abilityPointBuyOverrideAccepted: accepted }),
+
+  setAbilityAssignmentCompleted: (completed) =>
+    set({ abilityAssignmentCompleted: completed }),
+
+  setAbilityVirtualRolls: (rolls) =>
+    set({
+      abilityVirtualRolls: rolls,
+      abilityVirtualRollAssignments: {},
+      abilityAssignmentCompleted: false,
+    }),
+
+  setAbilityVirtualRollAssignment: (ability, score) =>
+    set((state) => {
+      const nextAssignments = { ...state.abilityVirtualRollAssignments };
+      if (score === null) {
+        delete nextAssignments[ability];
+      } else {
+        nextAssignments[ability] = Math.floor(score);
+      }
+      return {
+        abilityVirtualRollAssignments: nextAssignments,
+        abilityAssignmentCompleted: false,
+      };
+    }),
+
+  clearAbilityVirtualRollAssignments: () =>
+    set({
+      abilityVirtualRollAssignments: {},
+      abilityAssignmentCompleted: false,
     }),
 
   setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),

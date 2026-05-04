@@ -3,6 +3,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import { WizardSelectionStage } from "./WizardSelectionStage";
 import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
 import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
+import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
 import {
   getAllClasses,
   getAllRaces,
@@ -11,7 +12,7 @@ import {
   getSubraceById,
   getSubclassById,
 } from "../data/staticDataApi";
-import type { Ability, Skill } from "../types/common";
+import type { Skill } from "../types/common";
 import type { SkillProficiencyRequirement } from "../types/creationRequirement";
 import {
   toClassSelectionOption,
@@ -295,7 +296,15 @@ export const CharacterCreationWizard: React.FC = () => {
         return <WizardSpellSelectionStage />;
 
       case "abilities":
-        return <div>Ability Score UI goes here</div>;
+        return (
+          <WizardAbilityScoreStage
+            onContinue={() => {
+              if (isStageComplete("abilities")) {
+                advanceStep();
+              }
+            }}
+          />
+        );
 
       case "background":
         return <div>Background selection — work in progress!</div>;

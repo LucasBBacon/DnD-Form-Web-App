@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
 
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react";
 import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
 import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
+import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
 import {
   BASELINE_CHARACTER_STATE,
   useCharacterStore,
@@ -157,5 +158,74 @@ describe("WizardSpellSelectionStage", () => {
       await userEvent.click(cantripCards[0] as HTMLElement);
       expect(useCharacterStore.getState().spellsKnown).toHaveLength(0);
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Ability Score Stage Tests
+// ---------------------------------------------------------------------------
+
+describe("WizardAbilityScoreStage", () => {
+  beforeEach(() => {
+    useCharacterStore.setState({ ...BASELINE_CHARACTER_STATE });
+  });
+
+  it("starts with standard array method selected", () => {
+    render(<WizardAbilityScoreStage onContinue={vi.fn()} />);
+    expect(screen.getByText("Ability Scores")).toBeInTheDocument();
+    expect(
+      screen.getByText("Standard Array (15, 14, 13, 12, 10, 8)"),
+    ).toBeInTheDocument();
+  });
+
+  it("can complete with valid point buy", async () => {
+    const user = userEvent.setup();
+    render(<WizardAbilityScoreStage onContinue={vi.fn()} />);
+
+    await user.click(screen.getByText("Point Buy (27 points)"));
+
+    act(() => {
+      useCharacterStore.getState().setBaseAbilityScores({
+        str: 15,
+        dex: 15,
+        con: 15,
+        int: 8,
+        wis: 8,
+        cha: 8,
+      });
+    });
+
+    await user.click(screen.getByText("Confirm Ability Scores"));
+
+    expect(useCharacterStore.getState().abilityAssignmentCompleted).toBe(true);
+  });
+
+  it("requires override for invalid point buy", async () => {
+    const user = userEvent.setup();
+    render(<WizardAbilityScoreStage onContinue={vi.fn()} />);
+
+    await user.click(screen.getByText("Point Buy (27 points)"));
+
+    act(() => {
+      useCharacterStore.getState().setBaseAbilityScores({
+        str: 18,
+        dex: 15,
+        con: 15,
+        int: 8,
+        wis: 8,
+        cha: 8,
+      });
+    });
+
+    await user.click(screen.getByText("Confirm Ability Scores"));
+    expect(useCharacterStore.getState().abilityAssignmentCompleted).toBe(false);
+
+    const override = screen.getByLabelText(
+      "Allow house-rule override and continue anyway",
+    );
+    await user.click(override);
+    await user.click(screen.getByText("Confirm Ability Scores"));
+
+    expect(useCharacterStore.getState().abilityAssignmentCompleted).toBe(true);
   });
 });
