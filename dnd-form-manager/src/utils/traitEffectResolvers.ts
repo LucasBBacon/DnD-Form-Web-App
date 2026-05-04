@@ -2,8 +2,7 @@ import type { Ability, Size } from "../types/common";
 import type { TraitData } from "../types/trait";
 import type { ActionData } from "../types/action";
 import { getActionsByIds } from "../data/staticDataApi";
-
-const ABILITY_KEYS: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+import { ABILITIES as ABILITY_KEYS } from "./abilityConstants";
 
 export interface PendingAbilityBonusChoice {
   sourceId: string;

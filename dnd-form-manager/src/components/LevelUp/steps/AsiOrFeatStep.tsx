@@ -1,6 +1,7 @@
 import React from "react";
 import { getAllFeats } from "../../../data/staticDataApi";
 import type { Ability } from "../../../types/common";
+import { ABILITIES, ABILITY_LABELS } from "../../../utils/abilityConstants";
 import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
@@ -9,36 +10,54 @@ import { isFeatEligible } from "../../../utils/featUtils";
 import { useCharacterStats } from "../../../hooks/useCharacterStats";
 import { useCharacterStore } from "../../../store/useCharacterStore";
 
-const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
-const ABILITY_LABELS: Record<Ability, string> = {
-  str: "Strength",
-  dex: "Dexterity",
-  con: "Constitution",
-  int: "Intelligence",
-  wis: "Wisdom",
-  cha: "Charisma",
-};
+// #region --- Types ---
 
 interface AsiOrFeatStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
 }
 
+// #endregion
+
+/**
+ * Step for choosing whether to take an ability score improvement or a feat at a level that grants that choice.
+ * Only shown if the level being planned has an ASI/feat choice.
+ * @param param0 Props for the ASI or Feat step
+ * @returns JSX element for the ASI or Feat step
+ */
 export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
   draft,
   onUpdateDraft,
 }) => {
+
+  // #region --- State and Data ---
+
   const { abilities } = useCharacterStats();
-  const { level, raceId, subraceId, classId, subclassId, choicesByLevel, acquiredFeats } =
-    useCharacterStore();
+  const {
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+    choicesByLevel,
+    acquiredFeats,
+  } = useCharacterStore();
 
   const totalScores = abilities.scores;
 
   const isAsiMode = !draft.featId;
-  const usedPoints = Object.values(draft.asiChoices).reduce((s, v) => s + (v ?? 0), 0);
+  const usedPoints = Object.values(draft.asiChoices).reduce(
+    (s, v) => s + (v ?? 0),
+    0,
+  );
   const remainingPoints = 2 - usedPoints;
 
   const handleSetAsiMode = () => {
@@ -71,25 +90,37 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
     }),
   );
 
+  // #endregion
+
+  // #region --- Render ---
+
   return (
     <div className="level-up-step">
-      <h3 className="level-up-step__title">Ability Score Improvement or Feat</h3>
+      <h3 className="level-up-step__title">
+        Ability Score Improvement or Feat
+      </h3>
       <p className="level-up-step__description">
         Choose to improve two ability scores by 1 (or one by 2), or take a feat.
       </p>
 
       {/* Mode toggle */}
       <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}>
-        <label className={`level-up-step__option ${isAsiMode ? "level-up-step__option--selected" : ""}`}>
+        <label
+          className={`level-up-step__option ${isAsiMode ? "level-up-step__option--selected" : ""}`}
+        >
           <input
             type="radio"
             name="asi-or-feat"
             checked={isAsiMode}
             onChange={handleSetAsiMode}
           />
-          <span className="level-up-step__option-label">Ability Score Improvement</span>
+          <span className="level-up-step__option-label">
+            Ability Score Improvement
+          </span>
         </label>
-        <label className={`level-up-step__option ${!isAsiMode ? "level-up-step__option--selected" : ""}`}>
+        <label
+          className={`level-up-step__option ${!isAsiMode ? "level-up-step__option--selected" : ""}`}
+        >
           <input
             type="radio"
             name="asi-or-feat"
@@ -112,8 +143,15 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
               const atMax = base + allocated >= 20;
               return (
                 <div key={ability} className="asi-step__ability-cell">
-                  <span className="asi-step__ability-name">{ABILITY_LABELS[ability]}</span>
-                  <span style={{ fontSize: "0.8rem", color: "var(--color-text-muted, #888)" }}>
+                  <span className="asi-step__ability-name">
+                    {ABILITY_LABELS[ability]}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "0.8rem",
+                      color: "var(--color-text-muted, #888)",
+                    }}
+                  >
                     {base}
                   </span>
                   <button
@@ -131,7 +169,13 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
                   >
                     −
                   </button>
-                  <span style={{ minWidth: 16, textAlign: "center", fontWeight: 700 }}>
+                  <span
+                    style={{
+                      minWidth: 16,
+                      textAlign: "center",
+                      fontWeight: 700,
+                    }}
+                  >
                     +{allocated}
                   </span>
                   <button
@@ -167,7 +211,9 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
                 <label
                   className={[
                     "level-up-step__option",
-                    draft.featId === feat.id ? "level-up-step__option--selected" : "",
+                    draft.featId === feat.id
+                      ? "level-up-step__option--selected"
+                      : "",
                   ]
                     .join(" ")
                     .trim()}
@@ -179,7 +225,9 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
                     onChange={() => onUpdateDraft({ featId: feat.id })}
                   />
                   <span>
-                    <span className="level-up-step__option-label">{feat.name}</span>
+                    <span className="level-up-step__option-label">
+                      {feat.name}
+                    </span>
                     <br />
                     <span className="level-up-step__option-hint">
                       {feat.lore.shortDescription}
@@ -193,4 +241,6 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
       )}
     </div>
   );
+
+  // #endregion
 };

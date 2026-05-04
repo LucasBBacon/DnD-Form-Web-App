@@ -3,15 +3,25 @@ import type { ClassData } from "../types/class";
 import type { LevelUpDraft, LevelUpStepId } from "../types/levelUpDraft";
 import type { LevelChoice } from "../types/progression";
 import type { SubclassData } from "../types/subclass";
-import type { PendingFeatureChoice, PendingProficiencyChoice } from "./choiceUtils";
-import { getPendingFeatureChoices, getPendingProficiencyChoices } from "./choiceUtils";
-import { getLevelUpRequirements, type LevelUpRequirements } from "./levelUpUtils";
+import type {
+  PendingFeatureChoice,
+  PendingProficiencyChoice,
+} from "./choiceUtils";
+import {
+  getPendingFeatureChoices,
+  getPendingProficiencyChoices,
+} from "./choiceUtils";
+import {
+  getLevelUpRequirements,
+  type LevelUpRequirements,
+} from "./levelUpUtils";
 
 const getSelectionKey = (choice: PendingProficiencyChoice): string =>
   `${choice.category}:${choice.sourceId}`;
 
-const getChoicePool = (choice: PendingProficiencyChoice): string[] =>
-  [...choice.pool];
+const getChoicePool = (choice: PendingProficiencyChoice): string[] => [
+  ...choice.pool,
+];
 
 export interface LevelUpPlannerContext {
   /** Total character level after this level-up (e.g. 6 when leveling 5→6). */
@@ -24,28 +34,37 @@ export interface LevelUpPlannerContext {
   subclassData: SubclassData | null;
   /** Class-specific level after this level-up. */
   classLevel: number;
+  /** Choices made by the character at each level. */
   choicesByLevel: Record<number, LevelChoice>;
+  /** Class tracks for the character. */
   classTracks: CharacterClassTrack[];
+  /** Draft of the level-up being planned. */
   draft: LevelUpDraft;
 }
 
 export interface LevelUpPlannerResult {
   /** Ordered list of step IDs the wizard should present. */
   orderedSteps: LevelUpStepId[];
+  /** Level-up requirements for the current draft. */
   requirements: LevelUpRequirements;
+  /** Pending proficiency choices for the current draft. */
   pendingProficiencyChoices: PendingProficiencyChoice[];
+  /** Pending feature choices for the current draft. */
   pendingFeatureChoices: PendingFeatureChoice[];
+  /** Whether the level-up is complete. */
   isComplete: boolean;
+  /** Errors preventing completion of the level-up. */
   completionErrors: string[];
 }
 
 /**
- * Derives the required wizard steps and completion status for a given level-up.
- *
- * The result is recomputed whenever the draft changes so the modal can gate
- * the "Confirm" button on full completion.
+ * Builds a level-up plan based on the current character context and draft choices, determining the required steps, pending choices, and completion status.
+ * @param ctx The context for the level-up plan, including character data and draft choices.
+ * @returns The result of the level-up plan, including ordered steps, pending choices, and completion status.
  */
-export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResult => {
+export const buildLevelUpPlan = (
+  ctx: LevelUpPlannerContext,
+): LevelUpPlannerResult => {
   const {
     targetTotalLevel,
     raceId,
@@ -68,6 +87,8 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
     choicesByLevel,
     classTracks,
   );
+
+  // #region --- Determine Pending Choices ---
 
   const pendingProficiencyChoices: PendingProficiencyChoice[] = classData
     ? getPendingProficiencyChoices(
@@ -93,22 +114,33 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
       )
     : [];
 
-  // Build the ordered step sequence for this level-up
+  // #endregion
+
+  // #region --- Build Order ---
+  
   const orderedSteps: LevelUpStepId[] = ["class_pick"];
   if (requirements.requiresSubclass) orderedSteps.push("subclass_pick");
   orderedSteps.push("hp_gain");
   if (requirements.requiresProficiencySelection) orderedSteps.push("proficiency_choice");
   if (requirements.requiresAsiOrFeat) orderedSteps.push("asi_or_feat");
-  if (requirements.newCantripsToLearn > 0 || requirements.newSpellsToLearn > 0) {
+  if (
+    requirements.newCantripsToLearn > 0 ||
+    requirements.newSpellsToLearn > 0
+  ) {
     orderedSteps.push("spell_choice");
   }
   if (pendingFeatureChoices.length > 0) {
     orderedSteps.push("feature_choice");
   }
   orderedSteps.push("review");
+  
+  // #endregion
 
-  // Determine completion
+  // #region Determine completion
+
   const completionErrors: string[] = [];
+
+  // #region Class Selection
 
   if (!draft.targetClassId) {
     completionErrors.push("No class selected.");
@@ -118,9 +150,17 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
     completionErrors.push("Subclass selection required.");
   }
 
+  // #endregion
+
+  // #region Hp Gain
+
   if (draft.hpGained === null) {
     completionErrors.push("HP gain not determined.");
   }
+
+  // #endregion
+
+  // #region Proficiency Selection
 
   if (requirements.requiresProficiencySelection) {
     pendingProficiencyChoices.forEach((choice) => {
@@ -130,13 +170,17 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
 
       if (selected.length !== choice.count) {
         const delta = Math.abs(choice.count - selected.length);
-        completionErrors.push(`${choice.sourceName}: select ${delta} more selection(s).`);
+        completionErrors.push(
+          `${choice.sourceName}: select ${delta} more selection(s).`,
+        );
       }
 
       if (pool.length > 0) {
         const invalid = selected.find((item) => !pool.includes(item));
         if (invalid) {
-          completionErrors.push(`${choice.sourceName}: invalid selection ${invalid}.`);
+          completionErrors.push(
+            `${choice.sourceName}: invalid selection ${invalid}.`,
+          );
         }
       }
     });
@@ -155,6 +199,10 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
     }
   }
 
+  // #endregion
+
+  // #region ASI or Feat
+
   if (requirements.requiresAsiOrFeat) {
     const totalAsiPoints = Object.values(draft.asiChoices).reduce(
       (sum, v) => sum + (v ?? 0),
@@ -164,6 +212,10 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
       completionErrors.push("Assign 2 ability score points or choose a feat.");
     }
   }
+
+  // #endregion
+
+  // #region Spell Choices
 
   if (requirements.newSpellsToLearn > 0) {
     const deficit = requirements.newSpellsToLearn - draft.spellsLearned.length;
@@ -176,7 +228,8 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
   }
 
   if (requirements.newCantripsToLearn > 0) {
-    const deficit = requirements.newCantripsToLearn - draft.cantripsLearned.length;
+    const deficit =
+      requirements.newCantripsToLearn - draft.cantripsLearned.length;
     if (deficit > 0) {
       completionErrors.push(`Select ${deficit} more cantrip(s) to learn.`);
     }
@@ -185,8 +238,15 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
     }
   }
 
+  // #endregion
+
+  // #region Feature Choices
+
   pendingFeatureChoices.forEach((choice) => {
     if (choice.count !== 1) {
+      // For simplicity, this planner currently only supports single-value feature choices. 
+      // More complex multi-choice pools would require a more sophisticated UI and validation logic.
+      // TODO: expand this logic to support multiple selections per feature choice if needed.
       completionErrors.push(
         `${choice.sourceName}: only single-value custom choices are currently supported.`,
       );
@@ -205,6 +265,10 @@ export const buildLevelUpPlan = (ctx: LevelUpPlannerContext): LevelUpPlannerResu
       );
     }
   });
+
+  // #endregion
+  
+  // #endregion
 
   return {
     orderedSteps,

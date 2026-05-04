@@ -24,9 +24,7 @@ interface CreationRequirementBase {
   isResolved: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Equipment
-// ---------------------------------------------------------------------------
+// #region Equipment
 
 export interface EquipmentBundleRequirement extends CreationRequirementBase {
   type: "equipment_bundle";
@@ -38,9 +36,9 @@ export interface EquipmentBundleRequirement extends CreationRequirementBase {
   options: Array<{ itemIds: string[] }>;
 }
 
-// ---------------------------------------------------------------------------
-// Spells
-// ---------------------------------------------------------------------------
+// #endregion
+
+// #region Spells
 
 export interface CantripKnownRequirement extends CreationRequirementBase {
   type: "cantrip_known";
@@ -58,9 +56,9 @@ export interface SpellKnownRequirement extends CreationRequirementBase {
   classIds: string[];
 }
 
-// ---------------------------------------------------------------------------
-// Skills / Proficiencies
-// ---------------------------------------------------------------------------
+// #endregion
+
+// #region Skills / Proficiencies
 
 export interface SkillProficiencyRequirement extends CreationRequirementBase {
   type: "skill_proficiency";
@@ -72,12 +70,14 @@ export interface SkillProficiencyRequirement extends CreationRequirementBase {
   current: string[];
 }
 
-// ---------------------------------------------------------------------------
-// Union
-// ---------------------------------------------------------------------------
+// #endregion
+
+// #region Union
 
 export type CreationRequirement =
   | EquipmentBundleRequirement
   | CantripKnownRequirement
   | SpellKnownRequirement
   | SkillProficiencyRequirement;
+
+// #endregion

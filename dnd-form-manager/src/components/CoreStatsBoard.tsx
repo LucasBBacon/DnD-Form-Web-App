@@ -3,17 +3,7 @@ import type { Ability, Skill } from "../types/common";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useSkills } from "../hooks/useSkills";
 import "./CoreStatsBoard.css"
-
-const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
-
-const ABILITY_NAMES: Record<Ability, string> = {
-  str: "Strength",
-  dex: "Dexterity",
-  con: "Constitution",
-  int: "Intelligence",
-  wis: "Wisdom",
-  cha: "Charisma",
-};
+import { ABILITIES, ABILITY_LABELS as ABILITY_NAMES } from "../utils/abilityConstants";
 
 const formatSkillName = (str: string) => {
   const spaced = str.replace(/([A-Z])/g, " $1");

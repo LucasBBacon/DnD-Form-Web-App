@@ -9,11 +9,11 @@ export type SubclassScalingValue = string | number;
  * Additional keys are allowed for future subclass mechanics but must be scalar.
  */
 export type KnownSubclassStatScalingKey =
-    | "initiative"
-    | "initiative_bonus"
-    | "ac"
-    | "armor_class"
-    | "speed";
+  | "initiative"
+  | "initiative_bonus"
+  | "ac"
+  | "armor_class"
+  | "speed";
 
 /**
  * Generic subclass scaling map used in progression entries.
@@ -22,28 +22,36 @@ export type KnownSubclassStatScalingKey =
 export type SubclassSpecificScaling = Record<string, SubclassScalingValue>;
 
 export interface SubclassProgressionLevel {
-    level: number; // e.g., 3
-    features: string[]; // Trait IDs
-    subclassSpecificScaling?: SubclassSpecificScaling;
+  /** Level at which the subclass features are gained e.g., 3 */
+  level: number;
+  /** Features gained at this level */
+  features: string[]; 
+  /** Class-specific scaling details for this level */
+  subclassSpecificScaling?: SubclassSpecificScaling;
 
-    // Spell IDS automatically learned/prepared (Cleric Domain, Paladin Oath)
-    bonusSpells?: string[];
-    
-    // Spell IDs added to the class's valid spell list (Warlock Patron)
-    spellsAddedToList?: string[];
+  // Spell IDS automatically learned/prepared (Cleric Domain, Paladin Oath)
+  bonusSpells?: string[];
 
+  // Spell IDs added to the class's valid spell list (Warlock Patron)
+  spellsAddedToList?: string[];
 }
 
 export interface SubclassData {
-    id: string; // e.g., 'subclass_champion'
-    name: string; // e.g., 'Champion'
-    parentClassId: string; // e.g., 'class_fighter'
+  /** Unique identifier for the subclass e.g., 'subclass_champion' */
+  id: string;
+  /** Name of the subclass e.g., 'Champion' */
+  name: string;
+  /** Unique identifier for the parent class e.g., 'class_fighter' */
+  parentClassId: string;
 
-    lore?: {
-        shortDescription: string;
-        fullText?: string;
-    };
+  /** Lore and description of the subclass */
+  lore?: {
+    /** Short description of the subclass */
+    shortDescription: string;
+    /** Full text description of the subclass */
+    fullText?: string;
+  };
 
-    // Only contains items for the specific levels where this subclass grants features
-    progression: SubclassProgressionLevel[];
+  // Only contains items for the specific levels where this subclass grants features
+  progression: SubclassProgressionLevel[];
 }

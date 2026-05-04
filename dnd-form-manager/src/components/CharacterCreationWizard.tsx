@@ -22,17 +22,7 @@ import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCreationRequirements } from "../hooks/useCreationRequirements";
 import "./CharacterCreationWizard.css";
 import "./WizardPickerStage.css";
-
-const ABILITIES: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
-
-const ABILITY_LABELS: Record<Ability, string> = {
-  str: "STR",
-  dex: "DEX",
-  con: "CON",
-  int: "INT",
-  wis: "WIS",
-  cha: "CHA",
-};
+import { ABILITIES, ABILITY_SHORT_LABELS as ABILITY_LABELS } from "../utils/abilityConstants";
 
 const formatIdFallback = (id: string | null): string => {
   if (!id) return "...";

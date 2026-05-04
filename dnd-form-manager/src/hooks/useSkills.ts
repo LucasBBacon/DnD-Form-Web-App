@@ -1,5 +1,6 @@
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, Skill } from "../types/common";
+import { ABILITIES } from "../utils/abilityConstants";
 import { SKILL_ABILITY_MAP } from "../utils/constants";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
 import { aggregateSaveProficienciesMulticlass } from "../utils/proficiencyAggregator";
@@ -184,7 +185,7 @@ export const useSkills = () => {
     state,
     stats: derivedStats,
   });
-  const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+  const abilities = ABILITIES;
   const calculatedSaves: Record<
     Ability,
     { total: number; isProficient: boolean }

@@ -1,5 +1,7 @@
 import type { Ability, Skill } from "./common";
 
+// #region --- Types and Interfaces ---
+
 export type LevelUpStepId =
   | "class_pick"
   | "subclass_pick"
@@ -15,10 +17,10 @@ export interface LevelUpDraft {
   targetClassId: string | null;
   /** true when this level-up adds a brand-new class track (multiclassing in). */
   isNewMulticlass: boolean;
-  /** The class-specific level after this level-up (e.g. 4 when Fighter goes 3→4). */
+  /** The class-specific level after this level-up (e.g. 4 when Fighter goes 3 -> 4). */
   targetClassLevel: number;
 
-  // ---- per-step choices ----
+  // #region ---- Per-Step Choices ----
 
   /** HP gained this level (null = not yet chosen). */
   hpGained: number | null;
@@ -28,7 +30,7 @@ export interface LevelUpDraft {
   /** Subclass picked this level (only populated when subclass_pick step runs). */
   newSubclassId: string | null;
 
-  /** Net ability-score points allocated (max 2 total, each ability capped at 20). */
+  /** Net ability score points allocated (max 2 total, each ability capped at 20). */
   asiChoices: Partial<Record<Ability, number>>;
   /** Feat chosen instead of ASI (mutually exclusive with asiChoices). */
   featId: string | null;
@@ -38,7 +40,7 @@ export interface LevelUpDraft {
   weaponChoices: string[];
   toolChoices: string[];
   languageChoices: string[];
-  /** Per-source proficiency picks keyed as `${category}:${sourceId}`. */
+  /** Per-source proficiency picks (keyed as `${category}:${sourceId}`). */
   proficiencySelectionsBySource: Record<string, string[]>;
 
   /** Leveled spells learned this level. */
@@ -51,8 +53,16 @@ export interface LevelUpDraft {
 
   /** ID of the wizard step the user is currently on. */
   currentStepId: LevelUpStepId;
+
+  // #endregion
 }
 
+// #endregion
+
+/**
+ * Factory for an empty level-up draft with default values.
+ * @returns A new LevelUpDraft object with initial values.
+ */
 export const createEmptyDraft = (): LevelUpDraft => ({
   targetClassId: null,
   isNewMulticlass: false,

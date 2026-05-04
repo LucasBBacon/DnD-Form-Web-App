@@ -4,8 +4,13 @@ import type { Skill } from "../../../types/common";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { PendingProficiencyChoice } from "../../../utils/choiceUtils";
-import { resolveSkillChoicePool, resolveProficiencyChoicePool } from "../../../utils/choiceUtils";
+import {
+  resolveSkillChoicePool,
+  resolveProficiencyChoicePool,
+} from "../../../utils/choiceUtils";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
+
+// #region --- Utilities ---
 
 const getSelectionKey = (group: PendingProficiencyChoice): string =>
   `${group.category}:${group.sourceId}`;
@@ -15,14 +20,32 @@ const toSelectionPool = (group: PendingProficiencyChoice): string[] =>
     ? resolveSkillChoicePool(group.pool as Skill[] | "any")
     : resolveProficiencyChoicePool(group.category as never, group.pool);
 
+// #endregion
+
+// #region --- Types ---
+
 interface ProficiencyChoiceStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
 }
 
+// #endregion
+
+// #region --- Skill Choice Component ---
+
+/**
+ * Renders a group of skill choices for the user to select from.
+ * @param param0 - The props for the SkillChoiceGroup component.
+ * @returns A JSX element representing the skill choice group.
+ */
 function SkillChoiceGroup({
   group,
   selected,
@@ -41,6 +64,8 @@ function SkillChoiceGroup({
       onChange([...selected, val]);
     }
   };
+
+  // #region --- Render ---
 
   return (
     <div style={{ marginBottom: "1rem" }}>
@@ -78,26 +103,48 @@ function SkillChoiceGroup({
       </ul>
     </div>
   );
+
+  // #endregion
 }
+
+// #endregion
 
 export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
   draft,
   onUpdateDraft,
   plan,
 }) => {
+
+  // #region Pending Choices
+
   const { pendingProficiencyChoices } = plan;
 
-  const skillGroups = pendingProficiencyChoices.filter((c) => c.category === "skills");
-  const weaponGroups = pendingProficiencyChoices.filter((c) => c.category === "weapons");
-  const toolGroups = pendingProficiencyChoices.filter((c) => c.category === "tools");
-  const langGroups = pendingProficiencyChoices.filter((c) => c.category === "languages");
+  const skillGroups = pendingProficiencyChoices.filter(
+    (c) => c.category === "skills",
+  );
+  const weaponGroups = pendingProficiencyChoices.filter(
+    (c) => c.category === "weapons",
+  );
+  const toolGroups = pendingProficiencyChoices.filter(
+    (c) => c.category === "tools",
+  );
+  const langGroups = pendingProficiencyChoices.filter(
+    (c) => c.category === "languages",
+  );
 
-  const updateSourceSelections = (group: PendingProficiencyChoice, next: string[]) => {
+  // #endregion
+
+  const updateSourceSelections = (
+    group: PendingProficiencyChoice,
+    next: string[],
+  ) => {
     const key = getSelectionKey(group);
     const nextBySource = {
       ...draft.proficiencySelectionsBySource,
       [key]: next,
     };
+
+    // #region --- Recalculate Overall Selections ---
 
     const skillChoices = new Set<Skill>();
     const weaponChoices = new Set<string>();
@@ -108,7 +155,9 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
       const selectionKey = getSelectionKey(choice);
       const selected = nextBySource[selectionKey] ?? [];
       const pool = toSelectionPool(choice);
-      const validSelected = selected.filter((value) => pool.length === 0 || pool.includes(value));
+      const validSelected = selected.filter(
+        (value) => pool.length === 0 || pool.includes(value),
+      );
 
       if (choice.category === "skills") {
         validSelected.forEach((value) => skillChoices.add(value as Skill));
@@ -124,6 +173,8 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
       }
     });
 
+    // #endregion
+
     onUpdateDraft({
       proficiencySelectionsBySource: nextBySource,
       skillChoices: Array.from(skillChoices),
@@ -133,11 +184,15 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
     });
   };
 
+  // #region --- Render ---
+
   if (pendingProficiencyChoices.length === 0) {
     return (
       <div className="level-up-step">
         <h3 className="level-up-step__title">Proficiencies</h3>
-        <p className="level-up-step__description">No new proficiency choices at this level.</p>
+        <p className="level-up-step__description">
+          No new proficiency choices at this level.
+        </p>
       </div>
     );
   }
@@ -153,7 +208,9 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
         <SkillChoiceGroup
           key={group.sourceId}
           group={group}
-          selected={draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []}
+          selected={
+            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
+          }
           onChange={(next) => updateSourceSelections(group, next)}
         />
       ))}
@@ -162,7 +219,9 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
         <SkillChoiceGroup
           key={group.sourceId}
           group={group}
-          selected={draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []}
+          selected={
+            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
+          }
           onChange={(next) => updateSourceSelections(group, next)}
         />
       ))}
@@ -171,7 +230,9 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
         <SkillChoiceGroup
           key={group.sourceId}
           group={group}
-          selected={draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []}
+          selected={
+            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
+          }
           onChange={(next) => updateSourceSelections(group, next)}
         />
       ))}
@@ -180,10 +241,14 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
         <SkillChoiceGroup
           key={group.sourceId}
           group={group}
-          selected={draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []}
+          selected={
+            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
+          }
           onChange={(next) => updateSourceSelections(group, next)}
         />
       ))}
     </div>
   );
+
+  // #endregion
 };

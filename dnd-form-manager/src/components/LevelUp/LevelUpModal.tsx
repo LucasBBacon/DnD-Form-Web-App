@@ -14,12 +14,22 @@ import { ReviewStep } from "./steps/ReviewStep";
 import { SpellChoiceStep } from "./steps/SpellChoiceStep";
 import { SubclassPickStep } from "./steps/SubclassPickStep";
 
+// #region --- Types and Interfaces ---
+
 export interface LevelUpModalProps {
+  // The level the character is leveling up to (e.g. 5 if going from 4 to 5)
   targetLevel: number;
+  // If true, the modal cannot be closed until the level-up is completed (e.g. for XP-gated level-ups)
   isBlocking?: boolean;
+  // Callback when the modal should be closed (e.g. after successful commit or when user cancels)
   onClose: () => void;
 }
 
+// #endregion
+
+/**
+ * A multi-step modal dialog that guides the user through the process of leveling up their character.
+ */
 export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   targetLevel,
   isBlocking = false,
@@ -35,15 +45,18 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     commitLevelUpTransaction,
   } = useCharacterStore();
 
-  // Build the initial draft, auto-selecting single-class characters
+  // Build the initial draft
   const getInitialDraft = (): LevelUpDraft => {
     const draft = createEmptyDraft();
+    // If there is only one existing class track, pre-populate the draft to level up that class (common case for early levels)
     if (classTracks.length === 1) {
       const track = classTracks[0];
       draft.targetClassId = track.classId;
       draft.isNewMulticlass = false;
       // targetClassLevel = targetLevel for a 1:1 single-class character
       draft.targetClassLevel = targetLevel;
+    // If there are multiple class tracks, the user must explicitly pick which one to level up (multiclass or single-class)
+    // leave targetClassId null for the ClassPickStep to handle
     } else if (classTracks.length === 0 && classId) {
       // Fallback: legacy single-class without explicit tracks
       draft.targetClassId = classId;
@@ -55,13 +68,25 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
   const [draft, setDraft] = useState<LevelUpDraft>(getInitialDraft);
 
-  // Derived class/subclass data from the draft
-  const classData = draft.targetClassId ? getClassById(draft.targetClassId) : null;
-  const currentTrack = classTracks.find((t) => t.classId === draft.targetClassId);
-  const effectiveSubclassId = draft.newSubclassId ?? currentTrack?.subclassId ?? subclassId;
-  const subclassData = effectiveSubclassId ? getSubclassById(effectiveSubclassId) : null;
+  // #region --- Get Class and Subclass Data for Plan ---
+  
+  const classData = draft.targetClassId
+    ? getClassById(draft.targetClassId)
+    : null;
+  const currentTrack = classTracks.find(
+    (t) => t.classId === draft.targetClassId,
+  );
+  
+  const effectiveSubclassId =
+    draft.newSubclassId ?? currentTrack?.subclassId ?? subclassId;
+  const subclassData = effectiveSubclassId
+    ? getSubclassById(effectiveSubclassId)
+    : null;
 
-  // Recompute the plan whenever the draft changes
+  // #endregion
+
+  // #region --- Plan Recompute ---
+
   const plan = useMemo(
     () =>
       buildLevelUpPlan({
@@ -78,6 +103,10 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [draft, raceId, subraceId, targetLevel],
   );
+
+  // #endregion
+
+  // #region --- Step Navigation ---
 
   const currentStepIndex = plan.orderedSteps.indexOf(draft.currentStepId);
 
@@ -119,7 +148,17 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const isOnReview = draft.currentStepId === "review";
   const isFirstStep = currentStepIndex === 0;
 
-  const stepProps = { draft, onUpdateDraft: updateDraft, plan, classData, subclassData };
+  const stepProps = {
+    draft,
+    onUpdateDraft: updateDraft,
+    plan,
+    classData,
+    subclassData,
+  };
+
+  // #endregion
+
+  // #region --- Render ---
 
   const renderStep = () => {
     switch (draft.currentStepId) {
@@ -145,7 +184,11 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
         return <FeatureChoiceStep {...stepProps} />;
       case "review":
         return (
-          <ReviewStep {...stepProps} targetLevel={targetLevel} onConfirm={handleCommit} />
+          <ReviewStep
+            {...stepProps}
+            targetLevel={targetLevel}
+            onConfirm={handleCommit}
+          />
         );
       default:
         return null;
@@ -162,7 +205,9 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       >
         {/* ── Header ── */}
         <div className="level-up-modal__header">
-          <h2 className="level-up-modal__title">Level Up — Level {targetLevel}</h2>
+          <h2 className="level-up-modal__title">
+            Level Up — Level {targetLevel}
+          </h2>
           <button
             type="button"
             className="level-up-modal__close"
@@ -177,7 +222,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
 
         {isBlocking && (
           <div className="level-up-modal__banner" role="status">
-            This level-up must be completed before returning to the character sheet.
+            This level-up must be completed before returning to the character
+            sheet.
           </div>
         )}
 
@@ -189,7 +235,9 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
               className={[
                 "level-up-modal__step-dot",
                 idx < currentStepIndex ? "level-up-modal__step-dot--done" : "",
-                idx === currentStepIndex ? "level-up-modal__step-dot--active" : "",
+                idx === currentStepIndex
+                  ? "level-up-modal__step-dot--active"
+                  : "",
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -219,4 +267,6 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       </div>
     </div>
   );
+
+  // #endregion
 };

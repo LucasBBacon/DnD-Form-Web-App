@@ -7,7 +7,10 @@ export type PredicateType =
   | "weapon_property" // e.g., Sneak attack requires 'finesse' or 'ranged'
   | "environment_condition";
 export interface Predicate {
+  /** Type of the predicate */
   type: PredicateType;
-  value?: string | number | boolean; // e.g., 'heavy', 13, true
-  target?: string; // e.g., 'str', 'trait_darkvision'
+  /** Value associated with the predicate e.g., 'heavy', 13, true */
+  value?: string | number | boolean;
+  /** Target of the predicate e.g., 'str', 'trait_darkvision' */
+  target?: string;
 }

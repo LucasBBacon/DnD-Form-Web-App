@@ -6,14 +6,30 @@ import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
 
+// #region --- Types ---
+
 interface SpellChoiceStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
 }
 
+// #endregion
+
+// #region --- Spell Selector Component ---
+
+/**
+  * Step for choosing which spells to learn at a level that grants new spells.
+ * @param param0 Props for the spell selector
+ * @returns JSX element for the spell selector
+ */
 function SpellSelector({
   label,
   needed,
@@ -35,12 +51,17 @@ function SpellSelector({
     }
   };
 
+  // #region --- Render ---
+
   return (
     <div style={{ marginBottom: "1rem" }}>
       <p className="level-up-step__section-label">
         {label} — choose {needed} (selected {selected.length}/{needed})
       </p>
-      <ul className="level-up-step__option-list" style={{ maxHeight: 240, overflowY: "auto" }}>
+      <ul
+        className="level-up-step__option-list"
+        style={{ maxHeight: 240, overflowY: "auto" }}
+      >
         {pool.map((spell) => {
           const isChecked = selected.includes(spell.id);
           const isDisabled = !isChecked && selected.length >= needed;
@@ -61,7 +82,9 @@ function SpellSelector({
                   disabled={isDisabled}
                   onChange={() => toggle(spell.id)}
                 />
-                <span className="level-up-step__option-label">{spell.name}</span>
+                <span className="level-up-step__option-label">
+                  {spell.name}
+                </span>
               </label>
             </li>
           );
@@ -69,8 +92,17 @@ function SpellSelector({
       </ul>
     </div>
   );
+
+  // #endregion
 }
 
+// #endregion
+
+/**
+  * Step for choosing new spells to learn at a level-up. Shows separate selectors for cantrips and leveled spells if both are granted.
+ * @param param0 Props for the spell choice step
+ * @returns JSX element for the spell choice step
+ */
 export const SpellChoiceStep: React.FC<SpellChoiceStepProps> = ({
   draft,
   onUpdateDraft,
@@ -89,10 +121,15 @@ export const SpellChoiceStep: React.FC<SpellChoiceStepProps> = ({
 
   const knownSpellIds = useMemo(() => new Set(spellsKnown), [spellsKnown]);
 
-  const sortSpells = (a: { level: number; name: string }, b: { level: number; name: string }) => {
+  const sortSpells = (
+    a: { level: number; name: string },
+    b: { level: number; name: string },
+  ) => {
     if (a.level !== b.level) return a.level - b.level;
     return a.name.localeCompare(b.name);
   };
+
+  // #region Fetch Spells and Cantrips
 
   const cantripPool = useMemo(
     () =>
@@ -109,6 +146,10 @@ export const SpellChoiceStep: React.FC<SpellChoiceStepProps> = ({
         .sort(sortSpells),
     [classSpells, knownSpellIds],
   );
+
+  // #endregion
+
+  // #region --- Render ---
 
   return (
     <div className="level-up-step">
@@ -138,11 +179,17 @@ export const SpellChoiceStep: React.FC<SpellChoiceStepProps> = ({
       )}
 
       {newCantripsToLearn > 0 && cantripPool.length === 0 && (
-        <p className="level-up-step__description">No eligible new cantrips are available.</p>
+        <p className="level-up-step__description">
+          No eligible new cantrips are available.
+        </p>
       )}
       {newSpellsToLearn > 0 && spellPool.length === 0 && (
-        <p className="level-up-step__description">No eligible new spells are available.</p>
+        <p className="level-up-step__description">
+          No eligible new spells are available.
+        </p>
       )}
     </div>
   );
+
+  // #endregion
 };

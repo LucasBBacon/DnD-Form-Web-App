@@ -28,7 +28,7 @@ const TEST_CLASS: ClassData = {
     choices: [],
   },
   subclassInfo: {
-    name: "Arcane Tradition",
+    displayLabel: "Arcane Tradition",
     choiceLevel: 2,
     optionsPool: "",
   },

@@ -6,23 +6,41 @@ import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
 import { useCharacterStats } from "../../../hooks/useCharacterStats";
 
+// #region --- Types ---
+
 interface HpGainStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
+  /** The target level for the level-up */
   targetLevel: number;
 }
 
+// #endregion
+
 const averageForDie = (die: HitDie): number => Math.floor(die / 2) + 1;
 
+/**
+ * Step for determining the hit points gained during a level-up.
+ * Only shown if the class being leveled up has a hit die.
+ * @param param0 Props for the HP gain step
+ * @returns JSX element for the HP gain step
+ */
 export const HpGainStep: React.FC<HpGainStepProps> = ({
   draft,
   onUpdateDraft,
   classData,
   targetLevel,
 }) => {
+  // #region --- State and Data ---
+
   const { abilities } = useCharacterStats();
   const conMod = abilities.modifiers.con;
   const hitDie: HitDie = (classData?.hitDie ?? 8) as HitDie;
@@ -36,7 +54,7 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
     if (draft.useAverageHp || isLevelOne) {
       onUpdateDraft({ hpGained: computedHp });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draft.useAverageHp, computedHp, isLevelOne]);
 
   const handleManualChange = (val: string) => {
@@ -46,6 +64,10 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
       onUpdateDraft({ hpGained: withMod });
     }
   };
+
+  // #endregion
+
+  // #region --- Render ---
 
   return (
     <div className="level-up-step">
@@ -61,13 +83,15 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
 
       {isLevelOne ? (
         <p className="hp-step__result">
-          {hitDie} (max) {conMod !== 0 && `${conMod >= 0 ? "+" : ""}${conMod}`} ={" "}
-          <strong>{computedHp}</strong> HP
+          {hitDie} (max) {conMod !== 0 && `${conMod >= 0 ? "+" : ""}${conMod}`}{" "}
+          = <strong>{computedHp}</strong> HP
         </p>
       ) : (
         <>
           {/* Average option */}
-          <label className={`level-up-step__option ${draft.useAverageHp ? "level-up-step__option--selected" : ""}`}>
+          <label
+            className={`level-up-step__option ${draft.useAverageHp ? "level-up-step__option--selected" : ""}`}
+          >
             <input
               type="radio"
               name="hp-mode"
@@ -76,11 +100,14 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
             />
             <span>
               <span className="level-up-step__option-label">
-                Use average — {avgHp} {conMod !== 0 && `${conMod >= 0 ? "+" : ""}${conMod}`} ={" "}
+                Use average — {avgHp}{" "}
+                {conMod !== 0 && `${conMod >= 0 ? "+" : ""}${conMod}`} ={" "}
                 {computedHp} HP
               </span>
               <br />
-              <span className="level-up-step__option-hint">Recommended for most players</span>
+              <span className="level-up-step__option-hint">
+                Recommended for most players
+              </span>
             </span>
           </label>
 
@@ -93,17 +120,26 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
               type="radio"
               name="hp-mode"
               checked={!draft.useAverageHp}
-              onChange={() => onUpdateDraft({ useAverageHp: false, hpGained: null })}
+              onChange={() =>
+                onUpdateDraft({ useAverageHp: false, hpGained: null })
+              }
             />
             <span>
-              <span className="level-up-step__option-label">Enter a roll manually</span>
+              <span className="level-up-step__option-label">
+                Enter a roll manually
+              </span>
               <br />
-              <span className="level-up-step__option-hint">Enter the die result (1–{hitDie})</span>
+              <span className="level-up-step__option-hint">
+                Enter the die result (1–{hitDie})
+              </span>
             </span>
           </label>
 
           {!draft.useAverageHp && (
-            <div className="level-up-step__row" style={{ marginTop: "0.75rem" }}>
+            <div
+              className="level-up-step__row"
+              style={{ marginTop: "0.75rem" }}
+            >
               <label htmlFor="hp-roll-input" style={{ fontSize: "0.875rem" }}>
                 Rolled value (1–{hitDie}):
               </label>
@@ -116,7 +152,12 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
                 onChange={(e) => handleManualChange(e.target.value)}
               />
               {draft.hpGained !== null && (
-                <span style={{ fontSize: "0.875rem", color: "var(--color-text, #eee)" }}>
+                <span
+                  style={{
+                    fontSize: "0.875rem",
+                    color: "var(--color-text, #eee)",
+                  }}
+                >
                   → {draft.hpGained} HP total
                 </span>
               )}
@@ -126,4 +167,6 @@ export const HpGainStep: React.FC<HpGainStepProps> = ({
       )}
     </div>
   );
+
+  // #endregion
 };

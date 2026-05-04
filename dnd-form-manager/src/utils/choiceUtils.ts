@@ -6,38 +6,71 @@ import { getAllSpells } from "../data/staticDataApi";
 import { SKILL_ABILITY_MAP } from "./constants";
 import { getAllCharacterTraits } from "./traitUtils";
 
+// #region --- Types and Interfaces ---
+
+/**
+ * A pending proficiency choice that the player must resolve at level-up.
+ *
+ * The UI should prompt the player to make selections from the `pool` according
+ * to the `count`, and then save the results back to the store keyed by
+ * `sourceId` and `category` so they can be applied to the character.
+ */
 export type ProficiencyChoiceCategory = Extract<
   ProficiencyCategory,
   "skills" | "weapons" | "tools" | "languages"
 >;
 
 /**
- * Describes a single skill-pick prompt granted by a trait at a specific level.
+ * A pending feature choice that the player must resolve at level-up.
  *
- * The source fields identify the trait that granted the choice so the UI can
- * render stable groups and preserve per-source selections.
+ * Similar to `PendingProficiencyChoice`, but for arbitrary trait features rather than proficiencies.
  */
 export interface PendingSkillChoice {
+  /** The ID of the trait that granted this skill choice. (e.g., "trait_dwarf_prof_skills") */
   sourceId: string;
+  /** The name of the trait that granted this skill choice. */
   sourceName: string;
+  /** The number of skills that can be selected from the pool. */
   count: number;
+  /** The pool of skills available for selection. */
   pool: Skill[];
 }
 
+/**
+ * Aggregated skill and proficiency choices that have been selected across all levels up to the current one.
+ *
+ * Determines the character's current proficiencies and skill selections when evaluating new choices at level-up.
+ */
 export interface PendingProficiencyChoice {
+  /** The ID of the trait that granted this proficiency choice. (e.g., "trait_dwarf_prof_weapons") */
   sourceId: string;
+  /** The name of the trait that granted this proficiency choice. */
   sourceName: string;
+  /** The category of the proficiency choice (e.g., "skills", "weapons"). */
   category: ProficiencyChoiceCategory;
+  /** The number of proficiencies that can be selected from the pool. */
   count: number;
+  /** The pool of proficiencies available for selection. */
   pool: string[];
 }
 
+/**
+ * A resolved feature choice that the player has made at level-up.
+ *
+ * This is the output of the level-up planner after the player has made their selections, ready to be applied to the character.
+ */
 export interface PendingFeatureChoice {
+  /** The ID of the trait that granted this feature choice. (e.g., "trait_dwarf_feat_spellcasting") */
   sourceId: string;
+  /** The name of the trait that granted this feature choice. */
   sourceName: string;
+  /** The type of effect this feature choice has. */
   effectType: string;
+  /** The number of features that can be selected from the pool. */
   count: number;
+  /** The pool of features available for selection. */
   pool: string[];
+  /** Whether the player is allowed to enter a custom value instead of selecting from the pool. */
   allowCustomValue: boolean;
 }
 
@@ -48,7 +81,9 @@ export interface PendingFeatureChoice {
  * contains upgrades that double proficiency on already proficient skills.
  */
 export interface SelectedSkillChoices {
+  /** The skills that have been selected by the player. */
   skillChoices: Skill[];
+  /** The skills that have been selected for expertise by the player. */
   expertiseChoices: Skill[];
 }
 
@@ -59,10 +94,17 @@ export interface SelectedSkillChoices {
  * they come from explicit player choices such as feats or class features.
  */
 export interface SelectedProficiencyChoices {
+  /** The weapons that have been selected by the player. */
   weaponChoices: string[];
+  /** The tools that have been selected by the player. */
   toolChoices: string[];
+  /** The languages that have been selected by the player. */
   languageChoices: string[];
 }
+
+// #endregion
+
+// #region --- Utility Functions ---
 
 /**
  * Resolves a skill-choice pool into a concrete list of selectable skills.
@@ -91,13 +133,30 @@ const PROFICIENCY_CHOICE_CATEGORIES = new Set<ProficiencyChoiceCategory>([
   "languages",
 ]);
 
+/**
+ * Checks if a given string is a valid proficiency choice category.
+ * @param category The string to check.
+ * @returns True if the string is a valid proficiency choice category, false otherwise.
+ */
 const isProficiencyChoiceCategory = (
   category: string,
 ): category is ProficiencyChoiceCategory =>
   PROFICIENCY_CHOICE_CATEGORIES.has(category as ProficiencyChoiceCategory);
 
+// #region --- Resolve Spell List ---
+
 const SPELL_LIST_SENTINEL_SUFFIX = "_spell_list";
 
+/**
+ * Resolves a spell list sentinel value into the corresponding list of spell IDs.
+ *
+ * Some trait data uses a sentinel string like `"wizard_spell_list"` to indicate that the choice pool should be all spells available to a class. 
+ * This helper detects that pattern and expands it into the actual spell IDs so downstream code can treat it uniformly. 
+ * 
+ * (TODO: eventually migrate trait data to use explicit arrays and remove this layer of indirection.)
+ * @param value The sentinel string or a regular spell ID.
+ * @returns An array of spell IDs corresponding to the sentinel or the original spell ID.
+ */
 const resolveSpellListSentinel = (value: string): string[] => {
   if (!value.endsWith(SPELL_LIST_SENTINEL_SUFFIX)) {
     return [value];
@@ -108,12 +167,23 @@ const resolveSpellListSentinel = (value: string): string[] => {
 
   return getAllSpells()
     .filter((spell) =>
-      spell.classes.some((spellClassId) => classCandidates.includes(spellClassId)),
+      spell.classes.some((spellClassId) =>
+        classCandidates.includes(spellClassId),
+      ),
     )
     .map((spell) => spell.id);
 };
 
-const resolveFeatureChoicePool = (pool: readonly string[] | "any"): string[] => {
+/**
+ * Resolves a feature-choice pool into concrete values for a trait feature selection.
+ * @param pool The raw pool from trait data, which may be a list of strings or the "any" sentinel.
+ * @returns A concrete list of selectable options for the feature choice, with sentinels resolved.
+ */
+const resolveFeatureChoicePool = (
+  pool: readonly string[] | "any",
+): string[] => {
+  // The "any" sentinel is used for some non-proficiency choices to indicate freeform player input rather than a fixed pool. 
+  // Return an empty array to signal that there are no predefined options.
   if (pool === "any") {
     return [];
   }
@@ -129,8 +199,15 @@ const resolveFeatureChoicePool = (pool: readonly string[] | "any"): string[] => 
   );
 };
 
+// #endregion
+
 /**
  * Resolves a proficiency-choice pool into concrete values for a category.
+ *
+ * This function checks that all pending proficiency and feature choices have been resolved according to their specified counts and pools.
+ * @param category The proficiency choice category to resolve.
+ * @param pool The raw pool from trait data, which may be a list of strings or the "any" sentinel.
+ * @returns A concrete list of selectable options for the proficiency choice, with sentinels resolved.
  */
 export const resolveProficiencyChoicePool = (
   category: ProficiencyChoiceCategory,
@@ -144,7 +221,9 @@ export const resolveProficiencyChoicePool = (
     return [];
   }
 
-  return pool.filter((value) => typeof value === "string" && value.trim() !== "");
+  return pool.filter(
+    (value) => typeof value === "string" && value.trim() !== "",
+  );
 };
 
 /**
@@ -165,11 +244,13 @@ export const getSelectedSkillChoices = (
   const skillChoices = new Set<Skill>();
   const expertiseChoices = new Set<Skill>();
 
+  // Loop through each level up to the current one and aggregate skill and expertise choices, 
+  // Sets avoid duplicates while preserving order
   for (let level = 1; level <= currentLevel; level++) {
     const choice = choicesByLevel[level];
 
     // Sets preserve the first-seen order while removing duplicates from feats,
-    // retries, or overlapping progression data.
+    // retries, or overlapping progression data
     choice?.skillChoices?.forEach((skill) => skillChoices.add(skill));
     choice?.expertiseChoices?.forEach((skill) => expertiseChoices.add(skill));
   }
@@ -217,6 +298,10 @@ export const getSelectedProficiencyChoices = (
     languageChoices: Array.from(languageChoices),
   };
 };
+
+// #endregion
+
+// #region --- Pending Choices ---
 
 /**
  * Finds skill-choice prompts that become available exactly at a given level.
@@ -285,6 +370,17 @@ export const getPendingProficiencyChoices = (
   return pendingChoices;
 };
 
+/**
+ * Finds feature-choice prompts that become available exactly at a given level.
+ * @param level The exact level being evaluated for new choices.
+ * @param raceId The selected race identifier, if any.
+ * @param subraceId The selected subrace identifier, if any.
+ * @param classId The selected class identifier, if any.
+ * @param subclassId The selected subclass identifier, if any.
+ * @param choicesByLevel The saved level choice data keyed by level number.
+ * @param classTracks The character's class progression tracks, if any.
+ * @returns Pending feature choice groups for that level.
+ */
 export const getPendingFeatureChoices = (
   level: number,
   raceId: string | null,
@@ -338,31 +434,4 @@ export const getPendingFeatureChoices = (
   return pendingChoices;
 };
 
-/**
- * Backward-compatible skill-only helper used by existing consumers.
- */
-export const getPendingSkillChoices = (
-  level: number,
-  raceId: string | null,
-  subraceId: string | null,
-  classId: string | null,
-  subclassId: string | null,
-  choicesByLevel: Record<number, LevelChoice> = {},
-  classTracks: CharacterClassTrack[] = [],
-): PendingSkillChoice[] =>
-  getPendingProficiencyChoices(
-    level,
-    raceId,
-    subraceId,
-    classId,
-    subclassId,
-    choicesByLevel,
-    classTracks,
-  )
-    .filter((choice) => choice.category === "skills")
-    .map((choice) => ({
-      sourceId: choice.sourceId,
-      sourceName: choice.sourceName,
-      count: choice.count,
-      pool: choice.pool.filter((value): value is Skill => value in SKILL_ABILITY_MAP),
-    }));
+// #endregion

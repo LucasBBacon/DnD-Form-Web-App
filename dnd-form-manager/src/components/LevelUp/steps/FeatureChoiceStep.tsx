@@ -5,14 +5,30 @@ import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
 
+// #region --- Types ---
+
 interface FeatureChoiceStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
 }
 
+// #endregion
+
+// #region --- Utilities ---
+
+/**
+ * Converts a raw choice value (which may be a spell ID or a language entry) into a human-readable label for display.
+ * @param value The raw choice value
+ * @returns The human-readable label
+ */
 const toDisplayLabel = (value: string): string => {
   const spell = value.startsWith("spell_") ? getSpellByID(value) : null;
   if (spell?.name) {
@@ -21,6 +37,8 @@ const toDisplayLabel = (value: string): string => {
 
   return value.replace(/^lang_/, "").replace(/_/g, " ");
 };
+
+// #endregion
 
 export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
   draft,
@@ -33,7 +51,9 @@ export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
     return (
       <div className="level-up-step">
         <h3 className="level-up-step__title">Feature Choices</h3>
-        <p className="level-up-step__description">No custom feature choices at this level.</p>
+        <p className="level-up-step__description">
+          No custom feature choices at this level.
+        </p>
       </div>
     );
   }
@@ -46,6 +66,8 @@ export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
       },
     });
   };
+
+  // #region --- Render ---
 
   return (
     <div className="level-up-step">
@@ -79,7 +101,9 @@ export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
                           type="radio"
                           name={`feature-${choice.sourceId}`}
                           checked={isSelected}
-                          onChange={() => setChoiceValue(choice.sourceId, entry)}
+                          onChange={() =>
+                            setChoiceValue(choice.sourceId, entry)
+                          }
                         />
                         <span className="level-up-step__option-label">
                           {toDisplayLabel(entry)}
@@ -102,7 +126,9 @@ export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
                   className="level-up-step__inline-number"
                   style={{ width: "220px", textAlign: "left" }}
                   value={selectedValue}
-                  onChange={(event) => setChoiceValue(choice.sourceId, event.target.value)}
+                  onChange={(event) =>
+                    setChoiceValue(choice.sourceId, event.target.value)
+                  }
                 />
               </div>
             )}
@@ -111,4 +137,6 @@ export const FeatureChoiceStep: React.FC<FeatureChoiceStepProps> = ({
       })}
     </div>
   );
+
+  // #endregion
 };

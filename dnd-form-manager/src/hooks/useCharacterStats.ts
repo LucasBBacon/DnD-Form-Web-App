@@ -11,6 +11,7 @@ import {
   calculateTotalASI,
 } from "../utils/abilityUtils";
 import { calculateArmorClass } from "../utils/acUtils";
+import { ABILITIES } from "../utils/abilityConstants";
 import { calculateMulticlassMaxHP } from "../utils/hpUtils";
 import { calculateInitiative } from "../utils/initiativeUtils";
 import { evaluateAllPredicates } from "../utils/predicateEngine";
@@ -179,7 +180,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   );
 
   // Calculate all ability scores and modifiers in one pass
-  const abilities: Ability[] = ["str", "dex", "con", "int", "wis", "cha"];
+  const abilities = ABILITIES;
   const totalScores = abilities.reduce(
     (acc, ability) => {
       acc[ability] = calculateTotalAbilityScore(

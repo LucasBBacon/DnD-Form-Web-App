@@ -1,21 +1,43 @@
 import React from "react";
-import { getClassById, getFeatById, getSpellByID, getSubclassById } from "../../../data/staticDataApi";
+import {
+  getClassById,
+  getFeatById,
+  getSpellByID,
+  getSubclassById,
+} from "../../../data/staticDataApi";
 import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
 
+// #region --- Types ---
+
 interface ReviewStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Function to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planning process */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
+  /** The target level for the level-up */
   targetLevel: number;
+  /** Function to confirm the level-up choices */
   onConfirm: () => void;
 }
 
-function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) {
+// #endregion
+
+function ReviewRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <div className="review-step__row">
       <span className="review-step__label">{label}</span>
@@ -24,14 +46,26 @@ function ReviewRow({ label, value }: { label: string; value: React.ReactNode }) 
   );
 }
 
+/**
+ * Final review step showing a summary of all the choices made during the level-up process, along with any unmet requirements.
+ * @param param0 The props for the ReviewStep component
+ * @returns A React element representing the review step
+ */
 export const ReviewStep: React.FC<ReviewStepProps> = ({
   draft,
   plan,
   targetLevel,
   onConfirm,
 }) => {
-  const classData = draft.targetClassId ? getClassById(draft.targetClassId) : null;
-  const subclass = draft.newSubclassId ? getSubclassById(draft.newSubclassId) : null;
+
+  // #region --- Data Preparation ---
+
+  const classData = draft.targetClassId
+    ? getClassById(draft.targetClassId)
+    : null;
+  const subclass = draft.newSubclassId
+    ? getSubclassById(draft.newSubclassId)
+    : null;
   const feat = draft.featId ? getFeatById(draft.featId) : null;
 
   const asiSummary = Object.entries(draft.asiChoices)
@@ -41,6 +75,10 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
 
   const allSpells = [...draft.cantripsLearned, ...draft.spellsLearned];
   const selectedFeatureChoices = Object.values(draft.featureChoices);
+
+  // #endregion
+
+  // #region --- Render ---
 
   return (
     <div className="level-up-step">
@@ -71,10 +109,16 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         />
       )}
       {draft.weaponChoices.length > 0 && (
-        <ReviewRow label="Weapon Proficiencies" value={draft.weaponChoices.join(", ")} />
+        <ReviewRow
+          label="Weapon Proficiencies"
+          value={draft.weaponChoices.join(", ")}
+        />
       )}
       {draft.toolChoices.length > 0 && (
-        <ReviewRow label="Tool Proficiencies" value={draft.toolChoices.join(", ")} />
+        <ReviewRow
+          label="Tool Proficiencies"
+          value={draft.toolChoices.join(", ")}
+        />
       )}
       {draft.languageChoices.length > 0 && (
         <ReviewRow label="Languages" value={draft.languageChoices.join(", ")} />
@@ -86,7 +130,9 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
         <ReviewRow
           label="Feature Choices"
           value={selectedFeatureChoices
-            .map((value) => getSpellByID(value)?.name ?? value.replace(/_/g, " "))
+            .map(
+              (value) => getSpellByID(value)?.name ?? value.replace(/_/g, " "),
+            )
             .join(", ")}
         />
       )}
@@ -100,7 +146,8 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
             ))}
           </ul>
           <p className="level-up-step__option-hint">
-            Use Back to complete the missing selections, then return here to confirm.
+            Use Back to complete the missing selections, then return here to
+            confirm.
           </p>
         </div>
       )}
@@ -115,4 +162,6 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
       </button>
     </div>
   );
+
+  // #endregion
 };

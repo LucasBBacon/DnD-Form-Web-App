@@ -8,16 +8,30 @@ import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
 import { evaluateMulticlassEligibility } from "../../../utils/multiclassEligibilityUtils";
 import { useCharacterStats } from "../../../hooks/useCharacterStats";
 
+// #region --- Types ---
+
 interface ClassPickStepProps {
+  /** The current draft of the level-up process */
   draft: LevelUpDraft;
+  /** Callback to update the draft with new values */
   onUpdateDraft: (updates: Partial<LevelUpDraft>) => void;
+  /** The result of the level-up planner */
   plan: LevelUpPlannerResult;
+  /** Data for the currently selected class */
   classData: ClassData | null;
+  /** Data for the currently selected subclass */
   subclassData: SubclassData | null;
+  /** The target level for the level-up */
   targetLevel: number;
+  /** The character's class tracks */
   classTracks: CharacterClassTrack[];
 }
 
+// #endregion
+
+/**
+ * Step for picking which class to level up, or whether to add a new multiclass.
+ */
 export const ClassPickStep: React.FC<ClassPickStepProps> = ({
   draft,
   onUpdateDraft,
@@ -30,6 +44,8 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
 
   const isLevelingExisting = !draft.isNewMulticlass;
   const existingClassIds = new Set(classTracks.map((t) => t.classId));
+
+  // #region --- Class Selection ---
 
   const handleSelectExistingTrack = (track: CharacterClassTrack) => {
     const cd = getClassById(track.classId);
@@ -49,9 +65,14 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
     });
   };
 
-  const availableNewClasses = getAllClasses().filter((c) => !existingClassIds.has(c.id));
+  const availableNewClasses = getAllClasses().filter(
+    (c) => !existingClassIds.has(c.id),
+  );
 
-  // Check multiclass eligibility for adding a new class
+  // #endregion
+
+  // #region --- Multiclass Eligibility ---
+  
   const multiclassEligibilityByClassId = Object.fromEntries(
     availableNewClasses.map((c) => {
       const result = evaluateMulticlassEligibility({
@@ -64,8 +85,12 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
     }),
   );
 
+  // #endregion
+
   // If single class and not multiclassing, auto-display for confirmation
   const showAutoSelected = classTracks.length === 1 && !draft.isNewMulticlass;
+
+  // #region --- Render ---
 
   return (
     <div className="level-up-step">
@@ -77,7 +102,9 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
       {/* Existing class tracks */}
       {classTracks.length > 0 && (
         <>
-          <p className="level-up-step__section-label">Level up an existing class</p>
+          <p className="level-up-step__section-label">
+            Level up an existing class
+          </p>
           <ul className="level-up-step__option-list">
             {classTracks.map((track) => {
               const cd = getClassById(track.classId);
@@ -106,7 +133,8 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
                       </span>
                       <br />
                       <span className="level-up-step__option-hint">
-                        Currently level {track.level} → becoming level {track.level + 1}
+                        Currently level {track.level} → becoming level{" "}
+                        {track.level + 1}
                         {track.subclassId ? ` · ${track.subclassId}` : ""}
                       </span>
                     </span>
@@ -126,7 +154,8 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
             {availableNewClasses.map((c) => {
               const eligibility = multiclassEligibilityByClassId[c.id];
               const isEligible = eligibility?.eligible ?? false;
-              const isSelected = draft.targetClassId === c.id && draft.isNewMulticlass;
+              const isSelected =
+                draft.targetClassId === c.id && draft.isNewMulticlass;
               return (
                 <li key={c.id}>
                   <label
@@ -146,7 +175,9 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
                       disabled={!isEligible}
                     />
                     <span>
-                      <span className="level-up-step__option-label">{c.name}</span>
+                      <span className="level-up-step__option-label">
+                        {c.name}
+                      </span>
                       <br />
                       <span className="level-up-step__option-hint">
                         {isEligible
@@ -177,4 +208,6 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
       )}
     </div>
   );
+
+  // #endregion
 };
