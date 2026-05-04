@@ -64,7 +64,8 @@
                 "required": [
                     "level",
                     "features"
-                ]
+                ],
+                "additionalProperties": false
             }
         },
         "lore": {

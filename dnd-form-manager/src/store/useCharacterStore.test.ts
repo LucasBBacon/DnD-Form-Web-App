@@ -113,6 +113,166 @@ describe("useCharacterStore feat acquisition state", () => {
     expect(useCharacterStore.getState().subclassId).toBe("subclass_evocation");
     expect(useCharacterStore.getState().level).toBe(2);
   });
+
+  it("opens and closes the shared level-up modal state", () => {
+    useCharacterStore.getState().openLevelUpModal(6);
+
+    expect(useCharacterStore.getState().levelUpModalState).toEqual({
+      isOpen: true,
+      targetLevel: 6,
+      isBlocking: false,
+    });
+
+    useCharacterStore.getState().closeLevelUpModal();
+
+    expect(useCharacterStore.getState().levelUpModalState).toEqual({
+      isOpen: false,
+      targetLevel: null,
+      isBlocking: false,
+    });
+  });
+
+  it("does not close the shared level-up modal while blocking", () => {
+    useCharacterStore.getState().openLevelUpModal(4, { isBlocking: true });
+    useCharacterStore.getState().closeLevelUpModal();
+
+    expect(useCharacterStore.getState().levelUpModalState).toEqual({
+      isOpen: true,
+      targetLevel: 4,
+      isBlocking: true,
+    });
+  });
+
+  it("commits level-up changes atomically in a single transaction", () => {
+    useCharacterStore.setState({
+      level: 4,
+      classId: "class_fighter",
+      subclassId: null,
+      classTracks: [{ classId: "class_fighter", subclassId: null, level: 4 }],
+      choicesByLevel: {},
+      acquiredFeats: [],
+      spellsKnown: ["spell_magic_missile"],
+      hpRolls: { 1: 10, 2: 7, 3: 8, 4: 6 },
+    } as any);
+
+    const didCommit = useCharacterStore.getState().commitLevelUpTransaction({
+      targetLevel: 5,
+      draft: {
+        targetClassId: "class_fighter",
+        isNewMulticlass: false,
+        targetClassLevel: 5,
+        hpGained: 9,
+        useAverageHp: false,
+        newSubclassId: "subclass_champion",
+        asiChoices: {},
+        featId: "feat_alert",
+        skillChoices: ["athletics"],
+        expertiseChoices: [],
+        weaponChoices: [],
+        toolChoices: [],
+        languageChoices: [],
+        proficiencySelectionsBySource: {},
+        spellsLearned: ["spell_fireball"],
+        cantripsLearned: ["spell_light"],
+        featureChoices: {
+          "trait_cantrip:spell_grant:0": "spell_acid_splash",
+        },
+        currentStepId: "review",
+      },
+    });
+
+    const state = useCharacterStore.getState();
+    expect(didCommit).toBe(true);
+    expect(state.level).toBe(5);
+    expect(state.classTracks).toEqual([
+      {
+        classId: "class_fighter",
+        subclassId: "subclass_champion",
+        level: 5,
+      },
+    ]);
+    expect(state.subclassId).toBe("subclass_champion");
+    expect(state.choicesByLevel[5]).toMatchObject({
+      selectedClassId: "class_fighter",
+      hpGained: 9,
+      featId: "feat_alert",
+      skillChoices: ["athletics"],
+      featureChoices: {
+        "trait_cantrip:spell_grant:0": "spell_acid_splash",
+      },
+    });
+    expect(state.acquiredFeats).toEqual([
+      {
+        featId: "feat_alert",
+        source: "level_up",
+        sourceLevel: 5,
+      },
+    ]);
+    expect(state.spellsKnown).toEqual([
+      "spell_magic_missile",
+      "spell_light",
+      "spell_fireball",
+      "spell_acid_splash",
+    ]);
+    expect(state.hpRolls[5]).toBe(9);
+  });
+
+  it("does not partially apply transaction state when commit payload is invalid", () => {
+    useCharacterStore.setState({
+      level: 3,
+      classId: "class_fighter",
+      subclassId: null,
+      classTracks: [{ classId: "class_fighter", subclassId: null, level: 3 }],
+      choicesByLevel: { 3: { selectedClassId: "class_fighter" } },
+      acquiredFeats: [{ featId: "feat_tough", source: "level_up", sourceLevel: 2 }],
+      spellsKnown: ["spell_light"],
+      hpRolls: { 1: 10, 2: 7, 3: 8 },
+    } as any);
+
+    const snapshotState = () => {
+      const state = useCharacterStore.getState();
+      return {
+        level: state.level,
+        classId: state.classId,
+        subclassId: state.subclassId,
+        classTracks: state.classTracks,
+        choicesByLevel: state.choicesByLevel,
+        acquiredFeats: state.acquiredFeats,
+        spellsKnown: state.spellsKnown,
+        hpRolls: state.hpRolls,
+      };
+    };
+
+    const before = snapshotState();
+
+    const didCommit = useCharacterStore.getState().commitLevelUpTransaction({
+      targetLevel: 4,
+      draft: {
+        targetClassId: null,
+        isNewMulticlass: false,
+        targetClassLevel: 4,
+        hpGained: 6,
+        useAverageHp: false,
+        newSubclassId: "subclass_champion",
+        asiChoices: { str: 2 },
+        featId: "feat_alert",
+        skillChoices: ["athletics"],
+        expertiseChoices: [],
+        weaponChoices: [],
+        toolChoices: [],
+        languageChoices: [],
+        proficiencySelectionsBySource: {},
+        spellsLearned: ["spell_fireball"],
+        cantripsLearned: [],
+        featureChoices: {},
+        currentStepId: "review",
+      },
+    });
+
+    const after = snapshotState();
+    expect(didCommit).toBe(false);
+    expect(after).toEqual(before);
+  });
 });
 
 describe("useCharacterStore hydrateCharacter and resetCharacter", () => {

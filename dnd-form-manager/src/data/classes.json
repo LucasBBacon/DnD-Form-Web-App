@@ -394,7 +394,8 @@
         ]
       },
       {
-        "level": 7
+        "level": 7,
+        "features": []
       },
       {
         "level": 8,
@@ -423,7 +424,8 @@
         }
       },
       {
-        "level": 11
+        "level": 11,
+        "features": []
       },
       {
         "level": 12,
@@ -642,7 +644,8 @@
         }
       },
       {
-        "level": 3
+        "level": 3,
+        "features": []
       },
       {
         "level": 4,
@@ -670,7 +673,8 @@
         }
       },
       {
-        "level": 7
+        "level": 7,
+        "features": []
       },
       {
         "level": 8,
@@ -684,7 +688,8 @@
         }
       },
       {
-        "level": 9
+        "level": 9,
+        "features": []
       },
       {
         "level": 10,
@@ -708,7 +713,8 @@
         ]
       },
       {
-        "level": 13
+        "level": 13,
+        "features": []
       },
       {
         "level": 14,
@@ -720,7 +726,8 @@
         }
       },
       {
-        "level": 15
+        "level": 15,
+        "features": []
       },
       {
         "level": 16,
@@ -857,7 +864,8 @@
         ]
       },
       {
-        "level": 3
+        "level": 3,
+        "features": []
       },
       {
         "level": 4,
@@ -873,7 +881,8 @@
         }
       },
       {
-        "level": 5
+        "level": 5,
+        "features": []
       },
       {
         "level": 6,
@@ -882,7 +891,8 @@
         ]
       },
       {
-        "level": 7
+        "level": 7,
+        "features": []
       },
       {
         "level": 8,
@@ -896,7 +906,8 @@
         }
       },
       {
-        "level": 9
+        "level": 9,
+        "features": []
       },
       {
         "level": 10,
@@ -905,7 +916,8 @@
         ]
       },
       {
-        "level": 11
+        "level": 11,
+        "features": []
       },
       {
         "level": 12,
@@ -914,7 +926,8 @@
         ]
       },
       {
-        "level": 13
+        "level": 13,
+        "features": []
       },
       {
         "level": 14,
@@ -923,7 +936,8 @@
         ]
       },
       {
-        "level": 15
+        "level": 15,
+        "features": []
       },
       {
         "level": 16,
@@ -932,7 +946,8 @@
         ]
       },
       {
-        "level": 17
+        "level": 17,
+        "features": []
       },
       {
         "level": 18,
@@ -1707,7 +1722,8 @@
         ]
       },
       {
-        "level": 13
+        "level": 13,
+        "features": []
       },
       {
         "level": 14,
@@ -1728,7 +1744,8 @@
         ]
       },
       {
-        "level": 17
+        "level": 17,
+        "features": []
       },
       {
         "level": 18,
@@ -1906,7 +1923,8 @@
         ]
       },
       {
-        "level": 9
+        "level": 9,
+        "features": []
       },
       {
         "level": 10,
@@ -1928,7 +1946,8 @@
         ]
       },
       {
-        "level": 13
+        "level": 13,
+        "features": []
       },
       {
         "level": 14,
@@ -1950,7 +1969,8 @@
         ]
       },
       {
-        "level": 17
+        "level": 17,
+        "features": []
       },
       {
         "level": 18,
@@ -2406,6 +2426,7 @@
       },
       {
         "level": 5,
+        "features": [],
         "classSpecificScaling": {
           "sorcery_points": 5
         }
@@ -2437,6 +2458,7 @@
       },
       {
         "level": 9,
+        "features": [],
         "classSpecificScaling": {
           "sorcery_points": 9
         }
@@ -2452,6 +2474,7 @@
       },
       {
         "level": 11,
+        "features": [],
         "classSpecificScaling": {
           "sorcery_points": 11
         }
@@ -2467,6 +2490,7 @@
       },
       {
         "level": 13,
+        "features": [],
         "classSpecificScaling": {
           "sorcery_points": 13
         }
@@ -2482,6 +2506,7 @@
       },
       {
         "level": 15,
+        "features": [],
         "classSpecificScaling": {
           "sorcery_points": 15
         }
@@ -2665,7 +2690,8 @@
         ]
       },
       {
-        "level": 5
+        "level": 5,
+        "features": []
       },
       {
         "level": 6,
@@ -2674,7 +2700,8 @@
         ]
       },
       {
-        "level": 7
+        "level": 7,
+        "features": []
       },
       {
         "level": 8,
@@ -2683,7 +2710,8 @@
         ]
       },
       {
-        "level": 9
+        "level": 9,
+        "features": []
       },
       {
         "level": 10,
@@ -2734,7 +2762,8 @@
         ]
       },
       {
-        "level": 18
+        "level": 18,
+        "features": []
       },
       {
         "level": 19,
@@ -2854,7 +2883,8 @@
         ]
       },
       {
-        "level": 3
+        "level": 3,
+        "features": []
       },
       {
         "level": 4,
@@ -2863,7 +2893,8 @@
         ]
       },
       {
-        "level": 5
+        "level": 5,
+        "features": []
       },
       {
         "level": 6,
@@ -2872,7 +2903,8 @@
         ]
       },
       {
-        "level": 7
+        "level": 7,
+        "features": []
       },
       {
         "level": 8,
@@ -2881,7 +2913,8 @@
         ]
       },
       {
-        "level": 9
+        "level": 9,
+        "features": []
       },
       {
         "level": 10,
@@ -2890,7 +2923,8 @@
         ]
       },
       {
-        "level": 11
+        "level": 11,
+        "features": []
       },
       {
         "level": 12,
@@ -2899,7 +2933,8 @@
         ]
       },
       {
-        "level": 13
+        "level": 13,
+        "features": []
       },
       {
         "level": 14,
@@ -2908,7 +2943,8 @@
         ]
       },
       {
-        "level": 15
+        "level": 15,
+        "features": []
       },
       {
         "level": 16,
@@ -2917,7 +2953,8 @@
         ]
       },
       {
-        "level": 17
+        "level": 17,
+        "features": []
       },
       {
         "level": 18,

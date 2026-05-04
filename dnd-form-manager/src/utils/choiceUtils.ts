@@ -2,6 +2,7 @@ import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Skill } from "../types/common";
 import type { LevelChoice } from "../types/progression";
 import type { ProficiencyCategory } from "../types/trait";
+import { getAllSpells } from "../data/staticDataApi";
 import { SKILL_ABILITY_MAP } from "./constants";
 import { getAllCharacterTraits } from "./traitUtils";
 
@@ -29,6 +30,15 @@ export interface PendingProficiencyChoice {
   category: ProficiencyChoiceCategory;
   count: number;
   pool: string[];
+}
+
+export interface PendingFeatureChoice {
+  sourceId: string;
+  sourceName: string;
+  effectType: string;
+  count: number;
+  pool: string[];
+  allowCustomValue: boolean;
 }
 
 /**
@@ -85,6 +95,39 @@ const isProficiencyChoiceCategory = (
   category: string,
 ): category is ProficiencyChoiceCategory =>
   PROFICIENCY_CHOICE_CATEGORIES.has(category as ProficiencyChoiceCategory);
+
+const SPELL_LIST_SENTINEL_SUFFIX = "_spell_list";
+
+const resolveSpellListSentinel = (value: string): string[] => {
+  if (!value.endsWith(SPELL_LIST_SENTINEL_SUFFIX)) {
+    return [value];
+  }
+
+  const classToken = value.slice(0, -SPELL_LIST_SENTINEL_SUFFIX.length);
+  const classCandidates = [classToken, `class_${classToken}`];
+
+  return getAllSpells()
+    .filter((spell) =>
+      spell.classes.some((spellClassId) => classCandidates.includes(spellClassId)),
+    )
+    .map((spell) => spell.id);
+};
+
+const resolveFeatureChoicePool = (pool: readonly string[] | "any"): string[] => {
+  if (pool === "any") {
+    return [];
+  }
+
+  return Array.from(
+    new Set(
+      pool.flatMap((entry) =>
+        typeof entry === "string" && entry.trim().length > 0
+          ? resolveSpellListSentinel(entry)
+          : [],
+      ),
+    ),
+  );
+};
 
 /**
  * Resolves a proficiency-choice pool into concrete values for a category.
@@ -236,6 +279,59 @@ export const getPendingProficiencyChoices = (
           pool: resolvedPool,
         });
       }
+    });
+  });
+
+  return pendingChoices;
+};
+
+export const getPendingFeatureChoices = (
+  level: number,
+  raceId: string | null,
+  subraceId: string | null,
+  classId: string | null,
+  subclassId: string | null,
+  choicesByLevel: Record<number, LevelChoice> = {},
+  classTracks: CharacterClassTrack[] = [],
+): PendingFeatureChoice[] => {
+  const allTraits = getAllCharacterTraits(
+    level,
+    raceId,
+    subraceId,
+    classId,
+    subclassId,
+    true,
+    choicesByLevel,
+    [],
+    classTracks,
+  );
+
+  const pendingChoices: PendingFeatureChoice[] = [];
+
+  allTraits.forEach((trait) => {
+    trait.effects?.forEach((effect, effectIndex) => {
+      if (!effect.choice || typeof effect.choice.count !== "number") {
+        return;
+      }
+
+      if (
+        effect.type === "proficiency_choice" ||
+        effect.type === "ability_bonus_choice"
+      ) {
+        return;
+      }
+
+      const count = Math.max(1, Math.floor(effect.choice.count));
+      const sourceId = `${trait.id}:${effect.type}:${effectIndex}`;
+
+      pendingChoices.push({
+        sourceId,
+        sourceName: trait.name,
+        effectType: effect.type,
+        count,
+        pool: resolveFeatureChoicePool(effect.choice.pool),
+        allowCustomValue: effect.choice.pool === "any",
+      });
     });
   });
 

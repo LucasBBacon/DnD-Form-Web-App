@@ -2,7 +2,8 @@ import { create } from "zustand";
 import type { Ability, Skill, UUID } from "../types/common";
 import type { FeatAcquisitionEntry } from "../types/feat";
 import type { ItemData, ItemInstanceData } from "../types/item";
-import type { LevelChoice } from "../types/progression";
+import type { LevelUpDraft } from "../types/levelUpDraft";
+import type { LevelChoice, LevelUpMode } from "../types/progression";
 import { getClassById, getItemById } from "../data/staticDataApi";
 import { generateUuidV4 } from "../utils/uuidUtils";
 
@@ -174,6 +175,27 @@ const upsertClassTrack = (
   );
 };
 
+const buildLevelChoiceFromDraft = (
+  draft: LevelUpDraft,
+): Partial<LevelChoice> => ({
+  selectedClassId: draft.targetClassId ?? undefined,
+  hpGained: draft.hpGained ?? undefined,
+  ...(Object.keys(draft.asiChoices).length > 0 ? { asiChoices: draft.asiChoices } : {}),
+  ...(draft.featId ? { featId: draft.featId } : {}),
+  ...(draft.skillChoices.length > 0 ? { skillChoices: draft.skillChoices } : {}),
+  ...(draft.expertiseChoices.length > 0
+    ? { expertiseChoices: draft.expertiseChoices }
+    : {}),
+  ...(draft.weaponChoices.length > 0 ? { weaponChoices: draft.weaponChoices } : {}),
+  ...(draft.toolChoices.length > 0 ? { toolChoices: draft.toolChoices } : {}),
+  ...(draft.languageChoices.length > 0
+    ? { languageChoices: draft.languageChoices }
+    : {}),
+  ...(Object.keys(draft.featureChoices).length > 0
+    ? { featureChoices: draft.featureChoices }
+    : {}),
+});
+
 // #endregion
 
 // #region --- Store Types ---
@@ -223,6 +245,8 @@ export interface CharacterState {
   xp: number;
   // The character's current level, derived from their experience points
   level: number;
+  // Determines whether level-up availability is gated by XP thresholds or allowed at any time.
+  levelUpMode: LevelUpMode;
   // The ID of the character's race, used to look up race-specific traits and abilities
   raceId: string | null;
   // The ID of the character's subrace, if applicable, used to look up subrace-specific traits and abilities
@@ -303,6 +327,12 @@ export interface CharacterState {
   // A boolean indicating whether the character setup is complete, used to determine if the character is ready for gameplay
   isSetupComplete: boolean;
 
+  levelUpModalState: {
+    isOpen: boolean;
+    targetLevel: number | null;
+    isBlocking: boolean;
+  };
+
   // Records the selected option index (per choice-group index) for starting equipment bundles, set during character creation
   startingEquipmentSelections: Record<number, number>;
 }
@@ -319,6 +349,8 @@ interface CharacterActions {
   updateRoleplayField: (field: keyof CharacterState, value: string) => void;
   
   setXp: (xp: number) => void;
+
+  setLevelUpMode: (mode: LevelUpMode) => void;
   
   setRace: (raceId: string) => void;
   
@@ -347,6 +379,15 @@ interface CharacterActions {
   setBackground: (background: string) => void;
   
   setLevel: (level: number) => void;
+
+  /**
+   * Atomically commits a level-up draft in one transaction.
+   * Returns false if required inputs are invalid and no state is changed.
+   */
+  commitLevelUpTransaction: (payload: {
+    targetLevel: number;
+    draft: LevelUpDraft;
+  }) => boolean;
   
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
   
@@ -369,6 +410,10 @@ interface CharacterActions {
    * inventory management is tracked externally during creation).
    */
   setStartingEquipmentSelection: (groupIndex: number, optionIndex: number) => void;
+
+  openLevelUpModal: (targetLevel: number, options?: { isBlocking?: boolean }) => void;
+
+  closeLevelUpModal: () => void;
 
   // #endregion
 
@@ -503,6 +548,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   alliesAndOrganizations: "",
   xp: 0,
   level: 1,
+  levelUpMode: "xp_gated",
   raceId: null,
   subraceId: null,
   classId: null,
@@ -552,6 +598,12 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   
   isSetupComplete: false,
 
+  levelUpModalState: {
+    isOpen: false,
+    targetLevel: null,
+    isBlocking: false,
+  },
+
   startingEquipmentSelections: {},
 };
 
@@ -577,7 +629,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
 
   updateRoleplayField: (field, value) => set({ [field]: value }),
 
-  setXp: (xp) => set({ xp }),
+  setXp: (xp) =>
+    set({
+      xp: Math.max(0, Math.floor(xp)),
+    }),
+
+  setLevelUpMode: (mode) =>
+    set({
+      levelUpMode: mode,
+    }),
 
   setLevel: (newLevel) =>
     set((state) => {
@@ -627,6 +687,109 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         classTracks: updatedClassTracks,
       };
     }),
+
+  commitLevelUpTransaction: ({ targetLevel, draft }) => {
+    let committed = false;
+
+    set((state) => {
+      if (!draft.targetClassId) {
+        return state;
+      }
+
+      const clampedTargetLevel = clampCharacterLevel(targetLevel);
+
+      const nextTracksBase = draft.isNewMulticlass
+        ? upsertClassTrack(state.classTracks, draft.targetClassId, { level: 1 })
+        : upsertClassTrack(state.classTracks, draft.targetClassId, {
+            level: draft.targetClassLevel,
+          });
+
+      const nextTracks = draft.newSubclassId
+        ? upsertClassTrack(nextTracksBase, draft.targetClassId, {
+            subclassId: draft.newSubclassId,
+          })
+        : nextTracksBase;
+
+      const nextTotalLevel = clampCharacterLevel(getTotalClassTrackLevels(nextTracks));
+
+      const currentChoiceForLevel = state.choicesByLevel[clampedTargetLevel] || {};
+      const nextLevelChoice: LevelChoice = {
+        ...currentChoiceForLevel,
+        ...buildLevelChoiceFromDraft(draft),
+      };
+
+      const nextChoicesByLevel: Record<number, LevelChoice> = {
+        ...state.choicesByLevel,
+        [clampedTargetLevel]: nextLevelChoice,
+      };
+
+      const nextAcquiredFeats = state.acquiredFeats.filter(
+        (entry) =>
+          !(entry.source === "level_up" && entry.sourceLevel === clampedTargetLevel),
+      );
+
+      if (draft.featId && draft.featId.trim().length > 0) {
+        nextAcquiredFeats.push({
+          featId: draft.featId,
+          source: "level_up",
+          sourceLevel: clampedTargetLevel,
+        });
+      }
+
+      const selectedFeatureSpellIds = Object.values(draft.featureChoices).filter(
+        (value) => typeof value === "string" && value.startsWith("spell_"),
+      );
+
+      const nextSpellsKnown = Array.from(
+        new Set([
+          ...state.spellsKnown,
+          ...draft.cantripsLearned,
+          ...draft.spellsLearned,
+          ...selectedFeatureSpellIds,
+        ]),
+      );
+
+      const nextHpRolls =
+        typeof draft.hpGained === "number" && draft.hpGained > 0
+          ? {
+              ...state.hpRolls,
+              [clampedTargetLevel]: Math.floor(draft.hpGained),
+            }
+          : state.hpRolls;
+
+      const nextPrimaryClassId = state.classId ?? nextTracks[0]?.classId ?? null;
+
+      const shouldMirrorSubclass =
+        state.classId === null || state.classId === draft.targetClassId;
+
+      const nextTopLevelSubclassId = shouldMirrorSubclass
+        ? (draft.newSubclassId ??
+          nextTracks.find((track) => track.classId === draft.targetClassId)
+            ?.subclassId ??
+          state.subclassId)
+        : state.subclassId;
+
+      committed = true;
+
+      return {
+        classTracks: nextTracks,
+        classId: nextPrimaryClassId,
+        subclassId: nextTopLevelSubclassId,
+        level: nextTotalLevel,
+        hpRolls: nextHpRolls,
+        choicesByLevel: nextChoicesByLevel,
+        acquiredFeats: nextAcquiredFeats,
+        spellsKnown: nextSpellsKnown,
+        levelUpModalState: {
+          isOpen: false,
+          targetLevel: null,
+          isBlocking: false,
+        },
+      };
+    });
+
+    return committed;
+  },
 
   updateLevelChoice: (level, updates) =>
     set((state) => {
@@ -868,6 +1031,30 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         [groupIndex]: optionIndex,
       };
       return { startingEquipmentSelections: updatedSelections };
+    }),
+
+  openLevelUpModal: (targetLevel, options) =>
+    set({
+      levelUpModalState: {
+        isOpen: true,
+        targetLevel: clampCharacterLevel(targetLevel),
+        isBlocking: options?.isBlocking ?? false,
+      },
+    }),
+
+  closeLevelUpModal: () =>
+    set((state) => {
+      if (state.levelUpModalState.isBlocking) {
+        return state;
+      }
+
+      return {
+        levelUpModalState: {
+          isOpen: false,
+          targetLevel: null,
+          isBlocking: false,
+        },
+      };
     }),
 
   // #endregion

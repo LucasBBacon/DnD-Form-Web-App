@@ -1,5 +1,7 @@
 import type { Ability, Skill } from "./common";
 
+export type LevelUpMode = "xp_gated" | "milestone_anytime";
+
 export interface LevelChoice {
   selectedClassId?: string;
   hpGained?: number; // Raw roll on the hit die

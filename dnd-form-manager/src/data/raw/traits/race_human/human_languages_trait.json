@@ -7,11 +7,13 @@
     },
     "effects": [
         {
-            "type": "language_grant",
-            "target": "lang_common"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_common"
         },
         {
-            "type": "language_choice",
+            "type": "proficiency_choice",
+            "category": "languages",
             "choice": {
                 "count": 1,
                 "pool": [

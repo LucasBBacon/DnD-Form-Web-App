@@ -3769,7 +3769,8 @@
     },
     "effects": [
       {
-        "type": "language_grant",
+        "type": "proficiency_choice",
+        "category": "languages",
         "choice": {
           "count": 1,
           "pool": "any"
@@ -4369,12 +4370,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "value": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "value": "lang_draconic"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_draconic"
       }
     ]
   },
@@ -4454,12 +4457,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "value": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "value": "lang_dwarvish"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_dwarvish"
       }
     ]
   },
@@ -4570,12 +4575,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_elvish"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_elvish"
       }
     ]
   },
@@ -4686,16 +4693,19 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_gnomish"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_gnomish"
       },
       {
-        "type": "language_grant",
-        "target": "lang_undercommon"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_undercommon"
       }
     ]
   },
@@ -4722,12 +4732,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_gnomish"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_gnomish"
       }
     ]
   },
@@ -4821,15 +4833,18 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_elvish"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_elvish"
       },
       {
-        "type": "language_choice",
+        "type": "proficiency_choice",
+        "category": "languages",
         "choice": {
           "count": 1,
           "pool": [
@@ -4909,12 +4924,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_orc"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_orc"
       }
     ]
   },
@@ -4979,12 +4996,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_halfling"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_halfling"
       }
     ]
   },
@@ -5112,11 +5131,13 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_choice",
+        "type": "proficiency_choice",
+        "category": "languages",
         "choice": {
           "count": 1,
           "pool": [
@@ -5197,12 +5218,14 @@
     },
     "effects": [
       {
-        "type": "language_grant",
-        "target": "lang_common"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_common"
       },
       {
-        "type": "language_grant",
-        "target": "lang_infernal"
+        "type": "proficiency",
+        "category": "languages",
+        "item": "lang_infernal"
       }
     ]
   },

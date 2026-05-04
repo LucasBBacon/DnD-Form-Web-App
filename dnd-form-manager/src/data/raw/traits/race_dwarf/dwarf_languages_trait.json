@@ -7,12 +7,14 @@
     },
     "effects": [
         {
-            "type": "language_grant",
-            "value": "lang_common"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_common"
         },
         {
-            "type": "language_grant",
-            "value": "lang_dwarvish"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_dwarvish"
         }
     ]
 }

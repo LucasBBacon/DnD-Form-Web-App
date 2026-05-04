@@ -175,6 +175,36 @@
     }
   },
   {
+    "id": "spell_dancing_lights",
+    "name": "Dancing Lights",
+    "level": 0,
+    "school": "evocation",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A bit of phosphorous or wychwood, or a glowworm."
+    },
+    "lore": {
+      "shortDescription": "Create up to four torch-sized lights within range.",
+      "fullText": "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius.\nAs a bonus action on your turn, you can move the lights up to 60 feet to a new spot within range. A light must be within 20 feet of another light created by this spell, and a light winks out if it exceeds the spell''s range."
+    }
+  },
+  {
     "id": "spell_healing_word",
     "name": "Healing Word",
     "level": 1,
@@ -196,6 +226,11 @@
       "vocal": true,
       "somatic": false,
       "material": false
+    },
+    "output": {
+      "healing": [
+        "buff_healing_word"
+      ]
     },
     "lore": {
       "shortDescription": "Heal a creature within range.",

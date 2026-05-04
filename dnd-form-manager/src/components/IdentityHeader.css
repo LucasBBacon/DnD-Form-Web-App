@@ -91,6 +91,27 @@
   color: #0056b3;
 }
 
+.identity-levelup-mode-field {
+  border-bottom: 2px solid transparent;
+}
+
+.identity-levelup-mode-select {
+  width: 100%;
+  min-width: 160px;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #ffffff;
+  color: #1f1f1f;
+}
+
+.identity-levelup-mode-select:focus {
+  outline: 2px solid #0056b3;
+  outline-offset: 1px;
+}
+
 @media (max-width: 800px) {
   .identity-header {
     /* Stack the Character Name above the details grid on smaller screens */

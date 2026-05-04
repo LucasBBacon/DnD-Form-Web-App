@@ -3,6 +3,8 @@ import { LabeledField } from "./Utils/LabeledField";
 import "./IdentityHeader.css";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getClassById, getRaceById } from "../data/staticDataApi";
+import { getAvailableLevelUpTargetForCharacter } from "../utils/levelAvailabilityUtils";
+import type { LevelUpMode } from "../types/progression";
 
 export const IdentityHeader: React.FC = () => {
   const {
@@ -11,13 +13,17 @@ export const IdentityHeader: React.FC = () => {
     level,
     classId,
     raceId,
-    backgroundId,
     playerName,
     setPlayerName,
     alignment,
     setAlignment,
     xp,
     setXp,
+    levelUpMode,
+    setLevelUpMode,
+    classTracks,
+    choicesByLevel,
+    openLevelUpModal,
   } = useCharacterStore();
 
   const classData = classId ? getClassById(classId) : null;
@@ -33,11 +39,27 @@ export const IdentityHeader: React.FC = () => {
 
   // Modal handlers
   const openLevelUpWizard = () => {
-    console.log("Trigger Level Up Modal / Routing");
+    const targetLevel = getAvailableLevelUpTargetForCharacter({
+      xp,
+      level,
+      levelUpMode,
+      classTracks,
+      choicesByLevel,
+    });
+
+    console.log("Calculated level-up target:", targetLevel);
+
+    if (targetLevel !== null) {
+      openLevelUpModal(targetLevel, { isBlocking: false });
+    }
   };
 
   const openOriginModal = () => {
     console.log("Trigger Race/Background Modal");
+  };
+
+  const handleLevelUpModeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setLevelUpMode(event.target.value as LevelUpMode);
   };
 
   return (
@@ -96,6 +118,20 @@ export const IdentityHeader: React.FC = () => {
             }
           }}
         />
+        <div className="labeled-field-container mode-readonly identity-levelup-mode-field">
+          <div className="field-value-wrapper">
+            <select
+              className="identity-levelup-mode-select"
+              aria-label="Level Up Mode"
+              value={levelUpMode}
+              onChange={handleLevelUpModeChange}
+            >
+              <option value="xp_gated">XP Gated</option>
+              <option value="milestone_anytime">Milestone Anytime</option>
+            </select>
+          </div>
+          <span className="field-label">LEVEL UP MODE</span>
+        </div>
       </div>
     </header>
   );

@@ -7,15 +7,18 @@
     },
     "effects": [
         {
-            "type": "language_grant",
-            "target": "lang_common"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_common"
         },
         {
-            "type": "language_grant",
-            "target": "lang_elvish"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_elvish"
         },
         {
-            "type": "language_choice",
+            "type": "proficiency_choice",
+            "category": "languages",
             "choice": {
                 "count": 1,
                 "pool": ["lang_dwarvish", "lang_giant", "lang_gnomish", "lang_orc", "lang_undercommon"]

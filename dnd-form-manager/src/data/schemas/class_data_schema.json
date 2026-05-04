@@ -152,24 +152,33 @@
             ],
             "properties": {
               "cantripsKnown": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "spellsKnown": {
-                "type": "integer"
+                "type": "integer",
+                "minimum": 0
               },
               "spellSlots": {
                 "type": "object",
                 "description": "Mapping of spell level (1-9) to number of slots available.",
-                "additionalProperties": {
-                  "type": "integer"
-                }
+                "patternProperties": {
+                  "^[1-9]$": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false
               }
-            }
+            },
+            "additionalProperties": false
           }
         },
         "required": [
-          "level"
-        ]
+          "level",
+          "features"
+        ],
+        "additionalProperties": false
       }
     },
     "lore": {

@@ -7,16 +7,19 @@
     },
     "effects": [
         {
-            "type": "language_grant",
-            "target": "lang_common"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_common"
         },
         {
-            "type": "language_grant",
-            "target": "lang_gnomish"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_gnomish"
         },
         {
-            "type": "language_grant",
-            "target": "lang_undercommon"
+            "type": "proficiency",
+            "category": "languages",
+            "item": "lang_undercommon"
         }
     ]
 }

@@ -145,7 +145,8 @@
       }
     },
     {
-      "level": 3
+      "level": 3,
+      "features": []
     },
     {
       "level": 4,
@@ -173,7 +174,8 @@
       }
     },
     {
-      "level": 7
+      "level": 7,
+      "features": []
     },
     {
       "level": 8,
@@ -187,7 +189,8 @@
       }
     },
     {
-      "level": 9
+      "level": 9,
+      "features": []
     },
     {
       "level": 10,
@@ -211,7 +214,8 @@
       ]
     },
     {
-      "level": 13
+      "level": 13,
+      "features": []
     },
     {
       "level": 14,
@@ -223,7 +227,8 @@
       }
     },
     {
-      "level": 15
+      "level": 15,
+      "features": []
     },
     {
       "level": 16,

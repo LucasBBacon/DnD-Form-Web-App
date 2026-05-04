@@ -41,7 +41,6 @@ export interface ClassData {
     choices: EquipmentChoiceGroup[];
   };
   subclassInfo: {
-    name: string;
     choiceLevel: number;
     optionsPool: string;
     displayLabel?: string;
