@@ -18,6 +18,7 @@ const EMPTY_STATE: CreationRequirementState = {
   choicesByLevel: {},
   chosenRacialSkills: [],
   startingEquipmentSelections: {},
+  startingEquipmentCategorySelections: {},
   spellsKnown: [],
   spellsPrepared: [],
   baseAbilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
@@ -76,7 +77,7 @@ describe("resolveCreationRequirements", () => {
       ...EMPTY_STATE,
       classId: "class_barbarian",
       classTracks: [{ classId: "class_barbarian", subclassId: null, level: 1 }],
-      startingEquipmentSelections: { 0: 1 },
+      startingEquipmentSelections: { 0: 0 },
     };
     const requirements = resolveCreationRequirements(state, NON_CASTER_POOLS);
     const equipReq = requirements.find(
@@ -84,6 +85,39 @@ describe("resolveCreationRequirements", () => {
     );
     expect(equipReq).toBeDefined();
     expect(equipReq?.isResolved).toBe(true);
+  });
+
+  it("requires category item selection when the chosen option includes a category reference", () => {
+    const state: CreationRequirementState = {
+      ...EMPTY_STATE,
+      classId: "class_barbarian",
+      classTracks: [{ classId: "class_barbarian", subclassId: null, level: 1 }],
+      startingEquipmentSelections: { 0: 1 },
+      startingEquipmentCategorySelections: {},
+    };
+
+    const unresolvedRequirements = resolveCreationRequirements(
+      state,
+      NON_CASTER_POOLS,
+    );
+    const unresolvedEquipReq = unresolvedRequirements.find(
+      (r) => r.type === "equipment_bundle" && r.id === "equipment_bundle_0",
+    );
+    expect(unresolvedEquipReq?.isResolved).toBe(false);
+
+    const resolvedRequirements = resolveCreationRequirements(
+      {
+        ...state,
+        startingEquipmentCategorySelections: {
+          "0:1:0:category_weapon_martial_melee": "item_weapon_longsword",
+        },
+      },
+      NON_CASTER_POOLS,
+    );
+    const resolvedEquipReq = resolvedRequirements.find(
+      (r) => r.type === "equipment_bundle" && r.id === "equipment_bundle_0",
+    );
+    expect(resolvedEquipReq?.isResolved).toBe(true);
   });
 
   it("returns cantrip and spell requirements for a spellcaster class", () => {

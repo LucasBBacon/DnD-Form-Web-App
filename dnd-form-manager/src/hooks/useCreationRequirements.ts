@@ -37,6 +37,9 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
   const startingEquipmentSelections = useCharacterStore(
     (s) => s.startingEquipmentSelections,
   );
+  const startingEquipmentCategorySelections = useCharacterStore(
+    (s) => s.startingEquipmentCategorySelections,
+  );
   const spellsKnown = useCharacterStore((s) => s.spellsKnown);
   const spellsPrepared = useCharacterStore((s) => s.spellsPrepared);
   const baseAbilityScores = useCharacterStore((s) => s.baseAbilityScores);
@@ -84,6 +87,7 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
           choicesByLevel,
           chosenRacialSkills,
           startingEquipmentSelections,
+          startingEquipmentCategorySelections,
           spellsKnown,
           spellsPrepared,
           baseAbilityScores,
@@ -105,6 +109,7 @@ export function useCreationRequirements(): UseCreationRequirementsReturn {
       choicesByLevel,
       chosenRacialSkills,
       startingEquipmentSelections,
+      startingEquipmentCategorySelections,
       spellsKnown,
       spellsPrepared,
       baseAbilityScores,

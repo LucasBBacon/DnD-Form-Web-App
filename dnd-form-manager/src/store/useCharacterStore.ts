@@ -352,6 +352,8 @@ export interface CharacterState {
 
   // Records the selected option index (per choice-group index) for starting equipment bundles, set during character creation
   startingEquipmentSelections: Record<number, number>;
+  // Records selected concrete item IDs for category references inside starting equipment bundles
+  startingEquipmentCategorySelections: Record<string, string>;
 }
 
 interface CharacterActions {
@@ -444,6 +446,15 @@ interface CharacterActions {
    * inventory management is tracked externally during creation).
    */
   setStartingEquipmentSelection: (groupIndex: number, optionIndex: number) => void;
+
+  /**
+   * Records a concrete item pick for a specific category reference embedded in a
+   * starting-equipment option bundle.
+   */
+  setStartingEquipmentCategorySelection: (
+    selectionKey: string,
+    itemId: string,
+  ) => void;
 
   openLevelUpModal: (targetLevel: number, options?: { isBlocking?: boolean }) => void;
 
@@ -645,6 +656,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   },
 
   startingEquipmentSelections: {},
+  startingEquipmentCategorySelections: {},
 };
 
 /**
@@ -897,6 +909,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       // Reset equipment bundle selections whenever the class changes since the
       // choice groups are class-specific
       startingEquipmentSelections: {},
+      startingEquipmentCategorySelections: {},
     })),
 
   setSubclass: (subclassId) =>
@@ -1121,8 +1134,28 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         ...state.startingEquipmentSelections,
         [groupIndex]: optionIndex,
       };
-      return { startingEquipmentSelections: updatedSelections };
+
+      // Clear any category picks for this choice group when option changes.
+      const groupPrefix = `${groupIndex}:`;
+      const updatedCategorySelections = Object.fromEntries(
+        Object.entries(state.startingEquipmentCategorySelections).filter(
+          ([key]) => !key.startsWith(groupPrefix),
+        ),
+      );
+
+      return {
+        startingEquipmentSelections: updatedSelections,
+        startingEquipmentCategorySelections: updatedCategorySelections,
+      };
     }),
+
+  setStartingEquipmentCategorySelection: (selectionKey, itemId) =>
+    set((state) => ({
+      startingEquipmentCategorySelections: {
+        ...state.startingEquipmentCategorySelections,
+        [selectionKey]: itemId,
+      },
+    })),
 
   openLevelUpModal: (targetLevel, options) =>
     set({

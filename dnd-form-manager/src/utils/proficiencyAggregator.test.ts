@@ -6,6 +6,8 @@ import {
   aggregateProficiencies,
   aggregateSaveProficiencies,
   aggregateSkillProficiencies,
+  deriveWeaponProficiencyTargets,
+  isWeaponProficient,
 } from "./proficiencyAggregator";
 
 vi.mock("./predicateEngine");
@@ -220,5 +222,62 @@ describe("proficiencyAggregator", () => {
       "category_artisans_tools",
     ]);
     expect(result.languagesAndOther.list).toEqual(["elvish"]);
+  });
+
+  it("normalizes canonical weapon category tokens to broad values", () => {
+    const result = aggregateNonSkillProficiencies({
+      choicesByLevel: {},
+      currentLevel: 1,
+      state,
+      stats,
+      traits: [
+        {
+          id: "trait_legacy_weapon_category",
+          name: "Legacy Weapon Category",
+          lore: { shortDescription: "Legacy weapon token format." },
+          effects: [
+            { type: "proficiency", category: "weapons", item: "category_weapon_simple" },
+          ],
+        },
+      ],
+    });
+
+    expect(result.weapons.list).toEqual(["simple"]);
+  });
+
+  it("derives category-aware weapon proficiency match targets", () => {
+    const targets = deriveWeaponProficiencyTargets({
+      baseItemId: "item_weapon_longsword",
+      weaponCategory: "martial_melee",
+      categoryIds: ["category_weapon_martial", "category_weapon_martial_melee"],
+    });
+
+    expect(targets).toContain("item_weapon_longsword");
+    expect(targets).toContain("weapon_longsword");
+    expect(targets).toContain("martial");
+    expect(targets).toContain("category_weapon_martial");
+    expect(targets).toContain("category_weapon_martial_melee");
+  });
+
+  it("matches weapon proficiency by category membership and legacy item ids", () => {
+    const byCategory = isWeaponProficient(
+      {
+        baseItemId: "item_weapon_longsword",
+        weaponCategory: "martial_melee",
+        categoryIds: ["category_weapon_martial_melee"],
+      },
+      (target) => target === "category_weapon_martial_melee",
+    );
+
+    const byLegacyItem = isWeaponProficient(
+      {
+        baseItemId: "item_weapon_longsword",
+        weaponCategory: "martial_melee",
+      },
+      (target) => target === "weapon_longsword",
+    );
+
+    expect(byCategory).toBe(true);
+    expect(byLegacyItem).toBe(true);
   });
 });

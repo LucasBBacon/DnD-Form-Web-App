@@ -9,11 +9,13 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "armor_chain_mail",
+        "kind": "item",
+        "refId": "item_armor_chain_mail",
         "quantity": 1
       },
       {
-        "itemId": "category_holy_symbol",
+        "kind": "category",
+        "refId": "category_holy_symbol",
         "quantity": 1
       }
     ],
@@ -24,11 +26,13 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_martial",
+                "kind": "category",
+                "refId": "category_weapon_martial",
                 "quantity": 1
               },
               {
-                "itemId": "category_armor_shield",
+                "kind": "category",
+                "refId": "category_armor_shield",
                 "quantity": 1
               }
             ]
@@ -36,7 +40,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_martial",
+                "kind": "category",
+                "refId": "category_weapon_martial",
                 "quantity": 2
               }
             ]
@@ -49,7 +54,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_javelin",
+                "kind": "item",
+                "refId": "item_weapon_javelin",
                 "quantity": 5
               }
             ]
@@ -57,7 +63,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple_melee",
+                "kind": "category",
+                "refId": "category_weapon_simple_melee",
                 "quantity": 1
               }
             ]
@@ -70,7 +77,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_priests",
+                "kind": "item",
+                "refId": "item_pack_priests",
                 "quantity": 1
               }
             ]
@@ -78,7 +86,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

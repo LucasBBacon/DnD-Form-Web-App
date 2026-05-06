@@ -1,25 +1,34 @@
 import type React from "react";
 import "./WizardPickerStage.css";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { getClassById, getItemById } from "../data/staticDataApi";
+import {
+  getClassById,
+  getItemsByCategory,
+  getItemById,
+  getItemCategoryById,
+} from "../data/staticDataApi";
+import {
+  makeStartingEquipmentCategorySelectionKey,
+  normalizeEquipmentReference,
+  type EquipmentReference,
+} from "../types/class";
 
 /** Resolves a display name for an item ID, falling back gracefully when the
  *  item data does not exist yet. */
 function resolveItemLabel(itemId: string, quantity: number): string {
   const itemData = getItemById(itemId);
-  if (!itemData) {
-    return `Missing equipment reference: ${itemId}`;
+  if (itemData) {
+    return quantity > 1 ? `${itemData.name} ×${quantity}` : itemData.name;
   }
-  return quantity > 1 ? `${itemData.name} ×${quantity}` : itemData.name;
-}
 
-/** Formats a bundle of equipment items into a single readable string. */
-function formatBundle(
-  bundle: Array<{ itemId: string; quantity: number }>,
-): string {
-  return bundle
-    .map((item) => resolveItemLabel(item.itemId, item.quantity))
-    .join(", ");
+  const categoryData = getItemCategoryById(itemId);
+  if (categoryData) {
+    return quantity > 1
+      ? `${categoryData.name} (pick ${quantity})`
+      : `${categoryData.name} (pick 1)`;
+  }
+
+  return `Missing equipment reference: ${itemId}`;
 }
 
 export const WizardEquipmentSelectionStage: React.FC = () => {
@@ -27,8 +36,14 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
   const startingEquipmentSelections = useCharacterStore(
     (s) => s.startingEquipmentSelections,
   );
+  const startingEquipmentCategorySelections = useCharacterStore(
+    (s) => s.startingEquipmentCategorySelections,
+  );
   const setStartingEquipmentSelection = useCharacterStore(
     (s) => s.setStartingEquipmentSelection,
+  );
+  const setStartingEquipmentCategorySelection = useCharacterStore(
+    (s) => s.setStartingEquipmentCategorySelection,
   );
 
   const classData = getClassById(classId);
@@ -43,9 +58,95 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
   }
 
   const { given, choices } = classData.startingEquipment;
-  const allGroupsResolved = choices.every(
-    (_, i) => startingEquipmentSelections[i] !== undefined,
-  );
+
+  const isGroupResolved = (
+    group: (typeof choices)[number],
+    groupIndex: number,
+  ): boolean => {
+    const selectedOptionIndex = startingEquipmentSelections[groupIndex];
+    if (selectedOptionIndex === undefined) {
+      return false;
+    }
+
+    const selectedBundle =
+      group.options[selectedOptionIndex]?.equipmentBundle ?? [];
+
+    return selectedBundle.every((entry, bundleIndex) => {
+      const normalized = normalizeEquipmentReference(entry);
+      if (normalized.kind !== "category") {
+        return true;
+      }
+
+      const selectionKey = makeStartingEquipmentCategorySelectionKey(
+        groupIndex,
+        selectedOptionIndex,
+        bundleIndex,
+        normalized.refId,
+      );
+      return !!startingEquipmentCategorySelections[selectionKey];
+    });
+  };
+
+  const resolvedGroupCount = choices.filter((group, groupIndex) =>
+    isGroupResolved(group, groupIndex),
+  ).length;
+  const allGroupsResolved = resolvedGroupCount === choices.length;
+
+  const renderBundleEntry = (
+    entry: EquipmentReference,
+    groupIndex: number,
+    optionIndex: number,
+    bundleIndex: number,
+  ) => {
+    const normalized = normalizeEquipmentReference(entry);
+
+    if (normalized.kind === "item") {
+      return (
+        <div key={`bundle-${bundleIndex}`}>
+          {resolveItemLabel(normalized.refId, normalized.quantity)}
+        </div>
+      );
+    }
+
+    const category = getItemCategoryById(normalized.refId);
+    const categoryItems = getItemsByCategory(normalized.refId);
+    const selectionKey = makeStartingEquipmentCategorySelectionKey(
+      groupIndex,
+      optionIndex,
+      bundleIndex,
+      normalized.refId,
+    );
+    const selectedItemId = startingEquipmentCategorySelections[selectionKey] ?? "";
+
+    return (
+      <div key={`bundle-${bundleIndex}`}>
+        <div>
+          {normalized.quantity > 1
+            ? `${category?.name ?? normalized.refId} x${normalized.quantity}`
+            : (category?.name ?? normalized.refId)}
+        </div>
+        {categoryItems.length > 0 ? (
+          <select
+            value={selectedItemId}
+            onClick={(event) => event.stopPropagation()}
+            onChange={(event) =>
+              setStartingEquipmentCategorySelection(selectionKey, event.target.value)
+            }
+            aria-label={`Choose item for ${category?.name ?? normalized.refId}`}
+          >
+            <option value="">Select an item</option>
+            {categoryItems.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <div>No items available in this category.</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="picker-stage">
@@ -60,8 +161,14 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
           <div className="picker-section-header">Included Gear</div>
           <ul className="picker-given-list">
             {given.map((item) => (
-              <li key={item.itemId} className="picker-given-item">
-                {resolveItemLabel(item.itemId, item.quantity)}
+              <li
+                key={`${normalizeEquipmentReference(item).kind}-${normalizeEquipmentReference(item).refId}`}
+                className="picker-given-item"
+              >
+                {resolveItemLabel(
+                  normalizeEquipmentReference(item).refId,
+                  normalizeEquipmentReference(item).quantity,
+                )}
               </li>
             ))}
           </ul>
@@ -92,7 +199,9 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
                           setStartingEquipmentSelection(groupIndex, optIndex)
                         }
                       >
-                        {formatBundle(opt.equipmentBundle)}
+                        {opt.equipmentBundle.map((entry, bundleIndex) =>
+                          renderBundleEntry(entry, groupIndex, optIndex, bundleIndex),
+                        )}
                       </div>
                     );
                   })}
@@ -114,8 +223,7 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
         <div
           className={`picker-counter ${allGroupsResolved ? "complete" : ""}`}
         >
-          {Object.keys(startingEquipmentSelections).length} / {choices.length}{" "}
-          choices made
+          {resolvedGroupCount} / {choices.length} choices made
         </div>
       )}
     </div>

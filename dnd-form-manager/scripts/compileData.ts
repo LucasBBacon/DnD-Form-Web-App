@@ -36,6 +36,9 @@ const raceSchema = JSON.parse(
 const itemSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'item_data_schema.json'), 'utf-8')
 );
+const itemCategorySchema = JSON.parse(
+  readFileSync(resolve(schemasDir, 'item_category_data_schema.json'), 'utf-8')
+);
 const spellSchema = JSON.parse(
   readFileSync(resolve(schemasDir, 'spell_data_schema.json'), 'utf-8')
 );
@@ -65,6 +68,7 @@ ajv.addSchema(definitionsSchema);
 const validateClass = ajv.compile(classSchema);
 const validateRace  = ajv.compile(raceSchema);
 const validateItem = ajv.compile(itemSchema);
+const validateItemCategory = ajv.compile(itemCategorySchema);
 const validateSpell = ajv.compile(spellSchema);
 const validateFeat = ajv.compile(featSchema);
 const validateSubclass = ajv.compile(subclassSchema);
@@ -163,6 +167,7 @@ console.log('\nCompiling raw data files...');
 compileFolder('classes', validateClass, 'classes.json');
 compileFolder('races',   validateRace,  'races.json');
 compileFolder('items', validateItem, 'items.json');
+compileFolder('itemCategories', validateItemCategory, 'itemCategories.json');
 compileFolder('spells', validateSpell, 'spells.json');
 compileFolder('feats', validateFeat, 'feats.json');
 compileFolder('subclasses', validateSubclass, 'subclasses.json');

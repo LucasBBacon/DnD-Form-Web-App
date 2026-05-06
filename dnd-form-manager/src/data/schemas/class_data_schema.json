@@ -3,6 +3,62 @@
   "title": "DnD Class",
   "description": "",
   "type": "object",
+  "definitions": {
+    "EquipmentReference": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "item"
+            },
+            "refId": {
+              "type": "string",
+              "pattern": "^item_[a-z0-9_]+$"
+            },
+            "quantity": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "condition": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "refId",
+            "quantity"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "category"
+            },
+            "refId": {
+              "type": "string",
+              "pattern": "^category_[a-z0-9_]+$"
+            },
+            "quantity": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "condition": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "refId",
+            "quantity"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
   "properties": {
     "id": {
       "type": "string",
@@ -31,21 +87,7 @@
           "type": "array",
           "description": "Items the class always starts with.",
           "items": {
-            "type": "object",
-            "properties": {
-              "itemId": {
-                "type": "string",
-                "description": "Id of the specific item or item category pool."
-              },
-              "quantity": {
-                "type": "integer",
-                "minimum": 1
-              }
-            },
-            "required": [
-              "itemId",
-              "quantity"
-            ]
+            "$ref": "#/definitions/EquipmentReference"
           }
         },
         "choices": {
@@ -68,20 +110,7 @@
                       "type": "array",
                       "description": "A set of items granted together as a single choice.",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "itemId": {
-                            "type": "string"
-                          },
-                          "quantity": {
-                            "type": "integer",
-                            "minimum": 1
-                          }
-                        },
-                        "required": [
-                          "itemId",
-                          "quantity"
-                        ]
+                        "$ref": "#/definitions/EquipmentReference"
                       }
                     }
                   },

@@ -10,7 +10,7 @@
         {
             "type": "proficiency",
             "category": "weapons",
-            "item": "weapon_category_simple"
+            "item": "category_weapon_simple"
         }
     ]
 }

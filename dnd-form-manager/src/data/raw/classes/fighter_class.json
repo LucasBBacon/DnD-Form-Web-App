@@ -15,7 +15,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_chain_mail",
+                "kind": "item",
+                "refId": "item_armor_chain_mail",
                 "quantity": 1
               }
             ]
@@ -23,15 +24,18 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_leather",
+                "kind": "item",
+                "refId": "item_armor_leather",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_longbow",
+                "kind": "item",
+                "refId": "item_weapon_longbow",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_arrow",
+                "kind": "item",
+                "refId": "item_weapon_arrow",
                 "quantity": 20
               }
             ]
@@ -44,11 +48,13 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_martial",
+                "kind": "category",
+                "refId": "category_weapon_martial",
                 "quantity": 1
               },
               {
-                "itemId": "category_armor_shield",
+                "kind": "category",
+                "refId": "category_armor_shield",
                 "quantity": 1
               }
             ]
@@ -56,7 +62,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_martial",
+                "kind": "category",
+                "refId": "category_weapon_martial",
                 "quantity": 2
               }
             ]
@@ -69,11 +76,13 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_light_crossbow",
+                "kind": "item",
+                "refId": "item_weapon_light_crossbow",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_crossbow_bolt",
+                "kind": "item",
+                "refId": "item_weapon_crossbow_bolt",
                 "quantity": 20
               }
             ]
@@ -81,7 +90,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_handaxe",
+                "kind": "item",
+                "refId": "item_weapon_handaxe",
                 "quantity": 2
               }
             ]
@@ -94,7 +104,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_dungeoneers",
+                "kind": "item",
+                "refId": "item_pack_dungeoneers",
                 "quantity": 1
               }
             ]
@@ -102,7 +113,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

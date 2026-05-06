@@ -9,15 +9,18 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "weapon_longbow",
+        "kind": "item",
+        "refId": "item_weapon_longbow",
         "quantity": 1
       },
       {
-        "itemId": "weapon_arrow",
+        "kind": "item",
+        "refId": "item_weapon_arrow",
         "quantity": 20
       },
       {
-        "itemId": "pack_quiver",
+        "kind": "item",
+        "refId": "item_pack_quiver",
         "quantity": 1
       }
     ],
@@ -28,7 +31,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_scale",
+                "kind": "item",
+                "refId": "item_armor_scale",
                 "quantity": 1
               }
             ]
@@ -36,7 +40,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_leather",
+                "kind": "item",
+                "refId": "item_armor_leather",
                 "quantity": 1
               }
             ]
@@ -49,7 +54,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_shortsword",
+                "kind": "item",
+                "refId": "item_weapon_shortsword",
                 "quantity": 2
               }
             ]
@@ -57,7 +63,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple",
+                "kind": "category",
+                "refId": "category_weapon_simple",
                 "quantity": 2
               }
             ]
@@ -70,7 +77,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_dungeoneers",
+                "kind": "item",
+                "refId": "item_pack_dungeoneers",
                 "quantity": 1
               }
             ]
@@ -78,7 +86,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

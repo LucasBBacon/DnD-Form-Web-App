@@ -8,15 +8,18 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "armor_leather",
+        "kind": "item",
+        "refId": "item_armor_leather",
         "quantity": 1
       },
       {
-        "itemId": "pack_explorers",
+        "kind": "item",
+        "refId": "item_pack_explorers",
         "quantity": 1
       },
       {
-        "itemId": "category_druidic_focus",
+        "kind": "category",
+        "refId": "category_druidic_focus",
         "quantity": 1
       }
     ],
@@ -27,7 +30,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_shield_wooden",
+                "kind": "item",
+                "refId": "item_armor_shield_wooden",
                 "quantity": 1
               }
             ]
@@ -35,7 +39,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple",
+                "kind": "category",
+                "refId": "category_weapon_simple",
                 "quantity": 1
               }
             ]
@@ -48,7 +53,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_scimitar",
+                "kind": "item",
+                "refId": "item_weapon_scimitar",
                 "quantity": 1
               }
             ]
@@ -56,7 +62,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple_melee",
+                "kind": "category",
+                "refId": "category_weapon_simple_melee",
                 "quantity": 1
               }
             ]

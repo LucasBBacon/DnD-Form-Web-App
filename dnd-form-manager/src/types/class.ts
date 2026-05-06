@@ -4,16 +4,50 @@ import type {
   SpellcastingProgressionPayload,
 } from "./trait";
 
-/**
- * Basic item representation for use in item management groups (inventory, etc).
- * Holds item reference Id and the number of said items.
- */
-export interface EquipmentItem {
-  /** Unique identifier for the equipment item */
-  itemId: string;
-  /** Quantity of the equipment item */
+export interface EquipmentItemReference {
+  /** Explicit item reference kind */
+  kind: "item";
+  /** Item id (item_*) */
+  refId: string;
+  /** Quantity of the referenced item */
   quantity: number;
 }
+
+export interface EquipmentCategoryReference {
+  /** Explicit category reference kind */
+  kind: "category";
+  /** Category id (category_*) */
+  refId: string;
+  /** Quantity awarded from this category */
+  quantity: number;
+}
+
+export type EquipmentReference =
+  | EquipmentItemReference
+  | EquipmentCategoryReference;
+
+export interface NormalizedEquipmentReference {
+  kind: "item" | "category";
+  refId: string;
+  quantity: number;
+}
+
+export const normalizeEquipmentReference = (
+  reference: EquipmentReference,
+): NormalizedEquipmentReference => {
+  return {
+    kind: reference.kind,
+    refId: reference.refId,
+    quantity: reference.quantity,
+  };
+};
+
+export const makeStartingEquipmentCategorySelectionKey = (
+  groupIndex: number,
+  optionIndex: number,
+  bundleIndex: number,
+  categoryId: string,
+): string => `${groupIndex}:${optionIndex}:${bundleIndex}:${categoryId}`;
 
 /**
  * Generic grouped item references, with quantities.
@@ -23,7 +57,7 @@ export interface EquipmentChoiceGroup {
   /** Number of items to choose from the options */
   choose: number;
   /** Options available for selection */
-  options: { equipmentBundle: EquipmentItem[] }[];
+  options: { equipmentBundle: EquipmentReference[] }[];
 }
 
 export type { SpellcastingProgression, SpellcastingProgressionPayload };
@@ -57,7 +91,7 @@ export interface ClassData {
   /** Starting equipment for the class */
   startingEquipment: {
     /** Equipment items given to the character at the start */
-    given: EquipmentItem[];
+    given: EquipmentReference[];
     /** Equipment choices available to the character at the start */
     choices: EquipmentChoiceGroup[];
   };

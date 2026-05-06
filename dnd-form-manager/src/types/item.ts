@@ -129,3 +129,12 @@ export interface ItemData {
 
   // TODO: add modifiers, etc
 }
+
+export interface ItemCategoryData {
+  /** Unique identifier for the item category */
+  id: string;
+  /** Display name of the category */
+  name: string;
+  /** IDs of items that belong to this category */
+  itemIds: string[];
+}

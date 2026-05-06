@@ -258,7 +258,7 @@ const normalizeWeaponTarget = (target: string): string | null => {
     return target;
   }
 
-  if (target.startsWith("category_weapon")) {
+  if (target.startsWith("category_weapon_")) {
     return target;
   }
 
@@ -276,6 +276,65 @@ const normalizeWeaponTarget = (target: string): string | null => {
 
   return null;
 };
+
+/**
+ * Derives all proficiency tokens that should match a weapon.
+ * Includes canonical categories, legacy item ids, and explicit category ids.
+ */
+export const deriveWeaponProficiencyTargets = (
+  options: {
+    baseItemId: string;
+    weaponCategory: string;
+    categoryIds?: string[];
+  },
+): string[] => {
+  const targets = new Set<string>();
+  const categoryIds = options.categoryIds ?? [];
+
+  if (options.baseItemId) {
+    targets.add(options.baseItemId);
+
+    if (options.baseItemId.startsWith("item_")) {
+      targets.add(options.baseItemId.slice("item_".length));
+    }
+  }
+
+  const normalizedCategory = options.weaponCategory.trim().toLowerCase();
+  if (normalizedCategory.length > 0) {
+    targets.add(`category_weapon_${normalizedCategory}`);
+
+    if (normalizedCategory.startsWith("simple")) {
+      targets.add("simple");
+      targets.add("category_weapon_simple");
+    }
+
+    if (normalizedCategory.startsWith("martial")) {
+      targets.add("martial");
+      targets.add("category_weapon_martial");
+    }
+  }
+
+  categoryIds
+    .filter((id) => id.startsWith("category_weapon_"))
+    .forEach((id) => targets.add(id));
+
+  return Array.from(targets);
+};
+
+/**
+ * Determines whether a weapon is proficient based on aggregated proficiencies.
+ */
+export const isWeaponProficient = (
+  options: {
+    baseItemId: string;
+    weaponCategory: string;
+    categoryIds?: string[];
+  },
+  hasProficiency: (target: string) => boolean,
+): boolean =>
+  deriveWeaponProficiencyTargets(options).some((target) =>
+    hasProficiency(target),
+  );
 
 /**
  * Normalizes an armor target string.

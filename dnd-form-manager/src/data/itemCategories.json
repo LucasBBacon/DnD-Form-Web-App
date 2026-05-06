@@ -1,0 +1,67 @@
+[
+  {
+    "id": "category_arcane_focus",
+    "name": "Arcane Focuses",
+    "itemIds": []
+  },
+  {
+    "id": "category_armor_shield",
+    "name": "Shields",
+    "itemIds": []
+  },
+  {
+    "id": "category_artisans_tools",
+    "name": "Artisan's Tools",
+    "itemIds": []
+  },
+  {
+    "id": "category_druidic_focus",
+    "name": "Druidic Focuses",
+    "itemIds": []
+  },
+  {
+    "id": "category_holy_symbol",
+    "name": "Holy Symbols",
+    "itemIds": []
+  },
+  {
+    "id": "category_musical_instrument",
+    "name": "Musical Instruments",
+    "itemIds": [
+      "item_musical_instrument_lute"
+    ]
+  },
+  {
+    "id": "category_weapon_martial",
+    "name": "Martial Weapons",
+    "itemIds": [
+      "item_weapon_longsword",
+      "item_weapon_rapier"
+    ]
+  },
+  {
+    "id": "category_weapon_martial_melee",
+    "name": "Martial Melee Weapons",
+    "itemIds": [
+      "item_weapon_longsword",
+      "item_weapon_rapier"
+    ]
+  },
+  {
+    "id": "category_weapon_simple",
+    "name": "Simple Weapons",
+    "itemIds": [
+      "item_weapon_club",
+      "item_weapon_dagger",
+      "item_weapon_crossbow_light"
+    ]
+  },
+  {
+    "id": "category_weapon_simple_melee",
+    "name": "Simple Melee Weapons",
+    "itemIds": [
+      "item_weapon_club",
+      "item_weapon_dagger"
+    ]
+  }
+]

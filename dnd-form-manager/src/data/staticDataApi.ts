@@ -2,7 +2,7 @@ import type { Race } from "../types/race";
 import type { SubraceData } from "../types/subrace";
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
-import type { ItemData } from "../types/item";
+import type { ItemCategoryData, ItemData } from "../types/item";
 import type { SpellData, SpellRawData } from "../types/spell";
 import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
@@ -13,6 +13,7 @@ import rawSubracesData from "./subraces.json";
 import rawClassesData from "./classes.json";
 import rawSubclassesData from "./subclasses.json";
 import rawItemsData from "./items.json";
+import rawItemCategoriesData from "./itemCategories.json";
 import rawSpellsData from "./spells.json";
 import rawFeatsData from "./feats.json";
 import rawTraitsData from "./traits.json"
@@ -98,6 +99,34 @@ export const getItemById = (id: string | null): ItemData | null => {
 
 export const getAllItems = (): ItemData[] => {
   return itemsArray;
+};
+
+const itemCategoriesArray = rawItemCategoriesData as ItemCategoryData[];
+const itemCategoryDictionary: Record<string, ItemCategoryData> = {};
+itemCategoriesArray.forEach((category) => {
+  itemCategoryDictionary[category.id] = category;
+});
+
+export const getItemCategoryById = (
+  id: string | null,
+): ItemCategoryData | null => {
+  if (!id) return null;
+  return itemCategoryDictionary[id] || null;
+};
+
+export const getAllItemCategories = (): ItemCategoryData[] => {
+  return itemCategoriesArray;
+};
+
+export const getItemsByCategory = (categoryId: string): ItemData[] => {
+  const category = itemCategoryDictionary[categoryId];
+  if (!category) {
+    return [];
+  }
+
+  return category.itemIds
+    .map((itemId) => itemsDictionary[itemId])
+    .filter((item): item is ItemData => item !== undefined);
 };
 
 // region Spells API

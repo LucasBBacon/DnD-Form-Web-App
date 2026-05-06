@@ -9,11 +9,13 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "pack_explorers",
+        "kind": "item",
+        "refId": "item_pack_explorers",
         "quantity": 1
       },
       {
-        "itemId": "weapon_javelin",
+        "kind": "item",
+        "refId": "item_weapon_javelin",
         "quantity": 4
       }
     ],
@@ -24,7 +26,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_greataxe",
+                "kind": "item",
+                "refId": "item_weapon_greataxe",
                 "quantity": 1
               }
             ]
@@ -32,7 +35,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_martial_melee",
+                "kind": "category",
+                "refId": "category_weapon_martial_melee",
                 "quantity": 1
               }
             ]
@@ -45,7 +49,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_handaxe",
+                "kind": "item",
+                "refId": "item_weapon_handaxe",
                 "quantity": 2
               }
             ]
@@ -53,7 +58,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple",
+                "kind": "category",
+                "refId": "category_weapon_simple",
                 "quantity": 1
               }
             ]

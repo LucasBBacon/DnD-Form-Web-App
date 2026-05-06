@@ -6,7 +6,8 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "magic_item_spellbook",
+        "kind": "item",
+        "refId": "item_magic_item_spellbook",
         "quantity": 1
       }
     ],
@@ -17,7 +18,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_quarterstaff",
+                "kind": "item",
+                "refId": "item_weapon_quarterstaff",
                 "quantity": 1
               }
             ]
@@ -25,7 +27,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_dagger",
+                "kind": "item",
+                "refId": "item_weapon_dagger",
                 "quantity": 1
               }
             ]
@@ -38,7 +41,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "gear_component_pouch",
+                "kind": "item",
+                "refId": "item_gear_component_pouch",
                 "quantity": 1
               }
             ]
@@ -46,7 +50,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_arcane_focus",
+                "kind": "category",
+                "refId": "category_arcane_focus",
                 "quantity": 1
               }
             ]
@@ -59,7 +64,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_scholars",
+                "kind": "item",
+                "refId": "item_pack_scholars",
                 "quantity": 1
               }
             ]
@@ -67,7 +73,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

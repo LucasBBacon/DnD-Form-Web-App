@@ -1,0 +1,8 @@
+{
+  "id": "category_weapon_martial_melee",
+  "name": "Martial Melee Weapons",
+  "itemIds": [
+    "item_weapon_longsword",
+    "item_weapon_rapier"
+  ]
+}

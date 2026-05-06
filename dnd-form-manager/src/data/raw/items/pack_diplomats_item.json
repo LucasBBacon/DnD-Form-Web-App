@@ -1,0 +1,13 @@
+{
+    "id": "item_pack_diplomats",
+    "name": "Diplomat's Pack",
+    "type": "gear",
+    "weight": 36,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A pack designed for diplomats and travelers, containing essential items for communication and documentation.",
+        "fullText": "A pack that includes a chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap."
+    }
+}

@@ -42,6 +42,45 @@
     }
   },
   {
+    "id": "item_musical_instrument_lute",
+    "name": "Lute",
+    "type": "tool",
+    "weight": 2,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "A stringed musical instrument commonly used by bards and minstrels.",
+      "fullText": "A stringed musical instrument commonly used by bards and minstrels to accompany their performances."
+    }
+  },
+  {
+    "id": "item_pack_diplomats",
+    "name": "Diplomat's Pack",
+    "type": "gear",
+    "weight": 36,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "A pack designed for diplomats and travelers, containing essential items for communication and documentation.",
+      "fullText": "A pack that includes a chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap."
+    }
+  },
+  {
+    "id": "item_pack_entertainers",
+    "name": "Entertainer's Pack",
+    "type": "gear",
+    "weight": 33,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "A pack designed for entertainers and performers, containing essential items for travel and performance.",
+      "fullText": "A pack that includes a backpack, a bedroll, 2 costumes, 5 candles, 5 days of rations, a waterskin, and a disguise kit."
+    }
+  },
+  {
     "id": "item_torch",
     "name": "Torch",
     "type": "gear",
@@ -60,6 +99,9 @@
     "name": "Club",
     "type": "weapon",
     "weight": 2,
+    "stacking": {
+      "mode": "instance"
+    },
     "lore": {
       "shortDescription": "A simple wooden bludgeon that is easy to carry and use.",
       "fullText": "A club is a basic one-handed melee weapon made from a sturdy length of wood. It deals bludgeoning damage and is light enough to be used with two-weapon fighting when paired with another light melee weapon."
@@ -93,6 +135,75 @@
       ],
       "range": "80/320 ft",
       "ammoItemId": "item_ammo_bolt"
+    }
+  },
+  {
+    "id": "item_weapon_dagger",
+    "name": "Dagger",
+    "type": "weapon",
+    "weight": 1,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "A small, easily concealed blade that is perfect for close combat and throwing.",
+      "fullText": "A dagger is a simple melee weapon that is light and easy to conceal. It can be used for both stabbing and throwing, making it a versatile choice for adventurers. Daggers deal piercing damage and have the finesse property, allowing you to use your Dexterity modifier for attack and damage rolls instead of Strength. Additionally, daggers have the thrown property, giving them a range of 20/60 feet."
+    },
+    "weaponProperties": {
+      "category": "simple_melee",
+      "damageDice": "1d4",
+      "damageType": "piercing",
+      "properties": [
+        "finesse",
+        "light",
+        "thrown"
+      ],
+      "range": "20/60 ft"
+    }
+  },
+  {
+    "id": "item_weapon_longsword",
+    "name": "Longsword",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+      "mode": "instance"
+    },
+    "weaponProperties": {
+      "category": "martial_melee",
+      "damageDice": "1d8",
+      "damageType": "slashing",
+      "properties": [
+        "versatile"
+      ],
+      "versatileDamageDice": "1d10",
+      "range": "5 ft"
+    },
+    "lore": {
+      "shortDescription": "A versatile melee weapon that can be used with one or two hands.",
+      "fullText": "A longsword is a versatile melee weapon that can be used with one or two hands. It deals slashing damage and has the versatile property, allowing you to choose between using it with one hand for 1d8 damage or with two hands for 1d10 damage. Longswords are commonly used by knights and warriors who value both offense and defense in combat."
+    }
+  },
+  {
+    "id": "item_weapon_rapier",
+    "name": "Rapier",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+      "mode": "instance"
+    },
+    "weaponProperties": {
+      "category": "martial_melee",
+      "damageDice": "1d8",
+      "damageType": "piercing",
+      "properties": [
+        "finesse"
+      ],
+      "range": "5 ft"
+    },
+    "lore": {
+      "shortDescription": "A slender, sharply pointed sword designed for thrusting attacks.",
+      "fullText": "A rapier is a slender, sharply pointed sword designed for thrusting attacks. It is a finesse weapon, allowing the wielder to use their Dexterity modifier for attack and damage rolls. Rapiers are commonly used in duels and by those who prefer precision over brute strength."
     }
   }
 ]

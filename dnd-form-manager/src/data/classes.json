@@ -10,11 +10,13 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "pack_explorers",
+          "kind": "item",
+          "refId": "item_pack_explorers",
           "quantity": 1
         },
         {
-          "itemId": "weapon_javelin",
+          "kind": "item",
+          "refId": "item_weapon_javelin",
           "quantity": 4
         }
       ],
@@ -25,7 +27,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_greataxe",
+                  "kind": "item",
+                  "refId": "item_weapon_greataxe",
                   "quantity": 1
                 }
               ]
@@ -33,7 +36,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_martial_melee",
+                  "kind": "category",
+                  "refId": "category_weapon_martial_melee",
                   "quantity": 1
                 }
               ]
@@ -46,7 +50,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_handaxe",
+                  "kind": "item",
+                  "refId": "item_weapon_handaxe",
                   "quantity": 2
                 }
               ]
@@ -54,7 +59,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -250,11 +256,13 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "armor_leather",
+          "kind": "item",
+          "refId": "item_armor_leather",
           "quantity": 1
         },
         {
-          "itemId": "weapon_dagger",
+          "kind": "item",
+          "refId": "item_weapon_dagger",
           "quantity": 1
         }
       ],
@@ -265,7 +273,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_rapier",
+                  "kind": "item",
+                  "refId": "item_weapon_rapier",
                   "quantity": 1
                 }
               ]
@@ -273,7 +282,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_longsword",
+                  "kind": "item",
+                  "refId": "item_weapon_longsword",
                   "quantity": 1
                 }
               ]
@@ -281,7 +291,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -294,7 +305,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_diplomats",
+                  "kind": "item",
+                  "refId": "item_pack_diplomats",
                   "quantity": 1
                 }
               ]
@@ -302,7 +314,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_entertainers",
+                  "kind": "item",
+                  "refId": "item_pack_entertainers",
                   "quantity": 1
                 }
               ]
@@ -315,7 +328,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "musical_instrument_lute",
+                  "kind": "item",
+                  "refId": "item_musical_instrument_lute",
                   "quantity": 1
                 }
               ]
@@ -323,7 +337,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_musical_instrument",
+                  "kind": "category",
+                  "refId": "category_musical_instrument",
                   "quantity": 1
                 }
               ]
@@ -508,11 +523,13 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "category_armor_shield",
+          "kind": "category",
+          "refId": "category_armor_shield",
           "quantity": 1
         },
         {
-          "itemId": "category_holy_symbol",
+          "kind": "category",
+          "refId": "category_holy_symbol",
           "quantity": 1
         }
       ],
@@ -523,7 +540,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_mace",
+                  "kind": "item",
+                  "refId": "item_weapon_mace",
                   "quantity": 1
                 }
               ]
@@ -531,7 +549,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_warhammer",
+                  "kind": "item",
+                  "refId": "item_weapon_warhammer",
                   "quantity": 1
                 }
               ]
@@ -544,7 +563,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_scale_mail",
+                  "kind": "item",
+                  "refId": "item_armor_scale_mail",
                   "quantity": 1
                 }
               ]
@@ -552,7 +572,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_leather",
+                  "kind": "item",
+                  "refId": "item_armor_leather",
                   "quantity": 1
                 }
               ]
@@ -560,7 +581,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_chain_mail",
+                  "kind": "item",
+                  "refId": "item_armor_chain_mail",
                   "quantity": 1,
                   "condition": "proficiency_category_armor_heavy"
                 }
@@ -574,11 +596,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_light_crossbow",
+                  "kind": "item",
+                  "refId": "item_weapon_light_crossbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_crossbow_bolt",
+                  "kind": "item",
+                  "refId": "item_weapon_crossbow_bolt",
                   "quantity": 20
                 }
               ]
@@ -586,7 +610,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -599,7 +624,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_priests",
+                  "kind": "item",
+                  "refId": "item_pack_priests",
                   "quantity": 1
                 }
               ]
@@ -607,7 +633,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -782,15 +809,18 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "armor_leather",
+          "kind": "item",
+          "refId": "item_armor_leather",
           "quantity": 1
         },
         {
-          "itemId": "pack_explorers",
+          "kind": "item",
+          "refId": "item_pack_explorers",
           "quantity": 1
         },
         {
-          "itemId": "category_druidic_focus",
+          "kind": "category",
+          "refId": "category_druidic_focus",
           "quantity": 1
         }
       ],
@@ -801,7 +831,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_shield_wooden",
+                  "kind": "item",
+                  "refId": "item_armor_shield_wooden",
                   "quantity": 1
                 }
               ]
@@ -809,7 +840,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -822,7 +854,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_scimitar",
+                  "kind": "item",
+                  "refId": "item_weapon_scimitar",
                   "quantity": 1
                 }
               ]
@@ -830,7 +863,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple_melee",
+                  "kind": "category",
+                  "refId": "category_weapon_simple_melee",
                   "quantity": 1
                 }
               ]
@@ -991,7 +1025,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_chain_mail",
+                  "kind": "item",
+                  "refId": "item_armor_chain_mail",
                   "quantity": 1
                 }
               ]
@@ -999,15 +1034,18 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_leather",
+                  "kind": "item",
+                  "refId": "item_armor_leather",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_longbow",
+                  "kind": "item",
+                  "refId": "item_weapon_longbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_arrow",
+                  "kind": "item",
+                  "refId": "item_weapon_arrow",
                   "quantity": 20
                 }
               ]
@@ -1020,11 +1058,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_martial",
+                  "kind": "category",
+                  "refId": "category_weapon_martial",
                   "quantity": 1
                 },
                 {
-                  "itemId": "category_armor_shield",
+                  "kind": "category",
+                  "refId": "category_armor_shield",
                   "quantity": 1
                 }
               ]
@@ -1032,7 +1072,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_martial",
+                  "kind": "category",
+                  "refId": "category_weapon_martial",
                   "quantity": 2
                 }
               ]
@@ -1045,11 +1086,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_light_crossbow",
+                  "kind": "item",
+                  "refId": "item_weapon_light_crossbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_crossbow_bolt",
+                  "kind": "item",
+                  "refId": "item_weapon_crossbow_bolt",
                   "quantity": 20
                 }
               ]
@@ -1057,7 +1100,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_handaxe",
+                  "kind": "item",
+                  "refId": "item_weapon_handaxe",
                   "quantity": 2
                 }
               ]
@@ -1070,7 +1114,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -1078,7 +1123,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -1257,7 +1303,8 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "weapon_dart",
+          "kind": "item",
+          "refId": "item_weapon_dart",
           "quantity": 10
         }
       ],
@@ -1268,7 +1315,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_shortsword",
+                  "kind": "item",
+                  "refId": "item_weapon_shortsword",
                   "quantity": 1
                 }
               ]
@@ -1276,7 +1324,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -1289,7 +1338,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -1297,7 +1347,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -1559,11 +1610,13 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "armor_chain_mail",
+          "kind": "item",
+          "refId": "item_armor_chain_mail",
           "quantity": 1
         },
         {
-          "itemId": "category_holy_symbol",
+          "kind": "category",
+          "refId": "category_holy_symbol",
           "quantity": 1
         }
       ],
@@ -1574,11 +1627,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_martial",
+                  "kind": "category",
+                  "refId": "category_weapon_martial",
                   "quantity": 1
                 },
                 {
-                  "itemId": "category_armor_shield",
+                  "kind": "category",
+                  "refId": "category_armor_shield",
                   "quantity": 1
                 }
               ]
@@ -1586,7 +1641,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_martial",
+                  "kind": "category",
+                  "refId": "category_weapon_martial",
                   "quantity": 2
                 }
               ]
@@ -1599,7 +1655,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_javelin",
+                  "kind": "item",
+                  "refId": "item_weapon_javelin",
                   "quantity": 5
                 }
               ]
@@ -1607,7 +1664,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple_melee",
+                  "kind": "category",
+                  "refId": "category_weapon_simple_melee",
                   "quantity": 1
                 }
               ]
@@ -1620,7 +1678,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_priests",
+                  "kind": "item",
+                  "refId": "item_pack_priests",
                   "quantity": 1
                 }
               ]
@@ -1628,7 +1687,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -1782,15 +1842,18 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "weapon_longbow",
+          "kind": "item",
+          "refId": "item_weapon_longbow",
           "quantity": 1
         },
         {
-          "itemId": "weapon_arrow",
+          "kind": "item",
+          "refId": "item_weapon_arrow",
           "quantity": 20
         },
         {
-          "itemId": "pack_quiver",
+          "kind": "item",
+          "refId": "item_pack_quiver",
           "quantity": 1
         }
       ],
@@ -1801,7 +1864,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_scale",
+                  "kind": "item",
+                  "refId": "item_armor_scale",
                   "quantity": 1
                 }
               ]
@@ -1809,7 +1873,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "armor_leather",
+                  "kind": "item",
+                  "refId": "item_armor_leather",
                   "quantity": 1
                 }
               ]
@@ -1822,7 +1887,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_shortsword",
+                  "kind": "item",
+                  "refId": "item_weapon_shortsword",
                   "quantity": 2
                 }
               ]
@@ -1830,7 +1896,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 2
                 }
               ]
@@ -1843,7 +1910,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -1851,7 +1919,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -2008,15 +2077,18 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "armor_leather",
+          "kind": "item",
+          "refId": "item_armor_leather",
           "quantity": 1
         },
         {
-          "itemId": "weapon_dagger",
+          "kind": "item",
+          "refId": "item_weapon_dagger",
           "quantity": 2
         },
         {
-          "itemId": "tool_thieves_tools",
+          "kind": "item",
+          "refId": "item_tool_thieves_tools",
           "quantity": 1
         }
       ],
@@ -2027,7 +2099,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_rapier",
+                  "kind": "item",
+                  "refId": "item_weapon_rapier",
                   "quantity": 1
                 }
               ]
@@ -2035,7 +2108,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_shortsword",
+                  "kind": "item",
+                  "refId": "item_weapon_shortsword",
                   "quantity": 1
                 }
               ]
@@ -2048,15 +2122,18 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_shortbow",
+                  "kind": "item",
+                  "refId": "item_weapon_shortbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_arrow",
+                  "kind": "item",
+                  "refId": "item_weapon_arrow",
                   "quantity": 20
                 },
                 {
-                  "itemId": "pack_quiver",
+                  "kind": "item",
+                  "refId": "item_pack_quiver",
                   "quantity": 1
                 }
               ]
@@ -2064,7 +2141,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_shortsword",
+                  "kind": "item",
+                  "refId": "item_weapon_shortsword",
                   "quantity": 1
                 }
               ]
@@ -2077,7 +2155,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_burglars",
+                  "kind": "item",
+                  "refId": "item_pack_burglars",
                   "quantity": 1
                 }
               ]
@@ -2085,7 +2164,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -2093,7 +2173,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -2308,7 +2389,8 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "weapon_dagger",
+          "kind": "item",
+          "refId": "item_weapon_dagger",
           "quantity": 2
         }
       ],
@@ -2319,11 +2401,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_light_crossbow",
+                  "kind": "item",
+                  "refId": "item_weapon_light_crossbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_crossbow_bolt",
+                  "kind": "item",
+                  "refId": "item_weapon_crossbow_bolt",
                   "quantity": 20
                 }
               ]
@@ -2331,7 +2415,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -2344,7 +2429,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "gear_component_pouch",
+                  "kind": "item",
+                  "refId": "item_gear_component_pouch",
                   "quantity": 1
                 }
               ]
@@ -2352,7 +2438,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_arcane_focus",
+                  "kind": "category",
+                  "refId": "category_arcane_focus",
                   "quantity": 1
                 }
               ]
@@ -2365,7 +2452,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -2373,7 +2461,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]
@@ -2573,15 +2662,18 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "armor_leather",
+          "kind": "item",
+          "refId": "item_armor_leather",
           "quantity": 1
         },
         {
-          "itemId": "weapon_dagger",
+          "kind": "item",
+          "refId": "item_weapon_dagger",
           "quantity": 2
         },
         {
-          "itemId": "category_weapon_simple",
+          "kind": "category",
+          "refId": "category_weapon_simple",
           "quantity": 1
         }
       ],
@@ -2592,11 +2684,13 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_light_crossbow",
+                  "kind": "item",
+                  "refId": "item_weapon_light_crossbow",
                   "quantity": 1
                 },
                 {
-                  "itemId": "weapon_crossbow_bolt",
+                  "kind": "item",
+                  "refId": "item_weapon_crossbow_bolt",
                   "quantity": 20
                 }
               ]
@@ -2604,7 +2698,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_weapon_simple",
+                  "kind": "category",
+                  "refId": "category_weapon_simple",
                   "quantity": 1
                 }
               ]
@@ -2617,7 +2712,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "gear_component_pouch",
+                  "kind": "item",
+                  "refId": "item_gear_component_pouch",
                   "quantity": 1
                 }
               ]
@@ -2625,7 +2721,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_arcane_focus",
+                  "kind": "category",
+                  "refId": "category_arcane_focus",
                   "quantity": 1
                 }
               ]
@@ -2638,7 +2735,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_scholars",
+                  "kind": "item",
+                  "refId": "item_pack_scholars",
                   "quantity": 1
                 }
               ]
@@ -2646,7 +2744,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_dungeoneers",
+                  "kind": "item",
+                  "refId": "item_pack_dungeoneers",
                   "quantity": 1
                 }
               ]
@@ -2791,7 +2890,8 @@
     "startingEquipment": {
       "given": [
         {
-          "itemId": "magic_item_spellbook",
+          "kind": "item",
+          "refId": "item_magic_item_spellbook",
           "quantity": 1
         }
       ],
@@ -2802,7 +2902,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_quarterstaff",
+                  "kind": "item",
+                  "refId": "item_weapon_quarterstaff",
                   "quantity": 1
                 }
               ]
@@ -2810,7 +2911,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "weapon_dagger",
+                  "kind": "item",
+                  "refId": "item_weapon_dagger",
                   "quantity": 1
                 }
               ]
@@ -2823,7 +2925,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "gear_component_pouch",
+                  "kind": "item",
+                  "refId": "item_gear_component_pouch",
                   "quantity": 1
                 }
               ]
@@ -2831,7 +2934,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "category_arcane_focus",
+                  "kind": "category",
+                  "refId": "category_arcane_focus",
                   "quantity": 1
                 }
               ]
@@ -2844,7 +2948,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_scholars",
+                  "kind": "item",
+                  "refId": "item_pack_scholars",
                   "quantity": 1
                 }
               ]
@@ -2852,7 +2957,8 @@
             {
               "equipmentBundle": [
                 {
-                  "itemId": "pack_explorers",
+                  "kind": "item",
+                  "refId": "item_pack_explorers",
                   "quantity": 1
                 }
               ]

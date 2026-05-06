@@ -9,11 +9,13 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "category_armor_shield",
+        "kind": "category",
+        "refId": "category_armor_shield",
         "quantity": 1
       },
       {
-        "itemId": "category_holy_symbol",
+        "kind": "category",
+        "refId": "category_holy_symbol",
         "quantity": 1
       }
     ],
@@ -24,7 +26,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_mace",
+                "kind": "item",
+                "refId": "item_weapon_mace",
                 "quantity": 1
               }
             ]
@@ -32,7 +35,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_warhammer",
+                "kind": "item",
+                "refId": "item_weapon_warhammer",
                 "quantity": 1
               }
             ]
@@ -45,7 +49,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_scale_mail",
+                "kind": "item",
+                "refId": "item_armor_scale_mail",
                 "quantity": 1
               }
             ]
@@ -53,7 +58,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_leather",
+                "kind": "item",
+                "refId": "item_armor_leather",
                 "quantity": 1
               }
             ]
@@ -61,7 +67,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "armor_chain_mail",
+                "kind": "item",
+                "refId": "item_armor_chain_mail",
                 "quantity": 1,
                 "condition": "proficiency_category_armor_heavy"
               }
@@ -75,11 +82,13 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_light_crossbow",
+                "kind": "item",
+                "refId": "item_weapon_light_crossbow",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_crossbow_bolt",
+                "kind": "item",
+                "refId": "item_weapon_crossbow_bolt",
                 "quantity": 20
               }
             ]
@@ -87,7 +96,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple",
+                "kind": "category",
+                "refId": "category_weapon_simple",
                 "quantity": 1
               }
             ]
@@ -100,7 +110,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_priests",
+                "kind": "item",
+                "refId": "item_pack_priests",
                 "quantity": 1
               }
             ]
@@ -108,7 +119,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

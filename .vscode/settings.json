@@ -75,6 +75,7 @@
         "upserted",
         "Upserts",
         "warhammer",
+        "waterskin",
         "weaponsmithing",
         "wychwood"
     ],
@@ -85,6 +86,12 @@
                 "races/*_race.json"
             ],
             "url": "./dnd-form-manager/src/data/schemas/race_data_schema.json"
+        },
+        {
+            "fileMatch": [
+                "items/*_item.json"
+            ],
+            "url": "./dnd-form-manager/src/data/schemas/item_data_schema.json"
         },
         {
             "fileMatch": [

@@ -1,0 +1,7 @@
+{
+  "id": "category_musical_instrument",
+  "name": "Musical Instruments",
+  "itemIds": [
+    "item_musical_instrument_lute"
+  ]
+}

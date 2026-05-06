@@ -45,6 +45,36 @@ describe("WizardEquipmentSelectionStage", () => {
     expect(screen.getByText(/Choice 1/)).toBeInTheDocument();
   });
 
+  it("renders category references with category display names", () => {
+    act(() => {
+      useCharacterStore.getState().setClass("class_barbarian");
+    });
+    render(<WizardEquipmentSelectionStage />);
+
+    expect(screen.getByText("Simple Weapons")).toBeInTheDocument();
+  });
+
+  it("stores category item picks from embedded dropdown", async () => {
+    act(() => {
+      useCharacterStore.getState().setClass("class_barbarian");
+    });
+    render(<WizardEquipmentSelectionStage />);
+
+    const cards = document.querySelectorAll(".picker-bundle-card");
+    await userEvent.click(cards[1] as HTMLElement);
+
+    const categorySelect = screen.getByLabelText(
+      "Choose item for Martial Melee Weapons",
+    );
+    await userEvent.selectOptions(categorySelect, "item_weapon_rapier");
+
+    expect(
+      useCharacterStore.getState().startingEquipmentCategorySelections[
+        "0:1:0:category_weapon_martial_melee"
+      ],
+    ).toBe("item_weapon_rapier");
+  });
+
   it("marks an option as selected when clicked", async () => {
     act(() => {
       useCharacterStore.getState().setClass("class_barbarian");

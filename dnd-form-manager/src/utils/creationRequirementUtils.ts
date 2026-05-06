@@ -16,6 +16,10 @@ import type {
   SpellKnownRequirement,
   SkillProficiencyRequirement,
 } from "../types/creationRequirement";
+import {
+  makeStartingEquipmentCategorySelectionKey,
+  normalizeEquipmentReference,
+} from "../types/class";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import { getClassById, getRaceById, getSubraceById, getSpellByID } from "../data/staticDataApi";
 import { getPendingProficiencyChoices } from "./choiceUtils";
@@ -54,6 +58,7 @@ export interface CreationRequirementState {
   choicesByLevel: Record<number, LevelChoice>;
   chosenRacialSkills: Skill[];
   startingEquipmentSelections: Record<number, number>;
+  startingEquipmentCategorySelections: Record<string, string>;
   spellsKnown: string[];
   spellsPrepared: string[];
   baseAbilityScores: Record<Ability, number>;
@@ -84,7 +89,24 @@ function buildEquipmentRequirements(
 
   return classData.startingEquipment.choices.map((group, i) => {
     const selected = state.startingEquipmentSelections[i];
-    const isResolved = selected !== undefined;
+    const isResolved =
+      selected !== undefined &&
+      (group.options[selected]?.equipmentBundle ?? []).every(
+        (entry, bundleIndex) => {
+          const normalized = normalizeEquipmentReference(entry);
+          if (normalized.kind !== "category") {
+            return true;
+          }
+
+          const selectionKey = makeStartingEquipmentCategorySelectionKey(
+            i,
+            selected,
+            bundleIndex,
+            normalized.refId,
+          );
+          return !!state.startingEquipmentCategorySelections[selectionKey];
+        },
+      );
 
     return {
       id: `equipment_bundle_${i}`,
@@ -96,7 +118,9 @@ function buildEquipmentRequirements(
       groupIndex: i,
       chooseCount: group.choose,
       options: group.options.map((opt) => ({
-        itemIds: opt.equipmentBundle.map((item) => item.itemId),
+        itemIds: opt.equipmentBundle.map(
+          (entry) => normalizeEquipmentReference(entry).refId,
+        ),
       })),
     };
   });

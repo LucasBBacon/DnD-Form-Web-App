@@ -1,9 +1,12 @@
-import { getItemById } from "../data/staticDataApi";
+import { getAllItemCategories, getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { UUID } from "../types/common";
 import type { ItemInstanceData } from "../types/item";
 import { resolveInstance } from "../utils/inventoryUtils";
-import { aggregateNonSkillProficienciesMulticlass } from "../utils/proficiencyAggregator";
+import {
+  aggregateNonSkillProficienciesMulticlass,
+  isWeaponProficient,
+} from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 import { useCharacterStats } from "./useCharacterStats";
 
@@ -60,6 +63,18 @@ export const useAttacks = () => {
       state,
       stats: derivedStats,
     });
+
+  const weaponCategoryMembershipByItemId = new Map<string, string[]>();
+  getAllItemCategories().forEach((category) => {
+    if (!category.id.startsWith("category_weapon_")) {
+      return;
+    }
+
+    category.itemIds.forEach((itemId) => {
+      const existing = weaponCategoryMembershipByItemId.get(itemId) ?? [];
+      weaponCategoryMembershipByItemId.set(itemId, [...existing, category.id]);
+    });
+  });
 
   // #endregion
 
@@ -133,13 +148,15 @@ export const useAttacks = () => {
       // #endregion
 
       // #region --- Proficiency Check ---
-      // Check the broad category or the specific base item catalog id
-      const isProficient =
-        (activeWeaponProficiencies.has("simple") &&
-          props.category.includes("simple")) ||
-        (activeWeaponProficiencies.has("martial") &&
-          props.category.includes("martial")) ||
-        activeWeaponProficiencies.has(baseItemId);
+      const categoryIds = weaponCategoryMembershipByItemId.get(baseItemId) ?? [];
+      const isProficient = isWeaponProficient(
+        {
+          baseItemId,
+          weaponCategory: props.category,
+          categoryIds,
+        },
+        activeWeaponProficiencies.has,
+      );
       // #endregion
 
       // #region --- Calculate to-hit and damage ---

@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   getActionById,
   getActionsByIds,
+  getAllItemCategories,
   getAllSpells,
+  getItemCategoryById,
+  getItemsByCategory,
   getRaceById,
   getSpellByID,
   getTraitById,
@@ -50,6 +53,33 @@ describe("Actions static API", () => {
 
     expect(actions).toHaveLength(1);
     expect(actions[0].id).toBe("action_breath_weapon_cold_cone");
+  });
+});
+
+describe("Item categories static API", () => {
+  it("resolves a category by id", () => {
+    const category = getItemCategoryById("category_weapon_simple");
+
+    expect(category).not.toBeNull();
+    expect(category?.name).toBe("Simple Weapons");
+  });
+
+  it("returns all categories", () => {
+    const categories = getAllItemCategories();
+
+    expect(categories.length).toBeGreaterThan(0);
+    expect(categories.every((c) => c.id.startsWith("category_"))).toBe(true);
+  });
+
+  it("resolves category item members to item data", () => {
+    const items = getItemsByCategory("category_weapon_simple");
+
+    expect(items.length).toBeGreaterThan(0);
+    expect(items.some((item) => item.id === "item_weapon_club")).toBe(true);
+  });
+
+  it("returns empty for unknown category id", () => {
+    expect(getItemsByCategory("category_missing")).toEqual([]);
   });
 });
 

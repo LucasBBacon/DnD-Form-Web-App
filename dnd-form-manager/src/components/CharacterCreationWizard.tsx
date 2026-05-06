@@ -6,6 +6,7 @@ import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
 import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
 import {
   getAllClasses,
+  getItemsByCategory,
   getAllRaces,
   getClassById,
   getRaceById,
@@ -13,6 +14,10 @@ import {
   getSubclassById,
 } from "../data/staticDataApi";
 import type { Skill } from "../types/common";
+import {
+  makeStartingEquipmentCategorySelectionKey,
+  normalizeEquipmentReference,
+} from "../types/class";
 import type { SkillProficiencyRequirement } from "../types/creationRequirement";
 import {
   toClassSelectionOption,
@@ -152,16 +157,78 @@ export const CharacterCreationWizard: React.FC = () => {
 
     // Apply given starting equipment items to inventory
     const classData = getClassById(store.classId);
+
+    const resolveCategorySelection = (
+      categoryId: string,
+      selectionKey?: string,
+    ): string | null => {
+      const categoryItems = getItemsByCategory(categoryId);
+      if (categoryItems.length === 0) {
+        return null;
+      }
+
+      const selectedId =
+        selectionKey && store.startingEquipmentCategorySelections[selectionKey]
+          ? store.startingEquipmentCategorySelections[selectionKey]
+          : null;
+
+      if (
+        selectedId &&
+        categoryItems.some((item) => item.id === selectedId)
+      ) {
+        return selectedId;
+      }
+
+      return categoryItems[0].id;
+    };
+
+    const addResolvedEquipment = (
+      rawReference: Parameters<typeof normalizeEquipmentReference>[0],
+      context?: {
+        groupIndex: number;
+        optionIndex: number;
+        bundleIndex: number;
+      },
+    ) => {
+      const reference = normalizeEquipmentReference(rawReference);
+
+      if (reference.kind === "item") {
+        store.addInventoryItem(reference.refId, reference.quantity);
+        return;
+      }
+
+      const selectionKey =
+        context
+          ? makeStartingEquipmentCategorySelectionKey(
+              context.groupIndex,
+              context.optionIndex,
+              context.bundleIndex,
+              reference.refId,
+            )
+          : undefined;
+      const resolvedItemId = resolveCategorySelection(reference.refId, selectionKey);
+      if (!resolvedItemId) {
+        return;
+      }
+
+      store.addInventoryItem(resolvedItemId, reference.quantity);
+    };
+
     if (classData) {
-      classData.startingEquipment.given.forEach((item) => {
-        store.addInventoryItem(item.itemId, item.quantity);
+      classData.startingEquipment.given.forEach((reference) => {
+        addResolvedEquipment(reference);
       });
+
       classData.startingEquipment.choices.forEach((group, i) => {
         const selectedOptionIndex = store.startingEquipmentSelections[i];
         if (selectedOptionIndex !== undefined) {
           const bundle = group.options[selectedOptionIndex]?.equipmentBundle ?? [];
-          bundle.forEach((item) => {
-            store.addInventoryItem(item.itemId, item.quantity);
+          bundle.forEach((reference, bundleIndex) => {
+            addResolvedEquipment(reference, {
+              groupIndex: i,
+              optionIndex: selectedOptionIndex,
+              bundleIndex,
+            });
           });
         }
       });

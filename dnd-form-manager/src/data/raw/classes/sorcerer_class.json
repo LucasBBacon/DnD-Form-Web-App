@@ -6,7 +6,8 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "weapon_dagger",
+        "kind": "item",
+        "refId": "item_weapon_dagger",
         "quantity": 2
       }
     ],
@@ -17,11 +18,13 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_light_crossbow",
+                "kind": "item",
+                "refId": "item_weapon_light_crossbow",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_crossbow_bolt",
+                "kind": "item",
+                "refId": "item_weapon_crossbow_bolt",
                 "quantity": 20
               }
             ]
@@ -29,7 +32,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_weapon_simple",
+                "kind": "category",
+                "refId": "category_weapon_simple",
                 "quantity": 1
               }
             ]
@@ -42,7 +46,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "gear_component_pouch",
+                "kind": "item",
+                "refId": "item_gear_component_pouch",
                 "quantity": 1
               }
             ]
@@ -50,7 +55,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "category_arcane_focus",
+                "kind": "category",
+                "refId": "category_arcane_focus",
                 "quantity": 1
               }
             ]
@@ -63,7 +69,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_dungeoneers",
+                "kind": "item",
+                "refId": "item_pack_dungeoneers",
                 "quantity": 1
               }
             ]
@@ -71,7 +78,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

@@ -10,15 +10,18 @@
   "startingEquipment": {
     "given": [
       {
-        "itemId": "armor_leather",
+        "kind": "item",
+        "refId": "item_armor_leather",
         "quantity": 1
       },
       {
-        "itemId": "weapon_dagger",
+        "kind": "item",
+        "refId": "item_weapon_dagger",
         "quantity": 2
       },
       {
-        "itemId": "tool_thieves_tools",
+        "kind": "item",
+        "refId": "item_tool_thieves_tools",
         "quantity": 1
       }
     ],
@@ -29,7 +32,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_rapier",
+                "kind": "item",
+                "refId": "item_weapon_rapier",
                 "quantity": 1
               }
             ]
@@ -37,7 +41,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_shortsword",
+                "kind": "item",
+                "refId": "item_weapon_shortsword",
                 "quantity": 1
               }
             ]
@@ -50,15 +55,18 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_shortbow",
+                "kind": "item",
+                "refId": "item_weapon_shortbow",
                 "quantity": 1
               },
               {
-                "itemId": "weapon_arrow",
+                "kind": "item",
+                "refId": "item_weapon_arrow",
                 "quantity": 20
               },
               {
-                "itemId": "pack_quiver",
+                "kind": "item",
+                "refId": "item_pack_quiver",
                 "quantity": 1
               }
             ]
@@ -66,7 +74,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "weapon_shortsword",
+                "kind": "item",
+                "refId": "item_weapon_shortsword",
                 "quantity": 1
               }
             ]
@@ -79,7 +88,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_burglars",
+                "kind": "item",
+                "refId": "item_pack_burglars",
                 "quantity": 1
               }
             ]
@@ -87,7 +97,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_dungeoneers",
+                "kind": "item",
+                "refId": "item_pack_dungeoneers",
                 "quantity": 1
               }
             ]
@@ -95,7 +106,8 @@
           {
             "equipmentBundle": [
               {
-                "itemId": "pack_explorers",
+                "kind": "item",
+                "refId": "item_pack_explorers",
                 "quantity": 1
               }
             ]

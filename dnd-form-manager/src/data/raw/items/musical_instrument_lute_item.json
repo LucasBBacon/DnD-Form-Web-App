@@ -1,0 +1,13 @@
+{
+    "id": "item_musical_instrument_lute",
+    "name": "Lute",
+    "type": "tool",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A stringed musical instrument commonly used by bards and minstrels.",
+        "fullText": "A stringed musical instrument commonly used by bards and minstrels to accompany their performances."
+    }
+}
