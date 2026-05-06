@@ -1,0 +1,90 @@
+.die-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dice-roller-die-size, 80px);
+  height: var(--dice-roller-die-size, 80px);
+  color: white;
+  font-size: var(--dice-roller-die-font-size, 28px);
+  font-weight: bold;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.die-base.rolling {
+  animation: roll-poly 0.2s infinite;
+}
+
+.shape-d4 {
+  background-color: #ff3d00;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  padding-top: 25px; /* Visual center adjustment */
+  box-shadow: none; /* Clip-path hides box-shadows, so we remove it here */
+}
+
+.shape-d6 {
+  background-color: #ffb300; /* Amber */
+  box-shadow: none;
+}
+
+.shape-d8 {
+  background-color: #00b0ff; /* Light Blue */
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  box-shadow: none;
+}
+
+.shape-d10 {
+  background-color: #4caf50;
+  clip-path: polygon(50% 0%, 100% 35%, 50% 100%, 0% 35%);
+  box-shadow: none;
+}
+
+.shape-d100 {
+  background-color: #9c27b0; /* Purple */
+  clip-path: polygon(50% 0%, 100% 35%, 50% 100%, 0% 35%);
+  box-shadow: none;
+}
+
+.shape-d12 {
+  background-color: #009688; /* Teal */
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  padding-top: 10px;
+  box-shadow: none;
+}
+
+/* Fallback for the dice we haven't styled yet */
+.shape-d20 {
+  background-color: #424242; /* Dark Grey */
+  border-radius: 16px; 
+}
+
+.shape-d20 {
+  background-color: #e53935; /* Crimson Red */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow: none;
+}
+
+.crit-success {
+  color: #ffd700; /* Bright Yellow */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.50);
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+  transform: scale(1.15);
+  transition: all 0.3 cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+}
+
+.crit-fail {
+  color: #ffaaaa;
+  text-shadow: 0 0 10px rgba(200, 0, 0, 0.8);
+  filter: drop-shadow(0 0 8px rgba(200, 0, 0, 0.6));
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+@keyframes roll-poly {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-15deg) scale(1.1); }
+  50% { transform: rotate(15deg) scale(0.9); }
+  75% { transform: rotate(-15deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}

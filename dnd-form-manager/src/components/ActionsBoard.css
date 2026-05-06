@@ -247,6 +247,75 @@
   color: #334155;
 }
 
+.combat-roll-row {
+  margin-top: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.attack-roll-mode-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  padding: 0.15rem;
+  border: 1px solid #dbe3ef;
+  border-radius: 999px;
+  background: #f8fbff;
+}
+
+.attack-roll-mode-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid #d4dce8;
+  background: #ffffff;
+  color: #334155;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.18rem 0.48rem;
+  cursor: pointer;
+}
+
+.attack-roll-mode-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.attack-roll-mode-option.selected {
+  border-color: #2563eb;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.combat-roll-roller-wrap {
+  margin-top: 0.45rem;
+  max-width: 340px;
+}
+
+.multi-damage-roller-wrap {
+  max-width: 100%;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  padding: 0.4rem;
+  background: #fbfdff;
+}
+
+.combat-roll-roller-wrap .dice-roller {
+  width: 100%;
+  margin: 0;
+}
+
+.combat-roll-result {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
 .trait-use-controls {
   margin-top: 0.55rem;
   display: flex;

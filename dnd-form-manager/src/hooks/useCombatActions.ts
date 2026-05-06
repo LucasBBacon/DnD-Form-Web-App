@@ -6,6 +6,7 @@ import { useSpellcasting } from "./useSpellcasting";
 import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
+import type { DieFace } from "../types/common";
 
 export type CombatActionSection = "action" | "bonus_action" | "reaction";
 
@@ -25,7 +26,73 @@ export interface CombatActionEntry {
   isExhausted: boolean;
   spellLevel?: number;
   uses?: CombatActionUseState;
+  attackRoll?: CombatRollMetadata;
+  damageRolls?: CombatRollMetadata[];
 }
+
+export interface CombatRollMetadata {
+  id: string;
+  count: number;
+  sides: DieFace;
+  modifier: number;
+  label: string;
+}
+
+const ROLL_EXPRESSION_RE =
+  /^\s*(\d+)d(4|6|8|10|12|20|100)(?:\s*([+-])\s*(\d+))?\s*(.*)$/i;
+
+const parseRollExpression = (
+  expression: string,
+): (CombatRollMetadata & { trailingText: string }) | null => {
+  const match = expression.match(ROLL_EXPRESSION_RE);
+  if (!match) return null;
+
+  const [, countRaw, sidesRaw, signRaw, modifierRaw, trailingTextRaw] = match;
+  const count = Number(countRaw);
+  const sides = Number(sidesRaw) as DieFace;
+
+  if (!Number.isInteger(count) || count <= 0) return null;
+
+  const modifierValue = modifierRaw ? Number(modifierRaw) : 0;
+  const sign = signRaw === "-" ? -1 : 1;
+  const modifier = modifierValue * sign;
+
+  return {
+    id: expression.trim(),
+    count,
+    sides,
+    modifier,
+    label: expression.trim(),
+    trailingText: (trailingTextRaw ?? "").trim(),
+  };
+};
+
+const resolveScaledRollExpression = (
+  baseRoll: string,
+  scaling: {
+    type: "character_level" | "class_level" | "spell_slot";
+    thresholds?: Record<string, string>;
+  } | undefined,
+  characterLevel: number,
+  classLevel: number,
+): string => {
+  if (!scaling?.thresholds) return baseRoll;
+  if (scaling.type === "spell_slot") return baseRoll;
+
+  const levelForScaling = scaling.type === "class_level"
+    ? classLevel
+    : characterLevel;
+
+  const bestMatch = Object.entries(scaling.thresholds)
+    .map(([threshold, value]) => ({
+      threshold: Number(threshold),
+      value,
+    }))
+    .filter((entry) => Number.isFinite(entry.threshold) && levelForScaling >= entry.threshold)
+    .sort((a, b) => b.threshold - a.threshold)[0];
+
+  return bestMatch?.value ?? baseRoll;
+};
 
 const toTitleCase = (value: string): string =>
   value
@@ -129,7 +196,13 @@ export const useCombatActions = () => {
       reaction: [],
     };
 
+    const primaryClassLevel = state.classId
+      ? (state.classTracks.find((track) => track.classId === state.classId)?.level ?? state.level)
+      : state.level;
+
     attacks.attacks.forEach((attack, index) => {
+      const parsedDamage = parseRollExpression(attack?.damageString ?? "");
+
       grouped.action.push({
         id: `atk:${attack?.weaponId || "Weapon id not found"}:${index}`,
         name: attack?.name || "Weapon name not found",
@@ -145,6 +218,26 @@ export const useCombatActions = () => {
           ? `Ammo: ${attack.ammo.count} ${attack.ammo.name || ""}`.trim()
           : undefined,
         isExhausted: !attack?.canAttack,
+        attackRoll: {
+          id: `attack-roll:${attack?.weaponId || "unknown"}:${index}`,
+          count: 1,
+          sides: 20,
+          modifier: attack?.toHit ?? 0,
+          label: "To-Hit",
+        },
+        damageRolls: parsedDamage
+          ? [
+              {
+                id: `attack-damage:${attack?.weaponId || "unknown"}:${index}:0`,
+                count: parsedDamage.count,
+                sides: parsedDamage.sides,
+                modifier: parsedDamage.modifier,
+                label: parsedDamage.trailingText
+                  ? `Damage (${parsedDamage.trailingText})`
+                  : "Damage",
+              },
+            ]
+          : [],
       });
     });
 
@@ -235,6 +328,27 @@ export const useCombatActions = () => {
         description: action.description,
         isExhausted: uses ? uses.remaining <= 0 : false,
         uses,
+        damageRolls: (action.output?.damage ?? [])
+          .map((entry, index) => {
+            const resolvedRoll = resolveScaledRollExpression(
+              entry.roll,
+              entry.scaling,
+              state.level,
+              primaryClassLevel,
+            );
+            const parsed = parseRollExpression(resolvedRoll);
+            if (!parsed) return null;
+            return {
+              id: `trait-damage:${action.id}:${index}`,
+              count: parsed.count,
+              sides: parsed.sides,
+              modifier: parsed.modifier,
+              label: entry.type
+                ? `Damage (${entry.type})`
+                : "Damage",
+            } satisfies CombatRollMetadata;
+          })
+          .filter((entry): entry is CombatRollMetadata => entry != null),
       });
     });
 
@@ -245,6 +359,9 @@ export const useCombatActions = () => {
     return grouped;
   }, [
     attacks.attacks,
+    state.classId,
+    state.classTracks,
+    state.level,
     spellcasting.pools.known.selected,
     spellcasting.pools.prepared.selected,
     spellcasting.slots.shared,

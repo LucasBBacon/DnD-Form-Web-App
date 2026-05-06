@@ -16,6 +16,22 @@ export interface VirtualAbilityRoll {
   total: number;
 }
 
+export const toVirtualAbilityRoll = (
+  dice: [number, number, number, number],
+): VirtualAbilityRoll => {
+  const sorted = [...dice].sort((a, b) => a - b);
+  const dropped = sorted[0];
+  const kept = [sorted[1], sorted[2], sorted[3]] as [number, number, number];
+  const total = kept[0] + kept[1] + kept[2];
+
+  return {
+    dice,
+    dropped,
+    kept,
+    total,
+  };
+};
+
 const POINT_BUY_COST_BY_SCORE: Record<number, number> = {
   8: 0,
   9: 1,
@@ -84,17 +100,7 @@ export const roll4d6DropLowest = (
     rollD6(random),
   ];
 
-  const sorted = [...dice].sort((a, b) => a - b);
-  const dropped = sorted[0];
-  const kept = [sorted[1], sorted[2], sorted[3]] as [number, number, number];
-  const total = kept[0] + kept[1] + kept[2];
-
-  return {
-    dice,
-    dropped,
-    kept,
-    total,
-  };
+  return toVirtualAbilityRoll(dice);
 };
 
 export const rollAbilitySet = (

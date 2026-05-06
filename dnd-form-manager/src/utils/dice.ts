@@ -8,20 +8,25 @@ export function parseDiceNotation(notation: DiceNotation): DiceRoll {
   };
 }
 
-export function rollDice(roll: DiceRoll): number {
+export function rollDice(
+  roll: DiceRoll,
+  random: () => number = Math.random,
+): number {
   let total = 0;
   for (let i = 0; i < roll.count; i++) {
-    total += Math.floor(Math.random() * roll.faces) + 1;
+    total += Math.floor(random() * roll.faces) + 1;
   }
   return total + (roll.modifier || 0);
 }
 
-export const roll4d6DropLowest = (): number => {
+export const roll4d6DropLowest = (
+  random: () => number = Math.random,
+): number => {
   const rolls = [
-    rollDice({ count: 1, faces: 6}),
-    rollDice({ count: 1, faces: 6}),
-    rollDice({ count: 1, faces: 6}),
-    rollDice({ count: 1, faces: 6}),
+    rollDice({ count: 1, faces: 6 }, random),
+    rollDice({ count: 1, faces: 6 }, random),
+    rollDice({ count: 1, faces: 6 }, random),
+    rollDice({ count: 1, faces: 6 }, random),
   ];
 
   // Sort descending, keep top 3, sum up

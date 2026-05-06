@@ -2,8 +2,8 @@ import { useState } from "react";
 import { getClassById } from "../data/staticDataApi";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { rollDice } from "../utils/dice";
 import type { HitDie } from "../types/common";
+import { DiceRoller } from "./DiceRoller/DiceRoller";
 
 interface ShortRestModalProps {
   onClose: () => void;
@@ -28,12 +28,12 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
 
   // region Actions
 
-  const handleAutoRoll = () => {
+  const handleAutoRollComplete = (rolls: number[]) => {
     if (availableDice <= 0 || isFullyHealed) return;
+    const rolledValue = rolls[0] ?? 0;
 
-    const roll = rollDice({ count: 1, faces: hitDie });
-    // Negative heals cannot happen (e.g., rolling a 1 with a -2 con mod)
-    const totalHeal = Math.max(0, roll + conMod);
+    // Negative heals cannot happen (e.g., rolling a 1 with a -2 con mod).
+    const totalHeal = Math.max(0, rolledValue + conMod);
 
     heal(totalHeal);
     expendHitDie();
@@ -82,7 +82,15 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({ onClose }) => {
             {/* Opt 1: Auto Roll */}
             <div className="roll-box auto-roll">
               <h4>Digital Roll</h4>
-              <button onClick={handleAutoRoll}>Roll 1d{hitDie} + Con</button>
+              <DiceRoller
+                sides={hitDie}
+                count={1}
+                size="small"
+                hideTotal
+                rollLabel={`Roll 1d${hitDie} + Con`}
+                onRollComplete={handleAutoRollComplete}
+                disabled={availableDice <= 0 || isFullyHealed}
+              />
             </div>
 
             {/* Opt 2: Manual Input */}

@@ -1,5 +1,5 @@
 import type React from "react";
-import type { Ability, Skill } from "../types/common";
+import type { Skill } from "../types/common";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useSkills } from "../hooks/useSkills";
 import "./CoreStatsBoard.css"

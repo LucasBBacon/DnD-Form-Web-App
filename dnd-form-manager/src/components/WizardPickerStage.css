@@ -303,6 +303,15 @@
   margin-bottom: 0.8rem;
 }
 
+.ability-virtual-roller {
+  max-width: 360px;
+}
+
+.ability-virtual-roller .dice-roller {
+  margin: 0;
+  width: 100%;
+}
+
 .ability-roll-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

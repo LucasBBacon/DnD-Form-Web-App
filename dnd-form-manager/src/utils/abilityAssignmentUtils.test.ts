@@ -5,6 +5,7 @@ import {
   isStandardArrayAssignment,
   roll4d6DropLowest,
   rollAbilitySet,
+  toVirtualAbilityRoll,
   validatePointBuyAssignment,
 } from "./abilityAssignmentUtils";
 
@@ -67,6 +68,15 @@ describe("abilityAssignmentUtils", () => {
   });
 
   describe("rolling", () => {
+    it("converts fixed dice into VirtualAbilityRoll shape", () => {
+      const roll = toVirtualAbilityRoll([6, 2, 5, 3]);
+
+      expect(roll.dice).toEqual([6, 2, 5, 3]);
+      expect(roll.dropped).toBe(2);
+      expect(roll.kept).toEqual([3, 5, 6]);
+      expect(roll.total).toBe(14);
+    });
+
     it("rolls 4d6 and drops the lowest die", () => {
       const seq = [0.1, 0.2, 0.95, 0.35];
       let idx = 0;

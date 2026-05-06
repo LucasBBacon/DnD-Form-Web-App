@@ -1,10 +1,12 @@
 import type React from "react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   useCombatActions,
+  type CombatRollMetadata,
   type CombatActionSection,
 } from "../hooks/useCombatActions";
 import { useCharacterStore } from "../store/useCharacterStore";
+import { DiceRoller } from "./DiceRoller/DiceRoller";
 import "./ActionsBoard.css";
 
 const SECTION_ORDER: CombatActionSection[] = [
@@ -30,9 +32,111 @@ const renderPips = (remaining: number, total: number) => {
   ));
 };
 
+interface ActiveRoller {
+  entryId: string;
+  kind: "attack" | "damage";
+  damageId?: string;
+}
+
+interface EntryRollResult {
+  attack?: string;
+  damage: Record<string, string>;
+}
+
+type AttackRollMode = "normal" | "advantage" | "disadvantage";
+
+const ATTACK_ROLL_MODES: AttackRollMode[] = [
+  "normal",
+  "advantage",
+  "disadvantage",
+];
+
+const ATTACK_ROLL_MODE_LABELS: Record<AttackRollMode, string> = {
+  normal: "Normal",
+  advantage: "Advantage",
+  disadvantage: "Disadvantage",
+}
+
+const formatModifier = (modifier: number): string => {
+  if (modifier === 0) return "";
+  return modifier > 0 ? ` + ${modifier}` : ` - ${Math.abs(modifier)}`;
+};
+
 export const ActionsBoard: React.FC = () => {
   const { spellcasting, sections, toRomanNumeral } = useCombatActions();
   const { expendTraitActionUse, restoreTraitActionUse } = useCharacterStore();
+  const [activeRoller, setActiveRoller] = useState<ActiveRoller | null>(null);
+  const [attackRollModes, setAttackRollModes] = useState<Record<string, AttackRollMode>>({});
+  const [rollResultsByEntry, setRollResultsByEntry] = useState<
+    Record<string, EntryRollResult>
+  >({});
+
+  const getAttackRollMode = (entryId: string): AttackRollMode =>
+    attackRollModes[entryId] ?? "normal";
+
+  const setAttackResult = (
+    entryId: string,
+    config: CombatRollMetadata,
+    rolls: number[],
+    mode: AttackRollMode,
+  ) => {
+    const first = rolls[0] ?? 0;
+    const second = rolls[1] ?? 0;
+    const keptValue = mode === "normal"
+      ? first
+      : mode === "advantage"
+        ? Math.max(first, second)
+        : Math.min(first, second);
+
+    const total = keptValue + config.modifier;
+    const critLabel = keptValue === 20
+      ? " (critical success)"
+      : keptValue === 1
+        ? " (critical fail)"
+        : "";
+
+    const rollPart = mode === "normal"
+      ? `d20 ${keptValue}`
+      : `d20 ${first}/${second} -> keep ${keptValue} (${mode})`;
+
+    const detail = `${total} (${rollPart}${formatModifier(config.modifier)})${critLabel}`;
+
+    setRollResultsByEntry((previous) => {
+      const existing = previous[entryId] ?? { damage: {} };
+      return {
+        ...previous,
+        [entryId]: {
+          ...existing,
+          attack: detail,
+          damage: existing.damage,
+        },
+      };
+    });
+  };
+
+  const setDamageResult = (
+    entryId: string,
+    damageId: string,
+    config: CombatRollMetadata,
+    rollTotal: number,
+  ) => {
+    const total = rollTotal + config.modifier;
+    const detail = `${total} (${rollTotal}${formatModifier(config.modifier)})`;
+
+    setRollResultsByEntry((previous) => {
+      const existing = previous[entryId] ?? { damage: {} };
+      return {
+        ...previous,
+        [entryId]: {
+          ...existing,
+          damage: {
+            ...existing.damage,
+            [damageId]: detail,
+          },
+        },
+      };
+    });
+  };
 
   const slotHud = useMemo(() => {
     const rows: Array<{ label: string; text: string }> = [];
@@ -162,6 +266,212 @@ export const ActionsBoard: React.FC = () => {
                       {entry.description && (
                         <p className="combat-action-description">{entry.description}</p>
                       )}
+
+                      {!!entry.attackRoll && (
+                        <div className="combat-roll-row">
+                          <div
+                            className="attack-roll-mode-group"
+                            role="radiogroup"
+                            aria-label={`${entry.name} to-hit mode`}
+                          >
+                            {ATTACK_ROLL_MODES.map((mode) => {
+                              const checked = getAttackRollMode(entry.id) === mode;
+                              return (
+                                <label
+                                  key={`${entry.id}-${mode}`}
+                                  className={`attack-roll-mode-option ${checked ? "selected" : ""}`}
+                                >
+                                  <input
+                                    type="radio"
+                                    name={`roll-mode-${entry.id}`}
+                                    checked={checked}
+                                    onChange={() => {
+                                      setAttackRollModes((previous) => ({
+                                        ...previous,
+                                        [entry.id]: mode,
+                                      }));
+                                    }}
+                                  />
+                                  {ATTACK_ROLL_MODE_LABELS[mode]}
+                                </label>
+                              );
+                            })}
+                          </div>
+
+                          <button
+                            type="button"
+                            className="mini-use-btn"
+                            onClick={() => {
+                              setActiveRoller((current) =>
+                                current?.entryId === entry.id && current.kind === "attack"
+                                  ? null
+                                  : { entryId: entry.id, kind: "attack" },
+                              );
+                            }}
+                            disabled={entry.isExhausted}
+                          >
+                            Roll To-Hit
+                          </button>
+
+                          {rollResultsByEntry[entry.id]?.attack && (
+                            <span className="combat-roll-result">
+                              To-Hit: {rollResultsByEntry[entry.id]?.attack}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {(entry.damageRolls ?? []).map((damageRoll) => (
+                        <div key={damageRoll.id} className="combat-roll-row">
+                          <button
+                            type="button"
+                            className="mini-use-btn secondary"
+                            onClick={() => {
+                              setActiveRoller((current) =>
+                                current?.entryId === entry.id
+                                && current.kind === "damage"
+                                && current.damageId === damageRoll.id
+                                  ? null
+                                  : {
+                                      entryId: entry.id,
+                                      kind: "damage",
+                                      damageId: damageRoll.id,
+                                    },
+                              );
+                            }}
+                            disabled={entry.isExhausted}
+                          >
+                            {damageRoll.label}
+                          </button>
+
+                          {rollResultsByEntry[entry.id]?.damage[damageRoll.id] && (
+                            <span className="combat-roll-result">
+                              {damageRoll.label}: {rollResultsByEntry[entry.id]?.damage[damageRoll.id]}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+
+                      {(entry.damageRolls?.length ?? 0) > 1 && (
+                        <div className="combat-roll-row">
+                          <button
+                            type="button"
+                            className="mini-use-btn secondary"
+                            onClick={() => {
+                              setActiveRoller((current) =>
+                                current?.entryId === entry.id
+                                && current.kind === "damage"
+                                && current.damageId === "__all__"
+                                  ? null
+                                  : {
+                                      entryId: entry.id,
+                                      kind: "damage",
+                                      damageId: "__all__",
+                                    },
+                              );
+                            }}
+                            disabled={entry.isExhausted}
+                          >
+                            Roll All Damage
+                          </button>
+                        </div>
+                      )}
+
+                      {activeRoller?.entryId === entry.id && entry.attackRoll && activeRoller.kind === "attack" && (
+                        <div className="combat-roll-roller-wrap">
+                          {(() => {
+                            const mode = getAttackRollMode(entry.id);
+                            return (
+                          <DiceRoller
+                            count={mode === "normal" ? 1 : 2}
+                            sides={entry.attackRoll.sides}
+                            size="small"
+                            hideTotal
+                            rollLabel={`Roll ${entry.attackRoll.label}`}
+                            onRollComplete={(rolls) => {
+                              setAttackResult(
+                                entry.id,
+                                entry.attackRoll!,
+                                rolls,
+                                mode,
+                              );
+                              setActiveRoller(null);
+                            }}
+                            disabled={entry.isExhausted}
+                          />
+                            );
+                          })()}
+                        </div>
+                      )}
+
+                      {activeRoller?.entryId === entry.id
+                        && activeRoller.kind === "damage"
+                        && typeof activeRoller.damageId === "string"
+                        && activeRoller.damageId !== "__all__"
+                        && entry.damageRolls?.some((damageRoll) => damageRoll.id === activeRoller.damageId)
+                        && (
+                          <div className="combat-roll-roller-wrap">
+                            <DiceRoller
+                              count={entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.count ?? 1}
+                              sides={entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.sides ?? 6}
+                              size="small"
+                              hideTotal
+                              rollLabel={`Roll ${entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.label ?? "Damage"}`}
+                              onRollComplete={(_, summary) => {
+                                const metadata = entry.damageRolls?.find(
+                                  (damageRoll) => damageRoll.id === activeRoller.damageId,
+                                );
+                                if (!metadata) return;
+                                setDamageResult(
+                                  entry.id,
+                                  metadata.id,
+                                  metadata,
+                                  summary.total,
+                                );
+                                setActiveRoller(null);
+                              }}
+                              disabled={entry.isExhausted}
+                            />
+                          </div>
+                        )}
+
+                      {activeRoller?.entryId === entry.id
+                        && activeRoller.kind === "damage"
+                        && activeRoller.damageId === "__all__"
+                        && (entry.damageRolls?.length ?? 0) > 0
+                        && (
+                          <div className="combat-roll-roller-wrap multi-damage-roller-wrap">
+                            {entry.damageRolls?.map((damageRoll) => (
+                              <div key={`${entry.id}-all-${damageRoll.id}`} className="combat-roll-row">
+                                <DiceRoller
+                                  count={damageRoll.count}
+                                  sides={damageRoll.sides}
+                                  size="small"
+                                  hideTotal
+                                  rollLabel={`Roll ${damageRoll.label}`}
+                                  onRollComplete={(_, summary) => {
+                                    setDamageResult(
+                                      entry.id,
+                                      damageRoll.id,
+                                      damageRoll,
+                                      summary.total,
+                                    );
+                                  }}
+                                  disabled={entry.isExhausted}
+                                />
+                              </div>
+                            ))}
+                            <div className="combat-roll-row">
+                              <button
+                                type="button"
+                                className="mini-use-btn"
+                                onClick={() => setActiveRoller(null)}
+                              >
+                                Done
+                              </button>
+                            </div>
+                          </div>
+                        )}
 
                       {entry.uses && (
                         <div className="trait-use-controls">

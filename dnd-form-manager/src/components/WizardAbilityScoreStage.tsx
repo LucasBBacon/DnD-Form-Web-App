@@ -4,12 +4,13 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import { ABILITIES, ABILITY_SHORT_LABELS } from "../utils/abilityConstants";
 import {
   isStandardArrayAssignment,
-  rollAbilitySet,
+  toVirtualAbilityRoll,
   type AbilityAssignmentMethod,
   type RollingInputMode,
   validatePointBuyAssignment,
 } from "../utils/abilityAssignmentUtils";
 import type { Ability } from "../types/common";
+import { DiceRoller } from "./DiceRoller/DiceRoller";
 import "./WizardPickerStage.css";
 
 const PHYSICAL_ROLL_MIN = 3;
@@ -29,6 +30,13 @@ const formatDiceBreakdown = (dice: number[], dropped: number): string => {
 
 const clampInteger = (value: number, min: number, max: number): number =>
   Math.max(min, Math.min(max, Math.floor(value)));
+
+const isD6RollTuple = (
+  rolls: number[],
+): rolls is [number, number, number, number] => (
+  rolls.length === 4
+  && rolls.every((value) => Number.isInteger(value) && value >= 1 && value <= 6)
+);
 
 interface WizardAbilityScoreStageProps {
   onContinue: () => void;
@@ -121,6 +129,22 @@ export const WizardAbilityScoreStage: React.FC<WizardAbilityScoreStageProps> = (
 
   const handlePointBuyInput = (ability: Ability, value: number) => {
     setBaseScore(ability, value);
+    setCompleted(false);
+    setError(null);
+  };
+
+  const handleVirtualRollComplete = (rolls: number[]) => {
+    if (virtualRolls.length >= 6) return;
+    if (!isD6RollTuple(rolls)) return;
+
+    setVirtualRolls([...virtualRolls, toVirtualAbilityRoll(rolls)]);
+    setCompleted(false);
+    setError(null);
+  };
+
+  const handleRerollAll = () => {
+    setVirtualRolls([]);
+    clearVirtualAssignments();
     setCompleted(false);
     setError(null);
   };
@@ -289,17 +313,34 @@ export const WizardAbilityScoreStage: React.FC<WizardAbilityScoreStageProps> = (
           {rollingMode === "virtual" && (
             <>
               <div className="ability-roll-controls">
+                <div className="ability-virtual-roller">
+                  <DiceRoller
+                    count={4}
+                    sides={6}
+                    size="small"
+                    rollLabel={
+                      virtualRolls.length >= 6
+                        ? "All six scores generated"
+                        : `Roll score ${virtualRolls.length + 1} of 6 (4d6 drop lowest)`
+                    }
+                    onRollComplete={handleVirtualRollComplete}
+                    disabled={virtualRolls.length >= 6}
+                  />
+                </div>
+              </div>
+
+              <div className="ability-roll-controls">
                 <button
                   type="button"
                   className="wizard-continue-btn"
-                  onClick={() => {
-                    setVirtualRolls(rollAbilitySet(6));
-                    clearVirtualAssignments();
-                    setError(null);
-                  }}
+                  onClick={handleRerollAll}
                 >
-                  {virtualRolls.length === 6 ? "Reroll All Six" : "Roll Six Scores"}
+                  Reroll All Six
                 </button>
+              </div>
+
+              <div className="picker-counter">
+                {virtualRolls.length} / 6 rolls generated
               </div>
 
               {virtualRolls.length > 0 && (
