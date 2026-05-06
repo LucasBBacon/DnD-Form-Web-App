@@ -5,9 +5,25 @@
     "itemIds": []
   },
   {
+    "id": "category_armor_heavy",
+    "name": "Heavy Armor",
+    "itemIds": [
+      "item_armor_chain_mail"
+    ]
+  },
+  {
+    "id": "category_armor_medium",
+    "name": "Medium Armor",
+    "itemIds": [
+      "item_armor_scale_mail"
+    ]
+  },
+  {
     "id": "category_armor_shield",
     "name": "Shields",
-    "itemIds": []
+    "itemIds": [
+      "item_armor_shield"
+    ]
   },
   {
     "id": "category_artisans_tools",
@@ -22,7 +38,11 @@
   {
     "id": "category_holy_symbol",
     "name": "Holy Symbols",
-    "itemIds": []
+    "itemIds": [
+      "item_focus_amulet",
+      "item_focus_emblem",
+      "item_focus_reliquary"
+    ]
   },
   {
     "id": "category_musical_instrument",
@@ -37,7 +57,8 @@
     "itemIds": [
       "item_weapon_longsword",
       "item_weapon_rapier",
-      "item_weapon_greataxe"
+      "item_weapon_greataxe",
+      "item_weapon_warhammer"
     ]
   },
   {
@@ -46,7 +67,8 @@
     "itemIds": [
       "item_weapon_longsword",
       "item_weapon_rapier",
-      "item_weapon_greataxe"
+      "item_weapon_greataxe",
+      "item_weapon_warhammer"
     ]
   },
   {
@@ -57,7 +79,8 @@
       "item_weapon_dagger",
       "item_weapon_crossbow_light",
       "item_weapon_handaxe",
-      "item_weapon_javelin"
+      "item_weapon_javelin",
+      "item_weapon_mace"
     ]
   },
   {
@@ -67,7 +90,8 @@
       "item_weapon_club",
       "item_weapon_dagger",
       "item_weapon_handaxe",
-      "item_weapon_javelin"
+      "item_weapon_javelin",
+      "item_weapon_mace"
     ]
   }
 ]

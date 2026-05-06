@@ -1,0 +1,13 @@
+{
+    "id": "item_focus_emblem",
+    "name": "Emblem Holy Symbol",
+    "type": "gear",
+    "weight": 0,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
+        "fullText": "An emblem holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a small, flat object that bears the symbol of the deity the wearer worships. The emblem serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion. Unlike an amulet holy symbol, an emblem is not worn around the neck but is instead held in hand or displayed prominently on clothing or armor."
+    }
+}

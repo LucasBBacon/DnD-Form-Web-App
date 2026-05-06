@@ -1,0 +1,7 @@
+{
+    "id": "category_armor_heavy",
+    "name": "Heavy Armor",
+    "itemIds": [
+        "item_armor_chain_mail"
+    ]
+}

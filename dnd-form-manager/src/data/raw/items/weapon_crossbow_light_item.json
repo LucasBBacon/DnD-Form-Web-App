@@ -3,6 +3,9 @@
 	"name": "Light Crossbow",
 	"type": "weapon",
 	"weight": 5,
+	"stacking": {
+		"mode": "instance"
+	},
 	"lore": {
 		"shortDescription": "A simple ranged crossbow that fires bolts with solid range and stopping power.",
 		"fullText": "The light crossbow is a simple ranged weapon used to launch bolts at distant targets. It deals piercing damage and uses ammunition."

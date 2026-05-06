@@ -22,7 +22,7 @@
 			"type": "string",
 			"enum": [
 				"abjuration",
-				"alteration",
+				"transmutation",
 				"conjuration",
 				"divination",
 				"enchantment",

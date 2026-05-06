@@ -1,0 +1,18 @@
+{
+    "id": "item_armor_scale_mail",
+    "name": "Scale mail",
+    "type": "armor",
+    "weight": 45,
+    "stacking": {
+        "mode": "instance"
+    },
+    "armorProperties": {
+        "armorType": "medium",
+        "baseAc": 14,
+        "stealthDisadvantage": true
+    },
+    "lore": {
+        "shortDescription": "Scale mail is made of small metal plates sewn to a backing of leather or cloth.",
+        "fullText": "This armor consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like teh scales of a fish. The suit includes gauntlets."
+    }
+}

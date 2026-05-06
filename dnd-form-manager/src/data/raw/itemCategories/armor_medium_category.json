@@ -1,0 +1,7 @@
+{
+  "id": "category_armor_medium",
+  "name": "Medium Armor",
+  "itemIds": [
+    "item_armor_scale_mail"
+  ]
+}

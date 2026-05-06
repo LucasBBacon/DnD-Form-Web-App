@@ -1,0 +1,19 @@
+{
+    "id": "item_armor_chain_mail",
+    "name": "Chain mail",
+    "type": "armor",
+    "weight": 55,
+    "stacking": {
+        "mode": "instance"
+    },
+    "armorProperties": {
+        "armorType": "heavy",
+        "baseAc": 16,
+        "strengthRequirement": 13,
+        "stealthDisadvantage": true
+    },
+    "lore": {
+        "shortDescription": "Heavy armor made of interlocking metal rings, providing strong protection at the cost of mobility.",
+        "fullText": " Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets"
+    }
+}

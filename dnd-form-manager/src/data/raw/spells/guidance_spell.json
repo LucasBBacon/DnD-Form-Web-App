@@ -1,0 +1,27 @@
+{
+    "id": "spell_guidance",
+    "name": "Guidance",
+    "level": 0,
+    "school": "divination",
+    "classes": [
+        "class_artificer",
+        "class_cleric",
+        "class_druid"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "lore": {
+        "shortDescription": "You touch one willing creature to enhance their abilities.",
+        "fullText": "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends."
+    }
+}

@@ -1,5 +1,9 @@
 {
   "id": "category_holy_symbol",
   "name": "Holy Symbols",
-  "itemIds": []
+  "itemIds": [
+    "item_focus_amulet",
+    "item_focus_emblem",
+    "item_focus_reliquary"
+  ]
 }

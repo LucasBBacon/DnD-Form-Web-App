@@ -1,0 +1,21 @@
+{
+    "id": "item_weapon_warhammer",
+    "name": "Warhammer",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d8",
+        "damageType": "bludgeoning",
+        "properties": ["versatile"],
+        "versatileDamageDice": "1d10",
+        "range": "5 ft"
+    },
+    "lore": {
+        "shortDescription": "A versatile melee weapon capable of delivering powerful bludgeoning strikes.",
+        "fullText": "A warhammer is a versatile melee weapon that can be used with one or two hands. It is designed to deliver powerful bludgeoning strikes, making it effective against armored opponents. When wielded with two hands, it deals increased damage, making it a favored weapon among warriors and clerics who prefer a balance of strength and versatility in combat."
+    }
+}
