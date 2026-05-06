@@ -3,6 +3,8 @@
   "name": "Simple Melee Weapons",
   "itemIds": [
     "item_weapon_club",
-    "item_weapon_dagger"
+    "item_weapon_dagger",
+    "item_weapon_handaxe",
+    "item_weapon_javelin"
   ]
 }

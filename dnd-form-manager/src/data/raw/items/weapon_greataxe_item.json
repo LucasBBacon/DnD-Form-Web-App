@@ -1,0 +1,23 @@
+{
+    "id": "item_weapon_greataxe",
+    "name": "Greataxe",
+    "type": "weapon",
+    "weight": 7,
+    "stacking": {
+        "mode": "instance"
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d12",
+        "damageType": "slashing",
+        "properties": [
+            "heavy",
+            "two-handed"
+        ],
+        "range": "5 ft"
+    },
+    "lore": {
+        "shortDescription": "A large, two-handed axe that is designed for powerful strikes, ideal for close combat situations.",
+        "fullText": "A greataxe is a large, two-handed axe that is designed for powerful strikes. It has a heavy blade that can deal significant slashing damage to enemies. The greataxe has the heavy property, which means that it is more difficult to use effectively for smaller creatures, and the two-handed property, which means that it requires both hands to wield. When you attack with a greataxe, you can use your Strength modifier for the attack and damage rolls. The greataxe has a range of 5 feet, making it effective for close combat situations."
+    }
+}
