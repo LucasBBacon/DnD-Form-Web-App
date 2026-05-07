@@ -3,9 +3,99 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SpellBookView } from "./SpellBookView";
-import { getSpellByID } from "../data/staticDataApi";
+import { getAllClasses, getAllSpells } from "../data/staticDataApi";
 
 vi.mock("../data/staticDataApi");
+
+const baseSpells = [
+  {
+    id: "spell_magic_missile",
+    name: "Magic Missile",
+    level: 1,
+    school: "evocation",
+    classes: ["class_wizard"],
+    castingTime: "1 action",
+    range: "120 feet",
+    duration: "Instantaneous",
+    concentration: false,
+    ritual: false,
+    components: { vocal: true, somatic: true, material: false },
+    output: {
+      damage: [
+        {
+          type: "force",
+          roll: "1d4+1",
+        },
+      ],
+    },
+    lore: {
+      shortDescription: "Three darts of magical force.",
+      fullText:
+        "You create three glowing darts of magical force. Each dart hits a creature of your choice.",
+    },
+  },
+  {
+    id: "spell_detect_magic",
+    name: "Detect Magic",
+    level: 1,
+    school: "divination",
+    classes: ["class_wizard", "class_cleric"],
+    castingTime: "1 action",
+    range: "Self",
+    duration: "10 minutes",
+    concentration: true,
+    ritual: true,
+    components: { vocal: true, somatic: true, material: false },
+    savingThrow: {
+      ability: "wis",
+      dcCalculation: {
+        base: 8,
+        includeProficiency: true,
+        modifierStat: "spellcasting",
+      },
+      onSave: "special",
+    },
+    lore: {
+      shortDescription: "Sense magic in your surroundings.",
+      fullText: "For the duration, you sense the presence of magic within 30 feet.",
+      higherLevel: "The duration increases when cast at higher levels.",
+    },
+  },
+  {
+    id: "spell_cure_wounds",
+    name: "Cure Wounds",
+    level: 1,
+    school: "abjuration",
+    classes: ["class_cleric"],
+    castingTime: "1 action",
+    range: "Touch",
+    duration: "Instantaneous",
+    concentration: false,
+    ritual: false,
+    components: { vocal: true, somatic: true, material: false },
+    lore: {
+      shortDescription: "A creature you touch regains hit points.",
+      fullText: "A creature you touch regains a number of hit points.",
+    },
+  },
+  {
+    id: "spell_light",
+    name: "Light",
+    level: 0,
+    school: "evocation",
+    classes: ["class_wizard"],
+    castingTime: "1 action",
+    range: "Touch",
+    duration: "1 hour",
+    concentration: false,
+    ritual: false,
+    components: { vocal: true, somatic: true, material: true, materialMaterials: "A firefly." },
+    lore: {
+      shortDescription: "Object sheds bright light.",
+      fullText: "You touch one object that sheds bright light in a radius.",
+    },
+  },
+];
 
 const buildSpellcasting = (overrides: Partial<any> = {}): any => ({
   isSpellcaster: true,
@@ -35,7 +125,22 @@ const buildSpellcasting = (overrides: Partial<any> = {}): any => ({
       knownSpellOverflow: 0,
       preparedSpellOverflow: 0,
     },
-    classBreakdown: [],
+    classBreakdown: [
+      {
+        classId: "class_wizard",
+        classLevel: 3,
+        preparationType: "prepared",
+        spellcastingAbility: "int",
+        maxSpellLevel: 2,
+        maxCantrips: 3,
+        maxSpellsKnown: 0,
+        maxPreparedSpells: 5,
+        schoolRestrictions: null,
+        expandedSpellIds: [],
+        spellListSource: null,
+        freeSchoolSpellSlots: 0,
+      },
+    ],
   },
   ...overrides,
 });
@@ -44,66 +149,11 @@ describe("SpellBookView", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mocked(getSpellByID).mockImplementation((spellId) => {
-      const map: Record<string, any> = {
-        spell_magic_missile: {
-          id: "spell_magic_missile",
-          name: "Magic Missile",
-          level: 1,
-          school: "evocation",
-          classes: ["class_wizard"],
-          castingTime: "1 action",
-          range: "120 feet",
-          duration: "Instantaneous",
-          concentration: false,
-          ritual: false,
-          components: { vocal: true, somatic: true, material: false },
-          lore: {
-            shortDescription: "Three darts of magical force.",
-            fullText:
-              "You create three glowing darts of magical force. Each dart hits a creature of your choice.",
-          },
-        },
-        spell_shield: {
-          id: "spell_shield",
-          name: "Shield",
-          level: 1,
-          school: "abjuration",
-          classes: ["class_wizard"],
-          castingTime: "1 reaction",
-          range: "Self",
-          duration: "1 round",
-          concentration: false,
-          ritual: false,
-          components: { vocal: true, somatic: true, material: false },
-          lore: {
-            shortDescription: "Invisible barrier of force.",
-            fullText:
-              "An invisible barrier of magical force appears and protects you.",
-          },
-        },
-        spell_ember_spark: {
-          id: "spell_ember_spark",
-          name: "Ember Spark",
-          level: 0,
-          school: "evocation",
-          classes: ["class_warlock"],
-          castingTime: "1 action",
-          range: "60 feet",
-          duration: "Instantaneous",
-          concentration: false,
-          ritual: false,
-          components: { vocal: true, somatic: true, material: false },
-          lore: {
-            shortDescription: "A cinder mote lashes a nearby target.",
-            fullText:
-              "You snap your fingers and launch a cinder mote at one creature you can see within range.",
-          },
-        },
-      };
-
-      return map[String(spellId)] ?? null;
-    });
+    vi.mocked(getAllSpells).mockReturnValue(baseSpells as any);
+    vi.mocked(getAllClasses).mockReturnValue([
+      { id: "class_wizard", name: "Wizard" },
+      { id: "class_cleric", name: "Cleric" },
+    ] as any);
   });
 
   it("renders spell description when expanded", async () => {
@@ -120,26 +170,18 @@ describe("SpellBookView", () => {
     ).toBeInTheDocument();
   });
 
-  it("shows fallback text when description is missing", async () => {
+  it("shows fallback text when full description is missing", async () => {
     const user = userEvent.setup();
 
-    vi.mocked(getSpellByID).mockReturnValue({
-      id: "spell_magic_missile",
-      name: "Magic Missile",
-      level: 1,
-      school: "evocation",
-      classes: ["class_wizard"],
-      castingTime: "1 action",
-      range: "120 feet",
-      duration: "Instantaneous",
-      concentration: false,
-      ritual: false,
-      components: { vocal: true, somatic: true, material: false },
-      lore: {
-        shortDescription: "Three darts of magical force.",
-        fullText: "",
+    vi.mocked(getAllSpells).mockReturnValue([
+      {
+        ...baseSpells[0],
+        lore: {
+          ...baseSpells[0].lore,
+          fullText: "",
+        },
       },
-    } as any);
+    ] as any);
 
     render(<SpellBookView spellcasting={buildSpellcasting()} />);
 
@@ -148,7 +190,7 @@ describe("SpellBookView", () => {
     expect(screen.getByText("No description available.")).toBeInTheDocument();
   });
 
-  it("displays save DC and spell attack in expanded details", async () => {
+  it("shows spell attack but hides save DC when spell has no saving throw", async () => {
     const user = userEvent.setup();
 
     render(
@@ -166,56 +208,93 @@ describe("SpellBookView", () => {
 
     await user.click(screen.getByRole("button", { name: /magic missile/i }));
 
-    expect(screen.getByText(/Save DC:/i)).toBeInTheDocument();
-    expect(screen.getByText("16")).toBeInTheDocument();
+    expect(screen.queryByText(/Save DC:/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Spell Attack:/i)).toBeInTheDocument();
     expect(screen.getByText("+8")).toBeInTheDocument();
   });
 
-  it("deduplicates known and prepared spell IDs", () => {
+  it("shows save DC when the spell has saving throw data", async () => {
+    const user = userEvent.setup();
+
+    render(<SpellBookView spellcasting={buildSpellcasting()} />);
+
+    await user.click(screen.getByRole("button", { name: /detect magic/i }));
+
+    expect(screen.getByText(/Save DC:/i)).toBeInTheDocument();
+    expect(screen.getByText("15")).toBeInTheDocument();
+    expect(screen.queryByText(/Spell Attack:/i)).not.toBeInTheDocument();
+  });
+
+  it("filters list by school and class", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <SpellBookView spellcasting={buildSpellcasting()} />,
+    );
+
+    await user.selectOptions(screen.getByLabelText(/filter by school/i), "abjuration");
+
+    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /magic missile/i })).not.toBeInTheDocument();
+
+    await user.selectOptions(screen.getByLabelText(/filter by class/i), "class_wizard");
+
+    expect(screen.getByText("No spells match your current filters.")).toBeInTheDocument();
+  });
+
+  it("filters by rules-eligible availability", async () => {
+    const user = userEvent.setup();
+
     render(
       <SpellBookView
         spellcasting={buildSpellcasting({
-          pools: {
-            known: { selected: ["spell_magic_missile", "spell_shield"], max: 10 },
-            prepared: { selected: ["spell_shield", "spell_magic_missile"], max: 10 },
-            cantrips: { max: 3 },
-            innate: [],
-            bonusPrepared: [],
-            allExpandedSpellIds: [],
+          slots: {
+            shared: {
+              1: { total: 4, expended: 0 },
+            },
+            pact: null,
+          },
+          diagnostics: {
+            selections: {
+              invalidKnownSpellIds: [],
+              invalidPreparedSpellIds: [],
+              knownSpellOverflow: 0,
+              preparedSpellOverflow: 0,
+              freeSchoolOverflow: 0,
+            },
+            classBreakdown: [
+              {
+                classId: "class_wizard",
+                classLevel: 2,
+                preparationType: "prepared",
+                spellcastingAbility: "int",
+                maxSpellLevel: 1,
+                maxCantrips: 3,
+                maxSpellsKnown: 0,
+                maxPreparedSpells: 4,
+                schoolRestrictions: null,
+                expandedSpellIds: [],
+                spellListSource: null,
+                freeSchoolSpellSlots: 0,
+              },
+            ],
           },
         })}
       />,
     );
 
-    expect(screen.getAllByRole("button", { name: /magic missile/i })).toHaveLength(1);
-    expect(screen.getAllByRole("button", { name: /shield/i })).toHaveLength(1);
-  });
-
-  it("shows missing reference message when spell IDs cannot be resolved", () => {
-    vi.mocked(getSpellByID).mockReturnValue(null);
-
-    render(
-      <SpellBookView
-        spellcasting={buildSpellcasting({
-          pools: {
-            known: { selected: ["spell_missing"], max: 10 },
-            prepared: { selected: [], max: 10 },
-            cantrips: { max: 3 },
-            innate: [],
-            bonusPrepared: [],
-            allExpandedSpellIds: [],
-          },
-        })}
-      />,
+    await user.selectOptions(
+      screen.getByLabelText(/filter by availability/i),
+      "ineligible",
     );
 
-    expect(screen.getByText("Missing Spell References")).toBeInTheDocument();
-    expect(screen.getByText("Missing spell reference: spell_missing")).toBeInTheDocument();
-    expect(screen.getByText("Your spellbook is empty.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /magic missile/i })).not.toBeInTheDocument();
   });
 
-  it("shows armor penalty warning when cannot cast", () => {
+  it("shows armor penalty warning when cannot cast", async () => {
+    const user = userEvent.setup();
+
     render(
       <SpellBookView
         spellcasting={buildSpellcasting({
@@ -224,26 +303,30 @@ describe("SpellBookView", () => {
       />,
     );
 
-    expect(screen.getByText("Cannot Cast Spells")).toBeInTheDocument();
+    expect(screen.getByText("Cannot Cast Spells Right Now")).toBeInTheDocument();
     expect(
       screen.getByText("You are wearing armor you are not proficient with."),
     ).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /magic missile/i }));
+
+    expect(screen.getByText(/You create three glowing darts/i)).toBeInTheDocument();
   });
 
-  it("renders a distinct innate section below standard spells", async () => {
+  it("shows innate source info in expanded details when spell is granted innately", async () => {
     const user = userEvent.setup();
 
     render(
       <SpellBookView
         spellcasting={buildSpellcasting({
           pools: {
-            known: { selected: ["spell_magic_missile"], max: 10 },
+            known: { selected: [], max: 10 },
             prepared: { selected: [], max: 10 },
             cantrips: { max: 3 },
             innate: [
               {
-                spellId: "spell_ember_spark",
-                spellName: "Ember Spark",
+                spellId: "spell_light",
+                spellName: "Light",
                 isResolvedSpell: true,
                 sourceTraitName: "Starlit Bloodline",
                 spellSaveDC: 14,
@@ -257,56 +340,21 @@ describe("SpellBookView", () => {
       />,
     );
 
-    expect(
-      screen.getByText(/INNATE SPELLCASTING - TRAITS AND FEATURES/i),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/INNATE CANTRIPS/i)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /light/i }));
 
-    await user.click(screen.getByRole("button", { name: /ember spark/i }));
-
-    expect(screen.getByText(/Source:/i)).toBeInTheDocument();
-    expect(screen.getByText("Starlit Bloodline")).toBeInTheDocument();
+    expect(screen.getByText(/Innate Source:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Starlit Bloodline/i)).toBeInTheDocument();
+    expect(screen.getByText(/DC 14/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Attack \+6/i)).not.toBeInTheDocument();
   });
 
-  it("uses per-entry innate save DC and attack bonus values", async () => {
-    const user = userEvent.setup();
+  it("renders availability legend text", () => {
+    render(<SpellBookView spellcasting={buildSpellcasting()} />);
 
-    render(
-      <SpellBookView
-        spellcasting={buildSpellcasting({
-          casting: {
-            ability: "int",
-            preparationType: "prepared",
-            saveDC: 99,
-            attackBonus: 99,
-          },
-          pools: {
-            known: { selected: [], max: 10 },
-            prepared: { selected: [], max: 10 },
-            cantrips: { max: 3 },
-            innate: [
-              {
-                spellId: "spell_ember_spark",
-                spellName: "Ember Spark",
-                isResolvedSpell: true,
-                sourceTraitName: "Starlit Bloodline",
-                spellSaveDC: 15,
-                spellAttackBonus: 7,
-                uses: { count: 1, reset: "long_rest" },
-              },
-            ],
-            bonusPrepared: [],
-            allExpandedSpellIds: [],
-          },
-        })}
-      />,
-    );
-
-    await user.click(screen.getByRole("button", { name: /ember spark/i }));
-
-    expect(screen.getByText("15")).toBeInTheDocument();
-    expect(screen.getByText("+7")).toBeInTheDocument();
-    expect(screen.getByText(/Uses:/i)).toBeInTheDocument();
-    expect(screen.getByText(/1 \/ long rest/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/availability legend/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/availability rules info/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Meets class list, school rules, and per-track spell level limits\./i),
+    ).toBeInTheDocument();
   });
 });

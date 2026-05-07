@@ -3,12 +3,15 @@ import "./RoleplayBoard.css";
 import { useMemo, useState } from "react";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../utils/traitUtils";
+import { useSpellcasting } from "../hooks/useSpellcasting";
+import { SpellBookView } from "./SpellBookView";
 
-type RoleplayTab = "features" | "characteristics" | "biography";
+type RoleplayTab = "features" | "characteristics" | "biography" | "spellbook";
 
 export const RoleplayBoard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<RoleplayTab>("features");
   const store = useCharacterStore();
+  const spellcasting = useSpellcasting();
   type RoleplayFiled = Parameters<typeof store.updateRoleplayField>[0];
 
   // #region Mechanical Features
@@ -63,6 +66,12 @@ export const RoleplayBoard: React.FC = () => {
           onClick={() => setActiveTab("biography")}
         >
           BIOGRAPHY
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "spellbook" ? "active" : ""}`}
+          onClick={() => setActiveTab("spellbook")}
+        >
+          SPELLBOOK
         </button>
       </div>
       <div className="tab-content">
@@ -169,6 +178,9 @@ export const RoleplayBoard: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Spellbook */}
+        {activeTab === "spellbook" && <SpellBookView spellcasting={spellcasting} />}
       </div>
     </section>
   );
