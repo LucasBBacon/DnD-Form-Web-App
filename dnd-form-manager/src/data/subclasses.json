@@ -276,6 +276,49 @@
     }
   },
   {
+    "id": "subclass_cleric_nature",
+    "name": "Nature Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_nature_domain_spells",
+          "trait_acolyte_of_nature",
+          "trait_cleric_nature_prof_bonus"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cd_charm_animals_and_plants"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_dampen_elements"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_divine_strike"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_master_of_nature"
+        ]
+      }
+    ],
+    "lore": {
+      "shortDescription": "Clerics of the nature domain are champions of the natural world, harnessing the power of nature to defend the wilderness and its denizens.",
+      "fullText": "Gods of nature are as varied as the natural world itself; from inscrutable gods of the deep forests (such as Silvanus, Obad-Hai, Chislev, Balinor, and Pan) to friendly deities associated with particular springs and groves (such as Eldath). Druids revere nature as a whole and might serve one of these deities, practicing mysterious rites and reciting all-but-forgotten prayers in their own secret tongue. But many of these gods have clerics as well, champions who take a more active role in advancing the interests of a particular nature god. These clerics might hunt the evil monstrosities that despoil the woodlands, bless the harvest of the faithful, or wither the crops of those who anger their gods."
+    }
+  },
+  {
     "id": "subclass_fighter_battle_master",
     "name": "Battle Master",
     "parentClassId": "class_fighter",

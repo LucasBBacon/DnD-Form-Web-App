@@ -1,0 +1,29 @@
+{
+    "id": "trait_acolyte_of_nature",
+    "name": "Acolyte of Nature",
+    "effects": [
+        {
+            "type": "spell_grant",
+            "choice": {
+                "count": 1,
+                "pool": "any"
+            }
+        },
+        {
+            "type": "proficiency_choice",
+            "category": "skills",
+            "choice": {
+                "count": 1,
+                "pool": [
+                    "animal_handling",
+                    "nature",
+                    "survival"
+                ]
+            }
+        }
+    ],
+    "lore": {
+        "shortDescription": "Learn a druid cantrip and gain proficiency in a nature-related skill.",
+        "fullText": "At 1st level, you learn one cantrip of your choice from the druid spell list. This cantrip counts as a cleric cantrip for you, but it doesn’t count against the number of cleric cantrips you know. You also gain proficiency in one of the following skills of your choice: Animal Handling, Nature, or Survival."
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "id": "trait_cleric_nature_prof_bonus",
+    "name": "Bonus Proficiency",
+    "lore": {
+        "shortDescription": "Gain proficiency with heavy armor.",
+        "fullText": "Also at 1st level, you gain proficiency with heavy armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "heavy"
+        }
+    ]
+}

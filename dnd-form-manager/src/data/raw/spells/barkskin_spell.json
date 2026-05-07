@@ -1,0 +1,27 @@
+{
+    "id": "spell_barkskin",
+    "name": "Barkskin",
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+        "class_druid",
+        "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A handful of oak bark."
+    },
+    "lore": {
+        "shortDescription": "Target's skin becomes as hard as bark, granting a minimum AC of 16.",
+        "fullText": "You touch a willing creature. Until the spell ends, the target's skin has a rough, bark-like appearance, and the target's AC can't be less than 16, regardless of what kind of armor it is wearing."
+    }
+}

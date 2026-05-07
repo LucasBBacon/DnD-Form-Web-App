@@ -1,0 +1,50 @@
+{
+    "id": "trait_nature_domain_spells",
+    "name": "Nature Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The Nature domain grants you access to a set of domain spells at each cleric level listed in the Nature Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_animal_friendship",
+                    "spell_speak_with_animals"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_barkskin",
+                    "spell_spike_growth"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_plant_growth",
+                    "spell_wind_wall"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_dominate_beast",
+                    "spell_grasping_vine"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_insect_plague",
+                    "spell_tree_stride"
+                ]
+            }
+        ]
+    }
+}

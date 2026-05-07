@@ -120,6 +120,33 @@
     }
   },
   {
+    "id": "spell_barkskin",
+    "name": "Barkskin",
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A handful of oak bark."
+    },
+    "lore": {
+      "shortDescription": "Target's skin becomes as hard as bark, granting a minimum AC of 16.",
+      "fullText": "You touch a willing creature. Until the spell ends, the target's skin has a rough, bark-like appearance, and the target's AC can't be less than 16, regardless of what kind of armor it is wearing."
+    }
+  },
+  {
     "id": "spell_beacon_of_hope",
     "name": "Beacon of Hope",
     "level": 3,
@@ -386,6 +413,35 @@
     }
   },
   {
+    "id": "spell_dominate_beast",
+    "name": "Dominate Beast",
+    "level": 4,
+    "school": "enchantment",
+    "classes": [
+      "class_druid",
+      "class_ranger",
+      "class_sorcerer"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Beguile a beast, controlling its actions and movements.",
+      "fullText": "You attempt to beguile a beast that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\nWhile the beast is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as “Attack that creature,” “Run over there,” or “Fetch that object.” If the creature completes the order and doesn’t receive further direction from you, it defends and preserves itself to the best of its ability.\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn’t do anything that you don’t allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.",
+      "higherLevel": "When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours"
+    }
+  },
+  {
     "id": "spell_faerie_fire",
     "name": "Faerie Fire",
     "level": 1,
@@ -548,6 +604,33 @@
     }
   },
   {
+    "id": "spell_grasping_vine",
+    "name": "Grasping Vine",
+    "level": 4,
+    "school": "conjuration",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Conjure a vine that lashes out at a creature, pulling it toward the vine.",
+      "fullText": "You conjure a vine that sprouts from the ground in an unoccupied space of your choice that you can see within range. When you cast this spell, you can direct the vine to lash out at a creature within 30 feet of it that you can see. That creature must succeed on a Dexterity saving throw or be pulled 20 feet directly toward the vine.\nUntil the spell ends, you can direct the vine to lash out at the same creature or another one as a bonus action on each of your turns."
+    }
+  },
+  {
     "id": "spell_guardian_of_faith",
     "name": "Guardian of Faith",
     "level": 4,
@@ -669,6 +752,36 @@
       "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
       "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
       "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
+    }
+  },
+  {
+    "id": "spell_insect_plague",
+    "name": "Insect Plague",
+    "level": 5,
+    "school": "conjuration",
+    "classes": [
+      "class_cleric",
+      "class_druid",
+      "class_sorcerer"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 300
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A few grains of sugar, some kernels of gran, and a smear of fat."
+    },
+    "lore": {
+      "shortDescription": "Summon a swarm of biting locusts that damages creatures in the area and makes it difficult terrain.",
+      "fullText": "Swarming, biting locusts fill a 20-foot-radius sphere centered on a point you choose within range. The sphere spreads around corners. The sphere remains for the duration, and its area is lightly obscured. The sphere's area is difficult terrain.\nWhen the area appears, each creature in it must make a Constitution saving throw. A creature takes 4d10 piercing damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw when it enters the spell's area for the first time on a turn or ends its turn there.",
+      "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 for each slot level above 5th."
     }
   },
   {
@@ -817,6 +930,34 @@
     "lore": {
       "shortDescription": "A spell that repairs a single break or tear in an object you touch.",
       "fullText": "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.\nThis spell can physically repair a magic item or construct, but the spell can’t restore magic to such an object."
+    }
+  },
+  {
+    "id": "spell_plant_growth",
+    "name": "Plant Growth",
+    "level": 3,
+    "school": "transmutation",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 150
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Cause plants in an area to grow, hindering movement or enriching the land.",
+      "fullText": "This spell channels vitality into plants within a specific area. There are two possible uses for the spell, granting either immediate or long-term benefits.\nIf you cast this spell using 1 action, choose a point within range. All normal plants in a 100-foot radius centered on that point become thick and overgrown. A creature moving through the area must spend 4 feet of movement for every 1 foot it moves.\nYou can exclude one or more areas of any size within the spell's area from being affected.\nIf you cast this spell over 8 hours, you enrich the land. All plants in a half-mile radius centered on a point within range become enriched for 1 year. The plants yield twice the normal amount of food when harvested."
     }
   },
   {
@@ -973,6 +1114,65 @@
     }
   },
   {
+    "id": "spell_speak_with_animals",
+    "name": "Speak with Animals",
+    "level": 1,
+    "school": "divination",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "10 minutes",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Communicate with beasts for the duration.",
+      "fullText": "You gain the ability to comprehend and verbally communicate with beasts for the duration. The knowledge and awareness of many beasts is limited by their intelligence, but at minimum, beasts can give you information about nearby locations and monsters, including whatever they can perceive or have perceived within the past day. You might be able to persuade a beast to perform a small favor for you, at the DM's discretion."
+    }
+  },
+  {
+    "id": "spell_spike_growth",
+    "name": "Spike Growth",
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 150
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Seven sharp thorns or seven small twigs, each sharpened to a point."
+    },
+    "areaOfEffect": {
+      "shape": "cylinder",
+      "size": 20
+    },
+    "lore": {
+      "shortDescription": "The ground twists and sprouts hard spikes and thorns, dealing damage to creatures that move through it.",
+      "fullText": "The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels.\nThe transformation of the ground is camouflaged to look natural. Any creature that can’t see the area at the time the spell is cast must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it."
+    }
+  },
+  {
     "id": "spell_spiritual_weapon",
     "name": "Spiritual Weapon",
     "level": 2,
@@ -997,6 +1197,32 @@
       "shortDescription": "Summon a floating spectral weapon that attacks your enemies.",
       "fullText": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.",
       "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+    }
+  },
+  {
+    "id": "spell_tree_stride",
+    "name": "Tree Stride",
+    "level": 5,
+    "school": "conjuration",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Enter a tree and move to another tree of the same kind within 500 feet.",
+      "fullText": "You gain the ability to enter a tree and move from inside it to inside another tree of the same kind within 500 feet.\nBoth trees must be living and at least the same size as you. You must use 5 feet of movement to enter a tree. You instantly know the location of all other trees of the same kind within 500 feet and, as part of the move used to enter the tree, can either pass into one of those trees or step out of the tree you’re in. You appear in a spot of your choice within 5 feet of the destination tree, using another 5 feet of movement. If you have no movement left, you appear within 5 feet of the tree you entered.\nYou can use this transportation ability once per round for the duration. You must end each turn outside a tree."
     }
   },
   {
@@ -1047,6 +1273,43 @@
       "shortDescription": "Create a blazing wall of fire that damages creatures passing through or ending their turn near it.",
       "fullText": "You create a wall of fire on a solid surface within range. The wall can be up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration.\nWhen the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save.\nOne side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn.",
       "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th."
+    }
+  },
+  {
+    "id": "spell_wind_wall",
+    "name": "Wind Wall",
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A tiny fan an da feather of exotic origin."
+    },
+    "savingThrow": {
+      "ability": "str",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "Create a wall of strong wind that damages and hinders creatures and objects passing through it.",
+      "fullText": "A wall of strong wind rises from the ground at a point you choose within range. You can make the wall up to 50 feet long, 15 feet high, and 1 foot thick. You can shape the wall in any way you choose so long as it makes one continuous path along the ground. The wall lasts for the duration.\nWhen the wall appears, each creature within its area must make a Strength saving throw. A creature takes 3d8 bludgeoning damage on a failed save, or half as much damage on a successful one.\nThe strong wind keeps fog, smoke, and other gases at bay. Small or smaller flying creatures or objects can't pass through the wall. Loose, lightweight materials brought into the wall fly upward. Arrows, bolts, and other ordinary projectiles launched at targets behind the wall are deflected upward and automatically miss. (Boulders hurled by giants or siege engines, and similar projectiles, are unaffected.) Creatures in gaseous form can’t pass through it."
     }
   }
 ]

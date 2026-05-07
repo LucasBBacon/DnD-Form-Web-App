@@ -1,0 +1,8 @@
+{
+    "id": "trait_dampen_elements",
+    "name": "Dampen Elements",
+    "lore": {
+        "shortDescription": "Use your reaction to grant resistance to a creature against an elemental damage type.",
+        "fullText": "Starting at 6th level, when you or a creature within 30 feet of you takes acid, cold, fire, lightning, or thunder damage, you can use your reaction to grant resistance to the creature against that instance of the damage."
+    }
+}
