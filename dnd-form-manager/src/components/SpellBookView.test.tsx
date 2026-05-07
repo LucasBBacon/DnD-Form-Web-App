@@ -21,6 +21,8 @@ const buildSpellcasting = (overrides: Partial<any> = {}): any => ({
     prepared: { selected: ["spell_magic_missile"], max: 10 },
     cantrips: { max: 3 },
     innate: [],
+    bonusPrepared: [],
+    allExpandedSpellIds: [],
   },
   slots: {
     shared: {},
@@ -179,6 +181,8 @@ describe("SpellBookView", () => {
             prepared: { selected: ["spell_shield", "spell_magic_missile"], max: 10 },
             cantrips: { max: 3 },
             innate: [],
+            bonusPrepared: [],
+            allExpandedSpellIds: [],
           },
         })}
       />,
@@ -199,6 +203,8 @@ describe("SpellBookView", () => {
             prepared: { selected: [], max: 10 },
             cantrips: { max: 3 },
             innate: [],
+            bonusPrepared: [],
+            allExpandedSpellIds: [],
           },
         })}
       />,
@@ -244,6 +250,8 @@ describe("SpellBookView", () => {
                 spellAttackBonus: 6,
               },
             ],
+            bonusPrepared: [],
+            allExpandedSpellIds: [],
           },
         })}
       />,
@@ -287,6 +295,8 @@ describe("SpellBookView", () => {
                 uses: { count: 1, reset: "long_rest" },
               },
             ],
+            bonusPrepared: [],
+            allExpandedSpellIds: [],
           },
         })}
       />,

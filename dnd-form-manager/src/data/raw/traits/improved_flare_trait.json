@@ -1,0 +1,8 @@
+{
+    "id": "trait_improved_flare",
+    "name": "Improved Flare",
+    "lore": {
+        "shortDescription": "Use your Warding Flare against attacks targeting your allies.",
+        "fullText": "Starting at 6th level, you can also use your Warding Flare feature when a creature that you can see within 30 feet of you attacks a creature other than you."
+    }
+}

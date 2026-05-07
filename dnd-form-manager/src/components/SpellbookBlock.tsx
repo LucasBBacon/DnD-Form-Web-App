@@ -44,12 +44,26 @@ export const SpellbookBlock = () => {
         : [];
 
   // Filter spells so dropdown only shows spells for active spellcasting classes.
-  const availableClassSpells = getAllSpells().filter(
-    (spell) => spell.classes.some((spellClassId) => eligibleClassIds.includes(spellClassId)),
+  // Also include any spells added via spellsAddedToList (expanded spell lists) that
+  // aren't already covered by the class filter, excluding always-prepared domain spells.
+  const bonusPreparedSet = new Set(pools.bonusPrepared);
+  const baseClassSpells = getAllSpells().filter(
+    (spell) =>
+      spell.classes.some((spellClassId) => eligibleClassIds.includes(spellClassId)) &&
+      !bonusPreparedSet.has(spell.id),
   );
+  const baseClassSpellIds = new Set(baseClassSpells.map((s) => s.id));
+  const expandedOnlySpells = pools.allExpandedSpellIds
+    .filter((id) => !baseClassSpellIds.has(id) && !bonusPreparedSet.has(id))
+    .map((id) => getAllSpells().find((s) => s.id === id))
+    .filter((s): s is NonNullable<typeof s> => s != null);
+  const availableClassSpells = [...baseClassSpells, ...expandedOnlySpells];
 
   const uniqueKnownCount = new Set(pools.known.selected).size;
-  const uniquePreparedCount = new Set(pools.prepared.selected).size;
+  // Exclude always-prepared domain spells from the displayed prepared count
+  const uniquePreparedCount = new Set(
+    pools.prepared.selected.filter((id) => !bonusPreparedSet.has(id)),
+  ).size;
 
   const resolveSpellName = (spellId: string) => {
     const spell = getSpellByID(spellId);
@@ -347,6 +361,37 @@ export const SpellbookBlock = () => {
           })
         )}
       </div>
+
+      {/* --- Domain / Always-Prepared Spells --- */}
+      {pools.bonusPrepared.length > 0 && (
+        <div className="domain-spells-list">
+          <h3 style={{ marginBottom: "0.5rem" }}>Domain Spells (Always Prepared)</h3>
+          {pools.bonusPrepared.map((spellId) => {
+            const spell = getSpellByID(spellId);
+            if (!spell) return null;
+            return (
+              <div key={`domain-${spell.id}`} className="spell-card domain-spell-card">
+                <div className="spell-card-header">
+                  <strong>{spell.name}</strong>
+                  <span className="spell-tags">
+                    <span className="domain-badge">Domain</span>{" "}
+                    {spell.level === 0 ? "Cantrip" : `Level ${spell.level}`} -{" "}
+                    {spell.school}
+                  </span>
+                </div>
+                <div className="spell-card-meta">
+                  <span>{spell.castingTime}</span>
+                  <span>{spell.range}</span>
+                  <span>
+                    {spell.duration} {spell.concentration && "(C)"}
+                  </span>
+                </div>
+                <p className="spell-lore">{spell.lore.shortDescription}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

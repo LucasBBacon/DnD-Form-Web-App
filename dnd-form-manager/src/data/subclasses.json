@@ -197,8 +197,9 @@
       {
         "level": 1,
         "features": [
-          "trait_bonus_proficiency",
-          "trait_disciple_of_life"
+          "trait_cleric_life_prof_bonus",
+          "trait_disciple_of_life",
+          "trait_cleric_life_domain_spells"
         ]
       },
       {
@@ -225,7 +226,54 @@
           "trait_supreme_healing"
         ]
       }
-    ]
+    ],
+    "lore": {
+      "shortDescription": "The Life domain focuses on healing and vitality.",
+      "fullText": "The Life domain focuses on the vibrant positive energy - one of the fundamental forces of the universe - that sustains all life. The gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath. Almost any non-evil deity can claim influence over this domain, particularly agricultural deities (such as Chauntea, Arawai, and Demeter), sun gods (such as Lathander, Pelor, and Re-Horakhty), gods of healing or endurance (such as Ilmater, Mishakal, Apollo, and Diancecht), and gods of home and community (such as Hestia, Hathor, and Boldrci)."
+    }
+  },
+  {
+    "id": "subclass_cleric_light",
+    "name": "Light Domain",
+    "parentClassId": "class_cleric",
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_light_domain_spells",
+          "trait_cleric_light_bonus_cantrip",
+          "trait_warding_flare"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cd_radiance_of_the_dawn"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_improved_flare"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_potent_spellcasting"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_corona_of_light"
+        ]
+      }
+    ],
+    "lore": {
+      "shortDescription": "Clerics of the Light Domain are champions of the ideals of light, truth, and beauty.",
+      "fullText": "Gods of light - including Helm, Lathander, Pholtus, Branchala, the Silver Flame, Belenus, Apollo, and Re-Horakhty - promote the ideals of rebirth and renewal, truth, vigilance, and beauty, often using the symbol of the sun. Some of these gods are portrayed as the sun itself or as a charioteer who guides the sun across the sky. Others are tireless sentinels whose eyes pierce every shadow and see through every deception. Some are deities of beauty and artistry, who teach that art is a vehicle for the soul's improvement. Clerics of a god of light are enlightened souls infused with radiance and the power of their gods' discerning vision, charged with chasing away lies and burning away darkness."
+    }
   },
   {
     "id": "subclass_fighter_battle_master",

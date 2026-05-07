@@ -22,11 +22,13 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
 
   // Hydrate and group spells
   const groupedSpells = useMemo(() => {
-    // Combine all standard spell IDs (known + prepared) and deduplicate
+    // Combine standard spell IDs with always-prepared domain spells, deduplicated
+    const bonusPreparedSet = new Set(spellcasting.pools.bonusPrepared);
     const standardIds = Array.from(
       new Set([
         ...spellcasting.pools.known.selected,
         ...spellcasting.pools.prepared.selected,
+        ...spellcasting.pools.bonusPrepared,
       ]),
     );
 
@@ -53,8 +55,9 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
     return {
       grouped,
       missingSpellIds,
+      bonusPreparedSet,
     };
-  }, [spellcasting.pools.known.selected, spellcasting.pools.prepared.selected]);
+  }, [spellcasting.pools.known.selected, spellcasting.pools.prepared.selected, spellcasting.pools.bonusPrepared]);
 
   const groupedInnateSpells = useMemo(() => {
     const grouped: Record<
@@ -160,10 +163,11 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
             {groupedSpells.grouped[level].map((spell) => {
               const isExpanded = expandedSpellId === spell.id;
 
+              const isDomainSpell = groupedSpells.bonusPreparedSet.has(spell.id);
               return (
                 <div
                   key={spell.id}
-                  className={`spell-card ${isExpanded ? "expanded" : ""}`}
+                  className={`spell-card ${isExpanded ? "expanded" : ""} ${isDomainSpell ? "domain-spell-card" : ""}`}
                 >
                   {/* Accordion header (always visible) */}
                   <button
@@ -172,6 +176,9 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
                   >
                     <span className="spell-name">{spell.name}</span>
                     <div className="spell-quick-stats">
+                      {isDomainSpell && (
+                        <span className="quick-stat domain-mode-pill">Domain</span>
+                      )}
                       <span className="quick-stat">{spell.castingTime}</span>
                       <span className="quick-stat">{spell.range}</span>
                     </div>

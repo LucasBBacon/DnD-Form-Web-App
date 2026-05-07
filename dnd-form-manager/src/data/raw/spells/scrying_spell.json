@@ -1,0 +1,40 @@
+{
+    "id": "spell_scrying",
+    "name": "Scrying",
+    "level": 5,
+    "school": "divination",
+    "classes": [
+        "class_bard",
+        "class_cleric",
+        "class_druid",
+        "class_warlock",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "castingTime": "10 minutes",
+    "range": {
+        "type": "self"
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A focus worth at least 1,000 gp, such as a crystal ball, a silver mirror, or a font filled with holy water."
+    },
+    "savingThrow": {
+        "ability": "wis",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "no_damage"
+    },
+    "lore": {
+        "shortDescription": "See and hear a creature on the same plane of existence.",
+        "fullText": "You can see and hear a particular creature you choose that is on the same plane of existence as you. The target must make a Wisdom saving throw, which is modified by how well you know the target and the sort of physical connection you have to it. If the target is on a different plane of existence than you, the spell fails.\n\nKnowledge & Connection modifiers: Secondhand (heard of the target) –4; Firsthand (met the target) 0; Familiar (know the target well) +5. Likeness or picture –2; Possession or garment –4; Body part, lock of hair, bit of nail, or the like –10.\n\nOn a successful save, the target isn't affected, and you can't use this spell against it again for 24 hours.\nOn a failed save, the spell creates an invisible sensor within 10 feet of the target. You can see and hear through the sensor as if you were there. The sensor moves with the target, remaining within 10 feet of it for the duration. A creature that can see invisible objects sees the sensor as a luminous orb about the size of your fist."
+    }
+}

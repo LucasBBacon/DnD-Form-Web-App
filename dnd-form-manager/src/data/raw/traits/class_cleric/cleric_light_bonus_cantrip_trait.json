@@ -1,0 +1,21 @@
+{
+    "id": "trait_cleric_light_bonus_cantrip",
+    "name": "Bonus Cantrip",
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_light"
+                ]
+            }
+        ]
+    },
+    "lore": {
+        "shortDescription": "Gain the Light cantrip.",
+        "fullText": "When you choose this domain at 1st level, you gain the Light cantrip if you don't already know it. This cantrip doesn’t count against the number of cleric cantrips you know."
+    }
+}

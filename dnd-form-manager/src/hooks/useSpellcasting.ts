@@ -77,6 +77,7 @@ export interface UseSpellcastingReturn {
       max: number;
     };
     bonusPrepared: string[];
+    allExpandedSpellIds: string[];
     freeSchoolDesignated: string[];
     freeSchoolSlots: number;
     innate: InnateSpellcastingEntry[];
@@ -145,6 +146,7 @@ const getSpellcastingTraitsForTrack = (
   sourceType: "class";
   classId: string;
   classLevel: number;
+  isBonusOnly: boolean;
   spellcastingBase: {
     ability: Ability;
     preparationType: "known" | "prepared" | "pact";
@@ -183,18 +185,6 @@ const getSpellcastingTraitsForTrack = (
     .map((trait) => {
       if (!trait.spellcasting) return null;
 
-      const progression = getMostRecentProgressionProperty(
-        trait.spellcasting.progressionByLevel,
-        track.level,
-        (entry) => ({
-          cantripsKnown: entry.cantripsKnown,
-          spellsKnown: entry.spellsKnown,
-          spellSlots: entry.spellSlots,
-        }) as Exclude<SpellcastingProgression, null>,
-      );
-
-      if (!progression) return null;
-
       const allLevelEntries = trait.spellcasting.progressionByLevel.filter(
         (entry) => entry.level <= track.level,
       );
@@ -205,10 +195,53 @@ const getSpellcastingTraitsForTrack = (
         allLevelEntries.flatMap((e) => e.bonusSpells ?? []),
       );
 
+      const progression = getMostRecentProgressionProperty(
+        trait.spellcasting.progressionByLevel,
+        track.level,
+        (entry) => {
+          if (
+            entry.cantripsKnown === undefined &&
+            entry.spellsKnown === undefined &&
+            entry.spellSlots === undefined
+          ) {
+            return null;
+          }
+          return {
+            cantripsKnown: entry.cantripsKnown,
+            spellsKnown: entry.spellsKnown,
+            spellSlots: entry.spellSlots,
+          } as Exclude<SpellcastingProgression, null>;
+        },
+      );
+
+      if (!progression) {
+        if (bonusPreparedSpellIds.length === 0 && expandedSpellIds.length === 0) {
+          return null;
+        }
+        return {
+          sourceType: "class" as const,
+          classId: track.classId,
+          classLevel: track.level,
+          isBonusOnly: true,
+          spellcastingBase: {
+            ability: trait.spellcasting.ability,
+            preparationType: trait.spellcasting.preparationType,
+            ritualCasting: trait.spellcasting.ritualCasting,
+          },
+          progression: {} as Exclude<SpellcastingProgression, null>,
+          schoolRestrictions: null,
+          expandedSpellIds,
+          bonusPreparedSpellIds,
+          spellListSource: null,
+          freeSchoolSpellSlots: 0,
+        };
+      }
+
       return {
         sourceType: "class" as const,
         classId: track.classId,
         classLevel: track.level,
+        isBonusOnly: false,
         spellcastingBase: {
           ability: trait.spellcasting.ability,
           preparationType: trait.spellcasting.preparationType,
@@ -240,6 +273,7 @@ const getSpellcastingTraitsForRaceTrack = (
   sourceType: "race";
   classId: string;
   classLevel: number;
+  isBonusOnly: boolean;
   spellcastingBase: {
     ability: Ability;
     preparationType: "known" | "prepared" | "pact";
@@ -267,18 +301,6 @@ const getSpellcastingTraitsForRaceTrack = (
     .map((trait) => {
       if (!trait.spellcasting) return null;
 
-      const progression = getMostRecentProgressionProperty(
-        trait.spellcasting.progressionByLevel,
-        level,
-        (entry) => ({
-          cantripsKnown: entry.cantripsKnown,
-          spellsKnown: entry.spellsKnown,
-          spellSlots: entry.spellSlots,
-        }) as Exclude<SpellcastingProgression, null>,
-      );
-
-      if (!progression) return null;
-
       const allLevelEntries = trait.spellcasting.progressionByLevel.filter(
         (entry) => entry.level <= level,
       );
@@ -289,10 +311,53 @@ const getSpellcastingTraitsForRaceTrack = (
         allLevelEntries.flatMap((e) => e.bonusSpells ?? []),
       );
 
+      const progression = getMostRecentProgressionProperty(
+        trait.spellcasting.progressionByLevel,
+        level,
+        (entry) => {
+          if (
+            entry.cantripsKnown === undefined &&
+            entry.spellsKnown === undefined &&
+            entry.spellSlots === undefined
+          ) {
+            return null;
+          }
+          return {
+            cantripsKnown: entry.cantripsKnown,
+            spellsKnown: entry.spellsKnown,
+            spellSlots: entry.spellSlots,
+          } as Exclude<SpellcastingProgression, null>;
+        },
+      );
+
+      if (!progression) {
+        if (bonusPreparedSpellIds.length === 0 && expandedSpellIds.length === 0) {
+          return null;
+        }
+        return {
+          sourceType: "race" as const,
+          classId: raceId,
+          classLevel: level,
+          isBonusOnly: true,
+          spellcastingBase: {
+            ability: trait.spellcasting.ability,
+            preparationType: trait.spellcasting.preparationType,
+            ritualCasting: trait.spellcasting.ritualCasting,
+          },
+          progression: {} as Exclude<SpellcastingProgression, null>,
+          schoolRestrictions: null,
+          expandedSpellIds,
+          bonusPreparedSpellIds,
+          spellListSource: null,
+          freeSchoolSpellSlots: 0,
+        };
+      }
+
       return {
         sourceType: "race" as const,
         classId: raceId,
         classLevel: level,
+        isBonusOnly: false,
         spellcastingBase: {
           ability: trait.spellcasting.ability,
           preparationType: trait.spellcasting.preparationType,
@@ -364,7 +429,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
   // #region --- Derived Caster Properties ---
 
   const effectiveCasterLevel = calculateMulticlassCasterLevel(nonPactTracks);
-  const primaryCastingTrack = spellcastingTracks[0] || null;
+  const primaryCastingTrack = spellcastingTracks.find((t) => !t.isBonusOnly) || null;
   const preparationType = primaryCastingTrack?.spellcastingBase.preparationType;
   const spellcastingAbility = primaryCastingTrack?.spellcastingBase.ability;
   const highestPactLevel = pactTracks.reduce(
@@ -408,27 +473,41 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
 
   // Generate a summary of each class's contribution to the character's spellcasting, 
   // used for diagnostics and UI display
-  const classSpellcastingSummaries: ClassSpellcastingSummary[] =
-    spellcastingTracks.map((track) => {
-      const abilityMod = modifiers[track.spellcastingBase.ability] || 0;
+  // Bonus-only tracks (e.g. domain spell traits) are excluded — they contribute no
+  // cantrips, spell slots, or prepared-spell limits; their spells surface via bonusPrepared.
+  // However, any expandedSpellIds they carry are merged into the matching class summary
+  // so that off-list spells added via spellsAddedToList are still considered valid.
+  const bonusOnlyExpandedByClass = new Map<string, string[]>();
+  for (const track of spellcastingTracks) {
+    if (!track.isBonusOnly || track.expandedSpellIds.length === 0) continue;
+    const existing = bonusOnlyExpandedByClass.get(track.classId) ?? [];
+    bonusOnlyExpandedByClass.set(track.classId, [...existing, ...track.expandedSpellIds]);
+  }
 
-      return {
-        classId: track.classId,
-        classLevel: track.classLevel,
-        preparationType: track.spellcastingBase.preparationType,
-        spellcastingAbility: track.spellcastingBase.ability,
-        maxCantrips: track.progression.cantripsKnown || 0,
-        maxSpellsKnown: track.progression.spellsKnown || 0,
-        maxPreparedSpells:
-          track.spellcastingBase.preparationType === "prepared"
-            ? resolvePreparedSpellLimit(track.classLevel, abilityMod)
-            : 0,
-        schoolRestrictions: track.schoolRestrictions,
-        expandedSpellIds: track.expandedSpellIds,
-        spellListSource: track.spellListSource,
-        freeSchoolSpellSlots: track.freeSchoolSpellSlots,
-      };
-    });
+  const classSpellcastingSummaries: ClassSpellcastingSummary[] =
+    spellcastingTracks
+      .filter((track) => !track.isBonusOnly)
+      .map((track) => {
+        const abilityMod = modifiers[track.spellcastingBase.ability] || 0;
+        const extraExpanded = bonusOnlyExpandedByClass.get(track.classId) ?? [];
+
+        return {
+          classId: track.classId,
+          classLevel: track.classLevel,
+          preparationType: track.spellcastingBase.preparationType,
+          spellcastingAbility: track.spellcastingBase.ability,
+          maxCantrips: track.progression.cantripsKnown || 0,
+          maxSpellsKnown: track.progression.spellsKnown || 0,
+          maxPreparedSpells:
+            track.spellcastingBase.preparationType === "prepared"
+              ? resolvePreparedSpellLimit(track.classLevel, abilityMod)
+              : 0,
+          schoolRestrictions: track.schoolRestrictions,
+          expandedSpellIds: dedupe([...track.expandedSpellIds, ...extraExpanded]),
+          spellListSource: track.spellListSource,
+          freeSchoolSpellSlots: track.freeSchoolSpellSlots,
+        };
+      });
 
   const maxCantrips = classSpellcastingSummaries.reduce(
     (total, summary) => total + summary.maxCantrips,
@@ -441,6 +520,10 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
 
   const allBonusPreparedSpellIds = dedupe(
     spellcastingTracks.flatMap((track) => track.bonusPreparedSpellIds),
+  );
+
+  const allExpandedSpellIds = dedupe(
+    classSpellcastingSummaries.flatMap((s) => s.expandedSpellIds),
   );
 
   // Sum of free-school slots across all known-type tracks that have school restrictions
@@ -603,6 +686,7 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
       max: maxCantrips,
     },
     bonusPrepared: allBonusPreparedSpellIds,
+    allExpandedSpellIds,
     freeSchoolDesignated: state.freeSchoolKnownSpellIds ?? [],
     freeSchoolSlots,
     innate: innateSpells,

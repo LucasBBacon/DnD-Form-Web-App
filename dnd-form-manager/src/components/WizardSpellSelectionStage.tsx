@@ -24,13 +24,22 @@ export const WizardSpellSelectionStage: React.FC = () => {
 
   const isPreparedCaster = casting.preparationType === "prepared";
 
-  // Filter the full spell list to this class's available spells
+  // Filter the full spell list to this class's available spells.
+  // Exclude always-prepared domain spells (they're shown in their own locked section).
+  // Include any spells added via expandedSpellIds (off-list spells that can be manually prepared).
   const classSpells = useMemo(() => {
     if (!classId) return [];
-    return getAllSpells().filter((spell) =>
-      spell.classes?.includes(classId),
+    const bonusPreparedSet = new Set(pools.bonusPrepared);
+    const baseSpells = getAllSpells().filter(
+      (spell) => spell.classes?.includes(classId) && !bonusPreparedSet.has(spell.id),
     );
-  }, [classId]);
+    const baseIds = new Set(baseSpells.map((s) => s.id));
+    const expandedOnly = pools.allExpandedSpellIds
+      .filter((id) => !baseIds.has(id) && !bonusPreparedSet.has(id))
+      .map((id) => getAllSpells().find((s) => s.id === id))
+      .filter((s): s is NonNullable<typeof s> => s != null);
+    return [...baseSpells, ...expandedOnly];
+  }, [classId, pools.bonusPrepared, pools.allExpandedSpellIds]);
 
   const cantrips = useMemo(
     () => classSpells.filter((s) => s.level === 0),
@@ -56,6 +65,9 @@ export const WizardSpellSelectionStage: React.FC = () => {
   const cantripMax = pools.cantrips.max;
   const knownMax = pools.known.max;
   const preparedMax = pools.prepared.max;
+  // Count only manually prepared spells (exclude always-prepared domain spells)
+  const bonusPreparedSet = new Set(pools.bonusPrepared);
+  const manualPreparedCount = spellsPrepared.filter((id) => !bonusPreparedSet.has(id)).length;
 
   if (!classId || !isSpellcaster) {
     return (
@@ -83,7 +95,7 @@ export const WizardSpellSelectionStage: React.FC = () => {
       // Prepared casters toggle prepared list
       if (spellsPrepared.includes(spellId)) {
         unprepareSpell(spellId);
-      } else if (spellsPrepared.length < preparedMax) {
+      } else if (manualPreparedCount < preparedMax) {
         prepareSpell(spellId);
       }
     } else {
@@ -145,7 +157,7 @@ export const WizardSpellSelectionStage: React.FC = () => {
           </div>
           {(() => {
             const currentCount = isPreparedCaster
-              ? spellsPrepared.length
+              ? manualPreparedCount
               : chosenKnownSpells.length;
             const maxCount = isPreparedCaster ? preparedMax : knownMax;
             return (
@@ -163,7 +175,7 @@ export const WizardSpellSelectionStage: React.FC = () => {
                 ? spellsPrepared.includes(spell.id)
                 : chosenKnownSpells.includes(spell.id);
               const currentCount = isPreparedCaster
-                ? spellsPrepared.length
+                ? manualPreparedCount
                 : chosenKnownSpells.length;
               const maxCount = isPreparedCaster ? preparedMax : knownMax;
               const isDisabled = !isSelected && currentCount >= maxCount;
@@ -176,6 +188,28 @@ export const WizardSpellSelectionStage: React.FC = () => {
                   {isSelected && (
                     <span className="picker-card-badge">Chosen</span>
                   )}
+                  <span className="picker-card-name">{spell.name}</span>
+                  <span className="picker-card-meta">
+                    {spellMeta(spell.level, spell.school)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* Domain Spells — always prepared, shown as locked cards */}
+      {pools.bonusPrepared.length > 0 && (
+        <>
+          <div className="picker-section-header">Domain Spells (Always Prepared)</div>
+          <div className="picker-grid">
+            {pools.bonusPrepared.map((spellId) => {
+              const spell = getSpellByID(spellId);
+              if (!spell) return null;
+              return (
+                <div key={`domain-${spell.id}`} className="picker-card domain-spell-picker-card">
+                  <span className="picker-card-badge domain-picker-badge">Domain</span>
                   <span className="picker-card-name">{spell.name}</span>
                   <span className="picker-card-meta">
                     {spellMeta(spell.level, spell.school)}

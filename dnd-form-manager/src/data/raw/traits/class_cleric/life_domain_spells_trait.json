@@ -1,0 +1,50 @@
+{
+    "id": "trait_cleric_life_domain_spells",
+    "name": "Life Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The Life domain grants you access to a set of domain spells at each cleric level listed in the Life Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_bless",
+                    "spell_cure_wounds"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_lesser_restoration",
+                    "spell_spiritual_weapon"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_beacon_of_hope",
+                    "spell_revivify"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_death_ward",
+                    "spell_guardian_of_faith"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_mass_cure_wounds",
+                    "spell_raise_dead"
+                ]
+            }
+        ]
+    }
+}

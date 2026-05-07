@@ -1,0 +1,50 @@
+{
+    "id": "trait_light_domain_spells",
+    "name": "Light Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The Light domain grants you access to a set of domain spells at each cleric level listed in the Light Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_burning_hands",
+                    "spell_faerie_fire"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_flaming_sphere",
+                    "spell_scorching_ray"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_daylight",
+                    "spell_fireball"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_guardian_of_faith",
+                    "spell_wall_of_fire"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_flame_strike",
+                    "spell_scrying"
+                ]
+            }
+        ]
+    }
+}

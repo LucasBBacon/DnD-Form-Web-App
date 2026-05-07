@@ -1,0 +1,27 @@
+{
+    "id": "spell_revivify",
+    "name": "Revivify",
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+        "class_cleric",
+        "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "Diamonds worth 300 gp, which the spell consumes."
+    },
+    "lore": {
+        "shortDescription": "Return a creature that died in the last minute to life with 1 hit point.",
+        "fullText": "You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts."
+    }
+}

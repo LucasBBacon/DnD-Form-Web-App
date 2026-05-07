@@ -120,6 +120,17 @@
   padding: 1px 5px;
 }
 
+.domain-spell-picker-card {
+  border-left: 3px solid #16a34a;
+  opacity: 0.85;
+  cursor: default;
+  pointer-events: none;
+}
+
+.domain-picker-badge {
+  background: #16a34a;
+}
+
 /* ---- Missing reference note ---- */
 .picker-missing-ref {
   font-size: 0.75rem;

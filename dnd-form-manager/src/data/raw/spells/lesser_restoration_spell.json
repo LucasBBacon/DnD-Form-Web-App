@@ -1,0 +1,29 @@
+{
+    "id": "spell_lesser_restoration",
+    "name": "Lesser Restoration",
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+        "class_bard",
+        "class_cleric",
+        "class_druid",
+        "class_paladin",
+        "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "lore": {
+        "shortDescription": "End one disease or condition afflicting a creature you touch.",
+        "fullText": "You touch a creature and can end either one disease or one condition afflicting it. The condition can be blinded, deafened, paralyzed, or poisoned."
+    }
+}

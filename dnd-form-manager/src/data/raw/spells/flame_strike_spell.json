@@ -1,0 +1,55 @@
+{
+    "id": "spell_flame_strike",
+    "name": "Flame Strike",
+    "level": 5,
+    "school": "evocation",
+    "classes": [
+        "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "Pinch of sulfur."
+    },
+    "output": {
+        "damage": [
+            {
+                "roll": "4d6",
+                "type": "fire",
+                "scaling": {
+                    "type": "spell_slot"
+                }
+            },
+            {
+                "roll": "4d6",
+                "type": "radiant",
+                "scaling": {
+                    "type": "spell_slot"
+                }
+            }
+        ]
+    },
+    "savingThrow": {
+        "ability": "con",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "half_damage"
+    },
+    "lore": {
+        "shortDescription": "Call down a column of divine fire dealing fire and radiant damage.",
+        "fullText": "A vertical column of divine fire roars down from the heavens in a location you specify. Each creature in a 10-foot-radius, 40-foot-high cylinder centered on a point within range must make a Constitution saving throw. A creature takes 4d6 fire damage and 4d6 radiant damage on a failed save, or half as much damage on a successful one.",
+        "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, the fire damage or the radiant damage (your choice) increases by 1d6 for each slot level above 5th."
+    }
+}

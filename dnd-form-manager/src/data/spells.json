@@ -120,6 +120,32 @@
     }
   },
   {
+    "id": "spell_beacon_of_hope",
+    "name": "Beacon of Hope",
+    "level": 3,
+    "school": "abjuration",
+    "classes": [
+      "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Grant creatures resilience — maximum healing and advantage on death saves and Wisdom saves.",
+      "fullText": "This spell bestows hope and vitality. Choose any number of creatures within range. For the duration, each target has advantage on Wisdom saving throws and death saving throws, and regains the maximum number of hit points possible from any healing."
+    }
+  },
+  {
     "id": "spell_bless",
     "name": "Bless",
     "level": 1,
@@ -146,6 +172,46 @@
       "shortDescription": "You bless up to three creatures of your choice within range.",
       "fullText": "You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+    }
+  },
+  {
+    "id": "spell_burning_hands",
+    "name": "Burning Hands",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "areaOfEffect": {
+      "shape": "cone",
+      "size": 15
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "Shoot a cone of fire from your fingertips to damage creatures and ignite objects.",
+      "fullText": "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one.\nThe fire ignites any flammable objects in the area that aren't being worn or carried.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
     }
   },
   {
@@ -204,6 +270,36 @@
     }
   },
   {
+    "id": "spell_cure_wounds",
+    "name": "Cure Wounds",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_druid",
+      "class_paladin",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Restore hit points to a creature you touch.",
+      "fullText": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the healing increases by 1d8 for each slot level above 1st."
+    }
+  },
+  {
     "id": "spell_dancing_lights",
     "name": "Dancing Lights",
     "level": 0,
@@ -231,6 +327,250 @@
     "lore": {
       "shortDescription": "Create up to four torch-sized lights within range.",
       "fullText": "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius.\nAs a bonus action on your turn, you can move the lights up to 60 feet to a new spot within range. A light must be within 20 feet of another light created by this spell, and a light winks out if it exceeds the spell''s range."
+    }
+  },
+  {
+    "id": "spell_daylight",
+    "name": "Daylight",
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      "class_cleric",
+      "class_druid",
+      "class_paladin",
+      "class_ranger",
+      "class_sorcerer"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Create a sphere of light that dispels darkness and harms undead.",
+      "fullText": "A 60-foot-radius sphere of light spreads out from a point you choose within range. The sphere is bright light and sheds dim light for an additional 60 feet.\nIf you chose a point on an object you are holding or one that isn’t being worn or carried, the light shines from the object with and moves with it. Completely covering the affected object with an opaque object, such as a bowl or a helm, blocks the light.\nIf any of this spell's area overlaps with an area of darkness created by a spell of 3rd level or lower, the spell that created the darkness is dispelled."
+    }
+  },
+  {
+    "id": "spell_death_ward",
+    "name": "Death Ward",
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      "class_cleric",
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Protect a creature from death once — it drops to 1 hp instead of dying.",
+      "fullText": "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 hit points as a result of taking damage, the target instead drops to 1 hit point, and the spell ends. If the spell is still in effect when the target is subjected to an effect that would kill it instantaneously without dealing damage, that effect is instead negated against the target, and the spell ends."
+    }
+  },
+  {
+    "id": "spell_faerie_fire",
+    "name": "Faerie Fire",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_druid"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Outline objects and creatures in light, granting advantage on attacks against them.",
+      "fullText": "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice).\nAny creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed dim light in a 10-foot radius.\nAny attack roll against an affected creature or object has advantage if the attacker can see it, and the affected creature or object can't benefit from being invisible."
+    }
+  },
+  {
+    "id": "spell_fireball",
+    "name": "Fireball",
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 150
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A tiny ball of bat guano and sulfur."
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "8d6",
+          "type": "fire",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "A bright streak flashes from your pointing finger to a point you choose within range then blossoms with a low roar into an explosion of flame.",
+      "fullText": "A bright streak flashes from your pointing finger to a point you choose within range then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot radius must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one. The fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried.",
+      "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd."
+    }
+  },
+  {
+    "id": "spell_flame_strike",
+    "name": "Flame Strike",
+    "level": 5,
+    "school": "evocation",
+    "classes": [
+      "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Pinch of sulfur."
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "4d6",
+          "type": "fire",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        },
+        {
+          "roll": "4d6",
+          "type": "radiant",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "con",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "Call down a column of divine fire dealing fire and radiant damage.",
+      "fullText": "A vertical column of divine fire roars down from the heavens in a location you specify. Each creature in a 10-foot-radius, 40-foot-high cylinder centered on a point within range must make a Constitution saving throw. A creature takes 4d6 fire damage and 4d6 radiant damage on a failed save, or half as much damage on a successful one.",
+      "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, the fire damage or the radiant damage (your choice) increases by 1d6 for each slot level above 5th."
+    }
+  },
+  {
+    "id": "spell_flaming_sphere",
+    "name": "Flaming Sphere",
+    "level": 2,
+    "school": "conjuration",
+    "classes": [
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A bit of tallow, a pinch of brimstone, and a dusting of powdered iron."
+    },
+    "lore": {
+      "shortDescription": "Create a sphere of fire that damages creatures and can be moved around.",
+      "fullText": "A 5-foot-diameter sphere of fire appears in an unoccupied space of your choice within range and lasts for the duration. Any creature that ends its turn within 5 feet of the sphere must make a Dexterity saving throw. The creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one.\nAs a bonus action, you can move the sphere up to 30 feet. If you ram the sphere into a creature, that creature must make the saving throw against the sphere’s damage, and the sphere stops moving this turn.\nWhen you move the sphere, you can direct it over barriers up to 5 feet tall and jump it across pits up to 10 feet wide. The sphere ignites flammable objects not being worn or carried, and it sheds bright light in a 20-foot radius and dim light for an additional 20 feet.",
+      "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d6 for each slot level above 2nd."
+    }
+  },
+  {
+    "id": "spell_guardian_of_faith",
+    "name": "Guardian of Faith",
+    "level": 4,
+    "school": "conjuration",
+    "classes": [
+      "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Summon a Large spectral guardian that damages hostile creatures near it.",
+      "fullText": "A Large spectral guardian appears and hovers for the duration in an unoccupied space of your choice that you can see within range. The guardian occupies that space and is indistinct except for a gleaming sword and shield emblazoned with the symbol of your deity. Any creature hostile to you that moves to a space within 10 feet of the guardian for the first time on a turn must succeed on a Dexterity saving throw. The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage."
     }
   },
   {
@@ -332,6 +672,35 @@
     }
   },
   {
+    "id": "spell_lesser_restoration",
+    "name": "Lesser Restoration",
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_druid",
+      "class_paladin",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "End one disease or condition afflicting a creature you touch.",
+      "fullText": "You touch a creature and can end either one disease or one condition afflicting it. The condition can be blinded, deafened, paralyzed, or poisoned."
+    }
+  },
+  {
     "id": "spell_light",
     "name": "Light",
     "level": 0,
@@ -391,6 +760,35 @@
     }
   },
   {
+    "id": "spell_mass_cure_wounds",
+    "name": "Mass Cure Wounds",
+    "level": 5,
+    "school": "evocation",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_druid"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Heal up to six creatures in range.",
+      "fullText": "A wave of healing energy washes out from a point of your choice within range. Choose up to six creatures in a 30-foot-radius sphere centered on that point. Each target regains hit points equal to 3d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",
+      "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, the healing increases by 1d8 for each slot level above 5th."
+    }
+  },
+  {
     "id": "spell_mending",
     "name": "Mending",
     "level": 0,
@@ -422,6 +820,129 @@
     }
   },
   {
+    "id": "spell_raise_dead",
+    "name": "Raise Dead",
+    "level": 5,
+    "school": "necromancy",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A diamond worth at least 500 gp, which the spell consumes."
+    },
+    "lore": {
+      "shortDescription": "Return a creature that died in the last 10 days to life.",
+      "fullText": "You return a dead creature you touch to life, provided that it has been dead no longer than 10 days. If the creature's soul is both willing and at liberty to rejoin the body, the creature returns to life with 1 hit point. This spell also neutralizes any poisons and cures nonmagical diseases that affected the creature at the time it died. This spell doesn't, however, remove magical diseases, curses, or similar effects; if these aren't first removed prior to casting the spell, they take effect when the creature returns to life. The spell can't return an undead creature to life. Upon being raised, the target suffers a −4 penalty to all attack rolls, saving throws, and ability checks. Every time the target finishes a long rest, the penalty is reduced by 1 until it disappears."
+    }
+  },
+  {
+    "id": "spell_revivify",
+    "name": "Revivify",
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "class_cleric",
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Diamonds worth 300 gp, which the spell consumes."
+    },
+    "lore": {
+      "shortDescription": "Return a creature that died in the last minute to life with 1 hit point.",
+      "fullText": "You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts."
+    }
+  },
+  {
+    "id": "spell_scorching_ray",
+    "name": "Scorching Ray",
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Create three rays of fire and hurl them at targets within range.",
+      "fullText": "You create three rays of fire and hurl them at targets within range. You can hurl them at one target or several. Make a ranged spell attack for each ray. On a hit, the target takes 2d6 fire damage.",
+      "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, you create one additional ray for each slot level above 2nd."
+    }
+  },
+  {
+    "id": "spell_scrying",
+    "name": "Scrying",
+    "level": 5,
+    "school": "divination",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_druid",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "castingTime": "10 minutes",
+    "range": {
+      "type": "self"
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A focus worth at least 1,000 gp, such as a crystal ball, a silver mirror, or a font filled with holy water."
+    },
+    "savingThrow": {
+      "ability": "wis",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "no_damage"
+    },
+    "lore": {
+      "shortDescription": "See and hear a creature on the same plane of existence.",
+      "fullText": "You can see and hear a particular creature you choose that is on the same plane of existence as you. The target must make a Wisdom saving throw, which is modified by how well you know the target and the sort of physical connection you have to it. If the target is on a different plane of existence than you, the spell fails.\n\nKnowledge & Connection modifiers: Secondhand (heard of the target) –4; Firsthand (met the target) 0; Familiar (know the target well) +5. Likeness or picture –2; Possession or garment –4; Body part, lock of hair, bit of nail, or the like –10.\n\nOn a successful save, the target isn't affected, and you can't use this spell against it again for 24 hours.\nOn a failed save, the spell creates an invisible sensor within 10 feet of the target. You can see and hear through the sensor as if you were there. The sensor moves with the target, remaining within 10 feet of it for the duration. A creature that can see invisible objects sees the sensor as a luminous orb about the size of your fist."
+    }
+  },
+  {
     "id": "spell_sleep",
     "name": "Sleep",
     "level": 1,
@@ -449,6 +970,83 @@
       "shortDescription": "Send creatures into a magical slumber.",
       "fullText": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+    }
+  },
+  {
+    "id": "spell_spiritual_weapon",
+    "name": "Spiritual Weapon",
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "class_cleric"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Summon a floating spectral weapon that attacks your enemies.",
+      "fullText": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.",
+      "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+    }
+  },
+  {
+    "id": "spell_wall_of_fire",
+    "name": "Wall of Fire",
+    "level": 4,
+    "school": "evocation",
+    "classes": [
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A small piece of phosphorus."
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "5d8",
+          "type": "fire",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "no_damage"
+    },
+    "lore": {
+      "shortDescription": "Create a blazing wall of fire that damages creatures passing through or ending their turn near it.",
+      "fullText": "You create a wall of fire on a solid surface within range. The wall can be up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration.\nWhen the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save.\nOne side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn.",
+      "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th."
     }
   }
 ]

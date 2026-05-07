@@ -1,0 +1,50 @@
+{
+    "id": "spell_wall_of_fire",
+    "name": "Wall of Fire",
+    "level": 4,
+    "school": "evocation",
+    "classes": [
+        "class_druid",
+        "class_sorcerer",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 120
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A small piece of phosphorus."
+    },
+    "output": {
+        "damage": [
+            {
+                "roll": "5d8",
+                "type": "fire",
+                "scaling": {
+                    "type": "spell_slot"
+                }
+            }
+        ]
+    },
+    "savingThrow": {
+        "ability": "dex",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "no_damage"
+    },
+    "lore": {
+        "shortDescription": "Create a blazing wall of fire that damages creatures passing through or ending their turn near it.",
+        "fullText": "You create a wall of fire on a solid surface within range. The wall can be up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration.\nWhen the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save.\nOne side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn.",
+        "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th."
+    }
+}

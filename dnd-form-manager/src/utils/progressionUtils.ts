@@ -14,6 +14,7 @@ export interface SpellcastingTrackProfile {
   sourceType: "class" | "race";
   classId: string;
   classLevel: number;
+  isBonusOnly?: boolean;
   spellcastingBase: {
     ability: Ability;
     preparationType: SpellPreparationType;
@@ -94,6 +95,7 @@ export const getCasterContributionType = (
   profile: SpellcastingTrackProfile,
 ): CasterContributionType => {
   if (profile.sourceType === "race") return "none";
+  if (profile.isBonusOnly) return "none";
   if (profile.spellcastingBase.preparationType === "pact") return "none";
   if (HALF_CASTER_CLASS_IDS.has(profile.classId)) return "half";
   if (THIRD_CASTER_CLASS_IDS.has(profile.classId)) return "third";

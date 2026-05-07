@@ -81,6 +81,8 @@ describe("SpellbookBlock", () => {
         },
         cantrips: { max: 3 },
         innate: [],
+        bonusPrepared: [],
+        allExpandedSpellIds: [],
       },
       slots: {
         shared: {},
@@ -133,6 +135,8 @@ describe("SpellbookBlock", () => {
         prepared: { selected: [], max: 0 },
         cantrips: { max: 3 },
         innate: [],
+        bonusPrepared: [],
+        allExpandedSpellIds: [],
       },
       slots: {
         shared: {},
@@ -192,6 +196,8 @@ describe("SpellbookBlock", () => {
         prepared: { selected: ["spell_missing_reference"], max: 5 },
         cantrips: { max: 3 },
         innate: [],
+        bonusPrepared: [],
+        allExpandedSpellIds: [],
       },
       slots: {
         shared: {},

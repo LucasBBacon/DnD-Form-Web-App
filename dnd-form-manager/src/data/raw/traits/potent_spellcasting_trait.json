@@ -1,0 +1,8 @@
+{
+    "id": "trait_potent_spellcasting",
+    "name": "Potent Spellcasting",
+    "lore": {
+        "shortDescription": "Add your Wisdom modifier to the damage you deal with cleric cantrips.",
+        "fullText": "Starting at 8th level, you add your Wisdom modifier to the damage you deal with any cleric cantrip."
+    }
+}

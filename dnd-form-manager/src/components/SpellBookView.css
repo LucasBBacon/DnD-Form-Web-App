@@ -156,3 +156,13 @@
 .innate-highlight {
   color: #9f1239;
 }
+
+.domain-mode-pill {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+}
+
+.domain-spell-card {
+  border-left: 3px solid #16a34a;
+}

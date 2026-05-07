@@ -1,0 +1,40 @@
+{
+    "id": "spell_burning_hands",
+    "name": "Burning Hands",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+        "class_sorcerer",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "self"
+    },
+    "areaOfEffect": {
+        "shape": "cone",
+        "size": 15
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "savingThrow": {
+        "ability": "dex",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "half_damage"
+    },
+    "lore": {
+        "shortDescription": "Shoot a cone of fire from your fingertips to damage creatures and ignite objects.",
+        "fullText": "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one.\nThe fire ignites any flammable objects in the area that aren't being worn or carried.",
+        "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st."
+    }
+}
