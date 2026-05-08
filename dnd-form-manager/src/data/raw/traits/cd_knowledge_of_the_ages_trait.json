@@ -1,0 +1,8 @@
+{
+    "id": "trait_cd_knowledge_of_the_ages",
+    "name": "Channel Divinity: Knowledge of the Ages",
+    "lore": {
+        "shortDescription": "Tap into a divine well of knowledge with your Channel Divinity.",
+        "fullText": "Starting at 2nd level, you can use your Channel Divinity to tap into a divine well of knowledge. As an action, you choose one skill or tool. For 10 minutes, you have proficiency with the chosen skill or tool."
+    }
+}

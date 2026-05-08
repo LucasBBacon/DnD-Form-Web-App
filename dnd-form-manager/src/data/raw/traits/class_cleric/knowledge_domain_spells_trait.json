@@ -1,0 +1,50 @@
+{
+    "id": "trait_knowledge_domain_spells",
+    "name": "Knowledge Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The Knowledge domain grants you access to a set of domain spells at each cleric level listed in the Knowledge Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_command",
+                    "spell_identify"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_augury",
+                    "spell_suggestion"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_nondetection",
+                    "spell_speak_with_dead"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_arcane_eye",
+                    "spell_confusion"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_legend_lore",
+                    "spell_scrying"
+                ]
+            }
+        ]
+    }
+}

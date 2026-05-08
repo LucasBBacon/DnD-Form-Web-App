@@ -6,6 +6,7 @@
         {
             "level": 1,
             "features": [
+                "trait_knowledge_domain_spells",
                 "trait_blessings_of_knowledge"
             ]
         },

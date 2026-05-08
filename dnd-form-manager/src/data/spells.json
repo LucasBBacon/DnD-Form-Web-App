@@ -82,6 +82,62 @@
     }
   },
   {
+    "id": "spell_arcane_eye",
+    "name": "Arcane Eye",
+    "level": 4,
+    "school": "divination",
+    "classes": [
+      "class_artificer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A bit of bat fur."
+    },
+    "lore": {
+      "shortDescription": "Create an invisible, magical eye that you can see through.",
+      "fullText": "You create an invisible, magical eye within range that hovers in the air for the duration. You mentally receive visual information from the eye, which has normal vision and darkvision out to 30 feet. The eye can look in every direction.\nAs an action, you can move the eye up to 30 feet in any direction. There is no limit to how far away from you the eye can move, but it can’t enter another plane of existence. A solid barrier blocks the eye’s movement, but the eye can pass through an opening as small as 1 inch in diameter."
+    }
+  },
+  {
+    "id": "spell_augury",
+    "name": "Augury",
+    "level": 2,
+    "school": "divination",
+    "classes": [
+      "class_cleric",
+      "class_druid",
+      "class_wizard"
+    ],
+    "actionType": "minute",
+    "range": {
+      "type": "self"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": true,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Specially marked sticks, bones, or similar tokens worth at least 25 gp."
+    },
+    "lore": {
+      "shortDescription": "Receive an omen about the results of a specific course of action.",
+      "fullText": "By casting gem-inlaid sticks, rolling dragon bones, laying out ornate cards, or employing some other divining tool, you receive an omen from an otherworldly entity about the results of a specific course of action that you plan to take within the next 30 minutes. The DM chooses from the following possible omens:\n- Weal, for good results\n- Woe, for bad results\n- Weal and woe, for both good and bad results\n- Nothing, for results that aren’t especially good or bad\nThe spell doesn't take into account any possible circumstances that might change the outcome, such as the casting of additional spells or the loss or gain of a companion. If you cast the spell two or more times before completing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get a random reading.\nThe DM makes this roll in secret."
+    }
+  },
+  {
     "id": "spell_bane",
     "name": "Bane",
     "level": 1,
@@ -294,6 +350,75 @@
       "shortDescription": "A ghostly, skeletal hand strikes a creature, dealing necrotic damage and preventing it from healing.",
       "fullText": "You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell attack against the creature to assail it with the chill of the grave. On a hit, the target takes 1d8 necrotic damage, and it can’t regain hit points until the start of your next turn. Until then, the hand clings to the target. If you hit an undead target, it also has disadvantage on attack rolls against you until the end of your next turn.",
       "higherLevel": "This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)."
+    }
+  },
+  {
+    "id": "spell_command",
+    "name": "Command",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Speak a one-word command to compel a creature to follow it on its next turn.",
+      "fullText": "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn’t understand your language, or if your command is directly harmful to it. Some typical commands and their effects follow. You might issue a command other than one described here. If you do so, the DM determines how the target behaves. If the target can't follow your command, the spell ends.\nApproach. The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.\nDrop. The target drops whatever it is holding and then ends its turn.\nFlee. The target spends its turn moving away from you by the fastest available means.\nGrovel. The target falls prone and then ends its turn.\nHalt. The target doesn't move and takes no actions. A flying creature stays aloft, provided that it is able to do so. If it must move to stay aloft, it flies the minimum distance needed to remain in the air.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
+    }
+  },
+  {
+    "id": "spell_confusion",
+    "name": "Confusion",
+    "level": 4,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 90
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Three nut shells."
+    },
+    "savingThrow": {
+      "ability": "wis",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "special"
+    },
+    "lore": {
+      "shortDescription": "Cause creatures to become confused, making them act unpredictably.",
+      "fullText": "This spell assaults and twists creatures' minds, spawning delusions and provoking uncontrolled actions. Each creature in a 10-foot-radius sphere centered on a point you choose within range must succeed on a Wisdom saving throw when you cast this spell or be affected by it.\nAn affected target can't take reactions and must roll a d10 at the start of each of its turns to determine its behavior for that turn.\nd10: Behavior\n1: The creature uses all its movement to move in a random direction. To determine the direction, roll a d8 and assign a direction to each die face. The creature doesn't take an action this turn.\n2-6: The creature doesn't move or take actions this turn.\n7-8: The creature uses its action to make a melee attack against a randomly determined creature within its reach. If there is no creature within its reach, the creature does nothing this turn.\n9-10: The creature can act and move normally.\nAt the end of its turns, an affected target can make a Wisdom saving throw. If it succeeds, this effect ends for that target.",
+      "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the radius of the sphere increases by 5 feet for each slot level above 4th."
     }
   },
   {
@@ -755,6 +880,34 @@
     }
   },
   {
+    "id": "spell_identify",
+    "name": "Identify",
+    "level": 1,
+    "school": "divination",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_wizard"
+    ],
+    "actionType": "minute",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": true,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A pearl worth at least 100 gp and an owl feather."
+    },
+    "lore": {
+      "shortDescription": "Learn the properties of a magic item or what spells are affecting a creature.",
+      "fullText": "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it.\nIf you instead touch a creature throughout the casting, you learn what spells, if any, are currently affecting it."
+    }
+  },
+  {
     "id": "spell_insect_plague",
     "name": "Insect Plague",
     "level": 5,
@@ -782,6 +935,34 @@
       "shortDescription": "Summon a swarm of biting locusts that damages creatures in the area and makes it difficult terrain.",
       "fullText": "Swarming, biting locusts fill a 20-foot-radius sphere centered on a point you choose within range. The sphere spreads around corners. The sphere remains for the duration, and its area is lightly obscured. The sphere's area is difficult terrain.\nWhen the area appears, each creature in it must make a Constitution saving throw. A creature takes 4d10 piercing damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw when it enters the spell's area for the first time on a turn or ends its turn there.",
       "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, the damage increases by 1d10 for each slot level above 5th."
+    }
+  },
+  {
+    "id": "spell_legend_lore",
+    "name": "Legend Lore",
+    "level": 5,
+    "school": "divination",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_wizard"
+    ],
+    "actionType": "minute",
+    "range": {
+      "type": "self"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Incense worth at least 250 gp, which the spell consumes, and four ivory strips worth at least 50 gp each."
+    },
+    "lore": {
+      "shortDescription": "Learn a brief summary of the significant lore about a person, place, or object.",
+      "fullText": "Name or describe a person, place, or object. The spell brings to your mind a brief summary of the significant lore about the thing you named. The lore might consist of current tales, forgotten stories, or even secret lore that has never been widely known. If the thing you named isn’t of legendary importance, you gain no information. The more information you already have about the thing, the more precise and detailed the information you receive is.\nThe information you learn is accurate but might be couched in figurative language. For example, if you have a mysterious magic axe on hand, the spell might yield this information: Woe to the evildoer whose hand touches the axe, for even the haft slices the hand of the evil ones. Only a true Child of Stone, lover and beloved of Moradin, may awaken the true powers of the axe, and only with the sacred word Rudnogg on the lips"
     }
   },
   {
@@ -933,6 +1114,34 @@
     }
   },
   {
+    "id": "spell_nondetection",
+    "name": "Nondetection",
+    "level": 3,
+    "school": "abjuration",
+    "classes": [
+      "class_bard",
+      "class_ranger",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A pinch of diamond dust worth 25 gp sprinkled over the target, which the spell consumes."
+    },
+    "lore": {
+      "shortDescription": "Hide a target from divination magic and magical scrying sensors.",
+      "fullText": "For the duration, you hide a target that you touch from divination magic. The target can be a willing creature or a place or an object no larger than 10 feet in any dimension. The target can’t be targeted by any divination magic or perceived through magical scrying sensors."
+    }
+  },
+  {
     "id": "spell_plant_growth",
     "name": "Plant Growth",
     "level": 3,
@@ -1080,7 +1289,7 @@
     },
     "lore": {
       "shortDescription": "See and hear a creature on the same plane of existence.",
-      "fullText": "You can see and hear a particular creature you choose that is on the same plane of existence as you. The target must make a Wisdom saving throw, which is modified by how well you know the target and the sort of physical connection you have to it. If the target is on a different plane of existence than you, the spell fails.\n\nKnowledge & Connection modifiers: Secondhand (heard of the target) –4; Firsthand (met the target) 0; Familiar (know the target well) +5. Likeness or picture –2; Possession or garment –4; Body part, lock of hair, bit of nail, or the like –10.\n\nOn a successful save, the target isn't affected, and you can't use this spell against it again for 24 hours.\nOn a failed save, the spell creates an invisible sensor within 10 feet of the target. You can see and hear through the sensor as if you were there. The sensor moves with the target, remaining within 10 feet of it for the duration. A creature that can see invisible objects sees the sensor as a luminous orb about the size of your fist."
+      "fullText": "You can see and hear a particular creature you choose that is on the same plane of existence as you. The target must make a Wisdom saving throw, which is modified by how well you know the target and the sort of physical connection you have to it. If the target is on a different plane of existence than you, the spell fails.\n\nKnowledge & Connection modifiers: Secondhand (heard of the target) -4; Firsthand (met the target) 0; Familiar (know the target well) +5. Likeness or picture -2; Possession or garment -4; Body part, lock of hair, bit of nail, or the like -10.\n\nOn a successful save, the target isn't affected, and you can't use this spell against it again for 24 hours.\nOn a failed save, the spell creates an invisible sensor within 10 feet of the target. You can see and hear through the sensor as if you were there. The sensor moves with the target, remaining within 10 feet of it for the duration. A creature that can see invisible objects sees the sensor as a luminous orb about the size of your fist."
     }
   },
   {
@@ -1141,6 +1350,35 @@
     }
   },
   {
+    "id": "spell_speak_with_dead",
+    "name": "Speak with Dead",
+    "level": 3,
+    "school": "necromancy",
+    "classes": [
+      "class_bard",
+      "class_cleric",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 10
+    },
+    "duration": "10 minutes",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Burning incense."
+    },
+    "lore": {
+      "shortDescription": "Grant a corpse the ability to answer questions.",
+      "fullText": "You grant the semblance of life and intelligence to a corpse of your choice within range, allowing it to answer the questions you pose. The corpse must still have a mouth and can't be undead. The spell fails if the corpse was the target of this spell within the last 10 days.\nUntil the spell ends, you can ask the corpse up to five questions. The corpse knows only what it knew in life, including the languages it knew. Answers are usually brief, cryptic, or repetitive, and the corpse is under no compulsion to offer a truthful answer if you are hostile to it or it recognizes you as an enemy. This spell doesn't return the creature's soul to its body, only its animating spirit. Thus, the corpse can't learn new information, doesn't comprehend anything that has happened since it died, and can't speculate about future events."
+    }
+  },
+  {
     "id": "spell_spike_growth",
     "name": "Spike Growth",
     "level": 2,
@@ -1197,6 +1435,36 @@
       "shortDescription": "Summon a floating spectral weapon that attacks your enemies.",
       "fullText": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.",
       "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+    }
+  },
+  {
+    "id": "spell_suggestion",
+    "name": "Suggestion",
+    "level": 2,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "8 hours",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": true,
+      "materialMaterials": "A snake's tongue and either a bit of honeycomb or a drop of sweet oil."
+    },
+    "lore": {
+      "shortDescription": "Magically influence a creature to pursue a course of action you suggest.",
+      "fullText": "You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can’t be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell.\nThe target must make a Wisdom saving throw. On a failed save, it purses the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do.\nYou can also specify conditions that will trigger a special activity during the duration. For example, you might suggest that a knight give her warhorse to the first beggar she meets. If the condition isn't met before the spell expires, the activity isn't performed.\nIf you or any of your companions damage the target, the spell ends."
     }
   },
   {

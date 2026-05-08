@@ -1,0 +1,31 @@
+{
+    "id": "trait_blessings_of_knowledge",
+    "name": "Blessings of Knowledge",
+    "effects": [
+        {
+            "type": "proficiency_choice",
+            "category": "languages",
+            "choice": {
+                "count": 2,
+                "pool": "any"
+            }
+        },
+        {
+            "type": "proficiency_choice",
+            "category": "skills",
+            "choice": {
+                "count": 2,
+                "pool": [
+                    "arcana",
+                    "history",
+                    "nature",
+                    "religion"
+                ]
+            }
+        }
+    ],
+    "lore": {
+        "shortDescription": "Gain proficiency in languages and skills with divine blessings.",
+        "fullText": "At 1st level, you learn two languages of your choice. You also become proficient in your choice of two of the following skills: Arcana, History, Nature, or Religion.\nYour proficiency bonus is doubled for any ability check you make that uses either of those skills."
+    }
+}

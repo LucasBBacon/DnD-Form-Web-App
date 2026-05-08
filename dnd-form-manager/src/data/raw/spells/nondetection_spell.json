@@ -1,0 +1,28 @@
+{
+    "id": "spell_nondetection",
+    "name": "Nondetection",
+    "level": 3,
+    "school": "abjuration",
+    "classes": [
+        "class_bard",
+        "class_ranger",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A pinch of diamond dust worth 25 gp sprinkled over the target, which the spell consumes."
+    },
+    "lore": {
+        "shortDescription": "Hide a target from divination magic and magical scrying sensors.",
+        "fullText": "For the duration, you hide a target that you touch from divination magic. The target can be a willing creature or a place or an object no larger than 10 feet in any dimension. The target can’t be targeted by any divination magic or perceived through magical scrying sensors."
+    }
+}

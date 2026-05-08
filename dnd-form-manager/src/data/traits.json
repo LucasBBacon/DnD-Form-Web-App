@@ -45,6 +45,37 @@
     }
   },
   {
+    "id": "trait_blessings_of_knowledge",
+    "name": "Blessings of Knowledge",
+    "effects": [
+      {
+        "type": "proficiency_choice",
+        "category": "languages",
+        "choice": {
+          "count": 2,
+          "pool": "any"
+        }
+      },
+      {
+        "type": "proficiency_choice",
+        "category": "skills",
+        "choice": {
+          "count": 2,
+          "pool": [
+            "arcana",
+            "history",
+            "nature",
+            "religion"
+          ]
+        }
+      }
+    ],
+    "lore": {
+      "shortDescription": "Gain proficiency in languages and skills with divine blessings.",
+      "fullText": "At 1st level, you learn two languages of your choice. You also become proficient in your choice of two of the following skills: Arcana, History, Nature, or Religion.\nYour proficiency bonus is doubled for any ability check you make that uses either of those skills."
+    }
+  },
+  {
     "id": "trait_brave",
     "name": "Brave",
     "lore": {
@@ -86,6 +117,14 @@
     }
   },
   {
+    "id": "trait_cd_knowledge_of_the_ages",
+    "name": "Channel Divinity: Knowledge of the Ages",
+    "lore": {
+      "shortDescription": "Tap into a divine well of knowledge with your Channel Divinity.",
+      "fullText": "Starting at 2nd level, you can use your Channel Divinity to tap into a divine well of knowledge. As an action, you choose one skill or tool. For 10 minutes, you have proficiency with the chosen skill or tool."
+    }
+  },
+  {
     "id": "trait_cd_preserve_life",
     "name": "Channel Divinity: Preserve Life",
     "lore": {
@@ -99,6 +138,14 @@
     "lore": {
       "shortDescription": "Use your Channel Divinity to dispel darkness and deal radiant damage.",
       "fullText": "Starting at 2nd level, you can use your Channel Divinity to harness sunlight, banishing darkness and dealing radiant damage to your foes.\nAs an action, you present your holy symbol, and any magical darkness within 30 feet of you is dispelled. Additionally, each hostile creature within 30 feet of you must make a Constitution saving throw. A creature takes radiant damage equal to 2d10 + your cleric level on a failed saving throw, and half as much damage on a successful one. A creature that has total cover from you is not affected."
+    }
+  },
+  {
+    "id": "trait_cd_read_thoughts",
+    "name": "Channel Divinity: Read Thoughts",
+    "lore": {
+      "shortDescription": "Read a creature's thoughts and command it with your Channel Divinity.",
+      "fullText": "At 6th level, you can use your Channel Divinity to read a creature's thoughts. You can then use your access to the creature's mind to command it.\nAs an action, choose one creature that you can see within 60 feet of you. That creature must make a Wisdom saving throw. If the creature succeeds on the saving throw, you can't use this feature on it again until you finish a long rest.\nIf the creature fails its save, you can read its surface thoughts (those foremost in its mind, reflecting its current emotions and what it is actively thinking about) when it is within 60 feet of you. This effect lasts for 1 minute.\nDuring that time, you can use your action to end this effect and cast the Suggestion spell on the creature without expending a spell slot. The target automatically fails its saving throw against the spell."
     }
   },
   {
@@ -1108,6 +1155,56 @@
     "lore": {
       "shortDescription": "Choose a divine domain related to your deity.",
       "fullText": "At 1st level, you choose a domain shaped by your choice of Deity and the gifts they grant you. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels."
+    }
+  },
+  {
+    "id": "trait_knowledge_domain_spells",
+    "name": "Knowledge Domain Spells",
+    "lore": {
+      "shortDescription": "You always have certain spells prepared.",
+      "fullText": "The Knowledge domain grants you access to a set of domain spells at each cleric level listed in the Knowledge Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+      "ability": "wis",
+      "preparationType": "prepared",
+      "ritualCasting": false,
+      "progressionByLevel": [
+        {
+          "level": 1,
+          "bonusSpells": [
+            "spell_command",
+            "spell_identify"
+          ]
+        },
+        {
+          "level": 3,
+          "bonusSpells": [
+            "spell_augury",
+            "spell_suggestion"
+          ]
+        },
+        {
+          "level": 5,
+          "bonusSpells": [
+            "spell_nondetection",
+            "spell_speak_with_dead"
+          ]
+        },
+        {
+          "level": 7,
+          "bonusSpells": [
+            "spell_arcane_eye",
+            "spell_confusion"
+          ]
+        },
+        {
+          "level": 9,
+          "bonusSpells": [
+            "spell_legend_lore",
+            "spell_scrying"
+          ]
+        }
+      ]
     }
   },
   {
@@ -5792,6 +5889,14 @@
         ]
       }
     ]
+  },
+  {
+    "id": "trait_visions_of_the_past",
+    "name": "Visions of the Past",
+    "lore": {
+      "shortDescription": "Call up visions of the past that relate to an object you hold or your immediate surroundings.",
+      "fullText": "Starting at 17th level, you can call up visions of the past that relate to an object you hold or your immediate surroundings. You spend at least 1 minute in meditation and prayer, then receive dreamlike, shadowy glimpses of recent events. You can meditate in this way for a number of minutes equal to your Wisdom score and must maintain concentration during that time, as if you were casting a spell.\nOnce you use this feature, you can't use it again until you finish a short or long rest.\nObject Reading. Holding an object as you meditate, you can see visions of the object's previous owner. After meditating for 1 minute, you learn how the owner acquired and lost the object, as well as the most recent significant event involving the object and that owner. If the object was owned by another creature in the recent past (within a number of days equal to your Wisdom score), you can spend 1 additional minute for each owner to learn the same information about that creature.\nArea Reading. As you meditate, you see visions of recent events in your immediate vicinity (a room, street, tunnel, clearing, or the like, up to a 50-foot cube), going back a number of days equal to your Wisdom score. For each minute you meditate, you learn about one significant event, beginning with the most recent. Significant events typically involve powerful emotions, such as battles and betrayals, marriages and murders, births and funerals. However, they might also include more mundane events that are nevertheless important in your current situation."
+    }
   },
   {
     "id": "trait_warding_flare",
