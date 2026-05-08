@@ -1,0 +1,8 @@
+{
+    "id": "trait_cd_destructive_wrath",
+    "name": "Channel Divinity: Destructive Wrath",
+    "lore": {
+        "shortDescription": "Use your Channel Divinity to deal maximum damage with lightning or thunder damage.",
+        "fullText": "Starting at 2nd level, you can use your Channel Divinity to wield the power of the storm with unchecked ferocity.\nWhen you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling."
+    }
+}

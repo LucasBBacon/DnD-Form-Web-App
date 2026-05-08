@@ -1,0 +1,52 @@
+{
+    "id": "spell_thunderwave",
+    "name": "Thunderwave",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+        "class_bard",
+        "class_druid",
+        "class_sorcerer"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "self"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "output": {
+        "damage": [
+            {
+                "roll": "2d8",
+                "type": "thunder",
+                "scaling": {
+                    "type": "spell_slot"
+                }
+            }
+        ]
+    },
+    "savingThrow": {
+        "ability": "con",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "half_damage"
+    },
+    "areaOfEffect": {
+        "shape": "cube",
+        "size": 15
+    },
+    "lore": {
+        "shortDescription": "A wave of thunderous force that damages and pushes creatures.",
+        "fullText": "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn't pushed.\nIn addition, unsecured objects that are completely within the area of effect are automatically pushed 10 feet away from you by the spell's effect, and the spell emits a thunderous boom audible out to 300 feet.",
+        "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st."
+    }
+}

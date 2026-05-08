@@ -1,0 +1,34 @@
+{
+    "id": "spell_fog_cloud",
+    "name": "Fog Cloud",
+    "level": 1,
+    "school": "conjuration",
+    "classes": [
+        "class_druid",
+        "class_ranger",
+        "class_sorcerer",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 120
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "areaOfEffect": {
+        "shape": "sphere",
+        "size": 20
+    },
+    "lore": {
+        "shortDescription": "Create a heavily obscured area of fog.",
+        "fullText": "You create a 20-foot-radius sphere of fog centered on a point within range. The sphere spreads around corners, and its area is heavily obscured. It lasts for the duration or until a wind of moderate or greater speed (at least 10 miles per hour) disperses it.",
+        "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the radius of the fog increases by 20 feet for each slot level above 1st."
+    }
+}

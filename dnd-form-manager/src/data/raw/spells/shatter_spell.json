@@ -1,0 +1,51 @@
+{
+    "id": "spell_shatter",
+    "name": "Shatter",
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+        "class_bard",
+        "class_sorcerer",
+        "class_warlock",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A chip of mica."
+    },
+    "output": {
+        "damage": [
+            {
+                "roll": "3d8",
+                "type": "thunder",
+                "scaling": {
+                    "type": "spell_slot"
+                }
+            }
+        ]
+    },
+    "savingThrow": {
+        "ability": "con",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "half_damage"
+    },
+    "lore": {
+        "shortDescription": "A burst of thunderous energy that damages creatures and objects.",
+        "fullText": "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw.\nA nonmagical object that isn't being worn or carried also takes the damage if it's in the spell's area.",
+        "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd."
+    }
+}

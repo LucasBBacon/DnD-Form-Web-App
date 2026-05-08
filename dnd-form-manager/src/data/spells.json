@@ -298,6 +298,57 @@
     }
   },
   {
+    "id": "spell_call_lightning",
+    "name": "Call Lightning",
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "class_druid"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "areaOfEffect": {
+      "shape": "cylinder",
+      "size": 60
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "3d10",
+          "type": "lightning",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "Summon a storm cloud to strike targets with lightning.",
+      "fullText": "A storm cloud appears in the shape of a cylinder that is 10 feet tall with a 60-foot radius, centered on a point you can see within range directly above you. The spell fails if you can't see a point in the air where the storm cloud could appear (for example, if you are in a room that can't accommodate the cloud).\nWhen you cast the spell, choose a point you can see under the cloud. A bolt of lightning flashes down from the cloud to that point. Each creature within 5 feet of that point must make a Dexterity saving throw. A creature takes 3d10 lightning damage on a failed save, or half as much damage on a successful one. On each of your turns until the spell ends, you can use your action to call down lightning in this way again, targeting the same point or a different one.\nIf you are outdoors in stormy conditions when you cast this spell, the spell gives you control over the existing storm instead of creating a new one. Under such conditions, the spell's damage increases by 1d10.",
+      "higherLevel": "When you cast this spell using a spell slot of 4th or higher level, the damage increases by 1d10 for each slot level above 3rd."
+    }
+  },
+  {
     "id": "spell_chill_touch",
     "name": "Chill Touch",
     "level": 0,
@@ -422,6 +473,35 @@
     }
   },
   {
+    "id": "spell_control_water",
+    "name": "Control Water",
+    "level": 4,
+    "school": "transmutation",
+    "classes": [
+      "class_cleric",
+      "class_druid",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 300
+    },
+    "duration": "10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A drop of water and a pinch of dust."
+    },
+    "lore": {
+      "shortDescription": "Manipulate water in various ways within a large area.",
+      "fullText": "Until the spell ends, you control any freestanding water inside an area you choose that is a cube up to 100 feet on a side. You can choose from any of the following effects when you cast this spell. As an action on your turn, you can repeat the same effect or choose a different one.\nFlood. You cause the water level of all standing water in the area to rise by as much as 20 feet. If the area includes a shore, the flooding water spills over onto dry land. If you choose an area in a large body of water, you instead create a 20-foot tall wave that travels from one side of the area to the other and then crashes down. Any Huge or smaller vehicles in the wave’s path are carried with it to the other side. Any Huge or smaller vehicles struck by the wave have a 25 percent chance of capsizing. The water level remains elevated until the spell ends or you choose a different effect. If this effect produced a wave, the wave repeats on the start of your next turn while the flood effect lasts.\nPart Water. You cause water in the area to move apart and create a trench. The trench extends across the spell’s area, and the separated water forms a wall to either side. The trench remains until the spell ends or you choose a different effect. The water then slowly fills in the trench over the course of the next round until the normal water level is restored.\nRedirect Flow. You cause flowing water in the area to move in a direction you choose, even if the water has to flow over obstacles, up walls, or in other unlikely directions. The water in the area moves as you direct it, but once it moves beyond the spell’s area, it resumes its flow based on the terrain conditions. The water continues to move in the direction you chose until the spell ends or you choose a different effect.\nWhirlpool. This effect requires a body of water at least 50 feet square and 25 feet deep. You cause a whirlpool to form in the center of the area. The whirlpool forms a vortex that is 5 feet wide at the base, up to 50 feet wide at the top, and 25 feet tall. Any creature or object in the water and within 25 feet of the vortex is pulled 10 feet toward it. A creature can swim away from the vortex by making a Strength (Athletics) check against your spell save DC.\nWhen a creature enters the vortex for the first time on a turn or starts its turn there, it must make a Strength saving throw. On a failed save, the creature takes 2d8 bludgeoning damage and is caught in the vortex until the spell ends. On a successful save, the creature takes half damage, and isn’t caught in the vortex. A creature caught in the vortex can use its action to try to swim away from the vortex as described above, but has disadvantage on the Strength (Athletics) check to do so.\nThe first time each turn that an object enters the vortex, the object takes 2d8 bludgeoning damage, this damage occurs each round it remains in the vortex."
+    }
+  },
+  {
     "id": "spell_cure_wounds",
     "name": "Cure Wounds",
     "level": 1,
@@ -535,6 +615,53 @@
     "lore": {
       "shortDescription": "Protect a creature from death once — it drops to 1 hp instead of dying.",
       "fullText": "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 hit points as a result of taking damage, the target instead drops to 1 hit point, and the spell ends. If the spell is still in effect when the target is subjected to an effect that would kill it instantaneously without dealing damage, that effect is instead negated against the target, and the spell ends."
+    }
+  },
+  {
+    "id": "spell_destructive_wave",
+    "name": "Destructive Wave",
+    "level": 5,
+    "school": "evocation",
+    "classes": [
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self",
+      "distance": 30
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "5d6",
+          "type": "thunder"
+        },
+        {
+          "roll": "5d6",
+          "type": "radiant_or_necrotic"
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "con",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "A burst of divine energy that damages and knocks prone creatures.",
+      "fullText": "You strike the ground, creating a burst of divine energy that ripples outward from you. Each creature you choose within 30 feet of you must succeed on a Constitution saving throw or take 5d6 thunder damage, as well as 5d6 radiant or necrotic damage (your choice), and be knocked prone. A creature that succeeds on its saving throw takes half as much damage and isn't knocked prone."
     }
   },
   {
@@ -729,6 +856,40 @@
     }
   },
   {
+    "id": "spell_fog_cloud",
+    "name": "Fog Cloud",
+    "level": 1,
+    "school": "conjuration",
+    "classes": [
+      "class_druid",
+      "class_ranger",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "areaOfEffect": {
+      "shape": "sphere",
+      "size": 20
+    },
+    "lore": {
+      "shortDescription": "Create a heavily obscured area of fog.",
+      "fullText": "You create a 20-foot-radius sphere of fog centered on a point within range. The sphere spreads around corners, and its area is heavily obscured. It lasts for the duration or until a wind of moderate or greater speed (at least 10 miles per hour) disperses it.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the radius of the fog increases by 20 feet for each slot level above 1st."
+    }
+  },
+  {
     "id": "spell_grasping_vine",
     "name": "Grasping Vine",
     "level": 4,
@@ -809,6 +970,48 @@
     }
   },
   {
+    "id": "spell_gust_of_wind",
+    "name": "Gust of Wind",
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "class_druid",
+      "class_ranger",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A legume seed."
+    },
+    "areaOfEffect": {
+      "shape": "line",
+      "size": 60
+    },
+    "savingThrow": {
+      "ability": "str",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "special"
+    },
+    "lore": {
+      "shortDescription": "A line of strong wind that pushes creatures and disperses gas or vapor.",
+      "fullText": "A line of strong wind 60 feet long and 10 feet wide blasts from you in a direction you choose for the spell’s duration. Each creature that starts its turn in the line must succeed on a Strength saving throw or be pushed 15 feet away from you in a direction following the line.\nAny creature in the line must spend 2 feet of movement for every 1 foot it moves when moving closer to you.\nThe gust disperses gas or vapor, and it extinguishes candles, torches, and similar unprotected flames in the area. It causes protected flames, such as those of lanterns, to dance wildly and has a 50 percent chance to extinguish them.\nAs a bonus action on each of your turns before the spell ends, you can change the direction in which the line blasts from you."
+    }
+  },
+  {
     "id": "spell_healing_word",
     "name": "Healing Word",
     "level": 1,
@@ -877,6 +1080,64 @@
       "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
       "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
       "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
+    }
+  },
+  {
+    "id": "spell_ice_storm",
+    "name": "Ice Storm",
+    "level": 4,
+    "school": "evocation",
+    "classes": [
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 300
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A pinch of dust and a few drops of water."
+    },
+    "areaOfEffect": {
+      "shape": "cylinder",
+      "size": 20
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "2d8",
+          "type": "bludgeoning",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        },
+        {
+          "roll": "4d6",
+          "type": "cold"
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "Summon a hail of ice that damages and slows creatures in the area.",
+      "fullText": "A hail of rock-hard ice pounds to the ground in a 20-foot-radius, 40-foot-high cylinder centered on a point within range. Each creature in the cylinder must make a Dexterity saving throw. A creature takes 2d8 bludgeoning damage and 4d6 cold damage on a failed save, or half as much damage on a successful one.\nHailstones turn the storm's area of effect into difficult terrain until the end of your next turn.",
+      "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the bludgeoning damage increases by 1d8 for each slot level above 4th."
     }
   },
   {
@@ -1293,6 +1554,57 @@
     }
   },
   {
+    "id": "spell_shatter",
+    "name": "Shatter",
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A chip of mica."
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "3d8",
+          "type": "thunder",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "con",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "lore": {
+      "shortDescription": "A burst of thunderous energy that damages creatures and objects.",
+      "fullText": "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw.\nA nonmagical object that isn't being worn or carried also takes the damage if it's in the spell's area.",
+      "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd."
+    }
+  },
+  {
     "id": "spell_sleep",
     "name": "Sleep",
     "level": 1,
@@ -1320,6 +1632,48 @@
       "shortDescription": "Send creatures into a magical slumber.",
       "fullText": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+    }
+  },
+  {
+    "id": "spell_sleet_storm",
+    "name": "Sleet Storm",
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 150
+    },
+    "duration": "1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A pinch of dust and a few drops of water."
+    },
+    "areaOfEffect": {
+      "shape": "cylinder",
+      "size": 40
+    },
+    "savingThrow": {
+      "ability": "dex",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "special"
+    },
+    "lore": {
+      "shortDescription": "Create a storm of freezing rain and sleet that obscures vision and causes difficult terrain.",
+      "fullText": "Until the spell ends, freezing rain and sleet fall in a 20-foot-tall cylinder with a 40-foot radius centered on a point you choose within range. The area is heavily obscured, and exposed flames in the area are doused.\nThe ground in the area is covered with slick ice, making it difficult terrain. When a creature enters the spell’s area for the first time on a turn or starts its turn there, it must make a Dexterity saving throw. On a failed save, it falls prone.\nIf a creature starts its turn in the spell's area and is concentrating on a spell, the creature must make a successful Constitution saving throw against your spell save DC or lose concentration."
     }
   },
   {
@@ -1465,6 +1819,58 @@
     "lore": {
       "shortDescription": "Magically influence a creature to pursue a course of action you suggest.",
       "fullText": "You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can’t be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell.\nThe target must make a Wisdom saving throw. On a failed save, it purses the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do.\nYou can also specify conditions that will trigger a special activity during the duration. For example, you might suggest that a knight give her warhorse to the first beggar she meets. If the condition isn't met before the spell expires, the activity isn't performed.\nIf you or any of your companions damage the target, the spell ends."
+    }
+  },
+  {
+    "id": "spell_thunderwave",
+    "name": "Thunderwave",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_sorcerer"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "2d8",
+          "type": "thunder",
+          "scaling": {
+            "type": "spell_slot"
+          }
+        }
+      ]
+    },
+    "savingThrow": {
+      "ability": "con",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "half_damage"
+    },
+    "areaOfEffect": {
+      "shape": "cube",
+      "size": 15
+    },
+    "lore": {
+      "shortDescription": "A wave of thunderous force that damages and pushes creatures.",
+      "fullText": "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn't pushed.\nIn addition, unsecured objects that are completely within the area of effect are automatically pushed 10 feet away from you by the spell's effect, and the spell emits a thunderous boom audible out to 300 feet.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st."
     }
   },
   {

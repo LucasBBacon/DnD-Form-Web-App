@@ -117,6 +117,14 @@
     }
   },
   {
+    "id": "trait_cd_destructive_wrath",
+    "name": "Channel Divinity: Destructive Wrath",
+    "lore": {
+      "shortDescription": "Use your Channel Divinity to deal maximum damage with lightning or thunder damage.",
+      "fullText": "Starting at 2nd level, you can use your Channel Divinity to wield the power of the storm with unchecked ferocity.\nWhen you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling."
+    }
+  },
+  {
     "id": "trait_cd_knowledge_of_the_ages",
     "name": "Channel Divinity: Knowledge of the Ages",
     "lore": {
@@ -1150,6 +1158,26 @@
     }
   },
   {
+    "id": "trait_cleric_tempest_prof_bonus",
+    "name": "Bonus Proficiency",
+    "lore": {
+      "shortDescription": "Gain proficiency with heavy armor and martial weapons.",
+      "fullText": "At 1st level, you gain proficiency with martial weapons and heavy armor."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "category": "armor",
+        "item": "heavy"
+      },
+      {
+        "type": "proficiency",
+        "category": "weapons",
+        "item": "martial"
+      }
+    ]
+  },
+  {
     "id": "trait_divine_domain",
     "name": "Divine Domain",
     "lore": {
@@ -1352,6 +1380,56 @@
           "bonusSpells": [
             "spell_insect_plague",
             "spell_tree_stride"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "trait_tempest_domain_spells",
+    "name": "Tempest Domain Spells",
+    "lore": {
+      "shortDescription": "You always have certain spells prepared.",
+      "fullText": "The Tempest domain grants you access to a set of domain spells at each cleric level listed in the Tempest Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+      "ability": "wis",
+      "preparationType": "prepared",
+      "ritualCasting": false,
+      "progressionByLevel": [
+        {
+          "level": 1,
+          "bonusSpells": [
+            "spell_fog_cloud",
+            "spell_thunderwave"
+          ]
+        },
+        {
+          "level": 3,
+          "bonusSpells": [
+            "spell_gust_of_wind",
+            "spell_shatter"
+          ]
+        },
+        {
+          "level": 5,
+          "bonusSpells": [
+            "spell_call_lightning",
+            "spell_sleet_storm"
+          ]
+        },
+        {
+          "level": 7,
+          "bonusSpells": [
+            "spell_control_water",
+            "spell_ice_storm"
+          ]
+        },
+        {
+          "level": 9,
+          "bonusSpells": [
+            "spell_destructive_wave",
+            "spell_insect_plague"
           ]
         }
       ]
@@ -5800,6 +5878,14 @@
     }
   },
   {
+    "id": "trait_stormborn",
+    "name": "Stormborn",
+    "lore": {
+      "shortDescription": "Gain a flying speed when you are not underground or indoors.",
+      "fullText": "At 17th level, you have a flying speed equal to your current walking speed whenever you are not underground or indoors."
+    }
+  },
+  {
     "id": "trait_stout_resilience",
     "name": "Stout Resilience",
     "lore": {
@@ -5823,6 +5909,14 @@
     "lore": {
       "shortDescription": "Maximize your healing spells.",
       "fullText": "Starting at 17th level, when you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die. For example, instead of restoring 2d6 hit points to a creature, you restore 12."
+    }
+  },
+  {
+    "id": "trait_thunderous_strike",
+    "name": "Thunderous Strike",
+    "lore": {
+      "shortDescription": "Push a creature when you deal lightning damage.",
+      "fullText": "At 6th level, when you deal lightning damage to a Large or smaller creature, you can also push it up to 10 feet away from you."
     }
   },
   {
@@ -5904,6 +5998,14 @@
     "lore": {
       "shortDescription": "Use your reaction to impose disadvantage on an attack against you.",
       "fullText": "Also at 1st level, you can interpose divine light between yourself and an attacking enemy. When you are attacked by a creature within 30 feet of you that you can see, you can use your reaction to impose disadvantage on the attack roll, causing light to flare before the attacker before it hits or misses. An attacker that can't be blinded is immune to this feature.\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest."
+    }
+  },
+  {
+    "id": "trait_wrath_of_the_storm",
+    "name": "Wrath of the Storm",
+    "lore": {
+      "shortDescription": "Use your reaction to deal lightning or thunder damage to an attacker.",
+      "fullText": "Also at 1st level, you can thunderously rebuke attackers. When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to cause the creature to make a Dexterity saving throw. The creature takes 2d8 lightning or thunder damage (your choice) on a failed saving throw, and half as much damage on a successful one.\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest."
     }
   }
 ]

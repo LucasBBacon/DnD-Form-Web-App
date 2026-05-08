@@ -1,0 +1,20 @@
+{
+    "id": "trait_cleric_tempest_prof_bonus",
+    "name": "Bonus Proficiency",
+    "lore": {
+        "shortDescription": "Gain proficiency with heavy armor and martial weapons.",
+        "fullText": "At 1st level, you gain proficiency with martial weapons and heavy armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "heavy"
+        },
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "martial"
+        }
+    ]
+}

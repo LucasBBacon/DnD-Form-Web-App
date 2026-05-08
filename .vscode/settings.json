@@ -44,6 +44,7 @@
         "Ilmater",
         "Kagonesti",
         "Kefnet's",
+        "Kord",
         "Lathander",
         "lightfoot",
         "Lightfoots",
@@ -56,6 +57,7 @@
         "multiclass",
         "Multiclassing",
         "nondetection",
+        "nonmagical",
         "Oghma",
         "Onatar",
         "owlbear",
@@ -77,12 +79,15 @@
         "Spellcaster",
         "Spellcasting",
         "stackable",
+        "stormborn",
         "stronghearts",
         "subracial",
         "svirfneblin",
         "tallfellows",
+        "thunderwave",
         "tiefling",
         "tieflings",
+        "Umberlee",
         "unattune",
         "undeath",
         "Undercommon",
@@ -96,7 +101,8 @@
         "warhammer",
         "waterskin",
         "weaponsmithing",
-        "wychwood"
+        "wychwood",
+        "Zeboim"
     ],
     "json.schemas": [
 
