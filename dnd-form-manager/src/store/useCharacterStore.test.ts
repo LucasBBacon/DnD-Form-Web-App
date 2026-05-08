@@ -1,9 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useCharacterStore, BASELINE_CHARACTER_STATE } from "./useCharacterStore";
+import { getAllCharacterTraits } from "../utils/traitUtils";
+
+vi.mock("../utils/traitUtils", () => ({
+  getAllCharacterTraits: vi.fn(() => []),
+}));
 
 describe("useCharacterStore feat acquisition state", () => {
   beforeEach(() => {
+    vi.mocked(getAllCharacterTraits).mockReturnValue([] as never);
+
     useCharacterStore.setState({
       level: 5,
       raceId: null,
@@ -159,14 +166,44 @@ describe("useCharacterStore feat acquisition state", () => {
     });
   });
 
-  it("rest actions apply expected short and long rest state changes", () => {
+  it("rest actions recover trait uses based on reset cadence", () => {
+    vi.mocked(getAllCharacterTraits).mockReturnValue([
+      {
+        id: "trait_rest_test",
+        name: "Rest Test",
+        lore: { shortDescription: "Test reset cadence" },
+        effects: [
+          {
+            type: "action_grant",
+            value: "action_short",
+            uses: { count: 1, reset: "short_rest" },
+          },
+          {
+            type: "action_grant",
+            value: "action_long",
+            uses: { count: 1, reset: "long_rest" },
+          },
+          {
+            type: "action_grant",
+            value: "action_turn",
+            uses: { count: 1, reset: "turn" },
+          },
+        ],
+      },
+    ] as never);
+
     useCharacterStore.setState({
       level: 7,
       damageTaken: 19,
       tempHp: 6,
       expendedSpellSlots: { 1: 2, 2: 1 },
       expendedPactSlots: 2,
-      expendedTraitActionUses: { trait_foo: 1 },
+      expendedTraitActionUses: {
+        action_short: 1,
+        action_long: 1,
+        action_turn: 1,
+        action_unknown: 1,
+      },
       expendedHitDice: 5,
       restModalState: {
         isOpen: true,
@@ -177,7 +214,11 @@ describe("useCharacterStore feat acquisition state", () => {
     useCharacterStore.getState().takeShortRest();
     let state = useCharacterStore.getState();
     expect(state.expendedPactSlots).toBe(0);
-    expect(state.expendedTraitActionUses).toEqual({});
+    expect(state.expendedTraitActionUses).toEqual({
+      action_long: 1,
+      action_turn: 1,
+      action_unknown: 1,
+    });
     expect(state.expendedSpellSlots).toEqual({ 1: 2, 2: 1 });
     expect(state.damageTaken).toBe(19);
     expect(state.tempHp).toBe(6);
@@ -186,7 +227,10 @@ describe("useCharacterStore feat acquisition state", () => {
     state = useCharacterStore.getState();
     expect(state.expendedSpellSlots).toEqual({});
     expect(state.expendedPactSlots).toBe(0);
-    expect(state.expendedTraitActionUses).toEqual({});
+    expect(state.expendedTraitActionUses).toEqual({
+      action_turn: 1,
+      action_unknown: 1,
+    });
     expect(state.damageTaken).toBe(0);
     expect(state.tempHp).toBe(0);
     expect(state.expendedHitDice).toBe(2);

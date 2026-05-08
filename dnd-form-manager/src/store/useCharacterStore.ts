@@ -5,6 +5,7 @@ import type { ItemData, ItemInstanceData } from "../types/item";
 import type { LevelUpDraft } from "../types/levelUpDraft";
 import type { LevelChoice, LevelUpMode } from "../types/progression";
 import { getClassById, getItemById } from "../data/staticDataApi";
+import { getAllCharacterTraits } from "../utils/traitUtils";
 import { generateUuidV4 } from "../utils/uuidUtils";
 import type {
   AbilityAssignmentMethod,
@@ -202,6 +203,94 @@ const buildLevelChoiceFromDraft = (
     ? { featureChoices: draft.featureChoices }
     : {}),
 });
+
+type TraitActionResetCadence = "short_rest" | "long_rest" | "turn" | "other";
+
+const getTraitActionResetCadences = (context: {
+  level: number;
+  raceId: string | null;
+  subraceId: string | null;
+  classId: string | null;
+  subclassId: string | null;
+  choicesByLevel: Record<number, LevelChoice>;
+  acquiredFeats: FeatAcquisitionEntry[];
+  classTracks: CharacterClassTrack[];
+}): Record<string, Set<TraitActionResetCadence>> => {
+  const traits = getAllCharacterTraits(
+    context.level,
+    context.raceId,
+    context.subraceId,
+    context.classId,
+    context.subclassId,
+    false,
+    context.choicesByLevel,
+    context.acquiredFeats,
+    context.classTracks,
+  );
+
+  const byActionId: Record<string, Set<TraitActionResetCadence>> = {};
+
+  traits.forEach((trait) => {
+    trait.effects?.forEach((effect) => {
+      if (effect.type !== "action_grant") return;
+      if (typeof effect.value !== "string") return;
+      const uses = effect.uses;
+      if (!uses || typeof uses.count !== "number" || uses.count <= 0) return;
+
+      const actionId = effect.value;
+      const cadence = uses.reset;
+      if (!byActionId[actionId]) {
+        byActionId[actionId] = new Set();
+      }
+      byActionId[actionId].add(cadence);
+    });
+  });
+
+  return byActionId;
+};
+
+const getRemainingExpendedTraitActionUsesAfterRest = (
+  context: {
+    level: number;
+    raceId: string | null;
+    subraceId: string | null;
+    classId: string | null;
+    subclassId: string | null;
+    choicesByLevel: Record<number, LevelChoice>;
+    acquiredFeats: FeatAcquisitionEntry[];
+    classTracks: CharacterClassTrack[];
+    expendedTraitActionUses: Record<string, number>;
+  },
+  restType: RestType,
+): Record<string, number> => {
+  const resetCadencesByActionId = getTraitActionResetCadences(context);
+  const recoverableCadences = new Set<TraitActionResetCadence>(
+    restType === "short"
+      ? ["short_rest"]
+      : ["short_rest", "long_rest"],
+  );
+
+  const nextExpended: Record<string, number> = {};
+
+  Object.entries(context.expendedTraitActionUses).forEach(([actionId, expended]) => {
+    if (expended <= 0) {
+      return;
+    }
+
+    const actionCadences = resetCadencesByActionId[actionId];
+    const shouldRecover = actionCadences
+      ? Array.from(actionCadences).some((cadence) =>
+          recoverableCadences.has(cadence),
+        )
+      : false;
+
+    if (!shouldRecover) {
+      nextExpended[actionId] = expended;
+    }
+  });
+
+  return nextExpended;
+};
 
 // #endregion
 
@@ -1367,7 +1456,12 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       expendedSpellSlots: {}, // Wipes all normal slot usage
       expendedPactSlots: 0, // Wipes pact slot usage
-      expendedTraitActionUses: {}, // Resets tracked trait action usage
+      // Long rest recovers uses that reset on short_rest or long_rest.
+      // Uses with reset "turn" or "other" are unaffected by resting.
+      expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
+        state,
+        "long",
+      ),
       damageTaken: 0, // fully heal
       tempHp: 0, // temp HP stops after long rest
       // 5e rule: regain half total hit dice (min 1)
@@ -1378,11 +1472,14 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     })),
 
   takeShortRest: () =>
-    set(() => ({
+    set((state) => ({
       expendedPactSlots: 0, // Warlocks get spell slots back after short rest
-      // TODO: Track reset cadence per action (short_rest vs long_rest) and only
-      // clear short-rest resources here. For now, all tracked trait uses reset.
-      expendedTraitActionUses: {}, // Resets tracked trait action usage
+      // Short rest recovers only uses with reset cadence short_rest.
+      // Uses with reset "long_rest", "turn", or "other" are unchanged.
+      expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
+        state,
+        "short",
+      ),
       // Normal spell slots remain untouched
     })),
 
