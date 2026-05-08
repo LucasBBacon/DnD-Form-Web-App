@@ -1,0 +1,8 @@
+{
+    "id": "trait_cd_guided_strike",
+    "name": "Channel Divinity: Guided Strike",
+    "lore": {
+        "shortDescription": "Use your Channel Divinity to gain a +10 bonus to an attack roll.",
+        "fullText": "Starting at 2nd level, you can use your Channel Divinity to strike with supernatural accuracy. When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You make this choice after you see the roll, but before the DM says whether the attack hits or misses."
+    }
+}

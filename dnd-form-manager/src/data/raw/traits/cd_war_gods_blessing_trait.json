@@ -1,0 +1,8 @@
+{
+    "id": "trait_cd_war_gods_blessing",
+    "name": "Channel Divinity: War God's Blessing",
+    "lore": {
+        "shortDescription": "Use your Channel Divinity to grant a +10 bonus to an attack roll within 30 feet.",
+        "fullText": "At 6th level, when a creature within 30 feet of you makes an attack roll, you can use your reaction to grant that creature a +10 bonus to the roll, using your Channel Divinity. You make this choice after you see the roll, but before the DM says whether the attack hits or misses."
+    }
+}

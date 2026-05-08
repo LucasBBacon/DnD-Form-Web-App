@@ -569,6 +569,31 @@
     }
   },
   {
+    "id": "spell_crusaders_mantle",
+    "name": "Crusader's Mantle",
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Your aura empowers your allies to strike with radiant might.",
+      "fullText": "Holy power radiates from you in an aura with a 30-foot radius, awakening boldness in friendly creatures. Until the spell ends, the aura moves with you, centered on you. While in the aura, each non-hostile creature in the aura (including you) deals an extra 1d4 radiant damage when it hits with a weapon attack."
+    }
+  },
+  {
     "id": "spell_cure_wounds",
     "name": "Cure Wounds",
     "level": 1,
@@ -820,6 +845,31 @@
       "shortDescription": "Choose a creature, object, or magical effect within range to end a spell on it.",
       "fullText": "Choose any creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.",
       "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+    }
+  },
+  {
+    "id": "spell_divine_favor",
+    "name": "Divine Favor",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "class_paladin"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Your weapon is blessed by a divine power, dealing extra radiant damage.",
+      "fullText": "Your prayer empowers you with divine radiance. Until the spell ends, your weapon attacks deal an extra 1d4 radiant damage on a hit."
     }
   },
   {
@@ -1077,6 +1127,36 @@
     }
   },
   {
+    "id": "spell_freedom_of_movement",
+    "name": "Freedom of Movement",
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_cleric",
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A leather strap, bound around the arm or a similar appendage."
+    },
+    "lore": {
+      "shortDescription": "The target's movement is unaffected by difficult terrain, and it can't be paralyzed or restrained.",
+      "fullText": "You touch a willing creature. For the duration, the target's movement is unaffected by difficult terrain, and spells and other magical effects can neither reduce the target's speed nor cause the target to be paralyzed or restrained.\nThe target can also spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature that has it grappled. Finally, being underwater imposes no penalties on the target's movement or attacks."
+    }
+  },
+  {
     "id": "spell_grasping_vine",
     "name": "Grasping Vine",
     "level": 4,
@@ -1267,6 +1347,46 @@
       "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
       "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
       "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
+    }
+  },
+  {
+    "id": "spell_hold_monster",
+    "name": "Hold Monster",
+    "level": 5,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 90
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A small, straight piece of iron."
+    },
+    "savingThrow": {
+      "ability": "wis",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "special"
+    },
+    "lore": {
+      "shortDescription": "Paralyze a creature you can see within range.",
+      "fullText": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target.",
+      "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them."
     }
   },
   {
@@ -1499,6 +1619,36 @@
     "lore": {
       "shortDescription": "A spectral, floating hand appears at a point you choose within range.",
       "fullText": "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.\nYou can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial. You can move the hand up to 30 feet each time you use it.\nThe hand can’t attack, activate magical items, or carry more than 10 pounds."
+    }
+  },
+  {
+    "id": "spell_magic_weapon",
+    "name": "Magic Weapon",
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "class_artificer",
+      "class_paladin",
+      "class_ranger",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "Up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Imbue a weapon with magical energy, granting it a +1 bonus to attack and damage rolls.",
+      "fullText": "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.",
+      "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2. When you use a spell slot of 6th level or higher, the bonus increases to +3."
     }
   },
   {
@@ -1905,6 +2055,34 @@
     }
   },
   {
+    "id": "spell_shield_of_faith",
+    "name": "Shield of Faith",
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+      "class_cleric",
+      "class_paladin"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "Up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A small parchment with a bit of holy text written on it."
+    },
+    "lore": {
+      "shortDescription": "Grants a +2 bonus to AC to a creature within range.",
+      "fullText": "A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration."
+    }
+  },
+  {
     "id": "spell_sleep",
     "name": "Sleep",
     "level": 1,
@@ -2065,6 +2243,34 @@
     }
   },
   {
+    "id": "spell_spirit_guardians",
+    "name": "Spirit Guardians",
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "class_cleric"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self",
+      "distance": 15
+    },
+    "duration": "Up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A holy symbol."
+    },
+    "lore": {
+      "shortDescription": "You call forth spirits to protect you, damaging enemies that come too close.",
+      "fullText": "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish.\nWhen you cast this spell, you can designate any number of creatures you can see to be unaffected by it. An affected creature's speed is halved in the area, and when the creature enters the area for the first time on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 radiant damage (if you are good or neutral) or 3d8 necrotic damage (if you are evil). On a successful save, the creature takes half as much damage.",
+      "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd."
+    }
+  },
+  {
     "id": "spell_spiritual_weapon",
     "name": "Spiritual Weapon",
     "level": 2,
@@ -2089,6 +2295,36 @@
       "shortDescription": "Summon a floating spectral weapon that attacks your enemies.",
       "fullText": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.",
       "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+    }
+  },
+  {
+    "id": "spell_stoneskin",
+    "name": "Stoneskin",
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      "class_artificer",
+      "class_druid",
+      "class_ranger",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "touch"
+    },
+    "duration": "Up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Diamond dust worth 100 gp, which the spell consumes."
+    },
+    "lore": {
+      "shortDescription": "Grants resistance to nonmagical bludgeoning, piercing, and slashing damage.",
+      "fullText": "This spell turns the flesh of a willing creature you touch as hard as stone. Until the spell ends, the target has resistance to nonmagical bludgeoning, piercing, and slashing damage."
     }
   },
   {

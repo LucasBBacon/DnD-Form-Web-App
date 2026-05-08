@@ -241,14 +241,13 @@ export const useCombatActions = () => {
       });
     });
 
-    // Union both pools so known/pact casters (warlock) and prepared casters
-    // (wizard) — and multiclass mixes of both — all surface their active spells.
-    // For prepared casters, spellsKnown is empty/invalid so dedupe is harmless.
-    // For known/pact casters, spellsPrepared is empty so only known spells show.
+    // Union known, prepared, and always-prepared bonus pools so domain/oath
+    // spells are surfaced alongside manually selected spells.
     const activeCastableSpellIds = Array.from(
       new Set([
         ...spellcasting.pools.known.selected,
         ...spellcasting.pools.prepared.selected,
+        ...spellcasting.pools.bonusPrepared,
       ]),
     );
 
@@ -364,6 +363,7 @@ export const useCombatActions = () => {
     state.level,
     spellcasting.pools.known.selected,
     spellcasting.pools.prepared.selected,
+    spellcasting.pools.bonusPrepared,
     spellcasting.slots.shared,
     spellcasting.slots.pact,
     traitActionUses,

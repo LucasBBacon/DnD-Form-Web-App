@@ -1,0 +1,28 @@
+{
+    "id": "spell_shield_of_faith",
+    "name": "Shield of Faith",
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+        "class_cleric",
+        "class_paladin"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+        "type": "ranged",
+        "distance": 60
+    },
+    "duration": "Up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A small parchment with a bit of holy text written on it."
+    },
+    "lore": {
+        "shortDescription": "Grants a +2 bonus to AC to a creature within range.",
+        "fullText": "A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration."
+    }
+}

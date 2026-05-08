@@ -292,6 +292,65 @@ describe("SpellBookView", () => {
     expect(screen.queryByRole("button", { name: /magic missile/i })).not.toBeInTheDocument();
   });
 
+  it("treats bonus-prepared spells as eligible even when off class list", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <SpellBookView
+        spellcasting={buildSpellcasting({
+          pools: {
+            known: { selected: [], max: 10 },
+            prepared: { selected: [], max: 10 },
+            cantrips: { max: 3 },
+            innate: [],
+            bonusPrepared: ["spell_cure_wounds"],
+            allExpandedSpellIds: [],
+            freeSchoolDesignated: [],
+            freeSchoolSlots: 0,
+          },
+          slots: {
+            shared: {
+              1: { total: 2, expended: 0 },
+            },
+            pact: null,
+          },
+          diagnostics: {
+            selections: {
+              invalidKnownSpellIds: [],
+              invalidPreparedSpellIds: [],
+              knownSpellOverflow: 0,
+              preparedSpellOverflow: 0,
+              freeSchoolOverflow: 0,
+            },
+            classBreakdown: [
+              {
+                classId: "class_wizard",
+                classLevel: 2,
+                preparationType: "prepared",
+                spellcastingAbility: "int",
+                maxSpellLevel: 1,
+                maxCantrips: 3,
+                maxSpellsKnown: 0,
+                maxPreparedSpells: 4,
+                schoolRestrictions: null,
+                expandedSpellIds: [],
+                spellListSource: null,
+                freeSchoolSpellSlots: 0,
+              },
+            ],
+          },
+        })}
+      />,
+    );
+
+    await user.selectOptions(
+      screen.getByLabelText(/filter by availability/i),
+      "eligible",
+    );
+
+    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
+  });
+
   it("shows armor penalty warning when cannot cast", async () => {
     const user = userEvent.setup();
 

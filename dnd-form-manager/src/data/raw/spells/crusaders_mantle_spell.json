@@ -1,0 +1,25 @@
+{
+    "id": "spell_crusaders_mantle",
+    "name": "Crusader's Mantle",
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+        "class_paladin"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "self"
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": false,
+        "material": false
+    },
+    "lore": {
+        "shortDescription": "Your aura empowers your allies to strike with radiant might.",
+        "fullText": "Holy power radiates from you in an aura with a 30-foot radius, awakening boldness in friendly creatures. Until the spell ends, the aura moves with you, centered on you. While in the aura, each non-hostile creature in the aura (including you) deals an extra 1d4 radiant damage when it hits with a weapon attack."
+    }
+}

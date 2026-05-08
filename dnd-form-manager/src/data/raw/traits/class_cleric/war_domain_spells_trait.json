@@ -1,0 +1,50 @@
+{
+    "id": "trait_war_domain_spells",
+    "name": "War Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The War domain grants you access to a set of domain spells at each cleric level listed in the War Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_divine_favor",
+                    "spell_shield_of_faith"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_magic_weapon",
+                    "spell_spiritual_weapon"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_crusaders_mantle",
+                    "spell_spirit_guardians"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_freedom_of_movement",
+                    "spell_stoneskin"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_flame_strike",
+                    "spell_hold_monster"
+                ]
+            }
+        ]
+    }
+}

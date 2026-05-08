@@ -1,0 +1,30 @@
+{
+    "id": "spell_freedom_of_movement",
+    "name": "Freedom of Movement",
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+        "class_artificer",
+        "class_bard",
+        "class_cleric",
+        "class_druid",
+        "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A leather strap, bound around the arm or a similar appendage."
+    },
+    "lore": {
+        "shortDescription": "The target's movement is unaffected by difficult terrain, and it can't be paralyzed or restrained.",
+        "fullText": "You touch a willing creature. For the duration, the target's movement is unaffected by difficult terrain, and spells and other magical effects can neither reduce the target's speed nor cause the target to be paralyzed or restrained.\nThe target can also spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature that has it grappled. Finally, being underwater imposes no penalties on the target's movement or attacks."
+    }
+}

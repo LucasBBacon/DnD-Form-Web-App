@@ -1,0 +1,25 @@
+{
+    "id": "spell_divine_favor",
+    "name": "Divine Favor",
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+        "class_paladin"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+        "type": "self"
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "lore": {
+        "shortDescription": "Your weapon is blessed by a divine power, dealing extra radiant damage.",
+        "fullText": "Your prayer empowers you with divine radiance. Until the spell ends, your weapon attacks deal an extra 1d4 radiant damage on a hit."
+    }
+}

@@ -405,6 +405,49 @@
     }
   },
   {
+    "id": "subclass_cleric_war",
+    "name": "War Domain",
+    "parentClassId": "class_cleric",
+    "lore": {
+      "shortDescription": "Clerics of the War Domain are champions of battle, inspiring others to fight the good fight or offering acts of violence as prayers.",
+      "fullText": "War has many manifestations. It can make heroes of ordinary people. It can be desperate and horrific, with acts of cruelty and cowardice eclipsing instances of excellence and courage. In either case, the gods of war watch over warriors and reward them for their great deeds. The clerics of such gods excel in battle, inspiring others to fight the good fight or offering acts of violence as prayers. Gods of war include champions of honor and chivalry (such as Torm, Heironeous, and Kiri-Jolith) as well as gods of destruction and pillage (such as Erythnul, the Fury, Gruumsh, and Ares) and gods of conquest and domination (such as Bane, Hextor, and Maglubiyet). Other war gods (such as Tempus, Nike, and Nuada) take a more neutral stance, promoting war in all its manifestations and supporting warriors in any circumstance."
+    },
+    "progression": [
+      {
+        "level": 1,
+        "features": [
+          "trait_war_domain_spells",
+          "trait_cleric_war_prof_bonus",
+          "trait_war_priest"
+        ]
+      },
+      {
+        "level": 2,
+        "features": [
+          "trait_cd_guided_strike"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_cd_war_gods_blessing"
+        ]
+      },
+      {
+        "level": 8,
+        "features": [
+          "trait_divine_strike"
+        ]
+      },
+      {
+        "level": 17,
+        "features": [
+          "trait_avatar_of_battle"
+        ]
+      }
+    ]
+  },
+  {
     "id": "subclass_fighter_battle_master",
     "name": "Battle Master",
     "parentClassId": "class_fighter",

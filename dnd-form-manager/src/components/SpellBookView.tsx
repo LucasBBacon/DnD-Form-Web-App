@@ -34,7 +34,12 @@ const isSpellEligibleForSummary = (
   summary: ClassSpellcastingSummary,
   sharedMaxLevel: number,
   pactMaxLevel: number,
+  bonusPreparedSpellIds: Set<string>,
 ) => {
+  if (bonusPreparedSpellIds.has(spell.id)) {
+    return true;
+  }
+
   const effectiveClassIds = summary.spellListSource ?? [summary.classId];
   const classMatch = effectiveClassIds.some((classId) =>
     spell.classes.includes(classId),
@@ -99,13 +104,23 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
   }, [spellcasting.slots.shared]);
 
   const pactMaxLevel = spellcasting.slots.pact?.level ?? 0;
+  const bonusPreparedSpellIds = useMemo(
+    () => new Set(spellcasting.pools.bonusPrepared),
+    [spellcasting.pools.bonusPrepared],
+  );
 
   const spellRows = useMemo(
     () =>
       allSpells
         .map((spell) => {
           const eligible = spellcasting.diagnostics.classBreakdown.some((summary) =>
-            isSpellEligibleForSummary(spell, summary, sharedMaxLevel, pactMaxLevel),
+            isSpellEligibleForSummary(
+              spell,
+              summary,
+              sharedMaxLevel,
+              pactMaxLevel,
+              bonusPreparedSpellIds,
+            ),
           );
 
           return {
@@ -120,6 +135,7 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
     [
       allSpells,
       spellcasting.diagnostics.classBreakdown,
+      bonusPreparedSpellIds,
       sharedMaxLevel,
       pactMaxLevel,
     ],

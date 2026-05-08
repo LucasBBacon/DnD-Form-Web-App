@@ -1,0 +1,30 @@
+{
+    "id": "spell_magic_weapon",
+    "name": "Magic Weapon",
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+        "class_artificer",
+        "class_paladin",
+        "class_ranger",
+        "class_sorcerer",
+        "class_wizard"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+        "type": "touch"
+    },
+    "duration": "Up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": false
+    },
+    "lore": {
+        "shortDescription": "Imbue a weapon with magical energy, granting it a +1 bonus to attack and damage rolls.",
+        "fullText": "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.",
+        "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2. When you use a spell slot of 6th level or higher, the bonus increases to +3."
+    }
+}

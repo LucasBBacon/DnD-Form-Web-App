@@ -1,0 +1,40 @@
+{
+    "id": "spell_hold_monster",
+    "name": "Hold Monster",
+    "level": 5,
+    "school": "enchantment",
+    "classes": [
+        "class_bard",
+        "class_sorcerer",
+        "class_warlock",
+        "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+        "type": "ranged",
+        "distance": 90
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+        "vocal": true,
+        "somatic": true,
+        "material": true,
+        "materialMaterials": "A small, straight piece of iron."
+    },
+    "savingThrow": {
+        "ability": "wis",
+        "dcCalculation": {
+            "base": 8,
+            "includeProficiency": true,
+            "modifierStat": "spellcasting"
+        },
+        "onSave": "special"
+    },
+    "lore": {
+        "shortDescription": "Paralyze a creature you can see within range.",
+        "fullText": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target.",
+        "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them."
+    }
+}

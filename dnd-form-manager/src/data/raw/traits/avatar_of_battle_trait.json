@@ -1,0 +1,8 @@
+{
+    "id": "trait_avatar_of_battle",
+    "name": "Avatar of Battle",
+    "lore": {
+        "shortDescription": "Gain resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks.",
+        "fullText": "At 17th level, you gain resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks."
+    }
+}

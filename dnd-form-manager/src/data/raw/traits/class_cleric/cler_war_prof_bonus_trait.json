@@ -1,0 +1,20 @@
+{
+    "id": "trait_cleric_war_prof_bonus",
+    "name": "Bonus Proficiency",
+    "lore": {
+        "shortDescription": "Gain proficiency with martial weapons and heavy armor.",
+        "fullText": "At 1st level, you gain proficiency with martial weapons and heavy armor."
+    },
+    "effects": [
+        {
+            "type": "proficiency",
+            "category": "weapons",
+            "item": "category_martial"
+        },
+        {
+            "type": "proficiency",
+            "category": "armor",
+            "item": "heavy"
+        }
+    ]
+}

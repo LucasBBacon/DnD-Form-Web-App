@@ -37,6 +37,14 @@
     }
   },
   {
+    "id": "trait_avatar_of_battle",
+    "name": "Avatar of Battle",
+    "lore": {
+      "shortDescription": "Gain resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks.",
+      "fullText": "At 17th level, you gain resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks."
+    }
+  },
+  {
     "id": "trait_blessed_healer",
     "name": "Blessed Healer",
     "lore": {
@@ -141,6 +149,14 @@
     }
   },
   {
+    "id": "trait_cd_guided_strike",
+    "name": "Channel Divinity: Guided Strike",
+    "lore": {
+      "shortDescription": "Use your Channel Divinity to gain a +10 bonus to an attack roll.",
+      "fullText": "Starting at 2nd level, you can use your Channel Divinity to strike with supernatural accuracy. When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You make this choice after you see the roll, but before the DM says whether the attack hits or misses."
+    }
+  },
+  {
     "id": "trait_cd_invoke_duplicity",
     "name": "Channel Divinity: Invoke Duplicity",
     "lore": {
@@ -178,6 +194,14 @@
     "lore": {
       "shortDescription": "Read a creature's thoughts and command it with your Channel Divinity.",
       "fullText": "At 6th level, you can use your Channel Divinity to read a creature's thoughts. You can then use your access to the creature's mind to command it.\nAs an action, choose one creature that you can see within 60 feet of you. That creature must make a Wisdom saving throw. If the creature succeeds on the saving throw, you can't use this feature on it again until you finish a long rest.\nIf the creature fails its save, you can read its surface thoughts (those foremost in its mind, reflecting its current emotions and what it is actively thinking about) when it is within 60 feet of you. This effect lasts for 1 minute.\nDuring that time, you can use your action to end this effect and cast the Suggestion spell on the creature without expending a spell slot. The target automatically fails its saving throw against the spell."
+    }
+  },
+  {
+    "id": "trait_cd_war_gods_blessing",
+    "name": "Channel Divinity: War God's Blessing",
+    "lore": {
+      "shortDescription": "Use your Channel Divinity to grant a +10 bonus to an attack roll within 30 feet.",
+      "fullText": "At 6th level, when a creature within 30 feet of you makes an attack roll, you can use your reaction to grant that creature a +10 bonus to the roll, using your Channel Divinity. You make this choice after you see the roll, but before the DM says whether the attack hits or misses."
     }
   },
   {
@@ -774,6 +798,26 @@
         }
       ]
     }
+  },
+  {
+    "id": "trait_cleric_war_prof_bonus",
+    "name": "Bonus Proficiency",
+    "lore": {
+      "shortDescription": "Gain proficiency with martial weapons and heavy armor.",
+      "fullText": "At 1st level, you gain proficiency with martial weapons and heavy armor."
+    },
+    "effects": [
+      {
+        "type": "proficiency",
+        "category": "weapons",
+        "item": "category_martial"
+      },
+      {
+        "type": "proficiency",
+        "category": "armor",
+        "item": "heavy"
+      }
+    ]
   },
   {
     "id": "trait_cleric_life_prof_bonus",
@@ -1504,6 +1548,56 @@
           "bonusSpells": [
             "spell_dominate_person",
             "spell_modify_memory"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "trait_war_domain_spells",
+    "name": "War Domain Spells",
+    "lore": {
+      "shortDescription": "You always have certain spells prepared.",
+      "fullText": "The War domain grants you access to a set of domain spells at each cleric level listed in the War Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+      "ability": "wis",
+      "preparationType": "prepared",
+      "ritualCasting": false,
+      "progressionByLevel": [
+        {
+          "level": 1,
+          "bonusSpells": [
+            "spell_divine_favor",
+            "spell_shield_of_faith"
+          ]
+        },
+        {
+          "level": 3,
+          "bonusSpells": [
+            "spell_magic_weapon",
+            "spell_spiritual_weapon"
+          ]
+        },
+        {
+          "level": 5,
+          "bonusSpells": [
+            "spell_crusaders_mantle",
+            "spell_spirit_guardians"
+          ]
+        },
+        {
+          "level": 7,
+          "bonusSpells": [
+            "spell_freedom_of_movement",
+            "spell_stoneskin"
+          ]
+        },
+        {
+          "level": 9,
+          "bonusSpells": [
+            "spell_flame_strike",
+            "spell_hold_monster"
           ]
         }
       ]
@@ -6072,6 +6166,14 @@
     "lore": {
       "shortDescription": "Call up visions of the past that relate to an object you hold or your immediate surroundings.",
       "fullText": "Starting at 17th level, you can call up visions of the past that relate to an object you hold or your immediate surroundings. You spend at least 1 minute in meditation and prayer, then receive dreamlike, shadowy glimpses of recent events. You can meditate in this way for a number of minutes equal to your Wisdom score and must maintain concentration during that time, as if you were casting a spell.\nOnce you use this feature, you can't use it again until you finish a short or long rest.\nObject Reading. Holding an object as you meditate, you can see visions of the object's previous owner. After meditating for 1 minute, you learn how the owner acquired and lost the object, as well as the most recent significant event involving the object and that owner. If the object was owned by another creature in the recent past (within a number of days equal to your Wisdom score), you can spend 1 additional minute for each owner to learn the same information about that creature.\nArea Reading. As you meditate, you see visions of recent events in your immediate vicinity (a room, street, tunnel, clearing, or the like, up to a 50-foot cube), going back a number of days equal to your Wisdom score. For each minute you meditate, you learn about one significant event, beginning with the most recent. Significant events typically involve powerful emotions, such as battles and betrayals, marriages and murders, births and funerals. However, they might also include more mundane events that are nevertheless important in your current situation."
+    }
+  },
+  {
+    "id": "trait_war_priest",
+    "name": "War Priest",
+    "lore": {
+      "shortDescription": "Make a weapon attack as a bonus action a number of times equal to your Wisdom modifier.",
+      "fullText": "From 1st level, your god delivers bolts of inspiration to you while you are engaged in battle. When you use the Attack action, you can make one weapon attack as a bonus action.\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest."
     }
   },
   {
