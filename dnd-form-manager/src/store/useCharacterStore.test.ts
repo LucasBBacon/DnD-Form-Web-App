@@ -94,6 +94,46 @@ describe("useCharacterStore feat acquisition state", () => {
     ]);
   });
 
+  it("replaces the active class and clears class-specific creation state when switching classes", () => {
+    useCharacterStore.setState({
+      classId: "class_bard",
+      subclassId: "subclass_bard_lore",
+      classTracks: [
+        { classId: "class_bard", subclassId: "subclass_bard_lore", level: 5 },
+      ],
+      choicesByLevel: {
+        1: {
+          skillChoices: ["history", "persuasion"],
+        },
+        4: {
+          featId: "feat_alert",
+        },
+      },
+      spellsKnown: ["spell_healing_word"],
+      spellsPrepared: ["spell_detect_magic"],
+      freeSchoolKnownSpellIds: ["spell_cure_wounds"],
+      expendedSpellSlots: { 1: 2 },
+      expendedPactSlots: 1,
+    } as any);
+
+    useCharacterStore.getState().setClass("class_fighter");
+
+    expect(useCharacterStore.getState().classId).toBe("class_fighter");
+    expect(useCharacterStore.getState().subclassId).toBeNull();
+    expect(useCharacterStore.getState().classTracks).toEqual([
+      { classId: "class_fighter", subclassId: null, level: 5 },
+    ]);
+    expect(useCharacterStore.getState().choicesByLevel[1]).toEqual({});
+    expect(useCharacterStore.getState().choicesByLevel[4]).toEqual({
+      featId: "feat_alert",
+    });
+    expect(useCharacterStore.getState().spellsKnown).toEqual([]);
+    expect(useCharacterStore.getState().spellsPrepared).toEqual([]);
+    expect(useCharacterStore.getState().freeSchoolKnownSpellIds).toEqual([]);
+    expect(useCharacterStore.getState().expendedSpellSlots).toEqual({});
+    expect(useCharacterStore.getState().expendedPactSlots).toBe(0);
+  });
+
   it("supports adding and leveling a multiclass track", () => {
     useCharacterStore.getState().setClass("class_fighter");
     useCharacterStore.getState().setLevel(3);

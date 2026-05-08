@@ -1008,10 +1008,23 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   setClass: (classId) =>
     set((state) => ({
       classId,
-      classTracks: upsertClassTrack(state.classTracks, classId, {
-        subclassId: null, // Reset subclass when changing class
-        level: state.level, // Default new class track to the character's current level, will be clamped in the reducer
-      }),
+      subclassId: null,
+      classTracks: [
+        {
+          classId,
+          subclassId: null,
+          level: clampCharacterLevel(state.level),
+        },
+      ],
+      choicesByLevel: {
+        ...state.choicesByLevel,
+        1: {},
+      },
+      spellsKnown: [],
+      spellsPrepared: [],
+      freeSchoolKnownSpellIds: [],
+      expendedSpellSlots: {},
+      expendedPactSlots: 0,
       acquiredFeats: state.acquiredFeats.filter(
         (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the class
       ),
