@@ -38,6 +38,7 @@ export interface ClassSpellcastingSummary {
   classLevel: number;
   preparationType: "known" | "prepared" | "pact";
   spellcastingAbility: Ability;
+  maxSpellLevel: number;
   maxCantrips: number;
   maxSpellsKnown: number;
   maxPreparedSpells: number;
@@ -496,6 +497,12 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
           classLevel: track.classLevel,
           preparationType: track.spellcastingBase.preparationType,
           spellcastingAbility: track.spellcastingBase.ability,
+          maxSpellLevel: Math.max(
+            0,
+            ...Object.entries(track.progression.spellSlots ?? {})
+              .filter(([, slots]) => Number(slots) > 0)
+              .map(([level]) => Number(level)),
+          ),
           maxCantrips: track.progression.cantripsKnown || 0,
           maxSpellsKnown: track.progression.spellsKnown || 0,
           maxPreparedSpells:

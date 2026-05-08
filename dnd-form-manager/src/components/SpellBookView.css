@@ -1,26 +1,95 @@
 .spellbook-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+}
+
+.spellbook-header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.catalog-title {
+  margin: 0;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.catalog-summary {
+  margin: 0.3rem 0 0;
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.spell-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.availability-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+  font-size: 0.76rem;
+  color: #475569;
+}
+
+.availability-legend-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.availability-legend-tooltip {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 0.72rem;
+  line-height: 1;
+  cursor: help;
+}
+
+.availability-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.filter-group select {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.5rem;
 }
 
 .spell-error-state {
   background: #fef2f2;
   border: 2px solid #ef4444;
-  columns: #b91c1c;
+  color: #b91c1c;
   padding: 1rem;
-  border-radius: 1px;
-  text-align: center;
-}
-
-.level-header {
-  font-size: 0.8rem;
-  font-weight: 800;
-  color: #0369a1;
-  border-bottom: 2px solid #bae6fd;
-  margin: 0 0 0 0.75rem 0;
-  padding-bottom: 0.25rem;
-  letter-spacing: 0.5px;
+  border-radius: 6px;
+  text-align: left;
 }
 
 .spell-list {
@@ -45,11 +114,12 @@
 .spell-header-btn {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
   background: transparent;
   border: none;
-  padding: 0.75rem;
+  padding: 0.85rem;
   cursor: pointer;
   text-align: left;
 }
@@ -59,9 +129,40 @@
 }
 
 .spell-name {
-  font-weight: bold;
-  font-size: 1rem;
+  font-weight: 800;
+  font-size: 1.02rem;
   color: #18181b;
+}
+
+.spell-heading-main {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.availability-badge {
+  font-size: 0.7rem;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.2rem 0.55rem;
+}
+
+.availability-badge.eligible {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.availability-badge.ineligible {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.spell-collapsed-meta {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .spell-quick-stats {
@@ -75,6 +176,14 @@
   background: #f4f4f5;
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
+  white-space: nowrap;
+}
+
+.spell-short-description {
+  margin: 0;
+  color: #334155;
+  font-size: 0.84rem;
+  line-height: 1.45;
 }
 
 .spell-details {
@@ -108,61 +217,34 @@
 }
 
 .spell-description {
+  margin: 0;
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
-.innate-spellbook-section {
-  border-top: 2px dashed #9f1239;
-  padding-top: 0.75rem;
+.spell-higher-level {
+  margin: 0.75rem 0 0;
+  color: #1e293b;
 }
 
-.innate-level-header {
-  color: #9f1239;
-  border-bottom-color: #fecdd3;
-}
-
-.innate-level-subheader {
-  margin: 0.5rem 0;
-  color: #be123c;
-  font-size: 0.8rem;
-  letter-spacing: 0.4px;
-}
-
-.innate-spell-list {
-  gap: 0.65rem;
-}
-
-.innate-spell-card {
-  border-color: #fecdd3;
-}
-
-.innate-spell-card.expanded {
-  border-color: #fb7185;
-  box-shadow: 0 4px 6px rgba(225, 29, 72, 0.12);
-}
-
-.innate-spell-details {
+.innate-note {
+  margin-top: 0.65rem;
+  border-left: 3px solid #fda4af;
   background: #fff1f2;
-}
-
-.innate-mode-pill {
-  background: #ffe4e6;
+  padding: 0.45rem 0.6rem;
   color: #9f1239;
-  font-weight: 700;
+  border-radius: 4px;
+  font-size: 0.78rem;
 }
 
-.innate-highlight {
-  color: #9f1239;
-}
+@media (max-width: 640px) {
+  .spellbook-header-row {
+    flex-direction: column;
+  }
 
-.domain-mode-pill {
-  background: #dcfce7;
-  color: #166534;
-  font-weight: 700;
-}
-
-.domain-spell-card {
-  border-left: 3px solid #16a34a;
+  .spell-heading-main {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
