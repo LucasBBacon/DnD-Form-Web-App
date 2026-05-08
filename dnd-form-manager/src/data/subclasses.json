@@ -448,6 +448,84 @@
     ]
   },
   {
+    "id": "subclass_druid_land",
+    "name": "Circle of the Land",
+    "parentClassId": "class_druid",
+    "lore": {
+      "shortDescription": "Druids who draw their power from the land they protect.",
+      "fullText": "The Circle of the Land is made up of mystics and sages who safeguard ancient knowledge and rites through a vast oral tradition. These druids meet within sacred circles of trees or standing stones to whisper primal secrets in Druidic. The circle's wisest members preside as the chief priests of communities that hold to the Old Faith and serve as advisors to the rulers of those folk. As a member of this circle, your magic is influenced by the land where you were initiated into the circle's mysterious rites."
+    },
+    "progression": [
+      {
+        "level": 2,
+        "features": [
+          "trait_bonus_cantrip_druid_land",
+          "trait_natural_recovery"
+        ]
+      },
+      {
+        "level": 3,
+        "features": [
+          "trait_land_circle_spells"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_lands_stride"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_natures_ward"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_natures_sanctuary"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "subclass_druid_moon",
+    "name": "Circle of the Moon",
+    "parentClassId": "class_druid",
+    "lore": {
+      "shortDescription": "Druids who are fierce guardians of the wilds, changing shape as often as the moon changes phases.",
+      "fullText": "Druids of the Circle of the Moon are fierce guardians of the wilds. Their order gathers under the full moon to share news and trade warnings. They haunt the deepest parts of the wilderness, where they might go for weeks on end before crossing paths with another humanoid creature, let alone another druid.\nChangeable as the moon, a druid of this circle might prowl as a great cat one night, soar over the treetops as an eagle the next day, and crash through the undergrowth in bear form to drive off a trespassing monster. The wild is in the druid's blood."
+    },
+    "progression": [
+      {
+        "level": 2,
+        "features": [
+          "trait_combat_wild_shape",
+          "trait_wild_form"
+        ]
+      },
+      {
+        "level": 6,
+        "features": [
+          "trait_primal_strike"
+        ]
+      },
+      {
+        "level": 10,
+        "features": [
+          "trait_elemental_wild_shape"
+        ]
+      },
+      {
+        "level": 14,
+        "features": [
+          "trait_thousand_forms"
+        ]
+      }
+    ]
+  },
+  {
     "id": "subclass_fighter_battle_master",
     "name": "Battle Master",
     "parentClassId": "class_fighter",

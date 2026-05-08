@@ -875,7 +875,8 @@
     },
     "subclassInfo": {
       "choiceLevel": 2,
-      "optionsPool": "subclasses_druid"
+      "optionsPool": "subclasses_druid",
+      "optionLabel": "Druid Circle"
     },
     "progression": [
       {

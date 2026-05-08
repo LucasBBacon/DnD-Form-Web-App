@@ -1,0 +1,36 @@
+{
+    "id": "subclass_druid_moon",
+    "name": "Circle of the Moon",
+    "parentClassId": "class_druid",
+    "lore": {
+        "shortDescription": "Druids who are fierce guardians of the wilds, changing shape as often as the moon changes phases.",
+        "fullText": "Druids of the Circle of the Moon are fierce guardians of the wilds. Their order gathers under the full moon to share news and trade warnings. They haunt the deepest parts of the wilderness, where they might go for weeks on end before crossing paths with another humanoid creature, let alone another druid.\nChangeable as the moon, a druid of this circle might prowl as a great cat one night, soar over the treetops as an eagle the next day, and crash through the undergrowth in bear form to drive off a trespassing monster. The wild is in the druid's blood."
+    },
+    "progression": [
+        {
+            "level": 2,
+            "features": [
+                "trait_combat_wild_shape",
+                "trait_wild_form"
+            ]
+        },
+        {
+            "level": 6,
+            "features": [
+                "trait_primal_strike"
+            ]
+        },
+        {
+            "level": 10,
+            "features": [
+                "trait_elemental_wild_shape"
+            ]
+        },
+        {
+            "level": 14,
+            "features": [
+                "trait_thousand_forms"
+            ]
+        }
+    ]
+}
