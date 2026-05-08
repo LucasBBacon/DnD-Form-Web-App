@@ -1,0 +1,50 @@
+{
+    "id": "trait_trickery_domain_spells",
+    "name": "Trickery Domain Spells",
+    "lore": {
+        "shortDescription": "You always have certain spells prepared.",
+        "fullText": "The Trickery domain grants you access to a set of domain spells at each cleric level listed in the Trickery Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+        "ability": "wis",
+        "preparationType": "prepared",
+        "ritualCasting": false,
+        "progressionByLevel": [
+            {
+                "level": 1,
+                "bonusSpells": [
+                    "spell_charm_person",
+                    "spell_disguise_self"
+                ]
+            },
+            {
+                "level": 3,
+                "bonusSpells": [
+                    "spell_mirror_image",
+                    "spell_pass_without_trace"
+                ]
+            },
+            {
+                "level": 5,
+                "bonusSpells": [
+                    "spell_blink",
+                    "spell_dispel_magic"
+                ]
+            },
+            {
+                "level": 7,
+                "bonusSpells": [
+                    "spell_dimension_door",
+                    "spell_polymorph"
+                ]
+            },
+            {
+                "level": 9,
+                "bonusSpells": [
+                    "spell_dominate_person",
+                    "spell_modify_memory"
+                ]
+            }
+        ]
+    }
+}

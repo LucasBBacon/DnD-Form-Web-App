@@ -1,0 +1,8 @@
+{
+    "id": "trait_cd_cloak_of_shadows",
+    "name": "Channel Divinity: Cloak of Shadows",
+    "lore": {
+        "shortDescription": "Use your Channel Divinity to become invisible.",
+        "fullText": "Starting at 6th level, you can use your Channel Divinity to vanish.\nAs an action, you become invisible until the end of your next turn. You become visible if you attack or cast a spell."
+    }
+}

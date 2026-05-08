@@ -258,6 +258,33 @@
     }
   },
   {
+    "id": "spell_blink",
+    "name": "Blink",
+    "level": 3,
+    "school": "transmutation",
+    "classes": [
+      "class_artificer",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "bonus_action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Roll a d20 at the end of each of your turns to possibly vanish and reappear in the Ethereal Plane.",
+      "fullText": "Roll a d20 at the end of each of your turns for the duration of the spell. On a roll of 11 or higher, you vanish from your current plane of existence and appear in the Ethereal Plane (the spell fails and the casting is wasted if you were already on that plane).\nAt the start of your next turn, and when the spell ends if you are on the Ethereal Plane, you return to an unoccupied space of your choice that you can see within 10 feet of the space you vanished from. If no unoccupied space is available within that range, you appear in the nearest unoccupied space (chosen at random if more that one space is equally near). You can dismiss this spell as an action.\nWhile on the Ethereal Plane, you can see and hear the plane you originated from, which is cast in shades of gray, and you can't see anything more than 60 feet away. You can only affect and be affected by other creatures on the Ethereal Plane. Creature that aren't there can't perceive you or interact with you, unless they have the ability to do so."
+    }
+  },
+  {
     "id": "spell_burning_hands",
     "name": "Burning Hands",
     "level": 1,
@@ -346,6 +373,46 @@
       "shortDescription": "Summon a storm cloud to strike targets with lightning.",
       "fullText": "A storm cloud appears in the shape of a cylinder that is 10 feet tall with a 60-foot radius, centered on a point you can see within range directly above you. The spell fails if you can't see a point in the air where the storm cloud could appear (for example, if you are in a room that can't accommodate the cloud).\nWhen you cast the spell, choose a point you can see under the cloud. A bolt of lightning flashes down from the cloud to that point. Each creature within 5 feet of that point must make a Dexterity saving throw. A creature takes 3d10 lightning damage on a failed save, or half as much damage on a successful one. On each of your turns until the spell ends, you can use your action to call down lightning in this way again, targeting the same point or a different one.\nIf you are outdoors in stormy conditions when you cast this spell, the spell gives you control over the existing storm instead of creating a new one. Under such conditions, the spell's damage increases by 1d10.",
       "higherLevel": "When you cast this spell using a spell slot of 4th or higher level, the damage increases by 1d10 for each slot level above 3rd."
+    }
+  },
+  {
+    "id": "spell_charm_person",
+    "name": "Charm Person",
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "savingThrow": {
+      "ability": "wis",
+      "dcCalculation": {
+        "base": 8,
+        "includeProficiency": true,
+        "modifierStat": "spellcasting"
+      },
+      "onSave": "special"
+    },
+    "lore": {
+      "shortDescription": "Attempt to charm a humanoid you can see within range.",
+      "fullText": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.",
+      "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
     }
   },
   {
@@ -665,6 +732,97 @@
     }
   },
   {
+    "id": "spell_dimension_door",
+    "name": "Dimension Door",
+    "level": 4,
+    "school": "conjuration",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 500
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": false,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Teleport yourself and possibly one companion to a destination you can see or describe.",
+      "fullText": "You teleport yourself from your current location to any other spot within range. You arrive at exactly the spot desired. It can be a place you can see, one you can visualize, or one you can describe by stating distance and direction, such as \"200 feet straight downward\" or \"upward to the northwest at a 45-degree angle, 300 feet\".\nYou can bring along objects as long as their weight doesn't exceed what you can carry. You can also bring one willing creature of your size or smaller who is carrying gear up to its carrying capacity. The creature must be within 5 feet of you when you cast this spell.\nIf you would arrive in a place already occupied by an object or a creature, you and any creature traveling with you each take 4d6 force damage, and the spell fails to teleport you."
+    }
+  },
+  {
+    "id": "spell_disguise_self",
+    "name": "Disguise Self",
+    "level": 1,
+    "school": "illusion",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Make yourself look different until the spell ends or you dismiss it.",
+      "fullText": "You make yourself – including your clothing, armor, weapons, and other belongings on your person - look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you.\nThe changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair. To discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC."
+    }
+  },
+  {
+    "id": "spell_dispel_magic",
+    "name": "Dispel Magic",
+    "level": 3,
+    "school": "abjuration",
+    "classes": [
+      "class_artificer",
+      "class_bard",
+      "class_cleric",
+      "class_druid",
+      "class_paladin",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 120
+    },
+    "duration": "instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Choose a creature, object, or magical effect within range to end a spell on it.",
+      "fullText": "Choose any creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.",
+      "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+    }
+  },
+  {
     "id": "spell_dominate_beast",
     "name": "Dominate Beast",
     "level": 4,
@@ -691,6 +849,35 @@
       "shortDescription": "Beguile a beast, controlling its actions and movements.",
       "fullText": "You attempt to beguile a beast that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\nWhile the beast is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as “Attack that creature,” “Run over there,” or “Fetch that object.” If the creature completes the order and doesn’t receive further direction from you, it defends and preserves itself to the best of its ability.\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn’t do anything that you don’t allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.",
       "higherLevel": "When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours"
+    }
+  },
+  {
+    "id": "spell_dominate_person",
+    "name": "Dominate Person",
+    "level": 5,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Attempt to beguile a humanoid that you can see within range.",
+      "fullText": "You attempt to beguile a humanoid that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\nWhile the target is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as \"Attack that creature\", \"Run over there\", or \"Fetch that object\". If the creature completes the order and doesn’t receive further direction from you, it defends and preserves itself to the best of its ability.\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn’t do anything that you don’t allow it to do. During this time you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.",
+      "higherLevel": "When you cast this spell using a 6th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 7th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 8th level or higher, the duration is concentration, up to 8 hours."
     }
   },
   {
@@ -1375,6 +1562,62 @@
     }
   },
   {
+    "id": "spell_mirror_image",
+    "name": "Mirror Image",
+    "level": 2,
+    "school": "illusion",
+    "classes": [
+      "class_bard",
+      "class_sorcerer",
+      "class_warlock",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Create illusory duplicates of yourself to confuse attackers.",
+      "fullText": "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real. You can use your action to dismiss the illusory duplicates.\nEach time a creature targets you with an attack during the spell's duration, roll a d20 to determine whether the attack instead targets one of your duplicates.\nIf you have three duplicates, you must roll a 6 or higher to change the attack's target to a duplicate. With two duplicates, you must roll an 8 or higher. With one duplicate, you must roll an 11 or higher.\nA duplicate's AC equals 10 + your Dexterity modifier. If an attack hits a duplicate, the duplicate is destroyed. A duplicate can be destroyed only by an attack that hits it. It ignores all other damage and effects. The spell ends when all three duplicates are destroyed.\nA creature is unaffected by this spell if it can't see, if it relies on"
+    }
+  },
+  {
+    "id": "spell_modify_memory",
+    "name": "Modify Memory",
+    "level": 5,
+    "school": "enchantment",
+    "classes": [
+      "class_bard",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 30
+    },
+    "duration": "Up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": false
+    },
+    "lore": {
+      "shortDescription": "Attempt to reshape another creature's memories.",
+      "fullText": "You attempt to reshape another creature's memories. One creature that you can see must make a Wisdom saving throw. If you are fighting the creature, it has advantage on the saving throw. On a failed save, the target becomes charmed by you for the duration. The charmed target is incapacitated and unaware of its surroundings, though it can still hear you. If it takes any damage or is targeted by another spell, this spell ends, and none of the target's memories are modified.\nWhile this charm lasts, you can affect the target's memory of an event that it experienced within the last 24 hours and that lasted no more than 10 minutes. You can permanently eliminate all memory of the event, allow the target to recall the event with perfect clarity and exacting detail, change its memory of the details of the event, or create a memory of some other event.\nYou must speak to the target to describe how its memories are affected, and it must be able to understand your language for the modified memories to take root. Its mind fills in any gaps in the details of your description. If the spell ends before you have finished describing the modified memories, the creature's memory isn't altered. Otherwise, the modified memories take hold when the spell ends.\nA modified memory doesn't necessarily affect how a creature behaves, particularly if the memory contradicts the creature's natural inclinations, alignment, or beliefs. An illogical modified memory, such as implanting a memory of how much the creature enjoyed dousing itself in acid, is dismissed, perhaps as a bad dream. The DM might deem a modified memory too nonsensical to affect a creature in a significant manner.\nA Remove Curse or Greater Restoration spell cast on the target restores the creature's true memory.",
+      "higherLevel": "If you cast this spell using a spell slot of 6th level or higher, you can alter the target’s memories of an event that took place up to 7 days ago (6th level), 30 days ago (7th level), 1 year ago (8th level), or any time in the creature's past (9th level)."
+    }
+  },
+  {
     "id": "spell_nondetection",
     "name": "Nondetection",
     "level": 3,
@@ -1403,6 +1646,33 @@
     }
   },
   {
+    "id": "spell_pass_without_trace",
+    "name": "Pass Without Trace",
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+      "class_druid",
+      "class_ranger"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "self"
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "Ashes from a burned leaf or mistletoe and a spring of spruce."
+    },
+    "lore": {
+      "shortDescription": "You and your companions become invisible to detection.",
+      "fullText": "A veil of shadows and silence radiates from you, masking you and your companions from detection. For the duration, each creature you choose within 30 feet of you (including you) has a +10 bonus to Dexterity (Stealth) checks and can’t be tracked except by magical means. A creature that receives this bonus leaves behind no tracks or other traces of its passage."
+    }
+  },
+  {
     "id": "spell_plant_growth",
     "name": "Plant Growth",
     "level": 3,
@@ -1428,6 +1698,36 @@
     "lore": {
       "shortDescription": "Cause plants in an area to grow, hindering movement or enriching the land.",
       "fullText": "This spell channels vitality into plants within a specific area. There are two possible uses for the spell, granting either immediate or long-term benefits.\nIf you cast this spell using 1 action, choose a point within range. All normal plants in a 100-foot radius centered on that point become thick and overgrown. A creature moving through the area must spend 4 feet of movement for every 1 foot it moves.\nYou can exclude one or more areas of any size within the spell's area from being affected.\nIf you cast this spell over 8 hours, you enrich the land. All plants in a half-mile radius centered on a point within range become enriched for 1 year. The plants yield twice the normal amount of food when harvested."
+    }
+  },
+  {
+    "id": "spell_polymorph",
+    "name": "Polymorph",
+    "level": 4,
+    "school": "transmutation",
+    "classes": [
+      "class_bard",
+      "class_druid",
+      "class_sorcerer",
+      "class_wizard"
+    ],
+    "actionType": "action",
+    "range": {
+      "type": "ranged",
+      "distance": 60
+    },
+    "duration": "1 hour",
+    "concentration": true,
+    "ritual": false,
+    "components": {
+      "vocal": true,
+      "somatic": true,
+      "material": true,
+      "materialMaterials": "A caterpillar cocoon."
+    },
+    "lore": {
+      "shortDescription": "Transform a creature into a new form.",
+      "fullText": "This spell transforms a creature that you can see within range into a new form. An unwilling creature must make a Wisdom saving throw to avoid the effect. A shapechanger automatically succeeds on this saving throw.\nThe transformation lasts for the duration, or until the target drops to 0 hit points or dies. The new form can be any beast whose challenge rating is equal to or less than the target's (or the target's level, if it doesn't have a challenge rating). The target's game statistics, including mental ability scores, are replaced by the statistics of the chosen beast. It retains its alignment and personality.\nThe target assumes the hit points of its new form. When it reverts to its normal form, the creature returns to the number of hit points it had before it transformed. If it reverts as a result of dropping to 0 hit points, any excess damage carries over to its normal form. As long as the excess damage doesn't reduce the creature's normal form to 0 hit points, it isn't knocked unconscious.\nThe creature is limited in the actions it can perform by the nature of its new form, and it can’t speak, cast spells, or take any other action that requires hands or speech.\nThe target's gear melds into the new form. The creature can't activate, use, wield, or otherwise benefit from any of its equipment. This spell can't affect a target that has 0 hit points."
     }
   },
   {

@@ -45,6 +45,14 @@
     }
   },
   {
+    "id": "trait_blessing_of_the_trickster",
+    "name": "Blessing of the Trickster",
+    "lore": {
+      "shortDescription": "Grant a creature advantage on Stealth checks.",
+      "fullText": "Starting when you choose this domain at 1st level, you can use your action to touch a willing creature other than yourself to give it advantage on Dexterity (Stealth) checks. This blessing lasts for 1 hour or until you use this feature again."
+    }
+  },
+  {
     "id": "trait_blessings_of_knowledge",
     "name": "Blessings of Knowledge",
     "effects": [
@@ -117,11 +125,27 @@
     }
   },
   {
+    "id": "trait_cd_cloak_of_shadows",
+    "name": "Channel Divinity: Cloak of Shadows",
+    "lore": {
+      "shortDescription": "Use your Channel Divinity to become invisible.",
+      "fullText": "Starting at 6th level, you can use your Channel Divinity to vanish.\nAs an action, you become invisible until the end of your next turn. You become visible if you attack or cast a spell."
+    }
+  },
+  {
     "id": "trait_cd_destructive_wrath",
     "name": "Channel Divinity: Destructive Wrath",
     "lore": {
       "shortDescription": "Use your Channel Divinity to deal maximum damage with lightning or thunder damage.",
       "fullText": "Starting at 2nd level, you can use your Channel Divinity to wield the power of the storm with unchecked ferocity.\nWhen you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling."
+    }
+  },
+  {
+    "id": "trait_cd_invoke_duplicity",
+    "name": "Channel Divinity: Invoke Duplicity",
+    "lore": {
+      "shortDescription": "Create an illusory duplicate of yourself.",
+      "fullText": "Starting at 2nd level, you can use your Channel Divinity to create an illusory duplicate of yourself.\nAs an action, you create a perfect illusion of yourself that lasts for 1 minute, or until you lose your concentration (as if you were concentrating on a spell). The illusion appears in an unoccupied space that you can see within 30 feet of you. As a bonus action on your turn, you can move the illusion up to 30 feet to a space you can see, but it must remain within 120 feet of you.\nFor the duration, you can cast spells as though you were in the illusion's space, but you must use your own senses. Additionally, when both you and your illusion are within 5 feet of a creature that can see the illusion, you have advantage on attack rolls against that creature, given how distracting the illusion is to the target."
     }
   },
   {
@@ -1430,6 +1454,56 @@
           "bonusSpells": [
             "spell_destructive_wave",
             "spell_insect_plague"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "trait_trickery_domain_spells",
+    "name": "Trickery Domain Spells",
+    "lore": {
+      "shortDescription": "You always have certain spells prepared.",
+      "fullText": "The Trickery domain grants you access to a set of domain spells at each cleric level listed in the Trickery Domain Spells table. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day."
+    },
+    "spellcasting": {
+      "ability": "wis",
+      "preparationType": "prepared",
+      "ritualCasting": false,
+      "progressionByLevel": [
+        {
+          "level": 1,
+          "bonusSpells": [
+            "spell_charm_person",
+            "spell_disguise_self"
+          ]
+        },
+        {
+          "level": 3,
+          "bonusSpells": [
+            "spell_mirror_image",
+            "spell_pass_without_trace"
+          ]
+        },
+        {
+          "level": 5,
+          "bonusSpells": [
+            "spell_blink",
+            "spell_dispel_magic"
+          ]
+        },
+        {
+          "level": 7,
+          "bonusSpells": [
+            "spell_dimension_door",
+            "spell_polymorph"
+          ]
+        },
+        {
+          "level": 9,
+          "bonusSpells": [
+            "spell_dominate_person",
+            "spell_modify_memory"
           ]
         }
       ]
@@ -4456,6 +4530,14 @@
         "target": "fire_damage"
       }
     ]
+  },
+  {
+    "id": "trait_improved_duplicity",
+    "name": "Improved Duplicity",
+    "lore": {
+      "shortDescription": "Create multiple duplicates of yourself with Invoke Duplicity.",
+      "fullText": "At 17th level, you can create up to four duplicates of yourself, instead of one, when you use Invoke Duplicity. As a bonus action on your turn, you can move any number of them up to 30 feet, to a maximum range of 120 feet."
+    }
   },
   {
     "id": "trait_improved_flare",
