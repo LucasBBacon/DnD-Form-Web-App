@@ -24,6 +24,8 @@ export interface CharacterClassTrack {
   level: number;
 }
 
+export type RestType = "short" | "long";
+
 /** 
  * Inventory types used for managing the character's inventory state, including stack-based and instance-based items
  */
@@ -350,6 +352,11 @@ export interface CharacterState {
     isBlocking: boolean;
   };
 
+  restModalState: {
+    isOpen: boolean;
+    restType: RestType;
+  };
+
   // Records the selected option index (per choice-group index) for starting equipment bundles, set during character creation
   startingEquipmentSelections: Record<number, number>;
   // Records selected concrete item IDs for category references inside starting equipment bundles
@@ -459,6 +466,10 @@ interface CharacterActions {
   openLevelUpModal: (targetLevel: number, options?: { isBlocking?: boolean }) => void;
 
   closeLevelUpModal: () => void;
+
+  openRestModal: (restType: RestType) => void;
+
+  closeRestModal: () => void;
 
   // #endregion
 
@@ -655,6 +666,11 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
     isBlocking: false,
   },
 
+  restModalState: {
+    isOpen: false,
+    restType: "short",
+  },
+
   startingEquipmentSelections: {},
   startingEquipmentCategorySelections: {},
 };
@@ -836,6 +852,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
           isOpen: false,
           targetLevel: null,
           isBlocking: false,
+        },
+        restModalState: {
+          isOpen: false,
+          restType: "short",
         },
       };
     });
@@ -1181,6 +1201,22 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       };
     }),
 
+  openRestModal: (restType) =>
+    set({
+      restModalState: {
+        isOpen: true,
+        restType,
+      },
+    }),
+
+  closeRestModal: () =>
+    set({
+      restModalState: {
+        isOpen: false,
+        restType: "short",
+      },
+    }),
+
   // #endregion
 
   // #region --- Spell Actions ---
@@ -1344,6 +1380,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   takeShortRest: () =>
     set(() => ({
       expendedPactSlots: 0, // Warlocks get spell slots back after short rest
+      // TODO: Track reset cadence per action (short_rest vs long_rest) and only
+      // clear short-rest resources here. For now, all tracked trait uses reset.
       expendedTraitActionUses: {}, // Resets tracked trait action usage
       // Normal spell slots remain untouched
     })),

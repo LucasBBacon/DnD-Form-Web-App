@@ -185,3 +185,19 @@ button:hover {
 .saves-row.failures input {
   accent-color: #ef4444;
 }
+
+.rest-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.rest-btn.short {
+  background: #f5f3ff;
+  color: #5b21b6;
+}
+
+.rest-btn.long {
+  background: #ecfeff;
+  color: #155e75;
+}

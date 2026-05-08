@@ -6,18 +6,21 @@ import App from "./App";
 import { useCharacterStore } from "./store/useCharacterStore";
 import { BASELINE_CHARACTER_STATE } from "./store/useCharacterStore";
 
-vi.mock("./components/CharacterCreationWizard", () => ({
+vi.mock("./components/CharacterCreationWizard/CharacterCreationWizard", () => ({
   CharacterCreationWizard: () => <div>Wizard Stub</div>,
 }));
 
 vi.mock("./components/CharacterSheet", () => ({
   CharacterSheet: () => {
-    const { openLevelUpModal } = useCharacterStore();
+    const { openLevelUpModal, openRestModal } = useCharacterStore();
     return (
       <div>
         <div>Character Sheet Stub</div>
         <button type="button" onClick={() => openLevelUpModal(2)}>
           Open LevelUp From Header Stub
+        </button>
+        <button type="button" onClick={() => openRestModal("short")}>
+          Open Rest Modal From Vitals Stub
         </button>
       </div>
     );
@@ -40,6 +43,24 @@ vi.mock("./components/LevelUp/LevelUpModal", () => ({
       <div>Blocking: {isBlocking ? "yes" : "no"}</div>
       <button type="button" onClick={onClose}>
         Close LevelUp Modal
+      </button>
+    </div>
+  ),
+}));
+
+vi.mock("./components/ShortRestModal", () => ({
+  ShortRestModal: ({
+    restType,
+    onClose,
+  }: {
+    restType: "short" | "long";
+    onClose: () => void;
+  }) => (
+    <div>
+      <div>Rest Modal Stub</div>
+      <div>Rest Type: {restType}</div>
+      <button type="button" onClick={onClose}>
+        Close Rest Modal
       </button>
     </div>
   ),
@@ -175,5 +196,31 @@ describe("App setup transition smoke", () => {
     await user.click(screen.getByRole("button", { name: "Close LevelUp Modal" }));
 
     expect(screen.queryByText("Level Up Modal Stub")).not.toBeInTheDocument();
+  });
+
+  it("opens and closes the rest modal from the shared manual trigger", async () => {
+    const user = userEvent.setup();
+    useCharacterStore.setState({
+      isSetupComplete: true,
+      level: 1,
+      xp: 0,
+      choicesByLevel: { 1: { hpGained: 10 } },
+      levelUpMode: "xp_gated",
+    } as any);
+
+    render(<App />);
+
+    expect(screen.queryByText("Rest Modal Stub")).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole("button", { name: "Open Rest Modal From Vitals Stub" }),
+    );
+
+    expect(screen.getByText("Rest Modal Stub")).toBeInTheDocument();
+    expect(screen.getByText("Rest Type: short")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Close Rest Modal" }));
+
+    expect(screen.queryByText("Rest Modal Stub")).not.toBeInTheDocument();
   });
 });

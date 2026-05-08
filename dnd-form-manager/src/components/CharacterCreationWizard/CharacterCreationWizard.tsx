@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCharacterStore } from "../store/useCharacterStore";
+import { useCharacterStore } from "../../store/useCharacterStore";
 import { WizardSelectionStage } from "./WizardSelectionStage";
 import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
 import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
@@ -12,30 +12,31 @@ import {
   getRaceById,
   getSubraceById,
   getSubclassById,
-} from "../data/staticDataApi";
-import type { Skill } from "../types/common";
+} from "../../data/staticDataApi";
+import type { Skill } from "../../types/common";
 import {
   makeStartingEquipmentCategorySelectionKey,
   normalizeEquipmentReference,
-} from "../types/class";
-import type { SkillProficiencyRequirement } from "../types/creationRequirement";
+} from "../../types/class";
+import type { SkillProficiencyRequirement } from "../../types/creationRequirement";
 import {
   toClassSelectionOption,
   toRaceSelectionOption,
-} from "../utils/wizardSelectionUtils";
-import { calculateProficiencyBonus } from "../utils/progressionUtils";
-import { useCharacterStats } from "../hooks/useCharacterStats";
-import { useCreationRequirements } from "../hooks/useCreationRequirements";
+} from "../../utils/wizardSelectionUtils";
+import { calculateProficiencyBonus } from "../../utils/progressionUtils";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
+import { useCreationRequirements } from "../../hooks/useCreationRequirements";
 import "./CharacterCreationWizard.css";
 import "./WizardPickerStage.css";
-import { ABILITIES, ABILITY_SHORT_LABELS as ABILITY_LABELS } from "../utils/abilityConstants";
+import {
+  ABILITIES,
+  ABILITY_SHORT_LABELS as ABILITY_LABELS,
+} from "../../utils/abilityConstants";
 
 const formatIdFallback = (id: string | null): string => {
   if (!id) return "...";
 
-  return id
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return id.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 const formatModifier = (modifier: number): string =>
@@ -53,9 +54,7 @@ const WIZARD_STEPS = [
 
 // Converts a snake_case skill id to a display label
 const formatSkillName = (skill: string): string =>
-  skill
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  skill.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 // Inline skill picker rendered at the bottom of the race / class stage
 const SkillPickerSection: React.FC<{
@@ -81,9 +80,7 @@ const SkillPickerSection: React.FC<{
               className={`skill-chip ${
                 isSelected ? "selected" : ""
               } ${isDisabled ? "disabled" : ""}`}
-              onClick={() =>
-                !isDisabled && onToggle(skill as Skill)
-              }
+              onClick={() => !isDisabled && onToggle(skill as Skill)}
             >
               {formatSkillName(skill)}
             </div>
@@ -97,8 +94,11 @@ const SkillPickerSection: React.FC<{
 export const CharacterCreationWizard: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const store = useCharacterStore();
-  const { all: allRequirements, blocking, isStageComplete } =
-    useCreationRequirements();
+  const {
+    all: allRequirements,
+    blocking,
+    isStageComplete,
+  } = useCreationRequirements();
   const raceOptions = getAllRaces().map((race) =>
     toRaceSelectionOption(race, store.subraceId),
   );
@@ -111,7 +111,9 @@ export const CharacterCreationWizard: React.FC = () => {
   const selectedSubclass = getSubclassById(store.subclassId);
   const { abilities } = useCharacterStats();
   const proficiencyBonus = calculateProficiencyBonus(store.level);
-  const selectedRaceOption = raceOptions.find((option) => option.id === store.raceId);
+  const selectedRaceOption = raceOptions.find(
+    (option) => option.id === store.raceId,
+  );
   const selectedClassOption = classOptions.find(
     (option) => option.id === store.classId,
   );
@@ -172,10 +174,7 @@ export const CharacterCreationWizard: React.FC = () => {
           ? store.startingEquipmentCategorySelections[selectionKey]
           : null;
 
-      if (
-        selectedId &&
-        categoryItems.some((item) => item.id === selectedId)
-      ) {
+      if (selectedId && categoryItems.some((item) => item.id === selectedId)) {
         return selectedId;
       }
 
@@ -197,16 +196,18 @@ export const CharacterCreationWizard: React.FC = () => {
         return;
       }
 
-      const selectionKey =
-        context
-          ? makeStartingEquipmentCategorySelectionKey(
-              context.groupIndex,
-              context.optionIndex,
-              context.bundleIndex,
-              reference.refId,
-            )
-          : undefined;
-      const resolvedItemId = resolveCategorySelection(reference.refId, selectionKey);
+      const selectionKey = context
+        ? makeStartingEquipmentCategorySelectionKey(
+            context.groupIndex,
+            context.optionIndex,
+            context.bundleIndex,
+            reference.refId,
+          )
+        : undefined;
+      const resolvedItemId = resolveCategorySelection(
+        reference.refId,
+        selectionKey,
+      );
       if (!resolvedItemId) {
         return;
       }
@@ -222,7 +223,8 @@ export const CharacterCreationWizard: React.FC = () => {
       classData.startingEquipment.choices.forEach((group, i) => {
         const selectedOptionIndex = store.startingEquipmentSelections[i];
         if (selectedOptionIndex !== undefined) {
-          const bundle = group.options[selectedOptionIndex]?.equipmentBundle ?? [];
+          const bundle =
+            group.options[selectedOptionIndex]?.equipmentBundle ?? [];
           bundle.forEach((reference, bundleIndex) => {
             addResolvedEquipment(reference, {
               groupIndex: i,
@@ -298,10 +300,8 @@ export const CharacterCreationWizard: React.FC = () => {
           (r): r is SkillProficiencyRequirement =>
             r.wizardStage === "class" && r.type === "skill_proficiency",
         );
-        const classLevel1Skills =
-          store.choicesByLevel[1]?.skillChoices ?? [];
-        const stageReady =
-          !!store.classId && isStageComplete("class");
+        const classLevel1Skills = store.choicesByLevel[1]?.skillChoices ?? [];
+        const stageReady = !!store.classId && isStageComplete("class");
         return (
           <>
             <WizardSelectionStage
@@ -339,7 +339,11 @@ export const CharacterCreationWizard: React.FC = () => {
                       allChosen.splice(idx, 1);
                     } else if (currentSlice.length < req.required) {
                       // Insert into this requirement's slot
-                      allChosen.splice(priorCount + currentSlice.length, 0, skill);
+                      allChosen.splice(
+                        priorCount + currentSlice.length,
+                        0,
+                        skill,
+                      );
                     }
                     store.updateLevelChoice(1, { skillChoices: allChosen });
                   }}
@@ -423,7 +427,9 @@ export const CharacterCreationWizard: React.FC = () => {
               index > 0 &&
               (!store.raceId ||
                 (prevStep !== undefined &&
-                  !isStageComplete(prevStep.id as Parameters<typeof isStageComplete>[0])));
+                  !isStageComplete(
+                    prevStep.id as Parameters<typeof isStageComplete>[0],
+                  )));
 
             return (
               <button
@@ -477,7 +483,9 @@ export const CharacterCreationWizard: React.FC = () => {
           </div>
           <div className="draft-row">
             <span className="label">Background:</span>
-            <span className="value">{formatIdFallback(store.backgroundId)}</span>
+            <span className="value">
+              {formatIdFallback(store.backgroundId)}
+            </span>
           </div>
           <div className="draft-row">
             <span className="label">Level:</span>
@@ -497,9 +505,13 @@ export const CharacterCreationWizard: React.FC = () => {
 
               return (
                 <div className="draft-stat-box" key={ability}>
-                  <span className="draft-stat-name">{ABILITY_LABELS[ability]}</span>
+                  <span className="draft-stat-name">
+                    {ABILITY_LABELS[ability]}
+                  </span>
                   <span className="draft-stat-val">{score}</span>
-                  <span className="draft-stat-mod">{formatModifier(modifier)}</span>
+                  <span className="draft-stat-mod">
+                    {formatModifier(modifier)}
+                  </span>
                 </div>
               );
             })}

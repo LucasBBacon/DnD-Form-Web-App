@@ -1,7 +1,7 @@
 import type React from "react";
 import "./WizardSelectionStage.css";
 import { useState } from "react";
-import type { SelectionOption, TraitSegment } from "../types/wizardSelection";
+import type { SelectionOption, TraitSegment } from "../../types/wizardSelection";
 
 interface WizardSelectionStageProps {
   title: string;

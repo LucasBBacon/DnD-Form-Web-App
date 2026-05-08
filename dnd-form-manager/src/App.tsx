@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import "./App.css";
 import { useCharacterStore } from "./store/useCharacterStore";
 import { CharacterSheet } from "./components/CharacterSheet";
-import { CharacterCreationWizard } from "./components/CharacterCreationWizard";
+import { CharacterCreationWizard } from "./components/CharacterCreationWizard/CharacterCreationWizard";
 import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
+import { ShortRestModal } from "./components/ShortRestModal";
 import {
   getAvailableLevelUpTargetForCharacter,
   getFirstIncompleteLevelChoice,
@@ -18,8 +19,10 @@ function App() {
     classTracks,
     choicesByLevel,
     levelUpModalState,
+    restModalState,
     openLevelUpModal,
     closeLevelUpModal,
+    closeRestModal,
   } =
     useCharacterStore();
 
@@ -93,6 +96,12 @@ function App() {
           targetLevel={levelUpModalState.targetLevel}
           isBlocking={levelUpModalState.isBlocking}
           onClose={closeLevelUpModal}
+        />
+      )}
+      {isSetupComplete && restModalState.isOpen && (
+        <ShortRestModal
+          restType={restModalState.restType}
+          onClose={closeRestModal}
         />
       )}
     </main>

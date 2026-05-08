@@ -10,7 +10,7 @@ import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
 import {
   BASELINE_CHARACTER_STATE,
   useCharacterStore,
-} from "../store/useCharacterStore";
+} from "../../store/useCharacterStore";
 
 // ---------------------------------------------------------------------------
 // Equipment Stage Tests

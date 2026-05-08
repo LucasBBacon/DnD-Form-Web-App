@@ -8,8 +8,8 @@ import { CharacterCreationWizard } from "./CharacterCreationWizard";
 import {
   BASELINE_CHARACTER_STATE,
   useCharacterStore,
-} from "../store/useCharacterStore";
-import { getAllClasses, getAllRaces } from "../data/staticDataApi";
+} from "../../store/useCharacterStore";
+import { getAllClasses, getAllRaces } from "../../data/staticDataApi";
 
 const ABILITY_LABELS = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
 

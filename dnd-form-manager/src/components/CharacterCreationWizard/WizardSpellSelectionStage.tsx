@@ -1,9 +1,9 @@
 import type React from "react";
 import "./WizardPickerStage.css";
 import { useMemo } from "react";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { getAllSpells, getSpellByID } from "../data/staticDataApi";
-import { useSpellcasting } from "../hooks/useSpellcasting";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { getAllSpells, getSpellByID } from "../../data/staticDataApi";
+import { useSpellcasting } from "../../hooks/useSpellcasting";
 
 /** Formats a spell's school and level for the card subtitle. */
 function spellMeta(level: number, school?: string): string {

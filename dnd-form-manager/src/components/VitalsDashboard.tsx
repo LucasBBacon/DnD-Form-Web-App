@@ -15,7 +15,7 @@ export const VitalsDashboard: React.FC = () => {
     heal,
     setTempHp,
     recordDeathSave,
-    expendHitDie,
+    openRestModal,
   } = useCharacterStore();
 
   // Derive stats from engine
@@ -146,13 +146,22 @@ export const VitalsDashboard: React.FC = () => {
               {level - expendedHitDice} / {level}
             </span>
           </div>
-          <button
-            disabled={expendedHitDice >= level}
-            onClick={expendHitDie}
-            className="expend-dice-btn"
-          >
-            Expend Hit Die
-          </button>
+          <div className="rest-actions">
+            <button
+              type="button"
+              className="rest-btn short"
+              onClick={() => openRestModal("short")}
+            >
+              Short Rest
+            </button>
+            <button
+              type="button"
+              className="rest-btn long"
+              onClick={() => openRestModal("long")}
+            >
+              Long Rest
+            </button>
+          </div>
         </div>
 
         {hp.current === 0 && (

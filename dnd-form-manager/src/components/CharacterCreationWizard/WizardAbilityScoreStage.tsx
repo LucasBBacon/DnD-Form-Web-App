@@ -1,16 +1,16 @@
 import type React from "react";
 import { useMemo, useState } from "react";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { ABILITIES, ABILITY_SHORT_LABELS } from "../utils/abilityConstants";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { ABILITIES, ABILITY_SHORT_LABELS } from "../../utils/abilityConstants";
 import {
   isStandardArrayAssignment,
   toVirtualAbilityRoll,
   type AbilityAssignmentMethod,
   type RollingInputMode,
   validatePointBuyAssignment,
-} from "../utils/abilityAssignmentUtils";
-import type { Ability } from "../types/common";
-import { DiceRoller } from "./DiceRoller/DiceRoller";
+} from "../../utils/abilityAssignmentUtils";
+import type { Ability } from "../../types/common";
+import { DiceRoller } from "../DiceRoller/DiceRoller";
 import "./WizardPickerStage.css";
 
 const PHYSICAL_ROLL_MIN = 3;

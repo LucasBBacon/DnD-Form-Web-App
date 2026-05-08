@@ -143,6 +143,55 @@ describe("useCharacterStore feat acquisition state", () => {
     });
   });
 
+  it("opens and closes the shared rest modal state", () => {
+    useCharacterStore.getState().openRestModal("long");
+
+    expect(useCharacterStore.getState().restModalState).toEqual({
+      isOpen: true,
+      restType: "long",
+    });
+
+    useCharacterStore.getState().closeRestModal();
+
+    expect(useCharacterStore.getState().restModalState).toEqual({
+      isOpen: false,
+      restType: "short",
+    });
+  });
+
+  it("rest actions apply expected short and long rest state changes", () => {
+    useCharacterStore.setState({
+      level: 7,
+      damageTaken: 19,
+      tempHp: 6,
+      expendedSpellSlots: { 1: 2, 2: 1 },
+      expendedPactSlots: 2,
+      expendedTraitActionUses: { trait_foo: 1 },
+      expendedHitDice: 5,
+      restModalState: {
+        isOpen: true,
+        restType: "short",
+      },
+    } as any);
+
+    useCharacterStore.getState().takeShortRest();
+    let state = useCharacterStore.getState();
+    expect(state.expendedPactSlots).toBe(0);
+    expect(state.expendedTraitActionUses).toEqual({});
+    expect(state.expendedSpellSlots).toEqual({ 1: 2, 2: 1 });
+    expect(state.damageTaken).toBe(19);
+    expect(state.tempHp).toBe(6);
+
+    useCharacterStore.getState().takeLongRest();
+    state = useCharacterStore.getState();
+    expect(state.expendedSpellSlots).toEqual({});
+    expect(state.expendedPactSlots).toBe(0);
+    expect(state.expendedTraitActionUses).toEqual({});
+    expect(state.damageTaken).toBe(0);
+    expect(state.tempHp).toBe(0);
+    expect(state.expendedHitDice).toBe(2);
+  });
+
   it("commits level-up changes atomically in a single transaction", () => {
     useCharacterStore.setState({
       level: 4,

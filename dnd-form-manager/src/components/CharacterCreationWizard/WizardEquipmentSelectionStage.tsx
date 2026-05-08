@@ -1,17 +1,17 @@
 import type React from "react";
 import "./WizardPickerStage.css";
-import { useCharacterStore } from "../store/useCharacterStore";
+import { useCharacterStore } from "../../store/useCharacterStore";
 import {
   getClassById,
   getItemsByCategory,
   getItemById,
   getItemCategoryById,
-} from "../data/staticDataApi";
+} from "../../data/staticDataApi";
 import {
   makeStartingEquipmentCategorySelectionKey,
   normalizeEquipmentReference,
   type EquipmentReference,
-} from "../types/class";
+} from "../../types/class";
 
 /** Resolves a display name for an item ID, falling back gracefully when the
  *  item data does not exist yet. */
