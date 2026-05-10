@@ -5,6 +5,8 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../utils/traitUtils";
 import { useSpellcasting } from "../hooks/useSpellcasting";
 import { SpellBookView } from "./SpellBookView";
+import { TabBar } from "./RoleplayBoard/ui/TabBar";
+import { FeatureCard } from "./RoleplayBoard/ui/FeatureCard";
 
 type RoleplayTab = "features" | "characteristics" | "biography" | "spellbook";
 
@@ -48,32 +50,16 @@ export const RoleplayBoard: React.FC = () => {
   return (
     <section className="roleplay-board card">
       {/* Tabs */}
-      <div className="tab-controls">
-        <button
-          className={`tab-btn ${activeTab === "features" ? "active" : ""}`}
-          onClick={() => setActiveTab("features")}
-        >
-          FEATURES & TRAITS
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "characteristics" ? "active" : ""}`}
-          onClick={() => setActiveTab("characteristics")}
-        >
-          CHARACTERISTICS
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "biography" ? "active" : ""}`}
-          onClick={() => setActiveTab("biography")}
-        >
-          BIOGRAPHY
-        </button>
-        <button
-          className={`tab-btn ${activeTab === "spellbook" ? "active" : ""}`}
-          onClick={() => setActiveTab("spellbook")}
-        >
-          SPELLBOOK
-        </button>
-      </div>
+      <TabBar
+        tabs={[
+          { id: "features", label: "FEATURES & TRAITS" },
+          { id: "characteristics", label: "CHARACTERISTICS" },
+          { id: "biography", label: "BIOGRAPHY" },
+          { id: "spellbook", label: "SPELLBOOK" },
+        ]}
+        activeId={activeTab}
+        onChange={(id) => setActiveTab(id as RoleplayTab)}
+      />
       <div className="tab-content">
         {/* Mechanical features */}
         {activeTab === "features" && (
@@ -82,24 +68,16 @@ export const RoleplayBoard: React.FC = () => {
               <p className="empty-state">No features acquired yet.</p>
             ) : (
               activeFeatures.map(({ trait, sources }, idx) => (
-                <div key={`${trait.name}-${idx}`} className="feature-card">
-                  <div className="feature-header">
-                    <span className="feature-name">{trait.name}</span>
-                    <span className="feature-source" aria-label="Feature sources">
-                      {sources.map((source) => (
-                        <span
-                          key={`${trait.id}-${source.kind}-${source.sourceId ?? source.label}-${source.level ?? 0}`}
-                          className={`feature-source-badge feature-source-badge--${source.kind}`}
-                        >
-                          {source.label}
-                        </span>
-                      ))}
-                    </span>
-                  </div>
-                  <div className="feature-description">
-                    {trait.lore.shortDescription}
-                  </div>
-                </div>
+                <FeatureCard
+                  key={`${trait.name}-${idx}`}
+                  name={trait.name}
+                  sources={sources.map((source) => ({
+                    key: `${trait.id}-${source.kind}-${source.sourceId ?? source.label}-${source.level ?? 0}`,
+                    kind: source.kind,
+                    label: source.label,
+                  }))}
+                  description={trait.lore.shortDescription ?? ""}
+                />
               ))
             )}
           </div>

@@ -4,6 +4,7 @@ import type { ClassSpellcastingSummary, UseSpellcastingReturn } from "../hooks/u
 import { useMemo, useState } from "react";
 import { getAllClasses, getAllSpells } from "../data/staticDataApi";
 import "./SpellBookView.css";
+import { SpellFilterBar } from "./SpellBookView/ui/SpellFilterBar";
 
 interface SpellBookViewProps {
   spellcasting: UseSpellcastingReturn;
@@ -192,67 +193,20 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
       </div>
 
       <div className="spell-filters" aria-label="Spell filters">
-        <label className="filter-group">
-          <span>Level</span>
-          <select
-            value={selectedLevel}
-            onChange={(e) => setSelectedLevel(e.target.value)}
-            aria-label="Filter by level"
-          >
-            <option value="all">All levels</option>
-            {levelOptions.map((level) => (
-              <option key={`level-filter-${level}`} value={String(level)}>
-                {formatLevel(level)}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="filter-group">
-          <span>School</span>
-          <select
-            value={selectedSchool}
-            onChange={(e) => setSelectedSchool(e.target.value)}
-            aria-label="Filter by school"
-          >
-            <option value="all">All schools</option>
-            {schoolOptions.map((school) => (
-              <option key={`school-filter-${school}`} value={school}>
-                {formatSchool(school)}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="filter-group">
-          <span>Class</span>
-          <select
-            value={selectedClassId}
-            onChange={(e) => setSelectedClassId(e.target.value)}
-            aria-label="Filter by class"
-          >
-            <option value="all">All classes</option>
-            {classOptions.map((classId) => (
-              <option key={`class-filter-${classId}`} value={classId}>
-                {classLabelMap.get(classId) ?? classId}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label className="filter-group">
-          <span>Availability</span>
-          <select
-            value={availabilityFilter}
-            onChange={(e) => setAvailabilityFilter(e.target.value as AvailabilityFilter)}
-            aria-label="Filter by availability"
-          >
-            <option value="all">All spells</option>
-            <option value="eligible">Rules-eligible</option>
-            <option value="ineligible">Not eligible</option>
-          </select>
-        </label>
-      </div>
+      <SpellFilterBar
+        selectedLevel={selectedLevel}
+        selectedSchool={selectedSchool}
+        selectedClassId={selectedClassId}
+        availabilityFilter={availabilityFilter}
+        levelOptions={levelOptions}
+        schoolOptions={schoolOptions}
+        classOptions={classOptions}
+        classLabelMap={classLabelMap}
+        onLevelChange={setSelectedLevel}
+        onSchoolChange={setSelectedSchool}
+        onClassChange={setSelectedClassId}
+        onAvailabilityChange={setAvailabilityFilter}
+      />
 
       <div className="availability-legend" aria-label="Availability legend">
         <span className="availability-legend-title">

@@ -4,6 +4,8 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import { useCharacterStats } from "../hooks/useCharacterStats";
 import { useMemo } from "react";
 import { getItemById } from "../data/staticDataApi";
+import { WealthTracker } from "./InventoryBoard/ui/WealthTracker";
+import { EncumbranceDisplay } from "./InventoryBoard/ui/EncumbranceDisplay";
 
 export const InventoryBoard: React.FC = () => {
   const store = useCharacterStore();
@@ -94,41 +96,12 @@ export const InventoryBoard: React.FC = () => {
     <section className="inventory-board card">
       {/* Wealth and Encumbrance */}
       <div className="inventory-header">
-        <div className="wealth-shell">
-          <span className="section-label">WEALTH</span>
-          <div className="coin-grid">
-            {/* readonly shells for now TODO: implement wealth logic */}
-            {["CP", "SP", "EP", "GP", "PP"].map((coin) => (
-              <div key={coin} className="coin-box">
-                <input
-                  type="number"
-                  placeholder="0"
-                  disabled
-                  className={`coin-input ${coin.toLowerCase()}`}
-                />
-                <span className="coin-label">{coin}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={`encumbrance-box ${encumbrance.isEncumbered ? "encumbered" : ""}`}
-        >
-          <span className="section-label">ENCUMBRANCE</span>
-          <div className="weight-tracker">
-            <span className="current-weight">
-              {Math.round(encumbrance.totalWeight * 10) / 10}
-            </span>
-            <span className="max-weight">
-              {" "}
-              / {encumbrance.carryingCapacity} lbs
-            </span>
-          </div>
-          {encumbrance.isEncumbered && (
-            <div className="encumbered-warning">Encumbered (Speed - 10)</div>
-          )}
-        </div>
+        <WealthTracker />
+        <EncumbranceDisplay
+          totalWeight={encumbrance.totalWeight}
+          capacity={encumbrance.carryingCapacity}
+          isEncumbered={encumbrance.isEncumbered}
+        />
       </div>
 
       <hr className="divider" />

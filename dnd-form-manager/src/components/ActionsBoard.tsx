@@ -8,6 +8,9 @@ import {
 import { useCharacterStore } from "../store/useCharacterStore";
 import { DiceRoller } from "./DiceRoller/DiceRoller";
 import "./ActionsBoard.css";
+import { CostPips } from "./ActionsBoard/ui/CostPips";
+import { SpellSlotHud } from "./ActionsBoard/ui/SpellSlotHud";
+import { AttackRollModeToggle } from "./ActionsBoard/ui/AttackRollModeToggle";
 
 const SECTION_ORDER: CombatActionSection[] = [
   "action",
@@ -19,17 +22,6 @@ const SECTION_LABELS: Record<CombatActionSection, string> = {
   action: "Actions",
   bonus_action: "Bonus Actions",
   reaction: "Reactions",
-};
-
-const renderPips = (remaining: number, total: number) => {
-  const normalizedTotal = Math.max(total, 1);
-  return Array.from({ length: normalizedTotal }).map((_, index) => (
-    <span
-      key={`pip-${index}`}
-      className={`cost-pip ${index < remaining ? "filled" : "empty"}`}
-      aria-hidden="true"
-    />
-  ));
 };
 
 interface ActiveRoller {
@@ -44,18 +36,6 @@ interface EntryRollResult {
 }
 
 type AttackRollMode = "normal" | "advantage" | "disadvantage";
-
-const ATTACK_ROLL_MODES: AttackRollMode[] = [
-  "normal",
-  "advantage",
-  "disadvantage",
-];
-
-const ATTACK_ROLL_MODE_LABELS: Record<AttackRollMode, string> = {
-  normal: "Normal",
-  advantage: "Advantage",
-  disadvantage: "Disadvantage",
-}
 
 const formatModifier = (modifier: number): string => {
   if (modifier === 0) return "";
@@ -180,20 +160,7 @@ export const ActionsBoard: React.FC = () => {
         </div>
       </div>
 
-      <div className="spell-slot-hud" aria-label="Available spell slots">
-        <span className="hud-label">Spell Slots</span>
-        <div className="hud-track-list">
-          {slotHud.length === 0 ? (
-            <span className="hud-empty">No spell slots</span>
-          ) : (
-            slotHud.map((entry) => (
-              <span key={entry.label} className="hud-track">
-                <strong>{entry.label}:</strong> {entry.text}
-              </span>
-            ))
-          )}
-        </div>
-      </div>
+      <SpellSlotHud rows={slotHud} />
 
       <div className="combat-sections">
         {SECTION_ORDER.map((section) => {
@@ -245,7 +212,7 @@ export const ActionsBoard: React.FC = () => {
                               className="cost-badge uses"
                               title={`${entry.uses.remaining} of ${entry.uses.total} uses remaining`}
                             >
-                              {renderPips(entry.uses.remaining, entry.uses.total)}
+                              <CostPips remaining={entry.uses.remaining} total={entry.uses.total} />
                             </span>
                           )}
 
@@ -269,34 +236,17 @@ export const ActionsBoard: React.FC = () => {
 
                       {!!entry.attackRoll && (
                         <div className="combat-roll-row">
-                          <div
-                            className="attack-roll-mode-group"
-                            role="radiogroup"
-                            aria-label={`${entry.name} to-hit mode`}
-                          >
-                            {ATTACK_ROLL_MODES.map((mode) => {
-                              const checked = getAttackRollMode(entry.id) === mode;
-                              return (
-                                <label
-                                  key={`${entry.id}-${mode}`}
-                                  className={`attack-roll-mode-option ${checked ? "selected" : ""}`}
-                                >
-                                  <input
-                                    type="radio"
-                                    name={`roll-mode-${entry.id}`}
-                                    checked={checked}
-                                    onChange={() => {
-                                      setAttackRollModes((previous) => ({
-                                        ...previous,
-                                        [entry.id]: mode,
-                                      }));
-                                    }}
-                                  />
-                                  {ATTACK_ROLL_MODE_LABELS[mode]}
-                                </label>
-                              );
-                            })}
-                          </div>
+                          <AttackRollModeToggle
+                            entryId={entry.id}
+                            mode={getAttackRollMode(entry.id)}
+                            label={`${entry.name} to-hit mode`}
+                            onChange={(mode) =>
+                              setAttackRollModes((previous) => ({
+                                ...previous,
+                                [entry.id]: mode,
+                              }))
+                            }
+                          />
 
                           <button
                             type="button"
