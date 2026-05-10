@@ -1,10 +1,10 @@
 import type React from "react";
 import { LabeledField } from "./Utils/LabeledField";
+import { IdentityDetailsGrid } from "./IdentityHeader/ui/IdentityDetailsGrid";
 import "./IdentityHeader.css";
 import { useCharacterStore } from "../store/useCharacterStore";
 import { getClassById, getRaceById } from "../data/staticDataApi";
 import { getAvailableLevelUpTargetForCharacter } from "../utils/levelAvailabilityUtils";
-import type { LevelUpMode } from "../types/progression";
 
 export const IdentityHeader: React.FC = () => {
   const {
@@ -58,8 +58,8 @@ export const IdentityHeader: React.FC = () => {
     console.log("Trigger Race/Background Modal");
   };
 
-  const handleLevelUpModeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setLevelUpMode(event.target.value as LevelUpMode);
+  const handleLevelUpModeChange = (newMode: typeof levelUpMode) => {
+    setLevelUpMode(newMode);
   };
 
   return (
@@ -76,63 +76,22 @@ export const IdentityHeader: React.FC = () => {
       </div>
 
       {/* Right Side: Identity Grid */}
-      <div className="identity-details-grid">
-        <LabeledField
-          label="Class & Level"
-          value={classNameDisplay}
-          editMode="modal"
-          onClickModal={openLevelUpWizard}
-        />
-        <LabeledField
-          label="Background"
-          value={backgroundNameDisplay}
-          editMode="modal"
-          onClickModal={openOriginModal}
-        />
-        <LabeledField
-          label="Player Name"
-          value={playerName}
-          editMode="inline"
-          onChange={(newVal) => setPlayerName(newVal)}
-        />
-        <LabeledField
-          label="Race"
-          value={raceNameDisplay}
-          editMode="modal"
-          onClickModal={openOriginModal}
-        />
-        <LabeledField
-          label="Alignment"
-          value={alignment}
-          editMode="inline"
-          onChange={(newVal) => setAlignment(newVal)}
-        />
-        <LabeledField
-          label="Experience Points"
-          value={xp}
-          editMode="inline"
-          onChange={(newVal) => {
-            const numXp = parseInt(newVal, 10);
-            if (!isNaN(numXp)) {
-              setXp(numXp);
-            }
-          }}
-        />
-        <div className="labeled-field-container mode-readonly identity-levelup-mode-field">
-          <div className="field-value-wrapper">
-            <select
-              className="identity-levelup-mode-select"
-              aria-label="Level Up Mode"
-              value={levelUpMode}
-              onChange={handleLevelUpModeChange}
-            >
-              <option value="xp_gated">XP Gated</option>
-              <option value="milestone_anytime">Milestone Anytime</option>
-            </select>
-          </div>
-          <span className="field-label">LEVEL UP MODE</span>
-        </div>
-      </div>
+      <IdentityDetailsGrid
+        classNameDisplay={classNameDisplay}
+        backgroundNameDisplay={backgroundNameDisplay}
+        playerName={playerName}
+        raceNameDisplay={raceNameDisplay}
+        alignment={alignment}
+        xp={xp}
+        levelUpMode={levelUpMode}
+        onNameChange={(newVal) => setPlayerName(newVal)}
+        onAlignmentChange={(newVal) => setAlignment(newVal)}
+        onXpChange={(newVal) => setXp(newVal)}
+        onLevelUpModeChange={handleLevelUpModeChange}
+        onClassModalClick={openLevelUpWizard}
+        onBackgroundModalClick={openOriginModal}
+        onRaceModalClick={openOriginModal}
+      />
     </header>
   );
 };
