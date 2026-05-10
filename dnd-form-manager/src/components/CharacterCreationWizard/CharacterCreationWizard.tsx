@@ -4,6 +4,8 @@ import { WizardSelectionStage } from "./WizardSelectionStage";
 import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
 import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
 import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
+import { WizardStepNav } from "./ui/WizardStepNav";
+import { SkillPickerSection } from "./ui/SkillPickerSection";
 import {
   getAllClasses,
   getItemsByCategory,
@@ -51,45 +53,6 @@ const WIZARD_STEPS = [
   { id: "equipment", label: "6. Equipment" },
   { id: "identity", label: "7. Identity" },
 ];
-
-// Converts a snake_case skill id to a display label
-const formatSkillName = (skill: string): string =>
-  skill.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
-
-// Inline skill picker rendered at the bottom of the race / class stage
-const SkillPickerSection: React.FC<{
-  requirement: SkillProficiencyRequirement;
-  currentSelections: Skill[];
-  onToggle: (skill: Skill) => void;
-}> = ({ requirement, currentSelections, onToggle }) => {
-  const remaining = requirement.required - currentSelections.length;
-  return (
-    <div className="skill-picker-inline">
-      <div className="skill-picker-title">
-        {requirement.label}
-        {remaining <= 0 ? " ✓" : ` (${remaining} more needed)`}
-      </div>
-      <div className="skill-picker-grid">
-        {requirement.pool.map((skill) => {
-          const isSelected = currentSelections.includes(skill as Skill);
-          const isDisabled =
-            !isSelected && currentSelections.length >= requirement.required;
-          return (
-            <div
-              key={skill}
-              className={`skill-chip ${
-                isSelected ? "selected" : ""
-              } ${isDisabled ? "disabled" : ""}`}
-              onClick={() => !isDisabled && onToggle(skill as Skill)}
-            >
-              {formatSkillName(skill)}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
 
 export const CharacterCreationWizard: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
@@ -416,33 +379,23 @@ export const CharacterCreationWizard: React.FC = () => {
       {/* Stepper navigation */}
       <aside className="wizard-sidebar-left">
         <h1 className="wizard-brand">Character Creator</h1>
-        <nav className="stepper-nav">
-          {WIZARD_STEPS.map((step, index) => {
-            const isActive = currentStepIndex === index;
-            // Basic locking logic; disable class if no race is selected
-            // A step is locked when the previous step is not yet complete.
-            // Step 0 (Race) is always accessible.
+        <WizardStepNav
+          steps={WIZARD_STEPS}
+          currentStepIndex={currentStepIndex}
+          onStepClick={setCurrentStepIndex}
+          isStepDisabled={(index) => {
+            // Step 0 (Race) is always accessible
+            if (index === 0) return false;
+            // A step is locked when the previous step is not yet complete
             const prevStep = WIZARD_STEPS[index - 1];
-            const isDisabled =
-              index > 0 &&
-              (!store.raceId ||
-                (prevStep !== undefined &&
-                  !isStageComplete(
-                    prevStep.id as Parameters<typeof isStageComplete>[0],
-                  )));
-
             return (
-              <button
-                key={step.id}
-                className={`stepper-btn ${isActive ? "active" : ""} ${isDisabled ? "disabled" : ""}`}
-                onClick={() => setCurrentStepIndex(index)}
-                disabled={isDisabled}
-              >
-                {step.label}
-              </button>
+              !store.raceId ||
+              !isStageComplete(
+                prevStep.id as Parameters<typeof isStageComplete>[0],
+              )
             );
-          })}
-        </nav>
+          }}
+        />
       </aside>
 
       {/* Interactive Stage */}
