@@ -1,4 +1,5 @@
 import type React from "react";
+import "./OptionCard.css"
 import type { SelectionOption } from "../../../types/wizardSelection";
 
 interface OptionCardProps {

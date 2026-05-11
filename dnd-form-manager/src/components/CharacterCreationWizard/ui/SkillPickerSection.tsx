@@ -1,4 +1,5 @@
 import type React from "react";
+import "./SkillPickerSection.css"
 import type { Skill } from "../../../types/common";
 import type { SkillProficiencyRequirement } from "../../../types/creationRequirement";
 

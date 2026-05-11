@@ -1,4 +1,5 @@
 import type React from "react";
+import "./TraitAccordion.css"
 import type { TraitSegment } from "../../../types/wizardSelection";
 
 interface TraitAccordionProps {

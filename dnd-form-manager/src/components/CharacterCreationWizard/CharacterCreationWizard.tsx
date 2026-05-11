@@ -15,7 +15,6 @@ import {
   getSubraceById,
   getSubclassById,
 } from "../../data/staticDataApi";
-import type { Skill } from "../../types/common";
 import {
   makeStartingEquipmentCategorySelectionKey,
   normalizeEquipmentReference,

@@ -1,3 +1,4 @@
+import "./WizardStepNav.css"
 import type React from "react";
 
 export interface WizardStep {
