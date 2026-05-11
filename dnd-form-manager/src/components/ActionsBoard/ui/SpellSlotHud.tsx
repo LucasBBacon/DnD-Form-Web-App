@@ -1,4 +1,5 @@
 import type React from "react";
+import "./SpellSlotHud.css"
 
 export interface SpellSlotRow {
   label: string;

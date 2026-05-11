@@ -1,3 +1,4 @@
+import "./CostPips.css"
 import type React from "react";
 
 interface CostPipsProps {

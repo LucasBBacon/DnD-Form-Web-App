@@ -1,0 +1,15 @@
+.cost-pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid #94a3b8;
+}
+
+.cost-pip.filled {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.cost-pip.empty {
+  background: #fff;
+}
