@@ -1,4 +1,5 @@
 import type React from "react";
+import "./TabBar.css"
 
 export interface Tab {
   id: string;

@@ -1,4 +1,5 @@
 import type React from "react";
+import "./FeatureCard.css"
 
 export interface FeatureSource {
   key: string;
