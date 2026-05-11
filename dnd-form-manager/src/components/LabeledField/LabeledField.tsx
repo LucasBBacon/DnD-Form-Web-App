@@ -1,4 +1,5 @@
 import type React from "react";
+import "./LabeledField.css";
 import { useEffect, useRef, useState } from "react";
 
 interface LabeledFieldProps {

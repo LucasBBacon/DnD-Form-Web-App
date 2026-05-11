@@ -1,5 +1,5 @@
 import type React from "react";
-import { LabeledField } from "../Utils/LabeledField";
+import { LabeledField } from "../LabeledField/LabeledField";
 import { IdentityDetailsGrid } from "./ui/IdentityDetailsGrid";
 import "./IdentityHeader.css";
 import { useCharacterStore } from "../../store/useCharacterStore";
