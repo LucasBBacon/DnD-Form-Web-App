@@ -1,4 +1,5 @@
 import type React from "react";
+import "./HealthAdjustmentForm.css";
 
 export type HealthMode = "damage" | "heal" | "temp";
 

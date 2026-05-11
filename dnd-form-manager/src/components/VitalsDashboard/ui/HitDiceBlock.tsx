@@ -1,4 +1,5 @@
 import type React from "react";
+import "./HitDiceBlock.css";
 
 interface HitDiceBlockProps {
   available: number;

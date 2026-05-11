@@ -1,4 +1,5 @@
 import type React from "react";
+import "./HpDisplay.css";
 
 interface HpDisplayProps {
   current: number;

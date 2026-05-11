@@ -1,4 +1,5 @@
 import type React from "react";
+import "./DeathSavesTracker.css";
 
 interface DeathSavesTrackerProps {
   successes: number;
