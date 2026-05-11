@@ -1,4 +1,5 @@
 import type React from "react";
+import "./EncumbranceDisplay.css"
 
 interface EncumbranceDisplayProps {
   totalWeight: number;

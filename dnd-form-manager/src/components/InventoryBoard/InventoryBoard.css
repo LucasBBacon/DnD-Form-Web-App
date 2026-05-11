@@ -72,44 +72,6 @@
   color: #9333ea;
 } /* Platinum */
 
-.encumbrance-box {
-  background: #f4f4f5;
-  border: 1px solid #e4e4e7;
-  border-radius: 6px;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.encumbrance-box.encumbered {
-  background: #fef2f2;
-  border-color: #fca5a5;
-}
-
-.weight-tracker {
-  font-size: 1.2rem;
-}
-
-.current-weight {
-  font-weight: 900;
-  color: #18181b;
-}
-
-.max-weight {
-  font-size: 0.8rem;
-  color: #71717a;
-  font-weight: bold;
-}
-
-.encumbered-warning {
-  color: #dc2626;
-  font-size: 0.7rem;
-  font-weight: bold;
-  margin-top: 0.25rem;
-}
-
 .divider {
   border: none;
   border-top: 2px dashed #e4e4e7;
