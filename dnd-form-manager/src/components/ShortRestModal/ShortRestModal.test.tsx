@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ShortRestModal } from "./ShortRestModal";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { useCharacterStats } from "../hooks/useCharacterStats";
-import { getClassById } from "../data/staticDataApi";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
+import { getClassById } from "../../data/staticDataApi";
 
 vi.mock("../store/useCharacterStore");
 vi.mock("../hooks/useCharacterStats");

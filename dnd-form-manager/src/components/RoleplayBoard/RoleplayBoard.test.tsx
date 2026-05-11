@@ -5,9 +5,9 @@ import { render, screen } from "@testing-library/react";
 import { within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RoleplayBoard } from "./RoleplayBoard";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { getAllCharacterTraitsWithSources } from "../utils/traitUtils";
-import { useSpellcasting } from "../hooks/useSpellcasting";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
+import { useSpellcasting } from "../../hooks/useSpellcasting";
 
 vi.mock("../store/useCharacterStore");
 vi.mock("../utils/traitUtils");
@@ -87,7 +87,9 @@ describe("RoleplayBoard", () => {
         trait: {
           id: "trait_action_surge",
           name: "Action Surge",
-          lore: { shortDescription: "Push yourself beyond your normal limits." },
+          lore: {
+            shortDescription: "Push yourself beyond your normal limits.",
+          },
         },
         sources: [
           {

@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SpellBookView } from "./SpellBookView";
-import { getAllClasses, getAllSpells } from "../data/staticDataApi";
+import { getAllClasses, getAllSpells } from "../../data/staticDataApi";
 
 vi.mock("../data/staticDataApi");
 
@@ -57,7 +57,8 @@ const baseSpells = [
     },
     lore: {
       shortDescription: "Sense magic in your surroundings.",
-      fullText: "For the duration, you sense the presence of magic within 30 feet.",
+      fullText:
+        "For the duration, you sense the presence of magic within 30 feet.",
       higherLevel: "The duration increases when cast at higher levels.",
     },
   },
@@ -89,7 +90,12 @@ const baseSpells = [
     duration: "1 hour",
     concentration: false,
     ritual: false,
-    components: { vocal: true, somatic: true, material: true, materialMaterials: "A firefly." },
+    components: {
+      vocal: true,
+      somatic: true,
+      material: true,
+      materialMaterials: "A firefly.",
+    },
     lore: {
       shortDescription: "Object sheds bright light.",
       fullText: "You touch one object that sheds bright light in a radius.",
@@ -228,18 +234,28 @@ describe("SpellBookView", () => {
   it("filters list by school and class", async () => {
     const user = userEvent.setup();
 
-    render(
-      <SpellBookView spellcasting={buildSpellcasting()} />,
+    render(<SpellBookView spellcasting={buildSpellcasting()} />);
+
+    await user.selectOptions(
+      screen.getByLabelText(/filter by school/i),
+      "abjuration",
     );
 
-    await user.selectOptions(screen.getByLabelText(/filter by school/i), "abjuration");
+    expect(
+      screen.getByRole("button", { name: /cure wounds/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /magic missile/i }),
+    ).not.toBeInTheDocument();
 
-    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /magic missile/i })).not.toBeInTheDocument();
+    await user.selectOptions(
+      screen.getByLabelText(/filter by class/i),
+      "class_wizard",
+    );
 
-    await user.selectOptions(screen.getByLabelText(/filter by class/i), "class_wizard");
-
-    expect(screen.getByText("No spells match your current filters.")).toBeInTheDocument();
+    expect(
+      screen.getByText("No spells match your current filters."),
+    ).toBeInTheDocument();
   });
 
   it("filters by rules-eligible availability", async () => {
@@ -288,8 +304,12 @@ describe("SpellBookView", () => {
       "ineligible",
     );
 
-    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /magic missile/i })).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /cure wounds/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /magic missile/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("treats bonus-prepared spells as eligible even when off class list", async () => {
@@ -348,7 +368,9 @@ describe("SpellBookView", () => {
       "eligible",
     );
 
-    expect(screen.getByRole("button", { name: /cure wounds/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /cure wounds/i }),
+    ).toBeInTheDocument();
   });
 
   it("shows armor penalty warning when cannot cast", async () => {
@@ -362,14 +384,18 @@ describe("SpellBookView", () => {
       />,
     );
 
-    expect(screen.getByText("Cannot Cast Spells Right Now")).toBeInTheDocument();
+    expect(
+      screen.getByText("Cannot Cast Spells Right Now"),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("You are wearing armor you are not proficient with."),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /magic missile/i }));
 
-    expect(screen.getByText(/You create three glowing darts/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/You create three glowing darts/i),
+    ).toBeInTheDocument();
   });
 
   it("shows innate source info in expanded details when spell is granted innately", async () => {
@@ -411,9 +437,13 @@ describe("SpellBookView", () => {
     render(<SpellBookView spellcasting={buildSpellcasting()} />);
 
     expect(screen.getByLabelText(/availability legend/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/availability rules info/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Meets class list, school rules, and per-track spell level limits\./i),
+      screen.getByLabelText(/availability rules info/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /Meets class list, school rules, and per-track spell level limits\./i,
+      ),
     ).toBeInTheDocument();
   });
 });

@@ -1,11 +1,14 @@
 import type React from "react";
-import type { SpellData } from "../types/spell";
-import type { ClassSpellcastingSummary, UseSpellcastingReturn } from "../hooks/useSpellcasting";
+import type { SpellData } from "../../types/spell";
+import type {
+  ClassSpellcastingSummary,
+  UseSpellcastingReturn,
+} from "../../hooks/useSpellcasting";
 import { useMemo, useState } from "react";
-import { getAllClasses, getAllSpells } from "../data/staticDataApi";
+import { getAllClasses, getAllSpells } from "../../data/staticDataApi";
 import "./SpellBookView.css";
-import { SpellFilterBar } from "./SpellBookView/ui/SpellFilterBar";
-import { SpellRow } from "./SpellBookView/ui/SpellRow";
+import { SpellFilterBar } from "./ui/SpellFilterBar";
+import { SpellRow } from "./ui/SpellRow";
 
 interface SpellBookViewProps {
   spellcasting: UseSpellcastingReturn;
@@ -39,7 +42,9 @@ const isSpellEligibleForSummary = (
   const expandedMatch = summary.expandedSpellIds.includes(spell.id);
   const schoolMatch =
     !summary.schoolRestrictions ||
-    summary.schoolRestrictions.some((restrictedSchool) => restrictedSchool === spell.school);
+    summary.schoolRestrictions.some(
+      (restrictedSchool) => restrictedSchool === spell.school,
+    );
 
   const baseMatch = (classMatch && schoolMatch) || expandedMatch;
   if (!baseMatch) return false;
@@ -50,7 +55,8 @@ const isSpellEligibleForSummary = (
 
   const fallbackLevelCap =
     summary.preparationType === "pact" ? pactMaxLevel : sharedMaxLevel;
-  const levelCap = summary.maxSpellLevel > 0 ? summary.maxSpellLevel : fallbackLevelCap;
+  const levelCap =
+    summary.maxSpellLevel > 0 ? summary.maxSpellLevel : fallbackLevelCap;
 
   return levelCap >= spell.level;
 };
@@ -69,24 +75,30 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
   const classLabelMap = useMemo(() => buildClassLabelMap(), []);
 
   const levelOptions = useMemo(
-    () => Array.from(new Set(allSpells.map((spell) => spell.level))).sort((a, b) => a - b),
+    () =>
+      Array.from(new Set(allSpells.map((spell) => spell.level))).sort(
+        (a, b) => a - b,
+      ),
     [allSpells],
   );
 
   const schoolOptions = useMemo(
-    () => Array.from(new Set(allSpells.map((spell) => spell.school))).sort((a, b) => a.localeCompare(b)),
+    () =>
+      Array.from(new Set(allSpells.map((spell) => spell.school))).sort((a, b) =>
+        a.localeCompare(b),
+      ),
     [allSpells],
   );
 
   const classOptions = useMemo(
     () =>
-      Array.from(
-        new Set(allSpells.flatMap((spell) => spell.classes)),
-      ).sort((a, b) => {
-        const labelA = classLabelMap.get(a) ?? a;
-        const labelB = classLabelMap.get(b) ?? b;
-        return labelA.localeCompare(labelB);
-      }),
+      Array.from(new Set(allSpells.flatMap((spell) => spell.classes))).sort(
+        (a, b) => {
+          const labelA = classLabelMap.get(a) ?? a;
+          const labelB = classLabelMap.get(b) ?? b;
+          return labelA.localeCompare(labelB);
+        },
+      ),
     [allSpells, classLabelMap],
   );
 
@@ -105,14 +117,15 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
     () =>
       allSpells
         .map((spell) => {
-          const eligible = spellcasting.diagnostics.classBreakdown.some((summary) =>
-            isSpellEligibleForSummary(
-              spell,
-              summary,
-              sharedMaxLevel,
-              pactMaxLevel,
-              bonusPreparedSpellIds,
-            ),
+          const eligible = spellcasting.diagnostics.classBreakdown.some(
+            (summary) =>
+              isSpellEligibleForSummary(
+                spell,
+                summary,
+                sharedMaxLevel,
+                pactMaxLevel,
+                bonusPreparedSpellIds,
+              ),
           );
 
           return {
@@ -121,7 +134,8 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
           };
         })
         .sort((a, b) => {
-          if (a.spell.level !== b.spell.level) return a.spell.level - b.spell.level;
+          if (a.spell.level !== b.spell.level)
+            return a.spell.level - b.spell.level;
           return a.spell.name.localeCompare(b.spell.name);
         }),
     [
@@ -144,7 +158,10 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
           return false;
         }
 
-        if (selectedClassId !== "all" && !spell.classes.includes(selectedClassId)) {
+        if (
+          selectedClassId !== "all" &&
+          !spell.classes.includes(selectedClassId)
+        ) {
           return false;
         }
 
@@ -153,7 +170,13 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
 
         return true;
       }),
-    [spellRows, selectedLevel, selectedSchool, selectedClassId, availabilityFilter],
+    [
+      spellRows,
+      selectedLevel,
+      selectedSchool,
+      selectedClassId,
+      availabilityFilter,
+    ],
   );
 
   const eligibleCount = useMemo(
@@ -171,7 +194,8 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
         <div>
           <h3 className="catalog-title">Spell Catalog</h3>
           <p className="catalog-summary">
-            {filteredRows.length} shown, {eligibleCount} rules-eligible for this character.
+            {filteredRows.length} shown, {eligibleCount} rules-eligible for this
+            character.
           </p>
         </div>
 
@@ -182,7 +206,6 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
           </div>
         )}
       </div>
-
 
       <SpellFilterBar
         selectedLevel={selectedLevel}
@@ -223,7 +246,9 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
 
       <div className="spell-list" role="list">
         {filteredRows.length === 0 && (
-          <div className="empty-state">No spells match your current filters.</div>
+          <div className="empty-state">
+            No spells match your current filters.
+          </div>
         )}
 
         {filteredRows.map(({ spell, eligible }) => {

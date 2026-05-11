@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { IdentityHeader } from "./IdentityHeader";
-import { BASELINE_CHARACTER_STATE, useCharacterStore } from "../store/useCharacterStore";
+import {
+  BASELINE_CHARACTER_STATE,
+  useCharacterStore,
+} from "../../store/useCharacterStore";
 
 describe("IdentityHeader level-up launch", () => {
   beforeEach(() => {

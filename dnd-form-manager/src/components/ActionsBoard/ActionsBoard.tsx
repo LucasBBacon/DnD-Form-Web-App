@@ -4,13 +4,13 @@ import {
   useCombatActions,
   type CombatRollMetadata,
   type CombatActionSection,
-} from "../hooks/useCombatActions";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { DiceRoller } from "./DiceRoller/DiceRoller";
+} from "../../hooks/useCombatActions";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { DiceRoller } from "../DiceRoller/DiceRoller";
 import "./ActionsBoard.css";
-import { CostPips } from "./ActionsBoard/ui/CostPips";
-import { SpellSlotHud } from "./ActionsBoard/ui/SpellSlotHud";
-import { AttackRollModeToggle } from "./ActionsBoard/ui/AttackRollModeToggle";
+import { CostPips } from "./ui/CostPips";
+import { SpellSlotHud } from "./ui/SpellSlotHud";
+import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
 
 const SECTION_ORDER: CombatActionSection[] = [
   "action",
@@ -46,7 +46,9 @@ export const ActionsBoard: React.FC = () => {
   const { spellcasting, sections, toRomanNumeral } = useCombatActions();
   const { expendTraitActionUse, restoreTraitActionUse } = useCharacterStore();
   const [activeRoller, setActiveRoller] = useState<ActiveRoller | null>(null);
-  const [attackRollModes, setAttackRollModes] = useState<Record<string, AttackRollMode>>({});
+  const [attackRollModes, setAttackRollModes] = useState<
+    Record<string, AttackRollMode>
+  >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, EntryRollResult>
   >({});
@@ -62,22 +64,25 @@ export const ActionsBoard: React.FC = () => {
   ) => {
     const first = rolls[0] ?? 0;
     const second = rolls[1] ?? 0;
-    const keptValue = mode === "normal"
-      ? first
-      : mode === "advantage"
-        ? Math.max(first, second)
-        : Math.min(first, second);
+    const keptValue =
+      mode === "normal"
+        ? first
+        : mode === "advantage"
+          ? Math.max(first, second)
+          : Math.min(first, second);
 
     const total = keptValue + config.modifier;
-    const critLabel = keptValue === 20
-      ? " (critical success)"
-      : keptValue === 1
-        ? " (critical fail)"
-        : "";
+    const critLabel =
+      keptValue === 20
+        ? " (critical success)"
+        : keptValue === 1
+          ? " (critical fail)"
+          : "";
 
-    const rollPart = mode === "normal"
-      ? `d20 ${keptValue}`
-      : `d20 ${first}/${second} -> keep ${keptValue} (${mode})`;
+    const rollPart =
+      mode === "normal"
+        ? `d20 ${keptValue}`
+        : `d20 ${first}/${second} -> keep ${keptValue} (${mode})`;
 
     const detail = `${total} (${rollPart}${formatModifier(config.modifier)})${critLabel}`;
 
@@ -168,7 +173,9 @@ export const ActionsBoard: React.FC = () => {
 
           return (
             <div key={section} className="combat-section">
-              <h3 className="combat-section-header">{SECTION_LABELS[section]}</h3>
+              <h3 className="combat-section-header">
+                {SECTION_LABELS[section]}
+              </h3>
 
               {entries.length === 0 ? (
                 <div className="empty-state">
@@ -212,7 +219,10 @@ export const ActionsBoard: React.FC = () => {
                               className="cost-badge uses"
                               title={`${entry.uses.remaining} of ${entry.uses.total} uses remaining`}
                             >
-                              <CostPips remaining={entry.uses.remaining} total={entry.uses.total} />
+                              <CostPips
+                                remaining={entry.uses.remaining}
+                                total={entry.uses.total}
+                              />
                             </span>
                           )}
 
@@ -224,14 +234,19 @@ export const ActionsBoard: React.FC = () => {
 
                       <div className="combat-action-stats">
                         {entry.quickStats.map((stat, index) => (
-                          <span key={`${entry.id}-stat-${index}`} className="quick-stat">
+                          <span
+                            key={`${entry.id}-stat-${index}`}
+                            className="quick-stat"
+                          >
                             {stat}
                           </span>
                         ))}
                       </div>
 
                       {entry.description && (
-                        <p className="combat-action-description">{entry.description}</p>
+                        <p className="combat-action-description">
+                          {entry.description}
+                        </p>
                       )}
 
                       {!!entry.attackRoll && (
@@ -253,7 +268,8 @@ export const ActionsBoard: React.FC = () => {
                             className="mini-use-btn"
                             onClick={() => {
                               setActiveRoller((current) =>
-                                current?.entryId === entry.id && current.kind === "attack"
+                                current?.entryId === entry.id &&
+                                current.kind === "attack"
                                   ? null
                                   : { entryId: entry.id, kind: "attack" },
                               );
@@ -278,9 +294,9 @@ export const ActionsBoard: React.FC = () => {
                             className="mini-use-btn secondary"
                             onClick={() => {
                               setActiveRoller((current) =>
-                                current?.entryId === entry.id
-                                && current.kind === "damage"
-                                && current.damageId === damageRoll.id
+                                current?.entryId === entry.id &&
+                                current.kind === "damage" &&
+                                current.damageId === damageRoll.id
                                   ? null
                                   : {
                                       entryId: entry.id,
@@ -294,9 +310,16 @@ export const ActionsBoard: React.FC = () => {
                             {damageRoll.label}
                           </button>
 
-                          {rollResultsByEntry[entry.id]?.damage[damageRoll.id] && (
+                          {rollResultsByEntry[entry.id]?.damage[
+                            damageRoll.id
+                          ] && (
                             <span className="combat-roll-result">
-                              {damageRoll.label}: {rollResultsByEntry[entry.id]?.damage[damageRoll.id]}
+                              {damageRoll.label}:{" "}
+                              {
+                                rollResultsByEntry[entry.id]?.damage[
+                                  damageRoll.id
+                                ]
+                              }
                             </span>
                           )}
                         </div>
@@ -309,9 +332,9 @@ export const ActionsBoard: React.FC = () => {
                             className="mini-use-btn secondary"
                             onClick={() => {
                               setActiveRoller((current) =>
-                                current?.entryId === entry.id
-                                && current.kind === "damage"
-                                && current.damageId === "__all__"
+                                current?.entryId === entry.id &&
+                                current.kind === "damage" &&
+                                current.damageId === "__all__"
                                   ? null
                                   : {
                                       entryId: entry.id,
@@ -327,49 +350,64 @@ export const ActionsBoard: React.FC = () => {
                         </div>
                       )}
 
-                      {activeRoller?.entryId === entry.id && entry.attackRoll && activeRoller.kind === "attack" && (
-                        <div className="combat-roll-roller-wrap">
-                          {(() => {
-                            const mode = getAttackRollMode(entry.id);
-                            return (
-                          <DiceRoller
-                            count={mode === "normal" ? 1 : 2}
-                            sides={entry.attackRoll.sides}
-                            size="small"
-                            hideTotal
-                            rollLabel={`Roll ${entry.attackRoll.label}`}
-                            onRollComplete={(rolls) => {
-                              setAttackResult(
-                                entry.id,
-                                entry.attackRoll!,
-                                rolls,
-                                mode,
+                      {activeRoller?.entryId === entry.id &&
+                        entry.attackRoll &&
+                        activeRoller.kind === "attack" && (
+                          <div className="combat-roll-roller-wrap">
+                            {(() => {
+                              const mode = getAttackRollMode(entry.id);
+                              return (
+                                <DiceRoller
+                                  count={mode === "normal" ? 1 : 2}
+                                  sides={entry.attackRoll.sides}
+                                  size="small"
+                                  hideTotal
+                                  rollLabel={`Roll ${entry.attackRoll.label}`}
+                                  onRollComplete={(rolls) => {
+                                    setAttackResult(
+                                      entry.id,
+                                      entry.attackRoll!,
+                                      rolls,
+                                      mode,
+                                    );
+                                    setActiveRoller(null);
+                                  }}
+                                  disabled={entry.isExhausted}
+                                />
                               );
-                              setActiveRoller(null);
-                            }}
-                            disabled={entry.isExhausted}
-                          />
-                            );
-                          })()}
-                        </div>
-                      )}
+                            })()}
+                          </div>
+                        )}
 
-                      {activeRoller?.entryId === entry.id
-                        && activeRoller.kind === "damage"
-                        && typeof activeRoller.damageId === "string"
-                        && activeRoller.damageId !== "__all__"
-                        && entry.damageRolls?.some((damageRoll) => damageRoll.id === activeRoller.damageId)
-                        && (
+                      {activeRoller?.entryId === entry.id &&
+                        activeRoller.kind === "damage" &&
+                        typeof activeRoller.damageId === "string" &&
+                        activeRoller.damageId !== "__all__" &&
+                        entry.damageRolls?.some(
+                          (damageRoll) =>
+                            damageRoll.id === activeRoller.damageId,
+                        ) && (
                           <div className="combat-roll-roller-wrap">
                             <DiceRoller
-                              count={entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.count ?? 1}
-                              sides={entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.sides ?? 6}
+                              count={
+                                entry.damageRolls.find(
+                                  (damageRoll) =>
+                                    damageRoll.id === activeRoller.damageId,
+                                )?.count ?? 1
+                              }
+                              sides={
+                                entry.damageRolls.find(
+                                  (damageRoll) =>
+                                    damageRoll.id === activeRoller.damageId,
+                                )?.sides ?? 6
+                              }
                               size="small"
                               hideTotal
                               rollLabel={`Roll ${entry.damageRolls.find((damageRoll) => damageRoll.id === activeRoller.damageId)?.label ?? "Damage"}`}
                               onRollComplete={(_, summary) => {
                                 const metadata = entry.damageRolls?.find(
-                                  (damageRoll) => damageRoll.id === activeRoller.damageId,
+                                  (damageRoll) =>
+                                    damageRoll.id === activeRoller.damageId,
                                 );
                                 if (!metadata) return;
                                 setDamageResult(
@@ -385,14 +423,16 @@ export const ActionsBoard: React.FC = () => {
                           </div>
                         )}
 
-                      {activeRoller?.entryId === entry.id
-                        && activeRoller.kind === "damage"
-                        && activeRoller.damageId === "__all__"
-                        && (entry.damageRolls?.length ?? 0) > 0
-                        && (
+                      {activeRoller?.entryId === entry.id &&
+                        activeRoller.kind === "damage" &&
+                        activeRoller.damageId === "__all__" &&
+                        (entry.damageRolls?.length ?? 0) > 0 && (
                           <div className="combat-roll-roller-wrap multi-damage-roller-wrap">
                             {entry.damageRolls?.map((damageRoll) => (
-                              <div key={`${entry.id}-all-${damageRoll.id}`} className="combat-roll-row">
+                              <div
+                                key={`${entry.id}-all-${damageRoll.id}`}
+                                className="combat-roll-row"
+                              >
                                 <DiceRoller
                                   count={damageRoll.count}
                                   sides={damageRoll.sides}
@@ -428,7 +468,11 @@ export const ActionsBoard: React.FC = () => {
                           <button
                             type="button"
                             className="mini-use-btn"
-                            onClick={() => expendTraitActionUse(entry.id.replace("trait:", ""))}
+                            onClick={() =>
+                              expendTraitActionUse(
+                                entry.id.replace("trait:", ""),
+                              )
+                            }
                             disabled={entry.uses.remaining <= 0}
                           >
                             Use
@@ -437,7 +481,9 @@ export const ActionsBoard: React.FC = () => {
                             type="button"
                             className="mini-use-btn secondary"
                             onClick={() =>
-                              restoreTraitActionUse(entry.id.replace("trait:", ""))
+                              restoreTraitActionUse(
+                                entry.id.replace("trait:", ""),
+                              )
                             }
                             disabled={entry.uses.remaining >= entry.uses.total}
                           >

@@ -1,13 +1,18 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { ActionsBoard } from "./ActionsBoard";
-import { useCombatActions } from "../hooks/useCombatActions";
-import { useCharacterStore } from "../store/useCharacterStore";
+import { useCombatActions } from "../../hooks/useCombatActions";
+import { useCharacterStore } from "../../store/useCharacterStore";
 
 vi.mock("../hooks/useCombatActions");
 vi.mock("../store/useCharacterStore");
 vi.mock("./DiceRoller/DiceRoller", () => ({
-  DiceRoller: ({ sides = 20, count = 1, onRollComplete, rollLabel }: {
+  DiceRoller: ({
+    sides = 20,
+    count = 1,
+    onRollComplete,
+    rollLabel,
+  }: {
     sides?: number;
     count?: number;
     onRollComplete?: (rolls: number[], summary: { total: number }) => void;
@@ -21,9 +26,7 @@ vi.mock("./DiceRoller/DiceRoller", () => ({
             ? [4, 17]
             : Array.from({ length: count }, () => 5),
           {
-            total: sides === 20 && count === 2
-              ? 21
-              : count * 5,
+            total: sides === 20 && count === 2 ? 21 : count * 5,
           },
         )
       }
@@ -124,9 +127,15 @@ describe("ActionsBoard", () => {
   it("renders action-economy section headers and slot HUD", () => {
     render(<ActionsBoard />);
 
-    expect(screen.getByRole("heading", { name: "Actions" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Bonus Actions" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Reactions" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Actions" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Bonus Actions" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Reactions" }),
+    ).toBeInTheDocument();
 
     expect(screen.getByText(/Lvl 1:/i)).toBeInTheDocument();
     expect(screen.getByText(/\[o \]/i)).toBeInTheDocument();
@@ -138,7 +147,9 @@ describe("ActionsBoard", () => {
     expect(screen.getByText("I")).toBeInTheDocument();
     expect(screen.getByText(/Resource exhausted\./i)).toBeInTheDocument();
 
-    const exhaustedCard = container.querySelector(".combat-action-card.is-exhausted");
+    const exhaustedCard = container.querySelector(
+      ".combat-action-card.is-exhausted",
+    );
     expect(exhaustedCard).not.toBeNull();
   });
 
@@ -146,15 +157,21 @@ describe("ActionsBoard", () => {
     render(<ActionsBoard />);
 
     fireEvent.click(screen.getByRole("button", { name: "Roll To-Hit" }));
-    const toHitRollButtons = screen.getAllByRole("button", { name: "Roll To-Hit" });
+    const toHitRollButtons = screen.getAllByRole("button", {
+      name: "Roll To-Hit",
+    });
     fireEvent.click(toHitRollButtons[toHitRollButtons.length - 1]);
 
     expect(screen.getByText(/To-Hit: 10 \(d20 5 \+ 5\)/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Damage (slashing)" }));
-    fireEvent.click(screen.getByRole("button", { name: "Roll Damage \(slashing\)" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Roll Damage \(slashing\)" }),
+    );
 
-    expect(screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i),
+    ).toBeInTheDocument();
   });
 
   it("supports advantage and disadvantage to-hit modes", () => {
@@ -167,7 +184,11 @@ describe("ActionsBoard", () => {
       fireEvent.click(buttons[buttons.length - 1]);
     }
 
-    expect(screen.getByText(/To-Hit: 22 \(d20 4\/17 -> keep 17 \(advantage\) \+ 5\)/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /To-Hit: 22 \(d20 4\/17 -> keep 17 \(advantage\) \+ 5\)/i,
+      ),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("radio", { name: "Disadvantage" }));
     fireEvent.click(screen.getByRole("button", { name: "Roll To-Hit" }));
@@ -176,7 +197,11 @@ describe("ActionsBoard", () => {
       fireEvent.click(buttons[buttons.length - 1]);
     }
 
-    expect(screen.getByText(/To-Hit: 9 \(d20 4\/17 -> keep 4 \(disadvantage\) \+ 5\)/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /To-Hit: 9 \(d20 4\/17 -> keep 4 \(disadvantage\) \+ 5\)/i,
+      ),
+    ).toBeInTheDocument();
   });
 
   it("handles multi-damage roll-all workflow with independent result labels", () => {
@@ -184,10 +209,16 @@ describe("ActionsBoard", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Roll All Damage" }));
 
-    fireEvent.click(screen.getByRole("button", { name: "Roll Damage \(slashing\)" }));
-    fireEvent.click(screen.getByRole("button", { name: "Roll Damage \(fire\)" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Roll Damage \(slashing\)" }),
+    );
+    fireEvent.click(
+      screen.getByRole("button", { name: "Roll Damage \(fire\)" }),
+    );
 
-    expect(screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Damage \(fire\): 5 \(5\)/i)).toBeInTheDocument();
   });
 });

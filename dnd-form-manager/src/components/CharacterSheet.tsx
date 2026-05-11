@@ -1,10 +1,10 @@
-import "./CharacterSheet.css"
-import { ActionsBoard } from "./ActionsBoard";
-import { CoreStatsBoard } from "./CoreStatsBoard";
-import { IdentityHeader } from "./IdentityHeader";
-import { InventoryBoard } from "./InventoryBoard";
-import { RoleplayBoard } from "./RoleplayBoard";
-import { VitalsDashboard } from "./VitalsDashboard";
+import "./CharacterSheet.css";
+import { ActionsBoard } from "./ActionsBoard/ActionsBoard";
+import { CoreStatsBoard } from "./CoreStatsBoard/CoreStatsBoard";
+import { IdentityHeader } from "./IdentityHeader/IdentityHeader";
+import { InventoryBoard } from "./InventoryBoard/InventoryBoard";
+import { RoleplayBoard } from "./RoleplayBoard/RoleplayBoard";
+import { VitalsDashboard } from "./VitalsDashboard/VitalsDashboard";
 
 export const CharacterSheet = () => {
   return (

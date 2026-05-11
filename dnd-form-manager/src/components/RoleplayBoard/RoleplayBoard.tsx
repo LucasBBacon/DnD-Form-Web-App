@@ -1,12 +1,12 @@
 import type React from "react";
 import "./RoleplayBoard.css";
 import { useMemo, useState } from "react";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { getAllCharacterTraitsWithSources } from "../utils/traitUtils";
-import { useSpellcasting } from "../hooks/useSpellcasting";
-import { SpellBookView } from "./SpellBookView";
-import { TabBar } from "./RoleplayBoard/ui/TabBar";
-import { FeatureCard } from "./RoleplayBoard/ui/FeatureCard";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
+import { useSpellcasting } from "../../hooks/useSpellcasting";
+import { TabBar } from "./ui/TabBar";
+import { FeatureCard } from "./ui/FeatureCard";
+import { SpellBookView } from "../SpellBookView/SpellBookView";
 
 type RoleplayTab = "features" | "characteristics" | "biography" | "spellbook";
 
@@ -158,7 +158,9 @@ export const RoleplayBoard: React.FC = () => {
         )}
 
         {/* Spellbook */}
-        {activeTab === "spellbook" && <SpellBookView spellcasting={spellcasting} />}
+        {activeTab === "spellbook" && (
+          <SpellBookView spellcasting={spellcasting} />
+        )}
       </div>
     </section>
   );

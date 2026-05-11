@@ -103,7 +103,10 @@
   background: #ffffff;
   border-radius: 10px;
   padding: 0.62rem;
-  transition: opacity 0.2s ease, filter 0.2s ease, border-color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    filter 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .combat-action-card.is-exhausted {

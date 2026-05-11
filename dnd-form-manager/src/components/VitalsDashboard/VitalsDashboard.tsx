@@ -1,13 +1,13 @@
 import type React from "react";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { useCharacterStats } from "../hooks/useCharacterStats";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
 import { useState } from "react";
 import "./VitalsDashboard.css";
-import { StatBadge } from "./VitalsDashboard/ui/StatBadge";
-import { HpDisplay } from "./VitalsDashboard/ui/HpDisplay";
-import { HealthAdjustmentForm } from "./VitalsDashboard/ui/HealthAdjustmentForm";
-import { HitDiceBlock } from "./VitalsDashboard/ui/HitDiceBlock";
-import { DeathSavesTracker } from "./VitalsDashboard/ui/DeathSavesTracker";
+import { StatBadge } from "./ui/StatBadge";
+import { HpDisplay } from "./ui/HpDisplay";
+import { HealthAdjustmentForm } from "./ui/HealthAdjustmentForm";
+import { HitDiceBlock } from "./ui/HitDiceBlock";
+import { DeathSavesTracker } from "./ui/DeathSavesTracker";
 
 export const VitalsDashboard: React.FC = () => {
   // Mutable state and actions

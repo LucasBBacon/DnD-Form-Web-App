@@ -1,11 +1,11 @@
 import type React from "react";
 import "./InventoryBoard.css";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { useCharacterStats } from "../hooks/useCharacterStats";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
 import { useMemo } from "react";
-import { getItemById } from "../data/staticDataApi";
-import { WealthTracker } from "./InventoryBoard/ui/WealthTracker";
-import { EncumbranceDisplay } from "./InventoryBoard/ui/EncumbranceDisplay";
+import { getItemById } from "../../data/staticDataApi";
+import { WealthTracker } from "./ui/WealthTracker";
+import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
 
 export const InventoryBoard: React.FC = () => {
   const store = useCharacterStore();
@@ -26,7 +26,15 @@ export const InventoryBoard: React.FC = () => {
 
         return { ...instance, itemData };
       })
-      .filter((instance): instance is { instanceId: string; baseItemId: string; itemData: NonNullable<ReturnType<typeof getItemById>> } => instance !== null);
+      .filter(
+        (
+          instance,
+        ): instance is {
+          instanceId: string;
+          baseItemId: string;
+          itemData: NonNullable<ReturnType<typeof getItemById>>;
+        } => instance !== null,
+      );
 
     return {
       hydratedInstances: resolvedInstances,
@@ -47,7 +55,16 @@ export const InventoryBoard: React.FC = () => {
 
         return { ...stack, itemData };
       })
-      .filter((stack): stack is { stackId: string; baseItemId: string; quantity: number; itemData: NonNullable<ReturnType<typeof getItemById>> } => stack !== null);
+      .filter(
+        (
+          stack,
+        ): stack is {
+          stackId: string;
+          baseItemId: string;
+          quantity: number;
+          itemData: NonNullable<ReturnType<typeof getItemById>>;
+        } => stack !== null,
+      );
 
     return {
       hydratedStacks: resolvedStacks,
@@ -56,7 +73,8 @@ export const InventoryBoard: React.FC = () => {
   }, [store.inventoryStacks]);
 
   const missingItemIds = useMemo(
-    () => Array.from(new Set([...missingInstanceItemIds, ...missingStackItemIds])),
+    () =>
+      Array.from(new Set([...missingInstanceItemIds, ...missingStackItemIds])),
     [missingInstanceItemIds, missingStackItemIds],
   );
 

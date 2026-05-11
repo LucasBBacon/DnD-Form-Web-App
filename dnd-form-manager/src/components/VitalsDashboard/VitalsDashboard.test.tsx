@@ -4,8 +4,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { VitalsDashboard } from "./VitalsDashboard";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { useCharacterStats } from "../hooks/useCharacterStats";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
 
 vi.mock("../store/useCharacterStore");
 vi.mock("../hooks/useCharacterStats");

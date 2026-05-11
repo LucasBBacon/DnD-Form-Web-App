@@ -1,11 +1,14 @@
 import type React from "react";
-import type { Skill } from "../types/common";
-import { useCharacterStats } from "../hooks/useCharacterStats";
-import { useSkills } from "../hooks/useSkills";
-import "./CoreStatsBoard.css"
-import { ABILITIES, ABILITY_LABELS as ABILITY_NAMES } from "../utils/abilityConstants";
-import { StatsTopBar } from "./CoreStatsBoard/ui/StatsTopBar";
-import { AbilityCard } from "./CoreStatsBoard/ui/AbilityCard";
+import type { Skill } from "../../types/common";
+import { useCharacterStats } from "../../hooks/useCharacterStats";
+import { useSkills } from "../../hooks/useSkills";
+import "./CoreStatsBoard.css";
+import {
+  ABILITIES,
+  ABILITY_LABELS as ABILITY_NAMES,
+} from "../../utils/abilityConstants";
+import { StatsTopBar } from "./ui/StatsTopBar";
+import { AbilityCard } from "./ui/AbilityCard";
 
 const formatSkillName = (str: string) => {
   const spaced = str.replace(/([A-Z])/g, " $1");

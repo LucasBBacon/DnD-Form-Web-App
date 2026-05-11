@@ -1,10 +1,10 @@
 import type React from "react";
-import { LabeledField } from "./Utils/LabeledField";
-import { IdentityDetailsGrid } from "./IdentityHeader/ui/IdentityDetailsGrid";
+import { LabeledField } from "../Utils/LabeledField";
+import { IdentityDetailsGrid } from "./ui/IdentityDetailsGrid";
 import "./IdentityHeader.css";
-import { useCharacterStore } from "../store/useCharacterStore";
-import { getClassById, getRaceById } from "../data/staticDataApi";
-import { getAvailableLevelUpTargetForCharacter } from "../utils/levelAvailabilityUtils";
+import { useCharacterStore } from "../../store/useCharacterStore";
+import { getClassById, getRaceById } from "../../data/staticDataApi";
+import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils";
 
 export const IdentityHeader: React.FC = () => {
   const {
