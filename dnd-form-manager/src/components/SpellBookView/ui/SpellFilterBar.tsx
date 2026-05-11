@@ -1,8 +1,10 @@
 import type React from "react";
+import "./SpellFilterBar.css";
 
 type AvailabilityFilter = "all" | "eligible" | "ineligible";
 
-const formatLevel = (level: number) => (level === 0 ? "Cantrip" : `Level ${level}`);
+const formatLevel = (level: number) =>
+  level === 0 ? "Cantrip" : `Level ${level}`;
 const formatSchool = (school: string) =>
   school.charAt(0).toUpperCase() + school.slice(1);
 
@@ -88,7 +90,9 @@ export const SpellFilterBar: React.FC<SpellFilterBarProps> = ({
       <span>Availability</span>
       <select
         value={availabilityFilter}
-        onChange={(e) => onAvailabilityChange(e.target.value as AvailabilityFilter)}
+        onChange={(e) =>
+          onAvailabilityChange(e.target.value as AvailabilityFilter)
+        }
         aria-label="Filter by availability"
       >
         <option value="all">All spells</option>

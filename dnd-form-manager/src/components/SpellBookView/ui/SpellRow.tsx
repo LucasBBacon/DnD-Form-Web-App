@@ -1,4 +1,5 @@
 import type React from "react";
+import "./SpellRow.css";
 import type { SpellData } from "../../../types/spell";
 
 interface CastingStats {
