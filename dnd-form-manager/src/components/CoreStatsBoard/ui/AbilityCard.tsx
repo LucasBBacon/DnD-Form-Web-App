@@ -1,4 +1,5 @@
 import type React from "react";
+import "./AbilityCard.css"
 import { SkillRow } from "./SkillRow";
 
 export interface AbilityCardSkill {

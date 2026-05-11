@@ -1,4 +1,5 @@
 import type React from "react";
+import "./StatsTopBar.css"
 
 interface Passives {
   perception: number;
