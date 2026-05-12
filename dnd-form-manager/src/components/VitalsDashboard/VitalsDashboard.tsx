@@ -2,13 +2,13 @@ import type React from "react";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useCharacterStats } from "../../hooks/useCharacterStats";
 import { useState } from "react";
-import "./VitalsDashboard.css";
-import { StatBadge } from "./ui/StatBadge";
-import { HpDisplay } from "./ui/HpDisplay";
-import { HealthAdjustmentForm } from "./ui/HealthAdjustmentForm";
-import { HitDiceBlock } from "./ui/HitDiceBlock";
-import { DeathSavesTracker } from "./ui/DeathSavesTracker";
+import { VitalsDashboardView } from "./VitalsDashboardView";
 
+/**
+ * Hook wrapper for VitalsDashboardView.
+ * Handles all hook subscriptions and state management,
+ * then passes everything to the presentational view component.
+ */
 export const VitalsDashboard: React.FC = () => {
   // Mutable state and actions
   const {
@@ -47,52 +47,28 @@ export const VitalsDashboard: React.FC = () => {
   };
 
   return (
-    <section className="vitals-dashboard card">
-      {/* quick combat stats */}
-      <div className="vitals-top-row">
-        <StatBadge
-          label="ARMOR CLASS"
-          value={armorClass}
-          className="shield"
-          title={isArmorPenalized ? "Stealth Disadvantage!" : "Armor Class"}
-          warning={isArmorPenalized}
-        />
-        <StatBadge
-          label="INITIATIVE"
-          value={initiative >= 0 ? `+${initiative}` : initiative}
-        />
-        <StatBadge label="SPEED" value={speed} />
-      </div>
-
-      {/* health block */}
-      <div className="health-block">
-        <HpDisplay current={hp.current} max={hp.max} temp={tempHp} />
-        <HealthAdjustmentForm
-          activeMode={activeHealthMode}
-          inputValue={healthInput}
-          onInputChange={setHealthInput}
-          onSubmit={handleHealthSubmit}
-          onModeSelect={setActiveHealthMode}
-          onCancel={() => setActiveHealthMode(null)}
-        />
-      </div>
-
-      {/* hit dice and death saves */}
-      <div className="vitals-bottom-row">
-        <HitDiceBlock
-          available={level - expendedHitDice}
-          total={level}
-          onShortRest={() => openRestModal("short")}
-          onLongRest={() => openRestModal("long")}
-        />
-        {hp.current === 0 && (
-          <DeathSavesTracker
-            successes={deathSaves.successes}
-            failures={deathSaves.failures}
-            onToggle={(type, checked) => recordDeathSave(type, checked)}
-          />
-        )}
-      </div>
-    </section>
+    <VitalsDashboardView
+      armorClass={armorClass}
+      initiative={initiative}
+      speed={speed}
+      isArmorPenalized={isArmorPenalized}
+      hp={hp}
+      tempHp={tempHp}
+      deathSaves={deathSaves}
+      level={level}
+      expendedHitDice={expendedHitDice}
+      healthInput={healthInput}
+      activeHealthMode={activeHealthMode}
+      onHealthInputChange={setHealthInput}
+      onHealthModeSelect={setActiveHealthMode}
+      onHealthSubmit={handleHealthSubmit}
+      onHealthCancel={() => setActiveHealthMode(null)}
+      onTakeDamage={takeDamage}
+      onHeal={heal}
+      onSetTempHp={setTempHp}
+      onRecordDeathSave={recordDeathSave}
+      onShortRest={() => openRestModal("short")}
+      onLongRest={() => openRestModal("long")}
+    />
   );
 };
