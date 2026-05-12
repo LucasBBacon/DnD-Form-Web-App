@@ -4,8 +4,8 @@ import { WizardSelectionStage } from "./WizardSelectionStage";
 import { WizardEquipmentSelectionStage } from "./WizardEquipmentSelectionStage";
 import { WizardSpellSelectionStage } from "./WizardSpellSelectionStage";
 import { WizardAbilityScoreStage } from "./WizardAbilityScoreStage";
-import { WizardStepNav } from "./ui/WizardStepNav";
 import { SkillPickerSection } from "./ui/SkillPickerSection";
+import { CharacterCreationWizardView } from "./CharacterCreationWizardView";
 import {
   getAllClasses,
   getItemsByCategory,
@@ -374,118 +374,54 @@ export const CharacterCreationWizard: React.FC = () => {
   // #endregion
 
   return (
-    <div className="wizard-workspace">
-      {/* Stepper navigation */}
-      <aside className="wizard-sidebar-left">
-        <h1 className="wizard-brand">Character Creator</h1>
-        <WizardStepNav
-          steps={WIZARD_STEPS}
-          currentStepIndex={currentStepIndex}
-          onStepClick={setCurrentStepIndex}
-          isStepDisabled={(index) => {
-            // Step 0 (Race) is always accessible
-            if (index === 0) return false;
-            // A step is locked when the previous step is not yet complete
-            const prevStep = WIZARD_STEPS[index - 1];
-            return (
-              !store.raceId ||
-              !isStageComplete(
-                prevStep.id as Parameters<typeof isStageComplete>[0],
-              )
-            );
-          }}
-        />
-      </aside>
-
-      {/* Interactive Stage */}
-      <main className="wizard-center-stage">{renderCenterStage()}</main>
-
-      {/* Live Draft Sheet */}
-      <aside className="wizard-sidebar-right">
-        <h3 className="draft-header">Live Draft</h3>
-        <div className="draft-content">
-          <div className="draft-section-title">Identity</div>
-          <div className="draft-row">
-            <span className="label">Name:</span>
-            <span className="value">{store.name || "Unknown"}</span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Race:</span>
-            <span className="value">
-              {selectedRace?.name ?? formatIdFallback(store.raceId)}
-            </span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Subrace:</span>
-            <span className="value">
-              {selectedSubrace?.name ?? formatIdFallback(store.subraceId)}
-            </span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Class:</span>
-            <span className="value">
-              {selectedClass?.name ?? formatIdFallback(store.classId)}
-            </span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Subclass:</span>
-            <span className="value">
-              {selectedSubclass?.name ?? formatIdFallback(store.subclassId)}
-            </span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Background:</span>
-            <span className="value">
-              {formatIdFallback(store.backgroundId)}
-            </span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Level:</span>
-            <span className="value">{store.level}</span>
-          </div>
-          <div className="draft-row">
-            <span className="label">Prof. Bonus:</span>
-            <span className="value">{formatModifier(proficiencyBonus)}</span>
-          </div>
-          <hr className="draft-divider" />
-
-          <div className="draft-section-title">Core Stats</div>
-          <div className="draft-stats-grid">
-            {ABILITIES.map((ability) => {
-              const score = abilities.scores[ability];
-              const modifier = abilities.modifiers[ability];
-
-              return (
-                <div className="draft-stat-box" key={ability}>
-                  <span className="draft-stat-name">
-                    {ABILITY_LABELS[ability]}
-                  </span>
-                  <span className="draft-stat-val">{score}</span>
-                  <span className="draft-stat-mod">
-                    {formatModifier(modifier)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          <hr className="draft-divider" />
-
-          <div className="draft-section-title">Progress</div>
-          <div className="draft-progress-list">
-            {progressChecks.map((check) => (
-              <div className="draft-progress-row" key={check.label}>
-                <span className="label">{check.label}</span>
-                <span
-                  className={`draft-status-chip ${check.isComplete ? "done" : "pending"}`}
-                >
-                  {check.isComplete ? "Complete" : "Missing"}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </aside>
-    </div>
+    <CharacterCreationWizardView
+      steps={WIZARD_STEPS}
+      currentStepIndex={currentStepIndex}
+      onStepClick={setCurrentStepIndex}
+      isStepDisabled={(index) => {
+        if (index === 0) return false;
+        const prevStep = WIZARD_STEPS[index - 1];
+        return (
+          !store.raceId ||
+          !isStageComplete(
+            prevStep.id as Parameters<typeof isStageComplete>[0],
+          )
+        );
+      }}
+      centerStage={renderCenterStage()}
+      draft={{
+        identityRows: [
+          { label: "Name", value: store.name || "Unknown" },
+          {
+            label: "Race",
+            value: selectedRace?.name ?? formatIdFallback(store.raceId),
+          },
+          {
+            label: "Subrace",
+            value: selectedSubrace?.name ?? formatIdFallback(store.subraceId),
+          },
+          {
+            label: "Class",
+            value: selectedClass?.name ?? formatIdFallback(store.classId),
+          },
+          {
+            label: "Subclass",
+            value: selectedSubclass?.name ?? formatIdFallback(store.subclassId),
+          },
+          {
+            label: "Background",
+            value: formatIdFallback(store.backgroundId),
+          },
+          { label: "Level", value: String(store.level) },
+        ],
+        proficiencyBonus,
+        abilities: ABILITIES.map((ability) => ({
+          label: ABILITY_LABELS[ability],
+          score: abilities.scores[ability],
+          modifier: abilities.modifiers[ability],
+        })),
+        progressChecks,
+      }}
+    />
   );
 };
