@@ -1,10 +1,8 @@
 import type React from "react";
-import { LabeledField } from "../LabeledField/LabeledField";
-import { IdentityDetailsGrid } from "./ui/IdentityDetailsGrid";
-import "./IdentityHeader.css";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getClassById, getRaceById } from "../../data/staticDataApi";
 import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils";
+import { IdentityHeaderView } from "./IdentityHeaderView.tsx";
 
 export const IdentityHeader: React.FC = () => {
   const {
@@ -63,35 +61,23 @@ export const IdentityHeader: React.FC = () => {
   };
 
   return (
-    <header className="identity-header">
-      {/* Left Side: Character Name */}
-      <div className="character-name-box">
-        <LabeledField
-          label="Character Name"
-          value={name}
-          editMode="inline"
-          onChange={(newVal) => setName(newVal)}
-          className="name-field"
-        />
-      </div>
-
-      {/* Right Side: Identity Grid */}
-      <IdentityDetailsGrid
-        classNameDisplay={classNameDisplay}
-        backgroundNameDisplay={backgroundNameDisplay}
-        playerName={playerName}
-        raceNameDisplay={raceNameDisplay}
-        alignment={alignment}
-        xp={xp}
-        levelUpMode={levelUpMode}
-        onNameChange={(newVal) => setPlayerName(newVal)}
-        onAlignmentChange={(newVal) => setAlignment(newVal)}
-        onXpChange={(newVal) => setXp(newVal)}
-        onLevelUpModeChange={handleLevelUpModeChange}
-        onClassModalClick={openLevelUpWizard}
-        onBackgroundModalClick={openOriginModal}
-        onRaceModalClick={openOriginModal}
-      />
-    </header>
+    <IdentityHeaderView
+      name={name}
+      classNameDisplay={classNameDisplay}
+      backgroundNameDisplay={backgroundNameDisplay}
+      playerName={playerName}
+      raceNameDisplay={raceNameDisplay}
+      alignment={alignment}
+      xp={xp}
+      levelUpMode={levelUpMode}
+      onCharacterNameChange={setName}
+      onPlayerNameChange={setPlayerName}
+      onAlignmentChange={setAlignment}
+      onXpChange={setXp}
+      onLevelUpModeChange={handleLevelUpModeChange}
+      onClassModalClick={openLevelUpWizard}
+      onBackgroundModalClick={openOriginModal}
+      onRaceModalClick={openOriginModal}
+    />
   );
 };
