@@ -4,9 +4,9 @@ import { ActionsBoard } from "./ActionsBoard";
 import { useCombatActions } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
 
-vi.mock("../hooks/useCombatActions");
-vi.mock("../store/useCharacterStore");
-vi.mock("./DiceRoller/DiceRoller", () => ({
+vi.mock("../../hooks/useCombatActions");
+vi.mock("../../store/useCharacterStore");
+vi.mock("../DiceRoller/DiceRoller", () => ({
   DiceRoller: ({
     sides = 20,
     count = 1,
