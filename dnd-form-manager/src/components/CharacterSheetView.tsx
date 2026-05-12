@@ -8,6 +8,7 @@ export interface CharacterSheetViewProps {
   actions: React.ReactNode;
   inventory: React.ReactNode;
   roleplay: React.ReactNode;
+  spellbook: React.ReactNode;
 }
 
 export const CharacterSheetView: React.FC<CharacterSheetViewProps> = ({
@@ -17,6 +18,7 @@ export const CharacterSheetView: React.FC<CharacterSheetViewProps> = ({
   actions,
   inventory,
   roleplay,
+  spellbook,
 }) => {
   return (
     <div className="character-sheet-layout">
@@ -26,6 +28,7 @@ export const CharacterSheetView: React.FC<CharacterSheetViewProps> = ({
       <div className="sheet-area-actions">{actions}</div>
       <div className="sheet-area-inventory">{inventory}</div>
       <div className="sheet-area-roleplay">{roleplay}</div>
+      <div className="sheet-area-spellbook">{spellbook}</div>
     </div>
   );
 };

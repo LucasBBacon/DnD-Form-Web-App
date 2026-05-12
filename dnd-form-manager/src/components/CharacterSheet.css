@@ -12,7 +12,8 @@
     "stats"
     "actions"
     "inventory"
-    "roleplay";
+    "roleplay"
+    "spellbook";
 }
 
 .sheet-area-header {
@@ -33,6 +34,9 @@
 .sheet-area-roleplay {
   grid-area: roleplay;
 }
+.sheet-area-spellbook {
+  grid-area: spellbook;
+}
 
 @media (min-width: 900px) {
   .character-sheet-layout {
@@ -41,7 +45,7 @@
       "header header"
       "stats vitals"
       "stats actions"
-      "inventory inventory"
+      "inventory spellbook"
       "roleplay roleplay";
   }
 }
@@ -53,6 +57,7 @@
     grid-template-areas:
       "header header header"
       "stats vitals inventory"
-      "stats actions roleplay";
+      "stats actions spellbook"
+      "stats roleplay roleplay";
   }
 }

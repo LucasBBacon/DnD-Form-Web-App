@@ -6,6 +6,7 @@ import { InventoryBoard } from "./InventoryBoard/InventoryBoard";
 import { RoleplayBoard } from "./RoleplayBoard/RoleplayBoard";
 import { VitalsDashboard } from "./VitalsDashboard/VitalsDashboard";
 import { CharacterSheetView } from "./CharacterSheetView.tsx";
+import { SpellBookBoard } from "./SpellBookBoard/SpellBookBoard";
 
 export const CharacterSheet = () => {
   return (
@@ -16,6 +17,7 @@ export const CharacterSheet = () => {
       actions={<ActionsBoard />}
       inventory={<InventoryBoard />}
       roleplay={<RoleplayBoard />}
+      spellbook={<SpellBookBoard />}
     />
   );
 };

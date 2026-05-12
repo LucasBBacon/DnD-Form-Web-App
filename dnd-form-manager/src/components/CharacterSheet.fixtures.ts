@@ -4,6 +4,7 @@ import { INVENTORY_BOARD_FIXTURES } from "./InventoryBoard/InventoryBoard.fixtur
 import { ROLEPLAY_BOARD_FIXTURES } from "./RoleplayBoard/RoleplayBoard.fixtures";
 import { IDENTITY_HEADER_FIXTURES } from "./IdentityHeader/IdentityHeader.fixtures";
 import { CORE_STATS_BOARD_FIXTURES } from "./CoreStatsBoard/CoreStatsBoard.fixtures";
+import { SPELLBOOK_BOARD_FIXTURES } from "./SpellBookBoard/SpellBookBoard.fixtures";
 
 export type CharacterSheetScenarioKey =
   | "balanced"
@@ -19,6 +20,7 @@ interface CharacterSheetScenarioRefs {
   actions: keyof typeof ACTIONS_BOARD_FIXTURES;
   inventory: keyof typeof INVENTORY_BOARD_FIXTURES;
   roleplay: keyof typeof ROLEPLAY_BOARD_FIXTURES;
+  spellbook: keyof typeof SPELLBOOK_BOARD_FIXTURES;
 }
 
 export const CHARACTER_SHEET_SCENARIO_REFS: Record<
@@ -33,6 +35,7 @@ export const CHARACTER_SHEET_SCENARIO_REFS: Record<
     actions: "allActions",
     inventory: "standardLoadout",
     roleplay: "featuresLoaded",
+    spellbook: "preparedCaster",
   },
   combatPressure: {
     label: "Combat Pressure",
@@ -42,6 +45,7 @@ export const CHARACTER_SHEET_SCENARIO_REFS: Record<
     actions: "withRollResults",
     inventory: "encumbered",
     roleplay: "characteristicsFilled",
+    spellbook: "armorBlocked",
   },
   treasureHaul: {
     label: "Treasure Haul",
@@ -51,6 +55,7 @@ export const CHARACTER_SHEET_SCENARIO_REFS: Record<
     actions: "withAttacks",
     inventory: "playground",
     roleplay: "biographyDetailed",
+    spellbook: "withInnateSpells",
   },
   arcaneSpecialist: {
     label: "Arcane Specialist",
@@ -59,7 +64,8 @@ export const CHARACTER_SHEET_SCENARIO_REFS: Record<
     vitals: "withTempHp",
     actions: "withSpells",
     inventory: "fullyAttuned",
-    roleplay: "spellbookTab",
+    roleplay: "featuresLoaded",
+    spellbook: "pactCaster",
   },
 };
 
@@ -75,5 +81,6 @@ export const resolveCharacterSheetScenario = (key: CharacterSheetScenarioKey) =>
     actions: ACTIONS_BOARD_FIXTURES[refs.actions],
     inventory: INVENTORY_BOARD_FIXTURES[refs.inventory],
     roleplay: ROLEPLAY_BOARD_FIXTURES[refs.roleplay],
+    spellbook: SPELLBOOK_BOARD_FIXTURES[refs.spellbook],
   };
 };

@@ -2,8 +2,6 @@ import type React from "react";
 import { useMemo, useState } from "react";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
-import { useSpellcasting } from "../../hooks/useSpellcasting";
-import { SpellBookView } from "../SpellBookView/SpellBookView";
 import { RoleplayBoardView } from "./RoleplayBoardView.tsx";
 import type {
   RoleplayField,
@@ -14,7 +12,6 @@ import type {
 export const RoleplayBoard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<RoleplayTab>("features");
   const store = useCharacterStore();
-  const spellcasting = useSpellcasting();
 
   const activeFeatures = useMemo<RoleplayFeature[]>(() => {
     return getAllCharacterTraitsWithSources(
@@ -87,7 +84,6 @@ export const RoleplayBoard: React.FC = () => {
       }}
       onTabChange={setActiveTab}
       onRoleplayFieldBlur={handleTextBlur}
-      spellbookView={<SpellBookView spellcasting={spellcasting} />}
     />
   );
 };

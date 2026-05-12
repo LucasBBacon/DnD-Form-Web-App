@@ -7,53 +7,13 @@ import userEvent from "@testing-library/user-event";
 import { RoleplayBoard } from "./RoleplayBoard";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
-import { useSpellcasting } from "../../hooks/useSpellcasting";
 
 vi.mock("../../store/useCharacterStore");
 vi.mock("../../utils/traitUtils");
-vi.mock("../../hooks/useSpellcasting");
-vi.mock("../SpellBookView/SpellBookView", () => ({
-  SpellBookView: () => <div data-testid="spellbook-view">Spellbook View</div>,
-}));
 
 describe("RoleplayBoard", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    vi.mocked(useSpellcasting).mockReturnValue({
-      isSpellcaster: true,
-      canCastSpells: true,
-      casting: {
-        ability: "int",
-        preparationType: "prepared",
-        saveDC: 15,
-        attackBonus: 7,
-      },
-      pools: {
-        known: { selected: [], max: 0 },
-        prepared: { selected: [], max: 0 },
-        cantrips: { max: 0 },
-        bonusPrepared: [],
-        allExpandedSpellIds: [],
-        freeSchoolDesignated: [],
-        freeSchoolSlots: 0,
-        innate: [],
-      },
-      slots: {
-        shared: {},
-        pact: null,
-      },
-      diagnostics: {
-        selections: {
-          invalidKnownSpellIds: [],
-          invalidPreparedSpellIds: [],
-          knownSpellOverflow: 0,
-          preparedSpellOverflow: 0,
-          freeSchoolOverflow: 0,
-        },
-        classBreakdown: [],
-      },
-    } as never);
 
     vi.mocked(useCharacterStore).mockReturnValue({
       level: 3,
@@ -139,15 +99,15 @@ describe("RoleplayBoard", () => {
     ).toBeInTheDocument();
   });
 
-  it("opens Spellbook tab from roleplay tabs", async () => {
+  it("switches to biography tab", async () => {
     const user = userEvent.setup();
 
     vi.mocked(getAllCharacterTraitsWithSources).mockReturnValue([] as never);
 
     render(<RoleplayBoard />);
 
-    await user.click(screen.getByRole("button", { name: /spellbook/i }));
+    await user.click(screen.getByRole("button", { name: /biography/i }));
 
-    expect(screen.getByTestId("spellbook-view")).toBeInTheDocument();
+    expect(screen.getByText("BACKSTORY")).toBeInTheDocument();
   });
 });

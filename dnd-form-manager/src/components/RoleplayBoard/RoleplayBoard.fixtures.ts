@@ -155,27 +155,6 @@ export const ROLEPLAY_BOARD_FIXTURES: Record<string, RoleplayBoardScenario> = {
       alliesAndOrganizations: "Nocturne Vigil, Cinder Alley informants",
     },
   },
-  spellbookTab: {
-    activeTab: "spellbook",
-    features: FEATURE_SET_HEROIC,
-    characteristics: {
-      personalityTraits: ROLEPLAY_FIXTURES.heroic.personality,
-      ideals: ROLEPLAY_FIXTURES.heroic.ideals,
-      bonds: ROLEPLAY_FIXTURES.heroic.bonds,
-      flaws: ROLEPLAY_FIXTURES.heroic.flaws,
-    },
-    biography: {
-      age: "127",
-      height: "5'10\"",
-      weight: "148 lb",
-      eyes: "Silver",
-      skin: "Pale bronze",
-      hair: "Dark brown",
-      appearance: "Keeps armor polished and travel cloak immaculate.",
-      backstory: ROLEPLAY_FIXTURES.heroic.backstory,
-      alliesAndOrganizations: "Silverwood Wardens",
-    },
-  },
   playground: {
     activeTab: "features",
     features: FEATURE_SET_HEROIC,

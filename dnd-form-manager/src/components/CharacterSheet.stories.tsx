@@ -33,6 +33,7 @@ import {
   ROLEPLAY_BOARD_FIXTURES,
   type RoleplayBoardScenario,
 } from "./RoleplayBoard/RoleplayBoard.fixtures";
+import { SpellBookView } from "./SpellBookView/SpellBookView";
 import { WealthTracker } from "./InventoryBoard/ui/WealthTracker";
 import type { SpellcastingFixture } from "../types/fixtures";
 import {
@@ -51,6 +52,7 @@ import {
   CORE_STATS_BOARD_FIXTURES,
   type CoreStatsBoardScenario,
 } from "./CoreStatsBoard/CoreStatsBoard.fixtures";
+import { SPELLBOOK_BOARD_FIXTURES } from "./SpellBookBoard/SpellBookBoard.fixtures";
 import {
   CHARACTER_SHEET_SCENARIO_REFS,
   resolveCharacterSheetScenario,
@@ -152,7 +154,6 @@ function buildRoleplayProps(
     ...scenario,
     onTabChange: () => {},
     onRoleplayFieldBlur: () => {},
-    spellbookView: <div className="card" style={{ padding: "1rem" }}>Spellbook Placeholder</div>,
   };
 }
 
@@ -247,6 +248,7 @@ export const ComposedBoards: Story = {
           <InventoryBoardView {...buildInventoryProps(scenario.inventory)} />
         }
         roleplay={<RoleplayBoardView {...buildRoleplayProps(scenario.roleplay)} />}
+        spellbook={<SpellBookView spellcasting={scenario.spellbook} />}
       />
     );
   },

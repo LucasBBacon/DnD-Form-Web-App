@@ -10,7 +10,6 @@ const createProps = (
   ...scenario,
   onTabChange: vi.fn(),
   onRoleplayFieldBlur: vi.fn(),
-  spellbookView: <div data-testid="spellbook-placeholder">Spellbook Placeholder</div>,
 });
 
 describe("RoleplayBoardView", () => {
@@ -67,13 +66,5 @@ describe("RoleplayBoardView", () => {
     expect(screen.getByText("AGE")).toBeInTheDocument();
     expect(screen.getByText("BACKSTORY")).toBeInTheDocument();
     expect(screen.getByText("ALLIES & ORGANIZATIONS")).toBeInTheDocument();
-  });
-
-  it("renders spellbook content on spellbook tab", () => {
-    const props = createProps(ROLEPLAY_BOARD_FIXTURES.spellbookTab);
-
-    render(<RoleplayBoardView {...props} />);
-
-    expect(screen.getByTestId("spellbook-placeholder")).toBeInTheDocument();
   });
 });

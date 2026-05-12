@@ -6,8 +6,7 @@ import { FeatureCard } from "./ui/FeatureCard";
 export type RoleplayTab =
   | "features"
   | "characteristics"
-  | "biography"
-  | "spellbook";
+  | "biography";
 
 export type RoleplayField =
   | "personalityTraits"
@@ -59,7 +58,6 @@ export interface RoleplayBoardViewProps {
   };
   onTabChange: (tab: RoleplayTab) => void;
   onRoleplayFieldBlur: (field: RoleplayField, value: string) => void;
-  spellbookView?: React.ReactNode;
 }
 
 export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
@@ -69,7 +67,6 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
   biography,
   onTabChange,
   onRoleplayFieldBlur,
-  spellbookView,
 }) => {
   return (
     <section className="roleplay-board card">
@@ -78,7 +75,6 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
           { id: "features", label: "FEATURES & TRAITS" },
           { id: "characteristics", label: "CHARACTERISTICS" },
           { id: "biography", label: "BIOGRAPHY" },
-          { id: "spellbook", label: "SPELLBOOK" },
         ]}
         activeId={activeTab}
         onChange={(id) => onTabChange(id as RoleplayTab)}
@@ -173,8 +169,6 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
             </div>
           </div>
         )}
-
-        {activeTab === "spellbook" && spellbookView}
       </div>
     </section>
   );
