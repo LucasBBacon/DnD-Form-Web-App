@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useCombatActions } from "./useCombatActions";
@@ -42,6 +43,7 @@ describe("useCombatActions", () => {
     } as any);
 
     vi.mocked(useSpellcasting).mockReturnValue({
+      canCastSpells: true,
       pools: {
         known: { selected: [], max: 0 },
         prepared: { selected: ["spell_shield_of_faith"], max: 2 },
@@ -100,5 +102,58 @@ describe("useCombatActions", () => {
     expect(
       bonusActions.filter((entry) => entry.name === "Shield of Faith"),
     ).toHaveLength(1);
+  });
+
+  it("marks leveled spells uncastable when no slots remain", () => {
+    vi.mocked(useSpellcasting).mockReturnValue({
+      canCastSpells: true,
+      pools: {
+        known: { selected: [], max: 0 },
+        prepared: { selected: ["spell_shield_of_faith"], max: 2 },
+        bonusPrepared: [],
+      },
+      slots: {
+        shared: {
+          1: { total: 1, expended: 1 },
+        },
+        pact: null,
+      },
+    } as any);
+
+    const { result } = renderHook(() => useCombatActions());
+    const spellEntry = result.current.sections.bonus_action.find(
+      (entry) => entry.id === "spell:spell_shield_of_faith",
+    );
+
+    expect(spellEntry?.spellCast?.canCast).toBe(false);
+    expect(spellEntry?.spellCast?.unavailableReason).toBe(
+      "No Level 1 spell slots available.",
+    );
+  });
+
+  it("marks spells with both shared and pact pools as requiring slot selection", () => {
+    vi.mocked(useSpellcasting).mockReturnValue({
+      canCastSpells: true,
+      pools: {
+        known: { selected: ["spell_shield_of_faith"], max: 1 },
+        prepared: { selected: [], max: 0 },
+        bonusPrepared: [],
+      },
+      slots: {
+        shared: {
+          1: { total: 2, expended: 1 },
+        },
+        pact: { level: 2, total: 2, expended: 1 },
+      },
+    } as any);
+
+    const { result } = renderHook(() => useCombatActions());
+    const spellEntry = result.current.sections.bonus_action.find(
+      (entry) => entry.id === "spell:spell_shield_of_faith",
+    );
+
+    expect(spellEntry?.spellCast?.canCast).toBe(true);
+    expect(spellEntry?.spellCast?.canUseSharedSlot).toBe(true);
+    expect(spellEntry?.spellCast?.canUsePactSlot).toBe(true);
   });
 });

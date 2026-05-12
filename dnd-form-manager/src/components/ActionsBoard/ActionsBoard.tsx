@@ -16,7 +16,12 @@ export const ActionsBoard: React.FC = () => {
   // #region State and Hooks
 
   const { spellcasting, sections, toRomanNumeral } = useCombatActions();
-  const { expendTraitActionUse, restoreTraitActionUse } = useCharacterStore();
+  const {
+    expendTraitActionUse,
+    restoreTraitActionUse,
+    expendSpellSlot,
+    expendPactSlot,
+  } = useCharacterStore();
 
   const [activeRoller, setActiveRoller] = useState<{
     entryId: string;
@@ -28,6 +33,12 @@ export const ActionsBoard: React.FC = () => {
   >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, { attack?: string; damage: Record<string, string> }>
+  >({});
+  const [spellChoiceEntryId, setSpellChoiceEntryId] = useState<string | null>(
+    null,
+  );
+  const [spellActionFeedbackByEntry, setSpellActionFeedbackByEntry] = useState<
+    Record<string, string>
   >({});
 
   // #endregion
@@ -140,6 +151,68 @@ export const ActionsBoard: React.FC = () => {
     return rows;
   }, [spellcasting.slots.pact, spellcasting.slots.shared]);
 
+  const spellEntryById = useMemo(() => {
+    const byId = new Map<string, (typeof sections)[keyof typeof sections][number]>();
+
+    Object.values(sections).forEach((entries) => {
+      (entries ?? []).forEach((entry) => {
+        if (entry.source !== "spell") return;
+        byId.set(entry.id, entry);
+      });
+    });
+
+    return byId;
+  }, [sections]);
+
+  const clearSpellFeedback = (entryId: string) => {
+    setSpellActionFeedbackByEntry((previous) => {
+      if (!(entryId in previous)) return previous;
+      const next = { ...previous };
+      delete next[entryId];
+      return next;
+    });
+  };
+
+  const setSpellFeedback = (entryId: string, message: string) => {
+    setSpellActionFeedbackByEntry((previous) => ({
+      ...previous,
+      [entryId]: message,
+    }));
+  };
+
+  const consumeSpellSlotPool = (
+    entryId: string,
+    pool: "shared" | "pact",
+  ) => {
+    const entry = spellEntryById.get(entryId);
+    if (!entry || entry.source !== "spell") return;
+    if (entry.spellLevel === 0) return;
+
+    if (pool === "shared") {
+      if (!entry.spellCast?.canUseSharedSlot || typeof entry.spellLevel !== "number") {
+        setSpellFeedback(
+          entryId,
+          entry.spellCast?.unavailableReason || "No compatible spell slot available.",
+        );
+        return;
+      }
+      expendSpellSlot(entry.spellLevel);
+      clearSpellFeedback(entryId);
+      return;
+    }
+
+    if (!entry.spellCast?.canUsePactSlot) {
+      setSpellFeedback(
+        entryId,
+        entry.spellCast?.unavailableReason || "No compatible spell slot available.",
+      );
+      return;
+    }
+
+    expendPactSlot();
+    clearSpellFeedback(entryId);
+  };
+
   // #endregion
 
   return (
@@ -157,6 +230,62 @@ export const ActionsBoard: React.FC = () => {
       onDamageResult={setDamageResult}
       onExpendTraitUse={expendTraitActionUse}
       onRestoreTraitUse={restoreTraitActionUse}
+      spellChoiceEntryId={spellChoiceEntryId}
+      spellActionFeedbackByEntry={spellActionFeedbackByEntry}
+      onCastSpell={(entryId) => {
+        const entry = spellEntryById.get(entryId);
+        if (!entry || entry.source !== "spell") return;
+
+        if (!entry.spellCast?.canCast) {
+          setSpellFeedback(
+            entryId,
+            entry.spellCast?.unavailableReason || "No compatible spell slot available.",
+          );
+          setSpellChoiceEntryId(null);
+          return;
+        }
+
+        if (entry.spellLevel === 0) {
+          clearSpellFeedback(entryId);
+          setSpellChoiceEntryId(null);
+          return;
+        }
+
+        const canUseShared = entry.spellCast.canUseSharedSlot;
+        const canUsePact = entry.spellCast.canUsePactSlot;
+
+        if (canUseShared && canUsePact) {
+          setSpellChoiceEntryId(entryId);
+          clearSpellFeedback(entryId);
+          return;
+        }
+
+        if (canUseShared) {
+          consumeSpellSlotPool(entryId, "shared");
+          setSpellChoiceEntryId(null);
+          return;
+        }
+
+        if (canUsePact) {
+          consumeSpellSlotPool(entryId, "pact");
+          setSpellChoiceEntryId(null);
+          return;
+        }
+
+        setSpellFeedback(
+          entryId,
+          entry.spellCast.unavailableReason || "No compatible spell slot available.",
+        );
+      }}
+      onChooseSpellSlotPool={(entryId, pool) => {
+        consumeSpellSlotPool(entryId, pool);
+        setSpellChoiceEntryId(null);
+      }}
+      onCancelSpellSlotChoice={(entryId) => {
+        if (spellChoiceEntryId === entryId) {
+          setSpellChoiceEntryId(null);
+        }
+      }}
       toRomanNumeral={toRomanNumeral}
     />
   );

@@ -20,6 +20,9 @@ function createPropsFromScenario(
   const onDamageResult = vi.fn();
   const onExpendTraitUse = vi.fn();
   const onRestoreTraitUse = vi.fn();
+  const onCastSpell = vi.fn();
+  const onChooseSpellSlotPool = vi.fn();
+  const onCancelSpellSlotChoice = vi.fn();
   const toRomanNumeral = (level: number) =>
     ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ||
     level.toString();
@@ -41,6 +44,11 @@ function createPropsFromScenario(
     onDamageResult,
     onExpendTraitUse,
     onRestoreTraitUse,
+    onCastSpell,
+    onChooseSpellSlotPool,
+    onCancelSpellSlotChoice,
+    spellChoiceEntryId: null,
+    spellActionFeedbackByEntry: {},
     toRomanNumeral,
   };
 }
@@ -101,6 +109,15 @@ describe("ActionsBoardView", () => {
       // Should have slot HUD rows
       const slotRows = props.slotHudRows;
       expect(slotRows.length).toBeGreaterThan(0);
+    });
+
+    it("renders Cast button for spell entries", () => {
+      const scenario = ACTIONS_BOARD_FIXTURES.withSpells;
+      const props = createPropsFromScenario(scenario);
+
+      render(<ActionsBoardView {...props} />);
+
+      expect(screen.getByRole("button", { name: "Cast" })).toBeInTheDocument();
     });
   });
 
@@ -165,11 +182,10 @@ describe("ActionsBoardView", () => {
 
       render(<ActionsBoardView {...props} />);
 
-      // Attack roll mode toggle should be present (rendered by AttackRollModeToggle component)
-      const toHitButtons = screen.getAllByRole("button", {
+      const toHitModeGroups = screen.getAllByRole("radiogroup", {
         name: /to-hit mode/i,
       });
-      expect(toHitButtons.length).toBeGreaterThan(0);
+      expect(toHitModeGroups.length).toBeGreaterThan(0);
     });
 
     it("displays attack results when available", () => {
@@ -253,7 +269,9 @@ describe("ActionsBoardView", () => {
 
       render(<ActionsBoardView {...props} />);
 
-      expect(screen.getByText(/Resource exhausted/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Resource exhausted/i).length).toBeGreaterThan(
+        0,
+      );
     });
 
     it("disables action buttons when exhausted", () => {
@@ -263,7 +281,7 @@ describe("ActionsBoardView", () => {
       render(<ActionsBoardView {...props} />);
 
       // Find buttons within exhausted cards and check if disabled
-      const exhaustedNote = screen.getByText(/Resource exhausted/i);
+      const exhaustedNote = screen.getAllByText(/Resource exhausted/i)[0];
       const card = exhaustedNote.closest("article");
       const buttons = card?.querySelectorAll("button");
       expect(buttons?.length).toBeGreaterThan(0);
@@ -341,6 +359,83 @@ describe("ActionsBoardView", () => {
         await user.click(restoreButtons[0]);
         expect(props.onRestoreTraitUse).toHaveBeenCalled();
       }
+    });
+
+    it("calls onCastSpell when Cast is clicked", async () => {
+      const user = userEvent.setup();
+      const scenario = ACTIONS_BOARD_FIXTURES.withSpells;
+      const props = createPropsFromScenario(scenario);
+
+      render(<ActionsBoardView {...props} />);
+
+      await user.click(screen.getByRole("button", { name: "Cast" }));
+
+      expect(props.onCastSpell).toHaveBeenCalledWith("spell:fireball");
+    });
+
+    it("disables Cast and shows reason when spell lacks required slot", () => {
+      const scenario = ACTIONS_BOARD_FIXTURES.withSpells;
+      const props = createPropsFromScenario(scenario);
+      props.sections = {
+        action: [
+          {
+            ...scenario.sections.action![0],
+            spellCast: {
+              canCast: false,
+              canUseSharedSlot: false,
+              canUsePactSlot: false,
+              unavailableReason: "No Level 3 spell slots available.",
+            },
+          },
+        ],
+      };
+
+      render(<ActionsBoardView {...props} />);
+
+      const castButton = screen.getByRole("button", { name: "Cast" });
+      expect(castButton).toBeDisabled();
+      expect(castButton).toHaveAttribute(
+        "title",
+        "No Level 3 spell slots available.",
+      );
+      expect(screen.getByText("No Level 3 spell slots available.")).toBeInTheDocument();
+    });
+
+    it("shows pool choice controls when spell has both shared and pact options", async () => {
+      const user = userEvent.setup();
+      const scenario = ACTIONS_BOARD_FIXTURES.withSpells;
+      const props = createPropsFromScenario(scenario);
+      props.spellChoiceEntryId = "spell:fireball";
+      props.sections = {
+        action: [
+          {
+            ...scenario.sections.action![0],
+            spellCast: {
+              canCast: true,
+              canUseSharedSlot: true,
+              canUsePactSlot: true,
+            },
+          },
+        ],
+      };
+
+      render(<ActionsBoardView {...props} />);
+
+      await user.click(screen.getByRole("button", { name: "Shared" }));
+      await user.click(screen.getByRole("button", { name: "Pact" }));
+      await user.click(screen.getByRole("button", { name: "Cancel" }));
+
+      expect(props.onChooseSpellSlotPool).toHaveBeenCalledWith(
+        "spell:fireball",
+        "shared",
+      );
+      expect(props.onChooseSpellSlotPool).toHaveBeenCalledWith(
+        "spell:fireball",
+        "pact",
+      );
+      expect(props.onCancelSpellSlotChoice).toHaveBeenCalledWith(
+        "spell:fireball",
+      );
     });
   });
 

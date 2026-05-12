@@ -194,6 +194,26 @@
   color: #334155;
 }
 
+.spell-cast-controls {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.spell-slot-choice-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.spell-slot-choice-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #334155;
+}
+
 .combat-roll-row {
   margin-top: 0.45rem;
   display: flex;

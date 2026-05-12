@@ -38,6 +38,17 @@ export interface CombatActionEntry {
   isExhausted: boolean;
   /** Optional spell level for spell actions */
   spellLevel?: number;
+  /** Optional cast state for spell actions */
+  spellCast?: {
+    /** Indicates whether the spell can be cast right now */
+    canCast: boolean;
+    /** Indicates whether a shared slot can be consumed */
+    canUseSharedSlot: boolean;
+    /** Indicates whether a pact slot can be consumed */
+    canUsePactSlot: boolean;
+    /** Optional reason why casting is unavailable */
+    unavailableReason?: string;
+  };
   /** Optional usage state for the combat action */
   uses?: CombatActionUseState;
   /** Optional attack roll metadata for the combat action */
@@ -351,8 +362,20 @@ export const useCombatActions = () => {
             0,
           )
         : 0;
+      const canUseSharedSlot = spell.level > 0 && sharedRemaining > 0;
+      const canUsePactSlot = spell.level > 0 && pactRemaining > 0;
+      const hasAvailableSlot = canUseSharedSlot || canUsePactSlot;
+      const canCastWithoutArmorPenalty = spellcasting.canCastSpells;
+      const canCast =
+        canCastWithoutArmorPenalty &&
+        (spell.level === 0 || hasAvailableSlot);
       const isExhausted =
-        spell.level > 0 && sharedRemaining + pactRemaining <= 0;
+        spell.level > 0 && !hasAvailableSlot;
+      const unavailableReason = !canCastWithoutArmorPenalty
+        ? "Cannot cast spells while wearing armor you are not proficient with."
+        : spell.level > 0 && !hasAvailableSlot
+          ? `No Level ${spell.level} spell slots available.`
+          : undefined;
       // Label pact-only spells distinctly so the player knows which slot pool is used.
       // If both shared and pact slots exist at this level (multiclass), keep the generic label.
       const isPactSpell = pactCanCoverSpell && sharedRemaining === 0;
@@ -372,6 +395,12 @@ export const useCombatActions = () => {
         description: spell.lore.shortDescription,
         isExhausted,
         spellLevel: spell.level,
+        spellCast: {
+          canCast,
+          canUseSharedSlot,
+          canUsePactSlot,
+          unavailableReason,
+        },
       });
     });
 
@@ -446,6 +475,7 @@ export const useCombatActions = () => {
     spellcasting.pools.bonusPrepared,
     spellcasting.slots.shared,
     spellcasting.slots.pact,
+    spellcasting.canCastSpells,
     traitActionUses,
     traitActions.actions,
   ]);

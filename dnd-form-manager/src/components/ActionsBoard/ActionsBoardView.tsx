@@ -103,6 +103,16 @@ export interface ActionsBoardViewProps {
   onExpendTraitUse: (traitId: string) => void;
   /** Callback when a trait use is restored */
   onRestoreTraitUse: (traitId: string) => void;
+  /** Entry id currently choosing a spell slot pool */
+  spellChoiceEntryId?: string | null;
+  /** User-facing cast feedback keyed by action entry id */
+  spellActionFeedbackByEntry?: Record<string, string>;
+  /** Callback when a spell cast is requested */
+  onCastSpell?: (entryId: string) => void;
+  /** Callback when the user chooses the spell slot pool */
+  onChooseSpellSlotPool?: (entryId: string, pool: "shared" | "pact") => void;
+  /** Callback when slot pool choice is cancelled */
+  onCancelSpellSlotChoice?: (entryId: string) => void;
 
   /** Utility to convert a number to a Roman numeral */
   toRomanNumeral: (level: number) => string;
@@ -131,6 +141,11 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   onDamageResult,
   onExpendTraitUse,
   onRestoreTraitUse,
+  spellChoiceEntryId = null,
+  spellActionFeedbackByEntry = {},
+  onCastSpell = () => {},
+  onChooseSpellSlotPool = () => {},
+  onCancelSpellSlotChoice = () => {},
   toRomanNumeral,
 }) => {
   const getAttackRollMode = (entryId: string) =>
@@ -230,6 +245,66 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         <p className="combat-action-description">
                           {entry.description}
                         </p>
+                      )}
+
+                      {entry.source === "spell" && (
+                        <div className="spell-cast-controls">
+                          <button
+                            type="button"
+                            className="mini-use-btn"
+                            onClick={() => onCastSpell(entry.id)}
+                            disabled={
+                              entry.spellCast != null && !entry.spellCast.canCast
+                            }
+                            title={
+                              entry.spellCast != null && !entry.spellCast.canCast
+                                ? entry.spellCast?.unavailableReason ||
+                                  "No compatible spell slot available."
+                                : entry.spellLevel === 0
+                                  ? "Cast cantrip"
+                                  : "Cast spell"
+                            }
+                          >
+                            Cast
+                          </button>
+
+                          {spellChoiceEntryId === entry.id &&
+                            entry.spellCast?.canUseSharedSlot &&
+                            entry.spellCast?.canUsePactSlot && (
+                              <div className="spell-slot-choice-wrap">
+                                <span className="spell-slot-choice-label">
+                                  Choose slot:
+                                </span>
+                                <button
+                                  type="button"
+                                  className="mini-use-btn secondary"
+                                  onClick={() =>
+                                    onChooseSpellSlotPool(entry.id, "shared")
+                                  }
+                                >
+                                  Shared
+                                </button>
+                                <button
+                                  type="button"
+                                  className="mini-use-btn secondary"
+                                  onClick={() =>
+                                    onChooseSpellSlotPool(entry.id, "pact")
+                                  }
+                                >
+                                  Pact
+                                </button>
+                                <button
+                                  type="button"
+                                  className="mini-use-btn secondary"
+                                  onClick={() =>
+                                    onCancelSpellSlotChoice(entry.id)
+                                  }
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            )}
+                        </div>
                       )}
 
                       {!!entry.attackRoll && (
@@ -468,7 +543,23 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         </div>
                       )}
 
-                      {entry.isExhausted && (
+                      {entry.source === "spell" &&
+                        entry.spellCast != null &&
+                        !entry.spellCast.canCast &&
+                        entry.spellCast?.unavailableReason && (
+                          <p className="exhausted-note">
+                            {entry.spellCast.unavailableReason}
+                          </p>
+                        )}
+
+                      {entry.source === "spell" &&
+                        spellActionFeedbackByEntry[entry.id] && (
+                          <p className="exhausted-note">
+                            {spellActionFeedbackByEntry[entry.id]}
+                          </p>
+                        )}
+
+                      {entry.source !== "spell" && entry.isExhausted && (
                         <p className="exhausted-note">Resource exhausted.</p>
                       )}
                     </article>
