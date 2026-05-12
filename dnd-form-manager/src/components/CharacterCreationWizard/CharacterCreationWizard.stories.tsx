@@ -2,6 +2,15 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CharacterCreationWizardView } from "./CharacterCreationWizardView";
 import { CHARACTER_CREATION_WIZARD_FIXTURES } from "./CharacterCreationWizard.fixtures";
+import { WizardSelectionStageView } from "./WizardSelectionStageView";
+import { WizardSpellSelectionStageView } from "./WizardSpellSelectionStageView";
+import { WizardAbilityScoreStageView } from "./WizardAbilityScoreStageView";
+import { WizardEquipmentSelectionStageView } from "./WizardEquipmentSelectionStageView";
+import {
+  CHARACTER_CREATION_COMPOSED_SCENARIO_REFS,
+  resolveCharacterCreationComposedScenario,
+  type CharacterCreationComposedScenarioKey,
+} from "./CharacterCreationWizard.composed.fixtures";
 
 const meta: Meta<typeof CharacterCreationWizardView> = {
   title: "Flows/CharacterCreationWizard",
@@ -66,6 +75,90 @@ export const InteractiveStepper: Story = {
         onStepClick={(index) => setCurrentStepIndex(index)}
         isStepDisabled={(index) => index > fixture.disabledAfterStep}
       />
+    );
+  },
+};
+
+export const ComposedScenarioSelector: Story = {
+  render: () => {
+    const [scenarioKey, setScenarioKey] =
+      useState<CharacterCreationComposedScenarioKey>("raceStart");
+
+    const scenario = resolveCharacterCreationComposedScenario(scenarioKey);
+
+    const centerStage =
+      scenario.centerStage.kind === "selection" ? (
+        <WizardSelectionStageView
+          {...scenario.centerStage.fixture}
+          onExpandedBaseIdChange={() => {}}
+          onExpandedSubIdChange={() => {}}
+          onExpandedTraitIndexChange={() => {}}
+          onSelect={() => {}}
+        />
+      ) : scenario.centerStage.kind === "spells" ? (
+        <WizardSpellSelectionStageView
+          {...scenario.centerStage.fixture}
+          onCantripToggle={() => {}}
+          onSpellToggle={() => {}}
+        />
+      ) : scenario.centerStage.kind === "abilities" ? (
+        <WizardAbilityScoreStageView
+          {...scenario.centerStage.fixture}
+          onMethodChange={() => {}}
+          onRollModeChange={() => {}}
+          onStandardArrayChange={() => {}}
+          onPointBuyInput={() => {}}
+          onPointBuyOverrideChange={() => {}}
+          onVirtualRollComplete={() => {}}
+          onRerollAll={() => {}}
+          onVirtualAssignmentChange={() => {}}
+          onConfirm={() => {}}
+          onContinue={() => {}}
+        />
+      ) : (
+        <WizardEquipmentSelectionStageView
+          {...scenario.centerStage.fixture}
+          onSelectOption={() => {}}
+          onSelectCategoryItem={() => {}}
+        />
+      );
+
+    return (
+      <div style={{ display: "grid", gap: "1rem" }}>
+        <div
+          className="card"
+          style={{
+            padding: "0.75rem 1rem",
+            display: "flex",
+            gap: "0.75rem",
+            alignItems: "center",
+          }}
+        >
+          <label htmlFor="wizard-scenario">Wizard scenario</label>
+          <select
+            id="wizard-scenario"
+            value={scenarioKey}
+            onChange={(event) =>
+              setScenarioKey(event.target.value as CharacterCreationComposedScenarioKey)
+            }
+          >
+            {Object.entries(CHARACTER_CREATION_COMPOSED_SCENARIO_REFS).map(
+              ([key, value]) => (
+                <option key={key} value={key}>
+                  {value.label}
+                </option>
+              ),
+            )}
+          </select>
+        </div>
+
+        <CharacterCreationWizardView
+          {...scenario.shell}
+          centerStage={centerStage}
+          onStepClick={() => {}}
+          isStepDisabled={(index) => index > scenario.shell.disabledAfterStep}
+        />
+      </div>
     );
   },
 };

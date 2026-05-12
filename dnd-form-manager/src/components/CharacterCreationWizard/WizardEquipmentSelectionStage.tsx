@@ -10,8 +10,8 @@ import {
 import {
   makeStartingEquipmentCategorySelectionKey,
   normalizeEquipmentReference,
-  type EquipmentReference,
 } from "../../types/class";
+import { WizardEquipmentSelectionStageView } from "./WizardEquipmentSelectionStageView";
 
 /** Resolves a display name for an item ID, falling back gracefully when the
  *  item data does not exist yet. */
@@ -50,10 +50,14 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
 
   if (!classData) {
     return (
-      <div className="picker-stage">
-        <h2 className="picker-stage-title">Starting Equipment</h2>
-        <p className="picker-stage-subtitle">Select a class first.</p>
-      </div>
+      <WizardEquipmentSelectionStageView
+        classSelected={false}
+        givenItems={[]}
+        choiceGroups={[]}
+        resolvedGroupCount={0}
+        onSelectOption={() => {}}
+        onSelectCategoryItem={() => {}}
+      />
     );
   }
 
@@ -90,142 +94,74 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
   const resolvedGroupCount = choices.filter((group, groupIndex) =>
     isGroupResolved(group, groupIndex),
   ).length;
-  const allGroupsResolved = resolvedGroupCount === choices.length;
 
-  const renderBundleEntry = (
-    entry: EquipmentReference,
-    groupIndex: number,
-    optionIndex: number,
-    bundleIndex: number,
-  ) => {
-    const normalized = normalizeEquipmentReference(entry);
+  const givenItems = given.map((item, index) => {
+    const normalized = normalizeEquipmentReference(item);
+    return {
+      key: `given-${index}-${normalized.kind}-${normalized.refId}`,
+      label: resolveItemLabel(normalized.refId, normalized.quantity),
+    };
+  });
 
-    if (normalized.kind === "item") {
-      return (
-        <div key={`bundle-${bundleIndex}`}>
-          {resolveItemLabel(normalized.refId, normalized.quantity)}
-        </div>
-      );
-    }
+  const choiceGroups = choices.map((group, groupIndex) => {
+    const selectedOptionIndex = startingEquipmentSelections[groupIndex];
 
-    const category = getItemCategoryById(normalized.refId);
-    const categoryItems = getItemsByCategory(normalized.refId);
-    const selectionKey = makeStartingEquipmentCategorySelectionKey(
-      groupIndex,
-      optionIndex,
-      bundleIndex,
-      normalized.refId,
-    );
-    const selectedItemId = startingEquipmentCategorySelections[selectionKey] ?? "";
+    return {
+      key: `group-${groupIndex}`,
+      label: `Choice ${groupIndex + 1} - pick ${group.choose}`,
+      options: group.options.map((option, optionIndex) => ({
+        key: `group-${groupIndex}-option-${optionIndex}`,
+        isSelected: selectedOptionIndex === optionIndex,
+        entries: option.equipmentBundle.map((entry, bundleIndex) => {
+          const normalized = normalizeEquipmentReference(entry);
 
-    return (
-      <div key={`bundle-${bundleIndex}`}>
-        <div>
-          {normalized.quantity > 1
-            ? `${category?.name ?? normalized.refId} x${normalized.quantity}`
-            : (category?.name ?? normalized.refId)}
-        </div>
-        {categoryItems.length > 0 ? (
-          <select
-            value={selectedItemId}
-            onClick={(event) => event.stopPropagation()}
-            onChange={(event) =>
-              setStartingEquipmentCategorySelection(selectionKey, event.target.value)
-            }
-            aria-label={`Choose item for ${category?.name ?? normalized.refId}`}
-          >
-            <option value="">Select an item</option>
-            {categoryItems.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <div>No items available in this category.</div>
-        )}
-      </div>
-    );
-  };
+          if (normalized.kind === "item") {
+            return {
+              key: `entry-${groupIndex}-${optionIndex}-${bundleIndex}`,
+              label: resolveItemLabel(normalized.refId, normalized.quantity),
+            };
+          }
+
+          const category = getItemCategoryById(normalized.refId);
+          const categoryItems = getItemsByCategory(normalized.refId);
+          const selectionKey = makeStartingEquipmentCategorySelectionKey(
+            groupIndex,
+            optionIndex,
+            bundleIndex,
+            normalized.refId,
+          );
+
+          return {
+            key: `entry-${groupIndex}-${optionIndex}-${bundleIndex}`,
+            label:
+              normalized.quantity > 1
+                ? `${category?.name ?? normalized.refId} x${normalized.quantity}`
+                : (category?.name ?? normalized.refId),
+            categorySelection: {
+              selectionKey,
+              selectedItemId:
+                startingEquipmentCategorySelections[selectionKey] ?? "",
+              options: categoryItems.map((categoryItem) => ({
+                id: categoryItem.id,
+                name: categoryItem.name,
+              })),
+              emptyMessage: "No items available in this category.",
+              ariaLabel: `Choose item for ${category?.name ?? normalized.refId}`,
+            },
+          };
+        }),
+      })),
+    };
+  });
 
   return (
-    <div className="picker-stage">
-      <h2 className="picker-stage-title">Starting Equipment</h2>
-      <p className="picker-stage-subtitle">
-        Review your starting gear and make your equipment choices.
-      </p>
-
-      {/* Given items */}
-      {given.length > 0 && (
-        <>
-          <div className="picker-section-header">Included Gear</div>
-          <ul className="picker-given-list">
-            {given.map((item) => (
-              <li
-                key={`${normalizeEquipmentReference(item).kind}-${normalizeEquipmentReference(item).refId}`}
-                className="picker-given-item"
-              >
-                {resolveItemLabel(
-                  normalizeEquipmentReference(item).refId,
-                  normalizeEquipmentReference(item).quantity,
-                )}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {/* Choice groups */}
-      {choices.length > 0 && (
-        <>
-          <div className="picker-section-header">Your Choices</div>
-          {choices.map((group, groupIndex) => {
-            const selectedOptionIndex =
-              startingEquipmentSelections[groupIndex];
-
-            return (
-              <div key={groupIndex} className="picker-bundle-group">
-                <div className="picker-bundle-label">
-                  Choice {groupIndex + 1} — pick {group.choose}
-                </div>
-                <div className="picker-bundle-options">
-                  {group.options.map((opt, optIndex) => {
-                    const isSelected = selectedOptionIndex === optIndex;
-                    return (
-                      <div
-                        key={optIndex}
-                        className={`picker-bundle-card ${isSelected ? "selected" : ""}`}
-                        onClick={() =>
-                          setStartingEquipmentSelection(groupIndex, optIndex)
-                        }
-                      >
-                        {opt.equipmentBundle.map((entry, bundleIndex) =>
-                          renderBundleEntry(entry, groupIndex, optIndex, bundleIndex),
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </>
-      )}
-
-      {choices.length === 0 && (
-        <p className="picker-stage-subtitle">
-          No equipment choices for this class — everything is pre-selected.
-        </p>
-      )}
-
-      {/* Completion status */}
-      {choices.length > 0 && (
-        <div
-          className={`picker-counter ${allGroupsResolved ? "complete" : ""}`}
-        >
-          {resolvedGroupCount} / {choices.length} choices made
-        </div>
-      )}
-    </div>
+    <WizardEquipmentSelectionStageView
+      classSelected
+      givenItems={givenItems}
+      choiceGroups={choiceGroups}
+      resolvedGroupCount={resolvedGroupCount}
+      onSelectOption={setStartingEquipmentSelection}
+      onSelectCategoryItem={setStartingEquipmentCategorySelection}
+    />
   );
 };
