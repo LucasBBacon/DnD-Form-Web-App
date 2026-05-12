@@ -43,6 +43,7 @@ export const InventoryBoard: React.FC = () => {
             name: instance.itemData.name,
             type: instance.itemData.type,
             weight: instance.itemData.weight,
+            cpCost: instance.itemData.cpCost,
             lore: {
               shortDescription: instance.itemData.lore.shortDescription,
             },
@@ -79,6 +80,7 @@ export const InventoryBoard: React.FC = () => {
           name: stack.itemData.name,
           type: stack.itemData.type,
           weight: stack.itemData.weight,
+          cpCost: stack.itemData.cpCost,
           lore: {
             shortDescription: stack.itemData.lore.shortDescription,
           },

@@ -52,6 +52,7 @@ const toInstance = (
     name: instance.itemData?.name ?? instance.baseItemId,
     type,
     weight: instance.itemData?.weight ?? 0,
+    cpCost: instance.itemData?.cpCost ?? 0,
     lore: {
       shortDescription,
     },
@@ -73,6 +74,7 @@ const toStack = (
     name: stack.itemData?.name ?? stack.baseItemId,
     type: "adventuring_gear",
     weight: stack.itemData?.weight ?? 0,
+    cpCost: stack.itemData?.cpCost ?? 0,
     lore: {
       shortDescription,
     },

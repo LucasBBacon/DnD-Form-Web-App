@@ -25,6 +25,13 @@
   flex-wrap: wrap;
 }
 
+.wealth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .coin-box {
   display: flex;
   flex-direction: column;
@@ -71,6 +78,50 @@
 .coin-input.pp {
   color: #9333ea;
 } /* Platinum */
+
+.wealth-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, auto));
+  gap: 0.75rem;
+  align-items: end;
+  margin-top: 0.75rem;
+}
+
+.wealth-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.wealth-control-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #52525b;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.wealth-select,
+.wealth-number-input {
+  min-height: 2.25rem;
+  border: 1px solid #d4d4d8;
+  border-radius: 4px;
+  background: #fff;
+  color: #18181b;
+  padding: 0.35rem 0.55rem;
+  font: inherit;
+}
+
+.wealth-action-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.wealth-exchange-btn,
+.wealth-receive-btn {
+  white-space: nowrap;
+}
 
 .divider {
   border: none;

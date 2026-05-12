@@ -1,24 +1,26 @@
 {
-    "id": "item_weapon_dagger",
-    "name": "Dagger",
-    "type": "weapon",
-    "weight": 1,
-    "stacking": {
-        "mode": "instance"
-    },
-    "lore": {
-        "shortDescription": "A small, easily concealed blade that is perfect for close combat and throwing.",
-        "fullText": "A dagger is a simple melee weapon that is light and easy to conceal. It can be used for both stabbing and throwing, making it a versatile choice for adventurers. Daggers deal piercing damage and have the finesse property, allowing you to use your Dexterity modifier for attack and damage rolls instead of Strength. Additionally, daggers have the thrown property, giving them a range of 20/60 feet."
-    },
-    "weaponProperties": {
-        "category": "simple_melee",
-        "damageDice": "1d4",
-        "damageType": "piercing",
-        "properties": [
-            "finesse",
-            "light",
-            "thrown"
-        ],
-        "range": "20/60 ft"
-    }
+  "id": "item_weapon_dagger",
+  "name": "Dagger",
+  "type": "weapon",
+  "weight": 1,
+  "stacking": {
+    "mode": "instance"
+  },
+  "lore": {
+    "shortDescription": "A small, easily concealed blade that is perfect for close combat and throwing.",
+    "fullText": "A dagger is a simple melee weapon that is light and easy to conceal. It can be used for both stabbing and throwing, making it a versatile choice for adventurers. Daggers deal piercing damage and have the finesse property, allowing you to use your Dexterity modifier for attack and damage rolls instead of Strength. Additionally, daggers have the thrown property, giving them a range of 20/60 feet."
+  },
+  "weaponProperties": {
+    "category": "simple_melee",
+    "damageDice": "1d4",
+    "damageType": "piercing",
+    "properties": [
+      "finesse",
+      "light",
+      "thrown"
+    ],
+    "range": "20/60 ft"
+  },
+  "cpCost": 200
 }
+

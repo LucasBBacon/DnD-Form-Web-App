@@ -1,22 +1,24 @@
 {
-    "id": "item_weapon_rapier",
-    "name": "Rapier",
-    "type": "weapon",
-    "weight": 2,
-    "stacking": {
-        "mode": "instance"
-    },
-    "weaponProperties": {
-        "category": "martial_melee",
-        "damageDice": "1d8",
-        "damageType": "piercing",
-        "properties": [
-            "finesse"
-        ],
-        "range": "5 ft"
-    },
-    "lore": {
-        "shortDescription": "A slender, sharply pointed sword designed for thrusting attacks.",
-        "fullText": "A rapier is a slender, sharply pointed sword designed for thrusting attacks. It is a finesse weapon, allowing the wielder to use their Dexterity modifier for attack and damage rolls. Rapiers are commonly used in duels and by those who prefer precision over brute strength."
-    }
+  "id": "item_weapon_rapier",
+  "name": "Rapier",
+  "type": "weapon",
+  "weight": 2,
+  "stacking": {
+    "mode": "instance"
+  },
+  "weaponProperties": {
+    "category": "martial_melee",
+    "damageDice": "1d8",
+    "damageType": "piercing",
+    "properties": [
+      "finesse"
+    ],
+    "range": "5 ft"
+  },
+  "lore": {
+    "shortDescription": "A slender, sharply pointed sword designed for thrusting attacks.",
+    "fullText": "A rapier is a slender, sharply pointed sword designed for thrusting attacks. It is a finesse weapon, allowing the wielder to use their Dexterity modifier for attack and damage rolls. Rapiers are commonly used in duels and by those who prefer precision over brute strength."
+  },
+  "cpCost": 2500
 }
+

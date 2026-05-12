@@ -28,6 +28,11 @@
 			"minimum": 0,
 			"description": "Item weight in pounds."
 		},
+		"cpCost": {
+			"type": "number",
+			"minimum": 0,
+			"description": "Item cost in copper pieces."
+		},
 		"lore": {
 			"type": "object",
 			"properties": {
@@ -193,6 +198,7 @@
 		"name",
 		"type",
 		"weight",
+		"cpCost",
 		"lore"
 	],
 	"allOf": [

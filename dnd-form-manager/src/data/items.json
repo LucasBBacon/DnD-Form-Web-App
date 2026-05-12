@@ -11,7 +11,8 @@
     "stacking": {
       "mode": "stack",
       "bundleSize": 20
-    }
+    },
+    "cpCost": 100
   },
   {
     "id": "item_armor_chain_mail",
@@ -30,7 +31,8 @@
     "lore": {
       "shortDescription": "Heavy armor made of interlocking metal rings, providing strong protection at the cost of mobility.",
       "fullText": " Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets"
-    }
+    },
+    "cpCost": 7500
   },
   {
     "id": "item_armor_leather",
@@ -45,7 +47,8 @@
       "armorType": "light",
       "baseAc": 11,
       "stealthDisadvantage": false
-    }
+    },
+    "cpCost": 1000
   },
   {
     "id": "item_armor_scale_mail",
@@ -63,7 +66,8 @@
     "lore": {
       "shortDescription": "Scale mail is made of small metal plates sewn to a backing of leather or cloth.",
       "fullText": "This armor consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like teh scales of a fish. The suit includes gauntlets."
-    }
+    },
+    "cpCost": 5000
   },
   {
     "id": "item_armor_shield",
@@ -81,7 +85,8 @@
     "lore": {
       "shortDescription": "A shield is made from wood or metal and is carried in one hand.",
       "fullText": "A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time"
-    }
+    },
+    "cpCost": 1000
   },
   {
     "id": "item_backpack",
@@ -94,7 +99,8 @@
     },
     "stacking": {
       "mode": "instance"
-    }
+    },
+    "cpCost": 200
   },
   {
     "id": "item_focus_amulet",
@@ -107,7 +113,8 @@
     "lore": {
       "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
       "fullText": "An amulet holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a pendant or charm that bears the symbol of the deity the wearer worships. The amulet serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It is often worn around the neck and can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion."
-    }
+    },
+    "cpCost": 500
   },
   {
     "id": "item_focus_emblem",
@@ -120,7 +127,8 @@
     "lore": {
       "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
       "fullText": "An emblem holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a small, flat object that bears the symbol of the deity the wearer worships. The emblem serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion. Unlike an amulet holy symbol, an emblem is not worn around the neck but is instead held in hand or displayed prominently on clothing or armor."
-    }
+    },
+    "cpCost": 500
   },
   {
     "id": "item_focus_reliquary",
@@ -133,7 +141,8 @@
     "lore": {
       "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
       "fullText": "A reliquary holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a small, ornate container that holds a relic or sacred object associated with the deity the wearer worships. The reliquary serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion. Unlike an amulet or emblem holy symbol, a reliquary is designed to house a sacred relic, making it a powerful and revered item."
-    }
+    },
+    "cpCost": 500
   },
   {
     "id": "item_musical_instrument_lute",
@@ -146,7 +155,8 @@
     "lore": {
       "shortDescription": "A stringed musical instrument commonly used by bards and minstrels.",
       "fullText": "A stringed musical instrument commonly used by bards and minstrels to accompany their performances."
-    }
+    },
+    "cpCost": 3500
   },
   {
     "id": "item_pack_diplomats",
@@ -159,7 +169,8 @@
     "lore": {
       "shortDescription": "A pack designed for diplomats and travelers, containing essential items for communication and documentation.",
       "fullText": "A pack that includes a chest, 2 cases for maps and scrolls, a set of fine clothes, a bottle of ink, an ink pen, a lamp, 2 flasks of oil, 5 sheets of paper, a vial of perfume, sealing wax, and soap."
-    }
+    },
+    "cpCost": 4000
   },
   {
     "id": "item_pack_entertainers",
@@ -172,7 +183,8 @@
     "lore": {
       "shortDescription": "A pack designed for entertainers and performers, containing essential items for travel and performance.",
       "fullText": "A pack that includes a backpack, a bedroll, 2 costumes, 5 candles, 5 days of rations, a waterskin, and a disguise kit."
-    }
+    },
+    "cpCost": 4000
   },
   {
     "id": "item_pack_explorers",
@@ -185,7 +197,8 @@
     "lore": {
       "shortDescription": "A pack designed for adventurers and explorers, containing essential items for survival and exploration.",
       "fullText": "A pack that includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
-    }
+    },
+    "cpCost": 1000
   },
   {
     "id": "item_pack_priests",
@@ -198,7 +211,8 @@
     "lore": {
       "shortDescription": "A pack designed for priests and clerics, containing essential items for religious duties and rituals.",
       "fullText": "A pack that includes a Backpack, a blanket, 10 candles, a tinderbox, an alms box, 2 blocks of incense, a censer, vestments, 2 days of rations, and a waterskin."
-    }
+    },
+    "cpCost": 1900
   },
   {
     "id": "item_torch",
@@ -212,7 +226,8 @@
     "stacking": {
       "mode": "stack",
       "bundleSize": 1
-    }
+    },
+    "cpCost": 1
   },
   {
     "id": "item_weapon_club",
@@ -234,7 +249,8 @@
         "light"
       ],
       "range": "5 ft"
-    }
+    },
+    "cpCost": 10
   },
   {
     "id": "item_weapon_crossbow_light",
@@ -258,7 +274,8 @@
       ],
       "range": "80/320 ft",
       "ammoItemId": "item_ammo_bolt"
-    }
+    },
+    "cpCost": 2500
   },
   {
     "id": "item_weapon_dagger",
@@ -282,7 +299,8 @@
         "thrown"
       ],
       "range": "20/60 ft"
-    }
+    },
+    "cpCost": 200
   },
   {
     "id": "item_weapon_greataxe",
@@ -305,7 +323,8 @@
     "lore": {
       "shortDescription": "A large, two-handed axe that is designed for powerful strikes, ideal for close combat situations.",
       "fullText": "A greataxe is a large, two-handed axe that is designed for powerful strikes. It has a heavy blade that can deal significant slashing damage to enemies. The greataxe has the heavy property, which means that it is more difficult to use effectively for smaller creatures, and the two-handed property, which means that it requires both hands to wield. When you attack with a greataxe, you can use your Strength modifier for the attack and damage rolls. The greataxe has a range of 5 feet, making it effective for close combat situations."
-    }
+    },
+    "cpCost": 3000
   },
   {
     "id": "item_weapon_handaxe",
@@ -329,7 +348,8 @@
     "lore": {
       "shortDescription": "A small, easily handled axe that is perfect for close combat and throwing.",
       "fullText": "A handaxe is a simple melee weapon that is light and easy to handle. It can be used for both chopping and throwing, making it a versatile choice for adventurers. Handaxes deal slashing damage and have the light property, allowing you to use them in one hand and make an additional attack with a different light weapon as a bonus action. Additionally, handaxes have the thrown property, giving them a range of 20 feet for normal attacks and 60 feet for long-range attacks."
-    }
+    },
+    "cpCost": 500
   },
   {
     "id": "item_weapon_javelin",
@@ -352,7 +372,8 @@
     "lore": {
       "shortDescription": "A light spear designed for throwing, ideal for ranged combat.",
       "fullText": "A javelin is a simple melee weapon that is designed for throwing. It consists of a wooden shaft with a pointed metal tip. Javelins are typically used as ranged weapons, allowing you to attack from a distance. When thrown, a javelin can deal piercing damage to a target. The javelin has the thrown property, giving it a range of 30 feet for normal attacks and 120 feet for long-range attacks. Additionally, you can use a javelin as a melee weapon, dealing the same damage as when thrown."
-    }
+    },
+    "cpCost": 50
   },
   {
     "id": "item_weapon_longsword",
@@ -375,7 +396,8 @@
     "lore": {
       "shortDescription": "A versatile melee weapon that can be used with one or two hands.",
       "fullText": "A longsword is a versatile melee weapon that can be used with one or two hands. It deals slashing damage and has the versatile property, allowing you to choose between using it with one hand for 1d8 damage or with two hands for 1d10 damage. Longswords are commonly used by knights and warriors who value both offense and defense in combat."
-    }
+    },
+    "cpCost": 1500
   },
   {
     "id": "item_weapon_mace",
@@ -395,7 +417,8 @@
     "lore": {
       "shortDescription": "A simple melee weapon designed for powerful bludgeoning strikes.",
       "fullText": "A mace is a simple melee weapon that consists of a heavy head mounted on a shaft, typically made of wood or metal. It is designed to deliver powerful bludgeoning strikes and is effective against armored opponents. Maces come in various shapes and sizes, with some featuring flanged heads for increased damage. They are commonly used by warriors, clerics, and other combatants who prefer a straightforward and reliable weapon for close-quarters combat."
-    }
+    },
+    "cpCost": 500
   },
   {
     "id": "item_weapon_rapier",
@@ -417,7 +440,8 @@
     "lore": {
       "shortDescription": "A slender, sharply pointed sword designed for thrusting attacks.",
       "fullText": "A rapier is a slender, sharply pointed sword designed for thrusting attacks. It is a finesse weapon, allowing the wielder to use their Dexterity modifier for attack and damage rolls. Rapiers are commonly used in duels and by those who prefer precision over brute strength."
-    }
+    },
+    "cpCost": 2500
   },
   {
     "id": "item_weapon_warhammer",
@@ -440,6 +464,7 @@
     "lore": {
       "shortDescription": "A versatile melee weapon capable of delivering powerful bludgeoning strikes.",
       "fullText": "A warhammer is a versatile melee weapon that can be used with one or two hands. It is designed to deliver powerful bludgeoning strikes, making it effective against armored opponents. When wielded with two hands, it deals increased damage, making it a favored weapon among warriors and clerics who prefer a balance of strength and versatility in combat."
-    }
+    },
+    "cpCost": 1500
   }
 ]

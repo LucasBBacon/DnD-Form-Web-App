@@ -1,6 +1,7 @@
 import type React from "react";
 import "./InventoryBoard.css";
 import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
+import { formatCpAsCoinage } from "../../utils/currencyUtils";
 
 // #region Interfaces
 
@@ -11,6 +12,8 @@ export interface InventoryBoardItemData {
   type: string;
   /** The weight of the item */
   weight: number;
+  /** Item cost in copper pieces */
+  cpCost: number;
   /** Lore information about the item */
   lore: {
     /** A short description of the item */
@@ -114,6 +117,9 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   onStackIncrement,
   onStackDecrement,
 }) => {
+  const formatItemCost = (cpCost: number): string =>
+    `${formatCpAsCoinage(cpCost)} (${cpCost} CP)`;
+
   return (
     <section className="inventory-board card">
       <div className="inventory-header">
@@ -170,7 +176,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                     <span className="item-name">{itemData.name}</span>
                     <span className="item-meta">
                       {itemData.type.replace("_", " ").toUpperCase()} •{" "}
-                      {itemData.weight} lbs
+                      {itemData.weight} lbs • {formatItemCost(itemData.cpCost)}
                     </span>
                   </div>
 
@@ -231,7 +237,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                 <div className="item-info">
                   <span className="item-name">{itemData.name}</span>
                   <span className="item-meta">
-                    {itemData.lore.shortDescription}
+                    {itemData.lore.shortDescription} • {formatItemCost(itemData.cpCost)}
                   </span>
                 </div>
 

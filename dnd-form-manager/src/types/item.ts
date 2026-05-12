@@ -108,6 +108,8 @@ export interface ItemData {
   type: ItemType;
   /** Weight of the item in pounds */
   weight: number;
+  /** Cost of the item in copper pieces */
+  cpCost: number;
 
   /** Lore information for the item */
   lore: {

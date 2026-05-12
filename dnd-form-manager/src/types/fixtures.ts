@@ -63,6 +63,7 @@ export interface InventoryInstanceFixture {
   itemData?: {
     name: string;
     weight?: number;
+    cpCost?: number;
     rarity?: string;
   };
 }
@@ -77,6 +78,7 @@ export interface InventoryStackFixture {
   itemData?: {
     name: string;
     weight?: number;
+    cpCost?: number;
   };
 }
 
