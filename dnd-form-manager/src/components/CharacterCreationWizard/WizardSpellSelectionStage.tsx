@@ -4,12 +4,10 @@ import { useMemo } from "react";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAllSpells, getSpellByID } from "../../data/staticDataApi";
 import { useSpellcasting } from "../../hooks/useSpellcasting";
-
-/** Formats a spell's school and level for the card subtitle. */
-function spellMeta(level: number, school?: string): string {
-  const levelStr = level === 0 ? "Cantrip" : `Level ${level}`;
-  return school ? `${levelStr} · ${school}` : levelStr;
-}
+import {
+  WizardSpellSelectionStageView,
+  type WizardSpellOption,
+} from "./WizardSpellSelectionStageView";
 
 export const WizardSpellSelectionStage: React.FC = () => {
   const classId = useCharacterStore((s) => s.classId);
@@ -69,19 +67,6 @@ export const WizardSpellSelectionStage: React.FC = () => {
   const bonusPreparedSet = new Set(pools.bonusPrepared);
   const manualPreparedCount = spellsPrepared.filter((id) => !bonusPreparedSet.has(id)).length;
 
-  if (!classId || !isSpellcaster) {
-    return (
-      <div className="picker-stage">
-        <h2 className="picker-stage-title">Spells</h2>
-        <p className="picker-stage-subtitle">
-          {classId
-            ? "Your class does not cast spells."
-            : "Select a class first to see available spells."}
-        </p>
-      </div>
-    );
-  }
-
   const handleCantripClick = (spellId: string) => {
     if (chosenCantrips.includes(spellId)) {
       unlearnSpell(spellId);
@@ -108,118 +93,33 @@ export const WizardSpellSelectionStage: React.FC = () => {
     }
   };
 
+  const toViewOption = (spell: (typeof classSpells)[number]): WizardSpellOption => ({
+    id: spell.id,
+    name: spell.name,
+    level: spell.level,
+    school: spell.school,
+  });
+
+  const bonusPreparedSpells = pools.bonusPrepared
+    .map((spellId) => getSpellByID(spellId))
+    .filter((spell): spell is NonNullable<typeof spell> => spell != null)
+    .map(toViewOption);
+
   return (
-    <div className="picker-stage">
-      <h2 className="picker-stage-title">Spells</h2>
-      <p className="picker-stage-subtitle">
-        Choose spells from your class list.
-      </p>
-
-      {/* Cantrips section */}
-      {cantripMax > 0 && (
-        <>
-          <div className="picker-section-header">Cantrips</div>
-          <div
-            className={`picker-counter ${chosenCantrips.length >= cantripMax ? "complete" : ""}`}
-          >
-            {chosenCantrips.length} / {cantripMax} chosen
-          </div>
-          <div className="picker-grid">
-            {cantrips.map((spell) => {
-              const isSelected = chosenCantrips.includes(spell.id);
-              const isDisabled =
-                !isSelected && chosenCantrips.length >= cantripMax;
-              return (
-                <div
-                  key={spell.id}
-                  className={`picker-card ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""}`}
-                  onClick={() => handleCantripClick(spell.id)}
-                >
-                  {isSelected && (
-                    <span className="picker-card-badge">Chosen</span>
-                  )}
-                  <span className="picker-card-name">{spell.name}</span>
-                  <span className="picker-card-meta">
-                    {spellMeta(spell.level, spell.school)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {/* Spells section */}
-      {(knownMax > 0 || (isPreparedCaster && preparedMax > 0)) && (
-        <>
-          <div className="picker-section-header">
-            {isPreparedCaster ? "Prepare Spells" : "Spells Known"}
-          </div>
-          {(() => {
-            const currentCount = isPreparedCaster
-              ? manualPreparedCount
-              : chosenKnownSpells.length;
-            const maxCount = isPreparedCaster ? preparedMax : knownMax;
-            return (
-              <div
-                className={`picker-counter ${currentCount >= maxCount ? "complete" : ""}`}
-              >
-                {currentCount} / {maxCount}{" "}
-                {isPreparedCaster ? "prepared" : "known"}
-              </div>
-            );
-          })()}
-          <div className="picker-grid">
-            {spells.map((spell) => {
-              const isSelected = isPreparedCaster
-                ? spellsPrepared.includes(spell.id)
-                : chosenKnownSpells.includes(spell.id);
-              const currentCount = isPreparedCaster
-                ? manualPreparedCount
-                : chosenKnownSpells.length;
-              const maxCount = isPreparedCaster ? preparedMax : knownMax;
-              const isDisabled = !isSelected && currentCount >= maxCount;
-              return (
-                <div
-                  key={spell.id}
-                  className={`picker-card ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""}`}
-                  onClick={() => handleSpellClick(spell.id)}
-                >
-                  {isSelected && (
-                    <span className="picker-card-badge">Chosen</span>
-                  )}
-                  <span className="picker-card-name">{spell.name}</span>
-                  <span className="picker-card-meta">
-                    {spellMeta(spell.level, spell.school)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {/* Domain Spells — always prepared, shown as locked cards */}
-      {pools.bonusPrepared.length > 0 && (
-        <>
-          <div className="picker-section-header">Domain Spells (Always Prepared)</div>
-          <div className="picker-grid">
-            {pools.bonusPrepared.map((spellId) => {
-              const spell = getSpellByID(spellId);
-              if (!spell) return null;
-              return (
-                <div key={`domain-${spell.id}`} className="picker-card domain-spell-picker-card">
-                  <span className="picker-card-badge domain-picker-badge">Domain</span>
-                  <span className="picker-card-name">{spell.name}</span>
-                  <span className="picker-card-meta">
-                    {spellMeta(spell.level, spell.school)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
-    </div>
+    <WizardSpellSelectionStageView
+      classSelected={!!classId}
+      isSpellcaster={isSpellcaster}
+      isPreparedCaster={isPreparedCaster}
+      cantrips={cantrips.map(toViewOption)}
+      spells={spells.map(toViewOption)}
+      bonusPreparedSpells={bonusPreparedSpells}
+      selectedCantripIds={chosenCantrips}
+      selectedSpellIds={isPreparedCaster ? spellsPrepared : chosenKnownSpells}
+      cantripMax={cantripMax}
+      spellMax={isPreparedCaster ? preparedMax : knownMax}
+      spellCountLabel={isPreparedCaster ? "prepared" : "known"}
+      onCantripToggle={handleCantripClick}
+      onSpellToggle={handleSpellClick}
+    />
   );
 };

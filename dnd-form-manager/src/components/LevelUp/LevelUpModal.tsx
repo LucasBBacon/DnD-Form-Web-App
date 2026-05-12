@@ -55,8 +55,8 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
       draft.isNewMulticlass = false;
       // targetClassLevel = targetLevel for a 1:1 single-class character
       draft.targetClassLevel = targetLevel;
-    // If there are multiple class tracks, the user must explicitly pick which one to level up (multiclass or single-class)
-    // leave targetClassId null for the ClassPickStep to handle
+      // If there are multiple class tracks, the user must explicitly pick which one to level up (multiclass or single-class)
+      // leave targetClassId null for the ClassPickStep to handle
     } else if (classTracks.length === 0 && classId) {
       // Fallback: legacy single-class without explicit tracks
       draft.targetClassId = classId;
@@ -69,14 +69,14 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   const [draft, setDraft] = useState<LevelUpDraft>(getInitialDraft);
 
   // #region --- Get Class and Subclass Data for Plan ---
-  
+
   const classData = draft.targetClassId
     ? getClassById(draft.targetClassId)
     : null;
   const currentTrack = classTracks.find(
     (t) => t.classId === draft.targetClassId,
   );
-  
+
   const effectiveSubclassId =
     draft.newSubclassId ?? currentTrack?.subclassId ?? subclassId;
   const subclassData = effectiveSubclassId

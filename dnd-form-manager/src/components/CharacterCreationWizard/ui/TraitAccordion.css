@@ -1,0 +1,70 @@
+.traits-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+.trait-accordion {
+  border: 1px solid #e4d4e7;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.trait-accordion.open {
+  border-color: #a1a1aa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.trait-toggle-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.trait-toggle-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.trait-accordion.open .trait-toggle-btn {
+  background: #fff;
+}
+
+.trait-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trait-name {
+  font-weight: bold;
+  color: #18181b;
+}
+
+.trait-short-desc {
+  font-size: 0.85rem;
+  color: #71717a;
+}
+
+.toggle-icon {
+  font-size: 1.5rem;
+  color: #a1a1aa;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.trait-full-content {
+  padding: 0 1rem 1rem 1rem;
+  font-size: 0.96rem;
+  color: #3f3f46;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  border-top: 1px solid transparent;
+}

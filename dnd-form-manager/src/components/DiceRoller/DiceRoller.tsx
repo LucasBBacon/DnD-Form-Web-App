@@ -3,26 +3,45 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./DiceRoller.css";
 import { PolyDie, type DieType } from "./PolyDie";
 
+// #region Types and Interfaces
+
 export type DiceRollerSize = "small" | "medium" | "large";
 
 export interface DiceRollSummary {
+  /** The number of sides on each die */
   sides: DieType;
+  /** The number of dice rolled */
   count: number;
+  /** The total sum of all dice rolled */
   total: number;
 }
 
 interface DiceRollerProps {
+  /** The number of sides on each die */
   sides?: DieType;
+  /** The number of dice to roll */
   count?: number;
+  /** The size of the dice roller */
   size?: DiceRollerSize;
+  /** Whether to hide the total sum */
   hideTotal?: boolean;
+  /** Custom label for the roll button */
   rollLabel?: string;
+  /** Additional CSS class for the dice roller */
   className?: string;
+  /** Whether the dice roller is disabled */
   disabled?: boolean;
+  /** Custom random number generator function */
   random?: () => number;
+  /** Duration of the roll animation in milliseconds */
   animationMs?: number;
+  /** Callback function called when the roll is complete */
   onRollComplete?: (rolls: number[], summary: DiceRollSummary) => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const DiceRoller: React.FC<DiceRollerProps> = ({
   sides = 20,
@@ -102,11 +121,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
     { length: safeCount },
     (_, index) => values[index] ?? 1,
   );
-  const rollerClassName = [
-    "dice-roller",
-    `size-${size}`,
-    className,
-  ]
+  const rollerClassName = ["dice-roller", `size-${size}`, className]
     .filter(Boolean)
     .join(" ");
   const isDisabled = isRolling || disabled;
@@ -121,9 +136,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
         aria-label={resolvedRollLabel}
       >
         {!isRolling && (
-          <div className="dice-tray-overlay">
-            {resolvedRollLabel}
-          </div>
+          <div className="dice-tray-overlay">{resolvedRollLabel}</div>
         )}
 
         {displayedValues.map((val, index) => (
@@ -144,3 +157,5 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
     </div>
   );
 };
+
+// #endregion

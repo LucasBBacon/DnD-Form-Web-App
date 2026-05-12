@@ -11,6 +11,10 @@ export type WizardStageId =
   | "equipment"
   | "identity";
 
+/** 
+ * Base properties for all character creation requirements, which are used to track progress and enforce blocking rules in the UI. 
+ * Each specific requirement type then extends this with its own relevant properties.
+ */
 interface CreationRequirementBase {
   /** Stable unique id for this requirement, e.g. "equipment_bundle_0". */
   id: string;
@@ -28,6 +32,7 @@ interface CreationRequirementBase {
 
 export interface AbilityAssignmentRequirement extends CreationRequirementBase {
   type: "ability_assignment";
+  /** The method used for ability score assignment. */
   method: "rolling" | "standard_array" | "point_buy";
   /** True when point-buy validation failed but explicit override is enabled. */
   usesOverride?: boolean;
@@ -55,7 +60,9 @@ export interface EquipmentBundleRequirement extends CreationRequirementBase {
 
 export interface CantripKnownRequirement extends CreationRequirementBase {
   type: "cantrip_known";
+  /** Number of cantrips required. */
   required: number;
+  /** Number of cantrips currently known. */
   current: number;
   /** Class IDs whose spell list should be shown in the picker. */
   classIds: string[];
@@ -63,9 +70,13 @@ export interface CantripKnownRequirement extends CreationRequirementBase {
 
 export interface SpellKnownRequirement extends CreationRequirementBase {
   type: "spell_known";
+  /** The method used for spell preparation. */
   preparationType: "known" | "prepared" | "pact";
+  /** Number of spells required. */
   required: number;
+  /** Number of spells currently known. */
   current: number;
+  /** Class IDs whose spell list should be shown in the picker. */
   classIds: string[];
 }
 
@@ -77,9 +88,13 @@ export interface SkillProficiencyRequirement extends CreationRequirementBase {
   type: "skill_proficiency";
   /** Trait or feature that grants this pick (for grouping in the UI). */
   sourceId: string;
+  /** Human-readable name of the source trait or feature. */
   sourceName: string;
+  /** Number of skills required. */
   required: number;
+  /** List of skills available for selection. */
   pool: string[];
+  /** List of skills currently selected. */
   current: string[];
 }
 

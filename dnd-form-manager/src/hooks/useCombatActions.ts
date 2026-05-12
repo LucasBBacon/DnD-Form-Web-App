@@ -8,39 +8,70 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
 import type { DieFace } from "../types/common";
 
+// #region Types and Interfaces
+
 export type CombatActionSection = "action" | "bonus_action" | "reaction";
 
 export interface CombatActionUseState {
+  /** Total number of uses for the combat action */
   total: number;
+  /** Remaining number of uses for the combat action */
   remaining: number;
 }
 
 export interface CombatActionEntry {
+  /** Unique identifier for the combat action */
   id: string;
+  /** Name of the combat action */
   name: string;
+  /** Section of the combat action (action, bonus_action, reaction) */
   section: CombatActionSection;
+  /** Source of the combat action (attack, spell, trait) */
   source: "attack" | "spell" | "trait";
+  /** Optional subtitle for the combat action */
   subtitle?: string;
+  /** Quick stats for the combat action */
   quickStats: string[];
+  /** Optional description for the combat action */
   description?: string;
+  /** Indicates if the combat action is exhausted */
   isExhausted: boolean;
+  /** Optional spell level for spell actions */
   spellLevel?: number;
+  /** Optional usage state for the combat action */
   uses?: CombatActionUseState;
+  /** Optional attack roll metadata for the combat action */
   attackRoll?: CombatRollMetadata;
+  /** Optional damage roll metadata for the combat action */
   damageRolls?: CombatRollMetadata[];
 }
 
 export interface CombatRollMetadata {
+  /** Unique identifier for the combat roll */
   id: string;
+  /** Number of dice to roll */
   count: number;
+  /** Number of sides on each die */
   sides: DieFace;
+  /** Modifier to apply to the roll */
   modifier: number;
+  /** Label for the combat roll */
   label: string;
 }
+
+// #endregion
+
+// #region Helper Functions
 
 const ROLL_EXPRESSION_RE =
   /^\s*(\d+)d(4|6|8|10|12|20|100)(?:\s*([+-])\s*(\d+))?\s*(.*)$/i;
 
+/**
+ * Parses a roll expression in the format of "XdY+Z" (e.g., "2d6+3") and returns
+ * the corresponding combat roll metadata. The expression can also include trailing text after the roll, which will be captured as well.
+ * @param expression The roll expression to parse.
+ * @returns The combat roll metadata and trailing text, or null if the expression is invalid.
+ */
 const parseRollExpression = (
   expression: string,
 ): (CombatRollMetadata & { trailingText: string }) | null => {
@@ -67,38 +98,62 @@ const parseRollExpression = (
   };
 };
 
+/**
+ * Resolves a scaled roll expression based on character or class level.
+ * @param baseRoll The base roll expression.
+ * @param scaling The scaling information for the roll.
+ * @param characterLevel The character's level.
+ * @param classLevel The character's class level.
+ * @returns The resolved roll expression.
+ */
 const resolveScaledRollExpression = (
   baseRoll: string,
-  scaling: {
-    type: "character_level" | "class_level" | "spell_slot";
-    thresholds?: Record<string, string>;
-  } | undefined,
+  scaling:
+    | {
+        type: "character_level" | "class_level" | "spell_slot";
+        thresholds?: Record<string, string>;
+      }
+    | undefined,
   characterLevel: number,
   classLevel: number,
 ): string => {
   if (!scaling?.thresholds) return baseRoll;
   if (scaling.type === "spell_slot") return baseRoll;
 
-  const levelForScaling = scaling.type === "class_level"
-    ? classLevel
-    : characterLevel;
+  const levelForScaling =
+    scaling.type === "class_level" ? classLevel : characterLevel;
 
   const bestMatch = Object.entries(scaling.thresholds)
     .map(([threshold, value]) => ({
       threshold: Number(threshold),
       value,
     }))
-    .filter((entry) => Number.isFinite(entry.threshold) && levelForScaling >= entry.threshold)
+    .filter(
+      (entry) =>
+        Number.isFinite(entry.threshold) && levelForScaling >= entry.threshold,
+    )
     .sort((a, b) => b.threshold - a.threshold)[0];
 
   return bestMatch?.value ?? baseRoll;
 };
 
+/**
+ * Converts a string to title case, replacing underscores with spaces and capitalizing each word.
+ * @param value The string to convert.
+ * @returns The converted string in title case.
+ */
 const toTitleCase = (value: string): string =>
-  value
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  value.replace(/_/g, " ")
+       .replace(/\b\w/g, (char) => char.toUpperCase());
 
+/**
+ * Normalizes the action type for a spell based on its declared action type and casting time.
+ * If the declared action type is one of the standard types (action, bonus_action, reaction), it is used directly.
+ * Otherwise, the casting time string is analyzed for keywords to determine the appropriate action type.
+ * @param actionType The declared action type of the spell, if any.
+ * @param castingTime The casting time string of the spell.
+ * @returns The normalized combat action section for the spell, or null if it cannot be determined.
+ */
 const normalizeSpellActionType = (
   actionType: ActionType | undefined,
   castingTime: string,
@@ -114,6 +169,12 @@ const normalizeSpellActionType = (
   return null;
 };
 
+/**
+ * Converts a number to a Roman numeral string. 
+ * For example, 1 becomes "I", 4 becomes "IV", and 10 becomes "X". If the input number is 0 or negative, "C" is returned to represent "Cantrip".
+ * @param level The number to convert.
+ * @returns The Roman numeral representation of the number, or "C" for 0 or negative numbers.
+ */
 const toRomanNumeral = (level: number): string => {
   if (level <= 0) return "C";
   const map: Array<[number, string]> = [
@@ -137,6 +198,16 @@ const toRomanNumeral = (level: number): string => {
   return result;
 };
 
+// #endregion
+
+// #region Hook
+
+/**
+ * Custom React hook to manage and compute combat actions for a character based on their attacks, spellcasting, and trait actions.
+ * It aggregates data from various sources to create a structured representation of the character's available combat actions, 
+ * including their usage state and associated rolls.
+ * @returns An object containing the computed combat actions and their usage state.
+ */
 export const useCombatActions = () => {
   const state = useCharacterStore();
   const attacks = useAttacks();
@@ -197,7 +268,8 @@ export const useCombatActions = () => {
     };
 
     const primaryClassLevel = state.classId
-      ? (state.classTracks.find((track) => track.classId === state.classId)?.level ?? state.level)
+      ? (state.classTracks.find((track) => track.classId === state.classId)
+          ?.level ?? state.level)
       : state.level;
 
     attacks.attacks.forEach((attack, index) => {
@@ -210,7 +282,9 @@ export const useCombatActions = () => {
         source: "attack",
         subtitle: "Weapon Attack",
         quickStats: [
-          (attack?.toHit ?? 0) >= 0 ? `ATK +${attack?.toHit ?? 0}` : `ATK ${attack?.toHit ?? 0}`,
+          (attack?.toHit ?? 0) >= 0
+            ? `ATK +${attack?.toHit ?? 0}`
+            : `ATK ${attack?.toHit ?? 0}`,
           attack?.damageString || "1d6",
           attack?.range || "Melee",
         ],
@@ -255,7 +329,10 @@ export const useCombatActions = () => {
       const spell = getSpellByID(spellId);
       if (!spell) return;
 
-      const section = normalizeSpellActionType(spell.actionType, spell.castingTime);
+      const section = normalizeSpellActionType(
+        spell.actionType,
+        spell.castingTime,
+      );
       if (!section) return;
 
       const shared = spellcasting.slots.shared[spell.level];
@@ -274,7 +351,8 @@ export const useCombatActions = () => {
             0,
           )
         : 0;
-      const isExhausted = spell.level > 0 && sharedRemaining + pactRemaining <= 0;
+      const isExhausted =
+        spell.level > 0 && sharedRemaining + pactRemaining <= 0;
       // Label pact-only spells distinctly so the player knows which slot pool is used.
       // If both shared and pact slots exist at this level (multiclass), keep the generic label.
       const isPactSpell = pactCanCoverSpell && sharedRemaining === 0;
@@ -285,7 +363,11 @@ export const useCombatActions = () => {
         section,
         source: "spell",
         subtitle:
-          spell.level === 0 ? "Cantrip" : isPactSpell ? "Pact Magic" : `Level ${spell.level} Spell`,
+          spell.level === 0
+            ? "Cantrip"
+            : isPactSpell
+              ? "Pact Magic"
+              : `Level ${spell.level} Spell`,
         quickStats: [spell.range, spell.duration],
         description: spell.lore.shortDescription,
         isExhausted,
@@ -342,9 +424,7 @@ export const useCombatActions = () => {
               count: parsed.count,
               sides: parsed.sides,
               modifier: parsed.modifier,
-              label: entry.type
-                ? `Damage (${entry.type})`
-                : "Damage",
+              label: entry.type ? `Damage (${entry.type})` : "Damage",
             } satisfies CombatRollMetadata;
           })
           .filter((entry): entry is CombatRollMetadata => entry != null),
@@ -376,3 +456,5 @@ export const useCombatActions = () => {
     toRomanNumeral,
   };
 };
+
+// #endregion

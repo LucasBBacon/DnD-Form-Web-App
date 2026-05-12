@@ -1,13 +1,22 @@
 import React from "react";
 import "./Dice.css";
 
+// #region Types and Interfaces
+
 export type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 
 export interface PolyDieProps {
+  /** The number of sides on the die */
   sides: DieType;
+  /** The current value of the die */
   value: number;
+  /** Whether the die is currently rolling */
   isRolling: boolean;
 }
+
+// #endregion
+
+// #region Component
 
 export const PolyDie: React.FC<PolyDieProps> = ({
   sides,
@@ -34,3 +43,5 @@ export const PolyDie: React.FC<PolyDieProps> = ({
     </div>
   );
 };
+
+// #endregion

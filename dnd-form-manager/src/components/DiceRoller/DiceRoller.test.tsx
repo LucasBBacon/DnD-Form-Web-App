@@ -28,14 +28,11 @@ describe("DiceRoller", () => {
     vi.advanceTimersByTime(150);
 
     expect(onRollComplete).toHaveBeenCalledTimes(1);
-    expect(onRollComplete).toHaveBeenCalledWith(
-      [1, 1],
-      {
-        sides: 6,
-        count: 2,
-        total: 2,
-      },
-    );
+    expect(onRollComplete).toHaveBeenCalledWith([1, 1], {
+      sides: 6,
+      count: 2,
+      total: 2,
+    });
   });
 
   it("respects disabled state", async () => {

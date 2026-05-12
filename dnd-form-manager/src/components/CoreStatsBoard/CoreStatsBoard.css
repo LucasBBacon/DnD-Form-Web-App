@@ -1,0 +1,74 @@
+.core-stats-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.ability-card {
+  background: var(--surface-color, #fff);
+  border: 2px solid #e4e4e7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ability-header {
+  background: #18181b;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ability-name {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #a1a1aa;
+}
+
+.ability-score-block {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.modifier {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.score {
+  font-size: 1.2rem;
+  color: #a1a1aa;
+  font-weight: normal;
+}
+
+.ability-details {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.divider {
+  border: none;
+  border-top: 1px dashed #d4d4d8;
+  margin: 0.25rem 0;
+}
+
+.no-skill-msg {
+  font-size: 0.8rem;
+  color: #a1a1aa;
+  text-align: center;
+  font-style: italic;
+}

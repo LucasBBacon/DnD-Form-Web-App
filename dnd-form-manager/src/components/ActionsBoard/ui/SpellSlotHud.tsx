@@ -1,0 +1,31 @@
+import type React from "react";
+import "./SpellSlotHud.css"
+
+export interface SpellSlotRow {
+  /** The label for the spell slot row */
+  label: string;
+  /** The text describing the spell slot usage */
+  text: string;
+}
+
+interface SpellSlotHudProps {
+  /** The rows of spell slots to display */
+  rows: SpellSlotRow[];
+}
+
+export const SpellSlotHud: React.FC<SpellSlotHudProps> = ({ rows }) => (
+  <div className="spell-slot-hud" aria-label="Available spell slots">
+    <span className="hud-label">Spell Slots</span>
+    <div className="hud-track-list">
+      {rows.length === 0 ? (
+        <span className="hud-empty">No spell slots</span>
+      ) : (
+        rows.map((entry) => (
+          <span key={entry.label} className="hud-track">
+            <strong>{entry.label}:</strong> {entry.text}
+          </span>
+        ))
+      )}
+    </div>
+  </div>
+);

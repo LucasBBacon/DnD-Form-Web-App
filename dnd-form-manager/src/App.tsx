@@ -4,7 +4,7 @@ import { useCharacterStore } from "./store/useCharacterStore";
 import { CharacterSheet } from "./components/CharacterSheet";
 import { CharacterCreationWizard } from "./components/CharacterCreationWizard/CharacterCreationWizard";
 import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
-import { ShortRestModal } from "./components/ShortRestModal";
+import { ShortRestModal } from "./components/ShortRestModal/ShortRestModal";
 import {
   getAvailableLevelUpTargetForCharacter,
   getFirstIncompleteLevelChoice,
@@ -23,8 +23,7 @@ function App() {
     openLevelUpModal,
     closeLevelUpModal,
     closeRestModal,
-  } =
-    useCharacterStore();
+  } = useCharacterStore();
 
   // Dev-only: load a named scenario from the ?scenario= URL query parameter.
   // This block is eliminated from production builds by Vite's dead-code removal.
@@ -68,7 +67,11 @@ function App() {
     : null;
 
   useEffect(() => {
-    if (!isSetupComplete || levelUpModalState.isOpen || availableTargetLevel === null) {
+    if (
+      !isSetupComplete ||
+      levelUpModalState.isOpen ||
+      availableTargetLevel === null
+    ) {
       return;
     }
 
@@ -91,13 +94,15 @@ function App() {
   return (
     <main className="app-container">
       {isSetupComplete ? <CharacterSheet /> : <CharacterCreationWizard />}
-      {isSetupComplete && levelUpModalState.isOpen && levelUpModalState.targetLevel !== null && (
-        <LevelUpModal
-          targetLevel={levelUpModalState.targetLevel}
-          isBlocking={levelUpModalState.isBlocking}
-          onClose={closeLevelUpModal}
-        />
-      )}
+      {isSetupComplete &&
+        levelUpModalState.isOpen &&
+        levelUpModalState.targetLevel !== null && (
+          <LevelUpModal
+            targetLevel={levelUpModalState.targetLevel}
+            isBlocking={levelUpModalState.isBlocking}
+            onClose={closeLevelUpModal}
+          />
+        )}
       {isSetupComplete && restModalState.isOpen && (
         <ShortRestModal
           restType={restModalState.restType}

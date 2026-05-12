@@ -306,7 +306,7 @@ const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
     },
     damageTaken: 31, // effectively 0 HP on a d10 class with 12 CON
     tempHp: 0,
-    deathSaves: { successes: 1, failures: 2 },
+    deathSaves: { success: 1, failure: 2 },
     expendedHitDice: 2,
     alignment: "Lawful Good",
     xp: 900,

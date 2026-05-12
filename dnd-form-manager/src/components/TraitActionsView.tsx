@@ -7,9 +7,7 @@ interface TraitActionsViewProps {
 }
 
 const toTitleCase = (value: string): string =>
-  value
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
 const formatRange = (action: ActionData): string => {
   const { range } = action;
@@ -18,8 +16,10 @@ const formatRange = (action: ActionData): string => {
   if (range.type === "self") return "Self";
   if (range.type === "touch") return "Touch";
 
-  const minDistance = typeof range.distance === "number" ? `${range.distance} ft` : "";
-  const maxDistance = typeof range.maxDistance === "number" ? `${range.maxDistance} ft` : "";
+  const minDistance =
+    typeof range.distance === "number" ? `${range.distance} ft` : "";
+  const maxDistance =
+    typeof range.maxDistance === "number" ? `${range.maxDistance} ft` : "";
 
   if (minDistance && maxDistance) {
     return `${toTitleCase(range.type)} ${minDistance}/${maxDistance}`;
@@ -36,16 +36,18 @@ const formatDamageSummary = (action: ActionData): string | null => {
   const damage = action.output?.damage;
   if (!damage || damage.length === 0) return null;
 
-  return damage
-    .map((entry) => `${entry.roll} ${entry.type}`)
-    .join(", ");
+  return damage.map((entry) => `${entry.roll} ${entry.type}`).join(", ");
 };
 
-export const TraitActionsView: React.FC<TraitActionsViewProps> = ({ actions }) => {
+export const TraitActionsView: React.FC<TraitActionsViewProps> = ({
+  actions,
+}) => {
   const [expandedActionId, setExpandedActionId] = useState<string | null>(null);
 
   if (actions.length === 0) {
-    return <div className="empty-state">No trait-granted actions available.</div>;
+    return (
+      <div className="empty-state">No trait-granted actions available.</div>
+    );
   }
 
   return (
@@ -62,12 +64,16 @@ export const TraitActionsView: React.FC<TraitActionsViewProps> = ({ actions }) =
             <button
               className="trait-action-header"
               onClick={() =>
-                setExpandedActionId((prev) => (prev === action.id ? null : action.id))
+                setExpandedActionId((prev) =>
+                  prev === action.id ? null : action.id,
+                )
               }
             >
               <span className="trait-action-name">{action.name}</span>
               <div className="trait-action-quick-stats">
-                <span className="quick-stat">{toTitleCase(action.activation.actionType)}</span>
+                <span className="quick-stat">
+                  {toTitleCase(action.activation.actionType)}
+                </span>
                 <span className="quick-stat">{formatRange(action)}</span>
               </div>
             </button>
@@ -76,7 +82,8 @@ export const TraitActionsView: React.FC<TraitActionsViewProps> = ({ actions }) =
               <div className="trait-action-details">
                 <div className="trait-action-meta-grid">
                   <div className="meta-item">
-                    <strong>Activation:</strong> {toTitleCase(action.activation.actionType)}
+                    <strong>Activation:</strong>{" "}
+                    {toTitleCase(action.activation.actionType)}
                   </div>
                   {action.activation.condition && (
                     <div className="meta-item">
@@ -88,17 +95,20 @@ export const TraitActionsView: React.FC<TraitActionsViewProps> = ({ actions }) =
                   </div>
                   {action.areaOfEffect && (
                     <div className="meta-item">
-                      <strong>Area:</strong> {action.areaOfEffect.size} ft {toTitleCase(action.areaOfEffect.shape)}
+                      <strong>Area:</strong> {action.areaOfEffect.size} ft{" "}
+                      {toTitleCase(action.areaOfEffect.shape)}
                     </div>
                   )}
                   {action.savingThrow && (
                     <div className="meta-item">
-                      <strong>Save:</strong> {toTitleCase(action.savingThrow.ability)}
+                      <strong>Save:</strong>{" "}
+                      {toTitleCase(action.savingThrow.ability)}
                     </div>
                   )}
                   {action.attackRoll && (
                     <div className="meta-item">
-                      <strong>Attack Roll:</strong> {toTitleCase(action.attackRoll.ability)}
+                      <strong>Attack Roll:</strong>{" "}
+                      {toTitleCase(action.attackRoll.ability)}
                     </div>
                   )}
                   {damageSummary && (
