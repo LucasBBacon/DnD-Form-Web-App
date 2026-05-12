@@ -9,6 +9,8 @@ import type {
   SpellcastingFixture,
   EncumbranceFixture,
   CombatActionFixture,
+  InventoryInstanceFixture,
+  InventoryStackFixture,
   RoleplayFixture,
 } from "../types/fixtures";
 
@@ -215,5 +217,143 @@ export const ROLEPLAY_FIXTURES: Record<string, RoleplayFixture> = {
         source: "feat",
       },
     ],
+  },
+};
+
+/**
+ * Inventory fixture scenarios for equipment instances and backpack stacks.
+ */
+export const INVENTORY_FIXTURES: Record<
+  string,
+  {
+    instances: InventoryInstanceFixture[];
+    stacks: InventoryStackFixture[];
+    missingItemIds: string[];
+    equippedWeaponInstanceIds: string[];
+    equippedArmorInstanceId: string | null;
+    equippedShieldInstanceId: string | null;
+    attunedInstanceIds: string[];
+  }
+> = {
+  empty: {
+    instances: [],
+    stacks: [],
+    missingItemIds: [],
+    equippedWeaponInstanceIds: [],
+    equippedArmorInstanceId: null,
+    equippedShieldInstanceId: null,
+    attunedInstanceIds: [],
+  },
+  adventuringKit: {
+    instances: [
+      {
+        instanceId: "inst-longsword",
+        baseItemId: "item_longsword",
+        itemData: {
+          name: "Longsword",
+          weight: 3,
+          rarity: "common",
+        },
+      },
+      {
+        instanceId: "inst-chain-mail",
+        baseItemId: "item_chain_mail",
+        itemData: {
+          name: "Chain Mail",
+          weight: 55,
+          rarity: "common",
+        },
+      },
+      {
+        instanceId: "inst-shield",
+        baseItemId: "item_shield",
+        itemData: {
+          name: "Shield",
+          weight: 6,
+          rarity: "common",
+        },
+      },
+    ],
+    stacks: [
+      {
+        stackId: "stack-rations",
+        baseItemId: "item_rations",
+        quantity: 5,
+        itemData: {
+          name: "Rations",
+          weight: 2,
+        },
+      },
+      {
+        stackId: "stack-torches",
+        baseItemId: "item_torches",
+        quantity: 8,
+        itemData: {
+          name: "Torches",
+          weight: 1,
+        },
+      },
+    ],
+    missingItemIds: [],
+    equippedWeaponInstanceIds: ["inst-longsword"],
+    equippedArmorInstanceId: "inst-chain-mail",
+    equippedShieldInstanceId: "inst-shield",
+    attunedInstanceIds: [],
+  },
+  attunedMagicLoadout: {
+    instances: [
+      {
+        instanceId: "inst-wand",
+        baseItemId: "item_wand_war_mage",
+        itemData: {
+          name: "Wand of the War Mage",
+          weight: 1,
+          rarity: "uncommon",
+        },
+      },
+      {
+        instanceId: "inst-cloak",
+        baseItemId: "item_cloak_protection",
+        itemData: {
+          name: "Cloak of Protection",
+          weight: 1,
+          rarity: "uncommon",
+        },
+      },
+      {
+        instanceId: "inst-ring",
+        baseItemId: "item_ring_protection",
+        itemData: {
+          name: "Ring of Protection",
+          weight: 0,
+          rarity: "rare",
+        },
+      },
+    ],
+    stacks: [
+      {
+        stackId: "stack-healing-potion",
+        baseItemId: "item_potion_healing",
+        quantity: 2,
+        itemData: {
+          name: "Potion of Healing",
+          weight: 0.5,
+        },
+      },
+    ],
+    missingItemIds: [],
+    equippedWeaponInstanceIds: [],
+    equippedArmorInstanceId: null,
+    equippedShieldInstanceId: null,
+    attunedInstanceIds: ["inst-wand", "inst-cloak", "inst-ring"],
+  },
+  withMissingReferences: {
+    instances: [],
+    stacks: [],
+    missingItemIds: ["item_unknown_artifact", "item_missing_ration_pack"],
+    equippedWeaponInstanceIds: [],
+    equippedArmorInstanceId: null,
+    equippedShieldInstanceId: null,
+    attunedInstanceIds: [],
   },
 };

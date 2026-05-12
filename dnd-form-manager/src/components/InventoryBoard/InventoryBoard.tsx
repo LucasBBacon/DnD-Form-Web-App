@@ -1,11 +1,14 @@
 import type React from "react";
-import "./InventoryBoard.css";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useCharacterStats } from "../../hooks/useCharacterStats";
 import { useMemo } from "react";
 import { getItemById } from "../../data/staticDataApi";
 import { WealthTracker } from "./ui/WealthTracker";
-import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
+import {
+  InventoryBoardView,
+  type InventoryBoardHydratedInstance,
+  type InventoryBoardHydratedStack,
+} from "./InventoryBoardView.tsx";
 
 export const InventoryBoard: React.FC = () => {
   const store = useCharacterStore();
@@ -16,7 +19,7 @@ export const InventoryBoard: React.FC = () => {
   // Hydrate instances
   const { hydratedInstances, missingInstanceItemIds } = useMemo(() => {
     const missingItemIds: string[] = [];
-    const resolvedInstances = store.inventoryInstances
+    const resolvedInstances: InventoryBoardHydratedInstance[] = store.inventoryInstances
       .map((instance) => {
         const itemData = getItemById(instance.baseItemId);
         if (!itemData) {
@@ -26,15 +29,21 @@ export const InventoryBoard: React.FC = () => {
 
         return { ...instance, itemData };
       })
-      .filter(
-        (
-          instance,
-        ): instance is {
-          instanceId: string;
-          baseItemId: string;
-          itemData: NonNullable<ReturnType<typeof getItemById>>;
-        } => instance !== null,
-      );
+      .filter((instance): instance is NonNullable<typeof instance> => instance !== null)
+      .map((instance) => ({
+        instanceId: instance.instanceId,
+        baseItemId: instance.baseItemId,
+        itemData: {
+          name: instance.itemData.name,
+          type: instance.itemData.type,
+          weight: instance.itemData.weight,
+          lore: {
+            shortDescription: instance.itemData.lore.shortDescription,
+          },
+          armorProperties: instance.itemData.armorProperties,
+          magicItemProperties: instance.itemData.magicItemProperties,
+        },
+      }));
 
     return {
       hydratedInstances: resolvedInstances,
@@ -45,7 +54,7 @@ export const InventoryBoard: React.FC = () => {
   // Hydrate stacks
   const { hydratedStacks, missingStackItemIds } = useMemo(() => {
     const missingItemIds: string[] = [];
-    const resolvedStacks = store.inventoryStacks
+    const resolvedStacks: InventoryBoardHydratedStack[] = store.inventoryStacks
       .map((stack) => {
         const itemData = getItemById(stack.baseItemId);
         if (!itemData) {
@@ -55,16 +64,22 @@ export const InventoryBoard: React.FC = () => {
 
         return { ...stack, itemData };
       })
-      .filter(
-        (
-          stack,
-        ): stack is {
-          stackId: string;
-          baseItemId: string;
-          quantity: number;
-          itemData: NonNullable<ReturnType<typeof getItemById>>;
-        } => stack !== null,
-      );
+      .filter((stack): stack is NonNullable<typeof stack> => stack !== null)
+      .map((stack) => ({
+        stackId: stack.stackId,
+        baseItemId: stack.baseItemId,
+        quantity: stack.quantity,
+        itemData: {
+          name: stack.itemData.name,
+          type: stack.itemData.type,
+          weight: stack.itemData.weight,
+          lore: {
+            shortDescription: stack.itemData.lore.shortDescription,
+          },
+          armorProperties: stack.itemData.armorProperties,
+          magicItemProperties: stack.itemData.magicItemProperties,
+        },
+      }));
 
     return {
       hydratedStacks: resolvedStacks,
@@ -108,162 +123,31 @@ export const InventoryBoard: React.FC = () => {
     store.removeInventoryInstance(instanceId);
   };
 
-  // //#endregion
-
   return (
-    <section className="inventory-board card">
-      {/* Wealth and Encumbrance */}
-      <div className="inventory-header">
-        <WealthTracker />
-        <EncumbranceDisplay
-          totalWeight={encumbrance.totalWeight}
-          capacity={encumbrance.carryingCapacity}
-          isEncumbered={encumbrance.isEncumbered}
-        />
-      </div>
-
-      <hr className="divider" />
-
-      {missingItemIds.length > 0 && (
-        <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
-          {missingItemIds.map((itemId) => (
-            <div key={`missing-item-${itemId}`}>
-              Missing equipment reference: {itemId}
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Equipment (Instances) */}
-      <div className="inventory-section">
-        <h3 className="section-title">EQUIPMENT & ATTUNEMENT</h3>
-        {hydratedInstances.length === 0 ? (
-          <p className="empty-state">No equipment.</p>
-        ) : (
-          <div className="item-list">
-            {hydratedInstances.map(({ instanceId, itemData }) => {
-              // Determine equip states
-              const isWeapon = itemData?.type === "weapon";
-              const isArmor = itemData?.type === "armor";
-              const isShield =
-                isArmor && itemData?.armorProperties?.armorType === "shield";
-
-              const isEquipped = isWeapon
-                ? store.equippedWeaponInstanceIds.includes(instanceId)
-                : isShield
-                  ? store.equippedShieldInstanceId === instanceId
-                  : isArmor
-                    ? store.equippedArmorInstanceId === instanceId
-                    : false;
-
-              const requiresAttunement =
-                itemData?.magicItemProperties?.requiresAttunement;
-              const isAttuned = store.attunedInstanceIds.includes(instanceId);
-
-              return (
-                <div
-                  key={instanceId}
-                  className={`item-row ${isEquipped ? "equipped" : ""}`}
-                >
-                  <div className="item-info">
-                    <span className="item-name">{itemData?.name}</span>
-                    <span className="item-meta">
-                      {itemData?.type.replace("_", " ").toUpperCase()} •{" "}
-                      {itemData?.weight} lbs
-                    </span>
-                  </div>
-
-                  <div className="item-actions">
-                    {/* Attunement toggle */}
-                    {requiresAttunement && (
-                      <button
-                        className={`action-btn attune-btn ${isAttuned ? "active" : ""}`}
-                        onClick={() => toggleAttunement(instanceId, isAttuned)}
-                        disabled={
-                          !isAttuned && store.attunedInstanceIds.length >= 3
-                        }
-                        title="Attunement (Max 3)"
-                      >
-                        {isAttuned ? "ATTUNED" : "Attune"}
-                      </button>
-                    )}
-
-                    {/* Equip toggle */}
-                    {(isWeapon || isArmor) && (
-                      <button
-                        className={`action-btn equip-btn ${isEquipped ? "active" : ""}`}
-                        onClick={() =>
-                          isWeapon
-                            ? toggleEquipWeapon(instanceId, isEquipped)
-                            : toggleEquipArmor(
-                                instanceId,
-                                isEquipped,
-                                itemData!.armorProperties!.armorType,
-                              )
-                        }
-                      >
-                        {isEquipped ? "EQUIPPED" : "Equip"}
-                      </button>
-                    )}
-
-                    {/* Drop instance */}
-                    <button
-                      className="action-btn drop-btn"
-                      onClick={() => dropInstance(instanceId)}
-                      title="Remove from inventory"
-                    >
-                      Drop
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* Backpack (stacks) */}
-      <div className="inventory-section">
-        <h3 className="section title">BACKPACK (GEAR & CONSUMABLES)</h3>
-        {hydratedStacks.length === 0 ? (
-          <p className="empty-state">Backpack is empty.</p>
-        ) : (
-          <div className="item-list">
-            {hydratedStacks.map(
-              ({ stackId, baseItemId, quantity, itemData }) => (
-                <div key={stackId} className="item-row stack-row">
-                  <div className="item-info">
-                    <span className="item-name">{itemData?.name}</span>
-                    <span className="item-meta">
-                      {itemData?.lore.shortDescription}
-                    </span>
-                  </div>
-
-                  <div className="stack-actions">
-                    <span className="item-weight">
-                      {(itemData?.weight || 0) * quantity} lbs total
-                    </span>
-                    <div className="quantity-control">
-                      {/* - / + direct interaction with store funcs */}
-                      <button
-                        onClick={() => store.removeInventoryItem(baseItemId, 1)}
-                      >
-                        -
-                      </button>
-                      <span className="quantity-display">{quantity}</span>
-                      <button
-                        onClick={() => store.addInventoryItem(baseItemId, 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ),
-            )}
-          </div>
-        )}
-      </div>
-    </section>
+    <InventoryBoardView
+      wealthView={<WealthTracker />}
+      encumbrance={{
+        totalWeight: encumbrance.totalWeight,
+        capacity: encumbrance.carryingCapacity,
+        isEncumbered: encumbrance.isEncumbered,
+      }}
+      missingItemIds={missingItemIds}
+      instances={hydratedInstances}
+      stacks={hydratedStacks}
+      equippedWeaponInstanceIds={store.equippedWeaponInstanceIds}
+      equippedArmorInstanceId={store.equippedArmorInstanceId}
+      equippedShieldInstanceId={store.equippedShieldInstanceId}
+      attunedInstanceIds={store.attunedInstanceIds}
+      onToggleWeaponEquip={toggleEquipWeapon}
+      onToggleArmorEquip={toggleEquipArmor}
+      onToggleAttunement={toggleAttunement}
+      onDropInstance={dropInstance}
+      onStackDecrement={(baseItemId: string) =>
+        store.removeInventoryItem(baseItemId, 1)
+      }
+      onStackIncrement={(baseItemId: string) =>
+        store.addInventoryItem(baseItemId, 1)
+      }
+    />
   );
 };
