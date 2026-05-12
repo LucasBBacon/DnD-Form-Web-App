@@ -9,10 +9,10 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
 import { useSpellcasting } from "../../hooks/useSpellcasting";
 
-vi.mock("../store/useCharacterStore");
-vi.mock("../utils/traitUtils");
-vi.mock("../hooks/useSpellcasting");
-vi.mock("./SpellBookView", () => ({
+vi.mock("../../store/useCharacterStore");
+vi.mock("../../utils/traitUtils");
+vi.mock("../../hooks/useSpellcasting");
+vi.mock("../SpellBookView/SpellBookView", () => ({
   SpellBookView: () => <div data-testid="spellbook-view">Spellbook View</div>,
 }));
 

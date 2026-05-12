@@ -9,6 +9,7 @@ import type {
   SpellcastingFixture,
   EncumbranceFixture,
   CombatActionFixture,
+  RoleplayFixture,
 } from "../types/fixtures";
 
 /**
@@ -157,4 +158,62 @@ export const ACTION_FIXTURES: Record<string, CombatActionFixture[]> = {
       kind: "reaction",
     },
   ],
+};
+
+/**
+ * Roleplay fixture scenarios for characteristics and biography content.
+ */
+export const ROLEPLAY_FIXTURES: Record<string, RoleplayFixture> = {
+  blank: {
+    name: "",
+    playerName: "",
+    backstory: "",
+    personality: "",
+    ideals: "",
+    bonds: "",
+    flaws: "",
+    traits: [],
+  },
+  heroic: {
+    name: "Arannis Duskwhisper",
+    playerName: "Mira",
+    backstory:
+      "Raised among wardens of the silverwood, Arannis hunts threats that cross from the Feywild.",
+    personality: "Quietly observant, patient, and fiercely protective of allies.",
+    ideals: "Guard the innocent, even when the law is inconvenient.",
+    bonds: "Sworn to protect the frontier village that sheltered his family.",
+    flaws: "Distrusts authority and keeps dangerous secrets too long.",
+    traits: [
+      {
+        name: "Darkvision",
+        shortDescription: "Can see in dim light as if it were bright light.",
+        fullDescription: "Used to navigating moonlit forests and caverns.",
+        source: "race",
+      },
+      {
+        name: "Action Surge",
+        shortDescription: "Take one additional action on your turn once per rest.",
+        fullDescription: "Pushes beyond physical limits during critical moments.",
+        source: "class",
+      },
+    ],
+  },
+  haunted: {
+    name: "Sera Vale",
+    playerName: "Jon",
+    backstory:
+      "After surviving a failed ritual, Sera wanders in search of the cult that marked her soul.",
+    personality: "Charming in conversation but always on edge.",
+    ideals: "No one should suffer what I survived.",
+    bonds: "Keeps a weathered journal from her lost mentor.",
+    flaws: "Compulsively investigates occult signs, even in unsafe places.",
+    traits: [
+      {
+        name: "Shadow Touched",
+        shortDescription: "Can cast invisibility once per long rest.",
+        fullDescription: "Carries a fragment of shadow magic.",
+        source: "feat",
+      },
+    ],
+  },
 };
