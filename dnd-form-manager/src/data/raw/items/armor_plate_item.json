@@ -1,0 +1,24 @@
+{
+    "id": "item_armor_plate",
+    "name": "Plate Armor",
+    "type": "armor",
+    "weight": 65,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "The best and heaviest armor, made of interlocking metal plates that cover the entire body.",
+        "fullText": "Plate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body."
+    },
+    "armorProperties": {
+        "armorType": "heavy",
+        "acApplication": "set",
+        "baseAc": 18,
+        "dexModifier": {
+            "mode": "none"
+        },
+        "stealthDisadvantage": true,
+        "strengthRequirement": 15
+    },
+    "cpCost": 150000
+}

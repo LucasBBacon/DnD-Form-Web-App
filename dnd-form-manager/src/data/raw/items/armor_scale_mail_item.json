@@ -7,8 +7,13 @@
     "mode": "instance"
   },
   "armorProperties": {
+    "acApplication": "set",
     "armorType": "medium",
     "baseAc": 14,
+    "dexModifier": {
+      "mode": "capped",
+      "cap": 2
+    },
     "stealthDisadvantage": true
   },
   "lore": {

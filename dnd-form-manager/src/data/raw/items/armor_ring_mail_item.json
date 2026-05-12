@@ -1,0 +1,23 @@
+{
+    "id": "item_armor_ring_mail",
+    "name": "Ring Mail Armor",
+    "type": "armor",
+    "weight": 40,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Medium armor made of leather with heavy rings sewn into it.",
+        "fullText": "This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor."
+    },
+    "armorProperties": {
+        "armorType": "heavy",
+        "acApplication": "set",
+        "baseAc": 14,
+        "dexModifier": {
+            "mode": "none"
+        },
+        "stealthDisadvantage": true
+    },
+    "cpCost": 3000
+}

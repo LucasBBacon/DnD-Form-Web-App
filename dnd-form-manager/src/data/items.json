@@ -23,8 +23,12 @@
       "mode": "instance"
     },
     "armorProperties": {
+      "acApplication": "set",
       "armorType": "heavy",
       "baseAc": 16,
+      "dexModifier": {
+        "mode": "none"
+      },
       "strengthRequirement": 13,
       "stealthDisadvantage": true
     },
@@ -44,11 +48,35 @@
       "fullText": "The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials. Leather armor provides a base AC of 11 + your Dexterity modifier."
     },
     "armorProperties": {
+      "acApplication": "set",
       "armorType": "light",
       "baseAc": 11,
+      "dexModifier": {
+        "mode": "full"
+      },
       "stealthDisadvantage": false
     },
     "cpCost": 1000
+  },
+  {
+    "id": "item_armor_padded",
+    "name": "Padded Armor",
+    "type": "armor",
+    "weight": 10,
+    "lore": {
+      "shortDescription": "Light armor made of quilted layers of cloth and batting.",
+      "fullText": "Padded armor consists of quilted layers of cloth and batting."
+    },
+    "armorProperties": {
+      "acApplication": "set",
+      "armorType": "light",
+      "baseAc": 11,
+      "dexModifier": {
+        "mode": "full"
+      },
+      "stealthDisadvantage": true
+    },
+    "cpCost": 500
   },
   {
     "id": "item_armor_scale_mail",
@@ -59,8 +87,13 @@
       "mode": "instance"
     },
     "armorProperties": {
+      "acApplication": "set",
       "armorType": "medium",
       "baseAc": 14,
+      "dexModifier": {
+        "mode": "capped",
+        "cap": 2
+      },
       "stealthDisadvantage": true
     },
     "lore": {
@@ -78,8 +111,12 @@
       "mode": "instance"
     },
     "armorProperties": {
+      "acApplication": "bonus",
       "armorType": "shield",
       "baseAc": 2,
+      "dexModifier": {
+        "mode": "none"
+      },
       "stealthDisadvantage": false
     },
     "lore": {

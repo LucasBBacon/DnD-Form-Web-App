@@ -7,8 +7,12 @@
     "mode": "instance"
   },
   "armorProperties": {
+    "acApplication": "set",
     "armorType": "heavy",
     "baseAc": 16,
+    "dexModifier": {
+      "mode": "none"
+    },
     "strengthRequirement": 13,
     "stealthDisadvantage": true
   },

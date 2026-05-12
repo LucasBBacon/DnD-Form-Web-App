@@ -7,8 +7,12 @@
     "mode": "instance"
   },
   "armorProperties": {
+    "acApplication": "bonus",
     "armorType": "shield",
     "baseAc": 2,
+    "dexModifier": {
+      "mode": "none"
+    },
     "stealthDisadvantage": false
   },
   "lore": {

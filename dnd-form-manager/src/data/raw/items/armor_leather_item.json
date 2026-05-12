@@ -3,15 +3,21 @@
   "name": "Leather Armor",
   "type": "armor",
   "weight": 10,
+  "stacking": {
+    "mode": "instance"
+  },
   "lore": {
     "shortDescription": "Light armor made from treated leather, offering basic protection with full mobility.",
     "fullText": "The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials. Leather armor provides a base AC of 11 + your Dexterity modifier."
   },
   "armorProperties": {
+    "acApplication": "set",
     "armorType": "light",
     "baseAc": 11,
+    "dexModifier": {
+      "mode": "full"
+    },
     "stealthDisadvantage": false
   },
   "cpCost": 1000
 }
-

@@ -10,11 +10,59 @@ export interface UnarmoredDefenseModifier {
   modifier: number;
 }
 
+const resolveDexModeFromArmorType = (
+  armorType: EquippedArmorItem["armorProperties"]["armorType"],
+): { mode: "full" | "capped" | "none"; cap?: number } => {
+  switch (armorType) {
+    case "medium":
+      return { mode: "capped", cap: 2 };
+    case "heavy":
+    case "shield":
+      return { mode: "none" };
+    default:
+      return { mode: "full" };
+  }
+};
+
+const resolveDexContribution = (
+  dexModifier: number,
+  equippedArmor: EquippedArmorItem,
+): number => {
+  const dexModifierConfig = equippedArmor.armorProperties.dexModifier;
+  const dexMode = dexModifierConfig?.mode;
+
+  if (dexMode === "none") {
+    return 0;
+  }
+
+  if (dexMode === "capped") {
+    const cap = dexModifierConfig.cap ?? 2;
+    return Math.min(cap, dexModifier);
+  }
+
+  if (dexMode === "full") {
+    return dexModifier;
+  }
+
+  // Backward-compatible fallback for legacy data without dexModifier config.
+  const legacyDexMode = resolveDexModeFromArmorType(
+    equippedArmor.armorProperties.armorType,
+  );
+  if (legacyDexMode.mode === "none") {
+    return 0;
+  }
+  if (legacyDexMode.mode === "capped") {
+    return Math.min(legacyDexMode.cap ?? 2, dexModifier);
+  }
+
+  return dexModifier;
+};
+
 /**
  * Calculates a character's total Armor Class (AC).
  * @param dexModifier Character's Dex mod.
  * @param equippedArmor Equipped armor item, null if unarmored.
- * @param isWearingShield Whether a shield is equipped.
+ * @param equippedShield Equipped shield item, null if no shield is equipped.
  * @param unarmoredDefense Optional extra modifier used by unarmored defense status.
  * @param flatBonuses Any additional AC bonuses from effects, items, feats.
  * @returns The final calculated AC value.
@@ -22,7 +70,7 @@ export interface UnarmoredDefenseModifier {
 export const calculateArmorClass = (
   dexModifier: number,
   equippedArmor: EquippedArmorItem | null,
-  isWearingShield: boolean,
+  equippedShield: EquippedArmorItem | null,
   unarmoredDefense?: number,
   flatBonuses: number = 0,
 ): number => {
@@ -38,31 +86,26 @@ export const calculateArmorClass = (
       baseAc += unarmoredDefense;
     }
   } else {
-    // Wearing armor
-    baseAc = equippedArmor.armorProperties.baseAc;
+    const acApplication =
+      equippedArmor.armorProperties.acApplication ??
+      (equippedArmor.armorProperties.armorType === "shield" ? "bonus" : "set");
 
-    switch (equippedArmor.armorProperties.armorType) {
-      case "light":
-        // Full Dex mod
-        break;
-      case "medium":
-        // Medium armor caps the dex bonus at +2 (ignore negative dex caps as per 5e rules, negative dex still applies fully)
-        allowableDexMod = Math.min(2, dexModifier);
-        break;
-      case "heavy":
-        // Heavy armor ignores Dex mod completely
-        allowableDexMod = 0;
-        break;
-      default:
-        break;
+    if (acApplication === "set") {
+      baseAc = equippedArmor.armorProperties.baseAc;
+      allowableDexMod = resolveDexContribution(dexModifier, equippedArmor);
     }
   }
 
   let totalAc = baseAc + allowableDexMod;
 
-  // Shields
-  if (isWearingShield) {
-    totalAc += 2; // TODO: custom shield AC!
+  if (equippedShield?.armorProperties) {
+    const shieldAcApplication =
+      equippedShield.armorProperties.acApplication ??
+      (equippedShield.armorProperties.armorType === "shield" ? "bonus" : "set");
+
+    if (shieldAcApplication === "bonus") {
+      totalAc += equippedShield.armorProperties.baseAc;
+    }
   }
 
   // Flat bonuses

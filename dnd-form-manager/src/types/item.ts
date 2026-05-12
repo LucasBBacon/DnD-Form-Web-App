@@ -18,12 +18,25 @@ export type WeaponProperty =
   | "reach"
   | "loading";
 export type ItemStackMode = "stack" | "instance";
+export type ArmorAcApplication = "set" | "bonus";
+export type ArmorDexModifierMode = "full" | "capped" | "none";
+
+export interface ArmorDexModifier {
+  /** How Dexterity modifier contributes to AC for this armor */
+  mode: ArmorDexModifierMode;
+  /** Dex cap applied when mode is capped */
+  cap?: number;
+}
 
 export interface ArmorProperties {
+  /** Whether this armor sets AC or grants AC as a bonus */
+  acApplication: ArmorAcApplication;
   /** Type of armor e.g., "light", "medium", "heavy", "shield" */
   armorType: "light" | "medium" | "heavy" | "shield";
   /** Base armor class provided by the armor */
   baseAc: number;
+  /** Dexterity contribution behavior for AC */
+  dexModifier: ArmorDexModifier;
   /** Whether the armor imposes disadvantage on stealth checks */
   stealthDisadvantage: boolean;
   /** Minimum strength required to wear the armor effectively */

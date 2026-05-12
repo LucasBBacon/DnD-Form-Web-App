@@ -1,0 +1,24 @@
+{
+    "id": "item_armor_half_plate",
+    "name": "Half Plate Armor",
+    "type": "armor",
+    "weight": 40,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Medium armor made of metal plates, providing good protection with moderate mobility.",
+        "fullText": "Half plate consists of shaped metal plates that cover most of the wearer's body. It does not include leg protection beyond simple greaves that are attached with leather straps."
+    },
+    "armorProperties": {
+        "armorType": "medium",
+        "acApplication": "set",
+        "baseAc": 15,
+        "dexModifier": {
+            "mode": "capped",
+            "cap": 2
+        },
+        "stealthDisadvantage": true
+    },
+    "cpCost": 75000
+}
