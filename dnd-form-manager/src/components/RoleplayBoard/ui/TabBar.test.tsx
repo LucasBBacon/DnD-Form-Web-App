@@ -16,9 +16,15 @@ describe("TabBar", () => {
   });
 
   it("applies active class to the current tab", () => {
-    render(<TabBar tabs={tabs} activeId="characteristics" onChange={() => {}} />);
-    expect(screen.getByText("CHARACTERISTICS").closest("button")).toHaveClass("active");
-    expect(screen.getByText("FEATURES & TRAITS").closest("button")).not.toHaveClass("active");
+    render(
+      <TabBar tabs={tabs} activeId="characteristics" onChange={() => {}} />,
+    );
+    expect(screen.getByText("CHARACTERISTICS").closest("button")).toHaveClass(
+      "active",
+    );
+    expect(
+      screen.getByText("FEATURES & TRAITS").closest("button"),
+    ).not.toHaveClass("active");
   });
 
   it("calls onChange with the tab id when clicked", async () => {

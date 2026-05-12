@@ -20,5 +20,7 @@ export default meta;
 type Story = StoryObj<typeof TabBar>;
 
 export const Features: Story = { args: { activeId: "features" } };
+
 export const Spellbook: Story = { args: { activeId: "spellbook" } };
+
 export const Characteristics: Story = { args: { activeId: "characteristics" } };

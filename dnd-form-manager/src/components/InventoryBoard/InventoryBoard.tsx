@@ -10,6 +10,8 @@ import {
   type InventoryBoardHydratedStack,
 } from "./InventoryBoardView.tsx";
 
+// #region Component
+
 export const InventoryBoard: React.FC = () => {
   const store = useCharacterStore();
   const { encumbrance } = useCharacterStats();
@@ -19,31 +21,35 @@ export const InventoryBoard: React.FC = () => {
   // Hydrate instances
   const { hydratedInstances, missingInstanceItemIds } = useMemo(() => {
     const missingItemIds: string[] = [];
-    const resolvedInstances: InventoryBoardHydratedInstance[] = store.inventoryInstances
-      .map((instance) => {
-        const itemData = getItemById(instance.baseItemId);
-        if (!itemData) {
-          missingItemIds.push(instance.baseItemId);
-          return null;
-        }
+    const resolvedInstances: InventoryBoardHydratedInstance[] =
+      store.inventoryInstances
+        .map((instance) => {
+          const itemData = getItemById(instance.baseItemId);
+          if (!itemData) {
+            missingItemIds.push(instance.baseItemId);
+            return null;
+          }
 
-        return { ...instance, itemData };
-      })
-      .filter((instance): instance is NonNullable<typeof instance> => instance !== null)
-      .map((instance) => ({
-        instanceId: instance.instanceId,
-        baseItemId: instance.baseItemId,
-        itemData: {
-          name: instance.itemData.name,
-          type: instance.itemData.type,
-          weight: instance.itemData.weight,
-          lore: {
-            shortDescription: instance.itemData.lore.shortDescription,
+          return { ...instance, itemData };
+        })
+        .filter(
+          (instance): instance is NonNullable<typeof instance> =>
+            instance !== null,
+        )
+        .map((instance) => ({
+          instanceId: instance.instanceId,
+          baseItemId: instance.baseItemId,
+          itemData: {
+            name: instance.itemData.name,
+            type: instance.itemData.type,
+            weight: instance.itemData.weight,
+            lore: {
+              shortDescription: instance.itemData.lore.shortDescription,
+            },
+            armorProperties: instance.itemData.armorProperties,
+            magicItemProperties: instance.itemData.magicItemProperties,
           },
-          armorProperties: instance.itemData.armorProperties,
-          magicItemProperties: instance.itemData.magicItemProperties,
-        },
-      }));
+        }));
 
     return {
       hydratedInstances: resolvedInstances,
@@ -151,3 +157,5 @@ export const InventoryBoard: React.FC = () => {
     />
   );
 };
+
+// #endregion

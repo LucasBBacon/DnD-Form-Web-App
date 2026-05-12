@@ -4,29 +4,38 @@ import { ACTIONS_BOARD_FIXTURES } from "./ActionsBoard.fixtures";
 import type { SpellcastingFixture } from "../../types/fixtures";
 
 /**
- * Helper to convert fixture spellcasting data to slotHudRows format.
+ * Helper function to convert a spellcasting fixture into slot HUD rows for the ActionsBoardView.
+ * @param spellcasting The spellcasting fixture containing spell slot information.
+ * @returns An array of objects representing the label and text for each spell slot level to be displayed in the HUD.
  */
-function fixtureToSlotHudRows(spellcasting: SpellcastingFixture): Array<{ label: string; text: string }> {
+function fixtureToSlotHudRows(
+  spellcasting: SpellcastingFixture,
+): Array<{ label: string; text: string }> {
   const rows: Array<{ label: string; text: string }> = [];
-  
-  Object.entries(spellcasting.spellSlotsByLevel).forEach(([level, slotData]) => {
-    const remaining = slotData.available - slotData.used;
-    const bubbles = "o".repeat(remaining).padEnd(slotData.available, " ");
-    rows.push({
-      label: `Lvl ${level}`,
-      text: `[${bubbles}]`,
-    });
-  });
-  
+
+  Object.entries(spellcasting.spellSlotsByLevel).forEach(
+    ([level, slotData]) => {
+      const remaining = slotData.available - slotData.used;
+      const bubbles = "o".repeat(remaining).padEnd(slotData.available, " ");
+      rows.push({
+        label: `Lvl ${level}`,
+        text: `[${bubbles}]`,
+      });
+    },
+  );
+
   if (spellcasting.pactSlots) {
-    const remaining = spellcasting.pactSlots.available - spellcasting.pactSlots.used;
-    const bubbles = "o".repeat(remaining).padEnd(spellcasting.pactSlots.available, " ");
+    const remaining =
+      spellcasting.pactSlots.available - spellcasting.pactSlots.used;
+    const bubbles = "o"
+      .repeat(remaining)
+      .padEnd(spellcasting.pactSlots.available, " ");
     rows.push({
       label: "Pact",
       text: `[${bubbles}]`,
     });
   }
-  
+
   return rows;
 }
 
@@ -53,7 +62,9 @@ type Story = StoryObj<typeof ActionsBoardView>;
 
 export const NoActions: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.noActions.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.noActions.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.noActions.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.noActions.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.noActions.attackRollModes,
@@ -77,7 +88,9 @@ export const NoActions: Story = {
 
 export const WithAttacks: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withAttacks.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withAttacks.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withAttacks.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withAttacks.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withAttacks.attackRollModes,
@@ -102,7 +115,9 @@ export const WithAttacks: Story = {
 
 export const WithSpells: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withSpells.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withSpells.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withSpells.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withSpells.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withSpells.attackRollModes,
@@ -127,11 +142,14 @@ export const WithSpells: Story = {
 
 export const WithBonusActions: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withBonusActions.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withBonusActions.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withBonusActions.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withBonusActions.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withBonusActions.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withBonusActions.rollResultsByEntry,
+    rollResultsByEntry:
+      ACTIONS_BOARD_FIXTURES.withBonusActions.rollResultsByEntry,
     onActiveRollerChange: () => {},
     onAttackRollModeChange: () => {},
     onAttackResult: () => {},
@@ -151,7 +169,9 @@ export const WithBonusActions: Story = {
 
 export const WithReactions: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withReactions.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withReactions.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withReactions.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withReactions.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withReactions.attackRollModes,
@@ -175,7 +195,9 @@ export const WithReactions: Story = {
 
 export const AllActions: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.allActions.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.allActions.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.allActions.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.allActions.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.allActions.attackRollModes,
@@ -200,11 +222,14 @@ export const AllActions: Story = {
 
 export const ExhaustedActions: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.exhaustedActions.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.exhaustedActions.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.exhaustedActions.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.exhaustedActions.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.exhaustedActions.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.exhaustedActions.rollResultsByEntry,
+    rollResultsByEntry:
+      ACTIONS_BOARD_FIXTURES.exhaustedActions.rollResultsByEntry,
     onActiveRollerChange: () => {},
     onAttackRollModeChange: () => {},
     onAttackResult: () => {},
@@ -225,11 +250,14 @@ export const ExhaustedActions: Story = {
 
 export const WithActiveRoller: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withActiveRoller.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withActiveRoller.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withActiveRoller.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withActiveRoller.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withActiveRoller.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withActiveRoller.rollResultsByEntry,
+    rollResultsByEntry:
+      ACTIONS_BOARD_FIXTURES.withActiveRoller.rollResultsByEntry,
     onActiveRollerChange: () => {},
     onAttackRollModeChange: () => {},
     onAttackResult: () => {},
@@ -249,11 +277,14 @@ export const WithActiveRoller: Story = {
 
 export const WithRollResults: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.withRollResults.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.withRollResults.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.withRollResults.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.withRollResults.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.withRollResults.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withRollResults.rollResultsByEntry,
+    rollResultsByEntry:
+      ACTIONS_BOARD_FIXTURES.withRollResults.rollResultsByEntry,
     onActiveRollerChange: () => {},
     onAttackRollModeChange: () => {},
     onAttackResult: () => {},
@@ -274,7 +305,9 @@ export const WithRollResults: Story = {
 
 export const Playground: Story = {
   args: {
-    slotHudRows: fixtureToSlotHudRows(ACTIONS_BOARD_FIXTURES.playground.spellcasting),
+    slotHudRows: fixtureToSlotHudRows(
+      ACTIONS_BOARD_FIXTURES.playground.spellcasting,
+    ),
     sections: ACTIONS_BOARD_FIXTURES.playground.sections,
     activeRoller: ACTIONS_BOARD_FIXTURES.playground.activeRoller,
     attackRollModes: ACTIONS_BOARD_FIXTURES.playground.attackRollModes,

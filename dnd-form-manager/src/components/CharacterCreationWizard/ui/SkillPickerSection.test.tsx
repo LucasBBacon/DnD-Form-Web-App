@@ -14,6 +14,9 @@ describe("SkillPickerSection", () => {
     pool: ["animal_handling", "insight", "medicine", "perception", "survival"],
     isBlocking: true,
     isResolved: false,
+    sourceId: "test-feature",
+    sourceName: "Test Feature",
+    current: []
   };
 
   it("renders the requirement label", () => {
@@ -22,11 +25,11 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={[]}
         onToggle={() => {}}
-      />
+      />,
     );
 
     expect(
-      screen.getByText(/Choose 2 skills/, { exact: false })
+      screen.getByText(/Choose 2 skills/, { exact: false }),
     ).toBeInTheDocument();
   });
 
@@ -36,10 +39,12 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={[]}
         onToggle={() => {}}
-      />
+      />,
     );
 
-    expect(screen.getByText("Choose 2 skills (2 more needed)")).toBeInTheDocument();
+    expect(
+      screen.getByText("Choose 2 skills (2 more needed)"),
+    ).toBeInTheDocument();
   });
 
   it("updates remaining count as skills are selected", () => {
@@ -48,10 +53,12 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling"]}
         onToggle={() => {}}
-      />
+      />,
     );
 
-    expect(screen.getByText("Choose 2 skills (1 more needed)")).toBeInTheDocument();
+    expect(
+      screen.getByText("Choose 2 skills (1 more needed)"),
+    ).toBeInTheDocument();
   });
 
   it("shows checkmark when all skills are selected", () => {
@@ -60,7 +67,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling", "insight"]}
         onToggle={() => {}}
-      />
+      />,
     );
 
     expect(screen.getByText("Choose 2 skills ✓")).toBeInTheDocument();
@@ -72,7 +79,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={[]}
         onToggle={() => {}}
-      />
+      />,
     );
 
     expect(screen.getByText("Animal Handling")).toBeInTheDocument();
@@ -88,7 +95,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling", "insight"]}
         onToggle={() => {}}
-      />
+      />,
     );
 
     const animalHandlingChip = screen
@@ -109,7 +116,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={[]}
         onToggle={mockToggle}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByText("Animal Handling"));
@@ -122,11 +129,13 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling", "insight"]}
         onToggle={() => {}}
-      />
+      />,
     );
 
     const medicineChip = screen.getByText("Medicine").closest(".skill-chip");
-    const perceptionChip = screen.getByText("Perception").closest(".skill-chip");
+    const perceptionChip = screen
+      .getByText("Perception")
+      .closest(".skill-chip");
 
     expect(medicineChip).toHaveClass("disabled");
     expect(perceptionChip).toHaveClass("disabled");
@@ -139,7 +148,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling", "insight"]}
         onToggle={mockToggle}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByText("Medicine"));
@@ -153,7 +162,7 @@ describe("SkillPickerSection", () => {
         requirement={mockRequirement}
         currentSelections={["animal_handling", "insight"]}
         onToggle={mockToggle}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByText("Animal Handling"));
@@ -172,9 +181,11 @@ describe("SkillPickerSection", () => {
         requirement={req3Skills}
         currentSelections={["animal_handling"]}
         onToggle={() => {}}
-      />
+      />,
     );
 
-    expect(screen.getByText("Choose 3 skills (2 more needed)")).toBeInTheDocument();
+    expect(
+      screen.getByText("Choose 3 skills (2 more needed)"),
+    ).toBeInTheDocument();
   });
 });

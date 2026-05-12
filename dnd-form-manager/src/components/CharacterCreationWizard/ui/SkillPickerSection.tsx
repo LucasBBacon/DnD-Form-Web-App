@@ -1,17 +1,30 @@
 import type React from "react";
-import "./SkillPickerSection.css"
+import "./SkillPickerSection.css";
 import type { Skill } from "../../../types/common";
 import type { SkillProficiencyRequirement } from "../../../types/creationRequirement";
 
-// Converts a snake_case skill id to a display label
+// #region Imports and Types
+
+/**
+ * Helper function to convert skill identifiers like "animal_handling" into "Animal Handling" for display purposes.
+ * @param skill The skill identifier to format.
+ * @returns A human-readable skill name.
+ */
 const formatSkillName = (skill: string): string =>
   skill.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
 interface SkillPickerSectionProps {
+  /** The skill proficiency requirement to be displayed */
   requirement: SkillProficiencyRequirement;
+  /** The currently selected skills */
   currentSelections: Skill[];
+  /** Callback function when a skill is toggled */
   onToggle: (skill: Skill) => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const SkillPickerSection: React.FC<SkillPickerSectionProps> = ({
   requirement,
@@ -47,3 +60,5 @@ export const SkillPickerSection: React.FC<SkillPickerSectionProps> = ({
     </div>
   );
 };
+
+// #endregion

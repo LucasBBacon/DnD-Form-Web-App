@@ -3,10 +3,9 @@ import "./RoleplayBoard.css";
 import { TabBar } from "./ui/TabBar";
 import { FeatureCard } from "./ui/FeatureCard";
 
-export type RoleplayTab =
-  | "features"
-  | "characteristics"
-  | "biography";
+// #region Types & Interfaces
+
+export type RoleplayTab = "features" | "characteristics" | "biography";
 
 export type RoleplayField =
   | "personalityTraits"
@@ -24,41 +23,72 @@ export type RoleplayField =
   | "alliesAndOrganizations";
 
 export interface RoleplayFeatureSource {
+  /** The unique key for the feature source */
   key: string;
+  /** The kind of feature source (e.g., race, class, feat) */
   kind: string;
+  /** The label for the feature source */
   label: string;
 }
 
 export interface RoleplayFeature {
+  /** The unique identifier for the feature */
   id: string;
+  /** The name of the feature */
   name: string;
+  /** The description of the feature */
   description: string;
+  /** The sources from which the feature is derived */
   sources: RoleplayFeatureSource[];
 }
 
 export interface RoleplayBoardViewProps {
+  /** The currently active tab */
   activeTab: RoleplayTab;
+  /** The list of features to display */
   features: RoleplayFeature[];
+  /** The character's characteristics */
   characteristics: {
+    /** The character's personality traits */
     personalityTraits: string;
+    /** The character's ideals */
     ideals: string;
+    /** The character's bonds */
     bonds: string;
+    /** The character's flaws */
     flaws: string;
   };
+  /** The character's biography */
   biography: {
+    /** The character's age */
     age: string;
+    /** The character's height */
     height: string;
+    /** The character's weight */
     weight: string;
+    /** The character's eye color */
     eyes: string;
+    /** The character's skin color */
     skin: string;
+    /** The character's hair color */
     hair: string;
+    /** The character's appearance */
     appearance: string;
+    /** The character's backstory */
     backstory: string;
+    /** The character's allies and organizations */
     alliesAndOrganizations: string;
   };
+
+  /** Callback when the active tab changes */
   onTabChange: (tab: RoleplayTab) => void;
+  /** Callback when a roleplay field loses focus */
   onRoleplayFieldBlur: (field: RoleplayField, value: string) => void;
 }
+
+// #endregion
+
+// #region View Component
 
 export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
   activeTab,
@@ -121,20 +151,20 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
         {activeTab === "biography" && (
           <div className="biography-layout">
             <div className="physical-attributes-grid">
-              {(["age", "height", "weight", "eyes", "skin", "hair"] as const).map(
-                (field) => (
-                  <div key={field} className="rp-input-group inline">
-                    <label className="rp-label">{field.toUpperCase()}</label>
-                    <input
-                      type="text"
-                      className="rp-input"
-                      defaultValue={biography[field]}
-                      onBlur={(e) => onRoleplayFieldBlur(field, e.target.value)}
-                      placeholder="-"
-                    />
-                  </div>
-                ),
-              )}
+              {(
+                ["age", "height", "weight", "eyes", "skin", "hair"] as const
+              ).map((field) => (
+                <div key={field} className="rp-input-group inline">
+                  <label className="rp-label">{field.toUpperCase()}</label>
+                  <input
+                    type="text"
+                    className="rp-input"
+                    defaultValue={biography[field]}
+                    onBlur={(e) => onRoleplayFieldBlur(field, e.target.value)}
+                    placeholder="-"
+                  />
+                </div>
+              ))}
             </div>
 
             <hr className="divider" />
@@ -144,7 +174,9 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
               <textarea
                 className="rp-textarea small"
                 defaultValue={biography.appearance}
-                onBlur={(e) => onRoleplayFieldBlur("appearance", e.target.value)}
+                onBlur={(e) =>
+                  onRoleplayFieldBlur("appearance", e.target.value)
+                }
               />
             </div>
 
@@ -173,3 +205,5 @@ export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
     </section>
   );
 };
+
+// #endregion

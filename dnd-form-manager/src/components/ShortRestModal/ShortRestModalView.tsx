@@ -4,19 +4,36 @@ import type { RestType } from "../../store/useCharacterStore";
 import "./ShortRestModal.css";
 import { HitDiceRollPanel } from "./ui/HitDiceRollPanel";
 
+// #region Interface
+
 export interface ShortRestModalViewProps {
+  /** The type of rest being taken (short or long) */
   restType?: RestType;
+  /** Callback function to close the modal */
   onClose: () => void;
+  /** Current hit points */
   hpCurrent: number;
+  /** Maximum hit points */
   hpMax: number;
+  /** Number of available hit dice */
   availableDice: number;
+  /** Type of hit die (e.g., d6, d8, d10) */
   hitDie: HitDie;
+  /** Constitution modifier */
   conMod: number;
+  /** Number of hit dice recovered after a long rest */
   recoveredHitDice: number;
+  /** Callback function to apply the result of a hit die roll */
   onApplyHitDie: (totalHeal: number) => void;
+  /** Callback function to finish a short rest */
   onFinishShortRest: () => void;
+  /** Callback function to confirm a long rest */
   onConfirmLongRest: () => void;
 }
+
+// #endregion
+
+// #region View Component
 
 export const ShortRestModalView: React.FC<ShortRestModalViewProps> = ({
   restType = "short",
@@ -61,7 +78,8 @@ export const ShortRestModalView: React.FC<ShortRestModalViewProps> = ({
                 <strong>Available Hit Dice:</strong> {availableDice}d{hitDie}
               </span>
               <span>
-                <strong>Con Modifier:</strong> {conMod >= 0 ? `+${conMod}` : conMod}
+                <strong>Con Modifier:</strong>{" "}
+                {conMod >= 0 ? `+${conMod}` : conMod}
               </span>
             </div>
 
@@ -119,3 +137,5 @@ export const ShortRestModalView: React.FC<ShortRestModalViewProps> = ({
     </div>
   );
 };
+
+// #endregion

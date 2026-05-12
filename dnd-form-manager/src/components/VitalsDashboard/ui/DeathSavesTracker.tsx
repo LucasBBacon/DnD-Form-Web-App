@@ -1,15 +1,25 @@
 import type React from "react";
 import "./DeathSavesTracker.css";
 
+// #region Interface
+
 interface DeathSavesTrackerProps {
-  successes: number;
-  failures: number;
-  onToggle: (type: "successes" | "failures", checked: boolean) => void;
+  /** The number of successful death saves */
+  success: number;
+  /** The number of failed death saves */
+  failure: number;
+
+  /** Callback for when a death save checkbox is toggled */
+  onToggle: (type: "success" | "failure", checked: boolean) => void;
 }
 
+// #endregion
+
+// #region Component
+
 export const DeathSavesTracker: React.FC<DeathSavesTrackerProps> = ({
-  successes,
-  failures,
+  success,
+  failure,
   onToggle,
 }) => (
   <div className="death-saves-block">
@@ -20,8 +30,8 @@ export const DeathSavesTracker: React.FC<DeathSavesTrackerProps> = ({
         <input
           key={`succ-${num}`}
           type="checkbox"
-          checked={successes >= num}
-          onChange={(e) => onToggle("successes", e.target.checked)}
+          checked={success >= num}
+          onChange={(e) => onToggle("success", e.target.checked)}
         />
       ))}
     </div>
@@ -31,10 +41,12 @@ export const DeathSavesTracker: React.FC<DeathSavesTrackerProps> = ({
         <input
           key={`fail-${num}`}
           type="checkbox"
-          checked={failures >= num}
-          onChange={(e) => onToggle("failures", e.target.checked)}
+          checked={failure >= num}
+          onChange={(e) => onToggle("failure", e.target.checked)}
         />
       ))}
     </div>
   </div>
 );
+
+// #endregion

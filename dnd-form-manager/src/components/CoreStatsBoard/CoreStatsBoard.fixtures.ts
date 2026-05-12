@@ -6,8 +6,23 @@ import {
 import type { CoreStatsBoardViewProps } from "./CoreStatsBoardView";
 import type { AbilityCardSkill } from "./ui/AbilityCard";
 
+// #region Interfaces
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CoreStatsBoardScenario extends CoreStatsBoardViewProps {}
 
+// #endregion
+
+// #region Helper Functions
+
+/**
+ * Helper function to create a skill entry for an ability card, with sensible defaults for optional properties.
+ * @param key The unique key for the skill (e.g. "stealth")
+ * @param label The display label for the skill (e.g. "Stealth")
+ * @param modifier The total modifier for the skill, including ability modifier and proficiency (e.g. 5)
+ * @param options Optional overrides for the skill properties, such as proficiency, expertise, advantage, etc.
+ * @returns An AbilityCardSkill object with the specified properties and defaults for any unspecified options.
+ */
 const makeSkill = (
   key: string,
   label: string,
@@ -25,6 +40,13 @@ const makeSkill = (
   ...options,
 });
 
+/**
+ * Helper function to create a base set of abilities for the CoreStatsBoard, given ability modifiers and scores.
+ * This function generates the basic structure for each ability, which can then be further customized with saves and skills.
+ * @param modifierByAbility A record mapping each ability to its modifier (e.g. { str: 3, dex: 2, ... })
+ * @param scoreByAbility A record mapping each ability to its score (e.g. { str: 16, dex: 14, ... })
+ * @returns An array of CoreStatsAbilityEntry objects with the specified modifiers and scores, and default values for saves and skills.
+ */
 const makeBaseAbilities = (
   modifierByAbility: Record<Ability, number>,
   scoreByAbility: Record<Ability, number>,
@@ -40,6 +62,10 @@ const makeBaseAbilities = (
     },
     skills: [],
   }));
+
+// #endregion
+
+// #region Fixtures
 
 const balancedAbilities = makeBaseAbilities(
   { str: 3, dex: 2, con: 2, int: 0, wis: 1, cha: -1 },
@@ -185,3 +211,5 @@ export const CORE_STATS_BOARD_FIXTURES: Record<string, CoreStatsBoardScenario> =
       abilities: balancedAbilities,
     },
   };
+
+// #endregion

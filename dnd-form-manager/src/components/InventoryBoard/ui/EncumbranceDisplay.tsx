@@ -1,11 +1,20 @@
 import type React from "react";
-import "./EncumbranceDisplay.css"
+import "./EncumbranceDisplay.css";
+
+// #region Interface
 
 interface EncumbranceDisplayProps {
+  /** The total weight the character is carrying */
   totalWeight: number;
+  /** The maximum weight the character can carry */
   capacity: number;
+  /** Whether the character is encumbered */
   isEncumbered: boolean;
 }
+
+// #endregion
+
+// #region Component
 
 export const EncumbranceDisplay: React.FC<EncumbranceDisplayProps> = ({
   totalWeight,
@@ -25,3 +34,5 @@ export const EncumbranceDisplay: React.FC<EncumbranceDisplayProps> = ({
     )}
   </div>
 );
+
+// #endregion

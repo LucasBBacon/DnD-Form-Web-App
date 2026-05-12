@@ -5,8 +5,7 @@ import { InventoryBoardView } from "./InventoryBoardView";
 import { INVENTORY_BOARD_FIXTURES } from "./InventoryBoard.fixtures";
 
 const createProps = (
-  scenario:
-    (typeof INVENTORY_BOARD_FIXTURES)[keyof typeof INVENTORY_BOARD_FIXTURES],
+  scenario: (typeof INVENTORY_BOARD_FIXTURES)[keyof typeof INVENTORY_BOARD_FIXTURES],
 ) => ({
   ...scenario,
   wealthView: <div data-testid="wealth-placeholder">Wealth Placeholder</div>,
@@ -43,7 +42,9 @@ describe("InventoryBoardView", () => {
 
     render(<InventoryBoardView {...props} />);
 
-    expect(screen.getByText(/Missing equipment reference: item_unknown_artifact/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Missing equipment reference: item_unknown_artifact/i),
+    ).toBeInTheDocument();
   });
 
   it("disables attune button when at max attunements", () => {
@@ -51,7 +52,9 @@ describe("InventoryBoardView", () => {
 
     render(<InventoryBoardView {...props} />);
 
-    const attuneButtons = screen.getAllByRole("button", { name: /attuned|attune/i });
+    const attuneButtons = screen.getAllByRole("button", {
+      name: /attuned|attune/i,
+    });
     expect(attuneButtons.length).toBeGreaterThan(0);
   });
 
@@ -61,7 +64,9 @@ describe("InventoryBoardView", () => {
 
     render(<InventoryBoardView {...props} />);
 
-    const equipButtons = screen.getAllByRole("button", { name: /equipped|equip/i });
+    const equipButtons = screen.getAllByRole("button", {
+      name: /equipped|equip/i,
+    });
     await user.click(equipButtons[0]);
 
     expect(props.onToggleWeaponEquip).toHaveBeenCalled();

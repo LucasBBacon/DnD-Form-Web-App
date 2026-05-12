@@ -1,13 +1,30 @@
 import type React from "react";
-import "./TraitAccordion.css"
+import "./TraitAccordion.css";
 import type { TraitSegment } from "../../../types/wizardSelection";
 
+// #region Interface
+
 interface TraitAccordionProps {
-  traits: (TraitSegment & { source?: "base" | "sub"; isOverride?: boolean })[];
+  /** The list of traits to display in the accordion */
+  traits: (
+    TraitSegment & {
+      /** The source of the trait, either "base" or "sub" */
+      source?: "base" | "sub"; 
+      /** Indicates if the trait overrides a base trait */
+      isOverride?: boolean 
+    }
+  )[];
+  /** The index of the currently expanded trait, or null if none are expanded */
   expandedIndex: number | null;
+  /** Callback function to handle toggling a trait's expanded state */
   onToggle: (index: number) => void;
+  /** Optional name of the subclass or source adding the trait */
   subName?: string;
 }
+
+// #endregion
+
+//#region Component
 
 export const TraitAccordion: React.FC<TraitAccordionProps> = ({
   traits,
@@ -25,10 +42,7 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({
           key={`${trait.name}-${index}`}
           className={`trait-accordion ${isTraitExpanded ? "open" : ""} ${isSubTrait ? "sub-trait-highlight" : ""}`}
         >
-          <button
-            className="trait-toggle-btn"
-            onClick={() => onToggle(index)}
-          >
+          <button className="trait-toggle-btn" onClick={() => onToggle(index)}>
             <div className="trait-toggle-text">
               <div className="trait-title-row">
                 <span className="trait-name">{trait.name}</span>
@@ -40,7 +54,9 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({
                 )}
               </div>
               {!isTraitExpanded && (
-                <span className="trait-short-desc">{trait.shortDescription}</span>
+                <span className="trait-short-desc">
+                  {trait.shortDescription}
+                </span>
               )}
             </div>
             <span className="toggle-icon">{isTraitExpanded ? "-" : "+"}</span>
@@ -54,3 +70,5 @@ export const TraitAccordion: React.FC<TraitAccordionProps> = ({
     })}
   </div>
 );
+
+// #endregion

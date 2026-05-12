@@ -1,16 +1,29 @@
 import type React from "react";
 import "./HealthAdjustmentForm.css";
 
+// #region Type and Interfaces
+
 export type HealthMode = "damage" | "heal" | "temp";
 
 interface HealthAdjustmentFormProps {
+  /** The currently active health mode */
   activeMode: HealthMode | null;
+  /** The current value of the input field */
   inputValue: number | "";
+  /** Callback for when the input value changes */
   onInputChange: (value: number | "") => void;
-  onSubmit: (e: React.FormEvent) => void;
+
+  /** Callback for when the form is submitted */
+  onSubmit: (e: React.SubmitEvent) => void;
+  /** Callback for when a health mode is selected */
   onModeSelect: (mode: HealthMode) => void;
+  /** Callback for when the action is canceled */
   onCancel: () => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const HealthAdjustmentForm: React.FC<HealthAdjustmentFormProps> = ({
   activeMode,
@@ -52,3 +65,5 @@ export const HealthAdjustmentForm: React.FC<HealthAdjustmentFormProps> = ({
     )}
   </div>
 );
+
+// #endregion

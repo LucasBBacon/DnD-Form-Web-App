@@ -1,23 +1,39 @@
 import type { SpellcastingFixture } from "../../types/fixtures";
-import { COMBAT_FIXTURES, SPELLCASTING_FIXTURES } from "../../fixtures/boardFixtures";
-import type { CombatActionEntry, CombatActionSection } from "../../hooks/useCombatActions";
+import { SPELLCASTING_FIXTURES } from "../../fixtures/boardFixtures";
+import type {
+  CombatActionEntry,
+  CombatActionSection,
+} from "../../hooks/useCombatActions";
 
 /**
  * Defines shape of a single action board scenario.
  * Combines spell slots, combat action sections, and UI state.
  */
 export interface ActionsBoardScenario {
+  /** The spellcasting fixture for the scenario. */
   spellcasting: SpellcastingFixture;
+  /** The combat action sections for the scenario. */
   sections: Partial<Record<CombatActionSection, CombatActionEntry[]>>;
+  /** The currently active roller for the scenario. */
   activeRoller: {
+    /** The ID of the combat action entry currently being rolled. */
     entryId: string;
+    /** The kind of roll being performed: attack or damage. */
     kind: "attack" | "damage";
+    /** The ID of the specific damage roll being performed, if applicable. */
     damageId?: string;
   } | null;
+  /** The attack roll modes for the scenario. */
   attackRollModes: Record<string, "normal" | "advantage" | "disadvantage">;
+  /** The roll results by entry for the scenario. */
   rollResultsByEntry: Record<
     string,
-    { attack?: string; damage: Record<string, string> }
+    {
+      /** The result of the attack roll, if applicable. */
+      attack?: string;
+      /** The results of the damage rolls, keyed by damage roll ID. */
+      damage: Record<string, string>;
+    }
   >;
 }
 
@@ -32,7 +48,9 @@ const WEAPON_ACTION: CombatActionEntry = {
   description: "Melee weapon attack: +5 to hit, reach 5 ft., one target.",
   isExhausted: false,
   attackRoll: {
+    id: "atk:longsword",
     label: "Longsword Attack",
+    count: 1,
     sides: 20,
     modifier: 5,
   },
@@ -59,7 +77,9 @@ const FIREBALL_SPELL: CombatActionEntry = {
   isExhausted: false,
   spellLevel: 3,
   attackRoll: {
+    id: "atk:fireball",
     label: "Fireball Save DC",
+    count: 1,
     sides: 20,
     modifier: 5,
   },

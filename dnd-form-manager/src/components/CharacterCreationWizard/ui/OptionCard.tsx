@@ -1,10 +1,13 @@
 import type React from "react";
-import "./OptionCard.css"
+import "./OptionCard.css";
 import type { SelectionOption } from "../../../types/wizardSelection";
 
 interface OptionCardProps {
+  /** The option to be displayed in the card */
   option: SelectionOption;
+  /** Whether the option is currently selected */
   isSelected: boolean;
+  /** Callback function when the card is clicked */
   onClick: () => void;
 }
 

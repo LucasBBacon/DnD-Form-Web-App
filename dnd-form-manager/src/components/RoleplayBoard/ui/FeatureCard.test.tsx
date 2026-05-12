@@ -16,7 +16,9 @@ describe("FeatureCard", () => {
 
   it("renders the description", () => {
     render(<FeatureCard {...baseProps} />);
-    expect(screen.getByText("You can see in dim light within 60 feet.")).toBeInTheDocument();
+    expect(
+      screen.getByText("You can see in dim light within 60 feet."),
+    ).toBeInTheDocument();
   });
 
   it("renders each source badge label", () => {
@@ -26,7 +28,9 @@ describe("FeatureCard", () => {
 
   it("applies the kind class to each source badge", () => {
     const { container } = render(<FeatureCard {...baseProps} />);
-    expect(container.querySelector(".feature-source-badge--race")).toBeInTheDocument();
+    expect(
+      container.querySelector(".feature-source-badge--race"),
+    ).toBeInTheDocument();
   });
 
   it("renders multiple source badges", () => {

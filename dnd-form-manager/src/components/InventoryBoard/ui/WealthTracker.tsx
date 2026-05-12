@@ -1,11 +1,18 @@
 import type React from "react";
 
+// #region Types and Interfaces
+
 const COINS = ["CP", "SP", "EP", "GP", "PP"] as const;
 type CoinType = (typeof COINS)[number];
 
 interface WealthTrackerProps {
+  /** The coins and their respective amounts */
   coins?: Partial<Record<CoinType, number>>;
 }
+
+// #endregion
+
+// #region Component
 
 export const WealthTracker: React.FC<WealthTrackerProps> = ({ coins = {} }) => (
   <div className="wealth-shell">
@@ -26,3 +33,5 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({ coins = {} }) => (
     </div>
   </div>
 );
+
+// #endregion

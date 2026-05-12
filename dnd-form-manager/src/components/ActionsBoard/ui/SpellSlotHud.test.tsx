@@ -24,9 +24,7 @@ describe("SpellSlotHud", () => {
   });
 
   it("does not show empty message when rows are provided", () => {
-    render(
-      <SpellSlotHud rows={[{ label: "Shared", text: "0/4 used" }]} />,
-    );
+    render(<SpellSlotHud rows={[{ label: "Shared", text: "0/4 used" }]} />);
     expect(screen.queryByText("No spell slots")).not.toBeInTheDocument();
   });
 });

@@ -1,8 +1,10 @@
-import "./CostPips.css"
+import "./CostPips.css";
 import type React from "react";
 
 interface CostPipsProps {
+  /** The number of remaining pips */
   remaining: number;
+  /** The total number of pips */
   total: number;
 }
 

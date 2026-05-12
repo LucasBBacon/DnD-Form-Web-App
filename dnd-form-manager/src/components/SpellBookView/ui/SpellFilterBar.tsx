@@ -1,6 +1,8 @@
 import type React from "react";
 import "./SpellFilterBar.css";
 
+// #region Type and Interface
+
 type AvailabilityFilter = "all" | "eligible" | "ineligible";
 
 const formatLevel = (level: number) =>
@@ -9,19 +11,36 @@ const formatSchool = (school: string) =>
   school.charAt(0).toUpperCase() + school.slice(1);
 
 export interface SpellFilterBarProps {
+  /** The currently selected spell level filter */
   selectedLevel: string;
+  /** The currently selected spell school filter */
   selectedSchool: string;
+  /** The currently selected class filter */
   selectedClassId: string;
+  /** The currently selected availability filter */
   availabilityFilter: AvailabilityFilter;
+  /** The available spell levels for filtering */
   levelOptions: number[];
+  /** The available spell schools for filtering */
   schoolOptions: string[];
+  /** The available classes for filtering */
   classOptions: string[];
+  /** A map of class IDs to their display names */
   classLabelMap: Map<string, string>;
+
+  /** Callback when the spell level filter changes */
   onLevelChange: (value: string) => void;
+  /** Callback when the spell school filter changes */
   onSchoolChange: (value: string) => void;
+  /** Callback when the class filter changes */
   onClassChange: (value: string) => void;
+  /** Callback when the availability filter changes */
   onAvailabilityChange: (value: AvailabilityFilter) => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const SpellFilterBar: React.FC<SpellFilterBarProps> = ({
   selectedLevel,
@@ -102,3 +121,5 @@ export const SpellFilterBar: React.FC<SpellFilterBarProps> = ({
     </label>
   </div>
 );
+
+// #endregion

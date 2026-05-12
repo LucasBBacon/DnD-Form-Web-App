@@ -10,7 +10,7 @@ describe("LabeledField", () => {
         label="Character Name"
         value="Thrall"
         editMode="readonly"
-      />
+      />,
     );
     expect(screen.getByText("CHARACTER NAME")).toBeInTheDocument();
   });
@@ -21,15 +21,13 @@ describe("LabeledField", () => {
         label="Character Name"
         value="Thrall the Mighty"
         editMode="readonly"
-      />
+      />,
     );
     expect(screen.getByText("Thrall the Mighty")).toBeInTheDocument();
   });
 
   it("displays dash for empty value", () => {
-    render(
-      <LabeledField label="Background" value="" editMode="readonly" />
-    );
+    render(<LabeledField label="Background" value="" editMode="readonly" />);
     expect(screen.getByText("-")).toBeInTheDocument();
   });
 
@@ -39,7 +37,7 @@ describe("LabeledField", () => {
         label="Character Name"
         value="Thrall"
         editMode="readonly"
-      />
+      />,
     );
     const fieldContainer = container.querySelector(".mode-readonly");
     expect(fieldContainer).toBeInTheDocument();
@@ -52,7 +50,7 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={() => {}}
-      />
+      />,
     );
     const fieldContainer = container.querySelector(".mode-inline");
     expect(fieldContainer).toBeInTheDocument();
@@ -65,7 +63,7 @@ describe("LabeledField", () => {
         value="Wizard 5"
         editMode="modal"
         onClickModal={() => {}}
-      />
+      />,
     );
     const fieldContainer = container.querySelector(".mode-modal");
     expect(fieldContainer).toBeInTheDocument();
@@ -78,10 +76,12 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={() => {}}
-      />
+      />,
     );
 
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     const input = screen.getByDisplayValue("Thrall");
@@ -96,11 +96,13 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={mockOnChange}
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     // Edit the value
@@ -122,11 +124,13 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={mockOnChange}
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     // Edit the value
@@ -150,11 +154,13 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={mockOnChange}
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     // Edit the value
@@ -176,15 +182,17 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={mockOnChange}
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
-  // Save without changing
-  await userEvent.keyboard("{Enter}");
+    // Save without changing
+    await userEvent.keyboard("{Enter}");
 
     expect(mockOnChange).not.toHaveBeenCalled();
   });
@@ -197,7 +205,7 @@ describe("LabeledField", () => {
         value="Wizard 5"
         editMode="modal"
         onClickModal={mockOnClick}
-      />
+      />,
     );
 
     const fieldValue = screen.getByText("Wizard 5");
@@ -213,7 +221,7 @@ describe("LabeledField", () => {
         value="Test"
         editMode="readonly"
         className="custom-class"
-      />
+      />,
     );
     const fieldContainer = container.querySelector(".custom-class");
     expect(fieldContainer).toBeInTheDocument();
@@ -226,11 +234,13 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={() => {}}
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("Thrall").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("Thrall")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     const input = screen.getByDisplayValue("Thrall") as HTMLInputElement;
@@ -245,11 +255,13 @@ describe("LabeledField", () => {
         editMode="inline"
         onChange={() => {}}
         type="number"
-      />
+      />,
     );
 
     // Click to enter edit mode
-    const fieldContainer = screen.getByText("6500").closest(".labeled-field-container");
+    const fieldContainer = screen
+      .getByText("6500")
+      .closest(".labeled-field-container");
     await userEvent.click(fieldContainer!);
 
     const input = screen.getByDisplayValue("6500") as HTMLInputElement;
@@ -263,7 +275,7 @@ describe("LabeledField", () => {
         value="Thrall"
         editMode="inline"
         onChange={() => {}}
-      />
+      />,
     );
 
     const editIcon = container.querySelector(".edit-icon");
@@ -277,7 +289,7 @@ describe("LabeledField", () => {
         value="Wizard 5"
         editMode="modal"
         onClickModal={() => {}}
-      />
+      />,
     );
 
     const editIcon = container.querySelector(".edit-icon");

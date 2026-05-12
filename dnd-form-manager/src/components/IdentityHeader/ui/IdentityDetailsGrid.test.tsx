@@ -50,7 +50,7 @@ describe("IdentityDetailsGrid", () => {
       <IdentityDetailsGrid
         {...defaultProps}
         onClassModalClick={mockClassClick}
-      />
+      />,
     );
 
     const classText = screen.getByText("Wizard 5");
@@ -62,15 +62,12 @@ describe("IdentityDetailsGrid", () => {
   it("calls onNameChange when player name is edited", async () => {
     const mockNameChange = vi.fn();
     render(
-      <IdentityDetailsGrid
-        {...defaultProps}
-        onNameChange={mockNameChange}
-      />
+      <IdentityDetailsGrid {...defaultProps} onNameChange={mockNameChange} />,
     );
 
     const playerNameText = screen.getByText("Alice");
     await userEvent.click(playerNameText);
-    
+
     const playerNameField = screen.getByDisplayValue("Alice");
     await userEvent.clear(playerNameField);
     await userEvent.type(playerNameField, "Bob");
@@ -85,12 +82,12 @@ describe("IdentityDetailsGrid", () => {
       <IdentityDetailsGrid
         {...defaultProps}
         onAlignmentChange={mockAlignmentChange}
-      />
+      />,
     );
 
     const alignmentText = screen.getByText("Neutral Good");
     await userEvent.click(alignmentText);
-    
+
     const alignmentField = screen.getByDisplayValue("Neutral Good");
     await userEvent.clear(alignmentField);
     await userEvent.type(alignmentField, "Chaotic Evil");
@@ -101,13 +98,11 @@ describe("IdentityDetailsGrid", () => {
 
   it("calls onXpChange with number when xp is edited", async () => {
     const mockXpChange = vi.fn();
-    render(
-      <IdentityDetailsGrid {...defaultProps} onXpChange={mockXpChange} />
-    );
+    render(<IdentityDetailsGrid {...defaultProps} onXpChange={mockXpChange} />);
 
     const xpText = screen.getByText("6500");
     await userEvent.click(xpText);
-    
+
     const xpField = screen.getByDisplayValue("6500");
     await userEvent.clear(xpField);
     await userEvent.type(xpField, "10000");
@@ -118,13 +113,11 @@ describe("IdentityDetailsGrid", () => {
 
   it("ignores non-numeric XP input", async () => {
     const mockXpChange = vi.fn();
-    render(
-      <IdentityDetailsGrid {...defaultProps} onXpChange={mockXpChange} />
-    );
+    render(<IdentityDetailsGrid {...defaultProps} onXpChange={mockXpChange} />);
 
     const xpText = screen.getByText("6500");
     await userEvent.click(xpText);
-    
+
     const xpField = screen.getByDisplayValue("6500");
     await userEvent.clear(xpField);
     await userEvent.type(xpField, "abc");
@@ -139,7 +132,7 @@ describe("IdentityDetailsGrid", () => {
       <IdentityDetailsGrid
         {...defaultProps}
         onLevelUpModeChange={mockModeChange}
-      />
+      />,
     );
 
     const modeSelect = screen.getByRole("combobox", { name: "Level Up Mode" });
@@ -154,7 +147,7 @@ describe("IdentityDetailsGrid", () => {
       <IdentityDetailsGrid
         {...defaultProps}
         onBackgroundModalClick={mockBackgroundClick}
-      />
+      />,
     );
 
     const backgroundText = screen.getByText("Choose Background");
@@ -169,7 +162,7 @@ describe("IdentityDetailsGrid", () => {
       <IdentityDetailsGrid
         {...defaultProps}
         onRaceModalClick={mockRaceClick}
-      />
+      />,
     );
 
     const raceText = screen.getByText("Human");

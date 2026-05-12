@@ -2,15 +2,30 @@ import type React from "react";
 import "./LabeledField.css";
 import { useEffect, useRef, useState } from "react";
 
+// #region Interface
+
 interface LabeledFieldProps {
+  /** The label for the field */
   label: string;
+  /** The value of the field */
   value: string | number;
+  /** The edit mode of the field */
   editMode?: "readonly" | "inline" | "modal";
+  /** The type of the input field */
   type?: "text" | "number";
+
+  /** Callback when the value changes */
   onChange?: (newValue: string) => void;
+  /** Callback when the modal is clicked */
   onClickModal?: () => void;
+
+  /** Additional class names for the container */
   className?: string;
 }
+
+// #endregion
+
+// #region Component
 
 export const LabeledField: React.FC<LabeledFieldProps> = ({
   label,
@@ -90,3 +105,5 @@ export const LabeledField: React.FC<LabeledFieldProps> = ({
     </div>
   );
 };
+
+// #endregion

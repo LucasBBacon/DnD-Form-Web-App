@@ -52,7 +52,7 @@ export const createMockCharacterStats = (
 export const createMockCharacterStoreForVitals = (
   level: number = 5,
   tempHp: number = 0,
-  deathSaves: DeathSavesFixture = { successes: 0, failures: 0 },
+  deathSaves: DeathSavesFixture = { success: 0, failure: 0 },
   expendedHitDice: number = 0,
   callbacks?: {
     takeDamage?: (amount: number) => void;

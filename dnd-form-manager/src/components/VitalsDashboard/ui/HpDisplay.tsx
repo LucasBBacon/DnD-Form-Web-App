@@ -1,11 +1,20 @@
 import type React from "react";
 import "./HpDisplay.css";
 
+// #region Interface
+
 interface HpDisplayProps {
+  /** The current hit points */
   current: number;
+  /** The maximum hit points */
   max: number;
+  /** The temporary hit points */
   temp: number;
 }
+
+// #endregion
+
+// #region Component
 
 export const HpDisplay: React.FC<HpDisplayProps> = ({ current, max, temp }) => (
   <div className="hp-display">
@@ -25,3 +34,5 @@ export const HpDisplay: React.FC<HpDisplayProps> = ({ current, max, temp }) => (
     )}
   </div>
 );
+
+// #endregion

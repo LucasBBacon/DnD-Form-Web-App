@@ -10,11 +10,18 @@ import "./SpellBookView.css";
 import { SpellFilterBar } from "./ui/SpellFilterBar";
 import { SpellRow } from "./ui/SpellRow";
 
+// #region Type and Interface
+
 interface SpellBookViewProps {
+  /** The spellcasting data for the character. */
   spellcasting: UseSpellcastingReturn;
 }
 
 type AvailabilityFilter = "all" | "eligible" | "ineligible";
+
+// #endregion
+
+// #region Helpers
 
 const buildClassLabelMap = () => {
   const map = new Map<string, string>();
@@ -60,6 +67,10 @@ const isSpellEligibleForSummary = (
 
   return levelCap >= spell.level;
 };
+
+// #endregion
+
+// #region View Component
 
 export const SpellBookView: React.FC<SpellBookViewProps> = ({
   spellcasting,
@@ -285,3 +296,5 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
     </div>
   );
 };
+
+// #endregion

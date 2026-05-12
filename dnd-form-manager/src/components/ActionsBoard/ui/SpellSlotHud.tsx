@@ -2,11 +2,14 @@ import type React from "react";
 import "./SpellSlotHud.css"
 
 export interface SpellSlotRow {
+  /** The label for the spell slot row */
   label: string;
+  /** The text describing the spell slot usage */
   text: string;
 }
 
 interface SpellSlotHudProps {
+  /** The rows of spell slots to display */
   rows: SpellSlotRow[];
 }
 

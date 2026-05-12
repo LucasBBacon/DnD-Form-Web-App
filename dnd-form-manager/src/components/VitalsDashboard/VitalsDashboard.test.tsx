@@ -19,7 +19,7 @@ describe("VitalsDashboard rest actions", () => {
     vi.mocked(useCharacterStore).mockReturnValue({
       level: 5,
       tempHp: 0,
-      deathSaves: { successes: 0, failures: 0 },
+      deathSaves: { success: 0, failure: 0 },
       expendedHitDice: 2,
       takeDamage: vi.fn(),
       heal: vi.fn(),

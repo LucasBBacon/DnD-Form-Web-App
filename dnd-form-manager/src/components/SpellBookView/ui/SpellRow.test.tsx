@@ -1,13 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { SpellSchool, SpellSavingThrow } from "../../../types/spell";
 import { SpellRow } from "./SpellRow";
 
 const baseSpell = {
   id: "fireball",
   name: "Fireball",
   level: 3,
-  school: "evocation",
+  school: "evocation" as SpellSchool,
   castingTime: "1 action",
   range: "150 feet",
   duration: "Instantaneous",
@@ -19,8 +20,16 @@ const baseSpell = {
     shortDescription: "A sphere of fire explodes.",
     fullText: "A bright streak flashes from your pointing finger...",
   },
-  savingThrow: "DEX",
-  output: { damage: [{ type: "fire", dice: "8d6" }] },
+  savingThrow: {
+    ability: "dex",
+    dcCalculation: {
+      base: 8,
+      includeProficiency: true,
+      modifierStat: "spellcasting",
+    },
+    onSave: "half_damage",
+  } as SpellSavingThrow,
+  output: { damage: [{ roll: "1d6", type: "fire", dice: "8d6" }] },
 };
 
 const baseProps = {
@@ -72,7 +81,13 @@ describe("SpellRow", () => {
   });
 
   it("renders casting stats when provided and expanded", () => {
-    render(<SpellRow {...baseProps} isExpanded castingStats={{ saveDC: 16, attackBonus: 6 }} />);
+    render(
+      <SpellRow
+        {...baseProps}
+        isExpanded
+        castingStats={{ saveDC: 16, attackBonus: 6 }}
+      />,
+    );
     expect(screen.getByText("16")).toBeInTheDocument();
   });
 

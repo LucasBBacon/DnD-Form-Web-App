@@ -1,18 +1,33 @@
 import type React from "react";
-import "./StatsTopBar.css"
+import "./StatsTopBar.css";
+
+// #region Interfaces
 
 interface Passives {
+  /** The character's passive perception score */
   perception: number;
+  /** The character's passive investigation score */
   investigation: number;
+  /** The character's passive insight score */
   insight: number;
 }
 
 interface StatsTopBarProps {
+  /** The character's proficiency bonus */
   proficiencyBonus: number;
+  /** The character's passive scores */
   passives: Passives;
 }
 
+// #endregion
+
+// #region Helpers
+
 const formatMod = (mod: number) => (mod >= 0 ? `+${mod}` : `${mod}`);
+
+// #endregion
+
+// #region Component
 
 export const StatsTopBar: React.FC<StatsTopBarProps> = ({
   proficiencyBonus,
@@ -39,3 +54,5 @@ export const StatsTopBar: React.FC<StatsTopBarProps> = ({
     </div>
   </div>
 );
+
+// #endregion

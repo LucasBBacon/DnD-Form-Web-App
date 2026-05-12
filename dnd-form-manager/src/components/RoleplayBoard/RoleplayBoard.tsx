@@ -52,10 +52,7 @@ export const RoleplayBoard: React.FC = () => {
     alliesAndOrganizations: store.alliesAndOrganizations,
   };
 
-  const handleTextBlur = (
-    field: RoleplayField,
-    value: string,
-  ) => {
+  const handleTextBlur = (field: RoleplayField, value: string) => {
     if (roleplayValues[field] !== value) {
       store.updateRoleplayField(field, value);
     }

@@ -23,8 +23,8 @@ export interface CombatFixture {
  * Fixture for character death saves state.
  */
 export interface DeathSavesFixture {
-  successes: number;
-  failures: number;
+  success: number;
+  failure: number;
 }
 
 /**

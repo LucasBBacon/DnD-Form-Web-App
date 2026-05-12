@@ -2,36 +2,62 @@ import type React from "react";
 import "./SpellRow.css";
 import type { SpellData } from "../../../types/spell";
 
+// #region Interfaces
+
 interface CastingStats {
+  /** The saving throw DC for the spell. */
   saveDC: number;
+  /** The attack bonus for the spell. */
   attackBonus: number;
 }
 
 interface InnateEntry {
+  /** The ID of the spell. */
   spellId: string;
+  /** The name of the trait that grants this spell. */
   sourceTraitName: string;
+  /** The saving throw DC for the spell. */
   spellSaveDC: number;
+  /** The attack bonus for the spell. */
   spellAttackBonus: number;
+  /** The number of uses and reset condition for the spell. */
   uses?: { count: number; reset: string };
 }
 
 interface SpellRowProps {
+  /** The spell data for this row. */
   spell: SpellData;
+  /** Whether the spell is eligible for the character. */
   eligible: boolean;
+  /** Whether the spell row is expanded to show details. */
   isExpanded: boolean;
+  /** Callback to toggle the expanded state of the spell row. */
   onToggle: () => void;
+  /** The class names associated with the spell. */
   classNames: string[];
+  /** The casting stats for the spell, if available. */
   castingStats: CastingStats | null;
+  /** The innate entries for the spell. */
   innateEntries: InnateEntry[];
+  /** Whether the spell has damage output. */
   hasDamageOutput: boolean;
 }
 
-const formatLevel = (level: number) => (level === 0 ? "Cantrip" : `Level ${level}`);
+// #endregion
+
+// #region Helpers
+
+const formatLevel = (level: number) =>
+  level === 0 ? "Cantrip" : `Level ${level}`;
 const formatSchool = (school: string) =>
   school.charAt(0).toUpperCase() + school.slice(1);
 const formatAttackBonus = (bonus: number) =>
   bonus >= 0 ? `+${bonus}` : String(bonus);
 const formatResetText = (value: string) => value.replace(/_/g, " ");
+
+// #endregion
+
+// #region Component
 
 export const SpellRow: React.FC<SpellRowProps> = ({
   spell,
@@ -55,7 +81,9 @@ export const SpellRow: React.FC<SpellRowProps> = ({
     >
       <div className="spell-heading-main">
         <span className="spell-name">{spell.name}</span>
-        <span className={`availability-badge ${eligible ? "eligible" : "ineligible"}`}>
+        <span
+          className={`availability-badge ${eligible ? "eligible" : "ineligible"}`}
+        >
           {eligible ? "Eligible" : "Not eligible"}
         </span>
       </div>
@@ -103,7 +131,8 @@ export const SpellRow: React.FC<SpellRowProps> = ({
           </div>
           {spell.components.materialMaterials && (
             <div className="meta-item">
-              <strong>Material Details:</strong> {spell.components.materialMaterials}
+              <strong>Material Details:</strong>{" "}
+              {spell.components.materialMaterials}
             </div>
           )}
           {spell.savingThrow && castingStats && (
@@ -113,7 +142,8 @@ export const SpellRow: React.FC<SpellRowProps> = ({
           )}
           {hasDamageOutput && castingStats && (
             <div className="meta-item highlight">
-              <strong>Spell Attack:</strong> {formatAttackBonus(castingStats.attackBonus)}
+              <strong>Spell Attack:</strong>{" "}
+              {formatAttackBonus(castingStats.attackBonus)}
             </div>
           )}
         </div>
@@ -153,3 +183,5 @@ export const SpellRow: React.FC<SpellRowProps> = ({
     )}
   </article>
 );
+
+// #endregion

@@ -1,16 +1,27 @@
 import type React from "react";
-import "./HitDiceRollPanel.css"
+import "./HitDiceRollPanel.css";
 import type { HitDie } from "../../../types/common";
 import { DiceRoller } from "../../DiceRoller/DiceRoller";
 import { useState } from "react";
 
+// #region Interface
+
 interface HitDiceRollPanelProps {
+  /** The number of available Hit Dice the character has. */
   availableDice: number;
+  /** The type of Hit Die the character uses (e.g., d6, d8, d10, d12). */
   hitDie: HitDie;
+  /** The character's Constitution modifier. */
   conMod: number;
+  /** Whether the character is fully healed. */
   isFullyHealed: boolean;
+  /** Callback function to apply the rolled Hit Die value. */
   onRoll: (totalHeal: number) => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const HitDiceRollPanel: React.FC<HitDiceRollPanelProps> = ({
   availableDice,
@@ -67,12 +78,20 @@ export const HitDiceRollPanel: React.FC<HitDiceRollPanelProps> = ({
             value={manualRoll}
             onChange={(e) => setManualRoll(Number(e.target.value) || "")}
           />
-          <button type="button" onClick={handleManualRoll} disabled={!manualRoll}>
+          <button
+            type="button"
+            onClick={handleManualRoll}
+            disabled={!manualRoll}
+          >
             Apply
           </button>
         </div>
-        <small className="help-text">Con modifier will be added automatically.</small>
+        <small className="help-text">
+          Con modifier will be added automatically.
+        </small>
       </div>
     </div>
   );
 };
+
+// #endregion

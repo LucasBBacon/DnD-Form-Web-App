@@ -7,7 +7,7 @@ import {
 /**
  * Create mock objects matching ActionsBoard hook dependencies.
  * Returns both useCombatActions and useCharacterStore mocks ready for fixture data.
- * 
+ *
  * Used in unit tests only (ActionsBoardView.test.tsx).
  * Stories render the presentational component directly with props.
  */

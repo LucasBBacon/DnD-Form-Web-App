@@ -17,18 +17,15 @@ type Story = StoryObj<typeof meta>;
 const mockRequirement: SkillProficiencyRequirement = {
   id: "test-skill-req",
   type: "skill_proficiency",
+  sourceId: "test-feature",
+  sourceName: "Test Feature",
   wizardStage: "race",
   required: 2,
   label: "Choose 2 skills",
-  pool: [
-    "animal_handling",
-    "insight",
-    "medicine",
-    "perception",
-    "survival",
-  ],
+  pool: ["animal_handling", "insight", "medicine", "perception", "survival"],
   isBlocking: true,
   isResolved: false,
+  current: []
 };
 
 export const NoSelection: Story = {

@@ -426,7 +426,7 @@ export interface CharacterState {
   // The current temporary hit points of the character, which can be set by certain spells or abilities and are lost before regular hit points when taking damage
   tempHp: number;
   // An object tracking the number of successful and failed death saving throws, used to manage the character's status when at 0 HP and determine if they stabilize or die after three successes or failures
-  deathSaves: { successes: number; failures: number };
+  deathSaves: { success: number; failure: number };
   // The number of hit dice expended by the character, used to track the character's available hit dice for healing during rests
   expendedHitDice: number;
 
@@ -638,7 +638,7 @@ interface CharacterActions {
   
   setTempHp: (amount: number) => void;
   
-  recordDeathSave: (type: "successes" | "failures", value: boolean) => void;
+  recordDeathSave: (type: "success" | "failure", value: boolean) => void;
   
   expendHitDie: () => void;
 
@@ -742,7 +742,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
 
   damageTaken: 0,
   tempHp: 0,
-  deathSaves: { successes: 0, failures: 0 },
+  deathSaves: { success: 0, failure: 0 },
   expendedHitDice: 0,
   
   // #endregion
@@ -1698,7 +1698,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       // Cannot have negative damage take (cannot heal above max HP)
       damageTaken: Math.max(0, state.damageTaken - amount),
       // 5e rule: regaining any HP resets death saves
-      deathSaves: { successes: 0, failures: 0 },
+      deathSaves: { success: 0, failure: 0 },
     })),
 
   setTempHp: (amount) =>

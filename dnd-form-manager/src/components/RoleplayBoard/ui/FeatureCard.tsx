@@ -1,17 +1,29 @@
 import type React from "react";
-import "./FeatureCard.css"
+import "./FeatureCard.css";
+
+// #region Interfaces
 
 export interface FeatureSource {
+  /** The unique key for the feature source */
   key: string;
+  /** The kind of feature source */
   kind: string;
+  /** The label for the feature source */
   label: string;
 }
 
 interface FeatureCardProps {
+  /** The name of the feature */
   name: string;
+  /** The sources of the feature */
   sources: FeatureSource[];
+  /** The description of the feature */
   description: string;
 }
+
+// #endregion
+
+// #region Component
 
 export const FeatureCard: React.FC<FeatureCardProps> = ({
   name,
@@ -35,3 +47,5 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
     <div className="feature-description">{description}</div>
   </div>
 );
+
+// #endregion

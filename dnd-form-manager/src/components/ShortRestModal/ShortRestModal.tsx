@@ -4,10 +4,19 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import type { HitDie } from "../../types/common";
 import type { RestType } from "../../store/useCharacterStore";
 import { ShortRestModalView } from "./ShortRestModalView";
+
+// #region Interface
+
 interface ShortRestModalProps {
+  /** The type of rest being taken (short or long) */
   restType?: RestType;
+  /** Callback function to close the modal */
   onClose: () => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const ShortRestModal: React.FC<ShortRestModalProps> = ({
   restType = "short",
@@ -32,7 +41,7 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({
 
   const availableDice = Math.max(0, level - expendedHitDice);
 
-  // region Actions
+  // Actions
 
   const handleFinishRest = () => {
     takeShortRest(); // Warlocks should get pact slots back
@@ -64,3 +73,5 @@ export const ShortRestModal: React.FC<ShortRestModalProps> = ({
     />
   );
 };
+
+// #endregion

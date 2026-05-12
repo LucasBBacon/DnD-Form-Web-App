@@ -13,21 +13,21 @@ export default meta;
 type Story = StoryObj<typeof DeathSavesTracker>;
 
 export const Fresh: Story = {
-  args: { successes: 0, failures: 0 },
+  args: { success: 0, failure: 0 },
 };
 
 export const OneSuccess: Story = {
-  args: { successes: 1, failures: 0 },
+  args: { success: 1, failure: 0 },
 };
 
 export const Critical: Story = {
-  args: { successes: 1, failures: 2 },
+  args: { success: 1, failure: 2 },
 };
 
 export const Stabilized: Story = {
-  args: { successes: 3, failures: 1 },
+  args: { success: 3, failure: 1 },
 };
 
 export const Dead: Story = {
-  args: { successes: 0, failures: 3 },
+  args: { success: 0, failure: 3 },
 };

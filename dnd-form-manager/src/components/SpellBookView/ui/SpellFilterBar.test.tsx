@@ -35,28 +35,42 @@ describe("SpellFilterBar", () => {
   it("calls onLevelChange when level select changes", async () => {
     const onLevelChange = vi.fn();
     render(<SpellFilterBar {...base} onLevelChange={onLevelChange} />);
-    await userEvent.selectOptions(screen.getByLabelText("Filter by level"), "1");
+    await userEvent.selectOptions(
+      screen.getByLabelText("Filter by level"),
+      "1",
+    );
     expect(onLevelChange).toHaveBeenCalledWith("1");
   });
 
   it("calls onSchoolChange when school select changes", async () => {
     const onSchoolChange = vi.fn();
     render(<SpellFilterBar {...base} onSchoolChange={onSchoolChange} />);
-    await userEvent.selectOptions(screen.getByLabelText("Filter by school"), "evocation");
+    await userEvent.selectOptions(
+      screen.getByLabelText("Filter by school"),
+      "evocation",
+    );
     expect(onSchoolChange).toHaveBeenCalledWith("evocation");
   });
 
   it("calls onClassChange when class select changes", async () => {
     const onClassChange = vi.fn();
     render(<SpellFilterBar {...base} onClassChange={onClassChange} />);
-    await userEvent.selectOptions(screen.getByLabelText("Filter by class"), "wizard");
+    await userEvent.selectOptions(
+      screen.getByLabelText("Filter by class"),
+      "wizard",
+    );
     expect(onClassChange).toHaveBeenCalledWith("wizard");
   });
 
   it("calls onAvailabilityChange when availability select changes", async () => {
     const onAvailabilityChange = vi.fn();
-    render(<SpellFilterBar {...base} onAvailabilityChange={onAvailabilityChange} />);
-    await userEvent.selectOptions(screen.getByLabelText("Filter by availability"), "eligible");
+    render(
+      <SpellFilterBar {...base} onAvailabilityChange={onAvailabilityChange} />,
+    );
+    await userEvent.selectOptions(
+      screen.getByLabelText("Filter by availability"),
+      "eligible",
+    );
     expect(onAvailabilityChange).toHaveBeenCalledWith("eligible");
   });
 

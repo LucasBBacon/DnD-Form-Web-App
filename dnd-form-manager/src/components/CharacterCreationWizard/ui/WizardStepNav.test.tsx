@@ -17,15 +17,15 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={() => {}}
         isStepDisabled={() => false}
-      />
+      />,
     );
 
     expect(screen.getByRole("button", { name: "1. Race" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "2. Class" })
+      screen.getByRole("button", { name: "2. Class" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "3. Spells" })
+      screen.getByRole("button", { name: "3. Spells" }),
     ).toBeInTheDocument();
   });
 
@@ -36,7 +36,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={1}
         onStepClick={() => {}}
         isStepDisabled={() => false}
-      />
+      />,
     );
 
     const classBtn = screen.getByRole("button", { name: "2. Class" });
@@ -50,7 +50,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={1}
         onStepClick={() => {}}
         isStepDisabled={() => false}
-      />
+      />,
     );
 
     const raceBtn = screen.getByRole("button", { name: "1. Race" });
@@ -65,7 +65,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={mockClick}
         isStepDisabled={() => false}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByRole("button", { name: "2. Class" }));
@@ -79,7 +79,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={() => {}}
         isStepDisabled={(index) => index > 0}
-      />
+      />,
     );
 
     const raceBtn = screen.getByRole("button", { name: "1. Race" });
@@ -98,7 +98,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={() => {}}
         isStepDisabled={(index) => index > 0}
-      />
+      />,
     );
 
     const classBtn = screen.getByRole("button", { name: "2. Class" });
@@ -113,7 +113,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={mockClick}
         isStepDisabled={(index) => index > 0}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByRole("button", { name: "2. Class" }));
@@ -128,7 +128,7 @@ describe("WizardStepNav", () => {
         currentStepIndex={0}
         onStepClick={mockClick}
         isStepDisabled={() => false}
-      />
+      />,
     );
 
     await userEvent.click(screen.getByRole("button", { name: "1. Race" }));

@@ -234,7 +234,7 @@ export const Playground: Story = {
     isArmorPenalized: false,
     hp: { current: 45, max: 52 },
     tempHp: 0,
-    deathSaves: { successes: 0, failures: 0 },
+    deathSaves: { success: 0, failure: 0 },
     level: 5,
     expendedHitDice: 0,
     healthInput: "",

@@ -1,27 +1,50 @@
 import { ROLEPLAY_FIXTURES } from "../../fixtures/boardFixtures";
 import type { RoleplayFeature, RoleplayTab } from "./RoleplayBoardView";
 
+// #region Interface
+
 export interface RoleplayBoardScenario {
+  /** The currently active tab on the roleplay board */
   activeTab: RoleplayTab;
+  /** The list of features available to the character */
   features: RoleplayFeature[];
+  /** The character's core characteristics */
   characteristics: {
+    /** The character's personality traits */
     personalityTraits: string;
+    /** The character's ideals */
     ideals: string;
+    /** The character's bonds */
     bonds: string;
+    /** The character's flaws */
     flaws: string;
   };
+  /** The character's biography */
   biography: {
+    /** The character's age */
     age: string;
+    /** The character's height */
     height: string;
+    /** The character's weight */
     weight: string;
+    /** The character's eye color */
     eyes: string;
+    /** The character's skin color */
     skin: string;
+    /** The character's hair color */
     hair: string;
+    /** The character's overall appearance */
     appearance: string;
+    /** The character's backstory */
     backstory: string;
+    /** The character's allies and organizations */
     alliesAndOrganizations: string;
   };
 }
+
+// #endregion
+
+// #region Fixtures
 
 const FEATURE_SET_HEROIC: RoleplayFeature[] = [
   {
@@ -177,3 +200,5 @@ export const ROLEPLAY_BOARD_FIXTURES: Record<string, RoleplayBoardScenario> = {
     },
   },
 };
+
+// #endregion

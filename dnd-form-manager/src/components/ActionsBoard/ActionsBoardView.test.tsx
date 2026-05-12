@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ActionsBoardView } from "./ActionsBoardView";
@@ -11,7 +11,9 @@ import {
 /**
  * Helper to create props from a fixture scenario.
  */
-function createPropsFromScenario(scenario: ActionsBoardScenario): ActionsBoardViewProps {
+function createPropsFromScenario(
+  scenario: ActionsBoardScenario,
+): ActionsBoardViewProps {
   const onActiveRollerChange = vi.fn();
   const onAttackRollModeChange = vi.fn();
   const onAttackResult = vi.fn();
@@ -19,15 +21,16 @@ function createPropsFromScenario(scenario: ActionsBoardScenario): ActionsBoardVi
   const onExpendTraitUse = vi.fn();
   const onRestoreTraitUse = vi.fn();
   const toRomanNumeral = (level: number) =>
-    ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] || level.toString();
+    ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ||
+    level.toString();
 
   return {
-      slotHudRows: Object.entries(scenario.spellcasting.spellSlotsByLevel).map(
-        ([level, slotData]) => ({
-          label: `Lvl ${level}`,
-          text: `[${("o".repeat(slotData.available - slotData.used)).padEnd(slotData.available, " ")}]`,
-        }),
-      ),
+    slotHudRows: Object.entries(scenario.spellcasting.spellSlotsByLevel).map(
+      ([level, slotData]) => ({
+        label: `Lvl ${level}`,
+        text: `[${"o".repeat(slotData.available - slotData.used).padEnd(slotData.available, " ")}]`,
+      }),
+    ),
     sections: scenario.sections,
     activeRoller: scenario.activeRoller,
     attackRollModes: scenario.attackRollModes,
@@ -51,7 +54,9 @@ describe("ActionsBoardView", () => {
       render(<ActionsBoardView {...props} />);
 
       expect(screen.getByText(/No Actions available/i)).toBeInTheDocument();
-      expect(screen.getByText(/No Bonus Actions available/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/No Bonus Actions available/i),
+      ).toBeInTheDocument();
       expect(screen.getByText(/No Reactions available/i)).toBeInTheDocument();
     });
 
@@ -149,7 +154,9 @@ describe("ActionsBoardView", () => {
 
       render(<ActionsBoardView {...props} />);
 
-      expect(screen.getByRole("button", { name: /Roll To-Hit/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Roll To-Hit/i }),
+      ).toBeInTheDocument();
     });
 
     it("displays attack roll mode toggle", () => {
@@ -159,7 +166,9 @@ describe("ActionsBoardView", () => {
       render(<ActionsBoardView {...props} />);
 
       // Attack roll mode toggle should be present (rendered by AttackRollModeToggle component)
-      const toHitButtons = screen.getAllByRole("button", { name: /to-hit mode/i });
+      const toHitButtons = screen.getAllByRole("button", {
+        name: /to-hit mode/i,
+      });
       expect(toHitButtons.length).toBeGreaterThan(0);
     });
 
@@ -215,7 +224,9 @@ describe("ActionsBoardView", () => {
       render(<ActionsBoardView {...props} />);
 
       const useButtons = screen.getAllByRole("button", { name: /Use/i });
-      const restoreButtons = screen.getAllByRole("button", { name: /Restore/i });
+      const restoreButtons = screen.getAllByRole("button", {
+        name: /Restore/i,
+      });
       expect(useButtons.length).toBeGreaterThan(0);
       expect(restoreButtons.length).toBeGreaterThan(0);
     });
@@ -275,6 +286,7 @@ describe("ActionsBoardView", () => {
 
   describe("Callbacks", () => {
     it("calls onAttackRollModeChange when mode is toggled", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const user = userEvent.setup();
       const scenario = ACTIONS_BOARD_FIXTURES.withAttacks;
       const props = createPropsFromScenario(scenario);
@@ -293,7 +305,9 @@ describe("ActionsBoardView", () => {
 
       render(<ActionsBoardView {...props} />);
 
-      const rollToHitButton = screen.getByRole("button", { name: /Roll To-Hit/i });
+      const rollToHitButton = screen.getByRole("button", {
+        name: /Roll To-Hit/i,
+      });
       await user.click(rollToHitButton);
 
       expect(props.onActiveRollerChange).toHaveBeenCalled();
@@ -320,7 +334,9 @@ describe("ActionsBoardView", () => {
 
       render(<ActionsBoardView {...props} />);
 
-      const restoreButtons = screen.getAllByRole("button", { name: /Restore/i });
+      const restoreButtons = screen.getAllByRole("button", {
+        name: /Restore/i,
+      });
       if (restoreButtons.length > 0) {
         await user.click(restoreButtons[0]);
         expect(props.onRestoreTraitUse).toHaveBeenCalled();

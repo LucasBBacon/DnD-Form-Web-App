@@ -166,7 +166,7 @@ describe("ActionsBoard", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Damage (slashing)" }));
     fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage \(slashing\)" }),
+      screen.getByRole("button", { name: "Roll Damage (slashing)" }),
     );
 
     expect(
@@ -210,10 +210,10 @@ describe("ActionsBoard", () => {
     fireEvent.click(screen.getByRole("button", { name: "Roll All Damage" }));
 
     fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage \(slashing\)" }),
+      screen.getByRole("button", { name: "Roll Damage (slashing)" }),
     );
     fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage \(fire\)" }),
+      screen.getByRole("button", { name: "Roll Damage (fire)" }),
     );
 
     expect(

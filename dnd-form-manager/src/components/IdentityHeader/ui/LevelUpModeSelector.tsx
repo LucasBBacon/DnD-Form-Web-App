@@ -1,10 +1,18 @@
 import type React from "react";
 import type { LevelUpMode } from "../../../types/progression";
 
+// #region Interface
+
 interface LevelUpModeSelectorProps {
+  /** The current level up mode */
   value: LevelUpMode;
+  /** Callback when the level up mode changes */
   onChange: (newMode: LevelUpMode) => void;
 }
+
+// #endregion
+
+// #region Component
 
 export const LevelUpModeSelector: React.FC<LevelUpModeSelectorProps> = ({
   value,
@@ -31,3 +39,5 @@ export const LevelUpModeSelector: React.FC<LevelUpModeSelectorProps> = ({
     </div>
   );
 };
+
+// #endregion

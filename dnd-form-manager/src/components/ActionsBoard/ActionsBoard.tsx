@@ -8,24 +8,33 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import { ActionsBoardView } from "./ActionsBoardView";
 
 /**
- * Hook wrapper for ActionsBoardView.
- * Handles all hook subscriptions and state management,
- * then passes everything to the presentational view component.
+ * Main component for managing and displaying combat actions, spell slots, and rolls.
+ * Connects to combat actions and character store hooks, and manages local UI state for active rollers and roll results.
+ * @returns The ActionsBoard component.
  */
 export const ActionsBoard: React.FC = () => {
+  // #region State and Hooks
+
   const { spellcasting, sections, toRomanNumeral } = useCombatActions();
   const { expendTraitActionUse, restoreTraitActionUse } = useCharacterStore();
 
-  const [activeRoller, setActiveRoller] = useState<
-    { entryId: string; kind: "attack" | "damage"; damageId?: string } | null
-  >(null);
+  const [activeRoller, setActiveRoller] = useState<{
+    entryId: string;
+    kind: "attack" | "damage";
+    damageId?: string;
+  } | null>(null);
   const [attackRollModes, setAttackRollModes] = useState<
-    Record<string, "attack" | "damage">
+    Record<string, "normal" | "advantage" | "disadvantage">
   >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, { attack?: string; damage: Record<string, string> }>
   >({});
 
+  // #endregion
+
+  // #region Handlers and Memoized Values
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getAttackRollMode = (entryId: string) =>
     attackRollModes[entryId] ?? "normal";
 
@@ -38,7 +47,7 @@ export const ActionsBoard: React.FC = () => {
     entryId: string,
     config: CombatRollMetadata,
     rolls: number[],
-    mode: "normal" | "advantage" | "disadvantage"
+    mode: "normal" | "advantage" | "disadvantage",
   ) => {
     const first = rolls[0] ?? 0;
     const second = rolls[1] ?? 0;
@@ -81,7 +90,7 @@ export const ActionsBoard: React.FC = () => {
     entryId: string,
     damageId: string,
     config: CombatRollMetadata,
-    rollTotal: number
+    rollTotal: number,
   ) => {
     const total = rollTotal + config.modifier;
     const detail = `${total} (${rollTotal}${formatModifier(config.modifier)})`;
@@ -117,7 +126,7 @@ export const ActionsBoard: React.FC = () => {
     if (spellcasting.slots.pact && spellcasting.slots.pact.total > 0) {
       const remaining = Math.max(
         spellcasting.slots.pact.total - spellcasting.slots.pact.expended,
-        0
+        0,
       );
       const bubbles = "o"
         .repeat(remaining)
@@ -130,6 +139,8 @@ export const ActionsBoard: React.FC = () => {
 
     return rows;
   }, [spellcasting.slots.pact, spellcasting.slots.shared]);
+
+  // #endregion
 
   return (
     <ActionsBoardView

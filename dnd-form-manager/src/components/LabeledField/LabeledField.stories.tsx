@@ -60,7 +60,8 @@ export const NumericValue: Story = {
 export const LongValue: Story = {
   args: {
     label: "Character Description",
-    value: "A seasoned adventurer with years of experience in dungeon delving and dragon slaying.",
+    value:
+      "A seasoned adventurer with years of experience in dungeon delving and dragon slaying.",
     editMode: "readonly",
   },
 };

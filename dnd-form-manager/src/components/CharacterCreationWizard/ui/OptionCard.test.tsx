@@ -14,18 +14,26 @@ const option = {
 
 describe("OptionCard", () => {
   it("renders the name and tagline", () => {
-    render(<OptionCard option={option} isSelected={false} onClick={() => {}} />);
+    render(
+      <OptionCard option={option} isSelected={false} onClick={() => {}} />,
+    );
     expect(screen.getByText("Elf")).toBeInTheDocument();
-    expect(screen.getByText("Graceful, keen-sensed, magical.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Graceful, keen-sensed, magical."),
+    ).toBeInTheDocument();
   });
 
   it("renders the first letter as the initial avatar", () => {
-    render(<OptionCard option={option} isSelected={false} onClick={() => {}} />);
+    render(
+      <OptionCard option={option} isSelected={false} onClick={() => {}} />,
+    );
     expect(screen.getByText("E")).toBeInTheDocument();
   });
 
   it("does not show selected badge when not selected", () => {
-    render(<OptionCard option={option} isSelected={false} onClick={() => {}} />);
+    render(
+      <OptionCard option={option} isSelected={false} onClick={() => {}} />,
+    );
     expect(screen.queryByText("CHOSEN")).not.toBeInTheDocument();
   });
 

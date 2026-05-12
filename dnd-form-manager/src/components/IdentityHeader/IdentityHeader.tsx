@@ -4,6 +4,8 @@ import { getClassById, getRaceById } from "../../data/staticDataApi";
 import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils";
 import { IdentityHeaderView } from "./IdentityHeaderView.tsx";
 
+// #region Component
+
 export const IdentityHeader: React.FC = () => {
   const {
     name,
@@ -81,3 +83,5 @@ export const IdentityHeader: React.FC = () => {
     />
   );
 };
+
+// #endregion

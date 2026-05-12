@@ -29,13 +29,20 @@ describe("SkillRow", () => {
   });
 
   it("shows advantage indicator when hasAdvantage is true", () => {
-    render(<SkillRow label="Athletics" modifier={4} isProficient hasAdvantage />);
+    render(
+      <SkillRow label="Athletics" modifier={4} isProficient hasAdvantage />,
+    );
     expect(screen.getByText("(A)", { exact: false })).toBeInTheDocument();
   });
 
   it("shows disadvantage indicator when hasDisadvantage is true", () => {
     render(
-      <SkillRow label="Stealth" modifier={2} isProficient={false} hasDisadvantage />,
+      <SkillRow
+        label="Stealth"
+        modifier={2}
+        isProficient={false}
+        hasDisadvantage
+      />,
     );
     expect(screen.getByText("(D)", { exact: false })).toBeInTheDocument();
   });

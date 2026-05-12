@@ -49,7 +49,9 @@ describe("HealthAdjustmentForm", () => {
         onCancel={noop}
       />,
     );
-    expect(screen.getByPlaceholderText("Enter damage amount")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Enter damage amount"),
+    ).toBeInTheDocument();
     expect(screen.getByText("Apply")).toBeInTheDocument();
   });
 

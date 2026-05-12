@@ -4,7 +4,13 @@ import { DiceRoller } from "../DiceRoller/DiceRoller";
 import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
-import type { CombatActionSection, CombatActionEntry, CombatRollMetadata } from "../../hooks/useCombatActions";
+import type {
+  CombatActionSection,
+  CombatActionEntry,
+  CombatRollMetadata,
+} from "../../hooks/useCombatActions";
+
+// #region Constants and Utility Functions
 
 const SECTION_ORDER: CombatActionSection[] = [
   "action",
@@ -18,43 +24,100 @@ const SECTION_LABELS: Record<CombatActionSection, string> = {
   reaction: "Reactions",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formatModifier = (modifier: number): string => {
   if (modifier === 0) return "";
   return modifier > 0 ? ` + ${modifier}` : ` - ${Math.abs(modifier)}`;
 };
 
+// #endregion
+
+// #region Types and Interfaces
+
 /**
- * Props for ActionsBoardView presentational component.
- * All data is passed as props; no hooks are used.
+ * Props for the ActionsBoardView presentational component.
+ * Combines all data and callbacks needed to render the actions board UI.
+ * This is separate from the main ActionsBoard component to allow for easier testing and story rendering without hooks.
  */
 export interface ActionsBoardViewProps {
-  // Spell slots data
-  slotHudRows: Array<{ label: string; text: string }>;
+  /** Rows for the spell slot HUD */
+  slotHudRows: Array<{
+    /** Label for the spell slot row */
+    label: string;
+    /** Text representation of the spell slots */
+    text: string;
+  }>;
 
-  // Combat action sections
+  /** Combat action sections */
   sections: Partial<Record<CombatActionSection, CombatActionEntry[]>>;
 
-  // Local state
-  activeRoller: { entryId: string; kind: "attack" | "damage"; damageId?: string } | null;
+  /** Currently active roller, if any */
+  activeRoller: {
+    /** ID of the entry being rolled */
+    entryId: string;
+    /** Type of roll */
+    kind: "attack" | "damage";
+    /** Optional ID for damage roll */
+    damageId?: string;
+  } | null;
+  /** Attack roll modes for each entry */
   attackRollModes: Record<string, "normal" | "advantage" | "disadvantage">;
-  rollResultsByEntry: Record<string, { attack?: string; damage: Record<string, string> }>;
+  /** Roll results for each entry */
+  rollResultsByEntry: Record<
+    string,
+    {
+      attack?: string;
+      /** Damage results for each damage roll */
+      damage: Record<string, string>;
+    }
+  >;
 
-  // Callbacks
-  onActiveRollerChange: (roller: { entryId: string; kind: "attack" | "damage"; damageId?: string } | null) => void;
-  onAttackRollModeChange: (entryId: string, mode: "normal" | "advantage" | "disadvantage") => void;
-  onAttackResult: (entryId: string, config: CombatRollMetadata, rolls: number[], mode: "normal" | "advantage" | "disadvantage") => void;
-  onDamageResult: (entryId: string, damageId: string, config: CombatRollMetadata, rollTotal: number) => void;
+  /** Callback when the active roller changes */
+  onActiveRollerChange: (
+    roller: {
+      entryId: string;
+      kind: "attack" | "damage";
+      damageId?: string;
+    } | null,
+  ) => void;
+  /** Callback when the attack roll mode changes */
+  onAttackRollModeChange: (
+    entryId: string,
+    mode: "normal" | "advantage" | "disadvantage",
+  ) => void;
+  /** Callback when an attack result is available */
+  onAttackResult: (
+    entryId: string,
+    config: CombatRollMetadata,
+    rolls: number[],
+    mode: "normal" | "advantage" | "disadvantage",
+  ) => void;
+  /** Callback when a damage result is available */
+  onDamageResult: (
+    entryId: string,
+    damageId: string,
+    config: CombatRollMetadata,
+    rollTotal: number,
+  ) => void;
+  /** Callback when a trait use is expended */
   onExpendTraitUse: (traitId: string) => void;
+  /** Callback when a trait use is restored */
   onRestoreTraitUse: (traitId: string) => void;
 
-  // Utilities
+  /** Utility to convert a number to a Roman numeral */
   toRomanNumeral: (level: number) => string;
 }
 
+// #endregion
+
+// #region View Component
+
 /**
- * Presentational component for the ActionsBoard.
- * Renders combat actions, spell slots, and roll controls given all data as props.
- * No hooks or external dependencies.
+ * Presentational component for the Actions Board.
+ * Receives all data and callbacks as props from the main ActionsBoard component.
+ * Responsible for rendering the UI based on the provided props.
+ * @param param0 Props for the ActionsBoardView component, including combat action sections, active roller state, roll results, and callbacks for user interactions.
+ * @returns The rendered ActionsBoardView component.
  */
 export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   slotHudRows,
@@ -186,9 +249,9 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             onClick={() => {
                               onActiveRollerChange(
                                 activeRoller?.entryId === entry.id &&
-                                activeRoller.kind === "attack"
+                                  activeRoller.kind === "attack"
                                   ? null
-                                  : { entryId: entry.id, kind: "attack" }
+                                  : { entryId: entry.id, kind: "attack" },
                               );
                             }}
                             disabled={entry.isExhausted}
@@ -212,14 +275,14 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             onClick={() => {
                               onActiveRollerChange(
                                 activeRoller?.entryId === entry.id &&
-                                activeRoller.kind === "damage" &&
-                                activeRoller.damageId === damageRoll.id
+                                  activeRoller.kind === "damage" &&
+                                  activeRoller.damageId === damageRoll.id
                                   ? null
                                   : {
                                       entryId: entry.id,
                                       kind: "damage",
                                       damageId: damageRoll.id,
-                                    }
+                                    },
                               );
                             }}
                             disabled={entry.isExhausted}
@@ -250,14 +313,14 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             onClick={() => {
                               onActiveRollerChange(
                                 activeRoller?.entryId === entry.id &&
-                                activeRoller.kind === "damage" &&
-                                activeRoller.damageId === "__all__"
+                                  activeRoller.kind === "damage" &&
+                                  activeRoller.damageId === "__all__"
                                   ? null
                                   : {
                                       entryId: entry.id,
                                       kind: "damage",
                                       damageId: "__all__",
-                                    }
+                                    },
                               );
                             }}
                             disabled={entry.isExhausted}
@@ -285,7 +348,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                                       entry.id,
                                       entry.attackRoll!,
                                       rolls,
-                                      mode
+                                      mode,
                                     );
                                     onActiveRollerChange(null);
                                   }}
@@ -302,20 +365,20 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         activeRoller.damageId !== "__all__" &&
                         entry.damageRolls?.some(
                           (damageRoll) =>
-                            damageRoll.id === activeRoller.damageId
+                            damageRoll.id === activeRoller.damageId,
                         ) && (
                           <div className="combat-roll-roller-wrap">
                             <DiceRoller
                               count={
                                 entry.damageRolls.find(
                                   (damageRoll) =>
-                                    damageRoll.id === activeRoller.damageId
+                                    damageRoll.id === activeRoller.damageId,
                                 )?.count ?? 1
                               }
                               sides={
                                 entry.damageRolls.find(
                                   (damageRoll) =>
-                                    damageRoll.id === activeRoller.damageId
+                                    damageRoll.id === activeRoller.damageId,
                                 )?.sides ?? 6
                               }
                               size="small"
@@ -324,14 +387,14 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                               onRollComplete={(_, summary) => {
                                 const metadata = entry.damageRolls?.find(
                                   (damageRoll) =>
-                                    damageRoll.id === activeRoller.damageId
+                                    damageRoll.id === activeRoller.damageId,
                                 );
                                 if (!metadata) return;
                                 onDamageResult(
                                   entry.id,
                                   metadata.id,
                                   metadata,
-                                  summary.total
+                                  summary.total,
                                 );
                                 onActiveRollerChange(null);
                               }}
@@ -361,7 +424,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                                       entry.id,
                                       damageRoll.id,
                                       damageRoll,
-                                      summary.total
+                                      summary.total,
                                     );
                                   }}
                                   disabled={entry.isExhausted}
@@ -386,9 +449,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             type="button"
                             className="mini-use-btn"
                             onClick={() =>
-                              onExpendTraitUse(
-                                entry.id.replace("trait:", "")
-                              )
+                              onExpendTraitUse(entry.id.replace("trait:", ""))
                             }
                             disabled={entry.uses.remaining <= 0}
                           >
@@ -398,9 +459,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             type="button"
                             className="mini-use-btn secondary"
                             onClick={() =>
-                              onRestoreTraitUse(
-                                entry.id.replace("trait:", "")
-                              )
+                              onRestoreTraitUse(entry.id.replace("trait:", ""))
                             }
                             disabled={entry.uses.remaining >= entry.uses.total}
                           >
@@ -423,3 +482,5 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
     </section>
   );
 };
+
+// #endregion

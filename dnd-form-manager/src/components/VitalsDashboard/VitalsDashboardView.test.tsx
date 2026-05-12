@@ -16,7 +16,7 @@ describe("VitalsDashboardView", () => {
     hp: { current: 45, max: 52 },
     tempHp: 0,
     // Death saves
-    deathSaves: { successes: 0, failures: 0 },
+    deathSaves: { success: 0, failure: 0 },
     // Hit dice
     level: 5,
     expendedHitDice: 0,
@@ -54,7 +54,7 @@ describe("VitalsDashboardView", () => {
           {...defaultProps}
           isArmorPenalized={true}
           armorClass={14}
-        />
+        />,
       );
 
       const acBadge = screen.getByTitle("Stealth Disadvantage!");
@@ -88,23 +88,33 @@ describe("VitalsDashboardView", () => {
 
   describe("renders hit dice block", () => {
     it("shows available and total hit dice", () => {
-      render(<VitalsDashboardView {...defaultProps} level={5} expendedHitDice={2} />);
+      render(
+        <VitalsDashboardView {...defaultProps} level={5} expendedHitDice={2} />,
+      );
 
       // Available = level - expendedHitDice = 5 - 2 = 3
-      expect(screen.getByRole("button", { name: /Short Rest/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /Long Rest/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Short Rest/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Long Rest/i }),
+      ).toBeInTheDocument();
     });
   });
 
   describe("renders death saves tracker", () => {
     it("does not show death saves when HP is positive", () => {
-      render(<VitalsDashboardView {...defaultProps} hp={{ current: 5, max: 52 }} />);
+      render(
+        <VitalsDashboardView {...defaultProps} hp={{ current: 5, max: 52 }} />,
+      );
 
       expect(screen.queryByText(/death/i)).not.toBeInTheDocument();
     });
 
     it("shows death saves when HP is zero", () => {
-      render(<VitalsDashboardView {...defaultProps} hp={{ current: 0, max: 52 }} />);
+      render(
+        <VitalsDashboardView {...defaultProps} hp={{ current: 0, max: 52 }} />,
+      );
 
       // Death saves tracker should be present
       const tracker = screen.queryByRole("group");
@@ -123,11 +133,13 @@ describe("VitalsDashboardView", () => {
           {...defaultProps}
           activeHealthMode="damage"
           healthInput=""
-        />
+        />,
       );
 
       // The form should be rendered (HealthAdjustmentForm component handles visibility)
-      expect(screen.getByRole("button", { name: /Short Rest/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /Short Rest/i }),
+      ).toBeInTheDocument();
     });
 
     it("calls onShortRest when short rest button is clicked", async () => {
@@ -135,10 +147,7 @@ describe("VitalsDashboardView", () => {
       const onShortRest = vi.fn();
 
       render(
-        <VitalsDashboardView
-          {...defaultProps}
-          onShortRest={onShortRest}
-        />
+        <VitalsDashboardView {...defaultProps} onShortRest={onShortRest} />,
       );
 
       await user.click(screen.getByRole("button", { name: /Short Rest/i }));
@@ -149,12 +158,7 @@ describe("VitalsDashboardView", () => {
       const user = userEvent.setup();
       const onLongRest = vi.fn();
 
-      render(
-        <VitalsDashboardView
-          {...defaultProps}
-          onLongRest={onLongRest}
-        />
-      );
+      render(<VitalsDashboardView {...defaultProps} onLongRest={onLongRest} />);
 
       await user.click(screen.getByRole("button", { name: /Long Rest/i }));
       expect(onLongRest).toHaveBeenCalled();
@@ -163,12 +167,7 @@ describe("VitalsDashboardView", () => {
 
   describe("negative initiative display", () => {
     it("shows negative initiative correctly", () => {
-      render(
-        <VitalsDashboardView
-          {...defaultProps}
-          initiative={-2}
-        />
-      );
+      render(<VitalsDashboardView {...defaultProps} initiative={-2} />);
 
       expect(screen.getByText("-2")).toBeInTheDocument();
     });

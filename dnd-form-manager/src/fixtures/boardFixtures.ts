@@ -66,14 +66,14 @@ export const COMBAT_FIXTURES: Record<string, CombatFixture> = {
  * Death saves state fixtures.
  */
 export const DEATH_SAVES_FIXTURES: Record<string, DeathSavesFixture> = {
-  none: { successes: 0, failures: 0 },
-  oneSuccess: { successes: 1, failures: 0 },
-  twoSuccesses: { successes: 2, failures: 0 },
-  threeSuccesses: { successes: 3, failures: 0 },
-  oneFailure: { successes: 0, failures: 1 },
-  twoFailures: { successes: 0, failures: 2 },
-  threeFailures: { successes: 0, failures: 3 },
-  mixed: { successes: 2, failures: 1 },
+  none: { success: 0, failure: 0 },
+  oneSuccess: { success: 1, failure: 0 },
+  twoSuccesses: { success: 2, failure: 0 },
+  threeSuccesses: { success: 3, failure: 0 },
+  oneFailure: { success: 0, failure: 1 },
+  twoFailures: { success: 0, failure: 2 },
+  threeFailures: { success: 0, failure: 3 },
+  mixed: { success: 2, failure: 1 },
 };
 
 /**
