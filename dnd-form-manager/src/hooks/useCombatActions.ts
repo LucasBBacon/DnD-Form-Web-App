@@ -7,6 +7,7 @@ import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
 import type { DieFace } from "../types/common";
+import type { WeaponPropertyCatalogEntry } from "../types/item";
 
 // #region Types and Interfaces
 
@@ -55,6 +56,8 @@ export interface CombatActionEntry {
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */
   damageRolls?: CombatRollMetadata[];
+  /** Weapon property catalog entries (attack cards only) */
+  weaponProperties?: WeaponPropertyCatalogEntry[];
 }
 
 export interface CombatRollMetadata {
@@ -303,6 +306,7 @@ export const useCombatActions = () => {
           ? `Ammo: ${attack.ammo.count} ${attack.ammo.name || ""}`.trim()
           : undefined,
         isExhausted: !attack?.canAttack,
+        weaponProperties: attack?.properties ?? [],
         attackRoll: {
           id: `attack-roll:${attack?.weaponId || "unknown"}:${index}`,
           count: 1,

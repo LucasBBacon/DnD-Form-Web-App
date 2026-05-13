@@ -4,6 +4,7 @@ import { DiceRoller } from "../DiceRoller/DiceRoller";
 import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
+import { WeaponPropertyBadges } from "./ui/WeaponPropertyBadges";
 import type {
   CombatActionSection,
   CombatActionEntry,
@@ -240,6 +241,13 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                           </span>
                         ))}
                       </div>
+
+                      {entry.source === "attack" &&
+                        (entry.weaponProperties ?? []).length > 0 && (
+                          <WeaponPropertyBadges
+                            properties={entry.weaponProperties!}
+                          />
+                        )}
 
                       {entry.description && (
                         <p className="combat-action-description">

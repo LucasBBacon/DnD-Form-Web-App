@@ -1,7 +1,7 @@
 import { getAllItemCategories, getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { UUID } from "../types/common";
-import type { ItemInstanceData } from "../types/item";
+import type { ItemInstanceData, WeaponPropertyCatalogEntry } from "../types/item";
 import { resolveInstance } from "../utils/inventoryUtils";
 import {
   aggregateNonSkillProficienciesMulticlass,
@@ -193,7 +193,7 @@ export const useAttacks = () => {
         name: effectiveName,
         toHit,
         damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
-        properties: props.properties.map((property) => property.name),
+        properties: props.properties as WeaponPropertyCatalogEntry[],
         range: props.range,
         versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId
