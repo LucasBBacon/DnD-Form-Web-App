@@ -66,6 +66,8 @@ export interface CombatActionEntry {
   meleeReachFeet?: number;
   /** True when the weapon has the reach property */
   hasReachProperty?: boolean;
+  /** True when this attack entry represents a thrown variant */
+  isThrown?: boolean;
   /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
   heavyDisadvantage?: boolean;
 }
@@ -318,6 +320,7 @@ export const useCombatActions = () => {
         rangeInfo: attack?.rangeInfo ?? undefined,
         meleeReachFeet: attack?.meleeReachFeet,
         hasReachProperty: attack?.hasReachProperty ?? false,
+        isThrown: attack?.isThrown ?? false,
         heavyDisadvantage: attack?.heavyDisadvantage ?? false,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],

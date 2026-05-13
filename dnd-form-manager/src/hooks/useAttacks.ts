@@ -18,6 +18,13 @@ import { useCharacterStats } from "./useCharacterStats";
  * @returns An object containing the array of attacks with details such as to-hit bonus, damage string, properties, range, and ammunition status.
  */
 export const useAttacks = () => {
+  const formatRangeBand = (rangeBand?: { normal: number; long?: number }) => {
+    if (!rangeBand) return null;
+    return typeof rangeBand.long === "number"
+      ? `${rangeBand.normal}/${rangeBand.long} ft`
+      : `${rangeBand.normal} ft`;
+  };
+
   // #region --- Get Character State and Derived Stats ---
   const state = useCharacterStore();
   const { abilities, combat, encumbrance } = useCharacterStats();
@@ -109,7 +116,7 @@ export const useAttacks = () => {
   );
 
   const attacks = weaponSources
-    .map(({ instanceId, baseItemId, instanceData }) => {
+    .flatMap(({ instanceId, baseItemId, instanceData }) => {
       if (!baseItemId) return null;
       const baseItem = getItemById(baseItemId);
       // If weapon data is missing, skip this weapon
@@ -195,7 +202,7 @@ export const useAttacks = () => {
       }
       // #endregion
 
-      return {
+      const baseAttack = {
         instanceId,
         weaponId: baseItemId,
         name: effectiveName,
@@ -212,7 +219,30 @@ export const useAttacks = () => {
           : null,
         canAttack,
         heavyDisadvantage: props.rules.heavy && characterSize === "small",
+        isThrown: false,
       };
+
+      const hasThrownOption =
+        !props.rules.isRangedWeapon &&
+        typeof props.rules.thrownRange?.normal === "number";
+
+      if (!hasThrownOption) {
+        return [baseAttack];
+      }
+
+      const thrownRangeInfo = props.rules.thrownRange;
+      const thrownRangeText = formatRangeBand(thrownRangeInfo) ?? props.range;
+
+      const thrownAttack = {
+        ...baseAttack,
+        name: `${effectiveName} [Thrown]`,
+        range: thrownRangeText,
+        rangeInfo: thrownRangeInfo,
+        hasReachProperty: false,
+        isThrown: true,
+      };
+
+      return [baseAttack, thrownAttack];
     })
     .filter(Boolean); // Filter out any nulls
 
