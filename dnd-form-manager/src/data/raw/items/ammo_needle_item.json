@@ -1,0 +1,16 @@
+{
+  "id": "item_ammo_needle",
+  "name": "Blowgun Needle",
+  "type": "gear",
+  "weight": 0.02,
+  "lore": {
+    "shortDescription": "Standard ammunition for blowguns.",
+    "fullText": "A small, sharp needle designed for use with a blowgun. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+  },
+  "stacking": {
+    "mode": "stack",
+    "bundleSize": 50
+  },
+  "cpCost": 2
+}
+

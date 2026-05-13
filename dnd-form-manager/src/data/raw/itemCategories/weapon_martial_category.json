@@ -19,6 +19,11 @@
     "item_weapon_trident",
     "item_weapon_war_pick",
     "item_weapon_warhammer",
-    "item_weapon_whip"
+    "item_weapon_whip",
+    "item_weapon_blowgun",
+    "item_weapon_crossbow_hand",
+    "item_weapon_crossbow_heavy",
+    "item_weapon_longbow",
+    "item_weapon_net"
   ]
 }
