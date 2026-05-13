@@ -2,6 +2,8 @@ import type React from "react";
 import "./InventoryBoard.css";
 import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
 import { formatCpAsCoinage } from "../../utils/currencyUtils";
+import { EquipmentCard } from "./ui/EquipmentCard";
+import { GearCard } from "./ui/GearCard";
 
 // #region Interfaces
 
@@ -168,58 +170,21 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
               const isAttuned = attunedInstanceIds.includes(instanceId);
 
               return (
-                <div
-                  key={instanceId}
-                  className={`item-row ${isEquipped ? "equipped" : ""}`}
-                >
-                  <div className="item-info">
-                    <span className="item-name">{itemData.name}</span>
-                    <span className="item-meta">
-                      {itemData.type.replace("_", " ").toUpperCase()} •{" "}
-                      {itemData.weight} lbs • {formatItemCost(itemData.cpCost)}
-                    </span>
-                  </div>
-
-                  <div className="item-actions">
-                    {requiresAttunement && (
-                      <button
-                        className={`action-btn attune-btn ${isAttuned ? "active" : ""}`}
-                        onClick={() =>
-                          onToggleAttunement(instanceId, isAttuned)
-                        }
-                        disabled={!isAttuned && attunedInstanceIds.length >= 3}
-                        title="Attunement (Max 3)"
-                      >
-                        {isAttuned ? "ATTUNED" : "Attune"}
-                      </button>
-                    )}
-
-                    {(isWeapon || isArmor) && (
-                      <button
-                        className={`action-btn equip-btn ${isEquipped ? "active" : ""}`}
-                        onClick={() =>
-                          isWeapon
-                            ? onToggleWeaponEquip(instanceId, isEquipped)
-                            : onToggleArmorEquip(
-                                instanceId,
-                                isEquipped,
-                                itemData.armorProperties?.armorType ?? "",
-                              )
-                        }
-                      >
-                        {isEquipped ? "EQUIPPED" : "Equip"}
-                      </button>
-                    )}
-
-                    <button
-                      className="action-btn drop-btn"
-                      onClick={() => onDropInstance(instanceId)}
-                      title="Remove from inventory"
-                    >
-                      Drop
-                    </button>
-                  </div>
-                </div>
+                <EquipmentCard
+                  instanceId={instanceId}
+                  isEquipped={isEquipped}
+                  itemData={itemData}
+                  requiresAttunement={requiresAttunement}
+                  isAttuned={isAttuned}
+                  isWeapon={isWeapon}
+                  isArmor={isArmor}
+                  attunedInstanceIds={attunedInstanceIds}
+                  onToggleAttunement={onToggleAttunement}
+                  onToggleWeaponEquip={onToggleWeaponEquip}
+                  onToggleArmorEquip={onToggleArmorEquip}
+                  onDropInstance={onDropInstance}
+                  formatItemCost={formatItemCost}
+                />
               );
             })}
           </div>
@@ -233,29 +198,15 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
         ) : (
           <div className="item-list">
             {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
-              <div key={stackId} className="item-row stack-row">
-                <div className="item-info">
-                  <span className="item-name">{itemData.name}</span>
-                  <span className="item-meta">
-                    {itemData.lore.shortDescription} • {formatItemCost(itemData.cpCost)}
-                  </span>
-                </div>
-
-                <div className="stack-actions">
-                  <span className="item-weight">
-                    {itemData.weight * quantity} lbs total
-                  </span>
-                  <div className="quantity-control">
-                    <button onClick={() => onStackDecrement(baseItemId)}>
-                      -
-                    </button>
-                    <span className="quantity-display">{quantity}</span>
-                    <button onClick={() => onStackIncrement(baseItemId)}>
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <GearCard
+                stackId={stackId}
+                itemData={itemData}
+                quantity={quantity}
+                baseItemId={baseItemId}
+                onStackIncrement={onStackIncrement}
+                onStackDecrement={onStackDecrement}
+                formatItemCost={formatItemCost}
+              />
             ))}
           </div>
         )}
