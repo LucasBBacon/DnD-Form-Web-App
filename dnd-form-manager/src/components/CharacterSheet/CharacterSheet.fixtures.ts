@@ -1,10 +1,10 @@
-import { VITALS_DASHBOARD_FIXTURES } from "./VitalsDashboard/VitalsDashboard.fixtures";
-import { ACTIONS_BOARD_FIXTURES } from "./ActionsBoard/ActionsBoard.fixtures";
-import { INVENTORY_BOARD_FIXTURES } from "./InventoryBoard/InventoryBoard.fixtures";
-import { ROLEPLAY_BOARD_FIXTURES } from "./RoleplayBoard/RoleplayBoard.fixtures";
-import { IDENTITY_HEADER_FIXTURES } from "./IdentityHeader/IdentityHeader.fixtures";
-import { CORE_STATS_BOARD_FIXTURES } from "./CoreStatsBoard/CoreStatsBoard.fixtures";
-import { SPELLBOOK_BOARD_FIXTURES } from "./SpellBookBoard/SpellBookBoard.fixtures";
+import { VITALS_DASHBOARD_FIXTURES } from "../VitalsDashboard/VitalsDashboard.fixtures";
+import { ACTIONS_BOARD_FIXTURES } from "../ActionsBoard/ActionsBoard.fixtures";
+import { INVENTORY_BOARD_FIXTURES } from "../InventoryBoard/InventoryBoard.fixtures";
+import { ROLEPLAY_BOARD_FIXTURES } from "../RoleplayBoard/RoleplayBoard.fixtures";
+import { IDENTITY_HEADER_FIXTURES } from "../IdentityHeader/IdentityHeader.fixtures";
+import { CORE_STATS_BOARD_FIXTURES } from "../CoreStatsBoard/CoreStatsBoard.fixtures";
+import { SPELLBOOK_BOARD_FIXTURES } from "../SpellBookBoard/SpellBookBoard.fixtures";
 
 export type CharacterSheetScenarioKey =
   | "balanced"

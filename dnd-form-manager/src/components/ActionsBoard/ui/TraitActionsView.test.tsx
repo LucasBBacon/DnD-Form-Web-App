@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TraitActionsView } from "./TraitActionsView";
-import type { ActionData } from "../types/action";
+import type { ActionData } from "../../../types/action";
 
 const buildAction = (overrides: Partial<ActionData> = {}): ActionData => ({
   id: "action_breath_weapon_cold_cone",
