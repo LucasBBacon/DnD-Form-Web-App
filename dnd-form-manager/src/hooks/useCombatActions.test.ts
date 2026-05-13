@@ -156,4 +156,35 @@ describe("useCombatActions", () => {
     expect(spellEntry?.spellCast?.canUseSharedSlot).toBe(true);
     expect(spellEntry?.spellCast?.canUsePactSlot).toBe(true);
   });
+
+  it("maps thrown attack inventory metadata into action entries", () => {
+    vi.mocked(useAttacks).mockReturnValue({
+      attacks: [
+        {
+          instanceId: null,
+          weaponId: "weapon_javelin",
+          name: "Javelin [Thrown]",
+          toHit: 4,
+          damageString: "1d6 + 2 piercing",
+          properties: [],
+          range: "30/120 ft",
+          ammo: null,
+          canAttack: true,
+          heavyDisadvantage: false,
+          isThrown: true,
+          throwableItemId: "weapon_javelin",
+          throwableCount: 3,
+        },
+      ],
+    } as any);
+
+    const { result } = renderHook(() => useCombatActions());
+    const attackEntry = result.current.sections.action.find(
+      (entry) => entry.source === "attack" && entry.name === "Javelin [Thrown]",
+    );
+
+    expect(attackEntry?.isThrown).toBe(true);
+    expect(attackEntry?.throwableItemId).toBe("weapon_javelin");
+    expect(attackEntry?.throwableCount).toBe(3);
+  });
 });

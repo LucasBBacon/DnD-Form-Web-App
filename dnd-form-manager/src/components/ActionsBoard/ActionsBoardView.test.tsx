@@ -119,6 +119,15 @@ describe("ActionsBoardView", () => {
 
       expect(screen.getByRole("button", { name: "Cast" })).toBeInTheDocument();
     });
+
+    it("renders thrown remaining badge for throwable attacks", () => {
+      const scenario = ACTIONS_BOARD_FIXTURES.withThrownWeapons;
+      const props = createPropsFromScenario(scenario);
+
+      render(<ActionsBoardView {...props} />);
+
+      expect(screen.getByText(/Thrown remaining: 3/i)).toBeInTheDocument();
+    });
   });
 
   describe("Action Sections", () => {

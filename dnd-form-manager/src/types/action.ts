@@ -133,4 +133,8 @@ export interface Attack {
   heavyDisadvantage: boolean;
   /** True when this attack represents a thrown variant of a melee weapon */
   isThrown: boolean;
+  /** Base item id consumed when this thrown attack is used */
+  throwableItemId?: string;
+  /** Remaining count for the throwable source, when countable */
+  throwableCount?: number | null;
 }

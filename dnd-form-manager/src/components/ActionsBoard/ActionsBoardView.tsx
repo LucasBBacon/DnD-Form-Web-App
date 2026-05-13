@@ -294,6 +294,16 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         <AmmoIndicator ammo={entry.ammo} />
                       )}
 
+                      {entry.source === "attack" &&
+                        entry.isThrown &&
+                        entry.throwableCount != null && (
+                          <p className="throwable-count-note">
+                            <span className="throwable-count-badge" role="note">
+                              Thrown remaining: {entry.throwableCount}
+                            </span>
+                          </p>
+                        )}
+
                       {entry.source === "attack" && entry.hasReachProperty && (
                         <p className="reach-modifier-note">
                           <span className="reach-modifier-badge">

@@ -68,6 +68,10 @@ export interface CombatActionEntry {
   hasReachProperty?: boolean;
   /** True when this attack entry represents a thrown variant */
   isThrown?: boolean;
+  /** Base item id consumed when this thrown attack is used */
+  throwableItemId?: string;
+  /** Remaining count for this throwable source, when countable */
+  throwableCount?: number | null;
   /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
   heavyDisadvantage?: boolean;
   /** Versatile mode for versatile weapons (one-handed or two-handed) */
@@ -350,6 +354,8 @@ export const useCombatActions = () => {
         meleeReachFeet: attack?.meleeReachFeet,
         hasReachProperty: attack?.hasReachProperty ?? false,
         isThrown: attack?.isThrown ?? false,
+        throwableItemId: attack?.throwableItemId,
+        throwableCount: attack?.throwableCount ?? null,
         heavyDisadvantage: attack?.heavyDisadvantage ?? false,
         versatileMode: attack?.versatileMode ?? "one-handed",
         versatileDamageDice: attack?.versatileDamageDice ?? null,
