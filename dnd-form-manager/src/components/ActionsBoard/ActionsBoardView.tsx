@@ -277,6 +277,14 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         <AmmoIndicator ammo={entry.ammo} />
                       )}
 
+                      {entry.source === "attack" && entry.hasReachProperty && (
+                        <p className="reach-modifier-note">
+                          <span className="reach-modifier-badge">
+                            Reach: {entry.meleeReachFeet ?? 10} ft
+                          </span>
+                        </p>
+                      )}
+
                       {entry.source === "attack" && entry.rangeInfo && (
                         <RangeDistancePicker
                           entryId={entry.id}

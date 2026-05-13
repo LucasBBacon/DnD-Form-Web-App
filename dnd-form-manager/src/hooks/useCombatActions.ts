@@ -62,6 +62,10 @@ export interface CombatActionEntry {
   ammo?: { id: string; name: string | null; count: number | null };
   /** Parsed range data for ranged attack entries */
   rangeInfo?: WeaponRangeBand;
+  /** Effective melee reach in feet for this attack */
+  meleeReachFeet?: number;
+  /** True when the weapon has the reach property */
+  hasReachProperty?: boolean;
   /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
   heavyDisadvantage?: boolean;
 }
@@ -306,10 +310,14 @@ export const useCombatActions = () => {
             ? `ATK +${attack?.toHit ?? 0}`
             : `ATK ${attack?.toHit ?? 0}`,
           attack?.damageString || "1d6",
-          attack?.range || "Melee",
+          attack?.hasReachProperty
+            ? `Melee (${attack?.meleeReachFeet ?? 10} ft reach)`
+            : (attack?.range || "Melee"),
         ],
         ammo: attack?.ammo ?? undefined,
         rangeInfo: attack?.rangeInfo ?? undefined,
+        meleeReachFeet: attack?.meleeReachFeet,
+        hasReachProperty: attack?.hasReachProperty ?? false,
         heavyDisadvantage: attack?.heavyDisadvantage ?? false,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],

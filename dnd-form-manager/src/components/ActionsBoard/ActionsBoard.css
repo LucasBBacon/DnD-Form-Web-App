@@ -313,3 +313,19 @@
   cursor: help;
   white-space: nowrap;
 }
+
+.reach-modifier-note {
+  margin: 0.4rem 0 0;
+}
+
+.reach-modifier-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0c4a6e;
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+}

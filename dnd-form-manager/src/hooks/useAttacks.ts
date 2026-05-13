@@ -137,6 +137,7 @@ export const useAttacks = () => {
       // #endregion
 
       const props = effectiveProps;
+      const hasReachProperty = props.propertyIds.includes("property_reach");
 
       // #region Determine governing stat (str vs dex)
       let attackStat: "str" | "dex" = props.rules.attackAbility === "dex"
@@ -203,6 +204,8 @@ export const useAttacks = () => {
         properties: props.properties as WeaponPropertyCatalogEntry[],
         range: props.range,
         rangeInfo: props.rules.range,
+        meleeReachFeet: props.rules.meleeReachFeet,
+        hasReachProperty,
         versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId
           ? { id: props.ammoItemId, name: ammoName, count: ammoCount }
