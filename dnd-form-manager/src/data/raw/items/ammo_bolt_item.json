@@ -11,6 +11,6 @@
     "mode": "stack",
     "bundleSize": 20
   },
-  "cpCost": 100
+  "cpCost": 5
 }
 

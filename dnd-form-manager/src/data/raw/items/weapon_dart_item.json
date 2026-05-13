@@ -1,0 +1,26 @@
+{
+    "id": "item_weapon_dart",
+    "name": "Dart",
+    "type": "weapon",
+    "weight": 0.25,
+    "stacking": {
+        "mode": "stack",
+        "bundleSize": 8,
+        "maxBundleCount": 3
+    },
+    "lore": {
+        "shortDescription": "A small, pointed missile that can be thrown with great accuracy.",
+        "fullText": "A dart is a small, pointed missile that can be thrown with great accuracy. It is a simple ranged weapon that deals piercing damage and can be used with the finesse property, allowing the wielder to use their Dexterity modifier for attack and damage rolls. Additionally, it has the thrown property, enabling it to be thrown at targets within a range of 20 feet for normal attacks and up to 60 feet with disadvantage."
+    },
+    "weaponProperties": {
+        "category": "simple_ranged",
+        "damageDice": "1d4",
+        "damageType": "piercing",
+        "properties": [
+            "property_finesse",
+            "property_thrown"
+        ],
+        "range": "20/60 ft"
+    },
+    "cpCost": 5
+}

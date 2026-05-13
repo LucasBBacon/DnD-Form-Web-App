@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_shortbow",
+    "name": "Shortbow",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A smaller, more compact version of the longbow, ideal for characters who prefer a lighter ranged weapon.",
+        "fullText": "A shortbow is a simple ranged weapon that is easy to carry and use. It is a smaller version of the longbow, making it more suitable for characters who prefer a lighter and more compact weapon. The shortbow is typically made of wood and has a draw weight that allows for effective use by most characters. It deals piercing damage and can be used with the ammunition property, requiring the use of arrows as ammunition. Additionally, it has the two-handed property, meaning it must be wielded with both hands to use effectively."
+    },
+    "weaponProperties": {
+        "category": "simple_ranged",
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "properties": [
+            "property_ammunition",
+            "property_two_handed"
+        ],
+        "range": "80/320 ft",
+        "ammoItemId": "item_ammo_arrow"
+    },
+    "cpCost": 2500
+}

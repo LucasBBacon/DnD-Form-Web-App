@@ -13,6 +13,9 @@
     "item_weapon_sickle",
     "item_weapon_spear",
     "item_weapon_unarmed_strike",
-    "item_weapon_crossbow_light"
+    "item_weapon_crossbow_light",
+    "item_weapon_dart",
+    "item_weapon_shortbow",
+    "item_weapon_sling"
   ]
 }
