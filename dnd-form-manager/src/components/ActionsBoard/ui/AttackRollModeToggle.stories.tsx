@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AttackRollModeToggle } from "./AttackRollModeToggle";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof AttackRollModeToggle> = {
   title: "ActionsBoard/AttackRollModeToggle",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RangeDistancePicker } from "./RangeDistancePicker";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof RangeDistancePicker> = {
   title: "ActionsBoard/RangeDistancePicker",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TraitAccordion } from "./TraitAccordion";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const traits = [
   {

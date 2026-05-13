@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { VersatileModeToggle } from "./VersatileModeToggle";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof VersatileModeToggle> = {
   title: "ActionsBoard/VersatileModeToggle",

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TwoHandedWarningDialog } from "./TwoHandedWarningDialog";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof TwoHandedWarningDialog> = {
   title: "InventoryBoard/TwoHandedWarningDialog",

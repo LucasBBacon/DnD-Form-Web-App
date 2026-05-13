@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { OptionCard } from "./OptionCard";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const option = {
   id: "elf",

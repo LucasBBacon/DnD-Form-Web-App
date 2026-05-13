@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HitDiceRollPanel } from "./HitDiceRollPanel";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof HitDiceRollPanel> = {
   title: "ShortRestModal/HitDiceRollPanel",

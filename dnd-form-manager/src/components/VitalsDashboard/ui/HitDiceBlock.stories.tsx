@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HitDiceBlock } from "./HitDiceBlock";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof HitDiceBlock> = {
   title: "VitalsDashboard/HitDiceBlock",
