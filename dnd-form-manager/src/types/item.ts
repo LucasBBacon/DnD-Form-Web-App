@@ -7,16 +7,83 @@ export type WeaponCategory =
   | "martial_melee"
   | "simple_ranged"
   | "martial_ranged";
-export type WeaponProperty =
-  | "finesse"
-  | "light"
-  | "heavy"
-  | "two-handed"
-  | "thrown"
-  | "ammunition"
-  | "versatile"
-  | "reach"
-  | "loading";
+export type WeaponPropertyId =
+  | "property_ammunition"
+  | "property_finesse"
+  | "property_heavy"
+  | "property_light"
+  | "property_loading"
+  | "property_range"
+  | "property_reach"
+  | "property_special"
+  | "property_thrown"
+  | "property_two_handed"
+  | "property_versatile";
+
+export interface WeaponPropertyCatalogEntry {
+  id: WeaponPropertyId;
+  name: string;
+  lore: {
+    shortDescription: string;
+    fullText: string;
+  };
+}
+
+export interface WeaponRangeBand {
+  /** Normal range in feet. */
+  normal: number;
+  /** Long range in feet, when applicable. */
+  long?: number;
+}
+
+export type WeaponAttackAbility = "str" | "dex" | "choice";
+
+export interface WeaponRules {
+  /** Governing attack ability for the weapon. */
+  attackAbility: WeaponAttackAbility;
+  /** Whether the weapon is a ranged weapon category. */
+  isRangedWeapon: boolean;
+  /** Reach in feet for melee attacks with this weapon. */
+  meleeReachFeet: number;
+  /** Parsed range band for ranged weapons. */
+  range?: WeaponRangeBand;
+  /** Parsed range band for thrown melee weapons. */
+  thrownRange?: WeaponRangeBand;
+  /** Whether the weapon requires ammunition. */
+  requiresAmmunition: boolean;
+  /** Whether the weapon has the loading property. */
+  loading: boolean;
+  /** Whether the weapon has the light property. */
+  light: boolean;
+  /** Whether the weapon has the heavy property. */
+  heavy: boolean;
+  /** Whether the weapon requires two hands. */
+  twoHanded: boolean;
+  /** Whether the weapon has the special property. */
+  special: boolean;
+  /** Whether the weapon has the finesse property. */
+  finesse: boolean;
+  /** Whether the weapon can be used with the versatile rule. */
+  versatile: boolean;
+}
+
+export interface RawWeaponProperties {
+  /** Category of the weapon e.g., "simple_melee" */
+  category: WeaponCategory;
+  /** Damage dice of the weapon e.g., "1d8" */
+  damageDice: string;
+  /** Damage dice when using the weapon in versatile mode e.g., "1d10" */
+  versatileDamageDice?: string;
+  /** Type of damage dealt by the weapon e.g., "slashing" */
+  damageType: string;
+  /** Raw weapon property ids. */
+  properties: WeaponPropertyId[];
+  /** Range of the weapon e.g., "5 ft", "150/600 ft" */
+  range: string;
+  /** ID of the item required as ammunition, if applicable */
+  ammoItemId?: string;
+}
+
 export type ItemStackMode = "stack" | "instance";
 export type ArmorAcApplication = "set" | "bonus";
 export type ArmorDexModifierMode = "full" | "capped" | "none";
@@ -37,7 +104,7 @@ export interface ArmorProperties {
   baseAc: number;
   /** Dexterity contribution behavior for AC */
   dexModifier: ArmorDexModifier;
-  /** Whether the armor imposes disadvantage on stealth checks */
+  /** Whether the armor imposes disadvantage on stealth checks. */
   stealthDisadvantage: boolean;
   /** Minimum strength required to wear the armor effectively */
   strengthRequirement?: number;
@@ -52,12 +119,16 @@ export interface WeaponProperties {
   versatileDamageDice?: string;
   /** Type of damage dealt by the weapon e.g., "slashing", "piercing" */
   damageType: string;
-  /** Properties of the weapon e.g., "finesse", "light" */
-  properties: WeaponProperty[];
+  /** Resolved weapon property catalog entries, in source order. */
+  properties: WeaponPropertyCatalogEntry[];
+  /** Raw weapon property ids, preserved for predicate compatibility. */
+  propertyIds: WeaponPropertyId[];
   /** Range of the weapon e.g., "5 ft", "150/600 ft" */
   range: string;
   /** ID of the item required to fire this weapon, if applicable */
   ammoItemId?: string;
+  /** Derived weapon behavior used by runtime logic. */
+  rules: WeaponRules;
 }
 
 export interface MagicItemProperties {
@@ -143,6 +214,10 @@ export interface ItemData {
   stacking?: ItemStackingRules;
 
   // TODO: add modifiers, etc
+}
+
+export interface RawItemData extends Omit<ItemData, "weaponProperties"> {
+  weaponProperties?: RawWeaponProperties;
 }
 
 export interface ItemCategoryData {

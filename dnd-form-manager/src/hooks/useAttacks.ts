@@ -132,10 +132,11 @@ export const useAttacks = () => {
       const props = effectiveProps;
 
       // #region Determine governing stat (str vs dex)
-      let attackStat = "str";
-      if (props.category.includes("ranged")) {
-        attackStat = "dex";
-      } else if (props.properties.includes("finesse")) {
+      let attackStat: "str" | "dex" = props.rules.attackAbility === "dex"
+        ? "dex"
+        : "str";
+
+      if (props.rules.attackAbility === "choice") {
         // finesse lets player choose the higher stat
         attackStat =
           derivedStats.modifiers.dex > derivedStats.modifiers.str
@@ -144,7 +145,7 @@ export const useAttacks = () => {
       }
 
       // Calculate the stat modifier for the attacking stat
-      const statMod = derivedStats.modifiers[attackStat as "str" | "dex"] || 0;
+      const statMod = derivedStats.modifiers[attackStat] || 0;
       // #endregion
 
       // #region --- Proficiency Check ---
@@ -172,7 +173,7 @@ export const useAttacks = () => {
       let ammoName = null;
       let canAttack = true;
 
-      if (props.properties.includes("ammunition") && props.ammoItemId) {
+      if (props.rules.requiresAmmunition && props.ammoItemId) {
         // If the weapon uses ammunition, check the inventory stacks for the ammo item and count
         const ammoItem = getItemById(props.ammoItemId);
         const ammoStack = state.inventoryStacks.find(
@@ -192,7 +193,7 @@ export const useAttacks = () => {
         name: effectiveName,
         toHit,
         damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
-        properties: props.properties,
+        properties: props.properties.map((property) => property.name),
         range: props.range,
         versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId

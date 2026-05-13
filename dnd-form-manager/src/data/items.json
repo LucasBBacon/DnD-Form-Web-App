@@ -15,6 +15,30 @@
     "cpCost": 100
   },
   {
+    "id": "item_armor_breastplate",
+    "name": "Breastplate",
+    "type": "armor",
+    "weight": 20,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Medium armor made of a fitted metal chest piece and supple leather.",
+      "fullText": "This armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer's vital organs while leaving the wearer relatively unencumbered."
+    },
+    "armorProperties": {
+      "armorType": "medium",
+      "acApplication": "set",
+      "baseAc": 14,
+      "dexModifier": {
+        "mode": "capped",
+        "cap": 2
+      },
+      "stealthDisadvantage": false
+    },
+    "cpCost": 40000
+  },
+  {
     "id": "item_armor_chain_mail",
     "name": "Chain mail",
     "type": "armor",
@@ -39,10 +63,85 @@
     "cpCost": 7500
   },
   {
+    "id": "item_armor_chain_shirt",
+    "name": "Chain Shirt Armor",
+    "type": "armor",
+    "weight": 20,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Medium armor made of interlocking metal rings, worn under clothing or leather.",
+      "fullText": "Made of interlocking metal rings, a chain shirt is worn between layers of clothing or leather. This armor offers modest protection to the wearer's upper body and allows the sound of the rings rubbing against one another to be muffled by outer layers."
+    },
+    "armorProperties": {
+      "armorType": "medium",
+      "acApplication": "set",
+      "baseAc": 13,
+      "dexModifier": {
+        "mode": "capped",
+        "cap": 2
+      },
+      "stealthDisadvantage": false
+    },
+    "cpCost": 5000
+  },
+  {
+    "id": "item_armor_half_plate",
+    "name": "Half Plate Armor",
+    "type": "armor",
+    "weight": 40,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Medium armor made of metal plates, providing good protection with moderate mobility.",
+      "fullText": "Half plate consists of shaped metal plates that cover most of the wearer's body. It does not include leg protection beyond simple greaves that are attached with leather straps."
+    },
+    "armorProperties": {
+      "armorType": "medium",
+      "acApplication": "set",
+      "baseAc": 15,
+      "dexModifier": {
+        "mode": "capped",
+        "cap": 2
+      },
+      "stealthDisadvantage": true
+    },
+    "cpCost": 75000
+  },
+  {
+    "id": "item_armor_hide",
+    "name": "Hide Armor",
+    "type": "armor",
+    "weight": 12,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Medium armor made from the tanned hides of beasts.",
+      "fullText": "This crude armor consists of thick furs and pelts. It is commonly worn by barbarian tribes, evil humanoids, and other folk who lack access to the tools and materials needed to create better armor."
+    },
+    "armorProperties": {
+      "armorType": "medium",
+      "acApplication": "set",
+      "baseAc": 12,
+      "dexModifier": {
+        "mode": "capped",
+        "cap": 2
+      },
+      "stealthDisadvantage": false
+    },
+    "cpCost": 1000
+  },
+  {
     "id": "item_armor_leather",
     "name": "Leather Armor",
     "type": "armor",
     "weight": 10,
+    "stacking": {
+      "mode": "instance"
+    },
     "lore": {
       "shortDescription": "Light armor made from treated leather, offering basic protection with full mobility.",
       "fullText": "The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials. Leather armor provides a base AC of 11 + your Dexterity modifier."
@@ -63,6 +162,9 @@
     "name": "Padded Armor",
     "type": "armor",
     "weight": 10,
+    "stacking": {
+      "mode": "instance"
+    },
     "lore": {
       "shortDescription": "Light armor made of quilted layers of cloth and batting.",
       "fullText": "Padded armor consists of quilted layers of cloth and batting."
@@ -77,6 +179,53 @@
       "stealthDisadvantage": true
     },
     "cpCost": 500
+  },
+  {
+    "id": "item_armor_plate",
+    "name": "Plate Armor",
+    "type": "armor",
+    "weight": 65,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "The best and heaviest armor, made of interlocking metal plates that cover the entire body.",
+      "fullText": "Plate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body."
+    },
+    "armorProperties": {
+      "armorType": "heavy",
+      "acApplication": "set",
+      "baseAc": 18,
+      "dexModifier": {
+        "mode": "none"
+      },
+      "stealthDisadvantage": true,
+      "strengthRequirement": 15
+    },
+    "cpCost": 150000
+  },
+  {
+    "id": "item_armor_ring_mail",
+    "name": "Ring Mail Armor",
+    "type": "armor",
+    "weight": 40,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Medium armor made of leather with heavy rings sewn into it.",
+      "fullText": "This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor."
+    },
+    "armorProperties": {
+      "armorType": "heavy",
+      "acApplication": "set",
+      "baseAc": 14,
+      "dexModifier": {
+        "mode": "none"
+      },
+      "stealthDisadvantage": true
+    },
+    "cpCost": 3000
   },
   {
     "id": "item_armor_scale_mail",
@@ -124,6 +273,53 @@
       "fullText": "A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time"
     },
     "cpCost": 1000
+  },
+  {
+    "id": "item_armor_splint",
+    "name": "Splint Armor",
+    "type": "armor",
+    "weight": 60,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Heavy armor made of narrow vertical strips of metal riveted to a backing of leather.",
+      "fullText": "This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints."
+    },
+    "armorProperties": {
+      "armorType": "heavy",
+      "acApplication": "set",
+      "baseAc": 17,
+      "dexModifier": {
+        "mode": "none"
+      },
+      "stealthDisadvantage": true,
+      "strengthRequirement": 15
+    },
+    "cpCost": 20000
+  },
+  {
+    "id": "item_armor_studded_leather",
+    "name": "Studded Leather Armor",
+    "type": "armor",
+    "weight": 13,
+    "stacking": {
+      "mode": "instance"
+    },
+    "lore": {
+      "shortDescription": "Light armor made from tough leather reinforced with metal studs.",
+      "fullText": "Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes."
+    },
+    "armorProperties": {
+      "armorType": "light",
+      "acApplication": "set",
+      "baseAc": 12,
+      "dexModifier": {
+        "mode": "full"
+      },
+      "stealthDisadvantage": false
+    },
+    "cpCost": 4500
   },
   {
     "id": "item_backpack",
@@ -283,9 +479,32 @@
       "damageDice": "1d4",
       "damageType": "bludgeoning",
       "properties": [
-        "light"
+        {
+          "id": "property_light",
+          "name": "Light",
+          "lore": {
+            "shortDescription": "Light property indicates that a weapon is easy to handle, making it ideal for dual-wielding.",
+            "fullText": "A light weapon is small and easy to handle, making it ideal for use when fighting with two weapons."
+          }
+        }
       ],
-      "range": "5 ft"
+      "propertyIds": [
+        "property_light"
+      ],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": true,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "cpCost": 10
   },
@@ -306,11 +525,46 @@
       "damageDice": "1d8",
       "damageType": "piercing",
       "properties": [
-        "ammunition",
-        "two-handed"
+        {
+          "id": "property_ammunition",
+          "name": "Ammunition",
+          "lore": {
+            "shortDescription": "Ammunition property indicates that a weapon requires ammunition to make a ranged attack.",
+            "fullText": "You can use a weapon that has the ammunition property to make a ranged attack only if you have ammunition to fire from the weapon. Each time you attack with the weapon, you expend one piece of ammunition. Drawing the ammunition from a quiver, case, or other container is part of the attack. At the end of the battle, you can recover half your expended ammunition by taking a minute to search the battlefield.\nIf you use a weapon that has the ammunition property to make a melee attack, you treat the weapon as an improvised weapon. A sling must be loaded to deal any damage to be used in this way."
+          }
+        },
+        {
+          "id": "property_two_handed",
+          "name": "Two-Handed",
+          "lore": {
+            "shortDescription": "Two-Handed property indicates that a weapon requires two hands to use.",
+            "fullText": "This weapon requires two hands to use."
+          }
+        }
+      ],
+      "propertyIds": [
+        "property_ammunition",
+        "property_two_handed"
       ],
       "range": "80/320 ft",
-      "ammoItemId": "item_ammo_bolt"
+      "ammoItemId": "item_ammo_bolt",
+      "rules": {
+        "attackAbility": "dex",
+        "isRangedWeapon": true,
+        "meleeReachFeet": 5,
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "requiresAmmunition": true,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": true,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "cpCost": 2500
   },
@@ -331,11 +585,54 @@
       "damageDice": "1d4",
       "damageType": "piercing",
       "properties": [
-        "finesse",
-        "light",
-        "thrown"
+        {
+          "id": "property_finesse",
+          "name": "Finesse",
+          "lore": {
+            "shortDescription": "Finesse property allows you to use your choice of Strength or Dexterity modifier for attack and damage rolls.",
+            "fullText": "When making an attack with a finesse weapon, you use your choice of your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls."
+          }
+        },
+        {
+          "id": "property_light",
+          "name": "Light",
+          "lore": {
+            "shortDescription": "Light property indicates that a weapon is easy to handle, making it ideal for dual-wielding.",
+            "fullText": "A light weapon is small and easy to handle, making it ideal for use when fighting with two weapons."
+          }
+        },
+        {
+          "id": "property_thrown",
+          "name": "Thrown",
+          "lore": {
+            "shortDescription": "Thrown property indicates that a weapon can be thrown to make a ranged attack.",
+            "fullText": "If a weapon has the thrown property, you can throw the weapon to make a ranged attack. If the weapon is a melee weapon, you use the same ability modifier for that attack roll and damage roll that you would use for a melee attack with the weapon. For example, if you throw a handaxe, you use your Strength, but if you throw a dagger, you can either use your Strength or your Dexterity, since the dagger has the finesse property."
+          }
+        }
       ],
-      "range": "20/60 ft"
+      "propertyIds": [
+        "property_finesse",
+        "property_light",
+        "property_thrown"
+      ],
+      "range": "20/60 ft",
+      "rules": {
+        "attackAbility": "choice",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "thrownRange": {
+          "normal": 20,
+          "long": 60
+        },
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": true,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": true,
+        "versatile": false
+      }
     },
     "cpCost": 200
   },
@@ -352,10 +649,41 @@
       "damageDice": "1d12",
       "damageType": "slashing",
       "properties": [
-        "heavy",
-        "two-handed"
+        {
+          "id": "property_heavy",
+          "name": "Heavy",
+          "lore": {
+            "shortDescription": "Heavy property indicates that small creatures have disadvantage on attack rolls with heavy weapons.",
+            "fullText": "Small creatures have disadvantage on attack rolls with heavy weapons. A heavy weapon's size and bulk make it too large for a Small creature to use effectively."
+          }
+        },
+        {
+          "id": "property_two_handed",
+          "name": "Two-Handed",
+          "lore": {
+            "shortDescription": "Two-Handed property indicates that a weapon requires two hands to use.",
+            "fullText": "This weapon requires two hands to use."
+          }
+        }
       ],
-      "range": "5 ft"
+      "propertyIds": [
+        "property_heavy",
+        "property_two_handed"
+      ],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": true,
+        "twoHanded": true,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "lore": {
       "shortDescription": "A large, two-handed axe that is designed for powerful strikes, ideal for close combat situations.",
@@ -377,10 +705,45 @@
       "damageDice": "1d6",
       "damageType": "slashing",
       "properties": [
-        "light",
-        "thrown"
+        {
+          "id": "property_light",
+          "name": "Light",
+          "lore": {
+            "shortDescription": "Light property indicates that a weapon is easy to handle, making it ideal for dual-wielding.",
+            "fullText": "A light weapon is small and easy to handle, making it ideal for use when fighting with two weapons."
+          }
+        },
+        {
+          "id": "property_thrown",
+          "name": "Thrown",
+          "lore": {
+            "shortDescription": "Thrown property indicates that a weapon can be thrown to make a ranged attack.",
+            "fullText": "If a weapon has the thrown property, you can throw the weapon to make a ranged attack. If the weapon is a melee weapon, you use the same ability modifier for that attack roll and damage roll that you would use for a melee attack with the weapon. For example, if you throw a handaxe, you use your Strength, but if you throw a dagger, you can either use your Strength or your Dexterity, since the dagger has the finesse property."
+          }
+        }
       ],
-      "range": "20/60 ft"
+      "propertyIds": [
+        "property_light",
+        "property_thrown"
+      ],
+      "range": "20/60 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "thrownRange": {
+          "normal": 20,
+          "long": 60
+        },
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": true,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "lore": {
       "shortDescription": "A small, easily handled axe that is perfect for close combat and throwing.",
@@ -402,9 +765,36 @@
       "damageDice": "1d6",
       "damageType": "piercing",
       "properties": [
-        "thrown"
+        {
+          "id": "property_thrown",
+          "name": "Thrown",
+          "lore": {
+            "shortDescription": "Thrown property indicates that a weapon can be thrown to make a ranged attack.",
+            "fullText": "If a weapon has the thrown property, you can throw the weapon to make a ranged attack. If the weapon is a melee weapon, you use the same ability modifier for that attack roll and damage roll that you would use for a melee attack with the weapon. For example, if you throw a handaxe, you use your Strength, but if you throw a dagger, you can either use your Strength or your Dexterity, since the dagger has the finesse property."
+          }
+        }
       ],
-      "range": "30/120 ft"
+      "propertyIds": [
+        "property_thrown"
+      ],
+      "range": "30/120 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "thrownRange": {
+          "normal": 30,
+          "long": 120
+        },
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "lore": {
       "shortDescription": "A light spear designed for throwing, ideal for ranged combat.",
@@ -423,12 +813,35 @@
     "weaponProperties": {
       "category": "martial_melee",
       "damageDice": "1d8",
+      "versatileDamageDice": "1d10",
       "damageType": "slashing",
       "properties": [
-        "versatile"
+        {
+          "id": "property_versatile",
+          "name": "Versatile",
+          "lore": {
+            "shortDescription": "Versatile property indicates that a weapon can be used with one or two hands.",
+            "fullText": "This weapon can be used with one or two hands. A damage value in parentheses appears with the property - the damage when the weapon is used with two hands to make a melee attack."
+          }
+        }
       ],
-      "versatileDamageDice": "1d10",
-      "range": "5 ft"
+      "propertyIds": [
+        "property_versatile"
+      ],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": true
+      }
     },
     "lore": {
       "shortDescription": "A versatile melee weapon that can be used with one or two hands.",
@@ -449,7 +862,21 @@
       "damageDice": "1d6",
       "damageType": "bludgeoning",
       "properties": [],
-      "range": "5 ft"
+      "propertyIds": [],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": false
+      }
     },
     "lore": {
       "shortDescription": "A simple melee weapon designed for powerful bludgeoning strikes.",
@@ -470,9 +897,32 @@
       "damageDice": "1d8",
       "damageType": "piercing",
       "properties": [
-        "finesse"
+        {
+          "id": "property_finesse",
+          "name": "Finesse",
+          "lore": {
+            "shortDescription": "Finesse property allows you to use your choice of Strength or Dexterity modifier for attack and damage rolls.",
+            "fullText": "When making an attack with a finesse weapon, you use your choice of your Strength or Dexterity modifier for the attack and damage rolls. You must use the same modifier for both rolls."
+          }
+        }
       ],
-      "range": "5 ft"
+      "propertyIds": [
+        "property_finesse"
+      ],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "choice",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": true,
+        "versatile": false
+      }
     },
     "lore": {
       "shortDescription": "A slender, sharply pointed sword designed for thrusting attacks.",
@@ -491,12 +941,35 @@
     "weaponProperties": {
       "category": "martial_melee",
       "damageDice": "1d8",
+      "versatileDamageDice": "1d10",
       "damageType": "bludgeoning",
       "properties": [
-        "versatile"
+        {
+          "id": "property_versatile",
+          "name": "Versatile",
+          "lore": {
+            "shortDescription": "Versatile property indicates that a weapon can be used with one or two hands.",
+            "fullText": "This weapon can be used with one or two hands. A damage value in parentheses appears with the property - the damage when the weapon is used with two hands to make a melee attack."
+          }
+        }
       ],
-      "versatileDamageDice": "1d10",
-      "range": "5 ft"
+      "propertyIds": [
+        "property_versatile"
+      ],
+      "range": "5 ft",
+      "rules": {
+        "attackAbility": "str",
+        "isRangedWeapon": false,
+        "meleeReachFeet": 5,
+        "requiresAmmunition": false,
+        "loading": false,
+        "light": false,
+        "heavy": false,
+        "twoHanded": false,
+        "special": false,
+        "finesse": false,
+        "versatile": true
+      }
     },
     "lore": {
       "shortDescription": "A versatile melee weapon capable of delivering powerful bludgeoning strikes.",
