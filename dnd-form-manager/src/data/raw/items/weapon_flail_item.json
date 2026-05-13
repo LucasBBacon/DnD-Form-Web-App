@@ -1,0 +1,21 @@
+{
+    "id": "item_weapon_flail",
+    "name": "Flail",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A flail is a weapon consisting of a spiked ball attached to a handle by a chain.",
+        "fullText": "A flail is a weapon consisting of a spiked ball attached to a handle by a chain. It is designed to deliver powerful bludgeoning attacks, making it effective against armored opponents. The flail's unique design allows it to bypass shields and other defenses, as the spiked ball can strike from unexpected angles. However, its use requires skill and precision, as the chain can be difficult to control in combat. Despite its challenges, the flail remains a popular choice for warriors seeking a weapon that combines reach and impact on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d8",
+        "damageType": "bludgeoning",
+        "properties": [],
+        "range": "5 ft"
+    },
+    "cpCost": 1000
+}

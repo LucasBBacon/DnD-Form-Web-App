@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_halberd",
+    "name": "Halberd",
+    "type": "weapon",
+    "weight": 6,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A halberd is a polearm weapon that combines the features of an axe, a spear, and a hook.",
+        "fullText": "A halberd is a polearm weapon that combines the features of an axe, a spear, and a hook. It consists of a long wooden shaft with a blade on one end that can be used for slashing, thrusting, and hooking attacks. The halberd's versatility allows it to be effective against a variety of opponents, making it a popular choice for soldiers and guards throughout history."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d10",
+        "damageType": "slashing",
+        "properties": [
+            "property_heavy",
+            "property_reach",
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 2000
+}

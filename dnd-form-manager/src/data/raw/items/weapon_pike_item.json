@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_pike",
+    "name": "Pike",
+    "type": "weapon",
+    "weight": 18,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A pike is a long pole weapon that is designed for thrusting attacks.",
+        "fullText": "A pike is a long pole weapon that is designed for thrusting attacks. It features a sharp, pointed tip that can be used to strike enemies from a distance. The pike's reach allows the wielder to keep opponents at bay, making it an effective weapon for controlling the battlefield. However, its size and weight require strength and skill to wield effectively in combat, making it a favored choice for soldiers and warriors who seek to dominate the battlefield with reach and precision."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d10",
+        "damageType": "piercing",
+        "properties": [
+            "property_heavy",
+            "property_reach",
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 500
+}
