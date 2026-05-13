@@ -1,6 +1,7 @@
 import { getAllItemCategories, getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { UUID } from "../types/common";
+import type { Attack } from "../types/action";
 import type { ItemInstanceData, WeaponPropertyCatalogEntry } from "../types/item";
 import { resolveInstance } from "../utils/inventoryUtils";
 import {
@@ -17,7 +18,7 @@ import { useCharacterStats } from "./useCharacterStats";
  * all necessary information for displaying and executing attacks in the UI.
  * @returns An object containing the array of attacks with details such as to-hit bonus, damage string, properties, range, and ammunition status.
  */
-export const useAttacks = () => {
+export const useAttacks = (): { attacks: Attack[] } => {
   const formatRangeBand = (rangeBand?: { normal: number; long?: number }) => {
     if (!rangeBand) return null;
     return typeof rangeBand.long === "number"

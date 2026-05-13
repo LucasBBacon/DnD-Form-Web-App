@@ -1,4 +1,6 @@
 import type { Ability } from "./common";
+import type { UUID } from "./common";
+import type { WeaponPropertyCatalogEntry, WeaponRangeBand } from "./item";
 
 export type ActionType =
   | "action"
@@ -92,4 +94,43 @@ export interface ActionData {
     /** Healing details for the action */
     healing?: string[];
   };
+}
+
+/**
+ * Represents a weapon attack derived from an equipped weapon.
+ * Phase 8 Enhancement: Includes versatile mode, range selection, reach handling, heavy weapon disadvantage, and thrown variants.
+ */
+export interface Attack {
+  /** Instance ID of the equipped weapon, if applicable */
+  instanceId: UUID | null;
+  /** Base item ID of the weapon */
+  weaponId: string;
+  /** Display name of the weapon (customName or base name) */
+  name: string;
+  /** To-hit modifier for the attack */
+  toHit: number;
+  /** Formatted damage string (e.g., "1d8 + 2 slashing") */
+  damageString: string;
+  /** Catalog entries for weapon properties (finesse, reach, etc.) */
+  properties: WeaponPropertyCatalogEntry[];
+  /** Display range string for the weapon (e.g., "5 ft", "60/120 ft") */
+  range: string;
+  /** Parsed range band data for ranged attacks */
+  rangeInfo?: WeaponRangeBand;
+  /** Melee reach in feet for melee attacks (default: 5 ft) */
+  meleeReachFeet: number;
+  /** True when the weapon has the reach property */
+  hasReachProperty: boolean;
+  /** Versatile damage dice string (e.g., "1d10"), if the weapon supports versatile use */
+  versatileDamageDice: string | null;
+  /** Versatile mode selection (Phase 8): one-handed or two-handed */
+  versatileMode: "one-handed" | "two-handed";
+  /** Ammunition info for ranged attacks requiring ammunition */
+  ammo: { id: string; name: string | null; count: number | null } | null;
+  /** Whether the attack can be made (false if exhausted or out of ammo) */
+  canAttack: boolean;
+  /** True when a small character wields a heavy weapon (locked to disadvantage) */
+  heavyDisadvantage: boolean;
+  /** True when this attack represents a thrown variant of a melee weapon */
+  isThrown: boolean;
 }

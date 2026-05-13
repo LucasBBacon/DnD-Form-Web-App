@@ -274,6 +274,7 @@ export const ActionsBoard: React.FC = () => {
       onVersatileModeChange={handleVersatileModeChange}
       onAttackResult={setAttackResult}
       onDamageResult={setDamageResult}
+      onAmmoConsume={removeInventoryItem}
       onExpendTraitUse={expendTraitActionUse}
       onRestoreTraitUse={restoreTraitActionUse}
       spellChoiceEntryId={spellChoiceEntryId}

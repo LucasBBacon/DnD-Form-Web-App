@@ -120,6 +120,8 @@ export interface ActionsBoardViewProps {
     config: CombatRollMetadata,
     rollTotal: number,
   ) => void;
+  /** Callback when ammunition is consumed (fired or expended) */
+  onAmmoConsume?: (ammoItemId: string, quantity: number) => void;
   /** Callback when a trait use is expended */
   onExpendTraitUse: (traitId: string) => void;
   /** Callback when a trait use is restored */
@@ -164,6 +166,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   onVersatileModeChange = () => {},
   onAttackResult,
   onDamageResult,
+  onAmmoConsume = () => {},
   onExpendTraitUse,
   onRestoreTraitUse,
   spellChoiceEntryId = null,
