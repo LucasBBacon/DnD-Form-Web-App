@@ -8,6 +8,7 @@ import {
   isWeaponProficient,
 } from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
+import { resolveSizeFromTraits } from "../utils/traitEffectResolvers";
 import { useCharacterStats } from "./useCharacterStats";
 
 /**
@@ -49,6 +50,12 @@ export const useAttacks = () => {
     state.acquiredFeats,
     state.classTracks,
   );
+
+  // #endregion
+
+  // #region --- Resolve Character Size ---
+
+  const characterSize = resolveSizeFromTraits(allTraits, state.level);
 
   // #endregion
 
@@ -200,6 +207,7 @@ export const useAttacks = () => {
           ? { id: props.ammoItemId, name: ammoName, count: ammoCount }
           : null,
         canAttack,
+        heavyDisadvantage: props.rules.heavy && characterSize === "small",
       };
     })
     .filter(Boolean); // Filter out any nulls

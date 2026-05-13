@@ -60,6 +60,8 @@ export interface CombatActionEntry {
   weaponProperties?: WeaponPropertyCatalogEntry[];
   /** Ammunition info for ranged attack entries */
   ammo?: { id: string; name: string | null; count: number | null };
+  /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
+  heavyDisadvantage?: boolean;
 }
 
 export interface CombatRollMetadata {
@@ -305,6 +307,7 @@ export const useCombatActions = () => {
           attack?.range || "Melee",
         ],
         ammo: attack?.ammo ?? undefined,
+        heavyDisadvantage: attack?.heavyDisadvantage ?? false,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],
         attackRoll: {

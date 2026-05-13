@@ -46,10 +46,6 @@ export const ActionsBoard: React.FC = () => {
 
   // #region Handlers and Memoized Values
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getAttackRollMode = (entryId: string) =>
-    attackRollModes[entryId] ?? "normal";
-
   const formatModifier = (modifier: number): string => {
     if (modifier === 0) return "";
     return modifier > 0 ? ` + ${modifier}` : ` - ${Math.abs(modifier)}`;
@@ -232,6 +228,10 @@ export const ActionsBoard: React.FC = () => {
       rollResultsByEntry={rollResultsByEntry}
       onActiveRollerChange={setActiveRoller}
       onAttackRollModeChange={(entryId, mode) => {
+        // Heavy entries are locked to disadvantage — ignore any override
+        const allEntries = Object.values(sections).flat();
+        const entry = allEntries.find((e) => e.id === entryId);
+        if (entry?.heavyDisadvantage) return;
         setAttackRollModes((prev) => ({ ...prev, [entryId]: mode }));
       }}
       onAttackResult={setAttackResult}

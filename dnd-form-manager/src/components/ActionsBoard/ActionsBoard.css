@@ -297,3 +297,19 @@
     justify-content: flex-start;
   }
 }
+
+/* Heavy-weapon disadvantage warning badge (Phase 3) */
+.heavy-disadvantage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  cursor: help;
+  white-space: nowrap;
+}

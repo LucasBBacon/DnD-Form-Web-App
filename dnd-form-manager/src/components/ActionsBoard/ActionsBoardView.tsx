@@ -150,8 +150,10 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   onCancelSpellSlotChoice = () => {},
   toRomanNumeral,
 }) => {
-  const getAttackRollMode = (entryId: string) =>
-    attackRollModes[entryId] ?? "normal";
+  const getAttackRollMode = (entryId: string, heavyDisadvantage?: boolean) => {
+    if (heavyDisadvantage) return "disadvantage" as const;
+    return attackRollModes[entryId] ?? ("normal" as const);
+  };
 
   return (
     <section className="actions-board-container card">
@@ -322,10 +324,19 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
 
                       {!!entry.attackRoll && (
                         <div className="combat-roll-row">
+                          {entry.heavyDisadvantage && (
+                            <span
+                              className="heavy-disadvantage-badge"
+                              title="Heavy weapons cannot be used effectively by Small creatures. Attack rolls are locked to Disadvantage."
+                            >
+                              ⚠ Heavy (Small)
+                            </span>
+                          )}
                           <AttackRollModeToggle
                             entryId={entry.id}
-                            mode={getAttackRollMode(entry.id)}
+                            mode={getAttackRollMode(entry.id, entry.heavyDisadvantage)}
                             label={`${entry.name} to-hit mode`}
+                            disabled={entry.heavyDisadvantage}
                             onChange={(mode) =>
                               onAttackRollModeChange(entry.id, mode)
                             }
@@ -423,7 +434,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         activeRoller.kind === "attack" && (
                           <div className="combat-roll-roller-wrap">
                             {(() => {
-                              const mode = getAttackRollMode(entry.id);
+                              const mode = getAttackRollMode(entry.id, entry.heavyDisadvantage);
                               return (
                                 <DiceRoller
                                   count={mode === "normal" ? 1 : 2}
