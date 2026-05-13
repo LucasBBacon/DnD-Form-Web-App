@@ -6,6 +6,7 @@ import {
 } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import type { AttackRangeSelection } from "./ui/RangeDistancePicker";
+import type { VersatileMode } from "./ui/VersatileModeToggle";
 import { ActionsBoardView } from "./ActionsBoardView";
 
 /**
@@ -23,6 +24,7 @@ export const ActionsBoard: React.FC = () => {
     expendSpellSlot,
     expendPactSlot,
     removeInventoryItem,
+    setWeaponVersatileMode,
   } = useCharacterStore();
 
   const [activeRoller, setActiveRoller] = useState<{
@@ -35,6 +37,9 @@ export const ActionsBoard: React.FC = () => {
   >({});
   const [attackRangeSelections, setAttackRangeSelections] = useState<
     Record<string, AttackRangeSelection>
+  >({});
+  const [versatileModeSelections, setVersatileModeSelections] = useState<
+    Record<string, VersatileMode>
   >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, { attack?: string; damage: Record<string, string> }>
@@ -127,6 +132,26 @@ export const ActionsBoard: React.FC = () => {
     if (entry?.ammo?.id && (entry.ammo.count ?? 0) > 0) {
       removeInventoryItem(entry.ammo.id, 1);
     }
+  };
+
+  const handleVersatileModeChange = (
+    entryId: string,
+    mode: VersatileMode,
+  ) => {
+    // Find the entry to get the instanceId
+    const allEntries = Object.values(sections).flat();
+    const entry = allEntries.find((e) => e.id === entryId);
+    
+    if (entry?.instanceId) {
+      // Update the instance in the store with new versatile mode
+      setWeaponVersatileMode(entry.instanceId, mode);
+    }
+    
+    // Update local state for UI
+    setVersatileModeSelections((prev) => ({
+      ...prev,
+      [entryId]: mode,
+    }));
   };
 
   const slotHud = useMemo(() => {
@@ -230,6 +255,7 @@ export const ActionsBoard: React.FC = () => {
       activeRoller={activeRoller}
       attackRollModes={attackRollModes}
       attackRangeSelections={attackRangeSelections}
+      versatileModeSelections={versatileModeSelections}
       rollResultsByEntry={rollResultsByEntry}
       onActiveRollerChange={setActiveRoller}
       onAttackRollModeChange={(entryId, mode) => {
@@ -245,6 +271,7 @@ export const ActionsBoard: React.FC = () => {
           [entryId]: rangeSelection,
         }));
       }}
+      onVersatileModeChange={handleVersatileModeChange}
       onAttackResult={setAttackResult}
       onDamageResult={setDamageResult}
       onExpendTraitUse={expendTraitActionUse}

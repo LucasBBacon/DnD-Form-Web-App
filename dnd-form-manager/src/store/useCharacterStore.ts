@@ -719,6 +719,8 @@ interface CharacterActions {
   
   unequipWeaponInstance: (instanceId: UUID) => void;
   
+  setWeaponVersatileMode: (instanceId: UUID, mode: "one-handed" | "two-handed") => void;
+  
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
   
   attuneInstance: (instanceId: UUID) => void;
@@ -1786,6 +1788,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     set((state) => ({
       equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
         (id) => id !== instanceId,
+      ),
+    })),
+
+  setWeaponVersatileMode: (instanceId, mode) =>
+    set((state) => ({
+      inventoryInstances: state.inventoryInstances.map((instance) =>
+        instance.instanceId === instanceId
+          ? { ...instance, versatileMode: mode }
+          : instance,
       ),
     })),
 

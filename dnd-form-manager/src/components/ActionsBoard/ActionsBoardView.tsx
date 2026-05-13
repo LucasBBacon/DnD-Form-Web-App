@@ -10,6 +10,10 @@ import {
   RangeDistancePicker,
   type AttackRangeSelection,
 } from "./ui/RangeDistancePicker";
+import {
+  VersatileModeToggle,
+  type VersatileMode,
+} from "./ui/VersatileModeToggle";
 import type {
   CombatActionSection,
   CombatActionEntry,
@@ -70,6 +74,8 @@ export interface ActionsBoardViewProps {
   attackRollModes: Record<string, "normal" | "advantage" | "disadvantage">;
   /** Range selection (normal/long) for each ranged attack entry */
   attackRangeSelections?: Record<string, AttackRangeSelection>;
+  /** Versatile mode selection (one-handed/two-handed) for each versatile attack entry */
+  versatileModeSelections?: Record<string, VersatileMode>;
   /** Roll results for each entry */
   rollResultsByEntry: Record<
     string,
@@ -98,6 +104,8 @@ export interface ActionsBoardViewProps {
     entryId: string,
     selection: AttackRangeSelection,
   ) => void;
+  /** Callback when a versatile mode selection changes */
+  onVersatileModeChange?: (entryId: string, mode: VersatileMode) => void;
   /** Callback when an attack result is available */
   onAttackResult: (
     entryId: string,
@@ -148,10 +156,12 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   activeRoller,
   attackRollModes,
   attackRangeSelections = {},
+  versatileModeSelections = {},
   rollResultsByEntry,
   onActiveRollerChange,
   onAttackRollModeChange,
   onAttackRangeChange = () => {},
+  onVersatileModeChange = () => {},
   onAttackResult,
   onDamageResult,
   onExpendTraitUse,
@@ -174,6 +184,10 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
       return "normal" as const;
     }
     return selected;
+  };
+
+  const getVersatileModeSelection = (entryId: string) => {
+    return versatileModeSelections[entryId] ?? ("one-handed" as const);
   };
 
   return (
@@ -295,6 +309,20 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                           }
                         />
                       )}
+
+                      {entry.source === "attack" &&
+                        entry.versatileDamageDice &&
+                        entry.baseDamageDice && (
+                          <VersatileModeToggle
+                            entryId={entry.id}
+                            baseDamageDice={entry.baseDamageDice}
+                            versatileDamageDice={entry.versatileDamageDice}
+                            value={getVersatileModeSelection(entry.id)}
+                            onChange={(mode) =>
+                              onVersatileModeChange(entry.id, mode)
+                            }
+                          />
+                        )}
 
                       {entry.description && (
                         <p className="combat-action-description">

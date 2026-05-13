@@ -70,6 +70,14 @@ export interface CombatActionEntry {
   isThrown?: boolean;
   /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
   heavyDisadvantage?: boolean;
+  /** Versatile mode for versatile weapons (one-handed or two-handed) */
+  versatileMode?: "one-handed" | "two-handed";
+  /** Versatile damage dice string for the weapon (e.g., "1d8"), if the weapon is versatile */
+  versatileDamageDice?: string | null;
+  /** Base damage dice string for the weapon (e.g., "1d6") */
+  baseDamageDice?: string;
+  /** Instance ID for weapon attacks (for state management) */
+  instanceId?: string;
 }
 
 export interface CombatRollMetadata {
@@ -299,7 +307,28 @@ export const useCombatActions = () => {
       : state.level;
 
     attacks.attacks.forEach((attack, index) => {
-      const parsedDamage = parseRollExpression(attack?.damageString ?? "");
+      // Extract base damage dice from the damage string (e.g., "1d6" from "1d6 + 2 slashing")
+      const baseDamageDiceMatch = attack?.damageString?.match(/^\s*(\d+d\d+)/);
+      const baseDamageDice = baseDamageDiceMatch ? baseDamageDiceMatch[1] : "1d6";
+
+      // Determine effective damage string based on versatile mode
+      let effectiveDamageString = attack?.damageString ?? "";
+      if (
+        attack?.versatileDamageDice &&
+        attack?.versatileMode === "two-handed"
+      ) {
+        // For versatile weapons in two-handed mode, use versatile dice
+        // Extract the damage bonus from the original damage string and apply it to versatile dice
+        const damageBonus = attack.damageString
+          ? attack.damageString.match(/([+-]\s*\d+)/)?.[0] ?? ""
+          : "";
+        const damageType = attack.damageString
+          ? attack.damageString.split(/\s+/)?.[2] ?? ""
+          : "";
+        effectiveDamageString = `${attack.versatileDamageDice} ${damageBonus} ${damageType}`.trim();
+      }
+
+      const parsedDamage = parseRollExpression(effectiveDamageString);
 
       grouped.action.push({
         id: `atk:${attack?.weaponId || "Weapon id not found"}:${index}`,
@@ -311,7 +340,7 @@ export const useCombatActions = () => {
           (attack?.toHit ?? 0) >= 0
             ? `ATK +${attack?.toHit ?? 0}`
             : `ATK ${attack?.toHit ?? 0}`,
-          attack?.damageString || "1d6",
+          effectiveDamageString || "1d6",
           attack?.hasReachProperty
             ? `Melee (${attack?.meleeReachFeet ?? 10} ft reach)`
             : (attack?.range || "Melee"),
@@ -322,6 +351,10 @@ export const useCombatActions = () => {
         hasReachProperty: attack?.hasReachProperty ?? false,
         isThrown: attack?.isThrown ?? false,
         heavyDisadvantage: attack?.heavyDisadvantage ?? false,
+        versatileMode: attack?.versatileMode ?? "one-handed",
+        versatileDamageDice: attack?.versatileDamageDice ?? null,
+        baseDamageDice,
+        instanceId: attack?.instanceId ?? undefined,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],
         attackRoll: {

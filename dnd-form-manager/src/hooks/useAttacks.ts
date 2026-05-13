@@ -220,6 +220,7 @@ export const useAttacks = () => {
         canAttack,
         heavyDisadvantage: props.rules.heavy && characterSize === "small",
         isThrown: false,
+        versatileMode: instanceData?.versatileMode ?? "one-handed",
       };
 
       const hasThrownOption =

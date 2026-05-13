@@ -181,6 +181,8 @@ export interface ItemInstanceData {
   createdFromCatalogBaseItemId?: string;
   /** Whether the item instance is custom */
   isCustom?: boolean;
+  /** Versatile mode for weapons that support it (Phase 8) */
+  versatileMode?: "one-handed" | "two-handed";
 }
 
 export interface ItemData {
