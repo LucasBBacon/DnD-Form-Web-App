@@ -12,8 +12,8 @@
     "damageDice": "1d6",
     "damageType": "slashing",
     "properties": [
-      "light",
-      "thrown"
+      "property_light",
+      "property_thrown"
     ],
     "range": "20/60 ft"
   },

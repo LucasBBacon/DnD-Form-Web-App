@@ -15,8 +15,8 @@
     "damageDice": "1d8",
     "damageType": "piercing",
     "properties": [
-      "ammunition",
-      "two-handed"
+      "property_ammunition",
+      "property_two_handed"
     ],
     "range": "80/320 ft",
     "ammoItemId": "item_ammo_bolt"

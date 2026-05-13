@@ -15,9 +15,9 @@
     "damageDice": "1d4",
     "damageType": "piercing",
     "properties": [
-      "finesse",
-      "light",
-      "thrown"
+      "property_finesse",
+      "property_light",
+      "property_thrown"
     ],
     "range": "20/60 ft"
   },

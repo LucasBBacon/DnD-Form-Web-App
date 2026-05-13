@@ -12,7 +12,7 @@
     "damageDice": "1d6",
     "damageType": "piercing",
     "properties": [
-      "thrown"
+      "property_thrown"
     ],
     "range": "30/120 ft"
   },

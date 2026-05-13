@@ -11,8 +11,8 @@
     "damageDice": "1d12",
     "damageType": "slashing",
     "properties": [
-      "heavy",
-      "two-handed"
+      "property_heavy",
+      "property_two_handed"
     ],
     "range": "5 ft"
   },

@@ -15,7 +15,7 @@
     "damageDice": "1d4",
     "damageType": "bludgeoning",
     "properties": [
-      "light"
+      "property_light"
     ],
     "range": "5 ft"
   },

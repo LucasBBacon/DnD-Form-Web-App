@@ -187,15 +187,17 @@
 					"items": {
 						"type": "string",
 						"enum": [
-							"finesse",
-							"light",
-							"heavy",
-							"two-handed",
-							"thrown",
-							"ammunition",
-							"versatile",
-							"reach",
-							"loading"
+							"property_ammunition",
+							"property_finesse",
+							"property_heavy",
+							"property_light",
+							"property_loading",
+							"property_range",
+							"property_reach",
+							"property_special",
+							"property_thrown",
+							"property_two_handed",
+							"property_versatile"
 						]
 					},
 					"description": "Rules properties associated with this weapon."

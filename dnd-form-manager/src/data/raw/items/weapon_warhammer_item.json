@@ -11,7 +11,7 @@
     "damageDice": "1d8",
     "damageType": "bludgeoning",
     "properties": [
-      "versatile"
+      "property_versatile"
     ],
     "versatileDamageDice": "1d10",
     "range": "5 ft"
