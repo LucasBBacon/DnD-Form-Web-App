@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_light_hammer",
+    "name": "Light Hammer",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "stack",
+        "bundleSize": 5
+    },
+    "lore": {
+        "shortDescription": "A small, one-handed melee weapon. It can also be thrown for ranged attacks.",
+        "fullText": "A light hammer is a small, one-handed melee weapon that can be used for both close combat and throwing. It deals bludgeoning damage and is light enough to be used with two-weapon fighting when paired with another light melee weapon. The light hammer can also be thrown, making it a versatile option for characters who want to engage enemies at a distance."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1d4",
+        "damageType": "bludgeoning",
+        "properties": [
+            "property_light",
+            "property_thrown"
+        ],
+        "range": "20/60 ft"
+    },
+    "cpCost": 200
+}
