@@ -5,6 +5,7 @@ import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
 import { WeaponPropertyBadges } from "./ui/WeaponPropertyBadges";
+import { AmmoIndicator } from "./ui/AmmoIndicator";
 import type {
   CombatActionSection,
   CombatActionEntry,
@@ -248,6 +249,10 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                             properties={entry.weaponProperties!}
                           />
                         )}
+
+                      {entry.source === "attack" && entry.ammo != null && (
+                        <AmmoIndicator ammo={entry.ammo} />
+                      )}
 
                       {entry.description && (
                         <p className="combat-action-description">

@@ -21,6 +21,7 @@ export const ActionsBoard: React.FC = () => {
     restoreTraitActionUse,
     expendSpellSlot,
     expendPactSlot,
+    removeInventoryItem,
   } = useCharacterStore();
 
   const [activeRoller, setActiveRoller] = useState<{
@@ -119,6 +120,13 @@ export const ActionsBoard: React.FC = () => {
         },
       };
     });
+
+    // Ammo consumption: decrement the ammo stack when damage is rolled
+    const allEntries = Object.values(sections).flat();
+    const entry = allEntries.find((e) => e.id === entryId);
+    if (entry?.ammo?.id && (entry.ammo.count ?? 0) > 0) {
+      removeInventoryItem(entry.ammo.id, 1);
+    }
   };
 
   const slotHud = useMemo(() => {

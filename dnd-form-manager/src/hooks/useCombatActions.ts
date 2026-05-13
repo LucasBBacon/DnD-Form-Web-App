@@ -58,6 +58,8 @@ export interface CombatActionEntry {
   damageRolls?: CombatRollMetadata[];
   /** Weapon property catalog entries (attack cards only) */
   weaponProperties?: WeaponPropertyCatalogEntry[];
+  /** Ammunition info for ranged attack entries */
+  ammo?: { id: string; name: string | null; count: number | null };
 }
 
 export interface CombatRollMetadata {
@@ -302,9 +304,7 @@ export const useCombatActions = () => {
           attack?.damageString || "1d6",
           attack?.range || "Melee",
         ],
-        description: attack?.ammo
-          ? `Ammo: ${attack.ammo.count} ${attack.ammo.name || ""}`.trim()
-          : undefined,
+        ammo: attack?.ammo ?? undefined,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],
         attackRoll: {
