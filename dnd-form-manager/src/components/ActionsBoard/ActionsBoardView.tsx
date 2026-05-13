@@ -6,6 +6,10 @@ import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
 import { WeaponPropertyBadges } from "./ui/WeaponPropertyBadges";
 import { AmmoIndicator } from "./ui/AmmoIndicator";
+import {
+  RangeDistancePicker,
+  type AttackRangeSelection,
+} from "./ui/RangeDistancePicker";
 import type {
   CombatActionSection,
   CombatActionEntry,
@@ -64,6 +68,8 @@ export interface ActionsBoardViewProps {
   } | null;
   /** Attack roll modes for each entry */
   attackRollModes: Record<string, "normal" | "advantage" | "disadvantage">;
+  /** Range selection (normal/long) for each ranged attack entry */
+  attackRangeSelections?: Record<string, AttackRangeSelection>;
   /** Roll results for each entry */
   rollResultsByEntry: Record<
     string,
@@ -86,6 +92,11 @@ export interface ActionsBoardViewProps {
   onAttackRollModeChange: (
     entryId: string,
     mode: "normal" | "advantage" | "disadvantage",
+  ) => void;
+  /** Callback when an attack range selection changes */
+  onAttackRangeChange?: (
+    entryId: string,
+    selection: AttackRangeSelection,
   ) => void;
   /** Callback when an attack result is available */
   onAttackResult: (
@@ -136,9 +147,11 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   sections,
   activeRoller,
   attackRollModes,
+  attackRangeSelections = {},
   rollResultsByEntry,
   onActiveRollerChange,
   onAttackRollModeChange,
+  onAttackRangeChange = () => {},
   onAttackResult,
   onDamageResult,
   onExpendTraitUse,
@@ -153,6 +166,14 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   const getAttackRollMode = (entryId: string, heavyDisadvantage?: boolean) => {
     if (heavyDisadvantage) return "disadvantage" as const;
     return attackRollModes[entryId] ?? ("normal" as const);
+  };
+
+  const getAttackRangeSelection = (entry: CombatActionEntry) => {
+    const selected = attackRangeSelections[entry.id] ?? "normal";
+    if (selected === "long" && typeof entry.rangeInfo?.long !== "number") {
+      return "normal" as const;
+    }
+    return selected;
   };
 
   return (
@@ -254,6 +275,17 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
 
                       {entry.source === "attack" && entry.ammo != null && (
                         <AmmoIndicator ammo={entry.ammo} />
+                      )}
+
+                      {entry.source === "attack" && entry.rangeInfo && (
+                        <RangeDistancePicker
+                          entryId={entry.id}
+                          rangeInfo={entry.rangeInfo}
+                          value={getAttackRangeSelection(entry)}
+                          onChange={(selection) =>
+                            onAttackRangeChange(entry.id, selection)
+                          }
+                        />
                       )}
 
                       {entry.description && (

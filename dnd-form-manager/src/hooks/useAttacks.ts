@@ -202,6 +202,7 @@ export const useAttacks = () => {
         damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
         properties: props.properties as WeaponPropertyCatalogEntry[],
         range: props.range,
+        rangeInfo: props.rules.range,
         versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId
           ? { id: props.ammoItemId, name: ammoName, count: ammoCount }

@@ -5,6 +5,7 @@ import {
   type CombatRollMetadata,
 } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
+import type { AttackRangeSelection } from "./ui/RangeDistancePicker";
 import { ActionsBoardView } from "./ActionsBoardView";
 
 /**
@@ -31,6 +32,9 @@ export const ActionsBoard: React.FC = () => {
   } | null>(null);
   const [attackRollModes, setAttackRollModes] = useState<
     Record<string, "normal" | "advantage" | "disadvantage">
+  >({});
+  const [attackRangeSelections, setAttackRangeSelections] = useState<
+    Record<string, AttackRangeSelection>
   >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, { attack?: string; damage: Record<string, string> }>
@@ -225,6 +229,7 @@ export const ActionsBoard: React.FC = () => {
       sections={sections}
       activeRoller={activeRoller}
       attackRollModes={attackRollModes}
+      attackRangeSelections={attackRangeSelections}
       rollResultsByEntry={rollResultsByEntry}
       onActiveRollerChange={setActiveRoller}
       onAttackRollModeChange={(entryId, mode) => {
@@ -233,6 +238,12 @@ export const ActionsBoard: React.FC = () => {
         const entry = allEntries.find((e) => e.id === entryId);
         if (entry?.heavyDisadvantage) return;
         setAttackRollModes((prev) => ({ ...prev, [entryId]: mode }));
+      }}
+      onAttackRangeChange={(entryId, rangeSelection) => {
+        setAttackRangeSelections((prev) => ({
+          ...prev,
+          [entryId]: rangeSelection,
+        }));
       }}
       onAttackResult={setAttackResult}
       onDamageResult={setDamageResult}

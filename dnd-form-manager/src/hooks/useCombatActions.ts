@@ -7,7 +7,7 @@ import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
 import type { DieFace } from "../types/common";
-import type { WeaponPropertyCatalogEntry } from "../types/item";
+import type { WeaponPropertyCatalogEntry, WeaponRangeBand } from "../types/item";
 
 // #region Types and Interfaces
 
@@ -60,6 +60,8 @@ export interface CombatActionEntry {
   weaponProperties?: WeaponPropertyCatalogEntry[];
   /** Ammunition info for ranged attack entries */
   ammo?: { id: string; name: string | null; count: number | null };
+  /** Parsed range data for ranged attack entries */
+  rangeInfo?: WeaponRangeBand;
   /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
   heavyDisadvantage?: boolean;
 }
@@ -307,6 +309,7 @@ export const useCombatActions = () => {
           attack?.range || "Melee",
         ],
         ammo: attack?.ammo ?? undefined,
+        rangeInfo: attack?.rangeInfo ?? undefined,
         heavyDisadvantage: attack?.heavyDisadvantage ?? false,
         isExhausted: !attack?.canAttack,
         weaponProperties: attack?.properties ?? [],
