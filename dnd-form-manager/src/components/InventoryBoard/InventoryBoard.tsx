@@ -3,7 +3,6 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import { useCharacterStats } from "../../hooks/useCharacterStats";
 import { useMemo, useState } from "react";
 import { getItemById } from "../../data/staticDataApi";
-import { WealthTracker } from "./ui/WealthTracker";
 import { TwoHandedWarningDialog } from "./ui/TwoHandedWarningDialog";
 import { canEquipTwoHandedWeapon } from "../../utils/equipmentValidator";
 import {
@@ -202,7 +201,6 @@ export const InventoryBoard: React.FC = () => {
   return (
     <>
       <InventoryBoardView
-        wealthView={<WealthTracker />}
         encumbrance={{
           totalWeight: encumbrance.totalWeight,
           capacity: encumbrance.carryingCapacity,

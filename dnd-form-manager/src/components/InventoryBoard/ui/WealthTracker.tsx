@@ -5,6 +5,8 @@ import {
   useCharacterStore,
   type CoinType,
 } from "../../../store/useCharacterStore";
+import "./WealthTracker.css";
+import { Minus, Plus, Scale, X } from "lucide-react";
 
 interface WealthTrackerProps {
   allowElectrum?: boolean;
@@ -19,14 +21,6 @@ const coinLabelMap: Record<CoinType, string> = {
   pp: "PP",
 };
 
-const coinInputLabels: Record<CoinType, string> = {
-  cp: "CP balance",
-  sp: "SP balance",
-  ep: "EP balance",
-  gp: "GP balance",
-  pp: "PP balance",
-};
-
 export const WealthTracker: React.FC<WealthTrackerProps> = ({
   allowElectrum = true,
   allowPlatinum = true,
@@ -36,7 +30,8 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({
   const removeCoins = useCharacterStore((state) => state.removeCoins);
   const consolidateCoins = useCharacterStore((state) => state.consolidateCoins);
   const [selectedCoinType, setSelectedCoinType] = useState<CoinType>("gp");
-  const [coinAmount, setCoinAmount] = useState(1);
+  const [coinAmount, setCoinAmount] = useState<number | "">(1);
+  const [isEditing, setIsEditing] = useState(false);
 
   const visibleCoinTypes = COIN_TYPES.filter((coinType) => {
     if (coinType === "ep") {
@@ -48,96 +43,104 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({
     return true;
   });
 
-  const handleAddCoins = () => {
-    addCoins(selectedCoinType, coinAmount);
-  };
-
-  const handleRemoveCoins = () => {
-    removeCoins(selectedCoinType, coinAmount);
-  };
-
   const handleConsolidateCoins = () => {
     consolidateCoins({ allowElectrum, allowPlatinum });
   };
 
+  const handleOpenTransaction = (coinType: CoinType) => {
+    setSelectedCoinType(coinType);
+    setIsEditing(true);
+  };
+
+  const handleTransaction = (type: "add" | "remove") => {
+    if (!coinAmount) return;
+    if (type === "add") addCoins(selectedCoinType, Number(coinAmount));
+    if (type === "remove") removeCoins(selectedCoinType, Number(coinAmount));
+
+    setCoinAmount(1);
+  };
+
   return (
-    <div className="wealth-shell">
-      <div className="wealth-header">
-        <span className="section-label">WEALTH</span>
+    <div className="wealth-tracker-container">
+      {/* The Merchant's Header */}
+      <div className="wealth-display-row">
+        <div className="coins-list">
+          {visibleCoinTypes.map((type) => (
+            <div
+              key={type}
+              className={`coin-balance coin-${type}`}
+              onClick={() => handleOpenTransaction(type)}
+              title={`Click to transact ${coinLabelMap[type]}`}
+            >
+              <span className="coin-value">{coinPurse[type]}</span>
+              <span className="coin-label">{coinLabelMap[type]}</span>
+            </div>
+          ))}
+        </div>
+
         <button
-          type="button"
-          className="action-btn wealth-exchange-btn"
+          className="action-btn consolidate-btn"
           onClick={handleConsolidateCoins}
+          title="Consolidate lower coins into higher ones"
         >
-          Exchange
+          <Scale size={16} />
         </button>
       </div>
 
-      <div className="coin-grid">
-        {visibleCoinTypes.map((coinType) => (
-          <div key={coinType} className="coin-box">
+      {/* The Transaction Drawer */}
+      {isEditing && (
+        <div className="transaction-drawer">
+          <hr className="filigree-divider" />
+          <div className="transaction-controls">
             <input
               type="number"
-              placeholder="0"
-              value={coinPurse[coinType]}
-              readOnly
-              aria-label={coinInputLabels[coinType]}
-              className={`coin-input ${coinType}`}
+              className="manuscript-input amount-input"
+              value={coinAmount}
+              onChange={(e) =>
+                setCoinAmount(
+                  e.target.value === ""
+                    ? ""
+                    : Math.max(1, parseInt(e.target.value)),
+                )
+              }
+              min="1"
             />
-            <span className="coin-label">{coinLabelMap[coinType]}</span>
+
+            <select
+              className="manuscript-input type-select"
+              value={selectedCoinType}
+              onChange={(e) => setSelectedCoinType(e.target.value as CoinType)}
+            >
+              {visibleCoinTypes.map((type) => (
+                <option key={type} value={type}>
+                  {coinLabelMap[type]}
+                </option>
+              ))}
+            </select>
+
+            <div className="transaction-actions">
+              <button
+                className="action-btn receive-btn"
+                onClick={() => handleTransaction("add")}
+              >
+                <Plus size={14} /> Receive
+              </button>
+              <button
+                className="action-btn spend-btn"
+                onClick={() => handleTransaction("remove")}
+              >
+                <Minus size={14} /> Spend
+              </button>
+              <button
+                className="close-drawer-btn"
+                onClick={() => setIsEditing(false)}
+              >
+                <X size={14} />
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <div className="wealth-controls">
-        <div className="wealth-control-group">
-          <label htmlFor="wealth-coin-type" className="wealth-control-label">
-            Coin type
-          </label>
-          <select
-            id="wealth-coin-type"
-            className="wealth-select"
-            value={selectedCoinType}
-            onChange={(event) =>
-              setSelectedCoinType(event.target.value as CoinType)
-            }
-          >
-            {visibleCoinTypes.map((coinType) => (
-              <option key={coinType} value={coinType}>
-                {coinLabelMap[coinType]}
-              </option>
-            ))}
-          </select>
         </div>
-
-        <div className="wealth-control-group">
-          <label htmlFor="wealth-coin-amount" className="wealth-control-label">
-            Amount
-          </label>
-          <input
-            id="wealth-coin-amount"
-            className="wealth-number-input"
-            type="number"
-            min="0"
-            step="1"
-            value={coinAmount}
-            onChange={(event) => setCoinAmount(Number(event.target.value))}
-          />
-        </div>
-
-        <div className="wealth-action-row">
-          <button type="button" className="action-btn" onClick={handleAddCoins}>
-            Add
-          </button>
-          <button
-            type="button"
-            className="action-btn"
-            onClick={handleRemoveCoins}
-          >
-            Remove
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

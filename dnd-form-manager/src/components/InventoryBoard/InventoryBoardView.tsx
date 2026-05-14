@@ -4,6 +4,7 @@ import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
 import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
 import { InventoryLedgerCard } from "./ui/InventoryLedgerCard";
 import type { ItemStackingRules, WeaponProperties } from "../../types/item";
+import { WealthTracker } from "./ui/WealthTracker";
 
 // #region Interfaces
 
@@ -74,8 +75,6 @@ export interface InventoryBoardHydratedStack {
 }
 
 export interface InventoryBoardViewProps {
-  /** The view for displaying wealth */
-  wealthView?: React.ReactNode;
   /** The encumbrance information */
   encumbrance: {
     /** The total weight of the inventory */
@@ -123,7 +122,6 @@ export interface InventoryBoardViewProps {
 // #region View Component
 
 export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
-  wealthView,
   encumbrance,
   missingItemIds,
   instances,
@@ -145,7 +143,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   return (
     <section className="inventory-board card">
       <div className="inventory-header">
-        {wealthView}
+        <WealthTracker />
         <EncumbranceDisplay
           totalWeight={encumbrance.totalWeight}
           capacity={encumbrance.capacity}

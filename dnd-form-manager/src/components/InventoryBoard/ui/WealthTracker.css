@@ -1,0 +1,149 @@
+/* --- WEALTH CONTAINER --- */
+.wealth-tracker-container {
+  background-color: var(--vellum-bg);
+  border: 2px solid var(--ink-main); /* Heavier border to distinguish from inventory items */
+  border-radius: 4px;
+  margin-bottom: 16px; /* Space between wealth and inventory list */
+  padding: 12px;
+  box-shadow: 0 4px 6px rgba(44, 36, 27, 0.05);
+}
+
+/* --- THE DISPLAY ROW --- */
+.wealth-display-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.coins-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  flex-grow: 1;
+}
+
+/* Individual Coin Blocks */
+.coin-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.coin-balance:hover {
+  background-color: var(--vellum-hover);
+  border-bottom-color: var(--ink-muted);
+}
+
+.coin-value {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink-main);
+}
+
+.coin-label {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Metallic Accents for Labels */
+.coin-cp .coin-label { color: #B87333; } /* Copper */
+.coin-sp .coin-label { color: #71797E; } /* Silver/Steel */
+.coin-ep .coin-label { color: #50C878; } /* Electrum (Greenish Gold) */
+.coin-gp .coin-label { color: var(--gilt-gold); } /* Gold */
+.coin-pp .coin-label { color: #8A9A9A; } /* Platinum (Cool Grey) */
+
+/* Consolidate Button */
+.consolidate-btn {
+  padding: 6px;
+  border: 1px solid var(--border-filigree);
+}
+
+/* --- THE TRANSACTION DRAWER --- */
+.transaction-drawer {
+  animation: fadeInDown 0.2s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.transaction-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Manuscript Style Inputs */
+.manuscript-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--ink-main);
+  color: var(--ink-main);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 4px;
+  outline: none;
+  transition: border-bottom-color 0.2s ease;
+}
+
+.manuscript-input:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--gilt-gold);
+}
+
+.amount-input {
+  width: 60px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.type-select {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Specific Transaction Buttons */
+.transaction-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto; /* Pushes buttons to the right */
+}
+
+.receive-btn {
+  color: var(--ink-main);
+  border-color: var(--ink-main);
+}
+
+.spend-btn {
+  color: var(--rubric-red);
+  border-color: var(--rubric-red);
+}
+
+.spend-btn:hover {
+  background-color: var(--rubric-red);
+  color: var(--vellum-bg);
+}
+
+.close-drawer-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-drawer-btn:hover {
+  color: var(--ink-main);
+}

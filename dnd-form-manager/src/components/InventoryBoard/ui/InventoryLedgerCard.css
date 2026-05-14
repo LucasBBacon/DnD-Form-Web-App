@@ -1,19 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap");
-
-:root {
-  --vellum-bg: #fdfbf7;
-  --vellum-hover: #f6f1e6;
-  --ink-main: #2c241b;
-  --ink-muted: #5a4a3a;
-  --rubric-red: #9e2a2b;
-  --rubric-red-hover: #7a2021;
-  --gilt-gold: #d4af37;
-  --border-filigree: #e5d9c5;
-
-  --font-body: "Crimson Pro", serif;
-  --font-display: "Cinzel", serif;
-}
-
 .item-card-container {
   font-family: var(--font-body);
   color: var(--ink-main);
@@ -170,18 +154,6 @@
   }
 }
 
-.filigree-divider {
-  border: 0;
-  height: 1px;
-  background-image: linear-gradient(
-    to right,
-    transparent,
-    var(--border-filigree),
-    transparent
-  );
-  margin: 8px 0 16px 0;
-}
-
 .item-lore {
   font-size: 0.95rem;
   font-style: italic;
@@ -314,39 +286,6 @@
   justify-content: flex-start;
   gap: 12px;
   align-items: center;
-}
-
-.action-btn {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: transparent;
-  border: 1px solid var(--ink-main);
-  color: var(--ink-main);
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.action-btn:hover {
-  background-color: var(--ink-main);
-  color: var(--vellum-bg);
-}
-
-.action-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  border-color: var(--ink-muted);
-  color: var(--ink-muted);
-}
-
-.action-btn:disabled:hover {
-  background-color: transparent;
-  color: var(--ink-muted);
 }
 
 .equip-btn {
