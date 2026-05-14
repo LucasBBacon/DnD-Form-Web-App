@@ -9,6 +9,7 @@ import {
 import type { InventoryBoardItemData } from "../InventoryBoardView";
 import "./InventoryLedgerCard.css";
 import { useState } from "react";
+import { ManuscriptTooltip } from "../../ui/ManuscriptTooltip/ManuscriptTooltip";
 
 export interface InventoryLedgerCardProps {
   entityId: string;
@@ -115,15 +116,33 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
           {/* Stack Controls */}
           {quantity !== undefined && (
             <div className="quantity-stepper">
-              <button className="stepper-btn" onClick={(e) => handleQuantityClick(e, -1)} title="Decrease Quantity">-</button>
+              <button
+                className="stepper-btn"
+                onClick={(e) => handleQuantityClick(e, -1)}
+                title="Decrease Quantity"
+              >
+                -
+              </button>
               <span className="quantity-display">
-                <span className="quantity-x">X</span>{quantity}
+                <span className="quantity-x">X</span>
+                {quantity}
               </span>
-              <button className="stepper-btn" onClick={(e) => handleQuantityClick(e, 1)} title="Increase Quantity">+</button>
+              <button
+                className="stepper-btn"
+                onClick={(e) => handleQuantityClick(e, 1)}
+                title="Increase Quantity"
+              >
+                +
+              </button>
             </div>
           )}
 
-          <span className="item-weight">{quantity !== undefined ? (itemData.weight * quantity).toFixed(1) : itemData.weight} lb</span>
+          <span className="item-weight">
+            {quantity !== undefined
+              ? (itemData.weight * quantity).toFixed(1)
+              : itemData.weight}{" "}
+            lb
+          </span>
           {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       </div>
@@ -141,7 +160,9 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
             <div className="stat">
               <span className="stat-label">Value</span>
               <span className="stat-value">
-                {formatItemCost ? formatItemCost(itemData.cpCost) : `${itemData.cpCost} cp`}
+                {formatItemCost
+                  ? formatItemCost(itemData.cpCost)
+                  : `${itemData.cpCost} cp`}
               </span>
             </div>
 
@@ -188,20 +209,15 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
                     <span className="stat-label">Properties</span>
                     <div className="property-tags">
                       {itemData.weaponProperties.properties.map((prop) => (
-                        <div
+                        <ManuscriptTooltip
                           key={prop.id}
-                          className="property-tag with-tooltip"
+                          title={prop.name}
+                          content={prop.lore.shortDescription}
+                          className="property-tooltip-wrapper"
+                          showIndicator={true}
                         >
-                          {prop.name}
-
-                          {/* Tooltip container */}
-                          <div className="manuscript-tooltip">
-                            <span className="tooltip-title">{prop.name}</span>
-                            <span className="tooltip-body">
-                              {prop.lore.shortDescription}
-                            </span>
-                          </div>
-                        </div>
+                          <div className="property-tag">{prop.name}</div>
+                        </ManuscriptTooltip>
                       ))}
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 import type React from "react";
-import { LabeledField } from "../LabeledField/LabeledField";
+import { LabeledField } from "../ui/LabeledField/LabeledField";
 import { IdentityDetailsGrid } from "./ui/IdentityDetailsGrid";
 import "./IdentityHeader.css";
 import type { LevelUpMode } from "../../types/progression";
