@@ -1,9 +1,10 @@
 import type React from "react";
 import "./InventoryBoard.css";
 import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
-import { formatCpAsCoinage } from "../../utils/currencyUtils";
+import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
 import { EquipmentCard } from "./ui/EquipmentCard";
 import { GearCard } from "./ui/GearCard";
+import type { ItemStackingRules, WeaponProperties } from "../../types/item";
 
 // #region Interfaces
 
@@ -11,23 +12,43 @@ export interface InventoryBoardItemData {
   /** The name of the item */
   name: string;
   /** The type of the item (e.g., weapon, armor) */
-  type: string;
+  type: "gear" | "weapon" | "armor" | "tool" | "magic_item";
   /** The weight of the item */
   weight: number;
   /** Item cost in copper pieces */
   cpCost: number;
+
   /** Lore information about the item */
   lore: {
     /** A short description of the item */
     shortDescription: string;
+    /** The main bod of text for the item */
+    fullText?: string;
   };
+
+  stacking?: ItemStackingRules;
+
   /** Armor properties of the item */
   armorProperties?: {
+    acApplication: "set" | "bonus";
     /** The type of armor (e.g., light, medium, heavy) */
     armorType: string;
+    baseAc: number;
+    dexModifier: {
+      mode: "full" | "capped" | "none";
+      cap?: number;
+    };
+    stealthDisadvantage: boolean;
+    strengthRequirement?: number;
   };
+
+  weaponProperties?: WeaponProperties;
+
   /** Magic item properties of the item */
   magicItemProperties?: {
+    bonusToAttack?: number;
+    bonusToDamage?: number;
+    bonusToAc?: number;
     /** Indicates if the item requires attunement */
     requiresAttunement?: boolean;
   };
@@ -120,7 +141,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   onStackDecrement,
 }) => {
   const formatItemCost = (cpCost: number): string =>
-    `${formatCpAsCoinage(cpCost)} (${cpCost} CP)`;
+    formatCpAsMaxCoinValue(cpCost);
 
   return (
     <section className="inventory-board card">
@@ -166,7 +187,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                     : false;
 
               const requiresAttunement =
-                itemData.magicItemProperties?.requiresAttunement;
+                itemData.magicItemProperties?.requiresAttunement ?? false;
               const isAttuned = attunedInstanceIds.includes(instanceId);
 
               return (

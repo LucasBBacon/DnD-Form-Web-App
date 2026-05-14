@@ -56,10 +56,13 @@ export const InventoryBoard: React.FC = () => {
             type: instance.itemData.type,
             weight: instance.itemData.weight,
             cpCost: instance.itemData.cpCost,
+            stacking: instance.itemData.stacking,
             lore: {
               shortDescription: instance.itemData.lore.shortDescription,
+              fullText: instance.itemData.lore.fullText,
             },
             armorProperties: instance.itemData.armorProperties,
+            weaponProperties: instance.itemData.weaponProperties,
             magicItemProperties: instance.itemData.magicItemProperties,
           },
         }));

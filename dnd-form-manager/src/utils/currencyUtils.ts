@@ -68,3 +68,35 @@ export const formatCpAsCoinage = (
 
   return parts.length > 0 ? parts.join(" ") : "0 CP";
 };
+
+const trimTrailingZeros = (value: number, maxFractionDigits: number): string => {
+  if (Number.isInteger(value)) {
+    return value.toString();
+  }
+
+  return value
+    .toFixed(maxFractionDigits)
+    .replace(/(\.\d*?[1-9])0+$/, "$1")
+    .replace(/\.0+$/, "");
+};
+
+const formatPieceLabel = (amountText: string, denomination: string): string => {
+  const pieceLabel = amountText === "1" ? "piece" : "pieces";
+  return `${amountText} ${denomination} ${pieceLabel}`;
+};
+
+export const formatCpAsMaxCoinValue = (cpValue: number): string => {
+  const safeCp = toSafeCp(cpValue);
+
+  if (safeCp >= 100) {
+    const goldValue = safeCp / 100;
+    return formatPieceLabel(trimTrailingZeros(goldValue, 2), "Gold");
+  }
+
+  if (safeCp >= 10) {
+    const silverValue = safeCp / 10;
+    return formatPieceLabel(trimTrailingZeros(silverValue, 1), "Silver");
+  }
+
+  return formatPieceLabel(safeCp.toString(), "Copper");
+};
