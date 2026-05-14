@@ -29,9 +29,14 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({
   const addCoins = useCharacterStore((state) => state.addCoins);
   const removeCoins = useCharacterStore((state) => state.removeCoins);
   const consolidateCoins = useCharacterStore((state) => state.consolidateCoins);
+
   const [selectedCoinType, setSelectedCoinType] = useState<CoinType>("gp");
   const [coinAmount, setCoinAmount] = useState<number | "">(1);
   const [isEditing, setIsEditing] = useState(false);
+
+  const currentBalance = coinPurse[selectedCoinType];
+  const parsedAmount = Number(coinAmount) || 0;
+  const isInsufficientFunds = parsedAmount > currentBalance;
 
   const visibleCoinTypes = COIN_TYPES.filter((coinType) => {
     if (coinType === "ep") {
@@ -118,6 +123,14 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({
               ))}
             </select>
 
+            <div className="transaction-warning-wrapper">
+              {isInsufficientFunds && (
+                <span className="scribe-warning">
+                  Only {currentBalance} {coinLabelMap[selectedCoinType]} available.
+                </span>
+              )}
+            </div>
+
             <div className="transaction-actions">
               <button
                 className="action-btn receive-btn"
@@ -128,6 +141,8 @@ export const WealthTracker: React.FC<WealthTrackerProps> = ({
               <button
                 className="action-btn spend-btn"
                 onClick={() => handleTransaction("remove")}
+                disabled={isInsufficientFunds}
+                title={isInsufficientFunds ? "Insufficient funds" : "Spend coins"}
               >
                 <Minus size={14} /> Spend
               </button>

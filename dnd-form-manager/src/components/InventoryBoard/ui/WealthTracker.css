@@ -52,11 +52,21 @@
 }
 
 /* Metallic Accents for Labels */
-.coin-cp .coin-label { color: #B87333; } /* Copper */
-.coin-sp .coin-label { color: #71797E; } /* Silver/Steel */
-.coin-ep .coin-label { color: #50C878; } /* Electrum (Greenish Gold) */
-.coin-gp .coin-label { color: var(--gilt-gold); } /* Gold */
-.coin-pp .coin-label { color: #8A9A9A; } /* Platinum (Cool Grey) */
+.coin-cp .coin-label {
+  color: #b87333;
+} /* Copper */
+.coin-sp .coin-label {
+  color: #71797e;
+} /* Silver/Steel */
+.coin-ep .coin-label {
+  color: #50c878;
+} /* Electrum (Greenish Gold) */
+.coin-gp .coin-label {
+  color: var(--gilt-gold);
+} /* Gold */
+.coin-pp .coin-label {
+  color: #8a9a9a;
+} /* Platinum (Cool Grey) */
 
 /* Consolidate Button */
 .consolidate-btn {
@@ -70,8 +80,14 @@
 }
 
 @keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .transaction-controls {
@@ -146,4 +162,33 @@
 
 .close-drawer-btn:hover {
   color: var(--ink-main);
+}
+
+.transaction-warning-wrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+.scribe-warning {
+  color: var(--rubric-red);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.85rem;
+  animation: fadeIn 0.2s ease-in;
+}
+
+.spend-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--ink-muted);
+  color: var(--ink-muted);
+  text-decoration: line-through;
+}
+
+.spend-btn:disabled:hover {
+  background-color: transparent;
+  color: var(--ink-muted);
+  border-color: var(--ink-muted);
 }
