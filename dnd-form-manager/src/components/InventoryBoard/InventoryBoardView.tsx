@@ -141,17 +141,22 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
     formatCpAsMaxCoinValue(cpCost);
 
   return (
-    <section className="inventory-board card">
-      <div className="inventory-header">
+    <section className="inventory-board-container">
+      {/* Sticky Dashboard */}
+      <div className="inventory-dashboard-sticky">
+        <h2 className="manuscript-section-title">Inventory & Wealth</h2>
+
         <WealthTracker />
         <EncumbranceDisplay
           totalWeight={encumbrance.totalWeight}
           capacity={encumbrance.capacity}
           isEncumbered={encumbrance.isEncumbered}
         />
+
+        <hr className="ornate-board-divider" />
       </div>
 
-      <hr className="divider" />
+      {/* Scrollable Ledger */}
 
       {missingItemIds.length > 0 && (
         <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
@@ -163,12 +168,13 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
         </div>
       )}
 
-      <div className="inventory-section">
-        <h3 className="section-title">EQUIPMENT & ATTUNEMENT</h3>
+      <div className="inventory-ledger-scroll-area">
         {instances.length === 0 ? (
-          <p className="empty-state">No equipment.</p>
+          <p className="empty-inventory-state">
+            <span className="empty-text">Your pack is empty.</span>
+          </p>
         ) : (
-          <div className="item-list">
+          <div className="ledger-list">
             {instances.map(({ instanceId, itemData }) => {
               const isWeapon = itemData.type === "weapon";
               const isArmor = itemData.type === "armor";
@@ -206,32 +212,26 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                 />
               );
             })}
-          </div>
-        )}
-      </div>
-
-      <div className="inventory-section">
-        <h3 className="section title">BACKPACK (GEAR & CONSUMABLES)</h3>
-        {stacks.length === 0 ? (
-          <p className="empty-state">Backpack is empty.</p>
-        ) : (
-          <div className="item-list">
-            {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
-              <InventoryLedgerCard
-                key={stackId}
-                entityId={stackId}
-                itemData={itemData}
-                quantity={quantity}
-                onQuantityChange={(_id, delta) => {
-                  if (delta > 0) {
-                    onStackIncrement(baseItemId);
-                  } else {
-                    onStackDecrement(baseItemId);
-                  }
-                }}
-                formatItemCost={formatItemCost}
-              />
-            ))}
+            {stacks.length > 0 && (
+              <div className="ledger-list">
+                {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
+                  <InventoryLedgerCard
+                    key={stackId}
+                    entityId={stackId}
+                    itemData={itemData}
+                    quantity={quantity}
+                    onQuantityChange={(_id, delta) => {
+                      if (delta > 0) {
+                        onStackIncrement(baseItemId);
+                      } else {
+                        onStackDecrement(baseItemId);
+                      }
+                    }}
+                    formatItemCost={formatItemCost}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
