@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WizardStepNav } from "./WizardStepNav";
 
 const meta = {
-  title: "Components/CharacterCreationWizard/WizardStepNav",
+  title: "CharacterCreationWizard/WizardStepNav",
   component: WizardStepNav,
   parameters: {
     layout: "padded",

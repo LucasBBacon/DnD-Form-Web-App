@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LevelUpModeSelector } from "./LevelUpModeSelector";
 
 const meta = {
-  title: "Components/IdentityHeader/LevelUpModeSelector",
+  title: "IdentityHeader/LevelUpModeSelector",
   component: LevelUpModeSelector,
   parameters: {
     layout: "padded",

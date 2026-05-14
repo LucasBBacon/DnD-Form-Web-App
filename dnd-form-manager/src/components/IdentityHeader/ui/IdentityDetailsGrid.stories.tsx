@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { IdentityDetailsGrid } from "./IdentityDetailsGrid";
 
 const meta = {
-  title: "Components/IdentityHeader/IdentityDetailsGrid",
+  title: "IdentityHeader/IdentityDetailsGrid",
   component: IdentityDetailsGrid,
   parameters: {
     layout: "padded",

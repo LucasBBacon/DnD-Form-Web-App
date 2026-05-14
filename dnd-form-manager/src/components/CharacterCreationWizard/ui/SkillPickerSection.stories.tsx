@@ -3,7 +3,7 @@ import { SkillPickerSection } from "./SkillPickerSection";
 import type { SkillProficiencyRequirement } from "../../../types/creationRequirement";
 
 const meta = {
-  title: "Components/CharacterCreationWizard/SkillPickerSection",
+  title: "CharacterCreationWizard/SkillPickerSection",
   component: SkillPickerSection,
   parameters: {
     layout: "padded",

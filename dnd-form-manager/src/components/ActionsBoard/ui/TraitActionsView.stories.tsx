@@ -3,7 +3,7 @@ import { TraitActionsView } from "./TraitActionsView";
 import type { ActionData } from "../../../types/action";
 
 const meta = {
-  title: "Components/TraitActionsView",
+  title: "ActionsBoard/TraitActionsView",
   component: TraitActionsView,
   parameters: {
     layout: "padded",

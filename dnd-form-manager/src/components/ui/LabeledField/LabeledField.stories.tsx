@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { LabeledField } from "./LabeledField";
 
 const meta = {
-  title: "Components/Utils/LabeledField",
+  title: "ui/LabeledField",
   component: LabeledField,
   parameters: {
     layout: "padded",

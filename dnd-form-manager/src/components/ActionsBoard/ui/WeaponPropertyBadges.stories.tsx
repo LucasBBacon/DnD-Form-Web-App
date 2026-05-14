@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { WeaponPropertyBadges } from "./WeaponPropertyBadges";
-import type { WeaponPropertyCatalogEntry } from "../../../types/item";
+import type { WeaponPropertyCatalogEntry, WeaponPropertyId } from "../../../types/item";
 
 const meta: Meta<typeof WeaponPropertyBadges> = {
   title: "ActionsBoard/WeaponPropertyBadges",
@@ -13,7 +13,7 @@ type Story = StoryObj<typeof WeaponPropertyBadges>;
 
 const mockProperties: WeaponPropertyCatalogEntry[] = [
   {
-    id: "prop:finesse",
+    id: "prop_finesse" as WeaponPropertyId,
     name: "Finesse",
     lore: {
       shortDescription: "Can use DEX or STR modifier",
@@ -21,7 +21,7 @@ const mockProperties: WeaponPropertyCatalogEntry[] = [
     },
   },
   {
-    id: "prop:versatile",
+    id: "prop_versatile" as WeaponPropertyId,
     name: "Versatile",
     lore: {
       shortDescription: "1d8 one-handed or 1d10 two-handed",
