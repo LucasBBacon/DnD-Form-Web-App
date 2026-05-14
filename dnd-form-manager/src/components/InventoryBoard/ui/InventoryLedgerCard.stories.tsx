@@ -172,6 +172,10 @@ const rations: InventoryBoardItemData = {
 	type: "gear",
 	weight: 2,
 	cpCost: 50,
+  stacking: {
+    mode: "stack",
+    maxBundleCount: 10,
+  },
 	lore: {
 		shortDescription: "One day of preserved trail food.",
 	},
@@ -182,6 +186,10 @@ const rope: InventoryBoardItemData = {
 	type: "gear",
 	weight: 10,
 	cpCost: 100,
+  stacking: {
+    mode: "stack",
+    maxBundleCount: 5,
+  },
 	lore: {
 		shortDescription: "Durable rope for climbing and hauling.",
 	},
@@ -192,13 +200,17 @@ const healingPotion: InventoryBoardItemData = {
 	type: "gear",
 	weight: 0.5,
 	cpCost: 5000,
+  stacking: {
+    mode: "stack",
+    maxBundleCount: 5,
+  },
 	lore: {
 		shortDescription: "Regain hit points when consumed.",
 	},
 };
 
 const meta: Meta<typeof InventoryLedgerCard> = {
-  title: "InventoryBoard/EquipmentCard",
+  title: "InventoryBoard/InventoryLedgerCard",
   component: InventoryLedgerCard,
   tags: ["autodocs"],
   args: {
@@ -226,28 +238,28 @@ export default meta;
 
 type Story = StoryObj<typeof InventoryLedgerCard>;
 
-export const EquippedWeapon: Story = {
+export const EquippedWeaponLedger: Story = {
   args: {
     itemData: weaponItem,
     isEquipped: true,
   },
 };
 
-export const HeavyArmorUnequipped: Story = {
+export const HeavyArmorUnequippedLedger: Story = {
   args: {
     itemData: heavyArmorItem,
     isEquipped: false,
   },
 };
 
-export const EquippedShield: Story = {
+export const EquippedShieldLedger: Story = {
   args: {
     itemData: shieldItem,
     isEquipped: true,
   },
 };
 
-export const AttunedMagicItem: Story = {
+export const AttunedMagicItemLedger: Story = {
   args: {
     itemData: magicItem,
     isAttuned: true,
@@ -255,7 +267,7 @@ export const AttunedMagicItem: Story = {
   },
 };
 
-export const AttunementSlotsFull: Story = {
+export const AttunementSlotsFullLedger: Story = {
   args: {
     itemData: magicItem,
     isAttuned: false,
@@ -263,37 +275,34 @@ export const AttunementSlotsFull: Story = {
   },
 };
 
-export const UtilityItemNoEquipControls: Story = {
+export const UtilityItemNoEquipControlsLedger: Story = {
   args: {
     itemData: explorersPackItem,
     attunedInstanceIds: [],
   },
 };
 
-export const TypicalBackpackStack: Story = {};
+export const TypicalBackpackStackLedger: Story = {};
 
-export const SingleHeavyUtility: Story = {
+export const SingleHeavyUtilityLedger: Story = {
     args: {
         entityId: "stack-rope",
-        baseItemId: "adventuring_gear_rope_hempen_50ft",
         itemData: rope,
         quantity: 1,
     },
 };
 
-export const BulkSupplies: Story = {
+export const BulkSuppliesLedger: Story = {
     args: {
         entityId: "stack-rations-bulk",
-        baseItemId: "adventuring_gear_rations",
         itemData: rations,
         quantity: 25,
     },
 };
 
-export const PremiumConsumables: Story = {
+export const PremiumConsumablesLedger: Story = {
     args: {
         entityId: "stack-healing-potion",
-        baseItemId: "potion_healing",
         itemData: healingPotion,
         quantity: 4,
     },

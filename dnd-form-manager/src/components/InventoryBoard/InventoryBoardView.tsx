@@ -2,8 +2,7 @@ import type React from "react";
 import "./InventoryBoard.css";
 import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
 import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
-import { EquipmentCard } from "./ui/EquipmentCard";
-import { GearCard } from "./ui/GearCard";
+import { InventoryLedgerCard } from "./ui/InventoryLedgerCard";
 import type { ItemStackingRules, WeaponProperties } from "../../types/item";
 
 // #region Interfaces
@@ -186,24 +185,25 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                     ? equippedArmorInstanceId === instanceId
                     : false;
 
-              const requiresAttunement =
-                itemData.magicItemProperties?.requiresAttunement ?? false;
               const isAttuned = attunedInstanceIds.includes(instanceId);
 
               return (
-                <EquipmentCard
-                  instanceId={instanceId}
-                  isEquipped={isEquipped}
+                <InventoryLedgerCard
+                  key={instanceId}
+                  entityId={instanceId}
                   itemData={itemData}
-                  requiresAttunement={requiresAttunement}
+                  isEquipped={isEquipped}
                   isAttuned={isAttuned}
-                  isWeapon={isWeapon}
-                  isArmor={isArmor}
                   attunedInstanceIds={attunedInstanceIds}
                   onToggleAttunement={onToggleAttunement}
-                  onToggleWeaponEquip={onToggleWeaponEquip}
-                  onToggleArmorEquip={onToggleArmorEquip}
-                  onDropInstance={onDropInstance}
+                  onToggleEquip={(id, equipped, armorType) => {
+                    if (isWeapon) {
+                      onToggleWeaponEquip(id, equipped);
+                    } else if (isArmor && armorType) {
+                      onToggleArmorEquip(id, equipped, armorType);
+                    }
+                  }}
+                  onDropItem={(id) => onDropInstance(id)}
                   formatItemCost={formatItemCost}
                 />
               );
@@ -219,13 +219,18 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
         ) : (
           <div className="item-list">
             {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
-              <GearCard
-                stackId={stackId}
+              <InventoryLedgerCard
+                key={stackId}
+                entityId={stackId}
                 itemData={itemData}
                 quantity={quantity}
-                baseItemId={baseItemId}
-                onStackIncrement={onStackIncrement}
-                onStackDecrement={onStackDecrement}
+                onQuantityChange={(_id, delta) => {
+                  if (delta > 0) {
+                    onStackIncrement(baseItemId);
+                  } else {
+                    onStackDecrement(baseItemId);
+                  }
+                }}
                 formatItemCost={formatItemCost}
               />
             ))}

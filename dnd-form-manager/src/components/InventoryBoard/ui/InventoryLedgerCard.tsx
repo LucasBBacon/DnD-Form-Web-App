@@ -1,4 +1,11 @@
-import { ChevronDown, ChevronUp, Shield, Sparkles, Sword } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Shield,
+  Sparkles,
+  Sword,
+  Trash2,
+} from "lucide-react";
 import type { InventoryBoardItemData } from "../InventoryBoardView";
 import "./InventoryLedgerCard.css";
 import { useState } from "react";
@@ -15,7 +22,11 @@ export interface InventoryLedgerCardProps {
   attunedInstanceIds?: string[];
 
   onToggleAttunement?: (entityId: string, isAttuned: boolean) => void;
-  onToggleEquip?: (entityId: string, isEquipped: boolean, armorType?: string) => void;
+  onToggleEquip?: (
+    entityId: string,
+    isEquipped: boolean,
+    armorType?: string,
+  ) => void;
   onDropItem?: (entityId: string, dropQuantity: number) => void;
   formatItemCost?: (cpCost: number) => string;
 }
@@ -64,17 +75,19 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
     e.stopPropagation();
     if (onQuantityChange) {
       if (quantity === 1 && delta === -1) {
-        // TODO: prompt a drop/delete confirmation here
+        console.log(
+          `[Stub] Modal: Are you sure you want to remove the last ${itemData.name}?`,
+        );
       }
       onQuantityChange(entityId, delta);
     }
-  }
+  };
 
   const handleDrop = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onDropItem) {
-    // TODO: add trigger confirmation here
-    onDropItem(entityId, quantity ?? 1);
+      // TODO: add trigger confirmation here
+      onDropItem(entityId, quantity ?? 1);
     }
   };
 
@@ -100,9 +113,17 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
           {isAttuned && <Sparkles size={16} className="attuned-glow" />}
 
           {/* Stack Controls */}
-          {quantity !== undefined && (<></>)}
+          {quantity !== undefined && (
+            <div className="quantity-stepper">
+              <button className="stepper-btn" onClick={(e) => handleQuantityClick(e, -1)} title="Decrease Quantity">-</button>
+              <span className="quantity-display">
+                <span className="quantity-x">X</span>{quantity}
+              </span>
+              <button className="stepper-btn" onClick={(e) => handleQuantityClick(e, 1)} title="Increase Quantity">+</button>
+            </div>
+          )}
 
-          <span className="item-weight">{itemData.weight} lb</span>
+          <span className="item-weight">{quantity !== undefined ? (itemData.weight * quantity).toFixed(1) : itemData.weight} lb</span>
           {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       </div>
@@ -120,7 +141,7 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
             <div className="stat">
               <span className="stat-label">Value</span>
               <span className="stat-value">
-                {formatItemCost(itemData.cpCost)}
+                {formatItemCost ? formatItemCost(itemData.cpCost) : `${itemData.cpCost} cp`}
               </span>
             </div>
 
@@ -233,16 +254,17 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
               </button>
             )}
 
-            {requiresAttunement && (
-              <button
-                className={`action-btn attune-btn ${isAttuned ? "is-attuned" : ""}`}
-                onClick={handleAttuneToggle}
-                disabled={!isAttuned && attunedInstanceIds.length >= 3}
-                title={`Attunement Slots: ${attunedInstanceIds.length}/3`}
-              >
-                {isAttuned ? "Break Attunement" : "Attune"}
-              </button>
-            )}
+            {itemData.magicItemProperties?.requiresAttunement &&
+              attunedInstanceIds && (
+                <button
+                  className={`action-btn attune-btn ${isAttuned ? "is-attuned" : ""}`}
+                  onClick={handleAttuneToggle}
+                  disabled={!isAttuned && attunedInstanceIds.length >= 3}
+                  title={`Attunement Slots: ${attunedInstanceIds.length}/3`}
+                >
+                  {isAttuned ? "Break Attunement" : "Attune"}
+                </button>
+              )}
 
             <button className="action-btn drop-btn" onClick={handleDrop}>
               <Trash2 size={16} /> Drop
