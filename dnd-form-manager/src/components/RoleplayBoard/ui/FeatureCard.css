@@ -130,11 +130,59 @@
   animation: fadeIn 0.3s ease-out;
 }
 
+/* --- MARKDOWN TYPOGRAPHY --- */
 .feature-full-text {
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--ink-main);
   white-space: pre-wrap; /* Honors newlines in your JSON strings */
+}
+
+.feature-full-text p:last-child {
+  margin-bottom: 0;
+}
+
+.feature-full-text strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--rubric-red);
+  letter-spacing: 0.02em;
+}
+
+.feature-full-text em {
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.feature-full-text ul,
+.feature-full-text ol {
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding-left: 20px;
+}
+
+.feature-full-text li {
+  margin-bottom: 6px;
+}
+
+.feature-full-text ul {
+  list-style-type: none;
+}
+
+.feature-full-text ul li::before {
+  content: "✦";
+  color: var(--gilt-gold);
+  display: inline-block;
+  width: 1em;
+  margin-left: -1;
+}
+
+.feature-full-text blockquote {
+  border-left: 2px solid var(--gilt-gold);
+  margin: 0 0 12px 0;
+  padding-left: 12px;
+  font-style: italic;
+  background-color: rgba(212, 175, 55, 0.05);
 }
 
 .feature-mechanics-footer {

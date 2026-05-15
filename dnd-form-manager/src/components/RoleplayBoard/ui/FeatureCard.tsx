@@ -2,6 +2,7 @@ import type React from "react";
 import "./FeatureCard.css";
 import { useState } from "react";
 import { ChevronDown, ChevronUp, RefreshCw } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 // #region Interfaces
 
@@ -128,7 +129,9 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({
           <hr className="filigree-divider" />
 
           <div className="feature-full-text">
-            {lore.fullText ? lore.fullText : lore.shortDescription}
+            <ReactMarkdown>
+              {lore.fullText ? lore.fullText : lore.shortDescription}
+            </ReactMarkdown>
           </div>
 
           {/* Mechanical Footer */}
