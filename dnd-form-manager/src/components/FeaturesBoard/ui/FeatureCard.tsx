@@ -15,7 +15,7 @@ export interface FeatureSource {
   label: string;
 }
 
-interface FeatureCardProps {
+export interface FeatureCardProps {
   /** Unique ID from schema */
   traitId: string;
   /** The name of the feature */
