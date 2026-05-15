@@ -141,7 +141,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
     formatCpAsMaxCoinValue(cpCost);
 
   return (
-    <section className="inventory-board-container">
+    <div className="inventory-board-container">
       {/* Sticky Dashboard */}
       <div className="inventory-dashboard-sticky">
         <h2 className="manuscript-section-title">Inventory & Wealth</h2>
@@ -158,17 +158,17 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
 
       {/* Scrollable Ledger */}
 
-      {missingItemIds.length > 0 && (
-        <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
-          {missingItemIds.map((itemId) => (
-            <div key={`missing-item-${itemId}`}>
-              Missing equipment reference: {itemId}
-            </div>
-          ))}
-        </div>
-      )}
-
       <div className="inventory-ledger-scroll-area">
+        {missingItemIds.length > 0 && (
+          <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
+            {missingItemIds.map((itemId) => (
+              <div key={`missing-item-${itemId}`}>
+                Missing equipment reference: {itemId}
+              </div>
+            ))}
+          </div>
+        )}
+
         {instances.length === 0 ? (
           <p className="empty-inventory-state">
             <span className="empty-text">Your pack is empty.</span>
@@ -235,7 +235,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 };
 
