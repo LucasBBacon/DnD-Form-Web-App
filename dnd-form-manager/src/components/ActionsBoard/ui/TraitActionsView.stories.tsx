@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { ActionData } from "../../../types/action";
 import { TraitActionsView } from "./TraitActionsView";
-import type { ActionData } from "../types/action";
 
 const meta = {
-  title: "Components/TraitActionsView",
+  title: "ActionsBoard/TraitActionsView",
   component: TraitActionsView,
   parameters: {
     layout: "padded",

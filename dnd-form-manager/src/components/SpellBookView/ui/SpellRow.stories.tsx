@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SpellRow } from "./SpellRow";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 import type { SpellSavingThrow, SpellSchool } from "../../../types/spell";
 
 const basicSpell = {

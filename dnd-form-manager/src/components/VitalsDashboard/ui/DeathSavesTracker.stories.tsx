@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DeathSavesTracker } from "./DeathSavesTracker";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof DeathSavesTracker> = {
   title: "VitalsDashboard/DeathSavesTracker",

@@ -1,7 +1,7 @@
 import type React from "react";
 import "./HitDiceRollPanel.css";
 import type { HitDie } from "../../../types/common";
-import { DiceRoller } from "../../DiceRoller/DiceRoller";
+import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
 import { useState } from "react";
 
 // #region Interface

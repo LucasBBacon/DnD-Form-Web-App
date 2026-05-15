@@ -1,6 +1,6 @@
 import type React from "react";
 import "./ActionsBoard.css";
-import { DiceRoller } from "../DiceRoller/DiceRoller";
+import { DiceRoller } from "../ui/DiceRoller/DiceRoller";
 import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";

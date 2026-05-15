@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import "./App.css";
 import { useCharacterStore } from "./store/useCharacterStore";
-import { CharacterSheet } from "./components/CharacterSheet";
+import { CharacterSheet } from "./components/CharacterSheet/CharacterSheet";
 import { CharacterCreationWizard } from "./components/CharacterCreationWizard/CharacterCreationWizard";
 import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
 import { ShortRestModal } from "./components/ShortRestModal/ShortRestModal";

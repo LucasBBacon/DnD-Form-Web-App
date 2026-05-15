@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { HealthAdjustmentForm } from "./HealthAdjustmentForm";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const meta: Meta<typeof HealthAdjustmentForm> = {
   title: "VitalsDashboard/HealthAdjustmentForm",

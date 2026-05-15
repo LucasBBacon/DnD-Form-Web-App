@@ -4,55 +4,55 @@ import { CharacterSheetView } from "./CharacterSheetView";
 import {
   VitalsDashboardView,
   type VitalsDashboardViewProps,
-} from "./VitalsDashboard/VitalsDashboardView";
+} from "../VitalsDashboard/VitalsDashboardView";
 import {
   VITALS_DASHBOARD_FIXTURES,
   type VitalsDashboardScenario,
-} from "./VitalsDashboard/VitalsDashboard.fixtures";
+} from "../VitalsDashboard/VitalsDashboard.fixtures";
 import {
   ActionsBoardView,
   type ActionsBoardViewProps,
-} from "./ActionsBoard/ActionsBoardView";
+} from "../ActionsBoard/ActionsBoardView";
 import {
   ACTIONS_BOARD_FIXTURES,
   type ActionsBoardScenario,
-} from "./ActionsBoard/ActionsBoard.fixtures";
+} from "../ActionsBoard/ActionsBoard.fixtures";
 import {
   InventoryBoardView,
   type InventoryBoardViewProps,
-} from "./InventoryBoard/InventoryBoardView";
+} from "../InventoryBoard/InventoryBoardView";
 import {
   INVENTORY_BOARD_FIXTURES,
   type InventoryBoardScenario,
-} from "./InventoryBoard/InventoryBoard.fixtures";
+} from "../InventoryBoard/InventoryBoard.fixtures";
 import {
   RoleplayBoardView,
   type RoleplayBoardViewProps,
-} from "./RoleplayBoard/RoleplayBoardView";
+} from "../RoleplayBoard/RoleplayBoardView";
 import {
   ROLEPLAY_BOARD_FIXTURES,
   type RoleplayBoardScenario,
-} from "./RoleplayBoard/RoleplayBoard.fixtures";
-import { SpellBookView } from "./SpellBookView/SpellBookView";
-import { WealthTracker } from "./InventoryBoard/ui/WealthTracker";
-import type { SpellcastingFixture } from "../types/fixtures";
+} from "../RoleplayBoard/RoleplayBoard.fixtures";
+import { SpellBookView } from "../SpellBookView/SpellBookView";
+import { WealthTracker } from "../InventoryBoard/ui/WealthTracker";
+import type { SpellcastingFixture } from "../../types/fixtures";
 import {
   IdentityHeaderView,
   type IdentityHeaderViewProps,
-} from "./IdentityHeader/IdentityHeaderView";
+} from "../IdentityHeader/IdentityHeaderView";
 import {
   IDENTITY_HEADER_FIXTURES,
   type IdentityHeaderScenario,
-} from "./IdentityHeader/IdentityHeader.fixtures";
+} from "../IdentityHeader/IdentityHeader.fixtures";
 import {
   CoreStatsBoardView,
   type CoreStatsBoardViewProps,
-} from "./CoreStatsBoard/CoreStatsBoardView";
+} from "../CoreStatsBoard/CoreStatsBoardView";
 import {
   CORE_STATS_BOARD_FIXTURES,
   type CoreStatsBoardScenario,
-} from "./CoreStatsBoard/CoreStatsBoard.fixtures";
-import { SPELLBOOK_BOARD_FIXTURES } from "./SpellBookBoard/SpellBookBoard.fixtures";
+} from "../CoreStatsBoard/CoreStatsBoard.fixtures";
+import { SPELLBOOK_BOARD_FIXTURES } from "../SpellBookBoard/SpellBookBoard.fixtures";
 import {
   CHARACTER_SHEET_SCENARIO_REFS,
   resolveCharacterSheetScenario,

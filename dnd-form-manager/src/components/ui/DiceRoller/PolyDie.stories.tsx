@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PolyDie } from "./PolyDie";
 
 const meta = {
-  title: "Components/DiceRoller/PolyDie",
+  title: "ui/PolyDie",
   component: PolyDie,
   parameters: {
     layout: "centered",

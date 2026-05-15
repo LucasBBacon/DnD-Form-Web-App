@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TabBar } from "./TabBar";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const tabs = [
   { id: "features", label: "FEATURES & TRAITS" },

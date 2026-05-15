@@ -7,7 +7,7 @@ import type {
   RollingInputMode,
   VirtualAbilityRoll,
 } from "../../utils/abilityAssignmentUtils";
-import { DiceRoller } from "../DiceRoller/DiceRoller";
+import { DiceRoller } from "../ui/DiceRoller/DiceRoller";
 import "./WizardPickerStage.css";
 
 const METHOD_LABELS: Record<AbilityAssignmentMethod, string> = {

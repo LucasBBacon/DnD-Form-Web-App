@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SpellFilterBar } from "./SpellFilterBar";
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 const classLabelMap = new Map([
   ["wizard", "Wizard"],

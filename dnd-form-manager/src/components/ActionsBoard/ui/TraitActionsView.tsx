@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import type { ActionData } from "../types/action";
+import type { ActionData } from "../../../types/action";
 
 interface TraitActionsViewProps {
   actions: ActionData[];
