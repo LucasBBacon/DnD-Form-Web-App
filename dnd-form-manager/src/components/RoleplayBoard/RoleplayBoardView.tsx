@@ -1,11 +1,10 @@
 import type React from "react";
 import "./RoleplayBoard.css";
-import { TabBar } from "./ui/TabBar";
-import { FeatureCard } from "./ui/FeatureCard";
+import { ManuscriptField } from "./ui/ManuscriptField";
 
 // #region Types & Interfaces
 
-export type RoleplayTab = "features" | "characteristics" | "biography";
+export type RoleplayTab = "characteristics" | "biography";
 
 export type RoleplayField =
   | "personalityTraits"
@@ -92,117 +91,141 @@ export interface RoleplayBoardViewProps {
 
 export const RoleplayBoardView: React.FC<RoleplayBoardViewProps> = ({
   activeTab,
-  features,
   characteristics,
   biography,
   onTabChange,
   onRoleplayFieldBlur,
 }) => {
+  const currentTab =
+    activeTab === "characteristics" ? "characteristics" : "biography";
+
   return (
-    <section className="roleplay-board card">
-      <TabBar
-        tabs={[
-          { id: "features", label: "FEATURES & TRAITS" },
-          { id: "characteristics", label: "CHARACTERISTICS" },
-          { id: "biography", label: "BIOGRAPHY" },
-        ]}
-        activeId={activeTab}
-        onChange={(id) => onTabChange(id as RoleplayTab)}
-      />
+    <div className="roleplay-board-container">
+      {/* Bookmark Tabs */}
+      <div className="bookmark-tabs-container">
+        <button
+          className={`bookmark-tab ${currentTab === "characteristics" ? "active" : ""}`}
+          onClick={() => onTabChange("characteristics")}
+        >
+          Persona
+        </button>
+        <button
+          className={`bookmark-tab ${currentTab === "biography" ? "active" : ""}`}
+          onClick={() => onTabChange("biography")}
+        >
+          Chronicle
+        </button>
+      </div>
 
-      <div className="tab-content">
-        {activeTab === "features" && (
-          <div className="features-list">
-            {features.length === 0 ? (
-              <p className="empty-state">No features acquired yet.</p>
-            ) : (
-              features.map((feature) => (
-                <FeatureCard
-                  key={feature.id}
-                  name={feature.name}
-                  sources={feature.sources}
-                  description={feature.description}
-                />
-              ))
-            )}
+      <div className="roleplay-content-area">
+        {/* Persona Tab */}
+        {currentTab === "characteristics" && (
+          <div className="characteristics-grid fadeIn">
+            <ManuscriptField
+              label="Personality Traits"
+              fieldId="personalityTraits"
+              initialValue={characteristics.personalityTraits}
+              onBlur={onRoleplayFieldBlur}
+              isMultiline
+            />
+            <ManuscriptField
+              label="Ideals"
+              fieldId="ideals"
+              initialValue={characteristics.ideals}
+              onBlur={onRoleplayFieldBlur}
+              isMultiline
+            />
+            <ManuscriptField
+              label="Bonds"
+              fieldId="bonds"
+              initialValue={characteristics.bonds}
+              onBlur={onRoleplayFieldBlur}
+              isMultiline
+            />
+            <ManuscriptField
+              label="Flaws"
+              fieldId="flaws"
+              initialValue={characteristics.flaws}
+              onBlur={onRoleplayFieldBlur}
+              isMultiline
+            />
           </div>
         )}
 
-        {activeTab === "characteristics" && (
-          <div className="characteristics-grid">
-            {(["personalityTraits", "ideals", "bonds", "flaws"] as const).map(
-              (field) => (
-                <div key={field} className="rp-input-group">
-                  <label className="rp-label">
-                    {field.replace(/([A-Z])/g, " $1").toUpperCase()}
-                  </label>
-                  <textarea
-                    className="rp-textarea"
-                    defaultValue={characteristics[field]}
-                    onBlur={(e) => onRoleplayFieldBlur(field, e.target.value)}
-                    placeholder={`Enter your ${field.toLowerCase()}...`}
-                  />
-                </div>
-              ),
-            )}
-          </div>
-        )}
-
-        {activeTab === "biography" && (
-          <div className="biography-layout">
-            <div className="physical-attributes-grid">
-              {(
-                ["age", "height", "weight", "eyes", "skin", "hair"] as const
-              ).map((field) => (
-                <div key={field} className="rp-input-group inline">
-                  <label className="rp-label">{field.toUpperCase()}</label>
-                  <input
-                    type="text"
-                    className="rp-input"
-                    defaultValue={biography[field]}
-                    onBlur={(e) => onRoleplayFieldBlur(field, e.target.value)}
-                    placeholder="-"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <hr className="divider" />
-
-            <div className="rp-input-group">
-              <label className="rp-label">CHARACTER APPEARANCE</label>
-              <textarea
-                className="rp-textarea small"
-                defaultValue={biography.appearance}
-                onBlur={(e) =>
-                  onRoleplayFieldBlur("appearance", e.target.value)
-                }
+        {/* Chronicle Tab */}
+        {currentTab === "biography" && (
+          <div className="biography-layout fadeIn">
+            {/* Physical Stats dense grid */}
+            <div className="physical-stats-grid">
+              <ManuscriptField
+                label="Age"
+                fieldId="age"
+                initialValue={biography.age}
+                onBlur={onRoleplayFieldBlur}
+              />
+              <ManuscriptField
+                label="Height"
+                fieldId="height"
+                initialValue={biography.height}
+                onBlur={onRoleplayFieldBlur}
+              />
+              <ManuscriptField
+                label="Weight"
+                fieldId="weight"
+                initialValue={biography.weight}
+                onBlur={onRoleplayFieldBlur}
+              />
+              <ManuscriptField
+                label="Eyes"
+                fieldId="eyes"
+                initialValue={biography.eyes}
+                onBlur={onRoleplayFieldBlur}
+              />
+              <ManuscriptField
+                label="Skin"
+                fieldId="skin"
+                initialValue={biography.skin}
+                onBlur={onRoleplayFieldBlur}
+              />
+              <ManuscriptField
+                label="Hair"
+                fieldId="hair"
+                initialValue={biography.hair}
+                onBlur={onRoleplayFieldBlur}
               />
             </div>
 
-            <div className="rp-input-group">
-              <label className="rp-label">BACKSTORY</label>
-              <textarea
-                className="rp-textarea large"
-                defaultValue={biography.backstory}
-                onBlur={(e) => onRoleplayFieldBlur("backstory", e.target.value)}
-              />
-            </div>
+            <hr className="filigree-divider" />
 
-            <div className="rp-input-group">
-              <label className="rp-label">ALLIES & ORGANIZATIONS</label>
-              <textarea
-                className="rp-textarea small"
-                defaultValue={biography.alliesAndOrganizations}
-                onBlur={(e) =>
-                  onRoleplayFieldBlur("alliesAndOrganizations", e.target.value)
-                }
+            {/* Long form text */}
+            <div className="long-form-texts">
+              <ManuscriptField
+                label="Appearance"
+                fieldId="appearance"
+                initialValue={biography.appearance}
+                onBlur={onRoleplayFieldBlur}
+                isMultiline
+              />
+              <ManuscriptField
+                label="Backstory"
+                fieldId="backstory"
+                initialValue={biography.backstory}
+                onBlur={onRoleplayFieldBlur}
+                isMultiline
+                className="tall-textarea"
+              />
+              <ManuscriptField
+                label="Allies & Organizations"
+                fieldId="alliesAndOrganizations"
+                initialValue={biography.alliesAndOrganizations}
+                onBlur={onRoleplayFieldBlur}
+                isMultiline
               />
             </div>
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 };
 
