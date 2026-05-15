@@ -1,7 +1,7 @@
 import type React from "react";
 import { useMemo, useRef, useState } from "react";
 import "./DiceRoller.css";
-import { PolyDie, type DieType } from "./PolyDie";
+import { type DieType } from "./PolyDie";
 import { Check, Dices, PenTool } from "lucide-react";
 
 // #region Types and Interfaces
@@ -47,8 +47,6 @@ interface DiceRollerProps {
 export const DiceRoller: React.FC<DiceRollerProps> = ({
   sides = 20,
   count = 1,
-  size = "large",
-  hideTotal = false,
   rollLabel,
   className,
   disabled = false,
