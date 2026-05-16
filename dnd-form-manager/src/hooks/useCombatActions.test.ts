@@ -122,11 +122,12 @@ describe("useCombatActions", () => {
 
     const { result } = renderHook(() => useCombatActions());
     const spellEntry = result.current.sections.bonus_action.find(
-      (entry) => entry.id === "spell:spell_shield_of_faith",
+      (entry) => entry.id === "spell:spell_shield_of_faith" && entry.source === "spell",
     );
+    const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(spellEntry?.spellCast?.canCast).toBe(false);
-    expect(spellEntry?.spellCast?.unavailableReason).toBe(
+    expect(typedSpellEntry?.spellCast?.canCast).toBe(false);
+    expect(typedSpellEntry?.spellCast?.unavailableReason).toBe(
       "No Level 1 spell slots available.",
     );
   });
@@ -149,11 +150,12 @@ describe("useCombatActions", () => {
 
     const { result } = renderHook(() => useCombatActions());
     const spellEntry = result.current.sections.bonus_action.find(
-      (entry) => entry.id === "spell:spell_shield_of_faith",
+      (entry) => entry.id === "spell:spell_shield_of_faith" && entry.source === "spell",
     );
+    const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(spellEntry?.spellCast?.canCast).toBe(true);
-    expect(spellEntry?.spellCast?.canUseSharedSlot).toBe(true);
-    expect(spellEntry?.spellCast?.canUsePactSlot).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canCast).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canUseSharedSlot).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canUsePactSlot).toBe(true);
   });
 });
