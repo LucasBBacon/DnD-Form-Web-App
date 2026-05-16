@@ -7,248 +7,192 @@ import type {
   TraitUseActionEntry,
 } from "./CombatActionRow";
 
+const toRomanNumeral = (level: number): string =>
+  ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ??
+  level.toString();
+
+const longswordAttack: AttackActionEntry = {
+  id: "attack-longsword",
+  name: "Longsword",
+  section: "attack",
+  source: "attack",
+  isExhausted: false,
+  subtitle: "Melee weapon attack",
+  quickStats: ["+5 to hit", "1d8 + 3 slashing"],
+  attackRoll: {
+    id: "atk-longsword",
+    count: 1,
+    sides: 20,
+    modifier: 5,
+    label: "To Hit",
+  },
+  damageRolls: [
+    {
+      id: "dmg-longsword",
+      count: 1,
+      sides: 8,
+      modifier: 3,
+      label: "Slashing",
+    },
+  ],
+};
+
+const fireballSpell: SpellSaveActionEntry = {
+  id: "spell-fireball",
+  name: "Fireball",
+  section: "spell",
+  source: "spell",
+  isExhausted: false,
+  subtitle: "3rd-level evocation",
+  quickStats: ["8d6 fire", "Dex save"],
+  spellLevel: 3,
+  spellCast: {
+    canCast: true,
+    canUseSharedSlot: true,
+    canUsePactSlot: false,
+  },
+  attackRoll: {
+    id: "atk-fireball",
+    count: 1,
+    sides: 20,
+    modifier: 7,
+    label: "Spell Attack",
+  },
+  damageRolls: [
+    {
+      id: "dmg-fireball",
+      count: 8,
+      sides: 6,
+      modifier: 0,
+      label: "Fire Damage",
+    },
+  ],
+};
+
+const holdPersonSpellUnavailable: SpellSaveActionEntry = {
+  id: "spell-hold-person",
+  name: "Hold Person",
+  section: "spell",
+  source: "spell",
+  isExhausted: true,
+  subtitle: "2nd-level enchantment",
+  quickStats: ["Wis save", "Humanoid"],
+  spellLevel: 2,
+  spellCast: {
+    canCast: false,
+    canUseSharedSlot: false,
+    canUsePactSlot: false,
+    unavailableReason: "No spell slots remaining",
+  },
+};
+
+const rageTrait: TraitUseActionEntry = {
+  id: "trait-rage",
+  name: "Rage",
+  section: "trait",
+  source: "trait",
+  isExhausted: false,
+  subtitle: "Enter a furious state",
+  quickStats: ["Bonus damage", "Resistance"],
+  uses: {
+    total: 3,
+    remaining: 2,
+  },
+};
+
+const exhaustedTrait: TraitUseActionEntry = {
+  id: "trait-second-wind",
+  name: "Second Wind",
+  section: "trait",
+  source: "trait",
+  isExhausted: true,
+  subtitle: "Regain hit points",
+  quickStats: ["1/rest"],
+  uses: {
+    total: 1,
+    remaining: 0,
+  },
+};
+
 const meta: Meta<typeof CombatActionRow> = {
   title: "ActionsBoard/CombatActionRow",
   component: CombatActionRow,
   tags: ["autodocs"],
   args: {
+    attackRollMode: "normal",
+    onAttackRollModeChange: fn(),
     onAttackResult: fn(),
     onDamageResult: fn(),
     onCastSpell: fn(),
     onExpendTraitUse: fn(),
+    toRomanNumeral,
   },
 };
 export default meta;
 
 type Story = StoryObj<typeof CombatActionRow>;
 
-// ===== ATTACK ACTION ENTRIES =====
-
-export const SimpleAttack: Story = {
+export const AttackNormal: Story = {
   args: {
-    entry: {
-      id: "attack-1",
-      name: "Longsword",
-      kind: "attack",
-      subtitle: "Melee weapon attack",
-      attackModifier: 4,
-      damageDice: "1d8",
-      damageModifier: 4,
-      damageType: "slashing",
-    } as AttackActionEntry,
+    entry: longswordAttack,
+    attackRollMode: "normal",
   },
 };
 
-export const FinessWeapon: Story = {
+export const AttackAdvantage: Story = {
   args: {
-    entry: {
-      id: "attack-2",
-      name: "Rapier",
-      kind: "attack",
-      subtitle: "Finesse, melee weapon attack",
-      attackModifier: 5,
-      damageDice: "1d8",
-      damageModifier: 5,
-      damageType: "piercing",
-    } as AttackActionEntry,
+    entry: longswordAttack,
+    attackRollMode: "advantage",
   },
 };
 
-export const RangedWeapon: Story = {
+export const AttackDisadvantage: Story = {
   args: {
-    entry: {
-      id: "attack-3",
-      name: "Longbow",
-      kind: "attack",
-      subtitle: "Ranged weapon attack",
-      attackModifier: 3,
-      damageDice: "1d8",
-      damageModifier: 2,
-      damageType: "piercing",
-    } as AttackActionEntry,
+    entry: longswordAttack,
+    attackRollMode: "disadvantage",
   },
 };
 
-export const HighModifierAttack: Story = {
+export const SpellCastAndRoll: Story = {
   args: {
-    entry: {
-      id: "attack-4",
-      name: "Extra Attack",
-      kind: "attack",
-      subtitle: "Fighter's bonus attack",
-      attackModifier: 7,
-      damageDice: "2d6",
-      damageModifier: 4,
-      damageType: "slashing",
-    } as AttackActionEntry,
+    entry: fireballSpell,
   },
 };
 
-export const LowModifierAttack: Story = {
+export const SpellUnavailable: Story = {
   args: {
-    entry: {
-      id: "attack-5",
-      name: "Unarmed Strike",
-      kind: "attack",
-      subtitle: "Melee weapon attack",
-      attackModifier: 1,
-      damageDice: "1d4",
-      damageModifier: 1,
-      damageType: "bludgeoning",
-    } as AttackActionEntry,
+    entry: holdPersonSpellUnavailable,
   },
 };
 
-// ===== SPELL SAVE ACTION ENTRIES =====
-
-export const SpellSaveWithDamage: Story = {
+export const TraitWithUsesRemaining: Story = {
   args: {
-    entry: {
-      id: "spell-1",
-      name: "Fireball",
-      kind: "spell_save",
-      subtitle: "Evocation spell, 3rd level",
-      saveDc: 15,
-      saveAbility: "dexterity",
-      damageDice: "8d6",
-    } as SpellSaveActionEntry,
-  },
-};
-
-export const SpellSaveNoDamage: Story = {
-  args: {
-    entry: {
-      id: "spell-2",
-      name: "Hold Person",
-      kind: "spell_save",
-      subtitle: "Enchantment spell, 2nd level",
-      saveDc: 14,
-      saveAbility: "wisdom",
-    } as SpellSaveActionEntry,
-  },
-};
-
-export const HighDCSpell: Story = {
-  args: {
-    entry: {
-      id: "spell-3",
-      name: "Delayed Blast Fireball",
-      kind: "spell_save",
-      subtitle: "Evocation spell, 7th level",
-      saveDc: 17,
-      saveAbility: "dexterity",
-      damageDice: "14d6",
-    } as SpellSaveActionEntry,
-  },
-};
-
-export const LowDCSpell: Story = {
-  args: {
-    entry: {
-      id: "spell-4",
-      name: "Magic Missile",
-      kind: "spell_save",
-      subtitle: "Evocation spell, 1st level",
-      saveDc: 12,
-      saveAbility: "constitution",
-    } as SpellSaveActionEntry,
-  },
-};
-
-export const ConstitutionSave: Story = {
-  args: {
-    entry: {
-      id: "spell-5",
-      name: "Poison Spray",
-      kind: "spell_save",
-      subtitle: "Conjuration cantrip",
-      saveDc: 13,
-      saveAbility: "constitution",
-      damageDice: "1d12",
-    } as SpellSaveActionEntry,
-  },
-};
-
-// ===== TRAIT USE ACTION ENTRIES =====
-
-export const TraitFreshUses: Story = {
-  args: {
-    entry: {
-      id: "trait-1",
-      name: "Rage",
-      kind: "trait_use",
-      subtitle: "Channel your fury",
-      currentUses: 3,
-      maxUses: 3,
-    } as TraitUseActionEntry,
-  },
-};
-
-export const TraitPartiallyExpended: Story = {
-  args: {
-    entry: {
-      id: "trait-2",
-      name: "Second Wind",
-      kind: "trait_use",
-      subtitle: "Regain hit points",
-      currentUses: 1,
-      maxUses: 2,
-    } as TraitUseActionEntry,
+    entry: rageTrait,
   },
 };
 
 export const TraitExhausted: Story = {
   args: {
-    entry: {
-      id: "trait-3",
-      name: "Reckless Attack",
-      kind: "trait_use",
-      subtitle: "Attack recklessly",
-      currentUses: 0,
-      maxUses: 1,
-    } as TraitUseActionEntry,
+    entry: exhaustedTrait,
   },
 };
 
-export const TraitManyUses: Story = {
+export const TraitWithoutUsesTracker: Story = {
   args: {
     entry: {
-      id: "trait-4",
+      id: "trait-cunning-action",
       name: "Cunning Action",
-      kind: "trait_use",
-      subtitle: "Dash, disengage, or hide",
-      currentUses: 5,
-      maxUses: 5,
+      section: "trait",
+      source: "trait",
+      isExhausted: false,
+      subtitle: "Dash, Disengage, or Hide",
+      quickStats: ["Bonus action"],
     } as TraitUseActionEntry,
   },
 };
-
-export const TraitLastUse: Story = {
-  args: {
-    entry: {
-      id: "trait-5",
-      name: "Lay on Hands",
-      kind: "trait_use",
-      subtitle: "Heal yourself or allies",
-      currentUses: 1,
-      maxUses: 10,
-    } as TraitUseActionEntry,
-  },
-};
-
-// ===== PLAYGROUND =====
 
 export const Playground: Story = {
   args: {
-    entry: {
-      id: "attack-playground",
-      name: "Greatsword",
-      kind: "attack",
-      subtitle: "Versatile melee weapon",
-      attackModifier: 6,
-      damageDice: "2d6",
-      damageModifier: 4,
-      damageType: "slashing",
-    } as AttackActionEntry,
+    entry: longswordAttack,
   },
 };

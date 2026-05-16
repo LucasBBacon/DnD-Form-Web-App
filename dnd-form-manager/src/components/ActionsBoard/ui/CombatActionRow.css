@@ -2,20 +2,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 12px;
   border-bottom: 1px solid var(--border-filigree);
   background-color: transparent;
   transition: background-color 0.2s ease;
+  gap: 16px;
 }
 
 .combat-action-row:hover {
   background-color: var(--vellum-hover);
 }
 
+.combat-action-row.is-exhausted {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
 .action-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  flex: 1;
+}
+
+.quick-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.quick-stats-pill {
+  
 }
 
 .action-name {
