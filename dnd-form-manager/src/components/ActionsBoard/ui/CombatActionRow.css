@@ -1,0 +1,50 @@
+.combat-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-filigree);
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.combat-action-row:hover {
+  background-color: var(--vellum-hover);
+}
+
+.action-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.action-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--ink-main);
+}
+
+.action-subtitle {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.action-controls-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.save-dc-badge {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--rubric-red);
+  border: 1px solid var(--rubric-red);
+  padding: 2px 6px;
+  border-radius: 2px;
+  background-color: rgba(158, 42, 43, 0.05);
+}
