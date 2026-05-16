@@ -2,62 +2,8 @@ import type React from "react";
 import "./CombatActionRow.css";
 import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
 import type { DieType } from "../../ui/DiceRoller/PolyDie";
+import type { AttackActionEntry, CombatActionEntry, CombatRollMetadata, SpellSaveActionEntry, TraitUseActionEntry } from "../../../hooks/useCombatActions";
 
-export type CombatActionSection = "attack" | "spell" | "trait";
-
-export interface CombatActionUseState {
-  total: number;
-  remaining: number;
-}
-
-export interface CombatRollMetadata {
-  id: string;
-  count: number;
-  sides: number;
-  modifier: number;
-  label: string;
-}
-
-export interface BaseActionEntry {
-  id: string;
-  name: string;
-  section: CombatActionSection;
-  isExhausted: boolean;
-  quickStats: string[];
-  subtitle?: string;
-  description?: string;
-}
-
-export interface AttackActionEntry extends BaseActionEntry {
-  source: "attack";
-  attackRoll?: CombatRollMetadata;
-  damageRolls?: CombatRollMetadata[];
-}
-
-export interface SpellSaveActionEntry extends BaseActionEntry {
-  source: "spell";
-  spellLevel: number;
-  spellCast: {
-    canCast: boolean;
-    canUseSharedSlot: boolean;
-    canUsePactSlot: boolean;
-    unavailableReason?: string;
-  };
-
-  attackRoll?: CombatRollMetadata;
-  damageRolls?: CombatRollMetadata[];
-}
-
-export interface TraitUseActionEntry extends BaseActionEntry {
-  source: "trait";
-  uses?: CombatActionUseState;
-  damageRolls?: CombatRollMetadata[];
-}
-
-export type CombatActionEntry =
-  | AttackActionEntry
-  | SpellSaveActionEntry
-  | TraitUseActionEntry;
 
 export interface CombatActionRowProps {
   entry: CombatActionEntry;
@@ -95,7 +41,6 @@ export const CombatActionRow: React.FC<CombatActionRowProps> = ({
 }) => {
   const renderAttackControls = (attackEntry: AttackActionEntry) => (
     <div className="action-controls-group attack-group">
-      {/* TODO: Add Advantage/Disadvantage toggle */}
       {attackEntry.attackRoll && (
         <div className="roll-mode-toggle">
           {(["disadvantage", "normal", "advantage"] as const).map((mode) => (
@@ -209,13 +154,17 @@ export const CombatActionRow: React.FC<CombatActionRowProps> = ({
     <div className="combat-action-row">
       <div className="action-info">
         <span className="action-name">{entry.name}</span>
-        {entry.subtitle && <span className="action-subtitle">{entry.subtitle}</span>}
-      
+        {entry.subtitle && (
+          <span className="action-subtitle">{entry.subtitle}</span>
+        )}
+
         {/* Quick Stats */}
         {entry.quickStats && entry.quickStats.length > 0 && (
           <div className="quick-stats-row">
             {entry.quickStats.map((stat, i) => (
-              <span key={i} className="quick-stat-pill">{stat}</span>
+              <span key={i} className="quick-stat-pill">
+                {stat}
+              </span>
             ))}
           </div>
         )}

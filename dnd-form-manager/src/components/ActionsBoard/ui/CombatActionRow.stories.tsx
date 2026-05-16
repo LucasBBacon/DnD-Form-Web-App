@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { CombatActionRow } from "./CombatActionRow";
-import type {
-  AttackActionEntry,
-  SpellSaveActionEntry,
-  TraitUseActionEntry,
-} from "./CombatActionRow";
+import type { AttackActionEntry, SpellSaveActionEntry, TraitUseActionEntry } from "../../../hooks/useCombatActions";
 
 const toRomanNumeral = (level: number): string =>
   ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ??
@@ -14,7 +10,7 @@ const toRomanNumeral = (level: number): string =>
 const longswordAttack: AttackActionEntry = {
   id: "attack-longsword",
   name: "Longsword",
-  section: "attack",
+  section: "action",
   source: "attack",
   isExhausted: false,
   subtitle: "Melee weapon attack",
@@ -40,7 +36,7 @@ const longswordAttack: AttackActionEntry = {
 const fireballSpell: SpellSaveActionEntry = {
   id: "spell-fireball",
   name: "Fireball",
-  section: "spell",
+  section: "action",
   source: "spell",
   isExhausted: false,
   subtitle: "3rd-level evocation",
@@ -72,7 +68,7 @@ const fireballSpell: SpellSaveActionEntry = {
 const holdPersonSpellUnavailable: SpellSaveActionEntry = {
   id: "spell-hold-person",
   name: "Hold Person",
-  section: "spell",
+  section: "action",
   source: "spell",
   isExhausted: true,
   subtitle: "2nd-level enchantment",
@@ -89,7 +85,7 @@ const holdPersonSpellUnavailable: SpellSaveActionEntry = {
 const rageTrait: TraitUseActionEntry = {
   id: "trait-rage",
   name: "Rage",
-  section: "trait",
+  section: "bonus_action",
   source: "trait",
   isExhausted: false,
   subtitle: "Enter a furious state",
@@ -103,7 +99,7 @@ const rageTrait: TraitUseActionEntry = {
 const exhaustedTrait: TraitUseActionEntry = {
   id: "trait-second-wind",
   name: "Second Wind",
-  section: "trait",
+  section: "bonus_action",
   source: "trait",
   isExhausted: true,
   subtitle: "Regain hit points",
@@ -182,7 +178,7 @@ export const TraitWithoutUsesTracker: Story = {
     entry: {
       id: "trait-cunning-action",
       name: "Cunning Action",
-      section: "trait",
+      section: "bonus_action",
       source: "trait",
       isExhausted: false,
       subtitle: "Dash, Disengage, or Hide",

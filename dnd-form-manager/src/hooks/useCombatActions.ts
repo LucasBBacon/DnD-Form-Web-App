@@ -10,51 +10,11 @@ import type { DieFace } from "../types/common";
 
 // #region Types and Interfaces
 
-export type CombatActionSection = "action" | "bonus_action" | "reaction";
-
 export interface CombatActionUseState {
   /** Total number of uses for the combat action */
   total: number;
   /** Remaining number of uses for the combat action */
   remaining: number;
-}
-
-export interface CombatActionEntry {
-  /** Unique identifier for the combat action */
-  id: string;
-  /** Name of the combat action */
-  name: string;
-  /** Section of the combat action (action, bonus_action, reaction) */
-  section: CombatActionSection;
-  /** Source of the combat action (attack, spell, trait) */
-  source: "attack" | "spell" | "trait";
-  /** Optional subtitle for the combat action */
-  subtitle?: string;
-  /** Quick stats for the combat action */
-  quickStats: string[];
-  /** Optional description for the combat action */
-  description?: string;
-  /** Indicates if the combat action is exhausted */
-  isExhausted: boolean;
-  /** Optional spell level for spell actions */
-  spellLevel?: number;
-  /** Optional cast state for spell actions */
-  spellCast?: {
-    /** Indicates whether the spell can be cast right now */
-    canCast: boolean;
-    /** Indicates whether a shared slot can be consumed */
-    canUseSharedSlot: boolean;
-    /** Indicates whether a pact slot can be consumed */
-    canUsePactSlot: boolean;
-    /** Optional reason why casting is unavailable */
-    unavailableReason?: string;
-  };
-  /** Optional usage state for the combat action */
-  uses?: CombatActionUseState;
-  /** Optional attack roll metadata for the combat action */
-  attackRoll?: CombatRollMetadata;
-  /** Optional damage roll metadata for the combat action */
-  damageRolls?: CombatRollMetadata[];
 }
 
 export interface CombatRollMetadata {
@@ -69,6 +29,71 @@ export interface CombatRollMetadata {
   /** Label for the combat roll */
   label: string;
 }
+
+export type CombatActionTypes = "action" | "bonus_action" | "reaction";
+
+export interface BaseActionEntry {
+  /** Unique identifier for the combat action */
+  id: string;
+  /** Name of the combat action */
+  name: string;
+  /** Section of the combat action (action, bonus_action, reaction) */
+  section: CombatActionTypes;
+  /** Optional spell level for spell actions */
+  isExhausted: boolean;
+  /** Quick stats for the combat action */
+  quickStats: string[];
+  /** Optional subtitle for the combat action */
+  subtitle?: string;
+  /** Optional description for the combat action */
+  description?: string;
+}
+
+export interface AttackActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "attack";
+  /** Optional attack roll metadata for the combat action */
+  attackRoll?: CombatRollMetadata;
+  /** Optional damage roll metadata for the combat action */
+  damageRolls?: CombatRollMetadata[];
+}
+
+export interface SpellSaveActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "spell";
+  /** Optional cast state for spell actions */
+  spellLevel: number;
+  /** Cast state for spell actions */
+  spellCast: {
+    /** Indicates whether the spell can be cast right now */
+    canCast: boolean;
+    /** Indicates whether a shared slot can be consumed */
+    canUseSharedSlot: boolean;
+    /** Indicates whether a pact slot can be consumed */
+    canUsePactSlot: boolean;
+    /** Optional reason why casting is unavailable */
+    unavailableReason?: string;
+  };
+
+  /** Optional attack roll metadata for the combat action */
+  attackRoll?: CombatRollMetadata;
+  /** Optional damage roll metadata for the combat action */
+  damageRolls?: CombatRollMetadata[];
+}
+
+export interface TraitUseActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "trait";
+  /** Optional uses state for trait actions */
+  uses?: CombatActionUseState;
+  /** Optional attack roll metadata for the combat action */
+  damageRolls?: CombatRollMetadata[];
+}
+
+export type CombatActionEntry =
+  | AttackActionEntry
+  | SpellSaveActionEntry
+  | TraitUseActionEntry;
 
 // #endregion
 
@@ -168,7 +193,7 @@ const toTitleCase = (value: string): string =>
 const normalizeSpellActionType = (
   actionType: ActionType | undefined,
   castingTime: string,
-): CombatActionSection | null => {
+): CombatActionTypes | null => {
   if (actionType === "action") return "action";
   if (actionType === "bonus_action") return "bonus_action";
   if (actionType === "reaction") return "reaction";
@@ -272,7 +297,7 @@ export const useCombatActions = () => {
   ]);
 
   const sections = useMemo(() => {
-    const grouped: Record<CombatActionSection, CombatActionEntry[]> = {
+    const grouped: Record<CombatActionTypes, CombatActionEntry[]> = {
       action: [],
       bonus_action: [],
       reaction: [],

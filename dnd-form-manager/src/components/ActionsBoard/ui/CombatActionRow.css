@@ -32,8 +32,15 @@
   margin-top: 2px;
 }
 
-.quick-stats-pill {
-  
+.quick-stat-pill {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--ink-main);
+  background-color: rgba(229, 217, 197, 0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--border-filigree);
+  text-transform: uppercase;
 }
 
 .action-name {
@@ -54,6 +61,62 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.damage-rollers-container {
+  display: flex;
+  gap: 4px;
+}
+
+.spell-mode-toggle {
+  display: flex;
+  border: 1px solid var(--ink-muted);
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--vellum-bg);
+}
+
+.mode-btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--ink-muted);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.mode-btn:last-child {
+  border-right: none;
+}
+
+.mode-btn:hover {
+  background-color: var(--vellum-hover);
+  color: var(--ink-main);
+}
+
+.mode-btn.active {
+  background-color: var(--ink-main);
+  color: var(--vellum-bg);
+}
+
+.spell-level-badge {
+  font-family: var(--font-display);
+  font-weight: bold;
+  color: var(--gilt-gold);
+  border: 1px solid var(--gilt-gold);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  background-color: rgba(212, 175, 55, 0.05);
 }
 
 .save-dc-badge {

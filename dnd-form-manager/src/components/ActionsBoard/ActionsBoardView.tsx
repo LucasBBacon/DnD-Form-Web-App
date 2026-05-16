@@ -5,20 +5,20 @@ import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
 import type {
-  CombatActionSection,
+  CombatActionTypes,
   CombatActionEntry,
   CombatRollMetadata,
 } from "../../hooks/useCombatActions";
 
 // #region Constants and Utility Functions
 
-const SECTION_ORDER: CombatActionSection[] = [
+const SECTION_ORDER: CombatActionTypes[] = [
   "action",
   "bonus_action",
   "reaction",
 ];
 
-const SECTION_LABELS: Record<CombatActionSection, string> = {
+const SECTION_LABELS: Record<CombatActionTypes, string> = {
   action: "Actions",
   bonus_action: "Bonus Actions",
   reaction: "Reactions",
@@ -49,7 +49,7 @@ export interface ActionsBoardViewProps {
   }>;
 
   /** Combat action sections */
-  sections: Partial<Record<CombatActionSection, CombatActionEntry[]>>;
+  sections: Partial<Record<CombatActionTypes, CombatActionEntry[]>>;
 
   /** Currently active roller, if any */
   activeRoller: {
