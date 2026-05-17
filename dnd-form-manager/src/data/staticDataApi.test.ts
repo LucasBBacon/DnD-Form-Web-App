@@ -17,6 +17,8 @@ import {
   getTraitsByIds,
   getSubracesForRace,
   getProseUpcastEffectsAtLevel,
+  getAvailablePoolsForLevel,
+  formatSpellCastConfirmation,
 } from "./staticDataApi";
 import type { SpellData } from "../types/spell";
 
@@ -476,6 +478,96 @@ describe("Traits static API", () => {
       "trait_barbarian_prof_armor",
       "trait_elf_speed",
     ]);
+  });
+});
+
+describe("getAvailablePoolsForLevel", () => {
+  it("returns available pools when both have slots", () => {
+    const result = getAvailablePoolsForLevel(
+      3, // spellLevel
+      {}, // no expended slots
+      5, // max shared slots
+      0, // no expended pact slots
+      3, // max pact slots
+    );
+
+    expect(result.canUseShared).toBe(true);
+    expect(result.canUsePact).toBe(true);
+    expect(result.availablePools).toEqual(["shared", "pact"]);
+  });
+
+  it("returns only shared pool when pact slots are exhausted", () => {
+    const result = getAvailablePoolsForLevel(
+      3,
+      {},
+      5,
+      3, // all pact slots expended
+      3,
+    );
+
+    expect(result.canUseShared).toBe(true);
+    expect(result.canUsePact).toBe(false);
+    expect(result.availablePools).toEqual(["shared"]);
+  });
+
+  it("returns no pools when both are exhausted", () => {
+    const result = getAvailablePoolsForLevel(
+      3,
+      { 3: 5 }, // all shared slots expended
+      5,
+      3, // all pact slots expended
+      3,
+    );
+
+    expect(result.canUseShared).toBe(false);
+    expect(result.canUsePact).toBe(false);
+    expect(result.availablePools).toEqual([]);
+  });
+});
+
+describe("formatSpellCastConfirmation", () => {
+  it("formats a cantrip cast without slot info", () => {
+    const message = formatSpellCastConfirmation("Fire Bolt", 0, 0, null, 0);
+    expect(message).toBe("Cast Fire Bolt");
+  });
+
+  it("formats a base-level spell cast with shared slot", () => {
+    const message = formatSpellCastConfirmation(
+      "Fireball",
+      3,
+      3,
+      "shared",
+      4,
+    );
+    expect(message).toBe(
+      "Cast Fireball using Shared Slot (4 slots remain)",
+    );
+  });
+
+  it("formats an upcasted spell with pact slot", () => {
+    const message = formatSpellCastConfirmation(
+      "Fireball",
+      3,
+      5,
+      "pact",
+      2,
+    );
+    expect(message).toBe(
+      "Cast Fireball at 5th level using Pact Slot (2 slots remain)",
+    );
+  });
+
+  it("handles singular 'slot' correctly", () => {
+    const message = formatSpellCastConfirmation(
+      "Magic Missile",
+      1,
+      1,
+      "shared",
+      1,
+    );
+    expect(message).toBe(
+      "Cast Magic Missile using Shared Slot (1 slot remains)",
+    );
   });
 });
 

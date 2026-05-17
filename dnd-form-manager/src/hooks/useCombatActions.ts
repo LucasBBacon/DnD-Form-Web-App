@@ -6,7 +6,7 @@ import {
   getSpellCastLevelOptions,
 } from "../data/staticDataApi";
 import { useAttacks } from "./useAttacks";
-import { useSpellcasting } from "./useSpellcasting";
+import { useSpellcasting, type SpellCastMetadata } from "./useSpellcasting";
 import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
@@ -67,22 +67,7 @@ export interface SpellSaveActionEntry extends BaseActionEntry {
   source: "spell";
   /** Optional cast state for spell actions */
   spellLevel: number;
-  /** Cast levels currently available based on remaining shared/pact slots */
-  availableCastLevels?: number[];
-  /** Cast state for spell actions */
-  spellCast: {
-    /** Indicates whether the spell can be cast right now */
-    canCast: boolean;
-    /** Currently selected cast level for this action (defaults to base level) */
-    selectedCastLevel?: number;
-    /** Indicates whether a shared slot can be consumed */
-    canUseSharedSlot: boolean;
-    /** Indicates whether a pact slot can be consumed */
-    canUsePactSlot: boolean;
-    /** Optional reason why casting is unavailable */
-    unavailableReason?: string;
-  };
-
+  spellMetadata?: SpellCastMetadata;
   /** Optional attack roll metadata for the combat action */
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */

@@ -371,6 +371,75 @@ export const getResolvedSpellHealingEntriesAtCastLevel = (
   }));
 };
 
+/**
+ * Determines which spell slot pools (shared or pact) have available slots at a given level.
+ * @param spellLevel The spell level to check
+ * @param expendedSlots Record of expended shared spell slots by level
+ * @param maxSharedSlots Maximum shared slots available at this level (0 if none)
+ * @param expendedPactSlots Number of expended pact slots
+ * @param maxPactSlots Maximum pact slots available (typically for Warlocks)
+ * @returns Object with available pools and their availability status
+ */
+export const getAvailablePoolsForLevel = (
+  spellLevel: number,
+  expendedSlots: Record<number, number>,
+  maxSharedSlots: number,
+  expendedPactSlots: number,
+  maxPactSlots: number,
+): { canUseShared: boolean; canUsePact: boolean; availablePools: Array<'shared' | 'pact'> } => {
+  const expended = expendedSlots[spellLevel] ?? 0;
+  const canUseShared = expended < maxSharedSlots;
+  const canUsePact = expendedPactSlots < maxPactSlots && spellLevel <= maxPactSlots; // Pact slots are all same level
+  const availablePools: Array<'shared' | 'pact'> = [];
+  
+  if (canUseShared) availablePools.push('shared');
+  if (canUsePact) availablePools.push('pact');
+  
+  return { canUseShared, canUsePact, availablePools };
+};
+
+/**
+ * Formats a spell cast confirmation message with spell name, cast level, pool, and remaining slots.
+ * @param spellName Name of the spell
+ * @param baseLevel Base spell level
+ * @param castLevel Selected cast level for this cast
+ * @param pool Pool used (shared or pact)
+ * @param remainingAtLevel Remaining slots at the cast level after expenditure
+ * @returns Formatted confirmation message
+ */
+export const formatSpellCastConfirmation = (
+  spellName: string,
+  baseLevel: number,
+  castLevel: number,
+  pool: 'shared' | 'pact' | null,
+  remainingAtLevel: number,
+): string => {
+  if (baseLevel === 0) {
+    // Cantrip: no slot consumed
+    return `Cast ${spellName}`;
+  }
+
+  const upcastPart = castLevel > baseLevel ? ` at ${ordinalSuffix(castLevel)} level` : '';
+  const poolPart = pool === 'pact' ? ' using Pact Slot' : ' using Shared Slot';
+  const slotWord = remainingAtLevel === 1 ? 'slot' : 'slots';
+  const verbWord = remainingAtLevel === 1 ? 'remains' : 'remain';
+  const remainingPart = ` (${remainingAtLevel} ${slotWord} ${verbWord})`;
+
+  return `Cast ${spellName}${upcastPart}${poolPart}${remainingPart}`;
+};
+
+/**
+ * Helper to convert a number to ordinal string (1 => "1st", 2 => "2nd", etc.)
+ */
+const ordinalSuffix = (num: number): string => {
+  const j = num % 10;
+  const k = num % 100;
+  if (j === 1 && k !== 11) return `${num}st`;
+  if (j === 2 && k !== 12) return `${num}nd`;
+  if (j === 3 && k !== 13) return `${num}rd`;
+  return `${num}th`;
+};
+
 // region Feats API
 const featsArray = rawFeatsData as FeatData[];
 const featDictionary: Record<string, FeatData> = {};

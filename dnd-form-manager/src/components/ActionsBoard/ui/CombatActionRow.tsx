@@ -2,8 +2,14 @@ import type React from "react";
 import "./CombatActionRow.css";
 import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
 import type { DieType } from "../../ui/DiceRoller/PolyDie";
-import type { AttackActionEntry, CombatActionEntry, CombatRollMetadata, SpellSaveActionEntry, TraitUseActionEntry } from "../../../hooks/useCombatActions";
-
+import type {
+  AttackActionEntry,
+  CombatActionEntry,
+  CombatRollMetadata,
+  SpellSaveActionEntry,
+  TraitUseActionEntry,
+} from "../../../hooks/useCombatActions";
+import { useState } from "react";
 
 export interface CombatActionRowProps {
   entry: CombatActionEntry;
@@ -39,6 +45,12 @@ export const CombatActionRow: React.FC<CombatActionRowProps> = ({
   onExpendTraitUse,
   toRomanNumeral,
 }) => {
+  const [isPreparingCast, setIsPreparingCast] = useState(false);
+  const [selectedCastLevel, setSelectedCastLevel] = useState<number | null>(
+    null,
+  );
+  const [selectedPool, setSelectedPool] = useState<"shared" | "pact">("shared");
+
   const renderAttackControls = (attackEntry: AttackActionEntry) => (
     <div className="action-controls-group attack-group">
       {attackEntry.attackRoll && (
@@ -104,30 +116,116 @@ export const CombatActionRow: React.FC<CombatActionRowProps> = ({
     </div>
   );
   const renderSpellControls = (spellEntry: SpellSaveActionEntry) => {
-    const isCastable = spellEntry.spellCast.canCast;
+    const meta = spellEntry.spellMetadata;
+    const isCastable = meta?.canCast;
+
+    if (!meta) {
+      return (
+        <button
+          className="action-btn cast-btn"
+          onClick={() => onCastSpell?.(spellEntry.id)}
+          disabled={!isCastable}
+        >
+          Cast
+        </button>
+      );
+    }
+
+    const handleInitiateCast = () => {
+      setSelectedCastLevel(meta.baseSpellLevel);
+
+      // auto-select pact if it's only option available
+      if (meta.canUsePactSlot && !meta.canUseSharedSlot)
+        setSelectedPool("pact");
+      else setSelectedPool("shared");
+
+      setIsPreparingCast(true);
+    };
+
+    const handleConfirmCast = () => {
+      /* TODO: Implement spell processing here */
+      console.log(
+        `Casting at level ${selectedCastLevel} using ${selectedPool} slot.`,
+      );
+      setIsPreparingCast(false);
+    };
+
+    if (isPreparingCast) {
+      const needsPoolChoice = meta.canUseSharedSlot && meta.canUsePactSlot;
+      const needsLevelChoice = meta.availableCastLevels.length > 1;
+
+      return (
+        <div className="action-controls-group casting-drawer fadeIn">
+          {/* Level Selector */}
+          {needsLevelChoice && (
+            <div className="cast-level-selector">
+              <span className="selector-label">Level:</span>
+              <div className="level-beads">
+                {meta.availableCastLevels.map((level) => (
+                  <button
+                    key={level}
+                    className={`level-bead ${selectedCastLevel === level ? "active" : ""}`}
+                    onClick={() => setSelectedCastLevel(level)}
+                  >
+                    {toRomanNumeral(level)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Pool Selector */}
+          {needsPoolChoice && (
+            <div className="pool-selector">
+              <button
+                className={`pool-btn shared-btn ${selectedPool === "shared" ? "active" : ""}`}
+                onClick={() => setSelectedPool("shared")}
+              >
+                Shared
+              </button>
+              <button
+                className={`pool-btn pact-btn ${selectedPool === "pact" ? "active" : ""}`}
+                onClick={() => setSelectedPool("pact")}
+              >
+                Pact
+              </button>
+            </div>
+          )}
+
+          {/* Confirm / Cancel */}
+          <div className="cast-actions">
+            <button
+              className="action-btn cancel-btn"
+              onClick={() => setIsPreparingCast(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="action-btn confirm-cast-btn"
+              onClick={handleConfirmCast}
+            >
+              Confirm Cast
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="action-controls-group spell-group">
         <span className="spell-level-badge">
           {toRomanNumeral(spellEntry.spellLevel)}
         </span>
-        {spellEntry.attackRoll ? (
-          <button
-            className="action-btn cast-btn"
-            onClick={() => onCastSpell?.(spellEntry.id)}
-          >
-            Cast & Roll
-          </button>
-        ) : (
-          <button
-            className="action-btn cast-btn"
-            onClick={() => onCastSpell?.(spellEntry.id)}
-            disabled={!isCastable}
-            title={spellEntry.spellCast.unavailableReason}
-          >
-            {isCastable ? "Cast" : "Unavailable"}
-          </button>
-        )}
+        {spellEntry.attackRoll && renderAttackControls(spellEntry as any)}
+
+        <button
+          className="action-btn cast-btn"
+          onClick={handleInitiateCast}
+          disabled={!isCastable}
+          title={spellEntry.spellMetadata?.unavailableReason}
+        >
+          {isCastable ? "Prepare Cast" : "Unavailable"}
+        </button>
       </div>
     );
   };

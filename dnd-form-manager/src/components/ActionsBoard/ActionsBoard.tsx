@@ -5,6 +5,11 @@ import {
   type CombatRollMetadata,
 } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
+import {
+  formatSpellCastConfirmation,
+  getSpellByID,
+} from "../../data/staticDataApi";
+import { Toast } from "../ui/Toast";
 import { ActionsBoardView } from "./ActionsBoardView";
 
 /**
@@ -40,6 +45,10 @@ export const ActionsBoard: React.FC = () => {
   const [spellActionFeedbackByEntry, setSpellActionFeedbackByEntry] = useState<
     Record<string, string>
   >({});
+  const [castConfirmation, setCastConfirmation] = useState<{
+    message: string;
+    id: string;
+  } | null>(null);
 
   // #endregion
 
@@ -182,7 +191,20 @@ export const ActionsBoard: React.FC = () => {
   ) => {
     const entry = spellEntryById.get(entryId);
     if (!entry || entry.source !== "spell") return;
-    if (entry.spellLevel === 0) return;
+    const spell = getSpellByID(entry.id);
+
+    if (entry.spellLevel === 0) {
+      const message = formatSpellCastConfirmation(
+        spell?.name ?? entry.name,
+        0,
+        0,
+        null,
+        0,
+      );
+      setCastConfirmation({ message, id: entryId });
+      clearSpellFeedback(entryId);
+      return;
+    }
 
     if (pool === "shared") {
       const slotLevel =
@@ -196,7 +218,23 @@ export const ActionsBoard: React.FC = () => {
         );
         return;
       }
+
       expendSpellSlot(slotLevel);
+
+      const remainingSlots =
+        (spellcasting.slots.shared[slotLevel]?.total ?? 0) -
+        (spellcasting.slots.shared[slotLevel]?.expended ?? 0) -
+        1;
+
+      const message = formatSpellCastConfirmation(
+        spell?.name ?? entry.name,
+        entry.spellLevel,
+        slotLevel,
+        "shared",
+        Math.max(remainingSlots, 0),
+      );
+
+      setCastConfirmation({ message, id: entryId });
       clearSpellFeedback(entryId);
       return;
     }
@@ -210,13 +248,29 @@ export const ActionsBoard: React.FC = () => {
     }
 
     expendPactSlot();
+
+    const remainingPactSlots =
+      (spellcasting.slots.pact?.total ?? 0) -
+      (spellcasting.slots.pact?.expended ?? 0) -
+      1;
+
+    const message = formatSpellCastConfirmation(
+      spell?.name ?? entry.name,
+      entry.spellLevel,
+      entry.spellLevel,
+      "pact",
+      Math.max(remainingPactSlots, 0),
+    );
+
+    setCastConfirmation({ message, id: entryId });
     clearSpellFeedback(entryId);
   };
 
   // #endregion
 
   return (
-    <ActionsBoardView
+    <>
+      <ActionsBoardView
       slotHudRows={slotHud}
       sections={sections}
       activeRoller={activeRoller}
@@ -246,7 +300,7 @@ export const ActionsBoard: React.FC = () => {
         }
 
         if (entry.spellLevel === 0) {
-          clearSpellFeedback(entryId);
+          consumeSpellSlotPool(entryId, "shared");
           setSpellChoiceEntryId(null);
           return;
         }
@@ -288,5 +342,17 @@ export const ActionsBoard: React.FC = () => {
       }}
       toRomanNumeral={toRomanNumeral}
     />
+      {castConfirmation && (
+        <Toast
+          message={castConfirmation.message}
+          type="success"
+          onDismiss={() => {
+            setCastConfirmation((previous) =>
+              previous?.id === castConfirmation.id ? null : previous,
+            );
+          }}
+        />
+      )}
+    </>
   );
 };

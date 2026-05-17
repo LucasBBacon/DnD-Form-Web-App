@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { CombatActionRow } from "./CombatActionRow";
-import type { AttackActionEntry, SpellSaveActionEntry, TraitUseActionEntry } from "../../../hooks/useCombatActions";
+import type {
+  AttackActionEntry,
+  SpellSaveActionEntry,
+  TraitUseActionEntry,
+} from "../../../hooks/useCombatActions";
 
 const toRomanNumeral = (level: number): string =>
   ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ??
@@ -42,10 +46,16 @@ const fireballSpell: SpellSaveActionEntry = {
   subtitle: "3rd-level evocation",
   quickStats: ["8d6 fire", "Dex save"],
   spellLevel: 3,
-  spellCast: {
+  spellMetadata: {
+    spellId: "fireball",
+    baseSpellLevel: 3,
+    availableCastLevels: [3, 4, 5],
+    selectedCastLevel: 3,
     canCast: true,
     canUseSharedSlot: true,
-    canUsePactSlot: false,
+    canUsePactSlot: true,
+    resolvedDamageEntries: [],
+    resolvedHealingEntries: [],
   },
   attackRoll: {
     id: "atk-fireball",
@@ -74,11 +84,39 @@ const holdPersonSpellUnavailable: SpellSaveActionEntry = {
   subtitle: "2nd-level enchantment",
   quickStats: ["Wis save", "Humanoid"],
   spellLevel: 2,
-  spellCast: {
+  spellMetadata: {
+    spellId: "hold-person",
+    baseSpellLevel: 2,
+    availableCastLevels: [2],
+    selectedCastLevel: 2,
     canCast: false,
     canUseSharedSlot: false,
     canUsePactSlot: false,
     unavailableReason: "No spell slots remaining",
+    resolvedDamageEntries: [],
+    resolvedHealingEntries: [],
+  },
+};
+
+const magicMissileSpell: SpellSaveActionEntry = {
+  id: "spell-magic-missile",
+  name: "Magic Missile",
+  section: "action",
+  source: "spell",
+  isExhausted: false,
+  subtitle: "1st-level evocation",
+  quickStats: ["3 darts", "Force damage"],
+  spellLevel: 1,
+  spellMetadata: {
+    spellId: "magic-missile",
+    baseSpellLevel: 1,
+    availableCastLevels: [1, 2, 3],
+    selectedCastLevel: 1,
+    canCast: true,
+    canUseSharedSlot: true,
+    canUsePactSlot: true,
+    resolvedDamageEntries: [],
+    resolvedHealingEntries: [],
   },
 };
 
@@ -152,6 +190,24 @@ export const AttackDisadvantage: Story = {
 export const SpellCastAndRoll: Story = {
   args: {
     entry: fireballSpell,
+  },
+};
+
+export const SpellPrepareCast: Story = {
+  args: {
+    entry: magicMissileSpell,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole("button", { name: "Prepare Cast" }));
+
+    await expect(canvas.getByText("Level:")).toBeInTheDocument();
+    await expect(canvas.getByRole("button", { name: "Shared" })).toBeInTheDocument();
+    await expect(canvas.getByRole("button", { name: "Pact" })).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("button", { name: "Confirm Cast" }),
+    ).toBeInTheDocument();
   },
 };
 
