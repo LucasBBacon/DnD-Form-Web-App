@@ -1,51 +1,141 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ActionsBoardView } from "./ActionsBoardView";
+import { fn } from "storybook/test";
+import { ActionsBoard } from "./ActionsBoard";
 import { ACTIONS_BOARD_FIXTURES } from "./ActionsBoard.fixtures";
 import type { SpellcastingFixture } from "../../types/fixtures";
+import type { UseSpellcastingReturn } from "../../hooks/useSpellcasting";
+import type { CombatActionEntry, SpellSaveActionEntry } from "../../hooks/useCombatActions";
 
 /**
- * Helper function to convert a spellcasting fixture into slot HUD rows for the ActionsBoardView.
- * @param spellcasting The spellcasting fixture containing spell slot information.
- * @returns An array of objects representing the label and text for each spell slot level to be displayed in the HUD.
+ * Convert old spellcasting fixture data into the spellcasting shape expected by ActionsBoard.
  */
-function fixtureToSlotHudRows(
+function fixtureToSpellcasting(
   spellcasting: SpellcastingFixture,
-): Array<{ label: string; text: string }> {
-  const rows: Array<{ label: string; text: string }> = [];
-
-  Object.entries(spellcasting.spellSlotsByLevel).forEach(
-    ([level, slotData]) => {
-      const remaining = slotData.available - slotData.used;
-      const bubbles = "o".repeat(remaining).padEnd(slotData.available, " ");
-      rows.push({
-        label: `Lvl ${level}`,
-        text: `[${bubbles}]`,
-      });
-    },
+): UseSpellcastingReturn {
+  const shared = Object.fromEntries(
+    Object.entries(spellcasting.spellSlotsByLevel).map(([level, slotData]) => [
+      Number(level),
+      {
+        total: slotData.available,
+        expended: slotData.used,
+      },
+    ]),
   );
 
-  if (spellcasting.pactSlots) {
-    const remaining =
-      spellcasting.pactSlots.available - spellcasting.pactSlots.used;
-    const bubbles = "o"
-      .repeat(remaining)
-      .padEnd(spellcasting.pactSlots.available, " ");
-    rows.push({
-      label: "Pact",
-      text: `[${bubbles}]`,
-    });
-  }
+  return {
+    isSpellcaster:
+      Object.keys(spellcasting.spellSlotsByLevel).length > 0 ||
+      Boolean(spellcasting.pactSlots),
+    canCastSpells: spellcasting.preparedSpells.length > 0,
+    casting: {
+      ability: null,
+      preparationType: null,
+      saveDC: 0,
+      attackBonus: 0,
+    },
+    pools: {
+      known: {
+        selected: spellcasting.knownSpells,
+        max: spellcasting.knownSpells.length,
+      },
+      prepared: {
+        selected: spellcasting.preparedSpells,
+        max: spellcasting.preparedSpells.length,
+      },
+      cantrips: {
+        max: 0,
+      },
+      bonusPrepared: [],
+      allExpandedSpellIds: [],
+      freeSchoolDesignated: [],
+      freeSchoolSlots: 0,
+      innate: [],
+    },
+    slots: {
+      shared,
+      pact: spellcasting.pactSlots
+        ? {
+            level: 1,
+            total: spellcasting.pactSlots.available,
+            expended: spellcasting.pactSlots.used,
+          }
+        : null,
+    },
+    diagnostics: {
+      selections: {
+        invalidKnownSpellIds: [],
+        invalidPreparedSpellIds: [],
+        knownSpellOverflow: 0,
+        preparedSpellOverflow: 0,
+        freeSchoolOverflow: 0,
+      },
+      classBreakdown: [],
+    },
+    spellMetadata: undefined,
+  };
+}
 
-  return rows;
+function withSpellMetadata<T>(value: T): T {
+  const scenario = value as {
+    sections: Partial<Record<"action" | "bonus_action" | "reaction", CombatActionEntry[]>>;
+  };
+
+  const patchedSections = Object.fromEntries(
+    Object.entries(scenario.sections).map(([sectionKey, entries]) => [
+      sectionKey,
+      (entries ?? []).map((entry) => {
+        if (entry.source !== "spell") return entry;
+
+        const spellEntry = entry as SpellSaveActionEntry;
+        return {
+          ...spellEntry,
+          spellMetadata: {
+            spellId: spellEntry.id,
+            baseSpellLevel: spellEntry.spellLevel,
+            availableCastLevels: [spellEntry.spellLevel, spellEntry.spellLevel + 1],
+            selectedCastLevel: spellEntry.spellLevel,
+            canCast: true,
+            canUseSharedSlot: true,
+            canUsePactSlot: true,
+            resolvedDamageEntries: [],
+            resolvedHealingEntries: [],
+          },
+        };
+      }),
+    ]),
+  ) as typeof scenario.sections;
+
+  return {
+    ...(value as object),
+    sections: patchedSections,
+  } as T;
+}
+
+function createStoryArgs(
+  scenario: (typeof ACTIONS_BOARD_FIXTURES)[keyof typeof ACTIONS_BOARD_FIXTURES],
+) {
+  const scenarioWithMetadata = withSpellMetadata(scenario);
+  return {
+    spellcasting: fixtureToSpellcasting(scenarioWithMetadata.spellcasting),
+    sections: scenarioWithMetadata.sections,
+    attackRollModes: scenarioWithMetadata.attackRollModes,
+    onAttackRollModeChange: fn(),
+    onAttackResult: fn(),
+    onDamageResult: fn(),
+    onCastSpell: fn(),
+    onExpendTraitUse: fn(),
+    toRomanNumeral,
+  };
 }
 
 const toRomanNumeral = (level: number) =>
   ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][level] ||
   level.toString();
 
-const meta: Meta<typeof ActionsBoardView> = {
-  component: ActionsBoardView,
+const meta: Meta<typeof ActionsBoard> = {
+  component: ActionsBoard,
   title: "Boards/ActionsBoard",
+  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
     docs: {
@@ -58,25 +148,10 @@ const meta: Meta<typeof ActionsBoardView> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ActionsBoardView>;
+type Story = StoryObj<typeof ActionsBoard>;
 
 export const NoActions: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.noActions.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.noActions.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.noActions.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.noActions.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.noActions.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.noActions),
   parameters: {
     docs: {
       description: {
@@ -87,22 +162,7 @@ export const NoActions: Story = {
 };
 
 export const WithAttacks: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withAttacks.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withAttacks.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withAttacks.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withAttacks.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withAttacks.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withAttacks),
   parameters: {
     docs: {
       description: {
@@ -114,22 +174,7 @@ export const WithAttacks: Story = {
 };
 
 export const WithSpells: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withSpells.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withSpells.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withSpells.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withSpells.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withSpells.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withSpells),
   parameters: {
     docs: {
       description: {
@@ -141,23 +186,7 @@ export const WithSpells: Story = {
 };
 
 export const WithBonusActions: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withBonusActions.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withBonusActions.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withBonusActions.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withBonusActions.attackRollModes,
-    rollResultsByEntry:
-      ACTIONS_BOARD_FIXTURES.withBonusActions.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withBonusActions),
   parameters: {
     docs: {
       description: {
@@ -168,22 +197,7 @@ export const WithBonusActions: Story = {
 };
 
 export const WithReactions: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withReactions.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withReactions.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withReactions.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withReactions.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.withReactions.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withReactions),
   parameters: {
     docs: {
       description: {
@@ -194,22 +208,7 @@ export const WithReactions: Story = {
 };
 
 export const AllActions: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.allActions.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.allActions.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.allActions.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.allActions.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.allActions.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.allActions),
   parameters: {
     docs: {
       description: {
@@ -221,23 +220,7 @@ export const AllActions: Story = {
 };
 
 export const ExhaustedActions: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.exhaustedActions.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.exhaustedActions.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.exhaustedActions.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.exhaustedActions.attackRollModes,
-    rollResultsByEntry:
-      ACTIONS_BOARD_FIXTURES.exhaustedActions.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.exhaustedActions),
   parameters: {
     docs: {
       description: {
@@ -249,77 +232,30 @@ export const ExhaustedActions: Story = {
 };
 
 export const WithActiveRoller: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withActiveRoller.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withActiveRoller.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withActiveRoller.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withActiveRoller.attackRollModes,
-    rollResultsByEntry:
-      ACTIONS_BOARD_FIXTURES.withActiveRoller.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withActiveRoller),
   parameters: {
     docs: {
       description: {
-        story: "Dice roller UI shown for active attack roll selection.",
+        story: "Scenario with active attack entries and spell slots visible.",
       },
     },
   },
 };
 
 export const WithRollResults: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.withRollResults.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.withRollResults.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.withRollResults.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.withRollResults.attackRollModes,
-    rollResultsByEntry:
-      ACTIONS_BOARD_FIXTURES.withRollResults.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.withRollResults),
   parameters: {
     docs: {
       description: {
         story:
-          "Previous roll results displayed (Longsword hit/damage, Fireball advantage roll).",
+          "Mixed attack and spell actions with attack roll mode states configured.",
       },
     },
   },
 };
 
 export const Playground: Story = {
-  args: {
-    slotHudRows: fixtureToSlotHudRows(
-      ACTIONS_BOARD_FIXTURES.playground.spellcasting,
-    ),
-    sections: ACTIONS_BOARD_FIXTURES.playground.sections,
-    activeRoller: ACTIONS_BOARD_FIXTURES.playground.activeRoller,
-    attackRollModes: ACTIONS_BOARD_FIXTURES.playground.attackRollModes,
-    rollResultsByEntry: ACTIONS_BOARD_FIXTURES.playground.rollResultsByEntry,
-    onActiveRollerChange: () => {},
-    onAttackRollModeChange: () => {},
-    onAttackResult: () => {},
-    onDamageResult: () => {},
-    onExpendTraitUse: () => {},
-    onRestoreTraitUse: () => {},
-    toRomanNumeral,
-  },
+  args: createStoryArgs(ACTIONS_BOARD_FIXTURES.playground),
   parameters: {
     docs: {
       description: {
