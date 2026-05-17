@@ -30,6 +30,10 @@
                 "type": "lightning",
                 "scaling": {
                     "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d10"
                 }
             }
         ]

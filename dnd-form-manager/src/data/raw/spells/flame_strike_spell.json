@@ -27,6 +27,10 @@
                 "type": "fire",
                 "scaling": {
                     "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d6"
                 }
             },
             {
@@ -34,6 +38,10 @@
                 "type": "radiant",
                 "scaling": {
                     "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d6"
                 }
             }
         ]

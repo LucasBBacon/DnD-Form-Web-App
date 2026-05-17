@@ -23,6 +23,21 @@
         "somatic": true,
         "material": false
     },
+    "output": {
+        "damage": [
+            {
+                "roll": "3d6",
+                "type": "fire",
+                "scaling": {
+                    "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d6"
+                }
+            }
+        ]
+    },
     "savingThrow": {
         "ability": "dex",
         "dcCalculation": {

@@ -23,7 +23,17 @@
     },
     "output": {
         "healing": [
-            "buff_healing_word"
+            {
+                "roll": "1d4",
+                "addModifier": true,
+                "scaling": {
+                    "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d4"
+                }
+            }
         ]
     },
     "lore": {

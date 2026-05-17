@@ -22,6 +22,21 @@
         "somatic": true,
         "material": false
     },
+    "output": {
+        "healing": [
+            {
+                "roll": "1d8",
+                "addModifier": true,
+                "scaling": {
+                    "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d8"
+                }
+            }
+        ]
+    },
     "lore": {
         "shortDescription": "Restore hit points to a creature you touch.",
         "fullText": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",

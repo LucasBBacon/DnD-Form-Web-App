@@ -97,7 +97,13 @@ function validateSpellSlotScalingInvariants(
     level?: unknown;
     output?: {
       damage?: Array<{
-        type?: unknown;
+        slotScaling?: {
+          mode?: unknown;
+          startAtSlotLevel?: unknown;
+          bySlotLevel?: Record<string, unknown>;
+        };
+      }>;
+      healing?: Array<{
         slotScaling?: {
           mode?: unknown;
           startAtSlotLevel?: unknown;
@@ -108,44 +114,63 @@ function validateSpellSlotScalingInvariants(
   };
 
   const baseLevel = typeof spell.level === 'number' ? spell.level : null;
-  const damageEntries = spell.output?.damage;
-  if (!Array.isArray(damageEntries)) {
-    return errors;
-  }
+  const validateEntries = (
+    entries:
+      | Array<{
+          slotScaling?: {
+            mode?: unknown;
+            startAtSlotLevel?: unknown;
+            bySlotLevel?: Record<string, unknown>;
+          };
+        }>
+      | undefined,
+    pathPrefix: string,
+  ) => {
+    if (!Array.isArray(entries)) {
+      return;
+    }
 
-  damageEntries.forEach((entry, index) => {
-    const slotScaling = entry.slotScaling;
-    if (!slotScaling) return;
+    entries.forEach((entry, index) => {
+      const slotScaling = entry.slotScaling;
+      if (!slotScaling) return;
 
-    if (baseLevel != null && slotScaling.mode === 'linear') {
-      const startAt =
-        typeof slotScaling.startAtSlotLevel === 'number'
-          ? slotScaling.startAtSlotLevel
-          : baseLevel + 1;
-      if (startAt <= baseLevel) {
-        errors.push(
-          `output.damage[${index}].slotScaling.startAtSlotLevel must be greater than base spell level (${baseLevel}).`,
-        );
+      if (baseLevel != null && slotScaling.mode === 'linear') {
+        const startAt =
+          typeof slotScaling.startAtSlotLevel === 'number'
+            ? slotScaling.startAtSlotLevel
+            : baseLevel + 1;
+        if (startAt <= baseLevel) {
+          errors.push(
+            `${pathPrefix}[${index}].slotScaling.startAtSlotLevel must be greater than base spell level (${baseLevel}).`,
+          );
+        }
       }
-    }
 
-    if (baseLevel != null && slotScaling.mode === 'table' && slotScaling.bySlotLevel) {
-      Object.keys(slotScaling.bySlotLevel).forEach((slotLevelKey) => {
-        const slotLevel = Number(slotLevelKey);
-        if (!Number.isInteger(slotLevel) || slotLevel < 1 || slotLevel > 9) {
-          errors.push(
-            `output.damage[${index}].slotScaling.bySlotLevel has invalid level key '${slotLevelKey}'.`,
-          );
-          return;
-        }
-        if (slotLevel < baseLevel) {
-          errors.push(
-            `output.damage[${index}].slotScaling.bySlotLevel level ${slotLevel} cannot be below base spell level (${baseLevel}).`,
-          );
-        }
-      });
-    }
-  });
+      if (
+        baseLevel != null &&
+        slotScaling.mode === 'table' &&
+        slotScaling.bySlotLevel
+      ) {
+        Object.keys(slotScaling.bySlotLevel).forEach((slotLevelKey) => {
+          const slotLevel = Number(slotLevelKey);
+          if (!Number.isInteger(slotLevel) || slotLevel < 1 || slotLevel > 9) {
+            errors.push(
+              `${pathPrefix}[${index}].slotScaling.bySlotLevel has invalid level key '${slotLevelKey}'.`,
+            );
+            return;
+          }
+          if (slotLevel < baseLevel) {
+            errors.push(
+              `${pathPrefix}[${index}].slotScaling.bySlotLevel level ${slotLevel} cannot be below base spell level (${baseLevel}).`,
+            );
+          }
+        });
+      }
+    });
+  };
+
+  validateEntries(spell.output?.damage, 'output.damage');
+  validateEntries(spell.output?.healing, 'output.healing');
 
   return errors.map((message) => `spells/${relativePath} → ${message}`);
 }

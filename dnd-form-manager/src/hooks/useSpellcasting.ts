@@ -2,6 +2,7 @@ import {
   getAllSpells,
   getClassById,
   getResolvedSpellDamageEntriesAtCastLevel,
+  getResolvedSpellHealingEntriesAtCastLevel,
   getRaceById,
   getSpellByID,
   getSpellCastLevelOptions,
@@ -59,6 +60,8 @@ export interface SpellSelectionDiagnostics {
   freeSchoolOverflow: number;
 }
 
+import type { SpellHealingEntry } from "../types/spell";
+
 export interface SpellCastMetadata {
   spellId: string;
   baseSpellLevel: number;
@@ -69,6 +72,7 @@ export interface SpellCastMetadata {
   canUsePactSlot: boolean;
   unavailableReason?: string;
   resolvedDamageEntries: SpellDamageEntry[];
+  resolvedHealingEntries: SpellHealingEntry[];
 }
 
 export interface UseSpellcastingReturn {
@@ -765,6 +769,10 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
       canUsePactSlot,
       unavailableReason,
       resolvedDamageEntries: getResolvedSpellDamageEntriesAtCastLevel(
+        spell,
+        selectedCastLevel,
+      ),
+      resolvedHealingEntries: getResolvedSpellHealingEntriesAtCastLevel(
         spell,
         selectedCastLevel,
       ),

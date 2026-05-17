@@ -105,11 +105,27 @@ export interface SpellDamageEntry {
   slotScaling?: SpellSlotScaling;
 }
 
+export interface SpellHealingEntry {
+  /** Dice roll expression for the healing */
+  roll: string;
+  /** Whether to add the caster's spellcasting modifier to the healing */
+  addModifier?: boolean;
+  /** Legacy and non-slot scaling information for the healing */
+  scaling?: {
+    /** Type of scaling */
+    type: "character_level" | "class_level" | "spell_slot";
+    /** Thresholds for scaling */
+    thresholds?: Record<string, string>;
+  };
+  /** Explicit upcast behavior for slot-level casting */
+  slotScaling?: SpellSlotScaling;
+}
+
 export interface SpellOutput {
   /** Damage dealt by the spell */
   damage?: SpellDamageEntry[];
   /** Healing provided by the spell */
-  healing?: string[];
+  healing?: SpellHealingEntry[];
 }
 
 export interface SpellRawData {
@@ -152,6 +168,14 @@ export interface SpellRawData {
     /** Description of the spell when cast at higher levels */
     higherLevel?: string;
   };
+}
+
+/**
+ * Represents a prose-style upcast effect, such as extra targets or rays.
+ */
+export interface ProseUpcastEffect {
+    level: number; // The spell level at which this effect occurs
+    description: string; // A prose description of the effect
 }
 
 export interface SpellData {
@@ -203,4 +227,6 @@ export interface SpellData {
     /** Description of the spell when cast at higher levels */
     higherLevel?: string;
   };
+  /** Optional field for prose-style upcast effects */
+  proseUpcastEffects?: ProseUpcastEffect[];
 }

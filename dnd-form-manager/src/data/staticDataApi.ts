@@ -3,7 +3,13 @@ import type { SubraceData } from "../types/subrace";
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemCategoryData, ItemData } from "../types/item";
-import type { SpellDamageEntry, SpellData, SpellRawData } from "../types/spell";
+import type {
+  ProseUpcastEffect,
+  SpellDamageEntry,
+  SpellData,
+  SpellHealingEntry,
+  SpellRawData,
+} from "../types/spell";
 import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
 import type { ActionData } from "../types/action";
@@ -16,7 +22,7 @@ import rawItemsData from "./items.json";
 import rawItemCategoriesData from "./itemCategories.json";
 import rawSpellsData from "./spells.json";
 import rawFeatsData from "./feats.json";
-import rawTraitsData from "./traits.json"
+import rawTraitsData from "./traits.json";
 import rawActionsData from "./actions.json";
 import { normalizeSpells } from "./spellNormalizer";
 
@@ -168,9 +174,7 @@ const parseSimpleRollExpression = (expression: string) => {
   const count = Number(countRaw);
   const sides = Number(sidesRaw);
   const modifier =
-    modifierRaw == null
-      ? 0
-      : Number(modifierRaw) * (signRaw === "-" ? -1 : 1);
+    modifierRaw == null ? 0 : Number(modifierRaw) * (signRaw === "-" ? -1 : 1);
 
   if (!Number.isInteger(count) || count <= 0) return null;
   if (!Number.isInteger(sides) || sides <= 0) return null;
@@ -268,49 +272,73 @@ export const getSpellCastLevelOptions = (
   return Array.from(byLevel.values()).sort((a, b) => a.level - b.level);
 };
 
-export const resolveSpellDamageRollAtCastLevel = (
+type SpellRollEntry = {
+  roll: string;
+  slotScaling?: {
+    mode: "linear" | "table";
+    incrementPerSlotLevel?: string;
+    startAtSlotLevel?: number;
+    bySlotLevel?: Record<string, string>;
+  };
+  scaling?: {
+    type: "character_level" | "class_level" | "spell_slot";
+    thresholds?: Record<string, string>;
+  };
+};
+
+const resolveSpellRollAtCastLevel = (
   spell: SpellData,
-  damageEntry: SpellDamageEntry,
+  entry: SpellRollEntry,
   castLevel: number,
 ): string => {
   if (castLevel <= spell.level) {
-    return damageEntry.roll;
+    return entry.roll;
   }
 
-  if (damageEntry.slotScaling?.mode === "table") {
+  if (entry.slotScaling?.mode === "table" && entry.slotScaling.bySlotLevel) {
     return (
-      resolveBestThresholdExpression(damageEntry.slotScaling.bySlotLevel, castLevel) ??
-      damageEntry.roll
+      resolveBestThresholdExpression(
+        entry.slotScaling.bySlotLevel,
+        castLevel,
+      ) ?? entry.roll
     );
   }
 
-  if (damageEntry.slotScaling?.mode === "linear") {
-    const startAt = damageEntry.slotScaling.startAtSlotLevel ?? spell.level + 1;
+  if (
+    entry.slotScaling?.mode === "linear" &&
+    entry.slotScaling.incrementPerSlotLevel
+  ) {
+    const startAt = entry.slotScaling.startAtSlotLevel ?? spell.level + 1;
     if (castLevel < startAt) {
-      return damageEntry.roll;
+      return entry.roll;
     }
 
     const increments = castLevel - startAt + 1;
     return (
       addRollExpressions(
-        damageEntry.roll,
-        damageEntry.slotScaling.incrementPerSlotLevel,
+        entry.roll,
+        entry.slotScaling.incrementPerSlotLevel,
         increments,
-      ) ?? damageEntry.roll
+      ) ?? entry.roll
     );
   }
 
-  if (
-    damageEntry.scaling?.type === "spell_slot" &&
-    damageEntry.scaling.thresholds
-  ) {
+  if (entry.scaling?.type === "spell_slot" && entry.scaling.thresholds) {
     return (
-      resolveBestThresholdExpression(damageEntry.scaling.thresholds, castLevel) ??
-      damageEntry.roll
+      resolveBestThresholdExpression(entry.scaling.thresholds, castLevel) ??
+      entry.roll
     );
   }
 
-  return damageEntry.roll;
+  return entry.roll;
+};
+
+export const resolveSpellDamageRollAtCastLevel = (
+  spell: SpellData,
+  damageEntry: SpellDamageEntry,
+  castLevel: number,
+): string => {
+  return resolveSpellRollAtCastLevel(spell, damageEntry, castLevel);
 };
 
 export const getResolvedSpellDamageEntriesAtCastLevel = (
@@ -321,6 +349,25 @@ export const getResolvedSpellDamageEntriesAtCastLevel = (
   return damageEntries.map((entry) => ({
     ...entry,
     roll: resolveSpellDamageRollAtCastLevel(spell, entry, castLevel),
+  }));
+};
+
+export const resolveSpellHealingRollAtCastLevel = (
+  spell: SpellData,
+  healingEntry: SpellHealingEntry,
+  castLevel: number,
+): string => {
+  return resolveSpellRollAtCastLevel(spell, healingEntry, castLevel);
+};
+
+export const getResolvedSpellHealingEntriesAtCastLevel = (
+  spell: SpellData,
+  castLevel: number,
+): SpellHealingEntry[] => {
+  const healingEntries = spell.output?.healing ?? [];
+  return healingEntries.map((entry) => ({
+    ...entry,
+    roll: resolveSpellHealingRollAtCastLevel(spell, entry, castLevel),
   }));
 };
 
@@ -364,8 +411,10 @@ export const getTraitById = (id: string): TraitData | null => {
 };
 
 export const getTraitsByIds = (ids: string[]): TraitData[] => {
-  return ids.map(id => traitDictionary[id]).filter((t): t is TraitData => t !== undefined);
-}
+  return ids
+    .map((id) => traitDictionary[id])
+    .filter((t): t is TraitData => t !== undefined);
+};
 
 // region Actions API
 const actionsArray = rawActionsData as ActionData[];
@@ -397,3 +446,18 @@ export const getAllActions = (): ActionData[] => {
 //     lore: { shortDescription: "Trait description pending static data update." }
 //   }));
 // }
+
+/**
+ * Retrieves prose-style upcast effects for a given spell and level.
+ * @param spell The spell object.
+ * @param level The cast level.
+ * @returns The prose upcast effects for the given level.
+ */
+export function getProseUpcastEffectsAtLevel(
+  spell: SpellData,
+  level: number,
+): ProseUpcastEffect[] {
+  return (
+    spell.proseUpcastEffects?.filter((effect) => effect.level <= level) || []
+  );
+}

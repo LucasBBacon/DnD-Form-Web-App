@@ -33,6 +33,10 @@
                 "type": "bludgeoning",
                 "scaling": {
                     "type": "spell_slot"
+                },
+                "slotScaling": {
+                    "mode": "linear",
+                    "incrementPerSlotLevel": "1d8"
                 }
             },
             {

@@ -5,15 +5,18 @@ import {
   getAllItemCategories,
   getAllSpells,
   getResolvedSpellDamageEntriesAtCastLevel,
+  getResolvedSpellHealingEntriesAtCastLevel,
   getSpellCastLevelOptions,
   getItemCategoryById,
   getItemsByCategory,
   getRaceById,
   resolveSpellDamageRollAtCastLevel,
+  resolveSpellHealingRollAtCastLevel,
   getSpellByID,
   getTraitById,
   getTraitsByIds,
   getSubracesForRace,
+  getProseUpcastEffectsAtLevel,
 } from "./staticDataApi";
 import type { SpellData } from "../types/spell";
 
@@ -238,6 +241,216 @@ describe("Spells static API", () => {
     const resolved = getResolvedSpellDamageEntriesAtCastLevel(spell, 4);
     expect(resolved[0].roll).toBe("4d6");
   });
+
+  it("resolves linear slotScaling healing rolls at higher cast levels", () => {
+    const spell: SpellData = {
+      id: "spell_healing_linear",
+      name: "Linear Healing Spell",
+      level: 1,
+      school: "evocation",
+      classes: ["class_cleric"],
+      actionType: "action",
+      castingTime: "1 action",
+      range: "Touch",
+      duration: "Instantaneous",
+      concentration: false,
+      ritual: false,
+      components: {
+        vocal: true,
+        somatic: true,
+        material: false,
+      },
+      output: {
+        healing: [
+          {
+            roll: "1d8",
+            addModifier: true,
+            slotScaling: {
+              mode: "linear",
+              incrementPerSlotLevel: "1d8",
+            },
+          },
+        ],
+      },
+      lore: {
+        shortDescription: "test",
+        fullText: "test",
+      },
+    };
+
+    const healing = spell.output?.healing?.[0];
+    expect(healing).toBeDefined();
+    expect(resolveSpellHealingRollAtCastLevel(spell, healing!, 3)).toBe("3d8");
+  });
+
+  it("resolves table slotScaling healing rolls with threshold fallback", () => {
+    const spell: SpellData = {
+      id: "spell_healing_table",
+      name: "Table Healing Spell",
+      level: 2,
+      school: "evocation",
+      classes: ["class_cleric"],
+      actionType: "action",
+      castingTime: "1 action",
+      range: "60 feet",
+      duration: "Instantaneous",
+      concentration: false,
+      ritual: false,
+      components: {
+        vocal: true,
+        somatic: true,
+        material: false,
+      },
+      output: {
+        healing: [
+          {
+            roll: "2d4",
+            slotScaling: {
+              mode: "table",
+              bySlotLevel: {
+                "3": "3d4",
+                "5": "5d4",
+              },
+            },
+          },
+        ],
+      },
+      lore: {
+        shortDescription: "test",
+        fullText: "test",
+      },
+    };
+
+    const resolved = getResolvedSpellHealingEntriesAtCastLevel(spell, 4);
+    expect(resolved[0].roll).toBe("3d4");
+  });
+
+  it("preserves migrated slotScaling data for thunderwave and resolves upcast damage", () => {
+    const spell = getSpellByID("spell_thunderwave");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.damage?.[0].slotScaling).toEqual({
+      mode: "linear",
+      incrementPerSlotLevel: "1d8",
+    });
+    expect(getResolvedSpellDamageEntriesAtCastLevel(spell!, 3)[0].roll).toBe(
+      "4d8",
+    );
+  });
+
+  it("hydrates newly-modeled damage output for spirit guardians", () => {
+    const spell = getSpellByID("spell_spirit_guardians");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.damage?.[0].roll).toBe("3d8");
+    expect(getResolvedSpellDamageEntriesAtCastLevel(spell!, 5)[0].roll).toBe(
+      "5d8",
+    );
+  });
+
+  it("hydrates flaming sphere damage and resolves linear upcast damage", () => {
+    const spell = getSpellByID("spell_flaming_sphere");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.damage?.[0].roll).toBe("2d6");
+    expect(getResolvedSpellDamageEntriesAtCastLevel(spell!, 4)[0].roll).toBe(
+      "4d6",
+    );
+  });
+
+  it("resolves ice storm upcast scaling only on the bludgeoning damage entry", () => {
+    const spell = getSpellByID("spell_ice_storm");
+
+    expect(spell).not.toBeNull();
+    const resolved = getResolvedSpellDamageEntriesAtCastLevel(spell!, 6);
+    expect(resolved[0].roll).toBe("4d8");
+    expect(resolved[1].roll).toBe("4d6");
+  });
+
+  it("hydrates insect plague damage and resolves linear upcast damage", () => {
+    const spell = getSpellByID("spell_insect_plague");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.damage?.[0].roll).toBe("4d10");
+    expect(getResolvedSpellDamageEntriesAtCastLevel(spell!, 7)[0].roll).toBe(
+      "6d10",
+    );
+  });
+
+  it("preserves flame strike multi-entry slotScaling metadata for both damage types", () => {
+    const spell = getSpellByID("spell_flame_strike");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.damage).toHaveLength(2);
+    expect(spell?.output?.damage?.[0].slotScaling).toEqual({
+      mode: "linear",
+      incrementPerSlotLevel: "1d6",
+    });
+    expect(spell?.output?.damage?.[1].slotScaling).toEqual({
+      mode: "linear",
+      incrementPerSlotLevel: "1d6",
+    });
+  });
+
+  it("hydrates cure wounds healing output with linear slot scaling", () => {
+    const spell = getSpellByID("spell_cure_wounds");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.healing?.[0]).toEqual({
+      roll: "1d8",
+      addModifier: true,
+      scaling: {
+        type: "spell_slot",
+      },
+      slotScaling: {
+        mode: "linear",
+        incrementPerSlotLevel: "1d8",
+      },
+    });
+    expect(getResolvedSpellHealingEntriesAtCastLevel(spell!, 3)[0].roll).toBe(
+      "3d8",
+    );
+  });
+
+  it("hydrates healing word healing output with linear slot scaling", () => {
+    const spell = getSpellByID("spell_healing_word");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.healing?.[0]).toEqual({
+      roll: "1d4",
+      addModifier: true,
+      scaling: {
+        type: "spell_slot",
+      },
+      slotScaling: {
+        mode: "linear",
+        incrementPerSlotLevel: "1d4",
+      },
+    });
+    expect(getResolvedSpellHealingEntriesAtCastLevel(spell!, 4)[0].roll).toBe(
+      "4d4",
+    );
+  });
+
+  it("hydrates mass cure wounds healing output with linear slot scaling", () => {
+    const spell = getSpellByID("spell_mass_cure_wounds");
+
+    expect(spell).not.toBeNull();
+    expect(spell?.output?.healing?.[0]).toEqual({
+      roll: "3d8",
+      addModifier: true,
+      scaling: {
+        type: "spell_slot",
+      },
+      slotScaling: {
+        mode: "linear",
+        incrementPerSlotLevel: "1d8",
+      },
+    });
+    expect(getResolvedSpellHealingEntriesAtCastLevel(spell!, 7)[0].roll).toBe(
+      "5d8",
+    );
+  });
 });
 
 describe("Traits static API", () => {
@@ -264,4 +477,74 @@ describe("Traits static API", () => {
       "trait_elf_speed",
     ]);
   });
+});
+
+describe('getProseUpcastEffectsAtLevel', () => {
+    it('should return prose upcast effects for the given level', () => {
+        const spell: SpellData = {
+            id: "spell_test",
+            name: "Test Spell",
+            level: 1,
+            school: "evocation",
+            classes: ["class_wizard"],
+            actionType: "action",
+            castingTime: "1 action",
+            range: "60 feet",
+            duration: "Instantaneous",
+            concentration: false,
+            ritual: false,
+            components: {
+                vocal: true,
+                somatic: true,
+                material: false,
+            },
+            lore: {
+                shortDescription: "test",
+                fullText: "test",
+            },
+            proseUpcastEffects: [
+                { level: 3, description: 'You create one additional ray.' },
+                { level: 4, description: 'You create two additional rays.' }
+            ]
+        };
+
+        expect(getProseUpcastEffectsAtLevel(spell, 3)).toEqual([
+            { level: 3, description: 'You create one additional ray.' }
+        ]);
+
+        expect(getProseUpcastEffectsAtLevel(spell, 4)).toEqual([
+            { level: 3, description: 'You create one additional ray.' },
+            { level: 4, description: 'You create two additional rays.' }
+        ]);
+    });
+
+    it('should return an empty array if no effects are available for the level', () => {
+        const spell: SpellData = {
+            id: "spell_test",
+            name: "Test Spell",
+            level: 1,
+            school: "evocation",
+            classes: ["class_wizard"],
+            actionType: "action",
+            castingTime: "1 action",
+            range: "60 feet",
+            duration: "Instantaneous",
+            concentration: false,
+            ritual: false,
+            components: {
+                vocal: true,
+                somatic: true,
+                material: false,
+            },
+            lore: {
+                shortDescription: "test",
+                fullText: "test",
+            },
+            proseUpcastEffects: [
+                { level: 3, description: 'You create one additional ray.' }
+            ]
+        };
+
+        expect(getProseUpcastEffectsAtLevel(spell, 2)).toEqual([]);
+    });
 });
