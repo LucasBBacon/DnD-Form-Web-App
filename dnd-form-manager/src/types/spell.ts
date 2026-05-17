@@ -69,23 +69,45 @@ export interface SpellSavingThrow {
   onSave: "half_damage" | "no_damage" | "special";
 }
 
+export interface SpellSlotScalingLinear {
+  /** Adds this roll expression for each slot level above the configured start level */
+  mode: "linear";
+  /** Roll expression to add when upcasting, e.g. "1d8" */
+  incrementPerSlotLevel: string;
+  /** First slot level where scaling starts. Defaults to base spell level + 1 */
+  startAtSlotLevel?: number;
+}
+
+export interface SpellSlotScalingTable {
+  /** Uses explicit roll expressions per cast slot level */
+  mode: "table";
+  /** Cast-level to full roll expression map, e.g. { "3": "5d8" } */
+  bySlotLevel: Record<string, string>;
+}
+
+export type SpellSlotScaling = SpellSlotScalingLinear | SpellSlotScalingTable;
+
+export interface SpellDamageEntry {
+  /** Type of damage dealt by the spell */
+  type: string;
+  /** Dice roll expression for the damage */
+  roll: string;
+  /** Whether to add the caster's ability modifier to the damage */
+  addModifier?: boolean;
+  /** Legacy and non-slot scaling information for the damage */
+  scaling?: {
+    /** Type of scaling */
+    type: "character_level" | "class_level" | "spell_slot";
+    /** Thresholds for scaling */
+    thresholds?: Record<string, string>;
+  };
+  /** Explicit upcast behavior for slot-level casting */
+  slotScaling?: SpellSlotScaling;
+}
+
 export interface SpellOutput {
   /** Damage dealt by the spell */
-  damage?: Array<{
-    /** Type of damage dealt by the spell */
-    type: string;
-    /** Dice roll expression for the damage */
-    roll: string;
-    /** Whether to add the caster's ability modifier to the damage */
-    addModifier?: boolean;
-    /** Scaling information for the damage */
-    scaling?: {
-      /** Type of scaling */
-      type: "character_level" | "class_level" | "spell_slot";
-      /** Thresholds for scaling */
-      thresholds?: Record<string, string>;
-    };
-  }>;
+  damage?: SpellDamageEntry[];
   /** Healing provided by the spell */
   healing?: string[];
 }

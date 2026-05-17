@@ -83,6 +83,73 @@ type JsonSourceFile = {
   relativePath: string;
 };
 
+function validateSpellSlotScalingInvariants(
+  data: unknown,
+  relativePath: string,
+): string[] {
+  const errors: string[] = [];
+
+  if (!data || typeof data !== 'object') {
+    return errors;
+  }
+
+  const spell = data as {
+    level?: unknown;
+    output?: {
+      damage?: Array<{
+        type?: unknown;
+        slotScaling?: {
+          mode?: unknown;
+          startAtSlotLevel?: unknown;
+          bySlotLevel?: Record<string, unknown>;
+        };
+      }>;
+    };
+  };
+
+  const baseLevel = typeof spell.level === 'number' ? spell.level : null;
+  const damageEntries = spell.output?.damage;
+  if (!Array.isArray(damageEntries)) {
+    return errors;
+  }
+
+  damageEntries.forEach((entry, index) => {
+    const slotScaling = entry.slotScaling;
+    if (!slotScaling) return;
+
+    if (baseLevel != null && slotScaling.mode === 'linear') {
+      const startAt =
+        typeof slotScaling.startAtSlotLevel === 'number'
+          ? slotScaling.startAtSlotLevel
+          : baseLevel + 1;
+      if (startAt <= baseLevel) {
+        errors.push(
+          `output.damage[${index}].slotScaling.startAtSlotLevel must be greater than base spell level (${baseLevel}).`,
+        );
+      }
+    }
+
+    if (baseLevel != null && slotScaling.mode === 'table' && slotScaling.bySlotLevel) {
+      Object.keys(slotScaling.bySlotLevel).forEach((slotLevelKey) => {
+        const slotLevel = Number(slotLevelKey);
+        if (!Number.isInteger(slotLevel) || slotLevel < 1 || slotLevel > 9) {
+          errors.push(
+            `output.damage[${index}].slotScaling.bySlotLevel has invalid level key '${slotLevelKey}'.`,
+          );
+          return;
+        }
+        if (slotLevel < baseLevel) {
+          errors.push(
+            `output.damage[${index}].slotScaling.bySlotLevel level ${slotLevel} cannot be below base spell level (${baseLevel}).`,
+          );
+        }
+      });
+    }
+  });
+
+  return errors.map((message) => `spells/${relativePath} → ${message}`);
+}
+
 function collectJsonFilesRecursive(
   rootPath: string,
   currentPath: string = rootPath,
@@ -140,6 +207,19 @@ function compileFolder(
     }
 
     if (validate(data)) {
+      if (folderName === 'spells') {
+        const invariantErrors = validateSpellSlotScalingInvariants(
+          data,
+          file.relativePath,
+        );
+        if (invariantErrors.length > 0) {
+          hasErrors = true;
+          invariantErrors.forEach((message) => {
+            console.error(`[ERROR] ${message}`);
+          });
+          continue;
+        }
+      }
       compiled.push(data);
     } else {
       hasErrors = true;

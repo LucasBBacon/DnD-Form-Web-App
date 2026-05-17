@@ -45,10 +45,6 @@ export const ActionsBoard: React.FC = () => {
 
   // #region Handlers and Memoized Values
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getAttackRollMode = (entryId: string) =>
-    attackRollModes[entryId] ?? "normal";
-
   const formatModifier = (modifier: number): string => {
     if (modifier === 0) return "";
     return modifier > 0 ? ` + ${modifier}` : ` - ${Math.abs(modifier)}`;
@@ -189,14 +185,18 @@ export const ActionsBoard: React.FC = () => {
     if (entry.spellLevel === 0) return;
 
     if (pool === "shared") {
-      if (!entry.spellCast?.canUseSharedSlot || typeof entry.spellLevel !== "number") {
+      const slotLevel =
+        entry.spellCast?.selectedCastLevel ??
+        (typeof entry.spellLevel === "number" ? entry.spellLevel : null);
+
+      if (!entry.spellCast?.canUseSharedSlot || slotLevel == null) {
         setSpellFeedback(
           entryId,
           entry.spellCast?.unavailableReason || "No compatible spell slot available.",
         );
         return;
       }
-      expendSpellSlot(entry.spellLevel);
+      expendSpellSlot(slotLevel);
       clearSpellFeedback(entryId);
       return;
     }

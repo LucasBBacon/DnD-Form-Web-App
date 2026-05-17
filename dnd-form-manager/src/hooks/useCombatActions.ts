@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 import { getAllCharacterTraits } from "../utils/traitUtils";
-import { getSpellByID } from "../data/staticDataApi";
+import {
+  getResolvedSpellDamageEntriesAtCastLevel,
+  getSpellByID,
+  getSpellCastLevelOptions,
+} from "../data/staticDataApi";
 import { useAttacks } from "./useAttacks";
 import { useSpellcasting } from "./useSpellcasting";
 import { useTraitActions } from "./useTraitActions";
@@ -63,10 +67,14 @@ export interface SpellSaveActionEntry extends BaseActionEntry {
   source: "spell";
   /** Optional cast state for spell actions */
   spellLevel: number;
+  /** Cast levels currently available based on remaining shared/pact slots */
+  availableCastLevels?: number[];
   /** Cast state for spell actions */
   spellCast: {
     /** Indicates whether the spell can be cast right now */
     canCast: boolean;
+    /** Currently selected cast level for this action (defaults to base level) */
+    selectedCastLevel?: number;
     /** Indicates whether a shared slot can be consumed */
     canUseSharedSlot: boolean;
     /** Indicates whether a pact slot can be consumed */
@@ -371,25 +379,19 @@ export const useCombatActions = () => {
       );
       if (!section) return;
 
-      const shared = spellcasting.slots.shared[spell.level];
-      const sharedRemaining = shared
-        ? Math.max(shared.total - shared.expended, 0)
-        : 0;
-      // Pact slots cover any spell whose level is at or below the pact slot level,
-      // not just exact-level matches. A level 4 pact slot can cast a level 2 spell.
-      const pactCanCoverSpell =
-        spell.level > 0 &&
-        spellcasting.slots.pact != null &&
-        spell.level <= spellcasting.slots.pact.level;
-      const pactRemaining = pactCanCoverSpell
-        ? Math.max(
-            spellcasting.slots.pact!.total - spellcasting.slots.pact!.expended,
-            0,
-          )
-        : 0;
-      const canUseSharedSlot = spell.level > 0 && sharedRemaining > 0;
-      const canUsePactSlot = spell.level > 0 && pactRemaining > 0;
-      const hasAvailableSlot = canUseSharedSlot || canUsePactSlot;
+      const castLevelOptions = getSpellCastLevelOptions(spell, {
+        shared: spellcasting.slots.shared,
+        pact: spellcasting.slots.pact,
+      });
+      const selectedCastLevel =
+        spell.level === 0 ? 0 : castLevelOptions[0]?.level ?? spell.level;
+
+      const selectedLevelOption = castLevelOptions.find(
+        (option) => option.level === selectedCastLevel,
+      );
+      const canUseSharedSlot = selectedLevelOption?.canUseSharedSlot ?? false;
+      const canUsePactSlot = selectedLevelOption?.canUsePactSlot ?? false;
+      const hasAvailableSlot = selectedLevelOption?.hasAvailableSlot ?? false;
       const canCastWithoutArmorPenalty = spellcasting.canCastSpells;
       const canCast =
         canCastWithoutArmorPenalty &&
@@ -399,11 +401,31 @@ export const useCombatActions = () => {
       const unavailableReason = !canCastWithoutArmorPenalty
         ? "Cannot cast spells while wearing armor you are not proficient with."
         : spell.level > 0 && !hasAvailableSlot
-          ? `No Level ${spell.level} spell slots available.`
+          ? `No Level ${spell.level}+ spell slots available.`
           : undefined;
       // Label pact-only spells distinctly so the player knows which slot pool is used.
       // If both shared and pact slots exist at this level (multiclass), keep the generic label.
-      const isPactSpell = pactCanCoverSpell && sharedRemaining === 0;
+      const isPactSpell =
+        spell.level > 0 &&
+        canUsePactSlot &&
+        !canUseSharedSlot;
+
+      const resolvedDamageRolls = getResolvedSpellDamageEntriesAtCastLevel(
+        spell,
+        selectedCastLevel,
+      )
+        .map((entry, index) => {
+          const parsed = parseRollExpression(entry.roll);
+          if (!parsed) return null;
+          return {
+            id: `spell-damage:${spell.id}:${index}`,
+            count: parsed.count,
+            sides: parsed.sides,
+            modifier: parsed.modifier,
+            label: entry.type ? `Damage (${entry.type})` : "Damage",
+          } satisfies CombatRollMetadata;
+        })
+        .filter((entry): entry is CombatRollMetadata => entry != null);
 
       grouped[section].push({
         id: `spell:${spell.id}`,
@@ -420,12 +442,15 @@ export const useCombatActions = () => {
         description: spell.lore.shortDescription,
         isExhausted,
         spellLevel: spell.level,
+        availableCastLevels: castLevelOptions.map((option) => option.level),
         spellCast: {
           canCast,
+          selectedCastLevel,
           canUseSharedSlot,
           canUsePactSlot,
           unavailableReason,
         },
+        damageRolls: resolvedDamageRolls,
       });
     });
 

@@ -4,14 +4,18 @@ import {
   getActionsByIds,
   getAllItemCategories,
   getAllSpells,
+  getResolvedSpellDamageEntriesAtCastLevel,
+  getSpellCastLevelOptions,
   getItemCategoryById,
   getItemsByCategory,
   getRaceById,
+  resolveSpellDamageRollAtCastLevel,
   getSpellByID,
   getTraitById,
   getTraitsByIds,
   getSubracesForRace,
 } from "./staticDataApi";
+import type { SpellData } from "../types/spell";
 
 describe("getSubracesForRace", () => {
   it("derives children from parentRaceId links", () => {
@@ -101,6 +105,138 @@ describe("Spells static API", () => {
     expect(typeof rangedSpell?.range).toBe("string");
     // Every spell in the array should have a string range after normalization
     expect(spells.every((s) => typeof s.range === "string")).toBe(true);
+  });
+
+  it("computes cast-level options from shared and pact slot pools", () => {
+    const spell: SpellData = {
+      id: "spell_test",
+      name: "Test Spell",
+      level: 1,
+      school: "evocation",
+      classes: ["class_wizard"],
+      actionType: "action",
+      castingTime: "1 action",
+      range: "60 feet",
+      duration: "Instantaneous",
+      concentration: false,
+      ritual: false,
+      components: {
+        vocal: true,
+        somatic: true,
+        material: false,
+      },
+      lore: {
+        shortDescription: "test",
+        fullText: "test",
+      },
+    };
+
+    const options = getSpellCastLevelOptions(spell, {
+      shared: {
+        1: { total: 2, expended: 1 },
+        2: { total: 1, expended: 0 },
+      },
+      pact: { level: 2, total: 2, expended: 1 },
+    });
+
+    expect(options).toEqual([
+      {
+        level: 1,
+        canUseSharedSlot: true,
+        canUsePactSlot: false,
+        hasAvailableSlot: true,
+      },
+      {
+        level: 2,
+        canUseSharedSlot: true,
+        canUsePactSlot: true,
+        hasAvailableSlot: true,
+      },
+    ]);
+  });
+
+  it("resolves linear slotScaling damage rolls at higher cast levels", () => {
+    const spell: SpellData = {
+      id: "spell_linear",
+      name: "Linear Spell",
+      level: 1,
+      school: "evocation",
+      classes: ["class_wizard"],
+      actionType: "action",
+      castingTime: "1 action",
+      range: "60 feet",
+      duration: "Instantaneous",
+      concentration: false,
+      ritual: false,
+      components: {
+        vocal: true,
+        somatic: true,
+        material: false,
+      },
+      output: {
+        damage: [
+          {
+            type: "fire",
+            roll: "2d8",
+            slotScaling: {
+              mode: "linear",
+              incrementPerSlotLevel: "1d8",
+            },
+          },
+        ],
+      },
+      lore: {
+        shortDescription: "test",
+        fullText: "test",
+      },
+    };
+
+    const damage = spell.output?.damage?.[0];
+    expect(damage).toBeDefined();
+    expect(resolveSpellDamageRollAtCastLevel(spell, damage!, 3)).toBe("4d8");
+  });
+
+  it("resolves table slotScaling damage rolls with threshold fallback", () => {
+    const spell: SpellData = {
+      id: "spell_table",
+      name: "Table Spell",
+      level: 2,
+      school: "evocation",
+      classes: ["class_wizard"],
+      actionType: "action",
+      castingTime: "1 action",
+      range: "60 feet",
+      duration: "Instantaneous",
+      concentration: false,
+      ritual: false,
+      components: {
+        vocal: true,
+        somatic: true,
+        material: false,
+      },
+      output: {
+        damage: [
+          {
+            type: "fire",
+            roll: "3d6",
+            slotScaling: {
+              mode: "table",
+              bySlotLevel: {
+                "3": "4d6",
+                "5": "6d6",
+              },
+            },
+          },
+        ],
+      },
+      lore: {
+        shortDescription: "test",
+        fullText: "test",
+      },
+    };
+
+    const resolved = getResolvedSpellDamageEntriesAtCastLevel(spell, 4);
+    expect(resolved[0].roll).toBe("4d6");
   });
 });
 

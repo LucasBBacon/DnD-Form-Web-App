@@ -3,7 +3,7 @@ import type { SubraceData } from "../types/subrace";
 import type { ClassData } from "../types/class";
 import type { SubclassData } from "../types/subclass";
 import type { ItemCategoryData, ItemData } from "../types/item";
-import type { SpellData, SpellRawData } from "../types/spell";
+import type { SpellDamageEntry, SpellData, SpellRawData } from "../types/spell";
 import type { FeatData } from "../types/feat";
 import type { TraitData } from "../types/trait";
 import type { ActionData } from "../types/action";
@@ -143,6 +143,185 @@ export const getSpellByID = (id: string | null): SpellData | null => {
 
 export const getAllSpells = (): SpellData[] => {
   return spellsArray;
+};
+
+export interface SpellSlotPools {
+  shared: Record<number, { total: number; expended: number }>;
+  pact: { level: number; total: number; expended: number } | null;
+}
+
+export interface SpellCastLevelOption {
+  level: number;
+  canUseSharedSlot: boolean;
+  canUsePactSlot: boolean;
+  hasAvailableSlot: boolean;
+}
+
+const SIMPLE_ROLL_RE =
+  /^\s*(\d+)d(4|6|8|10|12|20|100)(?:\s*([+-])\s*(\d+))?\s*$/i;
+
+const parseSimpleRollExpression = (expression: string) => {
+  const match = expression.match(SIMPLE_ROLL_RE);
+  if (!match) return null;
+
+  const [, countRaw, sidesRaw, signRaw, modifierRaw] = match;
+  const count = Number(countRaw);
+  const sides = Number(sidesRaw);
+  const modifier =
+    modifierRaw == null
+      ? 0
+      : Number(modifierRaw) * (signRaw === "-" ? -1 : 1);
+
+  if (!Number.isInteger(count) || count <= 0) return null;
+  if (!Number.isInteger(sides) || sides <= 0) return null;
+
+  return { count, sides, modifier };
+};
+
+const formatSimpleRollExpression = (
+  count: number,
+  sides: number,
+  modifier: number,
+): string => {
+  if (modifier === 0) return `${count}d${sides}`;
+  if (modifier > 0) return `${count}d${sides}+${modifier}`;
+  return `${count}d${sides}${modifier}`;
+};
+
+const resolveBestThresholdExpression = (
+  thresholds: Record<string, string>,
+  castLevel: number,
+): string | null => {
+  const best = Object.entries(thresholds)
+    .map(([level, expression]) => ({
+      level: Number(level),
+      expression,
+    }))
+    .filter((entry) => Number.isFinite(entry.level) && entry.level <= castLevel)
+    .sort((a, b) => b.level - a.level)[0];
+
+  return best?.expression ?? null;
+};
+
+const addRollExpressions = (
+  baseExpression: string,
+  incrementExpression: string,
+  times: number,
+): string | null => {
+  if (times <= 0) return baseExpression;
+
+  const base = parseSimpleRollExpression(baseExpression);
+  const increment = parseSimpleRollExpression(incrementExpression);
+  if (!base || !increment) return null;
+  if (base.sides !== increment.sides) return null;
+
+  const totalCount = base.count + increment.count * times;
+  const totalModifier = base.modifier + increment.modifier * times;
+
+  return formatSimpleRollExpression(totalCount, base.sides, totalModifier);
+};
+
+export const getSpellCastLevelOptions = (
+  spell: SpellData,
+  slots: SpellSlotPools,
+): SpellCastLevelOption[] => {
+  if (spell.level === 0) {
+    return [
+      {
+        level: 0,
+        canUseSharedSlot: false,
+        canUsePactSlot: false,
+        hasAvailableSlot: true,
+      },
+    ];
+  }
+
+  const byLevel = new Map<number, SpellCastLevelOption>();
+
+  Object.entries(slots.shared).forEach(([levelKey, data]) => {
+    const level = Number(levelKey);
+    if (!Number.isInteger(level) || level < spell.level) return;
+    const remaining = Math.max(data.total - data.expended, 0);
+    if (remaining <= 0) return;
+
+    byLevel.set(level, {
+      level,
+      canUseSharedSlot: true,
+      canUsePactSlot: byLevel.get(level)?.canUsePactSlot ?? false,
+      hasAvailableSlot: true,
+    });
+  });
+
+  if (slots.pact) {
+    const pactRemaining = Math.max(slots.pact.total - slots.pact.expended, 0);
+    if (pactRemaining > 0 && slots.pact.level >= spell.level) {
+      const existing = byLevel.get(slots.pact.level);
+      byLevel.set(slots.pact.level, {
+        level: slots.pact.level,
+        canUseSharedSlot: existing?.canUseSharedSlot ?? false,
+        canUsePactSlot: true,
+        hasAvailableSlot: true,
+      });
+    }
+  }
+
+  return Array.from(byLevel.values()).sort((a, b) => a.level - b.level);
+};
+
+export const resolveSpellDamageRollAtCastLevel = (
+  spell: SpellData,
+  damageEntry: SpellDamageEntry,
+  castLevel: number,
+): string => {
+  if (castLevel <= spell.level) {
+    return damageEntry.roll;
+  }
+
+  if (damageEntry.slotScaling?.mode === "table") {
+    return (
+      resolveBestThresholdExpression(damageEntry.slotScaling.bySlotLevel, castLevel) ??
+      damageEntry.roll
+    );
+  }
+
+  if (damageEntry.slotScaling?.mode === "linear") {
+    const startAt = damageEntry.slotScaling.startAtSlotLevel ?? spell.level + 1;
+    if (castLevel < startAt) {
+      return damageEntry.roll;
+    }
+
+    const increments = castLevel - startAt + 1;
+    return (
+      addRollExpressions(
+        damageEntry.roll,
+        damageEntry.slotScaling.incrementPerSlotLevel,
+        increments,
+      ) ?? damageEntry.roll
+    );
+  }
+
+  if (
+    damageEntry.scaling?.type === "spell_slot" &&
+    damageEntry.scaling.thresholds
+  ) {
+    return (
+      resolveBestThresholdExpression(damageEntry.scaling.thresholds, castLevel) ??
+      damageEntry.roll
+    );
+  }
+
+  return damageEntry.roll;
+};
+
+export const getResolvedSpellDamageEntriesAtCastLevel = (
+  spell: SpellData,
+  castLevel: number,
+): SpellDamageEntry[] => {
+  const damageEntries = spell.output?.damage ?? [];
+  return damageEntries.map((entry) => ({
+    ...entry,
+    roll: resolveSpellDamageRollAtCastLevel(spell, entry, castLevel),
+  }));
 };
 
 // region Feats API
