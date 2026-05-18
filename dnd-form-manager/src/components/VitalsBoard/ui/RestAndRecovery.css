@@ -130,14 +130,19 @@
   font-weight: normal;
 }
 
-.spend-die-btn {
-  border-color: var(--ink-main);
-  font-weight: bold;
+.die-roller-slot {
+    flex-shrink: 0;
 }
 
-.spend-die-btn:hover:not(:disabled) {
-  background-color: var(--ink-main);
-  color: var(--vellum-bg);
+.hit-die-roller .roll-btn {
+    min-width: 80px;
+    border-color: #5a6b5a;
+    color: #5a6b5a;
+}
+
+.hit-die-roller .roll-btn:hover:not(:disabled) {
+    background-color: #5a6b5a;
+    color: var(--vellum-bg);
 }
 
 /* --- REST ACTIONS --- */

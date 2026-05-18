@@ -2,11 +2,16 @@ import type React from "react";
 import "./RestAndRecovery.css";
 import type { HitDicePool } from "../MortalLedger";
 import { useState } from "react";
-import { Dices, Moon, SunMoon, Tent } from "lucide-react";
+import { Moon, SunMoon, Tent } from "lucide-react";
+import {
+  DiceRoller,
+  type DiceRollSummary,
+} from "../../ui/DiceRoller/DiceRoller";
+import type { DieType } from "../../ui/DiceRoller/PolyDie";
 
 export interface RestAndRecoveryProps {
   hitDicePools: HitDicePool[];
-  onSpendHitDie: (sides: number) => void;
+  onSpendHitDie: (sides: number, rollTotal: number) => void;
   onShortRest: () => void;
   onLongRest: () => void;
 }
@@ -29,9 +34,13 @@ export const RestAndRecovery: React.FC<RestAndRecoveryProps> = ({
   // filter out any empty pools
   const activePools = hitDicePools.filter((pool) => pool.total > 0);
 
-  const handleSpendDie = (sides: number, available: number) => {
+  const handleSpendDie = (
+    sides: number,
+    summary: DiceRollSummary,
+    available: number,
+  ) => {
     if (available > 0) {
-      onSpendHitDie(sides);
+      onSpendHitDie(sides, summary.total);
     }
   };
 
@@ -77,20 +86,25 @@ export const RestAndRecovery: React.FC<RestAndRecoveryProps> = ({
                     {available} <span className="count-slash">/</span>{" "}
                     {pool.total}
                   </div>
-                  <button
-                    className="action-btn spend-die-btn"
-                    onClick={() => handleSpendDie(pool.sides, available)}
-                    disabled={isDepleted}
-                  >
-                    <Dices size={14} /> Spend
-                  </button>
+                  <div className="die-roller-slot">
+                    <DiceRoller
+                      sides={pool.sides as DieType}
+                      count={1}
+                      rollLabel="Spend"
+                      disabled={isDepleted}
+                      onRollComplete={(_, summary) =>
+                        handleSpendDie(pool.sides, summary, available)
+                      }
+                      className="hit-die-roller"
+                    />
+                  </div>
                 </div>
               );
             })}
           </div>
 
           <hr className="filigree-divider" />
-          
+
           <div className="rest-actions">
             <button className="action-btn short-rest-btn" onClick={onShortRest}>
               <SunMoon size={14} /> Finish Short Rest
