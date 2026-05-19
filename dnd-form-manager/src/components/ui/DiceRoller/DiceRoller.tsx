@@ -48,7 +48,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
   sides = 20,
   count = 1,
   rollLabel,
-  className,
+  className = "",
   disabled = false,
   random = Math.random,
   animationMs = 1000,

@@ -1,6 +1,6 @@
 import type React from "react";
 import "./AbilityCard.css";
-import { SkillRow } from "./SkillRow";
+import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
 
 // #region Interfaces
 
@@ -30,73 +30,114 @@ export interface AbilityCardSave {
   isProficient: boolean;
 }
 
-interface AbilityCardProps {
-  /** The name of the ability */
+export interface CoreStatsAbilityEntry {
+  key: string;
   abilityName: string;
-  /** The score of the ability */
   score: number;
-  /** The modifier for the ability */
   modifier: number;
-  /** The saving throw information for the ability */
-  save: AbilityCardSave;
-  /** The skills associated with the ability */
+  save: {
+    modifier: number;
+    isProficient: boolean;
+  };
+
   skills: AbilityCardSkill[];
 }
 
-// #endregion
-
-// #region Helpers
-
-const formatMod = (mod: number) => (mod >= 0 ? `+${mod}` : `${mod}`);
+interface AbilityCardProps {
+  ability: CoreStatsAbilityEntry;
+  onSkillRoll: (skillKey: string, total: number) => void;
+  onSaveRoll: (abilityKey: string, total: number) => void;
+  onAbilityCheckRoll: (abilityKey: string, total: number) => void;
+}
 
 // #endregion
 
 // #region Component
 
 export const AbilityCard: React.FC<AbilityCardProps> = ({
-  abilityName,
-  score,
-  modifier,
-  save,
-  skills,
-}) => (
-  <div className="ability-card">
-    <div className="ability-header">
-      <div className="ability-name">{abilityName.toUpperCase()}</div>
-      <div className="ability-score-block">
-        <span className="score">{score}</span>
-        <span className="modifier">{formatMod(modifier)}</span>
+  ability,
+  onSkillRoll,
+  onSaveRoll,
+  onAbilityCheckRoll,
+}) => {
+  const formatMod = (mod: number) => (mod >= 0 ? `+${mod}` : `${mod}`);
+
+  // Helper to render the proficiency "wax seal"
+  const renderProficiencySeal = (
+    isProficient: boolean,
+    isExpertise: boolean = false,
+  ) => {
+    let sealClass = "is-empty";
+    if (isExpertise) sealClass = "is-expertise";
+    else if (isProficient) sealClass = "is-proficient";
+
+    return <div className={`proficiency-seal ${sealClass}`} />;
+  };
+
+  return (
+    <div className="ability-card">
+      {/* Ability Header: Massive Modifier, Subdued Score */}
+      <div className="ability-header">
+        <div className="ability-title">{ability.abilityName}</div>
+        <DiceRoller
+          sides={20}
+          count={1}
+          rollLabel={formatMod(ability.modifier)}
+          className="ability-core-roller"
+          onRollComplete={(_, summary) =>
+            onAbilityCheckRoll(ability.key, summary.total)
+          }
+        />
+        <div className="ability-score-badge">Score {ability.score}</div>
+      </div>
+
+      <hr className="filigree-divider" />
+
+      {/* Saving Throw & Skills Ledger */}
+      <div className="skills-ledger">
+        {/* Saving Throw Row */}
+        <div className="skill-row save-row">
+          <div className="skill-info">
+            {renderProficiencySeal(ability.save.isProficient)}
+            <span className="skill-name">Saving Throw</span>
+          </div>
+          <DiceRoller
+            sides={20}
+            count={1}
+            rollLabel={formatMod(ability.save.modifier)}
+            className="skill-mini-roller"
+            onRollComplete={(_, summary) =>
+              onSaveRoll(ability.key, summary.total)
+            }
+          />
+        </div>
+
+        {/* Associated Skills */}
+        {ability.skills.map((skill) => (
+          <div key={skill.key} className="skill-row" title={skill.tooltip}>
+            <div className="skill-info">
+              {renderProficiencySeal(skill.isProficient, skill.isExpertise)}
+              <span className="skill-name">
+                {skill.label}
+                {/* Optional Advantage/Disadvantage Runes */}
+                {skill.hasAdvantage && <span className="adv-rune">A</span>}
+                {skill.hasDisadvantage && <span className="dis-rune">D</span>}
+              </span>
+            </div>
+            <DiceRoller
+              sides={20}
+              count={1}
+              rollLabel={formatMod(skill.modifier)}
+              className="skill-mini-roller"
+              onRollComplete={(_, summary) =>
+                onSkillRoll(skill.key, summary.total)
+              }
+            />
+          </div>
+        ))}
       </div>
     </div>
-
-    <div className="ability-details">
-      <SkillRow
-        label="Saving Throw"
-        modifier={save.isProficient ? save.modifier : modifier}
-        isProficient={save.isProficient}
-        isSave
-      />
-
-      <hr className="divider" />
-
-      {skills.length > 0 ? (
-        skills.map((skill) => (
-          <SkillRow
-            key={skill.key}
-            label={skill.label}
-            modifier={skill.modifier}
-            isProficient={skill.isProficient}
-            isExpertise={skill.isExpertise}
-            hasAdvantage={skill.hasAdvantage}
-            hasDisadvantage={skill.hasDisadvantage}
-            tooltip={skill.tooltip}
-          />
-        ))
-      ) : (
-        <div className="no-skill-msg">No associated skills</div>
-      )}
-    </div>
-  </div>
-);
+  );
+};
 
 // #endregion

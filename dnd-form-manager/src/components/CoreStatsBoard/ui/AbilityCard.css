@@ -1,62 +1,207 @@
+/* --- ABILITY CARD --- */
 .ability-card {
-  background: var(--surface-color, #fff);
-  border: 2px solid #e4e4e7;
-  border-radius: 8px;
-  overflow: hidden;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(44, 36, 27, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.ability-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(44, 36, 27, 0.08);
 }
 
 .ability-header {
-  background-color: #18181b;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
-.ability-name {
-  font-size: 0.85rem;
-  letter-spacing: 1px;
+.ability-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-main);
+  width: 100%;
+  border-bottom: 1px solid var(--border-filigree);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
 }
 
-.ability-score-block {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-.modifier {
-  font-size: 2.5rem;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.score {
-  font-size: 1.2rem;
-  color: #a1a1aa;
-  font-weight: normal;
-}
-
-.ability-details {
-  padding: 1rem;
+.ability-numbers {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-end;
 }
 
-.divider {
-  border: none;
-  border-top: 1px dashed #d4d4d8;
-  margin: 0.25rem 0;
+.ability-modifier {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--ink-main);
 }
 
-.no-skill-msg {
+.ability-score-badge {
+  font-family: var(--font-body);
   font-size: 0.8rem;
-  color: #a1a1aa;
-  text-align: center;
-  font-style: italic;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background-color: rgba(229, 217, 197, 0.4);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-top: 4px;
+}
+
+.dice-roller-wrapper.ability-core-roller {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.ability-core-roller .roll-btn {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--ink-main);
+  background: transparent;
+  border: none;
+  min-width: auto;
+  padding: 0 12px;
+}
+
+.ability-core-roller .roll-btn:hover {
+  color: var(--rubric-red);
+  transform: scale(1.05);
+}
+
+/* --- SKILLS LEDGER --- */
+.skills-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.skill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-radius: 4px;
+  border-bottom: 1px dashed transparent;
+  transition: all 0.2s ease;
+}
+
+.skill-row:hover {
+  border-bottom-color: var(--border-filigree);
+  background-color: var(--vellum-hover);
+}
+
+.skill-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.save-row {
+  font-weight: bold;
+  border-bottom: 1px dotted var(--border-filigree);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+  border-radius: 0;
+}
+
+.skill-modifier {
+  width: 28px;
+  text-align: right;
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.skill-name {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink-main);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dice-roller-wrapper.skill-mini-roller {
+  background: transparent;
+  border: none;
+  padding: 0;
+  gap: 4px;
+}
+
+.skill-mini-roller .mode-toggle-btn {
+  padding: 2px;
+  border: none;
+  opacity: 0.5;
+}
+
+.skill-mini-roller:hover .mode-toggle-btn {
+  opacity: 1;
+}
+
+.skill-mini-roller .roll-btn {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-main);
+  background-color: rgba(229, 217, 197, 0.3);
+  border: 1px solid var(--border-filigree);
+  min-width: 40px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.skill-mini-roller .roll-btn:hover {
+  background-color: var(--ink-main);
+  color: var(--vellum-bg);
+  border-color: var(--ink-main);
+}
+
+/* Runes for Advantage/Disadvantage */
+.adv-rune {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: #5A6B5A;
+  font-weight: bold;
+}
+.dis-rune {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--rubric-red);
+  font-weight: bold;
+}
+
+/* --- PROFICIENCY SEALS --- */
+.proficiency-seal {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-main);
+  flex-shrink: 0;
+}
+
+.proficiency-seal.is-empty {
+  background-color: transparent;
+  border-color: var(--ink-muted);
+}
+
+.proficiency-seal.is-proficient {
+  background-color: var(--ink-main);
+}
+
+.proficiency-seal.is-expertise {
+  background-color: var(--gilt-gold);
+  border-color: var(--gilt-gold);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
 }
