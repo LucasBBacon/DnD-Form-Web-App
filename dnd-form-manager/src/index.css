@@ -167,3 +167,36 @@ code {
     transform: translateY(0);
   }
 }
+
+.manuscript-section-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--ink-main);
+  text-align: center;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.05em;
+}
+
+.ornate-board-divider {
+  border: 0;
+  height: 3px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--ink-main),
+    var(--ink-main) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  margin: 12px 0 0 0;
+  opacity: 0.5;
+}
+
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--ink-muted);
+}
