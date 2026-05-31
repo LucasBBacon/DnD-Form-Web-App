@@ -1,7 +1,7 @@
 import type React from "react";
-import { useCharacterStore } from "../../store/useCharacterStore";
-import { getClassById, getRaceById } from "../../data/staticDataApi";
-import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils";
+import { useCharacterStore } from "../../store/useCharacterStore.ts";
+import { getClassById, getRaceById } from "../../data/staticDataApi.ts";
+import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils.ts";
 import { IdentityHeaderView } from "./IdentityHeaderView.tsx";
 
 // #region Component

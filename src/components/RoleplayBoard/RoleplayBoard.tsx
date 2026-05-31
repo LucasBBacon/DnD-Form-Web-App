@@ -1,7 +1,7 @@
 import type React from "react";
 import { useMemo, useState } from "react";
-import { useCharacterStore } from "../../store/useCharacterStore";
-import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
+import { useCharacterStore } from "../../store/useCharacterStore.ts";
+import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils.ts";
 import { RoleplayBoardView } from "./RoleplayBoardView.tsx";
 import type {
   RoleplayField,

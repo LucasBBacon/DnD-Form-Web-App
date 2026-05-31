@@ -1,10 +1,10 @@
 import type React from "react";
-import { useCharacterStore } from "../../store/useCharacterStore";
-import { useCharacterStats } from "../../hooks/useCharacterStats";
+import { useCharacterStore } from "../../store/useCharacterStore.ts";
+import { useCharacterStats } from "../../hooks/useCharacterStats.ts";
 import { useMemo, useState } from "react";
-import { getItemById } from "../../data/staticDataApi";
-import { TwoHandedWarningDialog } from "./ui/TwoHandedWarningDialog";
-import { canEquipTwoHandedWeapon } from "../../utils/equipmentValidator";
+import { getItemById } from "../../data/staticDataApi.ts";
+import { TwoHandedWarningDialog } from "./ui/TwoHandedWarningDialog.tsx";
+import { canEquipTwoHandedWeapon } from "../../utils/equipmentValidator.ts";
 import {
   InventoryBoardView,
   type InventoryBoardHydratedInstance,
