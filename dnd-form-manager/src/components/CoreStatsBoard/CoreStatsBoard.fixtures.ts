@@ -3,13 +3,13 @@ import {
   ABILITIES,
   ABILITY_LABELS as ABILITY_NAMES,
 } from "../../utils/abilityConstants";
-import type { CoreStatsBoardViewProps } from "./CoreStatsBoardView";
+import type { CoreStatsBoardProps } from "./CoreStatsBoard";
 import type { AbilityCardSkill } from "./ui/AbilityCard";
 
 // #region Interfaces
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CoreStatsBoardScenario extends CoreStatsBoardViewProps {}
+export interface CoreStatsBoardScenario extends CoreStatsBoardProps {}
 
 // #endregion
 
@@ -50,7 +50,7 @@ const makeSkill = (
 const makeBaseAbilities = (
   modifierByAbility: Record<Ability, number>,
   scoreByAbility: Record<Ability, number>,
-): CoreStatsBoardViewProps["abilities"] =>
+): CoreStatsBoardProps["abilities"] =>
   ABILITIES.map((ability) => ({
     key: ability,
     abilityName: ABILITY_NAMES[ability],

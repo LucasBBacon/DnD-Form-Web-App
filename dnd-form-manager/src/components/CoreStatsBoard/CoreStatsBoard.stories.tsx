@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CoreStatsBoardView } from "./CoreStatsBoardView";
+import { CoreStatsBoard } from "./CoreStatsBoard";
 import { CORE_STATS_BOARD_FIXTURES } from "./CoreStatsBoard.fixtures";
 
-const meta: Meta<typeof CoreStatsBoardView> = {
+const meta: Meta<typeof CoreStatsBoard> = {
   title: "Boards/CoreStatsBoard",
-  component: CoreStatsBoardView,
+  component: CoreStatsBoard,
   tags: ["autodocs"],
 };
 
 export default meta;
 
-type Story = StoryObj<typeof CoreStatsBoardView>;
+type Story = StoryObj<typeof CoreStatsBoard>;
 
 export const Balanced: Story = {
   args: {
