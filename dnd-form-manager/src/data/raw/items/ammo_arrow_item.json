@@ -1,0 +1,15 @@
+{
+    "id": "item_ammo_arrow",
+    "name": "Arrow",
+    "type": "gear",
+    "weight": 0.05,
+    "stacking": {
+        "mode": "stack",
+        "bundleSize": 20
+    },
+    "lore": {
+        "shortDescription": "A standard arrow used as ammunition for bows.",
+        "fullText": "A standard arrow used as ammunition for bows. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+    },
+    "cpCost": 5
+}

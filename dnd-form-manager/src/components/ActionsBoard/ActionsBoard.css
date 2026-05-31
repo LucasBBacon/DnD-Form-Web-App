@@ -96,3 +96,53 @@
 .combat-action-row {
   width: 100%;
 }
+
+/* Heavy-weapon disadvantage warning badge (Phase 3) */
+.heavy-disadvantage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.reach-modifier-note {
+  margin: 0.4rem 0 0;
+}
+
+.throwable-count-note {
+  margin: 0.4rem 0 0;
+}
+
+.throwable-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+  white-space: nowrap;
+}
+
+.reach-modifier-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #0c4a6e;
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
+  border-radius: 999px;
+  padding: 0.12rem 0.5rem;
+}

@@ -1,13 +1,15 @@
 {
-    "id": "item_focus_amulet",
-    "name": "Amulet Holy Symbol",
-    "type": "gear",
-    "weight": 1,
-    "stacking": {
-        "mode": "instance"
-    },
-    "lore": {
-        "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
-        "fullText": "An amulet holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a pendant or charm that bears the symbol of the deity the wearer worships. The amulet serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It is often worn around the neck and can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion."
-    }
+  "id": "item_focus_amulet",
+  "name": "Amulet Holy Symbol",
+  "type": "gear",
+  "weight": 1,
+  "stacking": {
+    "mode": "instance"
+  },
+  "lore": {
+    "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
+    "fullText": "An amulet holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a pendant or charm that bears the symbol of the deity the wearer worships. The amulet serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It is often worn around the neck and can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion."
+  },
+  "cpCost": 500
 }
+

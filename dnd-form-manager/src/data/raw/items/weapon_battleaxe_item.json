@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_battleaxe",
+    "name": "Battleaxe",
+    "type": "weapon",
+    "weight": 4,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A battleaxe is a versatile weapon favored by warriors who prefer a balance of offense and defense.",
+        "fullText": "A battleaxe is a versatile weapon favored by warriors who prefer a balance of offense and defense. It features a broad, heavy blade that can deliver powerful slashing attacks, making it effective in close combat. The battleaxe's design allows for both one-handed and two-handed use, giving the wielder flexibility in combat situations. Whether used to cleave through armor or to strike with precision, the battleaxe is a formidable weapon on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d8",
+        "damageType": "slashing",
+        "properties": [
+            "property_versatile"
+        ],
+        "range": "5 ft",
+        "versatileDamageDice": "1d10"
+    },
+    "cpCost": 1000
+}

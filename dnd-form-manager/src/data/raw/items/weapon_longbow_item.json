@@ -1,0 +1,26 @@
+{
+    "id": "item_weapon_longbow",
+    "name": "Longbow",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A powerful ranged weapon favored by skilled archers for its long range and high damage potential.",
+        "fullText": "A longbow is a powerful ranged weapon that has been used for centuries by archers and hunters. It is characterized by its long, slender design, which allows for greater draw length and increased range compared to shorter bows. The longbow is typically made from a single piece of wood, such as yew or ash, and is known for its simplicity and effectiveness in combat. It requires significant strength and skill to use effectively, but in the hands of a skilled archer, the longbow can deliver devastating attacks from a distance."
+    },
+    "weaponProperties": {
+        "category": "martial_ranged",
+        "damageDice": "1d8",
+        "damageType": "piercing",
+        "properties": [
+            "property_ammunition",
+            "property_heavy",
+            "property_two_handed"
+        ],
+        "range": "150/600 ft",
+        "ammoItemId": "item_ammo_arrow"
+    },
+    "cpCost": 5000
+}

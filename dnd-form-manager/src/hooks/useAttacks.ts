@@ -1,13 +1,15 @@
 import { getAllItemCategories, getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { UUID } from "../types/common";
-import type { ItemInstanceData } from "../types/item";
+import type { Attack } from "../types/action";
+import type { ItemInstanceData, WeaponPropertyCatalogEntry } from "../types/item";
 import { resolveInstance } from "../utils/inventoryUtils";
 import {
   aggregateNonSkillProficienciesMulticlass,
   isWeaponProficient,
 } from "../utils/proficiencyAggregator";
 import { getAllCharacterTraits } from "../utils/traitUtils";
+import { resolveSizeFromTraits } from "../utils/traitEffectResolvers";
 import { useCharacterStats } from "./useCharacterStats";
 
 /**
@@ -16,7 +18,14 @@ import { useCharacterStats } from "./useCharacterStats";
  * all necessary information for displaying and executing attacks in the UI.
  * @returns An object containing the array of attacks with details such as to-hit bonus, damage string, properties, range, and ammunition status.
  */
-export const useAttacks = () => {
+export const useAttacks = (): { attacks: Attack[] } => {
+  const formatRangeBand = (rangeBand?: { normal: number; long?: number }) => {
+    if (!rangeBand) return null;
+    return typeof rangeBand.long === "number"
+      ? `${rangeBand.normal}/${rangeBand.long} ft`
+      : `${rangeBand.normal} ft`;
+  };
+
   // #region --- Get Character State and Derived Stats ---
   const state = useCharacterStore();
   const { abilities, combat, encumbrance } = useCharacterStats();
@@ -49,6 +58,12 @@ export const useAttacks = () => {
     state.acquiredFeats,
     state.classTracks,
   );
+
+  // #endregion
+
+  // #region --- Resolve Character Size ---
+
+  const characterSize = resolveSizeFromTraits(allTraits, state.level);
 
   // #endregion
 
@@ -101,8 +116,37 @@ export const useAttacks = () => {
     },
   );
 
-  const attacks = weaponSources
-    .map(({ instanceId, baseItemId, instanceData }) => {
+  const getThrowableCountForItem = (itemId: string): number => {
+    const stackCount = state.inventoryStacks.reduce(
+      (total, stack) =>
+        stack.baseItemId === itemId ? total + stack.quantity : total,
+      0,
+    );
+    const instanceCount = state.inventoryInstances.reduce(
+      (total, instance) =>
+        instance.baseItemId === itemId ? total + 1 : total,
+      0,
+    );
+
+    return stackCount + instanceCount;
+  };
+
+  const resolveAttackStatModifier = (
+    attackAbility: "str" | "dex" | "choice",
+  ): number => {
+    if (attackAbility === "dex") {
+      return derivedStats.modifiers.dex || 0;
+    }
+
+    if (attackAbility === "choice") {
+      return Math.max(derivedStats.modifiers.dex, derivedStats.modifiers.str);
+    }
+
+    return derivedStats.modifiers.str || 0;
+  };
+
+  const equippedAttacks = weaponSources
+    .flatMap(({ instanceId, baseItemId, instanceData }) => {
       if (!baseItemId) return null;
       const baseItem = getItemById(baseItemId);
       // If weapon data is missing, skip this weapon
@@ -130,22 +174,9 @@ export const useAttacks = () => {
       // #endregion
 
       const props = effectiveProps;
+      const hasReachProperty = props.propertyIds.includes("property_reach");
 
-      // #region Determine governing stat (str vs dex)
-      let attackStat = "str";
-      if (props.category.includes("ranged")) {
-        attackStat = "dex";
-      } else if (props.properties.includes("finesse")) {
-        // finesse lets player choose the higher stat
-        attackStat =
-          derivedStats.modifiers.dex > derivedStats.modifiers.str
-            ? "dex"
-            : "str";
-      }
-
-      // Calculate the stat modifier for the attacking stat
-      const statMod = derivedStats.modifiers[attackStat as "str" | "dex"] || 0;
-      // #endregion
+      const statMod = resolveAttackStatModifier(props.rules.attackAbility);
 
       // #region --- Proficiency Check ---
       const categoryIds = weaponCategoryMembershipByItemId.get(baseItemId) ?? [];
@@ -172,7 +203,7 @@ export const useAttacks = () => {
       let ammoName = null;
       let canAttack = true;
 
-      if (props.properties.includes("ammunition") && props.ammoItemId) {
+      if (props.rules.requiresAmmunition && props.ammoItemId) {
         // If the weapon uses ammunition, check the inventory stacks for the ammo item and count
         const ammoItem = getItemById(props.ammoItemId);
         const ammoStack = state.inventoryStacks.find(
@@ -186,22 +217,116 @@ export const useAttacks = () => {
       }
       // #endregion
 
-      return {
+      const baseAttack = {
         instanceId,
         weaponId: baseItemId,
         name: effectiveName,
         toHit,
         damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
-        properties: props.properties,
+        properties: props.properties as WeaponPropertyCatalogEntry[],
         range: props.range,
+        rangeInfo: props.rules.range,
+        meleeReachFeet: props.rules.meleeReachFeet,
+        hasReachProperty,
         versatileDamageDice: props.versatileDamageDice ?? null,
         ammo: props.ammoItemId
           ? { id: props.ammoItemId, name: ammoName, count: ammoCount }
           : null,
         canAttack,
+        heavyDisadvantage: props.rules.heavy && characterSize === "small",
+        isThrown: false,
+        versatileMode: instanceData?.versatileMode ?? "one-handed",
       };
+
+      const hasThrownOption =
+        !props.rules.isRangedWeapon &&
+        typeof props.rules.thrownRange?.normal === "number";
+
+      if (!hasThrownOption) {
+        return [baseAttack];
+      }
+
+      const thrownRangeInfo = props.rules.thrownRange;
+      const thrownRangeText = formatRangeBand(thrownRangeInfo) ?? props.range;
+      const throwableCount = getThrowableCountForItem(baseItemId);
+
+      const thrownAttack = {
+        ...baseAttack,
+        name: `${effectiveName} [Thrown]`,
+        range: thrownRangeText,
+        rangeInfo: thrownRangeInfo,
+        hasReachProperty: false,
+        isThrown: true,
+        canAttack: canAttack && throwableCount > 0,
+        throwableItemId: baseItemId,
+        throwableCount,
+      };
+
+      return [baseAttack, thrownAttack];
     })
     .filter(Boolean); // Filter out any nulls
+
+  const stackThrownAttacks = state.inventoryStacks
+    .flatMap((stack) => {
+      if (stack.quantity <= 0) return [];
+
+      const baseItem = getItemById(stack.baseItemId);
+      if (!baseItem?.weaponProperties) return [];
+
+      const props = baseItem.weaponProperties;
+      const hasThrownOption =
+        !props.rules.isRangedWeapon &&
+        typeof props.rules.thrownRange?.normal === "number";
+
+      if (!hasThrownOption) {
+        return [];
+      }
+
+      const categoryIds =
+        weaponCategoryMembershipByItemId.get(stack.baseItemId) ?? [];
+      const isProficient = isWeaponProficient(
+        {
+          baseItemId: stack.baseItemId,
+          weaponCategory: props.category,
+          categoryIds,
+        },
+        activeWeaponProficiencies.has,
+      );
+
+      const statMod = resolveAttackStatModifier(props.rules.attackAbility);
+      const toHit =
+        statMod +
+        (isProficient ? derivedStats.proficiencyBonus : 0);
+      const damageBonus = statMod;
+      const thrownRangeInfo = props.rules.thrownRange;
+      const thrownRangeText = formatRangeBand(thrownRangeInfo) ?? props.range;
+
+      return [
+        {
+          instanceId: null,
+          weaponId: stack.baseItemId,
+          name: `${baseItem.name} [Thrown]`,
+          toHit,
+          damageString: `${props.damageDice} ${damageBonus >= 0 ? `+ ${damageBonus}` : `- ${Math.abs(damageBonus)}`} ${props.damageType}`,
+          properties: props.properties as WeaponPropertyCatalogEntry[],
+          range: thrownRangeText,
+          rangeInfo: thrownRangeInfo,
+          meleeReachFeet: props.rules.meleeReachFeet,
+          hasReachProperty: false,
+          versatileDamageDice: null,
+          ammo: null,
+          canAttack: stack.quantity > 0,
+          heavyDisadvantage: props.rules.heavy && characterSize === "small",
+          isThrown: true,
+          versatileMode: "one-handed" as const,
+          throwableItemId: stack.baseItemId,
+          throwableCount: stack.quantity,
+        },
+      ];
+    })
+    .filter(Boolean);
+
+  const attacks = [...equippedAttacks, ...stackThrownAttacks];
 
   // #endregion
 

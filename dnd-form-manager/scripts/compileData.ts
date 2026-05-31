@@ -13,6 +13,8 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
+import { normalizeItemData } from '../src/data/weaponNormalizer';
+import type { RawItemData } from '../src/types/item';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -292,6 +294,7 @@ function compileFolder(
   folderName: string,
   validate: ValidateFn,
   outputFileName: string,
+  transform: (data: unknown) => unknown = (data) => data,
 ): void {
   const folderPath = resolve(rawDir, folderName);
   const files = collectJsonFilesRecursive(folderPath);
@@ -311,31 +314,7 @@ function compileFolder(
     }
 
     if (validate(data)) {
-      if (folderName === 'spells') {
-        const invariantErrors = validateSpellSlotScalingInvariants(
-          data,
-          file.relativePath,
-        );
-        const proseInvariantErrors = validateSpellProseUpcastInvariants(
-          data,
-          file.relativePath,
-        );
-        if (invariantErrors.length > 0) {
-          hasErrors = true;
-          invariantErrors.forEach((message) => {
-            console.error(`[ERROR] ${message}`);
-          });
-          continue;
-        }
-        if (proseInvariantErrors.length > 0) {
-          hasErrors = true;
-          proseInvariantErrors.forEach((message) => {
-            console.error(`[ERROR] ${message}`);
-          });
-          continue;
-        }
-      }
-      compiled.push(data);
+      compiled.push(transform(data));
     } else {
       hasErrors = true;
       for (const error of validate.errors ?? []) {
@@ -361,7 +340,9 @@ function compileFolder(
 console.log('\nCompiling raw data files...');
 compileFolder('classes', validateClass, 'classes.json');
 compileFolder('races',   validateRace,  'races.json');
-compileFolder('items', validateItem, 'items.json');
+compileFolder('items', validateItem, 'items.json', (data) =>
+  normalizeItemData(data as RawItemData),
+);
 compileFolder('itemCategories', validateItemCategory, 'itemCategories.json');
 compileFolder('spells', validateSpell, 'spells.json');
 compileFolder('feats', validateFeat, 'feats.json');

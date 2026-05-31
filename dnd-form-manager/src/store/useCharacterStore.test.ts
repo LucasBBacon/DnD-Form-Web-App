@@ -657,3 +657,79 @@ describe("useCharacterStore free-school designation actions", () => {
     ]);
   });
 });
+
+describe("useCharacterStore wealth actions", () => {
+  beforeEach(() => {
+    useCharacterStore.setState({ ...BASELINE_CHARACTER_STATE } as any);
+  });
+
+  it("receives mixed coins without consolidating them", () => {
+    useCharacterStore.getState().receiveCoins({ sp: 5, cp: 20 });
+
+    expect(useCharacterStore.getState().coinPurse).toEqual({
+      cp: 20,
+      sp: 5,
+      ep: 0,
+      gp: 0,
+      pp: 0,
+    });
+  });
+
+  it("adds and removes coin by denomination without affecting other coin types", () => {
+    useCharacterStore.getState().addCoins("gp", 3);
+    useCharacterStore.getState().addCoins("sp", 2);
+    useCharacterStore.getState().removeCoins("gp", 1);
+
+    expect(useCharacterStore.getState().coinPurse).toEqual({
+      cp: 0,
+      sp: 2,
+      ep: 0,
+      gp: 2,
+      pp: 0,
+    });
+  });
+
+  it("does not allow removing more coin than is available", () => {
+    useCharacterStore.getState().addCoins("cp", 4);
+    useCharacterStore.getState().removeCoins("cp", 5);
+
+    expect(useCharacterStore.getState().coinPurse).toEqual({
+      cp: 4,
+      sp: 0,
+      ep: 0,
+      gp: 0,
+      pp: 0,
+    });
+  });
+
+  it("consolidates to the highest possible denominations by default", () => {
+    useCharacterStore.getState().receiveCoins({ gp: 2, sp: 5, cp: 15 });
+
+    useCharacterStore.getState().consolidateCoins();
+
+    expect(useCharacterStore.getState().coinPurse).toEqual({
+      cp: 5,
+      sp: 1,
+      ep: 1,
+      gp: 2,
+      pp: 0,
+    });
+  });
+
+  it("can consolidate without electrum or platinum", () => {
+    useCharacterStore.getState().receiveCoins({ pp: 1, ep: 2, gp: 3, sp: 4, cp: 5 });
+
+    useCharacterStore.getState().consolidateCoins({
+      allowElectrum: false,
+      allowPlatinum: false,
+    });
+
+    expect(useCharacterStore.getState().coinPurse).toEqual({
+      cp: 5,
+      sp: 4,
+      ep: 0,
+      gp: 14,
+      pp: 0,
+    });
+  });
+});

@@ -1,13 +1,15 @@
 {
-    "id": "item_pack_priests",
-    "name": "Priest's Pack",
-    "type": "gear",
-    "weight": 24,
-    "stacking": {
-        "mode": "instance"
-    },
-    "lore": {
-        "shortDescription": "A pack designed for priests and clerics, containing essential items for religious duties and rituals.",
-        "fullText": "A pack that includes a Backpack, a blanket, 10 candles, a tinderbox, an alms box, 2 blocks of incense, a censer, vestments, 2 days of rations, and a waterskin."
-    }
+  "id": "item_pack_priests",
+  "name": "Priest's Pack",
+  "type": "gear",
+  "weight": 24,
+  "stacking": {
+    "mode": "instance"
+  },
+  "lore": {
+    "shortDescription": "A pack designed for priests and clerics, containing essential items for religious duties and rituals.",
+    "fullText": "A pack that includes a Backpack, a blanket, 10 candles, a tinderbox, an alms box, 2 blocks of incense, a censer, vestments, 2 days of rations, and a waterskin."
+  },
+  "cpCost": 1900
 }
+

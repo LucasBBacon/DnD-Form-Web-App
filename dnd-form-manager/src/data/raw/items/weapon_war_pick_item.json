@@ -1,0 +1,21 @@
+{
+    "id": "item_weapon_war_pick",
+    "name": "War Pick",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A martial melee weapon that features a pointed head designed for piercing armor and delivering focused strikes.",
+        "fullText": "A war pick is a martial melee weapon that features a pointed head designed for piercing armor and delivering focused strikes. It is favored by warriors who seek to penetrate defenses and strike with precision on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d8",
+        "damageType": "piercing",
+        "properties": [],
+        "range": "5 ft"
+    },
+    "cpCost": 500
+}

@@ -4,9 +4,18 @@
   "itemIds": [
     "item_weapon_club",
     "item_weapon_dagger",
-    "item_weapon_crossbow_light",
+    "item_weapon_greatclub",
     "item_weapon_handaxe",
     "item_weapon_javelin",
-    "item_weapon_mace"
+    "item_weapon_light_hammer",
+    "item_weapon_mace",
+    "item_weapon_quarterstaff",
+    "item_weapon_sickle",
+    "item_weapon_spear",
+    "item_weapon_unarmed_strike",
+    "item_weapon_crossbow_light",
+    "item_weapon_dart",
+    "item_weapon_shortbow",
+    "item_weapon_sling"
   ]
 }

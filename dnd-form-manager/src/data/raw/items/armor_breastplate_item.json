@@ -1,0 +1,24 @@
+{
+    "id": "item_armor_breastplate",
+    "name": "Breastplate",
+    "type": "armor",
+    "weight": 20,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Medium armor made of a fitted metal chest piece and supple leather.",
+        "fullText": "This armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer's vital organs while leaving the wearer relatively unencumbered."
+    },
+    "armorProperties": {
+        "armorType": "medium",
+        "acApplication": "set",
+        "baseAc": 14,
+        "dexModifier": {
+            "mode": "capped",
+            "cap": 2
+        },
+        "stealthDisadvantage": false
+    },
+    "cpCost": 40000
+}

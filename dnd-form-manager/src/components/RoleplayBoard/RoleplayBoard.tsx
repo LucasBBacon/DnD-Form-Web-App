@@ -10,7 +10,7 @@ import type {
 } from "./RoleplayBoardView.tsx";
 
 export const RoleplayBoard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<RoleplayTab>("features");
+  const [activeTab, setActiveTab] = useState<RoleplayTab>("biography");
   const store = useCharacterStore();
 
   const activeFeatures = useMemo<RoleplayFeature[]>(() => {

@@ -1,13 +1,15 @@
 {
-    "id": "item_pack_explorers",
-    "name": "Explorer's Pack",
-    "type": "gear",
-    "weight": 59,
-    "stacking": {
-        "mode": "instance"
-    },
-    "lore": {
-        "shortDescription": "A pack designed for adventurers and explorers, containing essential items for survival and exploration.",
-        "fullText": "A pack that includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
-    }
+  "id": "item_pack_explorers",
+  "name": "Explorer's Pack",
+  "type": "gear",
+  "weight": 59,
+  "stacking": {
+    "mode": "instance"
+  },
+  "lore": {
+    "shortDescription": "A pack designed for adventurers and explorers, containing essential items for survival and exploration.",
+    "fullText": "A pack that includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it."
+  },
+  "cpCost": 1000
 }
+

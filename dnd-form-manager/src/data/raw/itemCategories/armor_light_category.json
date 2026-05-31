@@ -1,0 +1,9 @@
+{
+    "id": "category_armor_light",
+    "name": "Light Armor",
+    "itemIds": [
+        "item_armor_leather",
+        "item_armor_padded",
+        "item_armor_studded_leather"
+    ]
+}

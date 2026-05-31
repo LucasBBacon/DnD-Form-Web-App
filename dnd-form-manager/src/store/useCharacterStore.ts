@@ -42,6 +42,27 @@ export interface InventoryStackRecord {
 // Represents a single instance of an item in the character's inventory, used for non-stackable items like weapons and armor that may have unique properties or custom names
 export type InventoryInstanceRecord = ItemInstanceData;
 
+export const COIN_TYPES = ["cp", "sp", "ep", "gp", "pp"] as const;
+export type CoinType = (typeof COIN_TYPES)[number];
+
+export type CoinPurse = Record<CoinType, number>;
+
+const COIN_VALUES: CoinPurse = {
+  cp: 1,
+  sp: 10,
+  ep: 50,
+  gp: 100,
+  pp: 1000,
+};
+
+const DEFAULT_COIN_PURSE: CoinPurse = {
+  cp: 0,
+  sp: 0,
+  ep: 0,
+  gp: 0,
+  pp: 0,
+};
+
 // #endregion
 
 // #region --- Helper Functions ---
@@ -69,6 +90,79 @@ const clampCharacterLevel = (level: number): number =>
  */
 const normalizeQuantity = (quantity: number): number =>
   Math.max(1, Math.floor(quantity));
+
+const normalizeCoinAmount = (amount: number): number =>
+  Math.max(0, Math.floor(amount));
+
+const addCoinsToPurse = (
+  purse: CoinPurse,
+  coins: Partial<Record<CoinType, number>>,
+): CoinPurse => {
+  const nextPurse = { ...purse };
+
+  COIN_TYPES.forEach((coinType) => {
+    const amount = normalizeCoinAmount(coins[coinType] ?? 0);
+    if (amount > 0) {
+      nextPurse[coinType] += amount;
+    }
+  });
+
+  return nextPurse;
+};
+
+const totalCopperPieces = (purse: CoinPurse): number =>
+  COIN_TYPES.reduce(
+    (total, coinType) => total + purse[coinType] * COIN_VALUES[coinType],
+    0,
+  );
+
+const consolidateCoinPurse = (
+  purse: CoinPurse,
+  options?: { allowElectrum?: boolean; allowPlatinum?: boolean },
+): CoinPurse => {
+  const allowElectrum = options?.allowElectrum ?? true;
+  const allowPlatinum = options?.allowPlatinum ?? true;
+  const denominations: CoinType[] = allowPlatinum
+    ? allowElectrum
+      ? ["pp", "gp", "ep", "sp", "cp"]
+      : ["pp", "gp", "sp", "cp"]
+    : allowElectrum
+      ? ["gp", "ep", "sp", "cp"]
+      : ["gp", "sp", "cp"];
+
+  let remainingCopperPieces = totalCopperPieces(purse);
+  const nextPurse: CoinPurse = { ...DEFAULT_COIN_PURSE };
+
+  denominations.forEach((coinType) => {
+    const value = COIN_VALUES[coinType];
+    const coinCount = Math.floor(remainingCopperPieces / value);
+    nextPurse[coinType] = coinCount;
+    remainingCopperPieces -= coinCount * value;
+  });
+
+  return nextPurse;
+};
+
+const removeCoinsFromPurse = (
+  purse: CoinPurse,
+  coinType: CoinType,
+  amount: number,
+): CoinPurse | null => {
+  const normalizedAmount = normalizeCoinAmount(amount);
+
+  if (normalizedAmount === 0) {
+    return purse;
+  }
+
+  if (purse[coinType] < normalizedAmount) {
+    return null;
+  }
+
+  return {
+    ...purse,
+    [coinType]: purse[coinType] - normalizedAmount,
+  };
+};
 
 /**
  * Determines the default stacking mode for an item based on its type and metadata.
@@ -404,6 +498,9 @@ export interface CharacterState {
 
   // #region --- Inventory State ---
 
+  // The character's coin purse, tracked as exact denomination counts.
+  coinPurse: CoinPurse;
+
   // An array of inventory stack records representing the character's stackable items, where each record includes a unique stack ID, the base item ID, and the quantity of items in the stack
   inventoryStacks: InventoryStackRecord[];
   // An array of inventory instance records representing the character's individual items, where each record includes a unique instance ID, the base item ID, and any relevant metadata about the item
@@ -622,6 +719,8 @@ interface CharacterActions {
   
   unequipWeaponInstance: (instanceId: UUID) => void;
   
+  setWeaponVersatileMode: (instanceId: UUID, mode: "one-handed" | "two-handed") => void;
+  
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
   
   attuneInstance: (instanceId: UUID) => void;
@@ -641,6 +740,21 @@ interface CharacterActions {
   recordDeathSave: (type: "success" | "failure", value: boolean) => void;
   
   expendHitDie: () => void;
+
+  // #endregion
+
+  // #region --- Wealth Actions ---
+
+  receiveCoins: (coins: Partial<Record<CoinType, number>>) => void;
+
+  addCoins: (coinType: CoinType, amount: number) => void;
+
+  removeCoins: (coinType: CoinType, amount: number) => void;
+
+  consolidateCoins: (options?: {
+    allowElectrum?: boolean;
+    allowPlatinum?: boolean;
+  }) => void;
 
   // #endregion
 
@@ -729,6 +843,7 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
 
   // #region --- Inventory State ---
 
+  coinPurse: { ...DEFAULT_COIN_PURSE },
   inventoryStacks: [],
   inventoryInstances: [],
   equippedArmorInstanceId: null,
@@ -773,6 +888,44 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
   // #region --- Initial State ---
 
   ...BASELINE_CHARACTER_STATE,
+
+  // #endregion
+
+  // #region --- Wealth Actions ---
+
+  receiveCoins: (coins) =>
+    set((state) => ({
+      coinPurse: addCoinsToPurse(state.coinPurse, coins),
+    })),
+
+  addCoins: (coinType, amount) =>
+    set((state) => ({
+      coinPurse: addCoinsToPurse(state.coinPurse, {
+        [coinType]: amount,
+      }),
+    })),
+
+  removeCoins: (coinType, amount) =>
+    set((state) => {
+      const nextCoinPurse = removeCoinsFromPurse(
+        state.coinPurse,
+        coinType,
+        amount,
+      );
+
+      if (nextCoinPurse === null) {
+        return state;
+      }
+
+      return {
+        coinPurse: nextCoinPurse,
+      };
+    }),
+
+  consolidateCoins: (options) =>
+    set((state) => ({
+      coinPurse: consolidateCoinPurse(state.coinPurse, options),
+    })),
 
   // #endregion
 
@@ -1638,6 +1791,15 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       ),
     })),
 
+  setWeaponVersatileMode: (instanceId, mode) =>
+    set((state) => ({
+      inventoryInstances: state.inventoryInstances.map((instance) =>
+        instance.instanceId === instanceId
+          ? { ...instance, versatileMode: mode }
+          : instance,
+      ),
+    })),
+
   createItemInstance: (baseItemId, quantity = 1) => {
     const normalizedQuantity = normalizeQuantity(quantity);
     const createdInstances = Array.from({ length: normalizedQuantity }, () =>
@@ -1737,6 +1899,10 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
       const merged = {
         ...BASELINE_CHARACTER_STATE,
         ...overrides,
+        coinPurse: {
+          ...BASELINE_CHARACTER_STATE.coinPurse,
+          ...(overrides.coinPurse ?? {}),
+        },
         isSetupComplete: true,
       };
 

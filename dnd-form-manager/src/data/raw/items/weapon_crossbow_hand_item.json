@@ -1,0 +1,26 @@
+{
+    "id": "item_weapon_crossbow_hand",
+    "name": "Hand Crossbow",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A compact ranged weapon designed for one-handed use, favored by rogues and those who value stealth.",
+        "fullText": "A hand crossbow is a compact ranged weapon designed for one-handed use. It fires small bolts with precision and is favored by rogues and other characters who value stealth and mobility. The hand crossbow's lightweight design allows for quick and agile attacks, making it an ideal choice for those who prefer to strike from the shadows. Despite its size, the hand crossbow can still deliver a potent piercing attack, making it a formidable weapon in the right hands."
+    },
+    "weaponProperties": {
+        "category": "martial_ranged",
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "properties": [
+            "property_ammunition",
+            "property_light",
+            "property_loading"
+        ],
+        "range": "30/120 ft",
+        "ammoItemId": "item_ammo_bolt"
+    },
+    "cpCost": 7500
+}

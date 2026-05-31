@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_trident",
+    "name": "Trident",
+    "type": "weapon",
+    "weight": 4,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A three-pronged spear that is often associated with aquatic environments and is favored by warriors who seek versatility in combat.",
+        "fullText": "A trident is a three-pronged spear that is often associated with aquatic environments and is favored by warriors who seek versatility in combat. It can be used for both melee and ranged attacks, making it a versatile weapon for various combat situations. The trident's design allows it to be thrown with precision, making it effective for striking targets at a distance, while its sturdy construction allows for powerful melee strikes when used in close combat."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "properties": [
+            "property_thrown",
+            "property_versatile"
+        ],
+        "range": "20/60 ft",
+        "versatileDamageDice": "1d8"
+    },
+    "cpCost": 500
+}

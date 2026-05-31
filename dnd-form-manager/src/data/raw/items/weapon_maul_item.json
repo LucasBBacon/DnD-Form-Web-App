@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_maul",
+    "name": "Maul",
+    "type": "weapon",
+    "weight": 10,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A maul is a large, two-handed melee weapon that delivers powerful bludgeoning attacks.",
+        "fullText": "A maul is a large, two-handed melee weapon that delivers powerful bludgeoning attacks. It features a heavy head, often made of metal, attached to a long wooden handle. The maul's design allows it to strike with great force, making it effective for smashing through armor and dealing significant damage to opponents. However, its size and weight require strength and skill to wield effectively in combat, making it a favored choice for warriors who seek to dominate the battlefield with overwhelming power."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "2d6",
+        "damageType": "bludgeoning",
+        "properties": [
+            "property_heavy",
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 1000
+}

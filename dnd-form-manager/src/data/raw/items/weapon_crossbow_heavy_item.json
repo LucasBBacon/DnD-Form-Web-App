@@ -1,0 +1,27 @@
+{
+    "id": "item_weapon_crossbow_heavy",
+    "name": "Heavy Crossbow",
+    "type": "weapon",
+    "weight": 18,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A powerful ranged weapon that requires significant strength to operate, favored by those who need to take down heavily armored targets.",
+        "fullText": "The heavy crossbow is a powerful ranged weapon that requires significant strength to operate. It fires bolts with great force, making it effective against heavily armored targets. The heavy crossbow is a martial ranged weapon that uses ammunition and has the properties of being heavy, loading, and two-handed. It has a range of 100/400 feet and uses bolts as ammunition."
+    },
+    "weaponProperties": {
+        "category": "martial_ranged",
+        "damageDice": "1d10",
+        "damageType": "piercing",
+        "properties": [
+            "property_ammunition",
+            "property_heavy",
+            "property_loading",
+            "property_two_handed"
+        ],
+        "range": "100/400 ft",
+        "ammoItemId": "item_ammo_bolt"
+    },
+    "cpCost": 5000
+}

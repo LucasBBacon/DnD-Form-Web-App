@@ -1,0 +1,24 @@
+{
+    "id": "item_armor_hide",
+    "name": "Hide Armor",
+    "type": "armor",
+    "weight": 12,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Medium armor made from the tanned hides of beasts.",
+        "fullText": "This crude armor consists of thick furs and pelts. It is commonly worn by barbarian tribes, evil humanoids, and other folk who lack access to the tools and materials needed to create better armor."
+    },
+    "armorProperties": {
+        "armorType": "medium",
+        "acApplication": "set",
+        "baseAc": 12,
+        "dexModifier": {
+            "mode": "capped",
+            "cap": 2
+        },
+        "stealthDisadvantage": false
+    },
+    "cpCost": 1000
+}

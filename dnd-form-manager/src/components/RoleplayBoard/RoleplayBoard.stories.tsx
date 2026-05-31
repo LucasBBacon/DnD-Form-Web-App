@@ -9,7 +9,7 @@ const meta: Meta<typeof RoleplayBoardView> = {
   argTypes: {
     activeTab: {
       control: "select",
-      options: ["features", "characteristics", "biography"],
+      options: ["characteristics", "biography"],
     },
   },
 };

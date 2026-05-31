@@ -1,13 +1,15 @@
 {
-    "id": "item_focus_reliquary",
-    "name": "Reliquary Holy Symbol",
-    "type": "gear",
-    "weight": 2,
-    "stacking": {
-        "mode": "instance"
-    },
-    "lore": {
-        "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
-        "fullText": "A reliquary holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a small, ornate container that holds a relic or sacred object associated with the deity the wearer worships. The reliquary serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion. Unlike an amulet or emblem holy symbol, a reliquary is designed to house a sacred relic, making it a powerful and revered item."
-    }
+  "id": "item_focus_reliquary",
+  "name": "Reliquary Holy Symbol",
+  "type": "gear",
+  "weight": 2,
+  "stacking": {
+    "mode": "instance"
+  },
+  "lore": {
+    "shortDescription": "A sacred item used by clerics and paladins to channel divine power.",
+    "fullText": "A reliquary holy symbol is a sacred item used by clerics and paladins to channel divine power. It is typically a small, ornate container that holds a relic or sacred object associated with the deity the wearer worships. The reliquary serves as a focus for the wearer's divine magic, allowing them to cast spells and perform rituals associated with their faith. It can be made from various materials, such as metal, wood, or stone, depending on the preferences of the wearer and the traditions of their religion. Unlike an amulet or emblem holy symbol, a reliquary is designed to house a sacred relic, making it a powerful and revered item."
+  },
+  "cpCost": 500
 }
+
