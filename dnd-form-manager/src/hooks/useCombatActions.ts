@@ -7,6 +7,7 @@ import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
 import type { DieFace } from "../types/common";
+import type { WeaponPropertyCatalogEntry, WeaponRangeBand } from "../types/item";
 
 // #region Types and Interfaces
 
@@ -55,6 +56,32 @@ export interface CombatActionEntry {
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */
   damageRolls?: CombatRollMetadata[];
+  /** Weapon property catalog entries (attack cards only) */
+  weaponProperties?: WeaponPropertyCatalogEntry[];
+  /** Ammunition info for ranged attack entries */
+  ammo?: { id: string; name: string | null; count: number | null };
+  /** Parsed range data for ranged attack entries */
+  rangeInfo?: WeaponRangeBand;
+  /** Effective melee reach in feet for this attack */
+  meleeReachFeet?: number;
+  /** True when the weapon has the reach property */
+  hasReachProperty?: boolean;
+  /** True when this attack entry represents a thrown variant */
+  isThrown?: boolean;
+  /** Base item id consumed when this thrown attack is used */
+  throwableItemId?: string;
+  /** Remaining count for this throwable source, when countable */
+  throwableCount?: number | null;
+  /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
+  heavyDisadvantage?: boolean;
+  /** Versatile mode for versatile weapons (one-handed or two-handed) */
+  versatileMode?: "one-handed" | "two-handed";
+  /** Versatile damage dice string for the weapon (e.g., "1d8"), if the weapon is versatile */
+  versatileDamageDice?: string | null;
+  /** Base damage dice string for the weapon (e.g., "1d6") */
+  baseDamageDice?: string;
+  /** Instance ID for weapon attacks (for state management) */
+  instanceId?: string;
 }
 
 export interface CombatRollMetadata {
@@ -284,7 +311,28 @@ export const useCombatActions = () => {
       : state.level;
 
     attacks.attacks.forEach((attack, index) => {
-      const parsedDamage = parseRollExpression(attack?.damageString ?? "");
+      // Extract base damage dice from the damage string (e.g., "1d6" from "1d6 + 2 slashing")
+      const baseDamageDiceMatch = attack?.damageString?.match(/^\s*(\d+d\d+)/);
+      const baseDamageDice = baseDamageDiceMatch ? baseDamageDiceMatch[1] : "1d6";
+
+      // Determine effective damage string based on versatile mode
+      let effectiveDamageString = attack?.damageString ?? "";
+      if (
+        attack?.versatileDamageDice &&
+        attack?.versatileMode === "two-handed"
+      ) {
+        // For versatile weapons in two-handed mode, use versatile dice
+        // Extract the damage bonus from the original damage string and apply it to versatile dice
+        const damageBonus = attack.damageString
+          ? attack.damageString.match(/([+-]\s*\d+)/)?.[0] ?? ""
+          : "";
+        const damageType = attack.damageString
+          ? attack.damageString.split(/\s+/)?.[2] ?? ""
+          : "";
+        effectiveDamageString = `${attack.versatileDamageDice} ${damageBonus} ${damageType}`.trim();
+      }
+
+      const parsedDamage = parseRollExpression(effectiveDamageString);
 
       grouped.action.push({
         id: `atk:${attack?.weaponId || "Weapon id not found"}:${index}`,
@@ -296,13 +344,25 @@ export const useCombatActions = () => {
           (attack?.toHit ?? 0) >= 0
             ? `ATK +${attack?.toHit ?? 0}`
             : `ATK ${attack?.toHit ?? 0}`,
-          attack?.damageString || "1d6",
-          attack?.range || "Melee",
+          effectiveDamageString || "1d6",
+          attack?.hasReachProperty
+            ? `Melee (${attack?.meleeReachFeet ?? 10} ft reach)`
+            : (attack?.range || "Melee"),
         ],
-        description: attack?.ammo
-          ? `Ammo: ${attack.ammo.count} ${attack.ammo.name || ""}`.trim()
-          : undefined,
+        ammo: attack?.ammo ?? undefined,
+        rangeInfo: attack?.rangeInfo ?? undefined,
+        meleeReachFeet: attack?.meleeReachFeet,
+        hasReachProperty: attack?.hasReachProperty ?? false,
+        isThrown: attack?.isThrown ?? false,
+        throwableItemId: attack?.throwableItemId,
+        throwableCount: attack?.throwableCount ?? null,
+        heavyDisadvantage: attack?.heavyDisadvantage ?? false,
+        versatileMode: attack?.versatileMode ?? "one-handed",
+        versatileDamageDice: attack?.versatileDamageDice ?? null,
+        baseDamageDice,
+        instanceId: attack?.instanceId ?? undefined,
         isExhausted: !attack?.canAttack,
+        weaponProperties: attack?.properties ?? [],
         attackRoll: {
           id: `attack-roll:${attack?.weaponId || "unknown"}:${index}`,
           count: 1,

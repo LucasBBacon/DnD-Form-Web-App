@@ -1,0 +1,23 @@
+{
+    "id": "item_weapon_sickle",
+    "name": "Sickle",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A small, curved blade that is typically used for harvesting crops. It can also be used as a light melee weapon.",
+        "fullText": "A sickle is a small, curved blade that is typically used for harvesting crops. In combat, it can be used as a light melee weapon that deals slashing damage. The sickle's unique shape allows it to be effective for hooking and pulling enemies, making it a versatile choice for characters who want to engage in close combat."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1d4",
+        "damageType": "slashing",
+        "properties": [
+            "property_light"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 100
+}

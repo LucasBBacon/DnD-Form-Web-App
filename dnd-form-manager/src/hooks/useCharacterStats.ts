@@ -1,4 +1,8 @@
-import { getClassById, getItemById, getSubclassById } from "../data/staticDataApi";
+import {
+  getClassById,
+  getItemById,
+  getSubclassById,
+} from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability, HitDie } from "../types/common";
 import type {
@@ -330,6 +334,29 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
     state.inventoryInstances,
   );
 
+  const equippedShieldData = equippedShieldInstance
+    ? getItemById(equippedShieldInstance.baseItemId)
+    : null;
+
+  const equippedShield: Parameters<typeof calculateArmorClass>[2] = (() => {
+    if (
+      !equippedShieldData?.armorProperties ||
+      equippedShieldData.type !== "armor"
+    ) {
+      return null;
+    }
+    const mergedShieldProps = equippedShieldInstance?.overrides?.armorProperties
+      ? {
+          ...equippedShieldData.armorProperties,
+          ...equippedShieldInstance.overrides.armorProperties,
+        }
+      : equippedShieldData.armorProperties;
+    return {
+      ...equippedShieldData,
+      armorProperties: mergedShieldProps,
+    } as Exclude<Parameters<typeof calculateArmorClass>[2], null>;
+  })();
+
   const isWearingShield = !!state.equippedShieldInstanceId;
   const armorStealthDisadvantage =
     !!equippedArmor?.armorProperties?.stealthDisadvantage;
@@ -400,7 +427,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
   const baseArmorClass = calculateArmorClass(
     modifiers.dex,
     equippedArmor,
-    isWearingShield,
+    equippedShield,
     undefined,
     armorMagicAcBonus + shieldMagicAcBonus,
   );

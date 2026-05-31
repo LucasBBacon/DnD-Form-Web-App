@@ -1,37 +1,99 @@
-.encumbrance-box {
-  background: #f4f4f5;
-  border: 1px solid #e4e4e7;
-  border-radius: 6px;
-  padding: 0.75rem;
+/* --- CONTAINER --- */
+.encumbrance-container {
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background-color: rgba(229, 217, 197, 0.2); /* Faded filigree color */
+  border-radius: 2px;
+}
+
+/* --- HEADER & TEXT --- */
+.encumbrance-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+.encumbrance-title {
+  display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.encumbrance-box.encumbered {
-  background: #fef2f2;
-  border-color: #fca5a5;
+.encumbrance-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.weight-tracker {
-  font-size: 1.2rem;
+.weight-text {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink-main);
 }
 
-.current-weight {
-  font-weight: 900;
-  color: #18181b;
-}
-
-.max-weight {
-  font-size: 0.8rem;
-  color: #71717a;
-  font-weight: bold;
+.weight-text.is-heavy {
+  color: var(--rubric-red);
 }
 
 .encumbered-warning {
-  color: #dc2626;
-  font-size: 0.7rem;
-  font-weight: bold;
-  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--rubric-red);
+  text-transform: uppercase;
+  animation: pulseWarning 2s infinite ease-in-out;
+}
+
+@keyframes pulseWarning {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 4px rgba(158, 42, 43, 0.3);
+  }
+}
+
+/* --- THE SCRIBE'S GAUGE (PROGRESS BAR) --- */
+.scribe-gauge-track {
+  position: relative;
+  height: 6px;
+  width: 100%;
+  border-top: 1px solid var(--border-filigree);
+  border-bottom: 1px solid var(--border-filigree);
+  background-color: transparent;
+}
+
+.scribe-gauge-fill {
+  height: 100%;
+  background-color: var(--ink-muted);
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.3s ease;
+}
+
+/* Turns blood red when encumbered */
+.scribe-gauge-fill.is-heavy {
+  background-color: var(--rubric-red);
+  box-shadow: 0 0 4px rgba(158, 42, 43, 0.4); /* Slight magical/urgent glow */
+}
+
+/* A tiny vertical notch at the end of the bar */
+.capacity-marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background-color: var(--ink-main);
+  transform: translateX(-50%);
 }

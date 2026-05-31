@@ -65,6 +65,36 @@ const WEAPON_ACTION: CombatActionEntry = {
   ],
 };
 
+const THROWN_JAVELIN_ACTION: CombatActionEntry = {
+  id: "action:javelin:thrown",
+  name: "Javelin [Thrown]",
+  section: "action",
+  source: "attack",
+  subtitle: "Weapon Attack",
+  quickStats: ["+4 to-hit", "1d6+2 damage", "Range 30/120"],
+  description: "Ranged weapon attack with a thrown javelin.",
+  isExhausted: false,
+  isThrown: true,
+  throwableItemId: "weapon_javelin",
+  throwableCount: 3,
+  attackRoll: {
+    id: "atk:javelin:thrown",
+    label: "Javelin Attack",
+    count: 1,
+    sides: 20,
+    modifier: 4,
+  },
+  damageRolls: [
+    {
+      id: "dmg:javelin:thrown",
+      label: "1d6+2",
+      count: 1,
+      sides: 6,
+      modifier: 2,
+    },
+  ],
+};
+
 const FIREBALL_SPELL: CombatActionEntry = {
   id: "spell:fireball",
   name: "Fireball",
@@ -177,6 +207,16 @@ export const ACTIONS_BOARD_FIXTURES = {
     spellcasting: SPELLCASTING_FIXTURES.withSpells,
     sections: {
       action: [FIREBALL_SPELL],
+    },
+    activeRoller: null,
+    attackRollModes: {},
+    rollResultsByEntry: {},
+  } satisfies ActionsBoardScenario,
+
+  withThrownWeapons: {
+    spellcasting: SPELLCASTING_FIXTURES.allSpent,
+    sections: {
+      action: [THROWN_JAVELIN_ACTION],
     },
     activeRoller: null,
     attackRollModes: {},

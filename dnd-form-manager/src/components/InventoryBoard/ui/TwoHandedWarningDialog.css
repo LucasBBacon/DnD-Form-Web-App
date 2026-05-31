@@ -1,0 +1,44 @@
+.two-handed-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+}
+
+.two-handed-dialog {
+  width: min(520px, 94vw);
+  border: 1px solid #d4d4d8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #18181b;
+  padding: 1rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.two-handed-dialog-title {
+  margin: 0 0 0.45rem;
+  font-size: 1.05rem;
+}
+
+.two-handed-dialog-copy {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #3f3f46;
+}
+
+.two-handed-dialog-conflicts {
+  margin: 0.7rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  color: #27272a;
+}
+
+.two-handed-dialog-actions {
+  margin-top: 0.9rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

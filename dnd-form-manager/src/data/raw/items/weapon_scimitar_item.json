@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_scimitar",
+    "name": "Scimitar",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A curved, single-edged sword that is often associated with desert cultures.",
+        "fullText": "A scimitar is a curved, single-edged sword that is often associated with desert cultures. It is designed for slashing attacks and is favored by agile warriors who rely on speed and precision in combat. The scimitar's distinctive shape allows it to deliver powerful cuts while maintaining a lightweight and versatile design, making it an effective weapon for both offense and defense on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d6",
+        "damageType": "slashing",
+        "properties": [
+            "property_finesse",
+            "property_light"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 2500
+}

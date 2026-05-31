@@ -2,9 +2,23 @@
   "id": "category_weapon_martial_melee",
   "name": "Martial Melee Weapons",
   "itemIds": [
-    "item_weapon_longsword",
-    "item_weapon_rapier",
+    "item_weapon_battleaxe",
+    "item_weapon_flail",
+    "item_weapon_glaive",
     "item_weapon_greataxe",
-    "item_weapon_warhammer"
+    "item_weapon_greatsword",
+    "item_weapon_halberd",
+    "item_weapon_lance",
+    "item_weapon_longsword",
+    "item_weapon_maul",
+    "item_weapon_morningstar",
+    "item_weapon_pike",
+    "item_weapon_rapier",
+    "item_weapon_scimitar",
+    "item_weapon_shortsword",
+    "item_weapon_trident",
+    "item_weapon_war_pick",
+    "item_weapon_warhammer",
+    "item_weapon_whip"
   ]
 }

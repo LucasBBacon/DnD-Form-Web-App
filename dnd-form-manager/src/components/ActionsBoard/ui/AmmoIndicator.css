@@ -1,0 +1,61 @@
+.ammo-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.55rem 0.18rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  margin-top: 0.3rem;
+  width: fit-content;
+}
+
+.ammo-icon {
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.ammo-count {
+  font-variant-numeric: tabular-nums;
+  min-width: 1.4ch;
+  text-align: right;
+}
+
+.ammo-label {
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* Low ammo — amber warning */
+.ammo-indicator.ammo-low {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.ammo-indicator.ammo-low .ammo-label {
+  color: #b45309;
+}
+
+/* Empty — red alert */
+.ammo-indicator.ammo-empty {
+  background: #fff1f2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}
+
+.ammo-indicator.ammo-empty .ammo-label {
+  color: #b91c1c;
+}
+
+.ammo-warning {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #dc2626;
+  margin-left: 0.15rem;
+}

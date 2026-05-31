@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_shortsword",
+    "name": "Shortsword",
+    "type": "weapon",
+    "weight": 2,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A versatile melee weapon that is favored for its balance of speed and damage.",
+        "fullText": "A shortsword is a versatile melee weapon that is favored for its balance of speed and damage. It features a double-edged blade that is ideal for both slashing and thrusting attacks. The shortsword's compact size allows for quick strikes and easy maneuverability in close combat, making it a popular choice among rogues, fighters, and other agile combatants who value precision and speed on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "properties": [
+            "property_finesse",
+            "property_light"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 1000
+}

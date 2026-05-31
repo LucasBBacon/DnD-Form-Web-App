@@ -1,23 +1,25 @@
 {
-    "id": "item_weapon_longsword",
-    "name": "Longsword",
-    "type": "weapon",
-    "weight": 3,
-    "stacking": {
-        "mode": "instance"
-    },
-    "weaponProperties": {
-        "category": "martial_melee",
-        "damageDice": "1d8",
-        "damageType": "slashing",
-        "properties": [
-            "versatile"
-        ],
-        "versatileDamageDice": "1d10",
-        "range": "5 ft"
-    },
-    "lore": {
-        "shortDescription": "A versatile melee weapon that can be used with one or two hands.",
-        "fullText": "A longsword is a versatile melee weapon that can be used with one or two hands. It deals slashing damage and has the versatile property, allowing you to choose between using it with one hand for 1d8 damage or with two hands for 1d10 damage. Longswords are commonly used by knights and warriors who value both offense and defense in combat."
-    }
+  "id": "item_weapon_longsword",
+  "name": "Longsword",
+  "type": "weapon",
+  "weight": 3,
+  "stacking": {
+    "mode": "instance"
+  },
+  "weaponProperties": {
+    "category": "martial_melee",
+    "damageDice": "1d8",
+    "damageType": "slashing",
+    "properties": [
+      "property_versatile"
+    ],
+    "versatileDamageDice": "1d10",
+    "range": "5 ft"
+  },
+  "lore": {
+    "shortDescription": "A versatile melee weapon that can be used with one or two hands.",
+    "fullText": "A longsword is a versatile melee weapon that can be used with one or two hands. It deals slashing damage and has the versatile property, allowing you to choose between using it with one hand for 1d8 damage or with two hands for 1d10 damage. Longswords are commonly used by knights and warriors who value both offense and defense in combat."
+  },
+  "cpCost": 1500
 }
+

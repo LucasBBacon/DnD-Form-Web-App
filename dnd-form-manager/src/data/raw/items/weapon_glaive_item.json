@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_glaive",
+    "name": "Glaive",
+    "type": "weapon",
+    "weight": 6,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A glaive is a polearm weapon that features a long wooden shaft with a single-edged blade attached to the end.",
+        "fullText": "A glaive is a polearm weapon that features a long wooden shaft with a single-edged blade attached to the end. It is designed for sweeping attacks, allowing the wielder to strike multiple opponents in a wide arc. The glaive's reach makes it effective for keeping enemies at bay, while its heavy blade can deliver powerful slashing damage. However, its size and weight require strength and skill to wield effectively in combat."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d10",
+        "damageType": "slashing",
+        "properties": [
+            "property_heavy",
+            "property_reach",
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 2000
+}

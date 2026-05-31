@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_blowgun",
+    "name": "Blowgun",
+    "type": "weapon",
+    "weight": 1,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A martial ranged weapon that propels small projectiles using the user's breath.",
+        "fullText": "A blowgun is a martial ranged weapon that consists of a long, narrow tube through which small projectiles, such as darts or needles, are propelled by the force of the user's breath. Blowguns are often used for hunting small game or as a stealthy weapon in combat. They are typically lightweight and easy to conceal, making them ideal for surprise attacks. The blowgun's effectiveness relies on the user's ability to aim accurately and generate enough force to propel the projectile with sufficient velocity to cause damage."
+    },
+    "weaponProperties": {
+        "category": "martial_ranged",
+        "damageDice": "1",
+        "damageType": "piercing",
+        "properties": [
+            "property_ammunition",
+            "property_loading"
+        ],
+        "range": "25/100 ft",
+        "ammoItemId": "item_ammo_needle"
+    },
+    "cpCost": 1000
+}

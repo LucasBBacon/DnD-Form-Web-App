@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_greatsword",
+    "name": "Greatsword",
+    "type": "weapon",
+    "weight": 6,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A greatsword is a large, two-handed melee weapon that delivers powerful slashing attacks.",
+        "fullText": "A greatsword is a large, two-handed melee weapon that delivers powerful slashing attacks. It features a broad blade that can cleave through armor and strike with devastating force. The greatsword's size and weight require strength and skill to wield effectively in combat, making it a favored choice for warriors who seek to dominate the battlefield with overwhelming power."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "2d6",
+        "damageType": "slashing",
+        "properties": [
+            "property_heavy",
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 5000
+}

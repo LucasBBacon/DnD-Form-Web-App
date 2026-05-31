@@ -1,18 +1,24 @@
 {
-    "id": "item_armor_shield",
-    "name": "Shield",
-    "type": "armor",
-    "weight": 6,
-    "stacking": {
-        "mode": "instance"
+  "id": "item_armor_shield",
+  "name": "Shield",
+  "type": "armor",
+  "weight": 6,
+  "stacking": {
+    "mode": "instance"
+  },
+  "armorProperties": {
+    "acApplication": "bonus",
+    "armorType": "shield",
+    "baseAc": 2,
+    "dexModifier": {
+      "mode": "none"
     },
-    "armorProperties": {
-        "armorType": "shield",
-        "baseAc": 2,
-        "stealthDisadvantage": false
-    },
-    "lore": {
-        "shortDescription": "A shield is made from wood or metal and is carried in one hand.",
-        "fullText": "A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time"
-    }
+    "stealthDisadvantage": false
+  },
+  "lore": {
+    "shortDescription": "A shield is made from wood or metal and is carried in one hand.",
+    "fullText": "A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time"
+  },
+  "cpCost": 1000
 }
+

@@ -114,13 +114,17 @@ const buildCombatActions = () => ({
 });
 
 describe("ActionsBoard", () => {
+  let removeInventoryItemMock: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    removeInventoryItemMock = vi.fn();
 
     vi.mocked(useCombatActions).mockReturnValue(buildCombatActions() as never);
     vi.mocked(useCharacterStore).mockReturnValue({
       expendTraitActionUse: vi.fn(),
       restoreTraitActionUse: vi.fn(),
+      removeInventoryItem: removeInventoryItemMock,
     } as never);
   });
 
@@ -220,5 +224,55 @@ describe("ActionsBoard", () => {
       screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/Damage \(fire\): 5 \(5\)/i)).toBeInTheDocument();
+  });
+
+  it("consumes a thrown weapon on damage roll", () => {
+    vi.mocked(useCombatActions).mockReturnValue({
+      ...buildCombatActions(),
+      sections: {
+        action: [
+          {
+            id: "atk:javelin:thrown",
+            name: "Javelin [Thrown]",
+            section: "action",
+            source: "attack",
+            subtitle: "Weapon Attack",
+            quickStats: ["ATK +4", "1d6 + 2 piercing", "Range 30/120"],
+            description: "Thrown javelin.",
+            isExhausted: false,
+            isThrown: true,
+            throwableItemId: "weapon_javelin",
+            throwableCount: 2,
+            attackRoll: {
+              id: "attack-roll:javelin:thrown",
+              count: 1,
+              sides: 20,
+              modifier: 4,
+              label: "To-Hit",
+            },
+            damageRolls: [
+              {
+                id: "attack-damage:javelin:thrown",
+                count: 1,
+                sides: 6,
+                modifier: 2,
+                label: "Damage (piercing)",
+              },
+            ],
+          },
+        ],
+        bonus_action: [],
+        reaction: [],
+      },
+    } as never);
+
+    render(<ActionsBoard />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Damage (piercing)" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "Roll Damage (piercing)" }),
+    );
+
+    expect(removeInventoryItemMock).toHaveBeenCalledWith("weapon_javelin", 1);
   });
 });

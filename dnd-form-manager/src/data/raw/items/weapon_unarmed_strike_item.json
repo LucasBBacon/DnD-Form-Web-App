@@ -1,0 +1,21 @@
+{
+    "id": "item_weapon_unarmed_strike",
+    "name": "Unarmed Strike",
+    "type": "weapon",
+    "weight": 0,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A basic attack that a character can make without using a weapon.",
+        "fullText": "An unarmed strike is a basic attack that a character can make without using a weapon. It typically involves using a part of the body, such as a fist, foot, head, or other body part, to deliver a blow to an opponent. Unarmed strikes deal bludgeoning damage and are considered simple melee attacks. They can be used in combat when a character does not have a weapon available or chooses to fight without one."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1",
+        "damageType": "bludgeoning",
+        "properties": [],
+        "range": "5 ft"
+    },
+    "cpCost": 0
+}

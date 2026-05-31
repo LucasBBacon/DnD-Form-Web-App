@@ -38,6 +38,44 @@ const createStats = () =>
     },
   }) as any;
 
+const makeProperty = (id: string, name: string) => ({
+  id,
+  name,
+  lore: {
+    shortDescription: `${name} property`,
+    fullText: `${name} property`,
+  },
+});
+
+const makeWeaponProperties = (
+  category: string,
+  propertyIds: string[],
+  overrides: Partial<Record<string, unknown>> = {},
+) => ({
+  category,
+  damageDice: "1d6",
+  damageType: "slashing",
+  properties: propertyIds.map((id) => makeProperty(id, id.replace(/^property_/, "").replace(/_/g, " "))),
+  propertyIds,
+  range: "5 ft",
+  rules: {
+    attackAbility: category.includes("ranged") ? "dex" : propertyIds.includes("property_finesse") ? "choice" : "str",
+    isRangedWeapon: category.includes("ranged"),
+    meleeReachFeet: propertyIds.includes("property_reach") ? 10 : 5,
+    range: category.includes("ranged") ? { normal: 5 } : undefined,
+    thrownRange: propertyIds.includes("property_thrown") && !category.includes("ranged") ? { normal: 20, long: 60 } : undefined,
+    requiresAmmunition: propertyIds.includes("property_ammunition"),
+    loading: propertyIds.includes("property_loading"),
+    light: propertyIds.includes("property_light"),
+    heavy: propertyIds.includes("property_heavy"),
+    twoHanded: propertyIds.includes("property_two_handed"),
+    special: propertyIds.includes("property_special"),
+    finesse: propertyIds.includes("property_finesse"),
+    versatile: propertyIds.includes("property_versatile"),
+    ...overrides,
+  },
+});
+
 describe("evaluatePredicate", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -132,10 +170,10 @@ describe("evaluatePredicate", () => {
 
     it("returns true when an equipped weapon has the target property", () => {
       vi.mocked(getItemById).mockReturnValue({
-        weaponProperties: {
-          category: "martial_melee",
-          properties: ["finesse", "light"],
-        },
+        weaponProperties: makeWeaponProperties("martial_melee", [
+          "property_finesse",
+          "property_light",
+        ]),
       } as any);
 
       const result = evaluatePredicate(
@@ -153,10 +191,7 @@ describe("evaluatePredicate", () => {
 
     it("returns false when no equipped weapons has the target property", () => {
       vi.mocked(getItemById).mockReturnValue({
-        weaponProperties: {
-          category: "simple_melee",
-          properties: ["light"],
-        },
+        weaponProperties: makeWeaponProperties("simple_melee", ["property_light"]),
       } as any);
 
       const result = evaluatePredicate(
@@ -174,10 +209,10 @@ describe("evaluatePredicate", () => {
 
     it("returns true when matching the ranged token against a ranged weapon category", () => {
       vi.mocked(getItemById).mockReturnValue({
-        weaponProperties: {
-          category: "simple_ranged",
-          properties: ["ammunition"],
-        },
+        weaponProperties: makeWeaponProperties("simple_ranged", [
+          "property_ammunition",
+          "property_range",
+        ]),
       } as any);
 
       const result = evaluatePredicate(
@@ -196,16 +231,13 @@ describe("evaluatePredicate", () => {
     it("returns true when only one of multiple equipped weapons satisfies the predicate", () => {
       vi.mocked(getItemById)
         .mockReturnValueOnce({
-          weaponProperties: {
-            category: "simple_melee",
-            properties: ["light"],
-          },
+          weaponProperties: makeWeaponProperties("simple_melee", ["property_light"]),
         } as any)
         .mockReturnValueOnce({
-          weaponProperties: {
-            category: "martial_melee",
-            properties: ["finesse", "reach"],
-          },
+          weaponProperties: makeWeaponProperties("martial_melee", [
+            "property_finesse",
+            "property_reach",
+          ]),
         } as any);
 
       const result = evaluatePredicate(

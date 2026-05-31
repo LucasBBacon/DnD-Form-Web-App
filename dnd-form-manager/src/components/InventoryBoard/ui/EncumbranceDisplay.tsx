@@ -1,5 +1,6 @@
 import type React from "react";
 import "./EncumbranceDisplay.css";
+import { AlertTriangle, Backpack } from "lucide-react";
 
 // #region Interface
 
@@ -20,19 +21,40 @@ export const EncumbranceDisplay: React.FC<EncumbranceDisplayProps> = ({
   totalWeight,
   capacity,
   isEncumbered,
-}) => (
-  <div className={`encumbrance-box ${isEncumbered ? "encumbered" : ""}`}>
-    <span className="section-label">ENCUMBRANCE</span>
-    <div className="weight-tracker">
-      <span className="current-weight">
-        {Math.round(totalWeight * 10) / 10}
-      </span>
-      <span className="max-weight"> / {capacity} lbs</span>
+}) => {
+  const fillPercentage = Math.min((totalWeight / capacity) * 100, 100);
+
+  return (
+    <div className="encumbrance-container">
+      <div className="encumbrance-header">
+        <div className="encumbrance-title">
+          <Backpack size={16} />
+          <span>Carrying Capacity</span>
+        </div>
+
+        <div className="encumbrance-stats">
+          <span className={`weight-text ${isEncumbered ? "is-heavy" : ""}`}>
+            {totalWeight.toFixed(1)} / {capacity}
+          </span>
+
+          {isEncumbered && (
+            <span className="encumbered-warning">
+              <AlertTriangle size={14} /> Encumbered
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="scribe-gauge-track">
+        <div
+          className={`scribe-gauge-fill ${isEncumbered ? "is-heavy" : ""}`}
+          style={{ width: `${fillPercentage}%` }}
+        >
+          <div className="capacity-marker" style={{ left: "100%" }}></div>
+        </div>
+      </div>
     </div>
-    {isEncumbered && (
-      <div className="encumbered-warning">Encumbered (Speed - 10)</div>
-    )}
-  </div>
-);
+  );
+};
 
 // #endregion

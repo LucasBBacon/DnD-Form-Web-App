@@ -12,13 +12,20 @@ import {
   normalizeEquipmentReference,
 } from "../../types/class";
 import { WizardEquipmentSelectionStageView } from "./WizardEquipmentSelectionStageView";
+import { formatCpAsCoinage } from "../../utils/currencyUtils";
 
 /** Resolves a display name for an item ID, falling back gracefully when the
  *  item data does not exist yet. */
+function formatCpCost(cpCost: number): string {
+  return `${formatCpAsCoinage(cpCost)} (${cpCost} CP)`;
+}
+
 function resolveItemLabel(itemId: string, quantity: number): string {
   const itemData = getItemById(itemId);
   if (itemData) {
-    return quantity > 1 ? `${itemData.name} ×${quantity}` : itemData.name;
+    const totalCost = itemData.cpCost * quantity;
+    const quantityLabel = quantity > 1 ? ` ×${quantity}` : "";
+    return `${itemData.name}${quantityLabel} (${formatCpCost(totalCost)})`;
   }
 
   const categoryData = getItemCategoryById(itemId);
@@ -143,7 +150,7 @@ export const WizardEquipmentSelectionStage: React.FC = () => {
                 startingEquipmentCategorySelections[selectionKey] ?? "",
               options: categoryItems.map((categoryItem) => ({
                 id: categoryItem.id,
-                name: categoryItem.name,
+                name: `${categoryItem.name} (${formatCpCost(categoryItem.cpCost)})`,
               })),
               emptyMessage: "No items available in this category.",
               ariaLabel: `Choose item for ${category?.name ?? normalized.refId}`,

@@ -28,6 +28,11 @@
 			"minimum": 0,
 			"description": "Item weight in pounds."
 		},
+		"cpCost": {
+			"type": "number",
+			"minimum": 0,
+			"description": "Item cost in copper pieces."
+		},
 		"lore": {
 			"type": "object",
 			"properties": {
@@ -73,6 +78,14 @@
 		"armorProperties": {
 			"type": "object",
 			"properties": {
+				"acApplication": {
+					"type": "string",
+					"enum": [
+						"set",
+						"bonus"
+					],
+					"description": "How this armor contributes to AC: sets a base AC or adds a bonus."
+				},
 				"armorType": {
 					"type": "string",
 					"enum": [
@@ -87,6 +100,46 @@
 					"type": "number",
 					"description": "Base Armor Class granted by the armor."
 				},
+				"dexModifier": {
+					"type": "object",
+					"properties": {
+						"mode": {
+							"type": "string",
+							"enum": [
+								"full",
+								"capped",
+								"none"
+							],
+							"description": "How Dexterity modifier contributes to AC for this armor."
+						},
+						"cap": {
+							"type": "number",
+							"description": "Maximum Dexterity modifier applied when mode is capped."
+						}
+					},
+					"required": [
+						"mode"
+					],
+					"allOf": [
+						{
+							"if": {
+								"properties": {
+									"mode": {
+										"const": "capped"
+									}
+								},
+								"required": [
+									"mode"
+								]
+							},
+							"then": {
+								"required": [
+									"cap"
+								]
+							}
+						}
+					]
+				},
 				"stealthDisadvantage": {
 					"type": "boolean",
 					"description": "Whether this armor imposes disadvantage on Stealth checks."
@@ -97,8 +150,10 @@
 				}
 			},
 			"required": [
+				"acApplication",
 				"armorType",
 				"baseAc",
+				"dexModifier",
 				"stealthDisadvantage"
 			]
 		},
@@ -132,15 +187,17 @@
 					"items": {
 						"type": "string",
 						"enum": [
-							"finesse",
-							"light",
-							"heavy",
-							"two-handed",
-							"thrown",
-							"ammunition",
-							"versatile",
-							"reach",
-							"loading"
+							"property_ammunition",
+							"property_finesse",
+							"property_heavy",
+							"property_light",
+							"property_loading",
+							"property_range",
+							"property_reach",
+							"property_special",
+							"property_thrown",
+							"property_two_handed",
+							"property_versatile"
 						]
 					},
 					"description": "Rules properties associated with this weapon."
@@ -193,6 +250,7 @@
 		"name",
 		"type",
 		"weight",
+		"cpCost",
 		"lore"
 	],
 	"allOf": [

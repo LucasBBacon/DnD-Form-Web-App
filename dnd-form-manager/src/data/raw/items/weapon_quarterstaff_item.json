@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_quarterstaff",
+    "name": "Quarterstaff",
+    "type": "weapon",
+    "weight": 4,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A versatile, two-handed melee weapon that can also be used with one hand.",
+        "fullText": "A quarterstaff is a versatile, two-handed melee weapon. It can be used with one hand for a lighter attack or with both hands for a more powerful strike."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1d6",
+        "damageType": "bludgeoning",
+        "properties": [
+            "property_versatile"
+        ],
+        "range": "5 ft",
+        "versatileDamageDice": "1d8"
+    },
+    "cpCost": 20
+}
