@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_sling",
+    "name": "Sling",
+    "type": "weapon",
+    "weight": 0,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A simple ranged weapon that hurls small projectiles with a cord.",
+        "fullText": "A sling is a simple ranged weapon that consists of a small pouch attached to two lengths of cord. It is used to hurl small projectiles, such as bullets or stones, at targets. The sling is a basic weapon that deals bludgeoning damage and can be used with the ammunition property, requiring the use of bullets as ammunition. It has a range of 30 feet for normal attacks and up to 120 feet with disadvantage."
+    },
+    "weaponProperties": {
+        "category": "simple_ranged",
+        "damageDice": "1d4",
+        "damageType": "bludgeoning",
+        "properties": [
+            "property_ammunition"
+        ],
+        "range": "30/120 ft",
+        "ammoItemId": "item_ammo_bullet"
+    },
+    "cpCost": 10
+}

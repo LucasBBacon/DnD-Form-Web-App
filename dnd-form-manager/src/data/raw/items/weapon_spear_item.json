@@ -1,0 +1,25 @@
+{
+    "id": "item_weapon_spear",
+    "name": "Spear",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A versatile melee weapon that can be used for both thrusting and throwing.",
+        "fullText": "A spear is a versatile melee weapon that can be used for both thrusting and throwing. It typically consists of a long wooden shaft with a pointed metal tip. In combat, a spear can be used to strike enemies from a distance or to engage in close-quarters combat. The spear's design allows it to be effective for both piercing and slashing attacks, making it a popular choice for characters who want a flexible weapon option."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1d6",
+        "damageType": "piercing",
+        "properties": [
+            "property_thrown",
+            "property_versatile"
+        ],
+        "range": "20/60 ft",
+        "versatileDamageDice": "1d8"
+    },
+    "cpCost": 100
+}

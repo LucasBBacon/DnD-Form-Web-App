@@ -1,24 +1,26 @@
 {
-    "id": "item_weapon_handaxe",
-    "name": "Handaxe",
-    "type": "weapon",
-    "weight": 2,
-    "stacking": {
-        "mode": "stack",
-        "bundleSize": 2
-    },
-    "weaponProperties": {
-        "category": "simple_melee",
-        "damageDice": "1d6",
-        "damageType": "slashing",
-        "properties": [
-            "light",
-            "thrown"
-        ],
-        "range": "20/60 ft"
-    },
-    "lore": {
-        "shortDescription": "A small, easily handled axe that is perfect for close combat and throwing.",
-        "fullText": "A handaxe is a simple melee weapon that is light and easy to handle. It can be used for both chopping and throwing, making it a versatile choice for adventurers. Handaxes deal slashing damage and have the light property, allowing you to use them in one hand and make an additional attack with a different light weapon as a bonus action. Additionally, handaxes have the thrown property, giving them a range of 20 feet for normal attacks and 60 feet for long-range attacks."
-    }
+  "id": "item_weapon_handaxe",
+  "name": "Handaxe",
+  "type": "weapon",
+  "weight": 2,
+  "stacking": {
+    "mode": "stack",
+    "bundleSize": 2
+  },
+  "weaponProperties": {
+    "category": "simple_melee",
+    "damageDice": "1d6",
+    "damageType": "slashing",
+    "properties": [
+      "property_light",
+      "property_thrown"
+    ],
+    "range": "20/60 ft"
+  },
+  "lore": {
+    "shortDescription": "A small, easily handled axe that is perfect for close combat and throwing.",
+    "fullText": "A handaxe is a simple melee weapon that is light and easy to handle. It can be used for both chopping and throwing, making it a versatile choice for adventurers. Handaxes deal slashing damage and have the light property, allowing you to use them in one hand and make an additional attack with a different light weapon as a bonus action. Additionally, handaxes have the thrown property, giving them a range of 20 feet for normal attacks and 60 feet for long-range attacks."
+  },
+  "cpCost": 500
 }
+

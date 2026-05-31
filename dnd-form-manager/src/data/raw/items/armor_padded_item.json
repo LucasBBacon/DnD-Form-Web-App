@@ -1,0 +1,23 @@
+{
+    "id": "item_armor_padded",
+    "name": "Padded Armor",
+    "type": "armor",
+    "weight": 10,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Light armor made of quilted layers of cloth and batting.",
+        "fullText": "Padded armor consists of quilted layers of cloth and batting."
+    },
+    "armorProperties": {
+        "acApplication": "set",
+        "armorType": "light",
+        "baseAc": 11,
+        "dexModifier": {
+            "mode": "full"
+        },
+        "stealthDisadvantage": true
+    },
+    "cpCost": 500
+}

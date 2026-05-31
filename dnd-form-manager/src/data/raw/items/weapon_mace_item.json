@@ -1,20 +1,22 @@
 {
-    "id": "item_weapon_mace",
-    "name": "Mace",
-    "type": "weapon",
-    "weight": 4,
-    "stacking": {
-        "mode": "instance"
-    },
-    "weaponProperties": {
-        "category": "simple_melee",
-        "damageDice": "1d6",
-        "damageType": "bludgeoning",
-        "properties": [],
-        "range": "5 ft"
-    },
-    "lore": {
-        "shortDescription": "A simple melee weapon designed for powerful bludgeoning strikes.",
-        "fullText": "A mace is a simple melee weapon that consists of a heavy head mounted on a shaft, typically made of wood or metal. It is designed to deliver powerful bludgeoning strikes and is effective against armored opponents. Maces come in various shapes and sizes, with some featuring flanged heads for increased damage. They are commonly used by warriors, clerics, and other combatants who prefer a straightforward and reliable weapon for close-quarters combat."
-    }
+  "id": "item_weapon_mace",
+  "name": "Mace",
+  "type": "weapon",
+  "weight": 4,
+  "stacking": {
+    "mode": "instance"
+  },
+  "weaponProperties": {
+    "category": "simple_melee",
+    "damageDice": "1d6",
+    "damageType": "bludgeoning",
+    "properties": [],
+    "range": "5 ft"
+  },
+  "lore": {
+    "shortDescription": "A simple melee weapon designed for powerful bludgeoning strikes.",
+    "fullText": "A mace is a simple melee weapon that consists of a heavy head mounted on a shaft, typically made of wood or metal. It is designed to deliver powerful bludgeoning strikes and is effective against armored opponents. Maces come in various shapes and sizes, with some featuring flanged heads for increased damage. They are commonly used by warriors, clerics, and other combatants who prefer a straightforward and reliable weapon for close-quarters combat."
+  },
+  "cpCost": 500
 }
+

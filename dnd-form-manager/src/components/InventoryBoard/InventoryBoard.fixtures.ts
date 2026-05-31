@@ -2,7 +2,9 @@ import {
   ENCUMBRANCE_FIXTURES,
   INVENTORY_FIXTURES,
 } from "../../fixtures/boardFixtures";
+import type { ArmorProperties } from "../../types/item";
 import type {
+  InventoryBoardItemData,
   InventoryBoardHydratedInstance,
   InventoryBoardHydratedStack,
 } from "./InventoryBoardView";
@@ -39,11 +41,52 @@ export interface InventoryBoardScenario {
 
 // #region Helpers
 
+const buildArmorProperties = (
+  armorType: ArmorProperties["armorType"],
+): ArmorProperties => {
+  switch (armorType) {
+    case "shield":
+      return {
+        acApplication: "bonus",
+        armorType: "shield",
+        baseAc: 2,
+        dexModifier: { mode: "none" },
+        stealthDisadvantage: false,
+      };
+    case "heavy":
+      return {
+        acApplication: "set",
+        armorType: "heavy",
+        baseAc: 16,
+        dexModifier: { mode: "none" },
+        stealthDisadvantage: true,
+        strengthRequirement: 13,
+      };
+    case "medium":
+      return {
+        acApplication: "set",
+        armorType: "medium",
+        baseAc: 14,
+        dexModifier: { mode: "capped", cap: 2 },
+        stealthDisadvantage: false,
+      };
+    case "light":
+    default:
+      return {
+        acApplication: "set",
+        armorType: "light",
+        baseAc: 11,
+        dexModifier: { mode: "full" },
+        stealthDisadvantage: false,
+      };
+  }
+};
+
 const toInstance = (
   instance: (typeof INVENTORY_FIXTURES)[keyof typeof INVENTORY_FIXTURES]["instances"][number],
-  type: string,
+  type: InventoryBoardItemData["type"],
   shortDescription: string,
-  armorType?: string,
+  armorType?: ArmorProperties["armorType"],
   requiresAttunement?: boolean,
 ): InventoryBoardHydratedInstance => ({
   instanceId: instance.instanceId,
@@ -52,10 +95,13 @@ const toInstance = (
     name: instance.itemData?.name ?? instance.baseItemId,
     type,
     weight: instance.itemData?.weight ?? 0,
+    cpCost: instance.itemData?.cpCost ?? 0,
     lore: {
       shortDescription,
     },
-    ...(armorType ? { armorProperties: { armorType } } : {}),
+    ...(armorType
+      ? { armorProperties: buildArmorProperties(armorType) }
+      : {}),
     ...(requiresAttunement
       ? { magicItemProperties: { requiresAttunement: true } }
       : {}),
@@ -71,8 +117,9 @@ const toStack = (
   quantity: stack.quantity,
   itemData: {
     name: stack.itemData?.name ?? stack.baseItemId,
-    type: "adventuring_gear",
+    type: "gear",
     weight: stack.itemData?.weight ?? 0,
+    cpCost: stack.itemData?.cpCost ?? 0,
     lore: {
       shortDescription,
     },

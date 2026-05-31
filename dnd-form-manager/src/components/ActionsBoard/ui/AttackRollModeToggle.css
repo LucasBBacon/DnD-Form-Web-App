@@ -34,3 +34,23 @@
   background: #dbeafe;
   color: #1d4ed8;
 }
+
+/* Locked / disabled state (e.g. heavy weapon + small character) */
+.attack-roll-mode-group.locked {
+  opacity: 0.8;
+  border-color: #fca5a5;
+  background: #fff1f2;
+}
+
+.attack-roll-mode-option.disabled {
+  cursor: not-allowed;
+  color: #9ca3af;
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.attack-roll-mode-option.disabled.selected {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}

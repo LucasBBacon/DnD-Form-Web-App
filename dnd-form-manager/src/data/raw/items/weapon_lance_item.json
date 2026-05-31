@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_lance",
+    "name": "Lance",
+    "type": "weapon",
+    "weight": 6,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A lance is a long pole weapon designed for mounted combat.",
+        "fullText": "A lance is a long pole weapon designed for mounted combat. It features a sharp, pointed tip that can be used for thrusting attacks while the wielder is on horseback. The lance's reach allows the rider to strike enemies from a distance, making it an effective weapon for charging into battle. However, its specialized use and the need for a mount make it less versatile than other polearms."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d12",
+        "damageType": "piercing",
+        "properties": [
+            "property_reach",
+            "property_special"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 1000
+}

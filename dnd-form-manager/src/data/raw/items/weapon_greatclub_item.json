@@ -1,0 +1,23 @@
+{
+    "id": "item_weapon_greatclub",
+    "name": "Greatclub",
+    "type": "weapon",
+    "weight": 10,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A large, heavy wooden weapon that is typically used with two hands.",
+        "fullText": "A greatclub is a large, heavy wooden weapon that is typically used with two hands. It deals bludgeoning damage and is often favored by characters who rely on brute strength. The greatclub's size and weight make it less versatile than smaller weapons, but it can deliver powerful blows to enemies."
+    },
+    "weaponProperties": {
+        "category": "simple_melee",
+        "damageDice": "1d8",
+        "damageType": "bludgeoning",
+        "properties": [
+            "property_two_handed"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 20
+}

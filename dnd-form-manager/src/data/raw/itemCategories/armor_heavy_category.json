@@ -2,6 +2,9 @@
     "id": "category_armor_heavy",
     "name": "Heavy Armor",
     "itemIds": [
-        "item_armor_chain_mail"
+        "item_armor_ring_mail",
+        "item_armor_chain_mail",
+        "item_armor_splint",
+        "item_armor_plate"
     ]
 }

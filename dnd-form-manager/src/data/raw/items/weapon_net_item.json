@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_net",
+    "name": "Net",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A weapon designed to entangle and restrain targets, often used by hunters and trappers.",
+        "fullText": "A net is a weapon designed to entangle and restrain targets. It is typically made of strong, flexible material and can be thrown to capture creatures or opponents. The net's unique properties allow it to immobilize targets, making it a useful tool for hunters, trappers, and those who prefer non-lethal methods of subduing foes. When thrown, the net can cover a wide area, making it effective for capturing multiple targets at once or for ensnaring larger creatures."
+    },
+    "weaponProperties": {
+        "category": "martial_ranged",
+        "damageDice": "0",
+        "damageType": "",
+        "properties": [
+            "property_special",
+            "property_thrown"
+        ],
+        "range": "5/15 ft"
+    },
+    "cpCost": 100
+}

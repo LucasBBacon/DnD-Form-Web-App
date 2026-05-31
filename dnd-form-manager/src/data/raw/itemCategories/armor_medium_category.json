@@ -2,6 +2,10 @@
   "id": "category_armor_medium",
   "name": "Medium Armor",
   "itemIds": [
-    "item_armor_scale_mail"
+    "item_armor_hide",
+    "item_armor_chain_mail",
+    "item_armor_scale_mail",
+    "item_armor_breastplate",
+    "item_armor_half_plate"
   ]
 }

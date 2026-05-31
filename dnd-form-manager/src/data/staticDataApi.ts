@@ -19,6 +19,10 @@ import rawFeatsData from "./feats.json";
 import rawTraitsData from "./traits.json"
 import rawActionsData from "./actions.json";
 import { normalizeSpells } from "./spellNormalizer";
+import {
+  getAllWeaponProperties,
+  getWeaponPropertyById,
+} from "./weaponNormalizer";
 
 // region Race API
 const racesArray = rawRacesData as unknown as Race[];
@@ -209,6 +213,8 @@ export const getActionsByIds = (ids: string[]): ActionData[] => {
 export const getAllActions = (): ActionData[] => {
   return actionsArray;
 };
+
+export { getAllWeaponProperties, getWeaponPropertyById };
 
 // Mock getter
 // export const getTraitsByIds = (ids: string[]) => {

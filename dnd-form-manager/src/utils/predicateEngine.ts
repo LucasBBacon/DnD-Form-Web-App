@@ -2,7 +2,6 @@ import { getItemById } from "../data/staticDataApi";
 import type { CharacterStatsContext } from "../hooks/useCharacterStats";
 import type { useCharacterStore } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
-import type { WeaponProperty } from "../types/item";
 import type { Predicate } from "../types/predicate";
 import { resolveInstance } from "./inventoryUtils";
 import { getAllCharacterTraits } from "./traitUtils";
@@ -32,6 +31,13 @@ const warnInvalidRequiresTraitPredicate = (predicate: Predicate): void => {
   }
 };
 
+const normalizeWeaponPropertyToken = (value: string): string =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/^property_/, "")
+    .replace(/[\s_]+/g, "-");
+
 const hasEquippedWeaponProperty = (
   state: ReturnType<typeof useCharacterStore.getState>,
   propertyTarget: string,
@@ -42,11 +48,18 @@ const hasEquippedWeaponProperty = (
     const weapon = getItemById(instance.baseItemId);
     if (!weapon?.weaponProperties) return false;
     if (propertyTarget === "ranged") {
-      return weapon.weaponProperties.category.includes("ranged");
+      return weapon.weaponProperties.rules.isRangedWeapon;
     }
-    return weapon.weaponProperties.properties.includes(
-      propertyTarget as WeaponProperty,
-    );
+    const normalizedTarget = normalizeWeaponPropertyToken(propertyTarget);
+
+    return weapon.weaponProperties.properties.some((property) => {
+      const normalizedId = normalizeWeaponPropertyToken(property.id);
+      const normalizedName = normalizeWeaponPropertyToken(property.name);
+      return (
+        normalizedTarget === normalizedId ||
+        normalizedTarget === normalizedName
+      );
+    });
   });
 
 export const evaluatePredicate = (

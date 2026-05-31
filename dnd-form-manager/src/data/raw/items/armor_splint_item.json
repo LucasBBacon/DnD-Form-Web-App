@@ -1,0 +1,24 @@
+{
+    "id": "item_armor_splint",
+    "name": "Splint Armor",
+    "type": "armor",
+    "weight": 60,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Heavy armor made of narrow vertical strips of metal riveted to a backing of leather.",
+        "fullText": "This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints."
+    },
+    "armorProperties": {
+        "armorType": "heavy",
+        "acApplication": "set",
+        "baseAc": 17,
+        "dexModifier": {
+            "mode": "none"
+        },
+        "stealthDisadvantage": true,
+        "strengthRequirement": 15
+    },
+    "cpCost": 20000
+}

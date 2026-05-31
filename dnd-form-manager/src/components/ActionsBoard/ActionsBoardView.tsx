@@ -4,6 +4,16 @@ import { DiceRoller } from "../ui/DiceRoller/DiceRoller";
 import { CostPips } from "./ui/CostPips";
 import { SpellSlotHud } from "./ui/SpellSlotHud";
 import { AttackRollModeToggle } from "./ui/AttackRollModeToggle";
+import { WeaponPropertyBadges } from "./ui/WeaponPropertyBadges";
+import { AmmoIndicator } from "./ui/AmmoIndicator";
+import {
+  RangeDistancePicker,
+  type AttackRangeSelection,
+} from "./ui/RangeDistancePicker";
+import {
+  VersatileModeToggle,
+  type VersatileMode,
+} from "./ui/VersatileModeToggle";
 import type {
   CombatActionSection,
   CombatActionEntry,
@@ -62,6 +72,10 @@ export interface ActionsBoardViewProps {
   } | null;
   /** Attack roll modes for each entry */
   attackRollModes: Record<string, "normal" | "advantage" | "disadvantage">;
+  /** Range selection (normal/long) for each ranged attack entry */
+  attackRangeSelections?: Record<string, AttackRangeSelection>;
+  /** Versatile mode selection (one-handed/two-handed) for each versatile attack entry */
+  versatileModeSelections?: Record<string, VersatileMode>;
   /** Roll results for each entry */
   rollResultsByEntry: Record<
     string,
@@ -85,6 +99,13 @@ export interface ActionsBoardViewProps {
     entryId: string,
     mode: "normal" | "advantage" | "disadvantage",
   ) => void;
+  /** Callback when an attack range selection changes */
+  onAttackRangeChange?: (
+    entryId: string,
+    selection: AttackRangeSelection,
+  ) => void;
+  /** Callback when a versatile mode selection changes */
+  onVersatileModeChange?: (entryId: string, mode: VersatileMode) => void;
   /** Callback when an attack result is available */
   onAttackResult: (
     entryId: string,
@@ -99,6 +120,8 @@ export interface ActionsBoardViewProps {
     config: CombatRollMetadata,
     rollTotal: number,
   ) => void;
+  /** Callback when ammunition is consumed (fired or expended) */
+  onAmmoConsume?: (ammoItemId: string, quantity: number) => void;
   /** Callback when a trait use is expended */
   onExpendTraitUse: (traitId: string) => void;
   /** Callback when a trait use is restored */
@@ -134,11 +157,16 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   sections,
   activeRoller,
   attackRollModes,
+  attackRangeSelections = {},
+  versatileModeSelections = {},
   rollResultsByEntry,
   onActiveRollerChange,
   onAttackRollModeChange,
+  onAttackRangeChange = () => {},
+  onVersatileModeChange = () => {},
   onAttackResult,
   onDamageResult,
+  onAmmoConsume = () => {},
   onExpendTraitUse,
   onRestoreTraitUse,
   spellChoiceEntryId = null,
@@ -148,8 +176,22 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
   onCancelSpellSlotChoice = () => {},
   toRomanNumeral,
 }) => {
-  const getAttackRollMode = (entryId: string) =>
-    attackRollModes[entryId] ?? "normal";
+  const getAttackRollMode = (entryId: string, heavyDisadvantage?: boolean) => {
+    if (heavyDisadvantage) return "disadvantage" as const;
+    return attackRollModes[entryId] ?? ("normal" as const);
+  };
+
+  const getAttackRangeSelection = (entry: CombatActionEntry) => {
+    const selected = attackRangeSelections[entry.id] ?? "normal";
+    if (selected === "long" && typeof entry.rangeInfo?.long !== "number") {
+      return "normal" as const;
+    }
+    return selected;
+  };
+
+  const getVersatileModeSelection = (entryId: string) => {
+    return versatileModeSelections[entryId] ?? ("one-handed" as const);
+  };
 
   return (
     <section className="actions-board-container card">
@@ -241,6 +283,60 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         ))}
                       </div>
 
+                      {entry.source === "attack" &&
+                        (entry.weaponProperties ?? []).length > 0 && (
+                          <WeaponPropertyBadges
+                            properties={entry.weaponProperties!}
+                          />
+                        )}
+
+                      {entry.source === "attack" && entry.ammo != null && (
+                        <AmmoIndicator ammo={entry.ammo} />
+                      )}
+
+                      {entry.source === "attack" &&
+                        entry.isThrown &&
+                        entry.throwableCount != null && (
+                          <p className="throwable-count-note">
+                            <span className="throwable-count-badge" role="note">
+                              Thrown remaining: {entry.throwableCount}
+                            </span>
+                          </p>
+                        )}
+
+                      {entry.source === "attack" && entry.hasReachProperty && (
+                        <p className="reach-modifier-note">
+                          <span className="reach-modifier-badge">
+                            Reach: {entry.meleeReachFeet ?? 10} ft
+                          </span>
+                        </p>
+                      )}
+
+                      {entry.source === "attack" && entry.rangeInfo && (
+                        <RangeDistancePicker
+                          entryId={entry.id}
+                          rangeInfo={entry.rangeInfo}
+                          value={getAttackRangeSelection(entry)}
+                          onChange={(selection) =>
+                            onAttackRangeChange(entry.id, selection)
+                          }
+                        />
+                      )}
+
+                      {entry.source === "attack" &&
+                        entry.versatileDamageDice &&
+                        entry.baseDamageDice && (
+                          <VersatileModeToggle
+                            entryId={entry.id}
+                            baseDamageDice={entry.baseDamageDice}
+                            versatileDamageDice={entry.versatileDamageDice}
+                            value={getVersatileModeSelection(entry.id)}
+                            onChange={(mode) =>
+                              onVersatileModeChange(entry.id, mode)
+                            }
+                          />
+                        )}
+
                       {entry.description && (
                         <p className="combat-action-description">
                           {entry.description}
@@ -309,10 +405,19 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
 
                       {!!entry.attackRoll && (
                         <div className="combat-roll-row">
+                          {entry.heavyDisadvantage && (
+                            <span
+                              className="heavy-disadvantage-badge"
+                              title="Heavy weapons cannot be used effectively by Small creatures. Attack rolls are locked to Disadvantage."
+                            >
+                              ⚠ Heavy (Small)
+                            </span>
+                          )}
                           <AttackRollModeToggle
                             entryId={entry.id}
-                            mode={getAttackRollMode(entry.id)}
+                            mode={getAttackRollMode(entry.id, entry.heavyDisadvantage)}
                             label={`${entry.name} to-hit mode`}
+                            disabled={entry.heavyDisadvantage}
                             onChange={(mode) =>
                               onAttackRollModeChange(entry.id, mode)
                             }
@@ -410,7 +515,7 @@ export const ActionsBoardView: React.FC<ActionsBoardViewProps> = ({
                         activeRoller.kind === "attack" && (
                           <div className="combat-roll-roller-wrap">
                             {(() => {
-                              const mode = getAttackRollMode(entry.id);
+                              const mode = getAttackRollMode(entry.id, entry.heavyDisadvantage);
                               return (
                                 <DiceRoller
                                   count={mode === "normal" ? 1 : 2}

@@ -1,0 +1,21 @@
+{
+    "id": "item_weapon_morningstar",
+    "name": "Morningstar",
+    "type": "weapon",
+    "weight": 4,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A martial melee weapon that features a spiked ball attached to a wooden or metal shaft.",
+        "fullText": "A morningstar is a melee weapon that features a spiked ball attached to a wooden or metal shaft. It is designed to deliver powerful piercing attacks, making it effective against armored opponents. The morningstar's unique design allows it to bypass certain types of armor, making it a favored choice for warriors who seek to strike with precision and force on the battlefield."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d8",
+        "damageType": "piercing",
+        "properties": [],
+        "range": "5 ft"
+    },
+    "cpCost": 1500
+}

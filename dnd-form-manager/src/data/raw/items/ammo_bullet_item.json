@@ -1,0 +1,15 @@
+{
+    "id": "item_ammo_bolt",
+    "name": "Sling Bolt",
+    "type": "gear",
+    "weight": 0.075,
+    "stacking": {
+        "mode": "stack",
+        "bundleSize": 20
+    },
+    "cpCost": 0.2,
+    "lore": {
+        "shortDescription": "A small, round projectile used as ammunition for slings.",
+        "fullText": "A small, round projectile used as ammunition for slings. This entry is descriptive and is used for ammunition checks and carried-weight calculations."
+    }
+}

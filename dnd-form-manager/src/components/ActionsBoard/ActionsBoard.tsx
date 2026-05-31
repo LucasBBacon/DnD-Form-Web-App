@@ -5,6 +5,8 @@ import {
   type CombatRollMetadata,
 } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
+import type { AttackRangeSelection } from "./ui/RangeDistancePicker";
+import type { VersatileMode } from "./ui/VersatileModeToggle";
 import { ActionsBoardView } from "./ActionsBoardView";
 
 /**
@@ -21,6 +23,8 @@ export const ActionsBoard: React.FC = () => {
     restoreTraitActionUse,
     expendSpellSlot,
     expendPactSlot,
+    removeInventoryItem,
+    setWeaponVersatileMode,
   } = useCharacterStore();
 
   const [activeRoller, setActiveRoller] = useState<{
@@ -30,6 +34,12 @@ export const ActionsBoard: React.FC = () => {
   } | null>(null);
   const [attackRollModes, setAttackRollModes] = useState<
     Record<string, "normal" | "advantage" | "disadvantage">
+  >({});
+  const [attackRangeSelections, setAttackRangeSelections] = useState<
+    Record<string, AttackRangeSelection>
+  >({});
+  const [versatileModeSelections, setVersatileModeSelections] = useState<
+    Record<string, VersatileMode>
   >({});
   const [rollResultsByEntry, setRollResultsByEntry] = useState<
     Record<string, { attack?: string; damage: Record<string, string> }>
@@ -44,10 +54,6 @@ export const ActionsBoard: React.FC = () => {
   // #endregion
 
   // #region Handlers and Memoized Values
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const getAttackRollMode = (entryId: string) =>
-    attackRollModes[entryId] ?? "normal";
 
   const formatModifier = (modifier: number): string => {
     if (modifier === 0) return "";
@@ -119,6 +125,40 @@ export const ActionsBoard: React.FC = () => {
         },
       };
     });
+
+    // Resource consumption: ammo and thrown weapons decrement when damage is rolled.
+    const allEntries = Object.values(sections).flat();
+    const entry = allEntries.find((e) => e.id === entryId);
+    if (entry?.ammo?.id && (entry.ammo.count ?? 0) > 0) {
+      removeInventoryItem(entry.ammo.id, 1);
+    }
+
+    if (entry?.isThrown && entry.throwableItemId) {
+      const remaining = entry.throwableCount;
+      if (remaining == null || remaining > 0) {
+        removeInventoryItem(entry.throwableItemId, 1);
+      }
+    }
+  };
+
+  const handleVersatileModeChange = (
+    entryId: string,
+    mode: VersatileMode,
+  ) => {
+    // Find the entry to get the instanceId
+    const allEntries = Object.values(sections).flat();
+    const entry = allEntries.find((e) => e.id === entryId);
+    
+    if (entry?.instanceId) {
+      // Update the instance in the store with new versatile mode
+      setWeaponVersatileMode(entry.instanceId, mode);
+    }
+    
+    // Update local state for UI
+    setVersatileModeSelections((prev) => ({
+      ...prev,
+      [entryId]: mode,
+    }));
   };
 
   const slotHud = useMemo(() => {
@@ -221,13 +261,27 @@ export const ActionsBoard: React.FC = () => {
       sections={sections}
       activeRoller={activeRoller}
       attackRollModes={attackRollModes}
+      attackRangeSelections={attackRangeSelections}
+      versatileModeSelections={versatileModeSelections}
       rollResultsByEntry={rollResultsByEntry}
       onActiveRollerChange={setActiveRoller}
       onAttackRollModeChange={(entryId, mode) => {
+        // Heavy entries are locked to disadvantage — ignore any override
+        const allEntries = Object.values(sections).flat();
+        const entry = allEntries.find((e) => e.id === entryId);
+        if (entry?.heavyDisadvantage) return;
         setAttackRollModes((prev) => ({ ...prev, [entryId]: mode }));
       }}
+      onAttackRangeChange={(entryId, rangeSelection) => {
+        setAttackRangeSelections((prev) => ({
+          ...prev,
+          [entryId]: rangeSelection,
+        }));
+      }}
+      onVersatileModeChange={handleVersatileModeChange}
       onAttackResult={setAttackResult}
       onDamageResult={setDamageResult}
+      onAmmoConsume={removeInventoryItem}
       onExpendTraitUse={expendTraitActionUse}
       onRestoreTraitUse={restoreTraitActionUse}
       spellChoiceEntryId={spellChoiceEntryId}

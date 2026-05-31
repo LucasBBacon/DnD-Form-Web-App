@@ -1,0 +1,24 @@
+{
+    "id": "item_weapon_whip",
+    "name": "Whip",
+    "type": "weapon",
+    "weight": 3,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "A martial melee weapon that consists of a long, flexible length of leather or similar material.",
+        "fullText": "A whip is a martial melee weapon that consists of a long, flexible length of leather or similar material. It is designed for slashing attacks and has the unique property of being able to strike targets at a distance, making it an effective weapon for keeping enemies at bay. The whip's flexibility allows it to bypass certain types of armor and strike with precision, making it a favored choice for agile warriors who rely on speed and finesse in combat."
+    },
+    "weaponProperties": {
+        "category": "martial_melee",
+        "damageDice": "1d4",
+        "damageType": "slashing",
+        "properties": [
+            "property_finesse",
+            "property_reach"
+        ],
+        "range": "5 ft"
+    },
+    "cpCost": 200
+}

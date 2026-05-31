@@ -1,0 +1,23 @@
+{
+    "id": "item_armor_studded_leather",
+    "name": "Studded Leather Armor",
+    "type": "armor",
+    "weight": 13,
+    "stacking": {
+        "mode": "instance"
+    },
+    "lore": {
+        "shortDescription": "Light armor made from tough leather reinforced with metal studs.",
+        "fullText": "Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes."
+    },
+    "armorProperties": {
+        "armorType": "light",
+        "acApplication": "set",
+        "baseAc": 12,
+        "dexModifier": {
+            "mode": "full"
+        },
+        "stealthDisadvantage": false
+    },
+    "cpCost": 4500
+}

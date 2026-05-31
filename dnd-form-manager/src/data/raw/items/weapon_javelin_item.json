@@ -1,23 +1,25 @@
 {
-    "id": "item_weapon_javelin",
-    "name": "Javelin",
-    "type": "weapon",
-    "weight": 2,
-    "stacking": {
-        "mode": "stack",
-        "bundleSize": 4
-    },
-    "weaponProperties": {
-        "category": "simple_melee",
-        "damageDice": "1d6",
-        "damageType": "piercing",
-        "properties": [
-            "thrown"
-        ],
-        "range": "30/120 ft"
-    },
-    "lore": {
-        "shortDescription": "A light spear designed for throwing, ideal for ranged combat.",
-        "fullText": "A javelin is a simple melee weapon that is designed for throwing. It consists of a wooden shaft with a pointed metal tip. Javelins are typically used as ranged weapons, allowing you to attack from a distance. When thrown, a javelin can deal piercing damage to a target. The javelin has the thrown property, giving it a range of 30 feet for normal attacks and 120 feet for long-range attacks. Additionally, you can use a javelin as a melee weapon, dealing the same damage as when thrown."
-    }
+  "id": "item_weapon_javelin",
+  "name": "Javelin",
+  "type": "weapon",
+  "weight": 2,
+  "stacking": {
+    "mode": "stack",
+    "bundleSize": 4
+  },
+  "weaponProperties": {
+    "category": "simple_melee",
+    "damageDice": "1d6",
+    "damageType": "piercing",
+    "properties": [
+      "property_thrown"
+    ],
+    "range": "30/120 ft"
+  },
+  "lore": {
+    "shortDescription": "A light spear designed for throwing, ideal for ranged combat.",
+    "fullText": "A javelin is a simple melee weapon that is designed for throwing. It consists of a wooden shaft with a pointed metal tip. Javelins are typically used as ranged weapons, allowing you to attack from a distance. When thrown, a javelin can deal piercing damage to a target. The javelin has the thrown property, giving it a range of 30 feet for normal attacks and 120 feet for long-range attacks. Additionally, you can use a javelin as a melee weapon, dealing the same damage as when thrown."
+  },
+  "cpCost": 50
 }
+

@@ -3,11 +3,14 @@ import {
   getActionById,
   getActionsByIds,
   getAllItemCategories,
+  getAllWeaponProperties,
   getAllSpells,
   getItemCategoryById,
+  getItemById,
   getItemsByCategory,
   getRaceById,
   getSpellByID,
+  getWeaponPropertyById,
   getTraitById,
   getTraitsByIds,
   getSubracesForRace,
@@ -80,6 +83,47 @@ describe("Item categories static API", () => {
 
   it("returns empty for unknown category id", () => {
     expect(getItemsByCategory("category_missing")).toEqual([]);
+  });
+});
+
+describe("Weapon properties static API", () => {
+  it("resolves weapon property catalog entries by id", () => {
+    const finesse = getWeaponPropertyById("property_finesse");
+
+    expect(finesse).not.toBeNull();
+    expect(finesse?.name).toBe("Finesse");
+    expect(finesse?.lore.shortDescription).toContain("Dexterity");
+  });
+
+  it("returns the full weapon property catalog", () => {
+    const properties = getAllWeaponProperties();
+
+    expect(properties.map((property) => property.id)).toContain(
+      "property_reach",
+    );
+  });
+
+  it("exposes normalized compiled weapon data", () => {
+    const dagger = getItemById("item_weapon_dagger");
+
+    expect(dagger?.weaponProperties?.propertyIds).toEqual([
+      "property_finesse",
+      "property_light",
+      "property_thrown",
+    ]);
+    expect(dagger?.weaponProperties?.properties.map((property) => property.name)).toEqual([
+      "Finesse",
+      "Light",
+      "Thrown",
+    ]);
+    expect(dagger?.weaponProperties?.rules).toMatchObject({
+      attackAbility: "choice",
+      meleeReachFeet: 5,
+      thrownRange: { normal: 20, long: 60 },
+      requiresAmmunition: false,
+      finesse: true,
+      light: true,
+    });
   });
 });
 

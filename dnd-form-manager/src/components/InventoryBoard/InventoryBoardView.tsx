@@ -1,6 +1,10 @@
 import type React from "react";
 import "./InventoryBoard.css";
 import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
+import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
+import { InventoryLedgerCard } from "./ui/InventoryLedgerCard";
+import type { ItemStackingRules, WeaponProperties } from "../../types/item";
+import { WealthTracker } from "./ui/WealthTracker";
 
 // #region Interfaces
 
@@ -8,21 +12,43 @@ export interface InventoryBoardItemData {
   /** The name of the item */
   name: string;
   /** The type of the item (e.g., weapon, armor) */
-  type: string;
+  type: "gear" | "weapon" | "armor" | "tool" | "magic_item";
   /** The weight of the item */
   weight: number;
+  /** Item cost in copper pieces */
+  cpCost: number;
+
   /** Lore information about the item */
   lore: {
     /** A short description of the item */
     shortDescription: string;
+    /** The main bod of text for the item */
+    fullText?: string;
   };
+
+  stacking?: ItemStackingRules;
+
   /** Armor properties of the item */
   armorProperties?: {
+    acApplication: "set" | "bonus";
     /** The type of armor (e.g., light, medium, heavy) */
     armorType: string;
+    baseAc: number;
+    dexModifier: {
+      mode: "full" | "capped" | "none";
+      cap?: number;
+    };
+    stealthDisadvantage: boolean;
+    strengthRequirement?: number;
   };
+
+  weaponProperties?: WeaponProperties;
+
   /** Magic item properties of the item */
   magicItemProperties?: {
+    bonusToAttack?: number;
+    bonusToDamage?: number;
+    bonusToAc?: number;
     /** Indicates if the item requires attunement */
     requiresAttunement?: boolean;
   };
@@ -49,8 +75,6 @@ export interface InventoryBoardHydratedStack {
 }
 
 export interface InventoryBoardViewProps {
-  /** The view for displaying wealth */
-  wealthView?: React.ReactNode;
   /** The encumbrance information */
   encumbrance: {
     /** The total weight of the inventory */
@@ -98,7 +122,6 @@ export interface InventoryBoardViewProps {
 // #region View Component
 
 export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
-  wealthView,
   encumbrance,
   missingItemIds,
   instances,
@@ -114,35 +137,44 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   onStackIncrement,
   onStackDecrement,
 }) => {
+  const formatItemCost = (cpCost: number): string =>
+    formatCpAsMaxCoinValue(cpCost);
+
   return (
-    <section className="inventory-board card">
-      <div className="inventory-header">
-        {wealthView}
+    <div className="inventory-board-container">
+      {/* Sticky Dashboard */}
+      <div className="inventory-dashboard-sticky">
+        <h2 className="manuscript-section-title">Inventory & Wealth</h2>
+
+        <WealthTracker />
         <EncumbranceDisplay
           totalWeight={encumbrance.totalWeight}
           capacity={encumbrance.capacity}
           isEncumbered={encumbrance.isEncumbered}
         />
+
+        <hr className="ornate-board-divider" />
       </div>
 
-      <hr className="divider" />
+      {/* Scrollable Ledger */}
 
-      {missingItemIds.length > 0 && (
-        <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
-          {missingItemIds.map((itemId) => (
-            <div key={`missing-item-${itemId}`}>
-              Missing equipment reference: {itemId}
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="inventory-ledger-scroll-area">
+        {missingItemIds.length > 0 && (
+          <div className="encumbered-warning" style={{ marginBottom: "1rem" }}>
+            {missingItemIds.map((itemId) => (
+              <div key={`missing-item-${itemId}`}>
+                Missing equipment reference: {itemId}
+              </div>
+            ))}
+          </div>
+        )}
 
-      <div className="inventory-section">
-        <h3 className="section-title">EQUIPMENT & ATTUNEMENT</h3>
         {instances.length === 0 ? (
-          <p className="empty-state">No equipment.</p>
+          <p className="empty-inventory-state">
+            <span className="empty-text">Your pack is empty.</span>
+          </p>
         ) : (
-          <div className="item-list">
+          <div className="ledger-list">
             {instances.map(({ instanceId, itemData }) => {
               const isWeapon = itemData.type === "weapon";
               const isArmor = itemData.type === "armor";
@@ -157,104 +189,53 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
                     ? equippedArmorInstanceId === instanceId
                     : false;
 
-              const requiresAttunement =
-                itemData.magicItemProperties?.requiresAttunement;
               const isAttuned = attunedInstanceIds.includes(instanceId);
 
               return (
-                <div
+                <InventoryLedgerCard
                   key={instanceId}
-                  className={`item-row ${isEquipped ? "equipped" : ""}`}
-                >
-                  <div className="item-info">
-                    <span className="item-name">{itemData.name}</span>
-                    <span className="item-meta">
-                      {itemData.type.replace("_", " ").toUpperCase()} •{" "}
-                      {itemData.weight} lbs
-                    </span>
-                  </div>
-
-                  <div className="item-actions">
-                    {requiresAttunement && (
-                      <button
-                        className={`action-btn attune-btn ${isAttuned ? "active" : ""}`}
-                        onClick={() =>
-                          onToggleAttunement(instanceId, isAttuned)
-                        }
-                        disabled={!isAttuned && attunedInstanceIds.length >= 3}
-                        title="Attunement (Max 3)"
-                      >
-                        {isAttuned ? "ATTUNED" : "Attune"}
-                      </button>
-                    )}
-
-                    {(isWeapon || isArmor) && (
-                      <button
-                        className={`action-btn equip-btn ${isEquipped ? "active" : ""}`}
-                        onClick={() =>
-                          isWeapon
-                            ? onToggleWeaponEquip(instanceId, isEquipped)
-                            : onToggleArmorEquip(
-                                instanceId,
-                                isEquipped,
-                                itemData.armorProperties?.armorType ?? "",
-                              )
-                        }
-                      >
-                        {isEquipped ? "EQUIPPED" : "Equip"}
-                      </button>
-                    )}
-
-                    <button
-                      className="action-btn drop-btn"
-                      onClick={() => onDropInstance(instanceId)}
-                      title="Remove from inventory"
-                    >
-                      Drop
-                    </button>
-                  </div>
-                </div>
+                  entityId={instanceId}
+                  itemData={itemData}
+                  isEquipped={isEquipped}
+                  isAttuned={isAttuned}
+                  attunedInstanceIds={attunedInstanceIds}
+                  onToggleAttunement={onToggleAttunement}
+                  onToggleEquip={(id, equipped, armorType) => {
+                    if (isWeapon) {
+                      onToggleWeaponEquip(id, equipped);
+                    } else if (isArmor && armorType) {
+                      onToggleArmorEquip(id, equipped, armorType);
+                    }
+                  }}
+                  onDropItem={(id) => onDropInstance(id)}
+                  formatItemCost={formatItemCost}
+                />
               );
             })}
-          </div>
-        )}
-      </div>
-
-      <div className="inventory-section">
-        <h3 className="section title">BACKPACK (GEAR & CONSUMABLES)</h3>
-        {stacks.length === 0 ? (
-          <p className="empty-state">Backpack is empty.</p>
-        ) : (
-          <div className="item-list">
-            {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
-              <div key={stackId} className="item-row stack-row">
-                <div className="item-info">
-                  <span className="item-name">{itemData.name}</span>
-                  <span className="item-meta">
-                    {itemData.lore.shortDescription}
-                  </span>
-                </div>
-
-                <div className="stack-actions">
-                  <span className="item-weight">
-                    {itemData.weight * quantity} lbs total
-                  </span>
-                  <div className="quantity-control">
-                    <button onClick={() => onStackDecrement(baseItemId)}>
-                      -
-                    </button>
-                    <span className="quantity-display">{quantity}</span>
-                    <button onClick={() => onStackIncrement(baseItemId)}>
-                      +
-                    </button>
-                  </div>
-                </div>
+            {stacks.length > 0 && (
+              <div className="ledger-list">
+                {stacks.map(({ stackId, baseItemId, quantity, itemData }) => (
+                  <InventoryLedgerCard
+                    key={stackId}
+                    entityId={stackId}
+                    itemData={itemData}
+                    quantity={quantity}
+                    onQuantityChange={(_id, delta) => {
+                      if (delta > 0) {
+                        onStackIncrement(baseItemId);
+                      } else {
+                        onStackDecrement(baseItemId);
+                      }
+                    }}
+                    formatItemCost={formatItemCost}
+                  />
+                ))}
               </div>
-            ))}
+            )}
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 };
 
