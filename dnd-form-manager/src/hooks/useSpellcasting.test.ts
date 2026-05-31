@@ -6,7 +6,9 @@ import {
   getAllSpells,
   getClassById,
   getRaceById,
+  getResolvedSpellDamageEntriesAtCastLevel,
   getSpellByID,
+  getSpellCastLevelOptions,
   getSubclassById,
   getSubraceById,
   getTraitsByIds,
@@ -75,6 +77,8 @@ describe("useSpellcasting innate spell enrichment", () => {
     vi.mocked(getClassById).mockReturnValue(null);
     vi.mocked(getSubclassById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
     vi.mocked(getTraitsByIds).mockReturnValue([] as any);
   });
 
@@ -194,6 +198,8 @@ describe("useSpellcasting progression resolution", () => {
     vi.mocked(getSpellByID).mockReturnValue(null);
     vi.mocked(getSubclassById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
     vi.mocked(getTraitsByIds).mockReturnValue([] as any);
   });
 
@@ -554,6 +560,151 @@ describe("useSpellcasting progression resolution", () => {
     ]);
     expect(result.pools.prepared.max).toBe(7);
   });
+
+  it("exposes cast-level metadata for active selected spells", () => {
+    vi.mocked(useCharacterStore).mockReturnValue({
+      level: 5,
+      raceId: null,
+      subraceId: null,
+      classId: "class_wizard",
+      subclassId: null,
+      classTracks: [{ classId: "class_wizard", subclassId: null, level: 5 }],
+      choicesByLevel: {},
+      acquiredFeats: [],
+      expendedSpellSlots: { 1: 1, 3: 0 },
+      expendedPactSlots: 0,
+      spellsPrepared: ["spell_thunderwave"],
+      spellsKnown: ["spell_fire_bolt"],
+      freeSchoolKnownSpellIds: [],
+    } as any);
+
+    vi.mocked(getClassById).mockReturnValue({
+      progression: [{ level: 1, features: ["trait_wiz_spellcasting"] }],
+    } as any);
+
+    vi.mocked(getTraitsByIds).mockReturnValue([
+      {
+        id: "trait_wiz_spellcasting",
+        spellcasting: {
+          ability: "int",
+          preparationType: "prepared",
+          ritualCasting: true,
+          progressionByLevel: [
+            { level: 5, cantripsKnown: 3, spellSlots: { 1: 4, 2: 3, 3: 2 } },
+          ],
+        },
+      },
+    ] as any);
+
+    vi.mocked(getAllSpells).mockReturnValue([
+      { id: "spell_fire_bolt", classes: ["class_wizard"], school: "evocation" },
+      { id: "spell_thunderwave", classes: ["class_wizard"], school: "evocation" },
+    ] as any);
+
+    vi.mocked(getSpellByID).mockImplementation((id) => {
+      if (id === "spell_fire_bolt") {
+        return {
+          id: "spell_fire_bolt",
+          name: "Fire Bolt",
+          level: 0,
+          classes: ["class_wizard"],
+          school: "evocation",
+          output: { damage: [{ type: "fire", roll: "2d10" }] },
+          lore: { shortDescription: "", fullText: "" },
+          components: { vocal: true, somatic: true, material: false },
+          castingTime: "1 action",
+          range: "120 feet",
+          duration: "Instantaneous",
+          concentration: false,
+          ritual: false,
+          actionType: "action",
+        } as any;
+      }
+
+      if (id === "spell_thunderwave") {
+        return {
+          id: "spell_thunderwave",
+          name: "Thunderwave",
+          level: 1,
+          classes: ["class_wizard"],
+          school: "evocation",
+          output: { damage: [{ type: "thunder", roll: "2d8" }] },
+          lore: { shortDescription: "", fullText: "" },
+          components: { vocal: true, somatic: true, material: false },
+          castingTime: "1 action",
+          range: "Self",
+          duration: "Instantaneous",
+          concentration: false,
+          ritual: false,
+          actionType: "action",
+        } as any;
+      }
+
+      return null;
+    });
+
+    vi.mocked(getSpellCastLevelOptions).mockImplementation((spell: any) => {
+      if (spell?.id === "spell_fire_bolt") {
+        return [
+          {
+            level: 0,
+            canUseSharedSlot: false,
+            canUsePactSlot: false,
+            hasAvailableSlot: true,
+          },
+        ];
+      }
+
+      if (spell?.id === "spell_thunderwave") {
+        return [
+          {
+            level: 1,
+            canUseSharedSlot: true,
+            canUsePactSlot: false,
+            hasAvailableSlot: true,
+          },
+          {
+            level: 3,
+            canUseSharedSlot: true,
+            canUsePactSlot: false,
+            hasAvailableSlot: true,
+          },
+        ];
+      }
+
+      return [];
+    });
+
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockImplementation(
+      (spell: any, castLevel: number) => {
+        if (spell?.id === "spell_thunderwave" && castLevel === 1) {
+          return [{ type: "thunder", roll: "2d8" }] as any;
+        }
+        if (spell?.id === "spell_fire_bolt") {
+          return [{ type: "fire", roll: "2d10" }] as any;
+        }
+        return [] as any;
+      },
+    );
+
+    const result = useSpellcasting();
+
+    expect(result.spellMetadata?.activeSpellIds.sort()).toEqual([
+      "spell_fire_bolt",
+      "spell_thunderwave",
+    ]);
+    expect(result.spellMetadata?.byId.spell_thunderwave).toEqual({
+      spellId: "spell_thunderwave",
+      baseSpellLevel: 1,
+      availableCastLevels: [1, 3],
+      selectedCastLevel: 1,
+      canCast: true,
+      canUseSharedSlot: true,
+      canUsePactSlot: false,
+      unavailableReason: undefined,
+      resolvedDamageEntries: [{ type: "thunder", roll: "2d8" }],
+    });
+  });
 });
 
 describe("useSpellcasting race spellcasting", () => {
@@ -595,6 +746,8 @@ describe("useSpellcasting race spellcasting", () => {
     vi.mocked(getSubclassById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
     vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
     vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
     vi.mocked(getSubraceById).mockReturnValue(null);
   });
@@ -775,6 +928,8 @@ describe("useSpellcasting spell list expansion/restrictions", () => {
     vi.mocked(getSubraceById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
     vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
     vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
   });
 
@@ -1136,6 +1291,8 @@ describe("useSpellcasting free-school designation", () => {
     vi.mocked(getSubraceById).mockReturnValue(null);
     vi.mocked(getAllSpells).mockReturnValue([] as any);
     vi.mocked(getSpellByID).mockReturnValue(null);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
     vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
     vi.mocked(getClassById).mockReturnValue({ progression: [] } as any);
     vi.mocked(getSubclassById).mockReturnValue({

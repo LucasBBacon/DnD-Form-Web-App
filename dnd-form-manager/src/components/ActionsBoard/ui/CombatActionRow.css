@@ -2,20 +2,45 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
+  padding: 12px;
   border-bottom: 1px solid var(--border-filigree);
   background-color: transparent;
   transition: background-color 0.2s ease;
+  gap: 16px;
 }
 
 .combat-action-row:hover {
   background-color: var(--vellum-hover);
 }
 
+.combat-action-row.is-exhausted {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+}
+
 .action-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  flex: 1;
+}
+
+.quick-stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.quick-stat-pill {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--ink-main);
+  background-color: rgba(229, 217, 197, 0.3);
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--border-filigree);
+  text-transform: uppercase;
 }
 
 .action-name {
@@ -36,6 +61,62 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.damage-rollers-container {
+  display: flex;
+  gap: 4px;
+}
+
+.spell-mode-toggle {
+  display: flex;
+  border: 1px solid var(--ink-muted);
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--vellum-bg);
+}
+
+.mode-btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--ink-muted);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.mode-btn:last-child {
+  border-right: none;
+}
+
+.mode-btn:hover {
+  background-color: var(--vellum-hover);
+  color: var(--ink-main);
+}
+
+.mode-btn.active {
+  background-color: var(--ink-main);
+  color: var(--vellum-bg);
+}
+
+.spell-level-badge {
+  font-family: var(--font-display);
+  font-weight: bold;
+  color: var(--gilt-gold);
+  border: 1px solid var(--gilt-gold);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  background-color: rgba(212, 175, 55, 0.05);
 }
 
 .save-dc-badge {
@@ -47,4 +128,129 @@
   padding: 2px 6px;
   border-radius: 2px;
   background-color: rgba(158, 42, 43, 0.05);
+}
+
+/* --- CASTING DRAWER --- */
+.casting-drawer {
+  background-color: rgba(229, 217, 197, 0.4);
+  border: 1px dashed var(--border-filigree);
+  border-radius: 4px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.selector-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+
+/* --- LEVEL BEADS --- */
+.level-beads {
+  display: flex;
+  gap: 4px;
+}
+
+.level-bead {
+  font-family: var(--font-display);
+  font-weight: bold;
+  font-size: 0.8rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-filigree);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-bead:hover {
+  border-color: var(--ink-main);
+  color: var(--ink-main);
+}
+
+.level-bead.active {
+  background-color: var(--gilt-gold);
+  border-color: var(--gilt-gold);
+  color: var(--ink-main);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+}
+
+/* --- POOL SELECTOR (Shared vs Pact) --- */
+.pool-selector {
+  display: flex;
+  border: 1px solid var(--ink-muted);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pool-btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pool-btn.shared-btn {
+  color: var(--ink-main);
+  border-right: 1px solid var(--ink-muted);
+}
+
+.pool-btn.pact-btn {
+  color: #6a3a82; /* Eldritch Purple */
+}
+
+.pool-btn.shared-btn.active {
+  background-color: var(--ink-main);
+  color: var(--vellum-bg);
+}
+
+.pool-btn.pact-btn.active {
+  background-color: #6a3a82;
+  color: var(--vellum-bg);
+}
+
+/* --- ACTIONS --- */
+.cast-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.cancel-btn {
+  border-color: transparent;
+  color: var(--ink-muted);
+}
+
+.cancel-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--ink-main);
+}
+
+.confirm-cast-btn {
+  font-weight: bold;
+  border-color: var(--gilt-gold);
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+.confirm-cast-btn:hover {
+  background-color: var(--gilt-gold);
+  color: var(--vellum-bg);
+}
+
+.fadeIn {
+  animation: fadeIn 0.2s ease-in;
 }

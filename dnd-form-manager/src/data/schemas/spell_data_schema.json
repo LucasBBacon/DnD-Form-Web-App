@@ -198,6 +198,72 @@
                                         "description": "e.g., { '6': '3d6', '11': '4d6' }"
                                     }
                                 }
+							},
+							"slotScaling": {
+								"type": "object",
+								"description": "Explicit spell-slot upcast scaling for numeric outputs.",
+								"properties": {
+									"mode": {
+										"type": "string",
+										"enum": [
+											"linear",
+											"table"
+										]
+									},
+									"incrementPerSlotLevel": {
+										"type": "string",
+										"description": "For mode=linear. Roll expression added for each slot above the starting slot level."
+									},
+									"startAtSlotLevel": {
+										"type": "integer",
+										"minimum": 1,
+										"maximum": 9,
+										"description": "For mode=linear. First slot level where scaling applies. Defaults to base spell level + 1."
+									},
+									"bySlotLevel": {
+										"type": "object",
+										"description": "For mode=table. Explicit roll expression map by cast slot level.",
+										"patternProperties": {
+											"^[1-9]$": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"required": [
+									"mode"
+								],
+								"allOf": [
+									{
+										"if": {
+											"properties": {
+												"mode": {
+													"const": "linear"
+												}
+											}
+										},
+										"then": {
+											"required": [
+												"incrementPerSlotLevel"
+											]
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"mode": {
+													"const": "table"
+												}
+											}
+										},
+										"then": {
+											"required": [
+												"bySlotLevel"
+											]
+										}
+									}
+								]
                             }
                         },
                         "required": [
@@ -209,8 +275,105 @@
                 "healing": {
                     "type": "array",
                     "items": {
-                        "type": "string",
-                        "description": "IDs referencing temporary buffs and debuffs"
+						"type": "object",
+						"properties": {
+							"roll": {
+								"type": "string",
+								"description": "Base dice pool for healing (e.g., '1d8')"
+							},
+							"addModifier": {
+								"type": "boolean",
+								"description": "True if you add the caster's spellcasting modifier to the healing."
+							},
+							"scaling": {
+								"type": "object",
+								"properties": {
+									"type": {
+										"type": "string",
+										"enum": [
+											"character_level",
+											"class_level",
+											"spell_slot"
+										]
+									},
+									"thresholds": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"slotScaling": {
+								"type": "object",
+								"description": "Explicit spell-slot upcast scaling for numeric healing outputs.",
+								"properties": {
+									"mode": {
+										"type": "string",
+										"enum": [
+											"linear",
+											"table"
+										]
+									},
+									"incrementPerSlotLevel": {
+										"type": "string",
+										"description": "For mode=linear. Roll expression added for each slot above the starting slot level."
+									},
+									"startAtSlotLevel": {
+										"type": "integer",
+										"minimum": 1,
+										"maximum": 9,
+										"description": "For mode=linear. First slot level where scaling applies. Defaults to base spell level + 1."
+									},
+									"bySlotLevel": {
+										"type": "object",
+										"description": "For mode=table. Explicit roll expression map by cast slot level.",
+										"patternProperties": {
+											"^[1-9]$": {
+												"type": "string"
+											}
+										},
+										"additionalProperties": false
+									}
+								},
+								"required": [
+									"mode"
+								],
+								"allOf": [
+									{
+										"if": {
+											"properties": {
+												"mode": {
+													"const": "linear"
+												}
+											}
+										},
+										"then": {
+											"required": [
+												"incrementPerSlotLevel"
+											]
+										}
+									},
+									{
+										"if": {
+											"properties": {
+												"mode": {
+													"const": "table"
+												}
+											}
+										},
+										"then": {
+											"required": [
+												"bySlotLevel"
+											]
+										}
+									}
+								]
+							}
+						},
+						"required": [
+							"roll"
+						]
                     }
                 }
             }
@@ -270,6 +433,17 @@
 				"shortDescription",
 				"fullText"
 			]
+		},
+		"proseUpcastEffects": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"level": { "type": "integer", "minimum": 1 },
+					"description": { "type": "string" }
+				},
+				"required": ["level", "description"]
+			}
 		}
 	},
 	"required": [

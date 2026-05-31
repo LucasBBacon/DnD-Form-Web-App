@@ -1,8 +1,12 @@
 import { useMemo } from "react";
 import { getAllCharacterTraits } from "../utils/traitUtils";
-import { getSpellByID } from "../data/staticDataApi";
+import {
+  getResolvedSpellDamageEntriesAtCastLevel,
+  getSpellByID,
+  getSpellCastLevelOptions,
+} from "../data/staticDataApi";
 import { useAttacks } from "./useAttacks";
-import { useSpellcasting } from "./useSpellcasting";
+import { useSpellcasting, type SpellCastMetadata } from "./useSpellcasting";
 import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { ActionType } from "../types/action";
@@ -11,8 +15,6 @@ import type { WeaponPropertyCatalogEntry, WeaponRangeBand } from "../types/item"
 
 // #region Types and Interfaces
 
-export type CombatActionSection = "action" | "bonus_action" | "reaction";
-
 export interface CombatActionUseState {
   /** Total number of uses for the combat action */
   total: number;
@@ -20,38 +22,53 @@ export interface CombatActionUseState {
   remaining: number;
 }
 
-export interface CombatActionEntry {
+export interface CombatRollMetadata {
+  /** Unique identifier for the combat roll */
+  id: string;
+  /** Number of dice to roll */
+  count: number;
+  /** Number of sides on each die */
+  sides: DieFace;
+  /** Modifier to apply to the roll */
+  modifier: number;
+  /** Label for the combat roll */
+  label: string;
+}
+
+export type CombatActionTypes = "action" | "bonus_action" | "reaction";
+
+export interface BaseActionEntry {
   /** Unique identifier for the combat action */
   id: string;
   /** Name of the combat action */
   name: string;
   /** Section of the combat action (action, bonus_action, reaction) */
-  section: CombatActionSection;
-  /** Source of the combat action (attack, spell, trait) */
-  source: "attack" | "spell" | "trait";
-  /** Optional subtitle for the combat action */
-  subtitle?: string;
+  section: CombatActionTypes;
+  /** Optional spell level for spell actions */
+  isExhausted: boolean;
   /** Quick stats for the combat action */
   quickStats: string[];
+  /** Optional subtitle for the combat action */
+  subtitle?: string;
   /** Optional description for the combat action */
   description?: string;
-  /** Indicates if the combat action is exhausted */
-  isExhausted: boolean;
-  /** Optional spell level for spell actions */
-  spellLevel?: number;
+}
+
+export interface AttackActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "attack";
+  /** Optional attack roll metadata for the combat action */
+  attackRoll?: CombatRollMetadata;
+  /** Optional damage roll metadata for the combat action */
+  damageRolls?: CombatRollMetadata[];
+}
+
+export interface SpellSaveActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "spell";
   /** Optional cast state for spell actions */
-  spellCast?: {
-    /** Indicates whether the spell can be cast right now */
-    canCast: boolean;
-    /** Indicates whether a shared slot can be consumed */
-    canUseSharedSlot: boolean;
-    /** Indicates whether a pact slot can be consumed */
-    canUsePactSlot: boolean;
-    /** Optional reason why casting is unavailable */
-    unavailableReason?: string;
-  };
-  /** Optional usage state for the combat action */
-  uses?: CombatActionUseState;
+  spellLevel: number;
+  spellMetadata?: SpellCastMetadata;
   /** Optional attack roll metadata for the combat action */
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */
@@ -84,18 +101,19 @@ export interface CombatActionEntry {
   instanceId?: string;
 }
 
-export interface CombatRollMetadata {
-  /** Unique identifier for the combat roll */
-  id: string;
-  /** Number of dice to roll */
-  count: number;
-  /** Number of sides on each die */
-  sides: DieFace;
-  /** Modifier to apply to the roll */
-  modifier: number;
-  /** Label for the combat roll */
-  label: string;
+export interface TraitUseActionEntry extends BaseActionEntry {
+  /** Source of the combat action (attack, spell, trait) */
+  source: "trait";
+  /** Optional uses state for trait actions */
+  uses?: CombatActionUseState;
+  /** Optional attack roll metadata for the combat action */
+  damageRolls?: CombatRollMetadata[];
 }
+
+export type CombatActionEntry =
+  | AttackActionEntry
+  | SpellSaveActionEntry
+  | TraitUseActionEntry;
 
 // #endregion
 
@@ -195,7 +213,7 @@ const toTitleCase = (value: string): string =>
 const normalizeSpellActionType = (
   actionType: ActionType | undefined,
   castingTime: string,
-): CombatActionSection | null => {
+): CombatActionTypes | null => {
   if (actionType === "action") return "action";
   if (actionType === "bonus_action") return "bonus_action";
   if (actionType === "reaction") return "reaction";
@@ -299,7 +317,7 @@ export const useCombatActions = () => {
   ]);
 
   const sections = useMemo(() => {
-    const grouped: Record<CombatActionSection, CombatActionEntry[]> = {
+    const grouped: Record<CombatActionTypes, CombatActionEntry[]> = {
       action: [],
       bonus_action: [],
       reaction: [],
@@ -406,25 +424,19 @@ export const useCombatActions = () => {
       );
       if (!section) return;
 
-      const shared = spellcasting.slots.shared[spell.level];
-      const sharedRemaining = shared
-        ? Math.max(shared.total - shared.expended, 0)
-        : 0;
-      // Pact slots cover any spell whose level is at or below the pact slot level,
-      // not just exact-level matches. A level 4 pact slot can cast a level 2 spell.
-      const pactCanCoverSpell =
-        spell.level > 0 &&
-        spellcasting.slots.pact != null &&
-        spell.level <= spellcasting.slots.pact.level;
-      const pactRemaining = pactCanCoverSpell
-        ? Math.max(
-            spellcasting.slots.pact!.total - spellcasting.slots.pact!.expended,
-            0,
-          )
-        : 0;
-      const canUseSharedSlot = spell.level > 0 && sharedRemaining > 0;
-      const canUsePactSlot = spell.level > 0 && pactRemaining > 0;
-      const hasAvailableSlot = canUseSharedSlot || canUsePactSlot;
+      const castLevelOptions = getSpellCastLevelOptions(spell, {
+        shared: spellcasting.slots.shared,
+        pact: spellcasting.slots.pact,
+      });
+      const selectedCastLevel =
+        spell.level === 0 ? 0 : castLevelOptions[0]?.level ?? spell.level;
+
+      const selectedLevelOption = castLevelOptions.find(
+        (option) => option.level === selectedCastLevel,
+      );
+      const canUseSharedSlot = selectedLevelOption?.canUseSharedSlot ?? false;
+      const canUsePactSlot = selectedLevelOption?.canUsePactSlot ?? false;
+      const hasAvailableSlot = selectedLevelOption?.hasAvailableSlot ?? false;
       const canCastWithoutArmorPenalty = spellcasting.canCastSpells;
       const canCast =
         canCastWithoutArmorPenalty &&
@@ -434,11 +446,31 @@ export const useCombatActions = () => {
       const unavailableReason = !canCastWithoutArmorPenalty
         ? "Cannot cast spells while wearing armor you are not proficient with."
         : spell.level > 0 && !hasAvailableSlot
-          ? `No Level ${spell.level} spell slots available.`
+          ? `No Level ${spell.level}+ spell slots available.`
           : undefined;
       // Label pact-only spells distinctly so the player knows which slot pool is used.
       // If both shared and pact slots exist at this level (multiclass), keep the generic label.
-      const isPactSpell = pactCanCoverSpell && sharedRemaining === 0;
+      const isPactSpell =
+        spell.level > 0 &&
+        canUsePactSlot &&
+        !canUseSharedSlot;
+
+      const resolvedDamageRolls = getResolvedSpellDamageEntriesAtCastLevel(
+        spell,
+        selectedCastLevel,
+      )
+        .map((entry, index) => {
+          const parsed = parseRollExpression(entry.roll);
+          if (!parsed) return null;
+          return {
+            id: `spell-damage:${spell.id}:${index}`,
+            count: parsed.count,
+            sides: parsed.sides,
+            modifier: parsed.modifier,
+            label: entry.type ? `Damage (${entry.type})` : "Damage",
+          } satisfies CombatRollMetadata;
+        })
+        .filter((entry): entry is CombatRollMetadata => entry != null);
 
       grouped[section].push({
         id: `spell:${spell.id}`,
@@ -455,12 +487,15 @@ export const useCombatActions = () => {
         description: spell.lore.shortDescription,
         isExhausted,
         spellLevel: spell.level,
+        availableCastLevels: castLevelOptions.map((option) => option.level),
         spellCast: {
           canCast,
+          selectedCastLevel,
           canUseSharedSlot,
           canUsePactSlot,
           unavailableReason,
         },
+        damageRolls: resolvedDamageRolls,
       });
     });
 

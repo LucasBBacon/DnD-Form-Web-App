@@ -62,48 +62,9 @@ export const ActionsBoard: React.FC = () => {
 
   const setAttackResult = (
     entryId: string,
-    config: CombatRollMetadata,
-    rolls: number[],
     mode: "normal" | "advantage" | "disadvantage",
-  ) => {
-    const first = rolls[0] ?? 0;
-    const second = rolls[1] ?? 0;
-    const keptValue =
-      mode === "normal"
-        ? first
-        : mode === "advantage"
-          ? Math.max(first, second)
-          : Math.min(first, second);
-
-    const total = keptValue + config.modifier;
-    const critLabel =
-      keptValue === 20
-        ? " (critical success)"
-        : keptValue === 1
-          ? " (critical fail)"
-          : "";
-
-    const rollPart =
-      mode === "normal"
-        ? `d20 ${keptValue}`
-        : `d20 ${first}/${second} -> keep ${keptValue} (${mode})`;
-
-    const detail = `${total} (${rollPart}${formatModifier(config.modifier)})${critLabel}`;
-
-    setRollResultsByEntry((previous) => {
-      const existing = previous[entryId] ?? { damage: {} };
-      return {
-        ...previous,
-        [entryId]: {
-          ...existing,
-          attack: detail,
-          damage: existing.damage,
-        },
-      };
-    });
-  };
-
-  const setDamageResult = (
+  ) => void;
+  onAttackResult: (
     entryId: string,
     damageId: string,
     config: CombatRollMetadata,
@@ -222,39 +183,32 @@ export const ActionsBoard: React.FC = () => {
 
   const consumeSpellSlotPool = (
     entryId: string,
-    pool: "shared" | "pact",
-  ) => {
-    const entry = spellEntryById.get(entryId);
-    if (!entry || entry.source !== "spell") return;
-    if (entry.spellLevel === 0) return;
+    damageId: string,
+    config: any,
+    total: number,
+  ) => void;
+  onCastSpell?: (entry: string) => void;
+  onExpendTraitUse?: (entryId: string) => void;
+}
 
-    if (pool === "shared") {
-      if (!entry.spellCast?.canUseSharedSlot || typeof entry.spellLevel !== "number") {
-        setSpellFeedback(
-          entryId,
-          entry.spellCast?.unavailableReason || "No compatible spell slot available.",
-        );
-        return;
-      }
-      expendSpellSlot(entry.spellLevel);
-      clearSpellFeedback(entryId);
-      return;
-    }
+const SECTION_ORDER = ["action", "bonus_action", "reaction"] as const;
+const SECTION_LABELS = {
+  action: "Actions",
+  bonus_action: "Bonus Actions",
+  reaction: "Reactions",
+};
 
-    if (!entry.spellCast?.canUsePactSlot) {
-      setSpellFeedback(
-        entryId,
-        entry.spellCast?.unavailableReason || "No compatible spell slot available.",
-      );
-      return;
-    }
-
-    expendPactSlot();
-    clearSpellFeedback(entryId);
-  };
-
-  // #endregion
-
+export const ActionsBoard: React.FC<ActionsBoardProps> = ({
+  spellcasting,
+  sections,
+  toRomanNumeral,
+  attackRollModes,
+  onAttackRollModeChange,
+  onAttackResult,
+  onDamageResult,
+  onCastSpell,
+  onExpendTraitUse,
+}) => {
   return (
     <ActionsBoardView
       slotHudRows={slotHud}
@@ -295,52 +249,15 @@ export const ActionsBoard: React.FC = () => {
             entryId,
             entry.spellCast?.unavailableReason || "No compatible spell slot available.",
           );
-          setSpellChoiceEntryId(null);
-          return;
-        }
+        })}
 
-        if (entry.spellLevel === 0) {
-          clearSpellFeedback(entryId);
-          setSpellChoiceEntryId(null);
-          return;
-        }
-
-        const canUseShared = entry.spellCast.canUseSharedSlot;
-        const canUsePact = entry.spellCast.canUsePactSlot;
-
-        if (canUseShared && canUsePact) {
-          setSpellChoiceEntryId(entryId);
-          clearSpellFeedback(entryId);
-          return;
-        }
-
-        if (canUseShared) {
-          consumeSpellSlotPool(entryId, "shared");
-          setSpellChoiceEntryId(null);
-          return;
-        }
-
-        if (canUsePact) {
-          consumeSpellSlotPool(entryId, "pact");
-          setSpellChoiceEntryId(null);
-          return;
-        }
-
-        setSpellFeedback(
-          entryId,
-          entry.spellCast.unavailableReason || "No compatible spell slot available.",
-        );
-      }}
-      onChooseSpellSlotPool={(entryId, pool) => {
-        consumeSpellSlotPool(entryId, pool);
-        setSpellChoiceEntryId(null);
-      }}
-      onCancelSpellSlotChoice={(entryId) => {
-        if (spellChoiceEntryId === entryId) {
-          setSpellChoiceEntryId(null);
-        }
-      }}
-      toRomanNumeral={toRomanNumeral}
-    />
+        {/* Empty State Fallback */}
+        {Object.values(sections).every((arr) => !arr || arr.length === 0) && (
+          <div className="empty-state">
+            <span className="empty-text">No combat actions available...</span>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };

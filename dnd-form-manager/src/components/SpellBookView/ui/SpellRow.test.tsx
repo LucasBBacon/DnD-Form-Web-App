@@ -41,6 +41,7 @@ const baseProps = {
   castingStats: { saveDC: 16, attackBonus: 6 },
   innateEntries: [],
   hasDamageOutput: true,
+  proseUpcastEffects: [],
 };
 
 describe("SpellRow", () => {
@@ -104,6 +105,8 @@ describe("SpellRow", () => {
         innateEntries={[
           {
             spellId: "fireball",
+            spellName: "Fireball",
+            isResolvedSpell: true,
             sourceTraitName: "Dragon Ancestry",
             spellSaveDC: 15,
             spellAttackBonus: 5,
@@ -118,5 +121,39 @@ describe("SpellRow", () => {
   it("hides details when isExpanded is false", () => {
     render(<SpellRow {...baseProps} isExpanded={false} />);
     expect(screen.queryByText("1 action")).not.toBeInTheDocument();
+  });
+
+  it("renders structured prose upcast effects when expanded", () => {
+    render(
+      <SpellRow
+        {...baseProps}
+        isExpanded
+        proseUpcastEffects={[
+          {
+            level: 3,
+            description: "When cast with a 3rd-level slot, you create one additional ray.",
+          },
+          {
+            level: 4,
+            description: "When cast with a 4th-level slot, you create two additional rays.",
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Structured Upcast Effects:")).toBeInTheDocument();
+    expect(screen.getByText("Level 3+")).toBeInTheDocument();
+    expect(
+      screen.getByText(/When cast with a 3rd-level slot, you create one additional ray\./i),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Level 4+")).toBeInTheDocument();
+  });
+
+  it("does not render structured prose section when no prose effects apply", () => {
+    render(<SpellRow {...baseProps} isExpanded proseUpcastEffects={[]} />);
+
+    expect(
+      screen.queryByText("Structured Upcast Effects:"),
+    ).not.toBeInTheDocument();
   });
 });

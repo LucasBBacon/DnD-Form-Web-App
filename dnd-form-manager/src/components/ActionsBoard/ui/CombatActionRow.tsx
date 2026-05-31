@@ -1,121 +1,250 @@
 import type React from "react";
 import "./CombatActionRow.css";
 import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
-
-export type ActionKind = "attack" | "spell_save" | "trait_use";
-
-export interface BaseActionEntry {
-  id: string;
-  name: string;
-  kind: ActionKind;
-  subtitle: string;
-}
-
-export interface AttackActionEntry extends BaseActionEntry {
-  kind: "attack";
-  attackModifier: number;
-  damageDice: string;
-  damageModifier: number;
-  damageType: string;
-}
-
-export interface SpellSaveActionEntry extends BaseActionEntry {
-  kind: "spell_save";
-  saveDc: number;
-  saveAbility: string;
-  damageDice?: string;
-}
-
-export interface TraitUseActionEntry extends BaseActionEntry {
-  kind: "trait_use";
-  currentUses: number;
-  maxUses: number;
-}
-
-export type CombatActionEntry =
-  | AttackActionEntry
-  | SpellSaveActionEntry
-  | TraitUseActionEntry;
+import type { DieType } from "../../ui/DiceRoller/PolyDie";
+import type {
+  AttackActionEntry,
+  CombatActionEntry,
+  CombatRollMetadata,
+  SpellSaveActionEntry,
+  TraitUseActionEntry,
+} from "../../../hooks/useCombatActions";
+import { useState } from "react";
 
 export interface CombatActionRowProps {
   entry: CombatActionEntry;
-  onAttackResult: (entryId: string, total: number) => void;
-  onDamageResult: (entryId: string, total: number) => void;
+  attackRollMode: "normal" | "advantage" | "disadvantage";
+  onAttackRollModeChange: (
+    entryId: string,
+    mode: "normal" | "advantage" | "disadvantage",
+  ) => void;
+  onAttackResult: (
+    entryId: string,
+    config: CombatRollMetadata,
+    rolls: number[],
+    mode: string,
+  ) => void;
+  onDamageResult: (
+    entryId: string,
+    damageId: string,
+    config: CombatRollMetadata,
+    total: number,
+  ) => void;
   onCastSpell?: (entryId: string) => void;
   onExpendTraitUse?: (entryId: string) => void;
+  toRomanNumeral: (level: number) => string;
 }
 
 export const CombatActionRow: React.FC<CombatActionRowProps> = ({
   entry,
+  attackRollMode,
+  onAttackRollModeChange,
   onAttackResult,
   onDamageResult,
   onCastSpell,
   onExpendTraitUse,
+  toRomanNumeral,
 }) => {
+  const [isPreparingCast, setIsPreparingCast] = useState(false);
+  const [selectedCastLevel, setSelectedCastLevel] = useState<number | null>(
+    null,
+  );
+  const [selectedPool, setSelectedPool] = useState<"shared" | "pact">("shared");
+
   const renderAttackControls = (attackEntry: AttackActionEntry) => (
     <div className="action-controls-group attack-group">
-      {/* TODO: Add Advantage/Disadvantage toggle */}
-      <DiceRoller
-        sides={20}
-        count={1}
-        rollLabel={`To Hit (+${attackEntry.attackModifier})`}
-        onRollComplete={(rolls, summary) =>
-          onAttackResult(entry.id, summary.total + attackEntry.attackModifier)
-        }
-        className="attack-roller"
-      />
+      {attackEntry.attackRoll && (
+        <div className="roll-mode-toggle">
+          {(["disadvantage", "normal", "advantage"] as const).map((mode) => (
+            <button
+              key={mode}
+              className={`mode-btn ${attackRollMode === mode ? "active" : ""}`}
+              onClick={() => onAttackRollModeChange(entry.id, mode)}
+              title={mode.charAt(0).toUpperCase() + mode.slice(1)}
+            >
+              {mode === "normal"
+                ? "Norm"
+                : mode === "advantage"
+                  ? "Adv"
+                  : "Dis"}
+            </button>
+          ))}
+        </div>
+      )}
 
-      <DiceRoller
-        sides={8}
-        count={1}
-        rollLabel={`Dmg (${attackEntry.damageDice}+${attackEntry.damageModifier})`}
-        onRollComplete={(rolls, summary) =>
-          onAttackResult(entry.id, summary.total + attackEntry.damageModifier)
-        }
-        className="damage-roller"
-      />
-    </div>
-  );
-  const renderSpellSaveControls = (spellEntry: SpellSaveActionEntry) => (
-    <div className="action-controls-group spell-group">
-      <div className="save-dc-badge">
-        DC {spellEntry.saveDc} {spellEntry.saveAbility.toUpperCase()}
-      </div>
-      {spellEntry.damageDice && (
+      {/* To-hit Roller */}
+      {attackEntry.attackRoll && (
         <DiceRoller
-          sides={6}
-          count={8}
-          rollLabel={`Dmg (+${spellEntry.damageDice})`}
-          onRollComplete={(rolls, summary) =>
-            onDamageResult(entry.id, summary.total)
+          sides={attackEntry.attackRoll.sides as DieType}
+          count={
+            attackRollMode === "normal"
+              ? attackEntry.attackRoll.count
+              : Math.max(2, attackEntry.attackRoll.count)
           }
-          className="attack-roller "
+          rollLabel={attackEntry.attackRoll.label}
+          onRollComplete={(rolls) =>
+            onAttackResult(
+              attackEntry.id,
+              attackEntry.attackRoll!,
+              rolls,
+              attackRollMode,
+            )
+          }
+          className="attack-roller"
         />
       )}
-      <button
-        className="action-btn cast-btn"
-        onClick={() => onCastSpell?.(entry.id)}
-      >
-        Cast
-      </button>
+
+      {/* Damage Rollers */}
+      {attackEntry.damageRolls && attackEntry.damageRolls.length > 0 && (
+        <div className="damage-rollers-container">
+          {attackEntry.damageRolls.map((dmg) => (
+            <DiceRoller
+              key={dmg.id}
+              sides={dmg.sides as DieType}
+              count={
+                attackRollMode === "normal" ? dmg.count : Math.max(2, dmg.count)
+              }
+              rollLabel={dmg.label}
+              onRollComplete={(_, summary) =>
+                onDamageResult(entry.id, dmg.id, dmg, summary.total)
+              }
+              className="damage-roller"
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
-  const renderTraitControls = (traitEntry: TraitUseActionEntry) => (
-    <div className="action-controls-group trait-group">
-      <div className="trait-uses-tracker">
-        {/* TODO: Reuse Wax seal tracker from Features */}
-        <span className="uses-text">
-          {traitEntry.currentUses} / {traitEntry.maxUses}
+  const renderSpellControls = (spellEntry: SpellSaveActionEntry) => {
+    const meta = spellEntry.spellMetadata;
+    const isCastable = meta?.canCast;
+
+    if (!meta) {
+      return (
+        <button
+          className="action-btn cast-btn"
+          onClick={() => onCastSpell?.(spellEntry.id)}
+          disabled={!isCastable}
+        >
+          Cast
+        </button>
+      );
+    }
+
+    const handleInitiateCast = () => {
+      setSelectedCastLevel(meta.baseSpellLevel);
+
+      // auto-select pact if it's only option available
+      if (meta.canUsePactSlot && !meta.canUseSharedSlot)
+        setSelectedPool("pact");
+      else setSelectedPool("shared");
+
+      setIsPreparingCast(true);
+    };
+
+    const handleConfirmCast = () => {
+      /* TODO: Implement spell processing here */
+      console.log(
+        `Casting at level ${selectedCastLevel} using ${selectedPool} slot.`,
+      );
+      setIsPreparingCast(false);
+    };
+
+    if (isPreparingCast) {
+      const needsPoolChoice = meta.canUseSharedSlot && meta.canUsePactSlot;
+      const needsLevelChoice = meta.availableCastLevels.length > 1;
+
+      return (
+        <div className="action-controls-group casting-drawer fadeIn">
+          {/* Level Selector */}
+          {needsLevelChoice && (
+            <div className="cast-level-selector">
+              <span className="selector-label">Level:</span>
+              <div className="level-beads">
+                {meta.availableCastLevels.map((level) => (
+                  <button
+                    key={level}
+                    className={`level-bead ${selectedCastLevel === level ? "active" : ""}`}
+                    onClick={() => setSelectedCastLevel(level)}
+                  >
+                    {toRomanNumeral(level)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Pool Selector */}
+          {needsPoolChoice && (
+            <div className="pool-selector">
+              <button
+                className={`pool-btn shared-btn ${selectedPool === "shared" ? "active" : ""}`}
+                onClick={() => setSelectedPool("shared")}
+              >
+                Shared
+              </button>
+              <button
+                className={`pool-btn pact-btn ${selectedPool === "pact" ? "active" : ""}`}
+                onClick={() => setSelectedPool("pact")}
+              >
+                Pact
+              </button>
+            </div>
+          )}
+
+          {/* Confirm / Cancel */}
+          <div className="cast-actions">
+            <button
+              className="action-btn cancel-btn"
+              onClick={() => setIsPreparingCast(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="action-btn confirm-cast-btn"
+              onClick={handleConfirmCast}
+            >
+              Confirm Cast
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="action-controls-group spell-group">
+        <span className="spell-level-badge">
+          {toRomanNumeral(spellEntry.spellLevel)}
         </span>
+        {spellEntry.attackRoll && renderAttackControls(spellEntry as any)}
 
         <button
-          className="action-btn use-btn"
-          onClick={() => onExpendTraitUse?.(entry.id)}
-          disabled={traitEntry.currentUses <= 0}
+          className="action-btn cast-btn"
+          onClick={handleInitiateCast}
+          disabled={!isCastable}
+          title={spellEntry.spellMetadata?.unavailableReason}
         >
-          Use
+          {isCastable ? "Prepare Cast" : "Unavailable"}
         </button>
       </div>
+    );
+  };
+  const renderTraitControls = (traitEntry: TraitUseActionEntry) => (
+    <div className="action-controls-group trait-group">
+      {traitEntry.uses && (
+        <div className="trait-uses-tracker">
+          <span className="uses-text">
+            {traitEntry.uses.remaining} / {traitEntry.uses.total}
+          </span>
+        </div>
+      )}
+      <button
+        className="action-btn use-btn"
+        onClick={() => onExpendTraitUse?.(traitEntry.id)}
+        disabled={traitEntry.uses ? traitEntry.uses.remaining <= 0 : false}
+      >
+        Use
+      </button>
     </div>
   );
 
@@ -123,13 +252,26 @@ export const CombatActionRow: React.FC<CombatActionRowProps> = ({
     <div className="combat-action-row">
       <div className="action-info">
         <span className="action-name">{entry.name}</span>
-        <span className="action-subtitle">{entry.subtitle}</span>
+        {entry.subtitle && (
+          <span className="action-subtitle">{entry.subtitle}</span>
+        )}
+
+        {/* Quick Stats */}
+        {entry.quickStats && entry.quickStats.length > 0 && (
+          <div className="quick-stats-row">
+            {entry.quickStats.map((stat, i) => (
+              <span key={i} className="quick-stat-pill">
+                {stat}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="action-controls">
-        {entry.kind === "attack" && renderAttackControls(entry)}
-        {entry.kind === "spell_save" && renderSpellSaveControls(entry)}
-        {entry.kind === "trait_use" && renderTraitControls(entry)}
+        {entry.source === "attack" && renderAttackControls(entry)}
+        {entry.source === "spell" && renderSpellControls(entry)}
+        {entry.source === "trait" && renderTraitControls(entry)}
       </div>
     </div>
   );

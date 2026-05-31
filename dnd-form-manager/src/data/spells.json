@@ -79,7 +79,13 @@
       "shortDescription": "Charm a beast to be friendly towards you.",
       "fullText": "This spell lets you convince a beast that you mean it no harm. Choose a beast that you can see within range. It must see and hear you. If the beast’s Intelligence is 4 or higher, the spell fails. Otherwise, the beast must succeed on a Wisdom saving throw or be charmed by you for the spell’s duration. If you or one of your companions harms the target, the spell ends.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional beast for each slot level above 1st"
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional beast for each slot level above 1st."
+      }
+    ]
   },
   {
     "id": "spell_arcane_eye",
@@ -173,7 +179,13 @@
       "shortDescription": "Up to three creatures of your choice that you can see within range must make Charisma saving throws.",
       "fullText": "Up to three creatures of your choice that you can see within range must make Charisma saving throws. Whenever a target that fails this saving throw makes an attack roll or a saving throw before the spell ends, the target must roll a d4 and subtract the number rolled from the attack roll or saving throw.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+      }
+    ]
   },
   {
     "id": "spell_barkskin",
@@ -255,7 +267,13 @@
       "shortDescription": "You bless up to three creatures of your choice within range.",
       "fullText": "You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+      }
+    ]
   },
   {
     "id": "spell_blink",
@@ -309,6 +327,21 @@
       "somatic": true,
       "material": false
     },
+    "output": {
+      "damage": [
+        {
+          "roll": "3d6",
+          "type": "fire",
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d6"
+          }
+        }
+      ]
+    },
     "savingThrow": {
       "ability": "dex",
       "dcCalculation": {
@@ -356,6 +389,10 @@
           "type": "lightning",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d10"
           }
         }
       ]
@@ -413,7 +450,13 @@
       "shortDescription": "Attempt to charm a humanoid you can see within range.",
       "fullText": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
+      }
+    ]
   },
   {
     "id": "spell_chill_touch",
@@ -497,7 +540,13 @@
       "shortDescription": "Speak a one-word command to compel a creature to follow it on its next turn.",
       "fullText": "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn’t understand your language, or if your command is directly harmful to it. Some typical commands and their effects follow. You might issue a command other than one described here. If you do so, the DM determines how the target behaves. If the target can't follow your command, the spell ends.\nApproach. The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.\nDrop. The target drops whatever it is holding and then ends its turn.\nFlee. The target spends its turn moving away from you by the fastest available means.\nGrovel. The target falls prone and then ends its turn.\nHalt. The target doesn't move and takes no actions. A flying creature stays aloft, provided that it is able to do so. If it must move to stay aloft, it flies the minimum distance needed to remain in the air.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them."
+      }
+    ]
   },
   {
     "id": "spell_confusion",
@@ -537,7 +586,13 @@
       "shortDescription": "Cause creatures to become confused, making them act unpredictably.",
       "fullText": "This spell assaults and twists creatures' minds, spawning delusions and provoking uncontrolled actions. Each creature in a 10-foot-radius sphere centered on a point you choose within range must succeed on a Wisdom saving throw when you cast this spell or be affected by it.\nAn affected target can't take reactions and must roll a d10 at the start of each of its turns to determine its behavior for that turn.\nd10: Behavior\n1: The creature uses all its movement to move in a random direction. To determine the direction, roll a d8 and assign a direction to each die face. The creature doesn't take an action this turn.\n2-6: The creature doesn't move or take actions this turn.\n7-8: The creature uses its action to make a melee attack against a randomly determined creature within its reach. If there is no creature within its reach, the creature does nothing this turn.\n9-10: The creature can act and move normally.\nAt the end of its turns, an affected target can make a Wisdom saving throw. If it succeeds, this effect ends for that target.",
       "higherLevel": "When you cast this spell using a spell slot of 5th level or higher, the radius of the sphere increases by 5 feet for each slot level above 4th."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 5,
+        "description": "When you cast this spell using a spell slot of 5th level or higher, the radius of the sphere increases by 5 feet for each slot level above 4th."
+      }
+    ]
   },
   {
     "id": "spell_control_water",
@@ -616,6 +671,21 @@
       "vocal": true,
       "somatic": true,
       "material": false
+    },
+    "output": {
+      "healing": [
+        {
+          "roll": "1d8",
+          "addModifier": true,
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
+          }
+        }
+      ]
     },
     "lore": {
       "shortDescription": "Restore hit points to a creature you touch.",
@@ -845,7 +915,13 @@
       "shortDescription": "Choose a creature, object, or magical effect within range to end a spell on it.",
       "fullText": "Choose any creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.",
       "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 4,
+        "description": "When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used."
+      }
+    ]
   },
   {
     "id": "spell_divine_favor",
@@ -899,7 +975,21 @@
       "shortDescription": "Beguile a beast, controlling its actions and movements.",
       "fullText": "You attempt to beguile a beast that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\nWhile the beast is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as “Attack that creature,” “Run over there,” or “Fetch that object.” If the creature completes the order and doesn’t receive further direction from you, it defends and preserves itself to the best of its ability.\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn’t do anything that you don’t allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.",
       "higherLevel": "When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours"
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 5,
+        "description": "When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes."
+      },
+      {
+        "level": 6,
+        "description": "When you use a 6th-level spell slot, the duration is concentration, up to 1 hour."
+      },
+      {
+        "level": 7,
+        "description": "When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours."
+      }
+    ]
   },
   {
     "id": "spell_dominate_person",
@@ -928,7 +1018,21 @@
       "shortDescription": "Attempt to beguile a humanoid that you can see within range.",
       "fullText": "You attempt to beguile a humanoid that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\nWhile the target is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as \"Attack that creature\", \"Run over there\", or \"Fetch that object\". If the creature completes the order and doesn’t receive further direction from you, it defends and preserves itself to the best of its ability.\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn’t do anything that you don’t allow it to do. During this time you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.",
       "higherLevel": "When you cast this spell using a 6th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 7th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 8th level or higher, the duration is concentration, up to 8 hours."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 6,
+        "description": "When you cast this spell using a 6th-level spell slot, the duration is concentration, up to 10 minutes."
+      },
+      {
+        "level": 7,
+        "description": "When you use a 7th-level spell slot, the duration is concentration, up to 1 hour."
+      },
+      {
+        "level": 8,
+        "description": "When you use a spell slot of 8th level or higher, the duration is concentration, up to 8 hours."
+      }
+    ]
   },
   {
     "id": "spell_faerie_fire",
@@ -988,6 +1092,10 @@
           "type": "fire",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d6"
           }
         }
       ]
@@ -1036,6 +1144,10 @@
           "type": "fire",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d6"
           }
         },
         {
@@ -1043,6 +1155,10 @@
           "type": "radiant",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d6"
           }
         }
       ]
@@ -1086,6 +1202,21 @@
       "material": true,
       "materialMaterials": "A bit of tallow, a pinch of brimstone, and a dusting of powdered iron."
     },
+    "output": {
+      "damage": [
+        {
+          "roll": "2d6",
+          "type": "fire",
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d6"
+          }
+        }
+      ]
+    },
     "lore": {
       "shortDescription": "Create a sphere of fire that damages creatures and can be moved around.",
       "fullText": "A 5-foot-diameter sphere of fire appears in an unoccupied space of your choice within range and lasts for the duration. Any creature that ends its turn within 5 feet of the sphere must make a Dexterity saving throw. The creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one.\nAs a bonus action, you can move the sphere up to 30 feet. If you ram the sphere into a creature, that creature must make the saving throw against the sphere’s damage, and the sphere stops moving this turn.\nWhen you move the sphere, you can direct it over barriers up to 5 feet tall and jump it across pits up to 10 feet wide. The sphere ignites flammable objects not being worn or carried, and it sheds bright light in a 20-foot radius and dim light for an additional 20 feet.",
@@ -1124,7 +1255,13 @@
       "shortDescription": "Create a heavily obscured area of fog.",
       "fullText": "You create a 20-foot-radius sphere of fog centered on a point within range. The sphere spreads around corners, and its area is heavily obscured. It lasts for the duration or until a wind of moderate or greater speed (at least 10 miles per hour) disperses it.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, the radius of the fog increases by 20 feet for each slot level above 1st."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, the radius of the fog increases by 20 feet for each slot level above 1st."
+      }
+    ]
   },
   {
     "id": "spell_freedom_of_movement",
@@ -1303,7 +1440,17 @@
     },
     "output": {
       "healing": [
-        "buff_healing_word"
+        {
+          "roll": "1d4",
+          "addModifier": true,
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d4"
+          }
+        }
       ]
     },
     "lore": {
@@ -1347,7 +1494,21 @@
       "shortDescription": "You curse a creature, dealing extra damage and imposing a disadvantage on one ability.",
       "fullText": "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 Necrotic damage to the target whenever you hit it with an attack roll. Also, choose one ability when you cast the spell. The target has Disadvantage on ability checks made with the chosen ability.\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action on a later turn to curse a new creature.",
       "higherLevel": "Your Concentration can last longer with a spell slot of level 2 (up to 4 hours), 3-4 (up to 8 hours), or 5+ (24 hours)."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a 2nd-level spell slot, your concentration can last up to 4 hours."
+      },
+      {
+        "level": 3,
+        "description": "When you cast this spell using a 3rd- or 4th-level spell slot, your concentration can last up to 8 hours."
+      },
+      {
+        "level": 5,
+        "description": "When you cast this spell using a 5th-level spell slot or higher, your concentration can last up to 24 hours."
+      }
+    ]
   },
   {
     "id": "spell_hold_monster",
@@ -1387,7 +1548,13 @@
       "shortDescription": "Paralyze a creature you can see within range.",
       "fullText": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target.",
       "higherLevel": "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 6,
+        "description": "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them."
+      }
+    ]
   },
   {
     "id": "spell_ice_storm",
@@ -1424,6 +1591,10 @@
           "type": "bludgeoning",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
           }
         },
         {
@@ -1498,6 +1669,21 @@
       "somatic": true,
       "material": true,
       "materialMaterials": "A few grains of sugar, some kernels of gran, and a smear of fat."
+    },
+    "output": {
+      "damage": [
+        {
+          "roll": "4d10",
+          "type": "piercing",
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d10"
+          }
+        }
+      ]
     },
     "lore": {
       "shortDescription": "Summon a swarm of biting locusts that damages creatures in the area and makes it difficult terrain.",
@@ -1649,7 +1835,17 @@
       "shortDescription": "Imbue a weapon with magical energy, granting it a +1 bonus to attack and damage rolls.",
       "fullText": "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.",
       "higherLevel": "When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2. When you use a spell slot of 6th level or higher, the bonus increases to +3."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 4,
+        "description": "When you cast this spell using a spell slot of 4th level or higher, the bonus increases to +2."
+      },
+      {
+        "level": 6,
+        "description": "When you use a spell slot of 6th level or higher, the bonus increases to +3."
+      }
+    ]
   },
   {
     "id": "spell_mass_cure_wounds",
@@ -1673,6 +1869,21 @@
       "vocal": true,
       "somatic": true,
       "material": false
+    },
+    "output": {
+      "healing": [
+        {
+          "roll": "3d8",
+          "addModifier": true,
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
+          }
+        }
+      ]
     },
     "lore": {
       "shortDescription": "Heal up to six creatures in range.",
@@ -1765,7 +1976,25 @@
       "shortDescription": "Attempt to reshape another creature's memories.",
       "fullText": "You attempt to reshape another creature's memories. One creature that you can see must make a Wisdom saving throw. If you are fighting the creature, it has advantage on the saving throw. On a failed save, the target becomes charmed by you for the duration. The charmed target is incapacitated and unaware of its surroundings, though it can still hear you. If it takes any damage or is targeted by another spell, this spell ends, and none of the target's memories are modified.\nWhile this charm lasts, you can affect the target's memory of an event that it experienced within the last 24 hours and that lasted no more than 10 minutes. You can permanently eliminate all memory of the event, allow the target to recall the event with perfect clarity and exacting detail, change its memory of the details of the event, or create a memory of some other event.\nYou must speak to the target to describe how its memories are affected, and it must be able to understand your language for the modified memories to take root. Its mind fills in any gaps in the details of your description. If the spell ends before you have finished describing the modified memories, the creature's memory isn't altered. Otherwise, the modified memories take hold when the spell ends.\nA modified memory doesn't necessarily affect how a creature behaves, particularly if the memory contradicts the creature's natural inclinations, alignment, or beliefs. An illogical modified memory, such as implanting a memory of how much the creature enjoyed dousing itself in acid, is dismissed, perhaps as a bad dream. The DM might deem a modified memory too nonsensical to affect a creature in a significant manner.\nA Remove Curse or Greater Restoration spell cast on the target restores the creature's true memory.",
       "higherLevel": "If you cast this spell using a spell slot of 6th level or higher, you can alter the target’s memories of an event that took place up to 7 days ago (6th level), 30 days ago (7th level), 1 year ago (8th level), or any time in the creature's past (9th level)."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 6,
+        "description": "If you cast this spell using a 6th-level spell slot, you can alter the target's memories of an event that took place up to 7 days ago."
+      },
+      {
+        "level": 7,
+        "description": "If you cast this spell using a 7th-level spell slot, you can alter the target's memories of an event that took place up to 30 days ago."
+      },
+      {
+        "level": 8,
+        "description": "If you cast this spell using an 8th-level spell slot, you can alter the target's memories of an event that took place up to 1 year ago."
+      },
+      {
+        "level": 9,
+        "description": "If you cast this spell using a 9th-level spell slot, you can alter the target's memories of an event at any time in the creature's past."
+      }
+    ]
   },
   {
     "id": "spell_nondetection",
@@ -1961,7 +2190,13 @@
       "shortDescription": "Create three rays of fire and hurl them at targets within range.",
       "fullText": "You create three rays of fire and hurl them at targets within range. You can hurl them at one target or several. Make a ranged spell attack for each ray. On a hit, the target takes 2d6 fire damage.",
       "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, you create one additional ray for each slot level above 2nd."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 3,
+        "description": "When you cast this spell using a spell slot of 3rd level or higher, you create one additional ray for each slot level above 2nd."
+      }
+    ]
   },
   {
     "id": "spell_scrying",
@@ -2035,6 +2270,10 @@
           "type": "thunder",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
           }
         }
       ]
@@ -2110,7 +2349,13 @@
       "shortDescription": "Send creatures into a magical slumber.",
       "fullText": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature’s hit points from the total before moving on to the creature with the next lowest hit points. A creature’s hit points must be equal to or less than the remaining total for that creature to be affected. Undead and creatures immune to being charmed aren’t affected by this spell.",
       "higherLevel": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 2,
+        "description": "When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st."
+      }
+    ]
   },
   {
     "id": "spell_sleet_storm",
@@ -2264,6 +2509,21 @@
       "material": true,
       "materialMaterials": "A holy symbol."
     },
+    "output": {
+      "damage": [
+        {
+          "roll": "3d8",
+          "type": "radiant_or_necrotic",
+          "scaling": {
+            "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
+          }
+        }
+      ]
+    },
     "lore": {
       "shortDescription": "You call forth spirits to protect you, damaging enemies that come too close.",
       "fullText": "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish.\nWhen you cast this spell, you can designate any number of creatures you can see to be unaffected by it. An affected creature's speed is halved in the area, and when the creature enters the area for the first time on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 radiant damage (if you are good or neutral) or 3d8 necrotic damage (if you are evil). On a successful save, the creature takes half as much damage.",
@@ -2295,7 +2555,13 @@
       "shortDescription": "Summon a floating spectral weapon that attacks your enemies.",
       "fullText": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier. As a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.",
       "higherLevel": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
-    }
+    },
+    "proseUpcastEffects": [
+      {
+        "level": 3,
+        "description": "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+      }
+    ]
   },
   {
     "id": "spell_stoneskin",
@@ -2386,6 +2652,10 @@
           "type": "thunder",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
           }
         }
       ]
@@ -2466,6 +2736,10 @@
           "type": "fire",
           "scaling": {
             "type": "spell_slot"
+          },
+          "slotScaling": {
+            "mode": "linear",
+            "incrementPerSlotLevel": "1d8"
           }
         }
       ]

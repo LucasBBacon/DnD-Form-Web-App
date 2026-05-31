@@ -1,8 +1,11 @@
 import {
   getAllSpells,
   getClassById,
+  getResolvedSpellDamageEntriesAtCastLevel,
+  getResolvedSpellHealingEntriesAtCastLevel,
   getRaceById,
   getSpellByID,
+  getSpellCastLevelOptions,
   getSubclassById,
   getSubraceById,
   getTraitsByIds,
@@ -11,6 +14,7 @@ import { useCharacterStore } from "../store/useCharacterStore";
 import type { CharacterClassTrack } from "../store/useCharacterStore";
 import type { Ability } from "../types/common";
 import type { SpellcastingProgression } from "../types/class";
+import type { SpellDamageEntry } from "../types/spell";
 import type { SpellSchool } from "../types/trait";
 import {
   calculateMulticlassCasterLevel,
@@ -56,6 +60,21 @@ export interface SpellSelectionDiagnostics {
   freeSchoolOverflow: number;
 }
 
+import type { SpellHealingEntry } from "../types/spell";
+
+export interface SpellCastMetadata {
+  spellId: string;
+  baseSpellLevel: number;
+  availableCastLevels: number[];
+  selectedCastLevel: number;
+  canCast: boolean;
+  canUseSharedSlot: boolean;
+  canUsePactSlot: boolean;
+  unavailableReason?: string;
+  resolvedDamageEntries: SpellDamageEntry[];
+  resolvedHealingEntries: SpellHealingEntry[];
+}
+
 export interface UseSpellcastingReturn {
   isSpellcaster: boolean;
   canCastSpells: boolean;
@@ -90,6 +109,10 @@ export interface UseSpellcastingReturn {
   diagnostics: {
     selections: SpellSelectionDiagnostics;
     classBreakdown: ClassSpellcastingSummary[];
+  };
+  spellMetadata?: {
+    byId: Record<string, SpellCastMetadata>;
+    activeSpellIds: string[];
   };
 }
 
@@ -709,6 +732,53 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     classBreakdown: classSpellcastingSummaries,
   };
 
+  const activeSpellIds = dedupe([
+    ...state.spellsKnown,
+    ...state.spellsPrepared,
+    ...allBonusPreparedSpellIds,
+  ]);
+
+  const spellMetadataById: Record<string, SpellCastMetadata> = {};
+  activeSpellIds.forEach((spellId) => {
+    const spell = getSpellByID(spellId);
+    if (!spell) return;
+
+    const castLevelOptions = getSpellCastLevelOptions(spell, slots);
+    const selectedCastLevel =
+      spell.level === 0 ? 0 : castLevelOptions[0]?.level ?? spell.level;
+    const selectedLevelOption = castLevelOptions.find(
+      (option) => option.level === selectedCastLevel,
+    );
+    const canUseSharedSlot = selectedLevelOption?.canUseSharedSlot ?? false;
+    const canUsePactSlot = selectedLevelOption?.canUsePactSlot ?? false;
+    const hasAvailableSlot = selectedLevelOption?.hasAvailableSlot ?? false;
+    const canCast = !isArmorPenalized && (spell.level === 0 || hasAvailableSlot);
+    const unavailableReason = isArmorPenalized
+      ? "Cannot cast spells while wearing armor you are not proficient with."
+      : spell.level > 0 && !hasAvailableSlot
+        ? `No Level ${spell.level}+ spell slots available.`
+        : undefined;
+
+    spellMetadataById[spell.id] = {
+      spellId: spell.id,
+      baseSpellLevel: spell.level,
+      availableCastLevels: castLevelOptions.map((option) => option.level),
+      selectedCastLevel,
+      canCast,
+      canUseSharedSlot,
+      canUsePactSlot,
+      unavailableReason,
+      resolvedDamageEntries: getResolvedSpellDamageEntriesAtCastLevel(
+        spell,
+        selectedCastLevel,
+      ),
+      resolvedHealingEntries: getResolvedSpellHealingEntriesAtCastLevel(
+        spell,
+        selectedCastLevel,
+      ),
+    };
+  });
+
   return {
     isSpellcaster,
     canCastSpells: !isArmorPenalized,
@@ -716,6 +786,10 @@ export const useSpellcasting = (): UseSpellcastingReturn => {
     pools,
     slots,
     diagnostics,
+    spellMetadata: {
+      byId: spellMetadataById,
+      activeSpellIds,
+    },
   };
 
   // #endregion

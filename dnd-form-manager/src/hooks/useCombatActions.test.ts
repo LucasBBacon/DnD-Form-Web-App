@@ -6,7 +6,11 @@ import { useAttacks } from "./useAttacks";
 import { useSpellcasting } from "./useSpellcasting";
 import { useTraitActions } from "./useTraitActions";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { getSpellByID } from "../data/staticDataApi";
+import {
+  getResolvedSpellDamageEntriesAtCastLevel,
+  getSpellByID,
+  getSpellCastLevelOptions,
+} from "../data/staticDataApi";
 import { getAllCharacterTraits } from "../utils/traitUtils";
 
 vi.mock("./useAttacks");
@@ -23,6 +27,28 @@ describe("useCombatActions", () => {
     vi.mocked(useAttacks).mockReturnValue({ attacks: [] } as any);
     vi.mocked(useTraitActions).mockReturnValue({ actions: [] } as any);
     vi.mocked(getAllCharacterTraits).mockReturnValue([] as any);
+    vi.mocked(getResolvedSpellDamageEntriesAtCastLevel).mockReturnValue([] as any);
+    vi.mocked(getSpellCastLevelOptions).mockImplementation((spell: any) => {
+      if (spell?.level === 0) {
+        return [
+          {
+            level: 0,
+            canUseSharedSlot: false,
+            canUsePactSlot: false,
+            hasAvailableSlot: true,
+          },
+        ];
+      }
+
+      return [
+        {
+          level: spell?.level ?? 1,
+          canUseSharedSlot: true,
+          canUsePactSlot: false,
+          hasAvailableSlot: true,
+        },
+      ];
+    });
 
     vi.mocked(useCharacterStore).mockReturnValue({
       level: 1,
@@ -120,14 +146,17 @@ describe("useCombatActions", () => {
       },
     } as any);
 
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([] as any);
+
     const { result } = renderHook(() => useCombatActions());
     const spellEntry = result.current.sections.bonus_action.find(
-      (entry) => entry.id === "spell:spell_shield_of_faith",
+      (entry) => entry.id === "spell:spell_shield_of_faith" && entry.source === "spell",
     );
+    const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(spellEntry?.spellCast?.canCast).toBe(false);
-    expect(spellEntry?.spellCast?.unavailableReason).toBe(
-      "No Level 1 spell slots available.",
+    expect(typedSpellEntry?.spellCast?.canCast).toBe(false);
+    expect(typedSpellEntry?.spellCast?.unavailableReason).toBe(
+      "No Level 1+ spell slots available.",
     );
   });
 
@@ -147,14 +176,24 @@ describe("useCombatActions", () => {
       },
     } as any);
 
+    vi.mocked(getSpellCastLevelOptions).mockReturnValue([
+      {
+        level: 1,
+        canUseSharedSlot: true,
+        canUsePactSlot: true,
+        hasAvailableSlot: true,
+      },
+    ] as any);
+
     const { result } = renderHook(() => useCombatActions());
     const spellEntry = result.current.sections.bonus_action.find(
-      (entry) => entry.id === "spell:spell_shield_of_faith",
+      (entry) => entry.id === "spell:spell_shield_of_faith" && entry.source === "spell",
     );
+    const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(spellEntry?.spellCast?.canCast).toBe(true);
-    expect(spellEntry?.spellCast?.canUseSharedSlot).toBe(true);
-    expect(spellEntry?.spellCast?.canUsePactSlot).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canCast).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canUseSharedSlot).toBe(true);
+    expect(typedSpellEntry?.spellCast?.canUsePactSlot).toBe(true);
   });
 
   it("maps thrown attack inventory metadata into action entries", () => {

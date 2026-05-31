@@ -1,6 +1,7 @@
 import type React from "react";
 import "./SpellRow.css";
-import type { SpellData } from "../../../types/spell";
+import type { ProseUpcastEffect, SpellData } from "../../../types/spell";
+import type { InnateSpellcastingEntry } from "../../../hooks/useSpellcasting";
 
 // #region Interfaces
 
@@ -9,19 +10,6 @@ interface CastingStats {
   saveDC: number;
   /** The attack bonus for the spell. */
   attackBonus: number;
-}
-
-interface InnateEntry {
-  /** The ID of the spell. */
-  spellId: string;
-  /** The name of the trait that grants this spell. */
-  sourceTraitName: string;
-  /** The saving throw DC for the spell. */
-  spellSaveDC: number;
-  /** The attack bonus for the spell. */
-  spellAttackBonus: number;
-  /** The number of uses and reset condition for the spell. */
-  uses?: { count: number; reset: string };
 }
 
 interface SpellRowProps {
@@ -38,9 +26,11 @@ interface SpellRowProps {
   /** The casting stats for the spell, if available. */
   castingStats: CastingStats | null;
   /** The innate entries for the spell. */
-  innateEntries: InnateEntry[];
+  innateEntries: InnateSpellcastingEntry[];
   /** Whether the spell has damage output. */
   hasDamageOutput: boolean;
+  /** Structured upcast effects that apply at the selected cast level. */
+  proseUpcastEffects?: ProseUpcastEffect[];
 }
 
 // #endregion
@@ -68,6 +58,7 @@ export const SpellRow: React.FC<SpellRowProps> = ({
   castingStats,
   innateEntries,
   hasDamageOutput,
+  proseUpcastEffects = [],
 }) => (
   <article
     key={spell.id}
@@ -158,6 +149,19 @@ export const SpellRow: React.FC<SpellRowProps> = ({
           <p className="spell-higher-level">
             <strong>At Higher Levels:</strong> {spell.lore.higherLevel}
           </p>
+        )}
+
+        {proseUpcastEffects.length > 0 && (
+          <div className="spell-higher-level">
+            <strong>Structured Upcast Effects:</strong>
+            <ul>
+              {proseUpcastEffects.map((effect) => (
+                <li key={`${spell.id}-upcast-${effect.level}`}>
+                  <strong>{`Level ${effect.level}+`}</strong>: {effect.description}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         {innateEntries.map((entry, index) => (
