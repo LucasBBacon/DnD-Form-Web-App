@@ -175,6 +175,85 @@ function validateSpellSlotScalingInvariants(
   return errors.map((message) => `spells/${relativePath} → ${message}`);
 }
 
+function validateSpellProseUpcastInvariants(
+  data: unknown,
+  relativePath: string,
+): string[] {
+  const errors: string[] = [];
+
+  if (!data || typeof data !== 'object') {
+    return errors;
+  }
+
+  const spell = data as {
+    level?: unknown;
+    proseUpcastEffects?: Array<{
+      level?: unknown;
+      description?: unknown;
+    }>;
+  };
+
+  const baseLevel = typeof spell.level === 'number' ? spell.level : null;
+  if (!Array.isArray(spell.proseUpcastEffects)) {
+    return errors;
+  }
+
+  const seenLevels = new Set<number>();
+  let previousLevel: number | null = null;
+
+  spell.proseUpcastEffects.forEach((effect, index) => {
+    if (!effect || typeof effect !== 'object') {
+      errors.push(`proseUpcastEffects[${index}] must be an object.`);
+      return;
+    }
+
+    const level = effect.level;
+    if (!Number.isInteger(level)) {
+      errors.push(
+        `proseUpcastEffects[${index}].level must be an integer between 1 and 9.`,
+      );
+    } else {
+      if (level < 1 || level > 9) {
+        errors.push(
+          `proseUpcastEffects[${index}].level must be between 1 and 9.`,
+        );
+      }
+
+      if (baseLevel != null && level <= baseLevel) {
+        errors.push(
+          `proseUpcastEffects[${index}].level (${level}) must be greater than base spell level (${baseLevel}).`,
+        );
+      }
+
+      if (seenLevels.has(level)) {
+        errors.push(
+          `proseUpcastEffects[${index}].level (${level}) is duplicated; each upcast level must be unique.`,
+        );
+      }
+
+      if (previousLevel != null && level < previousLevel) {
+        errors.push(
+          `proseUpcastEffects[${index}].level (${level}) must be in ascending order.`,
+        );
+      }
+
+      seenLevels.add(level);
+      previousLevel = level;
+    }
+
+    if (
+      typeof effect.description !== 'string' ||
+      effect.description.trim().length === 0
+    ) {
+      errors.push(
+        `proseUpcastEffects[${index}].description must be a non-empty string.`,
+      );
+    }
+  });
+
+  return errors.map((message) => `spells/${relativePath} → ${message}`);
+}
+
 function collectJsonFilesRecursive(
   rootPath: string,
   currentPath: string = rootPath,
@@ -237,9 +316,20 @@ function compileFolder(
           data,
           file.relativePath,
         );
+        const proseInvariantErrors = validateSpellProseUpcastInvariants(
+          data,
+          file.relativePath,
+        );
         if (invariantErrors.length > 0) {
           hasErrors = true;
           invariantErrors.forEach((message) => {
+            console.error(`[ERROR] ${message}`);
+          });
+          continue;
+        }
+        if (proseInvariantErrors.length > 0) {
+          hasErrors = true;
+          proseInvariantErrors.forEach((message) => {
             console.error(`[ERROR] ${message}`);
           });
           continue;

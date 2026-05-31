@@ -5,7 +5,11 @@ import type {
   UseSpellcastingReturn,
 } from "../../hooks/useSpellcasting";
 import { useMemo, useState } from "react";
-import { getAllClasses, getAllSpells } from "../../data/staticDataApi";
+import {
+  getAllClasses,
+  getAllSpells,
+  getProseUpcastEffectsAtLevel,
+} from "../../data/staticDataApi";
 import "./SpellBookView.css";
 import { SpellFilterBar } from "./ui/SpellFilterBar";
 import { SpellRow } from "./ui/SpellRow";
@@ -265,6 +269,12 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
         {filteredRows.map(({ spell, eligible }) => {
           const isExpanded = expandedSpellId === spell.id;
           const hasDamageOutput = (spell.output?.damage?.length ?? 0) > 0;
+          const selectedCastLevel =
+            spellcasting.spellMetadata?.byId[spell.id]?.selectedCastLevel ??
+            spell.level;
+          const innateEntries = spellcasting.pools.innate.filter(
+            (entry) => entry.spellId === spell.id,
+          );
           const classNames = spell.classes
             .map((classId) => classLabelMap.get(classId) ?? classId)
             .sort((a, b) => a.localeCompare(b));
@@ -285,10 +295,12 @@ export const SpellBookView: React.FC<SpellBookViewProps> = ({
                     }
                   : null
               }
-              innateEntries={spellcasting.pools.innate.filter(
-                (entry) => entry.spellId === spell.id,
-              )}
+              innateEntries={innateEntries}
               hasDamageOutput={hasDamageOutput}
+              proseUpcastEffects={getProseUpcastEffectsAtLevel(
+                spell,
+                selectedCastLevel,
+              )}
             />
           );
         })}

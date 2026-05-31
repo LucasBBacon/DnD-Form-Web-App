@@ -458,7 +458,6 @@
 		"concentration",
 		"ritual",
 		"components",
-		"lore",
-		"proseUpcastEffects"
+		"lore"
 	]
 }
