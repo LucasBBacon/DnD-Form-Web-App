@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from "react";
 import "./CombatActionRow.css";
 import { DiceRoller } from "../../ui/DiceRoller/DiceRoller";
