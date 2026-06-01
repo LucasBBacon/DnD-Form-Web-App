@@ -1,6 +1,6 @@
 import type React from "react";
 import "./SpellbookRow.css";
-import type { SpellbookEntry } from "../SpellBookView";
+import type { SpellbookEntry } from "../Spellbook";
 import { useState } from "react";
 import { Bookmark, ChevronDown, ChevronUp } from "lucide-react";
 

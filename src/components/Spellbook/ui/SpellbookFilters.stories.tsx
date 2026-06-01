@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { SpellbookFilters } from "./SpellbookFilters";
-import type { SpellFilterState } from "../SpellBookView";
+import type { SpellFilterState } from "../Spellbook";
 
 const ALL_SCHOOLS = [
   "Abjuration",

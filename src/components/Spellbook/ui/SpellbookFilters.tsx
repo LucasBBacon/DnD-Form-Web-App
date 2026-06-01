@@ -1,6 +1,6 @@
 import type React from "react";
 import "./SpellbookFilters.css";
-import type { SpellFilterState } from "../SpellBookView";
+import type { SpellFilterState } from "../Spellbook";
 import { BookOpen, Search } from "lucide-react";
 
 interface SpellbookFiltersProps {

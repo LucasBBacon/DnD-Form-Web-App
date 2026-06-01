@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import { SpellbookRow } from "./SpellbookRow";
-import type { SpellbookEntry, SpellReferenceData } from "../SpellBookView";
+import type { SpellbookEntry, SpellReferenceData } from "../Spellbook";
 
 // ---------------------------------------------------------------------------
 // Helpers
