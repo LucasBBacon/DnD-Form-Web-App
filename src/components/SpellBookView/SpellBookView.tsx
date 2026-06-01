@@ -4,6 +4,7 @@ export interface SpellReferenceData {
   id: string;
   name: string;
   level: number;
+  school: string;
   castingTime: string;
   range: string;
   components: {
