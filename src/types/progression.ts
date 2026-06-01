@@ -1,6 +1,6 @@
 import type { Ability, Skill } from "./common";
 
-export type LevelUpMode = "xp_gated" | "milestone_anytime";
+export type LevelUpMode = "xp" | "milestone";
 
 export interface LevelChoice {
   /** ID of the selected class for this level */
@@ -25,3 +25,8 @@ export interface LevelChoice {
   /** Language choices for this level */
   languageChoices?: string[];
 }
+
+export const XP_THRESHOLDS = [
+  0, 300, 900, 2700, 6500, 14000, 23000, 34000, 48000, 64000, 85000, 100000,
+  120000, 140000, 165000, 195000, 225000, 265000, 305000, 355000,
+];

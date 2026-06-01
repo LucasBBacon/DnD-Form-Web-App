@@ -200,3 +200,20 @@ code {
   font-style: italic;
   color: var(--ink-muted);
 }
+
+.manuscript-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--ink-main);
+  color: var(--ink-main);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 4px;
+  outline: none;
+  transition: border-bottom-color 0.2s ease;
+}
+
+.manuscript-input:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--gilt-gold);
+}

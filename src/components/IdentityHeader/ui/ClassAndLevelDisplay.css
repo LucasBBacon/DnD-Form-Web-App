@@ -1,0 +1,79 @@
+.header-box {
+    border-bottom: 1px solid var(--border-filigree);
+    padding: 4px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.box-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2px;
+}
+
+.box-value {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.placeholder-text {
+    color: var(--ink-muted);
+    font-style: italic;
+    font-weight: normal;
+}
+
+.clickable-box {
+    cursor: pointer;
+}
+
+.clickable-box:hover {
+    background-color: var(--vellum-hover);
+    border-bottom-color: var(--ink-main);
+}
+
+.class-value {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.class-segment {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.class-level {
+    color: var(--rubric-red);
+    font-weight: bold;
+}
+
+.class-divider {
+    color: var(--border-filigree);
+    margin: 0 4px;
+}
+
+.total-level-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(158, 42, 43, 0.05);
+    border: 1px solid var(--rubric-red);
+    color: var(--rubric-red);
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 2px;
+}
