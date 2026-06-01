@@ -1,87 +1,129 @@
 import type React from "react";
-import { useCharacterStore } from "../../store/useCharacterStore.ts";
-import { getClassById, getRaceById } from "../../data/staticDataApi.ts";
-import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils.ts";
-import { IdentityHeaderView } from "./IdentityHeaderView.tsx";
+import "./IdentityHeader.css";
+import type { LevelUpMode } from "../../types/progression";
+import { ClassAndLevelDisplay } from "./ui/ClassAndLevelDisplay";
+import { ExperienceTracker } from "./ui/ExperienceTracker";
 
-// #region Component
+export interface CharacterClassEntry {
+  classId: string;
+  className: string;
+  subclassName?: string;
+  level: number;
+}
 
-export const IdentityHeader: React.FC = () => {
-  const {
-    name,
-    setName,
-    level,
-    classId,
-    raceId,
-    playerName,
-    setPlayerName,
-    alignment,
-    setAlignment,
-    xp,
-    setXp,
-    levelUpMode,
-    setLevelUpMode,
-    classTracks,
-    choicesByLevel,
-    openLevelUpModal,
-  } = useCharacterStore();
+export interface IdentityHeaderProps {
+  characterName: string;
+  playerName: string;
+  alignment: string;
 
-  const classData = classId ? getClassById(classId) : null;
-  const classNameDisplay = classData
-    ? `${classData.name} ${level}`
-    : "Choose Class";
+  classes: CharacterClassEntry[];
 
-  const raceData = raceId ? getRaceById(raceId) : null;
-  const raceNameDisplay = raceData?.name || "Choose Race";
+  raceNameDisplay: string;
+  backgroundNameDisplay: string;
 
-  // TODO: Implement getBackgroundById
-  const backgroundNameDisplay = "Choose Background";
+  xp: number;
+  levelUpMode: LevelUpMode;
 
-  // Modal handlers
-  const openLevelUpWizard = () => {
-    const targetLevel = getAvailableLevelUpTargetForCharacter({
-      xp,
-      level,
-      levelUpMode,
-      classTracks,
-      choicesByLevel,
-    });
+  onCharacterNameChange: (newValue: string) => void;
+  onPlayerNameChange: (newValue: string) => void;
+  onAlignmentChange: (newValue: string) => void;
+  onXpChange: (newValue: number) => void;
+  onLevelUpModeChange: (newMode: LevelUpMode) => void;
+  onClassModalClick: () => void;
+  onBackgroundModalClick: () => void;
+  onRaceModalClick: () => void;
+}
 
-    console.log("Calculated level-up target:", targetLevel);
-
-    if (targetLevel !== null) {
-      openLevelUpModal(targetLevel, { isBlocking: false });
-    }
-  };
-
-  const openOriginModal = () => {
-    console.log("Trigger Race/Background Modal");
-  };
-
-  const handleLevelUpModeChange = (newMode: typeof levelUpMode) => {
-    setLevelUpMode(newMode);
-  };
-
+export const IdentityHeader: React.FC<IdentityHeaderProps> = ({
+  characterName,
+  playerName,
+  alignment,
+  classes,
+  raceNameDisplay,
+  backgroundNameDisplay,
+  xp,
+  levelUpMode,
+  onCharacterNameChange,
+  onPlayerNameChange,
+  onAlignmentChange,
+  onXpChange,
+  onLevelUpModeChange,
+  onClassModalClick,
+  onBackgroundModalClick,
+  onRaceModalClick,
+}) => {
   return (
-    <IdentityHeaderView
-      name={name}
-      classNameDisplay={classNameDisplay}
-      backgroundNameDisplay={backgroundNameDisplay}
-      playerName={playerName}
-      raceNameDisplay={raceNameDisplay}
-      alignment={alignment}
-      xp={xp}
-      levelUpMode={levelUpMode}
-      onCharacterNameChange={setName}
-      onPlayerNameChange={setPlayerName}
-      onAlignmentChange={setAlignment}
-      onXpChange={setXp}
-      onLevelUpModeChange={handleLevelUpModeChange}
-      onClassModalClick={openLevelUpWizard}
-      onBackgroundModalClick={openOriginModal}
-      onRaceModalClick={openOriginModal}
-    />
+    <div className="identity-header-container">
+      {/* Character Name */}
+      <div className="character-name-section">
+        <input
+          type="text"
+          className="character-name-input"
+          value={characterName}
+          onChange={(e) => onCharacterNameChange(e.target.value)}
+          placeholder="Character Name"
+          spellCheck={false}
+        />
+        <div className="name-underline" />
+      </div>
+
+      {/* Demographics Grid */}
+      <div className="demographics-grid">
+        {/* Top Row */}
+        <ClassAndLevelDisplay classes={classes} onClick={onClassModalClick} />
+
+        <div
+          className="header-box clickable-box"
+          onClick={onBackgroundModalClick}
+        >
+          <div className="box-label">Background</div>
+          <div className="box-value">
+            {backgroundNameDisplay || (
+              <span className="placeholder-text">Select</span>
+            )}
+          </div>
+        </div>
+
+        <div className="header-box editable-box">
+          <div className="box-label">Player Name</div>
+          <input
+            type="text"
+            className="header-inline-input"
+            value={playerName}
+            onChange={(e) => onPlayerNameChange(e.target.value)}
+            placeholder="Your Name"
+          />
+        </div>
+
+        {/* Bottom Row */}
+        <div className="header-box clickable-box" onClick={onRaceModalClick}>
+          <div className="box-label">Race</div>
+          <div className="box-value">
+            {raceNameDisplay || (
+              <span className="placeholder-text">Select</span>
+            )}
+          </div>
+        </div>
+
+        <div className="header-box editable-box">
+          <div className="box-label">Alignment</div>
+          <input
+            type="text"
+            className="header-inline-input"
+            value={alignment}
+            onChange={(e) => onAlignmentChange(e.target.value)}
+            placeholder="Alignment"
+          />
+        </div>
+
+        <ExperienceTracker
+          xp={xp}
+          classes={classes}
+          levelUpMode={levelUpMode}
+          onXpChange={onXpChange}
+          onModeChange={onLevelUpModeChange}
+        />
+      </div>
+    </div>
   );
 };
-
-// #endregion
