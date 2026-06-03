@@ -71,7 +71,7 @@ export const WizardAbilityScoreStageView: React.FC<
   isVirtualValid,
   isPhysicalValid,
   isStandardArrayValid,
-  isPointBuyComplete,
+  isPointBuyComplete: _isPointBuyComplete,
   canContinue,
   error,
   onMethodChange,

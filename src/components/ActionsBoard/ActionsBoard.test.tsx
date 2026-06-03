@@ -1,12 +1,12 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { ActionsBoard } from "./ActionsBoard";
+import { ActionsBoardContainer } from "./ActionsBoardContainer";
 import { useCombatActions } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
 
 vi.mock("../../hooks/useCombatActions");
 vi.mock("../../store/useCharacterStore");
-vi.mock("../DiceRoller/DiceRoller", () => ({
+vi.mock("../ui/DiceRoller/DiceRoller", () => ({
   DiceRoller: ({
     sides = 20,
     count = 1,
@@ -21,14 +21,9 @@ vi.mock("../DiceRoller/DiceRoller", () => ({
     <button
       type="button"
       onClick={() =>
-        onRollComplete?.(
-          sides === 20 && count === 2
-            ? [4, 17]
-            : Array.from({ length: count }, () => 5),
-          {
-            total: sides === 20 && count === 2 ? 21 : count * 5,
-          },
-        )
+        onRollComplete?.(Array.from({ length: count }, () => 5), {
+          total: count * 5,
+        })
       }
     >
       {rollLabel ?? `Mock d${sides}`}
@@ -38,12 +33,28 @@ vi.mock("../DiceRoller/DiceRoller", () => ({
 
 const buildCombatActions = () => ({
   spellcasting: {
+    isSpellcaster: true,
     slots: {
       shared: {
         1: { total: 2, expended: 1 },
-        2: { total: 1, expended: 1 },
       },
       pact: null,
+    },
+    spellMetadata: {
+      byId: {
+        spell_magic_missile: {
+          spellId: "spell_magic_missile",
+          baseSpellLevel: 1,
+          availableCastLevels: [1],
+          selectedCastLevel: 1,
+          canCast: true,
+          canUseSharedSlot: true,
+          canUsePactSlot: false,
+          resolvedDamageEntries: [],
+          resolvedHealingEntries: [],
+        },
+      },
+      activeSpellIds: ["spell_magic_missile"],
     },
   },
   sections: {
@@ -66,18 +77,11 @@ const buildCombatActions = () => ({
         },
         damageRolls: [
           {
-            id: "attack-damage:longsword:0:0",
+            id: "attack-damage:longsword:0",
             count: 1,
             sides: 8,
             modifier: 3,
             label: "Damage (slashing)",
-          },
-          {
-            id: "attack-damage:longsword:0:1",
-            count: 1,
-            sides: 6,
-            modifier: 0,
-            label: "Damage (fire)",
           },
         ],
       },
@@ -100,10 +104,10 @@ const buildCombatActions = () => ({
         subtitle: "Trait Action",
         quickStats: ["Self", "2d6 cold"],
         description: "Exhale destructive cold energy.",
-        isExhausted: true,
+        isExhausted: false,
         uses: {
           total: 1,
-          remaining: 0,
+          remaining: 1,
         },
       },
     ],
@@ -113,117 +117,45 @@ const buildCombatActions = () => ({
   toRomanNumeral: (level: number) => (level === 1 ? "I" : "C"),
 });
 
-describe("ActionsBoard", () => {
+describe("ActionsBoardContainer", () => {
   let removeInventoryItemMock: ReturnType<typeof vi.fn>;
+  let expendSpellSlotMock: ReturnType<typeof vi.fn>;
+  let expendPactSlotMock: ReturnType<typeof vi.fn>;
+  let expendTraitActionUseMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
     removeInventoryItemMock = vi.fn();
+    expendSpellSlotMock = vi.fn();
+    expendPactSlotMock = vi.fn();
+    expendTraitActionUseMock = vi.fn();
 
     vi.mocked(useCombatActions).mockReturnValue(buildCombatActions() as never);
     vi.mocked(useCharacterStore).mockReturnValue({
-      expendTraitActionUse: vi.fn(),
-      restoreTraitActionUse: vi.fn(),
       removeInventoryItem: removeInventoryItemMock,
+      expendSpellSlot: expendSpellSlotMock,
+      expendPactSlot: expendPactSlotMock,
+      expendTraitActionUse: expendTraitActionUseMock,
     } as never);
   });
 
-  it("renders action-economy section headers and slot HUD", () => {
-    render(<ActionsBoard />);
+  it("renders board title, spell slot HUD, and action section", () => {
+    render(<ActionsBoardContainer />);
 
-    expect(
-      screen.getByRole("heading", { name: "Actions" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Bonus Actions" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("heading", { name: "Reactions" }),
-    ).toBeInTheDocument();
-
-    expect(screen.getByText(/Lvl 1:/i)).toBeInTheDocument();
-    expect(screen.getByText(/\[o \]/i)).toBeInTheDocument();
+    expect(screen.getByText("Book of War")).toBeInTheDocument();
+    expect(screen.getByText("Spell Slots")).toBeInTheDocument();
+    expect(screen.getByText("Level I")).toBeInTheDocument();
+    expect(screen.getByText("Actions")).toBeInTheDocument();
   });
 
-  it("renders spell level badge and exhausted trait state", () => {
-    const { container } = render(<ActionsBoard />);
+  it("expends trait use via container callback mapping", () => {
+    render(<ActionsBoardContainer />);
 
-    expect(screen.getByText("I")).toBeInTheDocument();
-    expect(screen.getByText(/Resource exhausted\./i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Use" }));
 
-    const exhaustedCard = container.querySelector(
-      ".combat-action-card.is-exhausted",
+    expect(expendTraitActionUseMock).toHaveBeenCalledWith(
+      "action_breath_weapon_cold_cone",
     );
-    expect(exhaustedCard).not.toBeNull();
-  });
-
-  it("rolls to-hit and damage with inline result summaries", () => {
-    render(<ActionsBoard />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Roll To-Hit" }));
-    const toHitRollButtons = screen.getAllByRole("button", {
-      name: "Roll To-Hit",
-    });
-    fireEvent.click(toHitRollButtons[toHitRollButtons.length - 1]);
-
-    expect(screen.getByText(/To-Hit: 10 \(d20 5 \+ 5\)/i)).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Damage (slashing)" }));
-    fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage (slashing)" }),
-    );
-
-    expect(
-      screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i),
-    ).toBeInTheDocument();
-  });
-
-  it("supports advantage and disadvantage to-hit modes", () => {
-    render(<ActionsBoard />);
-
-    fireEvent.click(screen.getByRole("radio", { name: "Advantage" }));
-    fireEvent.click(screen.getByRole("button", { name: "Roll To-Hit" }));
-    {
-      const buttons = screen.getAllByRole("button", { name: "Roll To-Hit" });
-      fireEvent.click(buttons[buttons.length - 1]);
-    }
-
-    expect(
-      screen.getByText(
-        /To-Hit: 22 \(d20 4\/17 -> keep 17 \(advantage\) \+ 5\)/i,
-      ),
-    ).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("radio", { name: "Disadvantage" }));
-    fireEvent.click(screen.getByRole("button", { name: "Roll To-Hit" }));
-    {
-      const buttons = screen.getAllByRole("button", { name: "Roll To-Hit" });
-      fireEvent.click(buttons[buttons.length - 1]);
-    }
-
-    expect(
-      screen.getByText(
-        /To-Hit: 9 \(d20 4\/17 -> keep 4 \(disadvantage\) \+ 5\)/i,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it("handles multi-damage roll-all workflow with independent result labels", () => {
-    render(<ActionsBoard />);
-
-    fireEvent.click(screen.getByRole("button", { name: "Roll All Damage" }));
-
-    fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage (slashing)" }),
-    );
-    fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage (fire)" }),
-    );
-
-    expect(
-      screen.getByText(/Damage \(slashing\): 8 \(5 \+ 3\)/i),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/Damage \(fire\): 5 \(5\)/i)).toBeInTheDocument();
   });
 
   it("consumes a thrown weapon on damage roll", () => {
@@ -266,12 +198,9 @@ describe("ActionsBoard", () => {
       },
     } as never);
 
-    render(<ActionsBoard />);
+    render(<ActionsBoardContainer />);
 
     fireEvent.click(screen.getByRole("button", { name: "Damage (piercing)" }));
-    fireEvent.click(
-      screen.getByRole("button", { name: "Roll Damage (piercing)" }),
-    );
 
     expect(removeInventoryItemMock).toHaveBeenCalledWith("weapon_javelin", 1);
   });

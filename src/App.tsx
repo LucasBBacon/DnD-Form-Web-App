@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import "./App.css";
 import { useCharacterStore } from "./store/useCharacterStore";
-import { CharacterSheet } from "./components/CharacterSheet/CharacterSheet";
+import { CharacterSheetLayout } from "./components/CharacterSheetLayout/CharacterSheetLayout";
 import { CharacterCreationWizard } from "./components/CharacterCreationWizard/CharacterCreationWizard";
 import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
-import { ShortRestModal } from "./components/ShortRestModal/ShortRestModal";
 import {
   getAvailableLevelUpTargetForCharacter,
   getFirstIncompleteLevelChoice,
@@ -19,10 +18,8 @@ function App() {
     classTracks,
     choicesByLevel,
     levelUpModalState,
-    restModalState,
     openLevelUpModal,
     closeLevelUpModal,
-    closeRestModal,
   } = useCharacterStore();
 
   // Dev-only: load a named scenario from the ?scenario= URL query parameter.
@@ -46,6 +43,7 @@ function App() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const effectiveCurrentLevel = Math.max(
     level,
     classTracks.reduce((total, track) => total + track.level, 0),
@@ -93,7 +91,7 @@ function App() {
 
   return (
     <main className="app-container">
-      {isSetupComplete ? <CharacterSheet /> : <CharacterCreationWizard />}
+      {isSetupComplete ? <CharacterSheetLayout /> : <CharacterCreationWizard />}
       {isSetupComplete &&
         levelUpModalState.isOpen &&
         levelUpModalState.targetLevel !== null && (
@@ -103,12 +101,6 @@ function App() {
             onClose={closeLevelUpModal}
           />
         )}
-      {isSetupComplete && restModalState.isOpen && (
-        <ShortRestModal
-          restType={restModalState.restType}
-          onClose={closeRestModal}
-        />
-      )}
     </main>
   );
 }

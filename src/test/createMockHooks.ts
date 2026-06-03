@@ -79,8 +79,8 @@ export const createMockCharacterStoreForVitals = (
  * Creates a mock useCharacterStore return value for ActionsBoard.
  */
 export const createMockCharacterStoreForActions = (callbacks?: {
-  expendTraitActionUse?: (traitId: string, actionId: string) => void;
-  restoreTraitActionUse?: (traitId: string, actionId: string) => void;
+  expendTraitActionUse?: (actionId: string) => void;
+  restoreTraitActionUse?: (actionId: string) => void;
 }) => {
   return {
     expendTraitActionUse: callbacks?.expendTraitActionUse ?? (() => {}),

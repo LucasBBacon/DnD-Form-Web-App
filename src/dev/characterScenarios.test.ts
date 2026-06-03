@@ -98,7 +98,7 @@ describe("buildScenarioState", () => {
 
   it("near_death scenario has failed death saves", () => {
     const state = buildScenarioState("near_death")!;
-    expect(state.deathSaves.failures).toBeGreaterThan(0);
+    expect(state.deathSaves.failure).toBeGreaterThan(0);
     expect(state.damageTaken).toBeGreaterThan(0);
   });
 });

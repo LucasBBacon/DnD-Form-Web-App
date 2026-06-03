@@ -154,8 +154,8 @@ describe("useCombatActions", () => {
     );
     const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(typedSpellEntry?.spellCast?.canCast).toBe(false);
-    expect(typedSpellEntry?.spellCast?.unavailableReason).toBe(
+    expect(typedSpellEntry?.spellMetadata?.canCast).toBe(false);
+    expect(typedSpellEntry?.spellMetadata?.unavailableReason).toBe(
       "No Level 1+ spell slots available.",
     );
   });
@@ -191,9 +191,9 @@ describe("useCombatActions", () => {
     );
     const typedSpellEntry = spellEntry?.source === "spell" ? spellEntry : undefined;
 
-    expect(typedSpellEntry?.spellCast?.canCast).toBe(true);
-    expect(typedSpellEntry?.spellCast?.canUseSharedSlot).toBe(true);
-    expect(typedSpellEntry?.spellCast?.canUsePactSlot).toBe(true);
+    expect(typedSpellEntry?.spellMetadata?.canCast).toBe(true);
+    expect(typedSpellEntry?.spellMetadata?.canUseSharedSlot).toBe(true);
+    expect(typedSpellEntry?.spellMetadata?.canUsePactSlot).toBe(true);
   });
 
   it("maps thrown attack inventory metadata into action entries", () => {
@@ -221,9 +221,11 @@ describe("useCombatActions", () => {
     const attackEntry = result.current.sections.action.find(
       (entry) => entry.source === "attack" && entry.name === "Javelin [Thrown]",
     );
+    const typedAttackEntry =
+      attackEntry?.source === "attack" ? attackEntry : undefined;
 
-    expect(attackEntry?.isThrown).toBe(true);
-    expect(attackEntry?.throwableItemId).toBe("weapon_javelin");
-    expect(attackEntry?.throwableCount).toBe(3);
+    expect(typedAttackEntry?.isThrown).toBe(true);
+    expect(typedAttackEntry?.throwableItemId).toBe("weapon_javelin");
+    expect(typedAttackEntry?.throwableCount).toBe(3);
   });
 });

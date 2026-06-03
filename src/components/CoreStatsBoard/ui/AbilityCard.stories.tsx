@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AbilityCard } from "./AbilityCard";
+import { AbilityCard, type AbilityCardSkill } from "./AbilityCard";
 
 const makeSkill = (
   key: string,
   label: string,
   modifier: number,
-  overrides?: Partial<
-    (typeof Strength.args.ability.skills extends Array<infer T> ? T : never)
-  >,
+  overrides?: Partial<AbilityCardSkill>,
 ) => ({
   key,
   label,

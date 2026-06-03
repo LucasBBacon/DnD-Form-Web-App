@@ -1,6 +1,10 @@
 import type { Ability, Skill } from "./common";
 
-export type LevelUpMode = "xp" | "milestone";
+export type LevelUpMode =
+  | "xp"
+  | "milestone"
+  | "xp_gated"
+  | "milestone_anytime";
 
 export interface LevelChoice {
   /** ID of the selected class for this level */

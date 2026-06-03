@@ -29,7 +29,7 @@ export const IDENTITY_HEADER_FIXTURES: Record<string, IdentityHeaderScenario> =
       raceNameDisplay: "Choose Race",
       alignment: "",
       xp: 0,
-      levelUpMode: "xp_gated",
+      levelUpMode: "xp",
     },
     fighterLevel5: {
       name: "Arannis Duskwhisper",
@@ -39,7 +39,7 @@ export const IDENTITY_HEADER_FIXTURES: Record<string, IdentityHeaderScenario> =
       raceNameDisplay: "Elf",
       alignment: "Neutral Good",
       xp: 7000,
-      levelUpMode: "xp_gated",
+      levelUpMode: "xp",
     },
     milestoneCampaign: {
       name: "Sera Vale",
@@ -49,7 +49,7 @@ export const IDENTITY_HEADER_FIXTURES: Record<string, IdentityHeaderScenario> =
       raceNameDisplay: "Human",
       alignment: "Chaotic Neutral",
       xp: 0,
-      levelUpMode: "milestone_anytime",
+      levelUpMode: "milestone",
     },
     multiclassHero: {
       name: "Kade Ironstep",
@@ -59,7 +59,7 @@ export const IDENTITY_HEADER_FIXTURES: Record<string, IdentityHeaderScenario> =
       raceNameDisplay: "Half-Orc",
       alignment: "Lawful Neutral",
       xp: 14000,
-      levelUpMode: "xp_gated",
+      levelUpMode: "xp",
     },
     playground: {
       name: "Arannis Duskwhisper",
@@ -69,6 +69,6 @@ export const IDENTITY_HEADER_FIXTURES: Record<string, IdentityHeaderScenario> =
       raceNameDisplay: "Elf",
       alignment: "Neutral Good",
       xp: 7000,
-      levelUpMode: "xp_gated",
+      levelUpMode: "xp",
     },
   };

@@ -2,7 +2,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { IdentityHeader } from "./IdentityHeader";
+import { IdentityHeaderContainer } from "./IdentityHeaderContainer";
 import {
   BASELINE_CHARACTER_STATE,
   useCharacterStore,
@@ -32,9 +32,9 @@ describe("IdentityHeader level-up launch", () => {
       levelUpMode: "milestone_anytime",
     } as any);
 
-    render(<IdentityHeader />);
+    render(<IdentityHeaderContainer />);
 
-    await user.click(screen.getByText("CLASS & LEVEL"));
+    await user.click(screen.getByText("Class & Level"));
 
     expect(useCharacterStore.getState().levelUpModalState).toEqual({
       isOpen: true,
@@ -51,9 +51,9 @@ describe("IdentityHeader level-up launch", () => {
       xp: 0,
     } as any);
 
-    render(<IdentityHeader />);
+    render(<IdentityHeaderContainer />);
 
-    await user.click(screen.getByText("CLASS & LEVEL"));
+    await user.click(screen.getByText("Class & Level"));
 
     expect(useCharacterStore.getState().levelUpModalState).toEqual({
       isOpen: false,
@@ -62,14 +62,17 @@ describe("IdentityHeader level-up launch", () => {
     });
   });
 
-  it("updates level-up mode from the header selector", async () => {
+  it("toggles level-up mode from the header experience tracker", async () => {
     const user = userEvent.setup();
 
-    render(<IdentityHeader />);
+    useCharacterStore.setState({
+      levelUpMode: "xp",
+    } as any);
 
-    const modeSelect = screen.getByLabelText("Level Up Mode");
-    await user.selectOptions(modeSelect, "milestone_anytime");
+    render(<IdentityHeaderContainer />);
 
-    expect(useCharacterStore.getState().levelUpMode).toBe("milestone_anytime");
+    await user.click(screen.getByTitle("Currently using xp leveling"));
+
+    expect(useCharacterStore.getState().levelUpMode).toBe("milestone");
   });
 });

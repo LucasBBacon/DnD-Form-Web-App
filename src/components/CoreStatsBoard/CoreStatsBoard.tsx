@@ -24,6 +24,10 @@ export const CoreStatsBoard: React.FC<CoreStatsBoardProps> = ({
   passives,
   abilities,
 }) => {
+  const handleSkillRoll = () => {};
+  const handleSaveRoll = () => {};
+  const handleAbilityCheckRoll = () => {};
+
   return (
     <div className="core-stats-container">
       
@@ -56,7 +60,13 @@ export const CoreStatsBoard: React.FC<CoreStatsBoardProps> = ({
       {/* ABILITY GRID */}
       <div className="ability-grid">
         {abilities.map((ability) => (
-          <AbilityCard key={ability.key} ability={ability} />
+          <AbilityCard
+            key={ability.key}
+            ability={ability}
+            onSkillRoll={handleSkillRoll}
+            onSaveRoll={handleSaveRoll}
+            onAbilityCheckRoll={handleAbilityCheckRoll}
+          />
         ))}
       </div>
 

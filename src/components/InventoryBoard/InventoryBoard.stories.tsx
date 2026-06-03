@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InventoryBoardView } from "./InventoryBoardView";
 import { INVENTORY_BOARD_FIXTURES } from "./InventoryBoard.fixtures";
-import { WealthTracker } from "./ui/WealthTracker";
 
 const meta: Meta<typeof InventoryBoardView> = {
   title: "Boards/InventoryBoard",
@@ -25,7 +24,6 @@ const baseCallbacks = {
 export const Empty: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.empty,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };
@@ -33,7 +31,6 @@ export const Empty: Story = {
 export const StandardLoadout: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.standardLoadout,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };
@@ -41,7 +38,6 @@ export const StandardLoadout: Story = {
 export const FullyAttuned: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.fullyAttuned,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };
@@ -49,7 +45,6 @@ export const FullyAttuned: Story = {
 export const Encumbered: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.encumbered,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };
@@ -57,7 +52,6 @@ export const Encumbered: Story = {
 export const MissingReferences: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.missingReferences,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };
@@ -65,7 +59,6 @@ export const MissingReferences: Story = {
 export const Playground: Story = {
   args: {
     ...INVENTORY_BOARD_FIXTURES.playground,
-    wealthView: <WealthTracker />,
     ...baseCallbacks,
   },
 };

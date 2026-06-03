@@ -74,7 +74,6 @@ export const MortalLedger: React.FC<MortalLedgerProps> = ({
   hp,
   tempHp,
   deathSaves,
-  level,
   hitDicePools,
   onTakeDamage,
   onHeal,

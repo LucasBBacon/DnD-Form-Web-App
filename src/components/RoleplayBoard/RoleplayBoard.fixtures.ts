@@ -95,7 +95,7 @@ const FEATURE_SET_MIXED: RoleplayFeature[] = [
 
 export const ROLEPLAY_BOARD_FIXTURES: Record<string, RoleplayBoardScenario> = {
   featuresEmpty: {
-    activeTab: "features",
+    activeTab: "characteristics",
     features: [],
     characteristics: {
       personalityTraits: ROLEPLAY_FIXTURES.blank.personality,
@@ -116,7 +116,7 @@ export const ROLEPLAY_BOARD_FIXTURES: Record<string, RoleplayBoardScenario> = {
     },
   },
   featuresLoaded: {
-    activeTab: "features",
+    activeTab: "characteristics",
     features: FEATURE_SET_HEROIC,
     characteristics: {
       personalityTraits: ROLEPLAY_FIXTURES.heroic.personality,
@@ -179,7 +179,7 @@ export const ROLEPLAY_BOARD_FIXTURES: Record<string, RoleplayBoardScenario> = {
     },
   },
   playground: {
-    activeTab: "features",
+    activeTab: "characteristics",
     features: FEATURE_SET_HEROIC,
     characteristics: {
       personalityTraits: ROLEPLAY_FIXTURES.heroic.personality,

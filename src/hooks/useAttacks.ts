@@ -264,7 +264,7 @@ export const useAttacks = (): { attacks: Attack[] } => {
 
       return [baseAttack, thrownAttack];
     })
-    .filter(Boolean); // Filter out any nulls
+    .filter((attack) => attack !== null);
 
   const stackThrownAttacks = state.inventoryStacks
     .flatMap((stack) => {
@@ -324,9 +324,9 @@ export const useAttacks = (): { attacks: Attack[] } => {
         },
       ];
     })
-    .filter(Boolean);
+    .filter((attack) => attack !== null);
 
-  const attacks = [...equippedAttacks, ...stackThrownAttacks];
+  const attacks = [...equippedAttacks, ...stackThrownAttacks] as Attack[];
 
   // #endregion
 

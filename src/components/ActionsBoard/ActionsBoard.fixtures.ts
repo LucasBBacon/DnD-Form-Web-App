@@ -2,7 +2,7 @@ import type { SpellcastingFixture } from "../../types/fixtures";
 import { SPELLCASTING_FIXTURES } from "../../fixtures/boardFixtures";
 import type {
   CombatActionEntry,
-  CombatActionSection,
+  CombatActionTypes,
 } from "../../hooks/useCombatActions";
 
 /**
@@ -13,7 +13,7 @@ export interface ActionsBoardScenario {
   /** The spellcasting fixture for the scenario. */
   spellcasting: SpellcastingFixture;
   /** The combat action sections for the scenario. */
-  sections: Partial<Record<CombatActionSection, CombatActionEntry[]>>;
+  sections: Partial<Record<CombatActionTypes, CombatActionEntry[]>>;
   /** The currently active roller for the scenario. */
   activeRoller: {
     /** The ID of the combat action entry currently being rolled. */
@@ -74,9 +74,6 @@ const THROWN_JAVELIN_ACTION: CombatActionEntry = {
   quickStats: ["+4 to-hit", "1d6+2 damage", "Range 30/120"],
   description: "Ranged weapon attack with a thrown javelin.",
   isExhausted: false,
-  isThrown: true,
-  throwableItemId: "weapon_javelin",
-  throwableCount: 3,
   attackRoll: {
     id: "atk:javelin:thrown",
     label: "Javelin Attack",

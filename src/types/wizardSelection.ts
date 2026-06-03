@@ -21,7 +21,7 @@ export interface SubSelectionOption {
   /** Detailed description of the sub-selection option */
   description: string;
   /** Traits associated with the sub-selection option */
-  traits: TraitSegment[];
+  traits: readonly TraitSegment[];
 }
 
 export interface SelectionOption {
@@ -34,9 +34,9 @@ export interface SelectionOption {
   /** Detailed description of the selection option */
   description: string;
   /** Traits associated with the selection option */
-  traits: TraitSegment[];
+  traits: readonly TraitSegment[];
   /** Sub-options available for the selection option */
-  subOptions?: SubSelectionOption[];
+  subOptions?: readonly SubSelectionOption[];
   /** Label for the sub-options */
   subOptionLabel?: string;
 }

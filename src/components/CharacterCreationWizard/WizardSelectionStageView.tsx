@@ -6,7 +6,7 @@ import { TraitAccordion } from "./ui/TraitAccordion";
 
 export interface WizardSelectionStageViewProps {
   title: string;
-  options: SelectionOption[];
+  options: readonly SelectionOption[];
   currentSelectionId: string | null;
   currentSubSelectionId: string | null;
   expandedBaseId: string | null;

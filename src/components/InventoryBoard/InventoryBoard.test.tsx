@@ -5,6 +5,7 @@ import { InventoryBoard } from "./InventoryBoard";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { useCharacterStats } from "../../hooks/useCharacterStats";
 import * as staticDataApi from "../../data/staticDataApi";
+import type { UUID } from "../../types/common";
 
 vi.mock("../../store/useCharacterStore");
 vi.mock("../../hooks/useCharacterStats");
@@ -21,12 +22,20 @@ vi.mock("./ui/TwoHandedWarningDialog", () => ({
 }));
 
 const mockStoreActions = () => ({
-  inventoryInstances: [],
-  inventoryStacks: [],
-  equippedWeaponInstanceIds: [],
+  inventoryInstances: [] as Array<{
+    instanceId: UUID;
+    baseItemId: string;
+    customName?: string;
+  }>,
+  inventoryStacks: [] as Array<{
+    stackId: UUID;
+    baseItemId: string;
+    quantity: number;
+  }>,
+  equippedWeaponInstanceIds: [] as UUID[],
   equippedArmorInstanceId: null,
   equippedShieldInstanceId: null,
-  attunedInstanceIds: [],
+  attunedInstanceIds: [] as UUID[],
   equipWeaponInstance: vi.fn(),
   unequipWeaponInstance: vi.fn(),
   equipArmorInstance: vi.fn(),

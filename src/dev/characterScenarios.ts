@@ -39,7 +39,7 @@ const sableCrossbowId = generateUuidV4();
 const sableBackpackId = generateUuidV4();
 
 // Partial overrides keyed by scenario name.
-const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
+export const SCENARIO_OVERRIDES: Record<string, Partial<CharacterState>> = {
   // ── Blank character with setup flagged complete ────────────────────────────
   blank: {
     isSetupComplete: true,

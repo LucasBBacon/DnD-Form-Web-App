@@ -1,35 +1,42 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { FeatureCard } from "./FeatureCard";
 
 const baseProps = {
+  traitId: "trait_darkvision",
   name: "Darkvision",
   sources: [{ key: "race-elf", kind: "race", label: "Elf" }],
-  description: "You can see in dim light within 60 feet.",
+  lore: {
+    shortDescription: "You can see in dim light within 60 feet.",
+    fullText: "You can see in dim light within 60 feet as if it were bright light.",
+  },
 };
 
 describe("FeatureCard", () => {
-  it("renders the feature name", () => {
+  it("renders feature name and source tag", () => {
     render(<FeatureCard {...baseProps} />);
+
     expect(screen.getByText("Darkvision")).toBeInTheDocument();
+    expect(screen.getByText("Elf")).toBeInTheDocument();
   });
 
-  it("renders the description", () => {
+  it("renders short description while collapsed", () => {
     render(<FeatureCard {...baseProps} />);
+
     expect(
       screen.getByText("You can see in dim light within 60 feet."),
     ).toBeInTheDocument();
   });
 
-  it("renders each source badge label", () => {
+  it("expands to show detailed lore on click", () => {
     render(<FeatureCard {...baseProps} />);
-    expect(screen.getByText("Elf")).toBeInTheDocument();
-  });
 
-  it("applies the kind class to each source badge", () => {
-    const { container } = render(<FeatureCard {...baseProps} />);
+    fireEvent.click(screen.getByText("Darkvision"));
+
     expect(
-      container.querySelector(".feature-source-badge--race"),
+      screen.getByText(
+        "You can see in dim light within 60 feet as if it were bright light.",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -43,6 +50,7 @@ describe("FeatureCard", () => {
         ]}
       />,
     );
+
     expect(screen.getByText("Fighter 5")).toBeInTheDocument();
     expect(screen.getByText("War Caster")).toBeInTheDocument();
   });

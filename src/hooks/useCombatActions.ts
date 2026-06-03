@@ -61,6 +61,32 @@ export interface AttackActionEntry extends BaseActionEntry {
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */
   damageRolls?: CombatRollMetadata[];
+  /** Weapon property catalog entries (attack cards only) */
+  weaponProperties?: WeaponPropertyCatalogEntry[];
+  /** Ammunition info for ranged attack entries */
+  ammo?: { id: string; name: string | null; count: number | null };
+  /** Parsed range data for ranged attack entries */
+  rangeInfo?: WeaponRangeBand;
+  /** Effective melee reach in feet for this attack */
+  meleeReachFeet?: number;
+  /** True when the weapon has the reach property */
+  hasReachProperty?: boolean;
+  /** True when this attack entry represents a thrown variant */
+  isThrown?: boolean;
+  /** Base item id consumed when this thrown attack is used */
+  throwableItemId?: string;
+  /** Remaining count for this throwable source, when countable */
+  throwableCount?: number | null;
+  /** True when a heavy weapon is wielded by a Small character — attack is locked to disadvantage */
+  heavyDisadvantage?: boolean;
+  /** Versatile mode for versatile weapons (one-handed or two-handed) */
+  versatileMode?: "one-handed" | "two-handed";
+  /** Versatile damage dice string for the weapon (e.g., "1d8"), if the weapon is versatile */
+  versatileDamageDice?: string | null;
+  /** Base damage dice string for the weapon (e.g., "1d6") */
+  baseDamageDice?: string;
+  /** Instance ID for weapon attacks (for state management) */
+  instanceId?: string;
 }
 
 export interface SpellSaveActionEntry extends BaseActionEntry {
@@ -69,6 +95,16 @@ export interface SpellSaveActionEntry extends BaseActionEntry {
   /** Optional cast state for spell actions */
   spellLevel: number;
   spellMetadata?: SpellCastMetadata;
+  /** Legacy cast-state shape consumed by older UI/tests */
+  spellCast?: {
+    canCast: boolean;
+    selectedCastLevel: number;
+    canUseSharedSlot: boolean;
+    canUsePactSlot: boolean;
+    unavailableReason?: string;
+  };
+  /** Available cast levels for this spell entry */
+  availableCastLevels?: number[];
   /** Optional attack roll metadata for the combat action */
   attackRoll?: CombatRollMetadata;
   /** Optional damage roll metadata for the combat action */

@@ -60,8 +60,6 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
   const [inputMode, setInputMode] = useState<"digital" | "manual">("digital");
   const [manualTotal, setManualTotal] = useState<number | "">("");
 
-  const [values, setValues] = useState<number[]>(Array(safeCount).fill(1));
-
   const [isRolling, setIsRolling] = useState<boolean>(false);
   const rollInterval = useRef<number | null>(null);
 
@@ -83,7 +81,7 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
     setIsRolling(true);
 
     rollInterval.current = window.setInterval(() => {
-      setValues(generateRolls(safeCount, sides));
+      generateRolls(safeCount, sides);
     }, 50);
 
     setTimeout(() => {
@@ -92,7 +90,6 @@ export const DiceRoller: React.FC<DiceRollerProps> = ({
       const finalRolls = generateRolls(safeCount, sides);
       const total = finalRolls.reduce((a, b) => a + b, 0);
 
-      setValues(finalRolls);
       setIsRolling(false);
 
       if (onRollComplete) {

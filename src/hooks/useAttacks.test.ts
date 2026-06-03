@@ -102,7 +102,7 @@ describe("useAttacks thrown weapon behavior", () => {
       ],
     } as any);
 
-    vi.mocked(getItemById).mockImplementation((id: string) => {
+    vi.mocked(getItemById).mockImplementation((id: string | null) => {
       if (id !== "weapon_dagger") return null;
       return {
         id: "weapon_dagger",
@@ -158,7 +158,7 @@ describe("useAttacks thrown weapon behavior", () => {
       ],
     } as any);
 
-    vi.mocked(getItemById).mockImplementation((id: string) => {
+    vi.mocked(getItemById).mockImplementation((id: string | null) => {
       if (id !== "weapon_javelin") return null;
       return {
         id: "weapon_javelin",

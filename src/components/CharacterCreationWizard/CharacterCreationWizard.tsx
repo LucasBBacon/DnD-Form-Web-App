@@ -40,9 +40,6 @@ const formatIdFallback = (id: string | null): string => {
   return id.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-const formatModifier = (modifier: number): string =>
-  modifier >= 0 ? `+${modifier}` : `${modifier}`;
-
 const WIZARD_STEPS = [
   { id: "race", label: "1. Race" },
   { id: "class", label: "2. Class" },
