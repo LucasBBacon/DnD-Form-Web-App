@@ -23,7 +23,31 @@ interface TwoHandedWarningState {
 // #region Component
 
 export const InventoryBoard: React.FC = () => {
-  const store = useCharacterStore();
+  const inventoryInstances = useCharacterStore((state) => state.inventoryInstances);
+  const inventoryStacks = useCharacterStore((state) => state.inventoryStacks);
+  const equippedWeaponInstanceIds = useCharacterStore(
+    (state) => state.equippedWeaponInstanceIds,
+  );
+  const equippedArmorInstanceId = useCharacterStore(
+    (state) => state.equippedArmorInstanceId,
+  );
+  const equippedShieldInstanceId = useCharacterStore(
+    (state) => state.equippedShieldInstanceId,
+  );
+  const attunedInstanceIds = useCharacterStore((state) => state.attunedInstanceIds);
+
+  const equipWeaponInstance = useCharacterStore((state) => state.equipWeaponInstance);
+  const unequipWeaponInstance = useCharacterStore((state) => state.unequipWeaponInstance);
+  const equipArmorInstance = useCharacterStore((state) => state.equipArmorInstance);
+  const equipShieldInstance = useCharacterStore((state) => state.equipShieldInstance);
+  const attuneInstance = useCharacterStore((state) => state.attuneInstance);
+  const unattuneInstance = useCharacterStore((state) => state.unattuneInstance);
+  const removeInventoryInstance = useCharacterStore(
+    (state) => state.removeInventoryInstance,
+  );
+  const removeInventoryItem = useCharacterStore((state) => state.removeInventoryItem);
+  const addInventoryItem = useCharacterStore((state) => state.addInventoryItem);
+
   const { encumbrance } = useCharacterStats();
   const [twoHandedWarningState, setTwoHandedWarningState] = useState<TwoHandedWarningState | null>(null);
 
@@ -33,7 +57,7 @@ export const InventoryBoard: React.FC = () => {
   const { hydratedInstances, missingInstanceItemIds } = useMemo(() => {
     const missingItemIds: string[] = [];
     const resolvedInstances: InventoryBoardHydratedInstance[] =
-      store.inventoryInstances
+      inventoryInstances
         .map((instance) => {
           const itemData = getItemById(instance.baseItemId);
           if (!itemData) {
@@ -70,12 +94,12 @@ export const InventoryBoard: React.FC = () => {
       hydratedInstances: resolvedInstances,
       missingInstanceItemIds: Array.from(new Set(missingItemIds)),
     };
-  }, [store.inventoryInstances]);
+  }, [inventoryInstances]);
 
   // Hydrate stacks
   const { hydratedStacks, missingStackItemIds } = useMemo(() => {
     const missingItemIds: string[] = [];
-    const resolvedStacks: InventoryBoardHydratedStack[] = store.inventoryStacks
+    const resolvedStacks: InventoryBoardHydratedStack[] = inventoryStacks
       .map((stack) => {
         const itemData = getItemById(stack.baseItemId);
         if (!itemData) {
@@ -107,7 +131,7 @@ export const InventoryBoard: React.FC = () => {
       hydratedStacks: resolvedStacks,
       missingStackItemIds: Array.from(new Set(missingItemIds)),
     };
-  }, [store.inventoryStacks]);
+  }, [inventoryStacks]);
 
   const missingItemIds = useMemo(
     () =>
@@ -121,7 +145,7 @@ export const InventoryBoard: React.FC = () => {
 
   const getInstanceDisplayName = (instanceId: string | null): string | null => {
     if (!instanceId) return null;
-    const instance = store.inventoryInstances.find(
+    const instance = inventoryInstances.find(
       (entry) => entry.instanceId === instanceId,
     );
     if (!instance) return null;
@@ -131,19 +155,19 @@ export const InventoryBoard: React.FC = () => {
 
   const toggleEquipWeapon = (instanceId: string, isEquipped: boolean) => {
     if (isEquipped) {
-      store.unequipWeaponInstance(instanceId);
+      unequipWeaponInstance(instanceId);
       return;
     }
 
     const validation = canEquipTwoHandedWeapon({
       targetWeaponInstanceId: instanceId,
-      inventoryInstances: store.inventoryInstances,
-      equippedWeaponInstanceIds: store.equippedWeaponInstanceIds,
-      equippedShieldInstanceId: store.equippedShieldInstanceId,
+      inventoryInstances,
+      equippedWeaponInstanceIds,
+      equippedShieldInstanceId,
     });
 
     if (!validation.isTwoHandedWeapon || !validation.hasConflicts) {
-      store.equipWeaponInstance(instanceId);
+      equipWeaponInstance(instanceId);
       return;
     }
 
@@ -166,14 +190,14 @@ export const InventoryBoard: React.FC = () => {
     if (!twoHandedWarningState) return;
 
     if (twoHandedWarningState.conflictingShieldInstanceId) {
-      store.equipShieldInstance(null);
+      equipShieldInstance(null);
     }
 
     twoHandedWarningState.conflictingWeaponInstanceIds.forEach((instanceId) => {
-      store.unequipWeaponInstance(instanceId);
+      unequipWeaponInstance(instanceId);
     });
 
-    store.equipWeaponInstance(twoHandedWarningState.targetWeaponInstanceId);
+    equipWeaponInstance(twoHandedWarningState.targetWeaponInstanceId);
     setTwoHandedWarningState(null);
   };
 
@@ -183,19 +207,19 @@ export const InventoryBoard: React.FC = () => {
     armorType: string,
   ) => {
     if (armorType === "shield") {
-      store.equipShieldInstance(isEquipped ? null : instanceId);
+      equipShieldInstance(isEquipped ? null : instanceId);
     } else {
-      store.equipArmorInstance(isEquipped ? null : instanceId);
+      equipArmorInstance(isEquipped ? null : instanceId);
     }
   };
 
   const toggleAttunement = (instanceId: string, isAttuned: boolean) => {
-    if (isAttuned) store.unattuneInstance(instanceId);
-    else store.attuneInstance(instanceId);
+    if (isAttuned) unattuneInstance(instanceId);
+    else attuneInstance(instanceId);
   };
 
   const dropInstance = (instanceId: string) => {
-    store.removeInventoryInstance(instanceId);
+    removeInventoryInstance(instanceId);
   };
 
   return (
@@ -209,19 +233,19 @@ export const InventoryBoard: React.FC = () => {
         missingItemIds={missingItemIds}
         instances={hydratedInstances}
         stacks={hydratedStacks}
-        equippedWeaponInstanceIds={store.equippedWeaponInstanceIds}
-        equippedArmorInstanceId={store.equippedArmorInstanceId}
-        equippedShieldInstanceId={store.equippedShieldInstanceId}
-        attunedInstanceIds={store.attunedInstanceIds}
+        equippedWeaponInstanceIds={equippedWeaponInstanceIds}
+        equippedArmorInstanceId={equippedArmorInstanceId}
+        equippedShieldInstanceId={equippedShieldInstanceId}
+        attunedInstanceIds={attunedInstanceIds}
         onToggleWeaponEquip={toggleEquipWeapon}
         onToggleArmorEquip={toggleEquipArmor}
         onToggleAttunement={toggleAttunement}
         onDropInstance={dropInstance}
         onStackDecrement={(baseItemId: string) =>
-          store.removeInventoryItem(baseItemId, 1)
+          removeInventoryItem(baseItemId, 1)
         }
         onStackIncrement={(baseItemId: string) =>
-          store.addInventoryItem(baseItemId, 1)
+          addInventoryItem(baseItemId, 1)
         }
       />
 

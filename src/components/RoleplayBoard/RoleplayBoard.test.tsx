@@ -2,7 +2,6 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RoleplayBoard } from "./RoleplayBoard";
 import { useCharacterStore } from "../../store/useCharacterStore";
@@ -12,10 +11,17 @@ vi.mock("../../store/useCharacterStore");
 vi.mock("../../utils/traitUtils");
 
 describe("RoleplayBoard", () => {
+  const setStoreMock = (store: Record<string, unknown>) => {
+    vi.mocked(useCharacterStore).mockImplementation(
+      ((selector?: (state: Record<string, unknown>) => unknown) =>
+        typeof selector === "function" ? selector(store) : store) as never,
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mocked(useCharacterStore).mockReturnValue({
+    setStoreMock({
       level: 3,
       raceId: "race_elf",
       subraceId: "subrace_high_elf",
@@ -38,10 +44,10 @@ describe("RoleplayBoard", () => {
       appearance: "",
       backstory: "",
       alliesAndOrganizations: "",
-    } as never);
+    });
   });
 
-  it("renders formatted source labels for sourced traits", () => {
+  it("derives traits using current character selections", () => {
     vi.mocked(getAllCharacterTraitsWithSources).mockReturnValue([
       {
         trait: {
@@ -86,28 +92,32 @@ describe("RoleplayBoard", () => {
 
     render(<RoleplayBoard />);
 
-    expect(screen.getByText("Fighter level 2")).toBeInTheDocument();
-    expect(screen.getByText("Action Surge")).toBeInTheDocument();
-    expect(screen.getByText("Darkvision")).toBeInTheDocument();
-
-    const sourceGroups = screen.getAllByLabelText("Feature sources");
-    const darkvisionSources = sourceGroups[1];
-
-    expect(within(darkvisionSources).getByText("Elf")).toBeInTheDocument();
-    expect(
-      within(darkvisionSources).getByText("Feat: Shadow Touched"),
-    ).toBeInTheDocument();
+    expect(getAllCharacterTraitsWithSources).toHaveBeenCalledWith(
+      3,
+      "race_elf",
+      "subrace_high_elf",
+      "class_fighter",
+      "subclass_champion",
+      false,
+      {},
+      [],
+      [],
+    );
   });
 
-  it("switches to biography tab", async () => {
+  it("switches between Persona and Chronicle tabs", async () => {
     const user = userEvent.setup();
 
     vi.mocked(getAllCharacterTraitsWithSources).mockReturnValue([] as never);
 
     render(<RoleplayBoard />);
 
-    await user.click(screen.getByRole("button", { name: /biography/i }));
+    expect(screen.getByLabelText("Backstory")).toBeInTheDocument();
 
-    expect(screen.getByText("BACKSTORY")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /persona/i }));
+    expect(screen.getByLabelText("Personality Traits")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: /chronicle/i }));
+    expect(screen.getByLabelText("Backstory")).toBeInTheDocument();
   });
 });

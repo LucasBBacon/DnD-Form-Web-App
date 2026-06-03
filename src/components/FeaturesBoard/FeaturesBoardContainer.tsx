@@ -6,19 +6,26 @@ import { FeaturesBoard } from "./FeaturesBoard";
 import type { FeatureCardProps } from "./ui/FeatureCard";
 
 export const FeaturesBoardContainer: React.FC = () => {
-  const store = useCharacterStore();
+  const level = useCharacterStore((state) => state.level);
+  const raceId = useCharacterStore((state) => state.raceId);
+  const subraceId = useCharacterStore((state) => state.subraceId);
+  const classId = useCharacterStore((state) => state.classId);
+  const subclassId = useCharacterStore((state) => state.subclassId);
+  const choicesByLevel = useCharacterStore((state) => state.choicesByLevel);
+  const acquiredFeats = useCharacterStore((state) => state.acquiredFeats);
+  const classTracks = useCharacterStore((state) => state.classTracks);
 
   const features = useMemo<FeatureCardProps[]>(() => {
     return getAllCharacterTraitsWithSources(
-      store.level,
-      store.raceId,
-      store.subraceId,
-      store.classId,
-      store.subclassId,
+      level,
+      raceId,
+      subraceId,
+      classId,
+      subclassId,
       false,
-      store.choicesByLevel,
-      store.acquiredFeats,
-      store.classTracks,
+      choicesByLevel,
+      acquiredFeats,
+      classTracks,
     ).map(({ trait, sources }) => ({
       traitId: trait.id,
       name: trait.name,
@@ -33,14 +40,14 @@ export const FeaturesBoardContainer: React.FC = () => {
       },
     }));
   }, [
-    store.acquiredFeats,
-    store.choicesByLevel,
-    store.classId,
-    store.classTracks,
-    store.level,
-    store.raceId,
-    store.subclassId,
-    store.subraceId,
+    acquiredFeats,
+    choicesByLevel,
+    classId,
+    classTracks,
+    level,
+    raceId,
+    subclassId,
+    subraceId,
   ]);
 
   return <FeaturesBoard features={features} />;

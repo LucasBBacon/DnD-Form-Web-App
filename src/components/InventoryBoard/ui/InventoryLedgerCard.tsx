@@ -54,11 +54,11 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
     e.stopPropagation(); // Prevent expanding/collapsing when clicking button
     if (onToggleEquip) {
       if (isWeapon) {
-        onToggleEquip(entityId, !isEquipped);
+        onToggleEquip(entityId, !!isEquipped);
       } else if (isArmor && itemData.armorProperties) {
         onToggleEquip(
           entityId,
-          !isEquipped,
+          !!isEquipped,
           itemData.armorProperties.armorType,
         );
       }
@@ -68,7 +68,7 @@ export const InventoryLedgerCard: React.FC<InventoryLedgerCardProps> = ({
   const handleAttuneToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onToggleAttunement) {
-      onToggleAttunement(entityId, !isAttuned);
+      onToggleAttunement(entityId, !!isAttuned);
     }
   };
 

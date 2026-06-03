@@ -11,19 +11,46 @@ import type {
 
 export const RoleplayBoard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<RoleplayTab>("biography");
-  const store = useCharacterStore();
+  const level = useCharacterStore((state) => state.level);
+  const raceId = useCharacterStore((state) => state.raceId);
+  const subraceId = useCharacterStore((state) => state.subraceId);
+  const classId = useCharacterStore((state) => state.classId);
+  const subclassId = useCharacterStore((state) => state.subclassId);
+  const choicesByLevel = useCharacterStore((state) => state.choicesByLevel);
+  const acquiredFeats = useCharacterStore((state) => state.acquiredFeats);
+  const classTracks = useCharacterStore((state) => state.classTracks);
+
+  const personalityTraits = useCharacterStore((state) => state.personalityTraits);
+  const ideals = useCharacterStore((state) => state.ideals);
+  const bonds = useCharacterStore((state) => state.bonds);
+  const flaws = useCharacterStore((state) => state.flaws);
+  const age = useCharacterStore((state) => state.age);
+  const height = useCharacterStore((state) => state.height);
+  const weight = useCharacterStore((state) => state.weight);
+  const eyes = useCharacterStore((state) => state.eyes);
+  const skin = useCharacterStore((state) => state.skin);
+  const hair = useCharacterStore((state) => state.hair);
+  const appearance = useCharacterStore((state) => state.appearance);
+  const backstory = useCharacterStore((state) => state.backstory);
+  const alliesAndOrganizations = useCharacterStore(
+    (state) => state.alliesAndOrganizations,
+  );
+
+  const updateRoleplayField = useCharacterStore(
+    (state) => state.updateRoleplayField,
+  );
 
   const activeFeatures = useMemo<RoleplayFeature[]>(() => {
     return getAllCharacterTraitsWithSources(
-      store.level,
-      store.raceId,
-      store.subraceId,
-      store.classId,
-      store.subclassId,
+      level,
+      raceId,
+      subraceId,
+      classId,
+      subclassId,
       false,
-      store.choicesByLevel,
-      store.acquiredFeats,
-      store.classTracks,
+      choicesByLevel,
+      acquiredFeats,
+      classTracks,
     ).map(({ trait, sources }, index) => ({
       id: `${trait.id}-${index}`,
       name: trait.name,
@@ -34,27 +61,36 @@ export const RoleplayBoard: React.FC = () => {
         label: source.label,
       })),
     }));
-  }, [store]);
+  }, [
+    acquiredFeats,
+    choicesByLevel,
+    classId,
+    classTracks,
+    level,
+    raceId,
+    subclassId,
+    subraceId,
+  ]);
 
   const roleplayValues: Record<RoleplayField, string> = {
-    personalityTraits: store.personalityTraits,
-    ideals: store.ideals,
-    bonds: store.bonds,
-    flaws: store.flaws,
-    age: store.age,
-    height: store.height,
-    weight: store.weight,
-    eyes: store.eyes,
-    skin: store.skin,
-    hair: store.hair,
-    appearance: store.appearance,
-    backstory: store.backstory,
-    alliesAndOrganizations: store.alliesAndOrganizations,
+    personalityTraits,
+    ideals,
+    bonds,
+    flaws,
+    age,
+    height,
+    weight,
+    eyes,
+    skin,
+    hair,
+    appearance,
+    backstory,
+    alliesAndOrganizations,
   };
 
   const handleTextBlur = (field: RoleplayField, value: string) => {
     if (roleplayValues[field] !== value) {
-      store.updateRoleplayField(field, value);
+      updateRoleplayField(field, value);
     }
   };
 
@@ -63,21 +99,21 @@ export const RoleplayBoard: React.FC = () => {
       activeTab={activeTab}
       features={activeFeatures}
       characteristics={{
-        personalityTraits: store.personalityTraits,
-        ideals: store.ideals,
-        bonds: store.bonds,
-        flaws: store.flaws,
+        personalityTraits,
+        ideals,
+        bonds,
+        flaws,
       }}
       biography={{
-        age: store.age,
-        height: store.height,
-        weight: store.weight,
-        eyes: store.eyes,
-        skin: store.skin,
-        hair: store.hair,
-        appearance: store.appearance,
-        backstory: store.backstory,
-        alliesAndOrganizations: store.alliesAndOrganizations,
+        age,
+        height,
+        weight,
+        eyes,
+        skin,
+        hair,
+        appearance,
+        backstory,
+        alliesAndOrganizations,
       }}
       onTabChange={setActiveTab}
       onRoleplayFieldBlur={handleTextBlur}

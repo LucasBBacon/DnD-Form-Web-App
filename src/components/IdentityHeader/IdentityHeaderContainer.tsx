@@ -14,11 +14,29 @@ const formatDisplayNameFromId = (id: string | null): string => {
 };
 
 export const IdentityHeaderContainer: React.FC = () => {
-  const store = useCharacterStore();
+  const name = useCharacterStore((state) => state.name);
+  const playerName = useCharacterStore((state) => state.playerName);
+  const alignment = useCharacterStore((state) => state.alignment);
+  const xp = useCharacterStore((state) => state.xp);
+  const level = useCharacterStore((state) => state.level);
+  const levelUpMode = useCharacterStore((state) => state.levelUpMode);
+  const raceId = useCharacterStore((state) => state.raceId);
+  const backgroundId = useCharacterStore((state) => state.backgroundId);
+  const classId = useCharacterStore((state) => state.classId);
+  const subclassId = useCharacterStore((state) => state.subclassId);
+  const classTracks = useCharacterStore((state) => state.classTracks);
+  const choicesByLevel = useCharacterStore((state) => state.choicesByLevel);
+
+  const setName = useCharacterStore((state) => state.setName);
+  const setPlayerName = useCharacterStore((state) => state.setPlayerName);
+  const setAlignment = useCharacterStore((state) => state.setAlignment);
+  const setXp = useCharacterStore((state) => state.setXp);
+  const setLevelUpMode = useCharacterStore((state) => state.setLevelUpMode);
+  const openLevelUpModal = useCharacterStore((state) => state.openLevelUpModal);
 
   const classes = useMemo<CharacterClassEntry[]>(() => {
-    if (store.classTracks.length > 0) {
-      return store.classTracks.map((track) => {
+    if (classTracks.length > 0) {
+      return classTracks.map((track) => {
         const classData = getClassById(track.classId);
         const subclassData = track.subclassId
           ? getSubclassById(track.subclassId)
@@ -33,61 +51,61 @@ export const IdentityHeaderContainer: React.FC = () => {
       });
     }
 
-    if (!store.classId) return [];
+    if (!classId) return [];
 
-    const classData = getClassById(store.classId);
-    const subclassData = store.subclassId
-      ? getSubclassById(store.subclassId)
+    const classData = getClassById(classId);
+    const subclassData = subclassId
+      ? getSubclassById(subclassId)
       : null;
 
     return [
       {
-        classId: store.classId,
-        className: classData?.name ?? formatDisplayNameFromId(store.classId),
+        classId,
+        className: classData?.name ?? formatDisplayNameFromId(classId),
         subclassName: subclassData?.name,
-        level: store.level,
+        level,
       },
     ];
-  }, [store.classId, store.classTracks, store.level, store.subclassId]);
+  }, [classId, classTracks, level, subclassId]);
 
   const raceNameDisplay = useMemo(() => {
-    const raceData = getRaceById(store.raceId);
-    return raceData?.name ?? formatDisplayNameFromId(store.raceId);
-  }, [store.raceId]);
+    const raceData = getRaceById(raceId);
+    return raceData?.name ?? formatDisplayNameFromId(raceId);
+  }, [raceId]);
 
   const backgroundNameDisplay = useMemo(() => {
-    return formatDisplayNameFromId(store.backgroundId);
-  }, [store.backgroundId]);
+    return formatDisplayNameFromId(backgroundId);
+  }, [backgroundId]);
 
   const openLevelUpFromHeader = () => {
     const targetLevel = getAvailableLevelUpTargetForCharacter({
-      xp: store.xp,
-      level: store.level,
-      levelUpMode: store.levelUpMode,
-      classTracks: store.classTracks,
-      choicesByLevel: store.choicesByLevel,
+      xp,
+      level,
+      levelUpMode,
+      classTracks,
+      choicesByLevel,
     });
 
     if (targetLevel !== null) {
-      store.openLevelUpModal(targetLevel);
+      openLevelUpModal(targetLevel);
     }
   };
 
   return (
     <IdentityHeader
-      characterName={store.name}
-      playerName={store.playerName}
-      alignment={store.alignment}
+      characterName={name}
+      playerName={playerName}
+      alignment={alignment}
       classes={classes}
       raceNameDisplay={raceNameDisplay}
       backgroundNameDisplay={backgroundNameDisplay}
-      xp={store.xp}
-      levelUpMode={store.levelUpMode}
-      onCharacterNameChange={store.setName}
-      onPlayerNameChange={store.setPlayerName}
-      onAlignmentChange={store.setAlignment}
-      onXpChange={store.setXp}
-      onLevelUpModeChange={store.setLevelUpMode}
+      xp={xp}
+      levelUpMode={levelUpMode}
+      onCharacterNameChange={setName}
+      onPlayerNameChange={setPlayerName}
+      onAlignmentChange={setAlignment}
+      onXpChange={setXp}
+      onLevelUpModeChange={setLevelUpMode}
       onClassModalClick={openLevelUpFromHeader}
       onBackgroundModalClick={() => {}}
       onRaceModalClick={() => {}}

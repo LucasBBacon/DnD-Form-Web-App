@@ -1,5 +1,6 @@
 import type React from "react";
 import { useState } from "react";
+import "./CharacterSheetLayout.css";
 import { IdentityHeaderContainer } from "../IdentityHeader/IdentityHeaderContainer";
 import { BookOpen } from "lucide-react";
 import { CoreStatsBoardContainer } from "../CoreStatsBoard/CoreStatsBoardContainer";
@@ -8,13 +9,18 @@ import { ActionsBoardContainer } from "../ActionsBoard/ActionsBoardContainer";
 import { FeaturesBoardContainer } from "../FeaturesBoard/FeaturesBoardContainer";
 import { InventoryBoard } from "../InventoryBoard/InventoryBoard";
 import { RoleplayBoard } from "../RoleplayBoard/RoleplayBoard";
+import { SpellbookContainer } from "../Spellbook/SpellbookContainer.tsx";
 
 export const CharacterSheetLayout: React.FC = () => {
   const [activeRightTab, setActiveRightTab] = useState<
     "inventory" | "features" | "roleplay"
   >("features");
 
-  const [, setShowSpellbook] = useState(false);
+  const [showSpellbook, setShowSpellbook] = useState(false);
+
+  if (showSpellbook) {
+    return <SpellbookContainer />
+  }
 
   return (
     <div className="sheet-master-layout">

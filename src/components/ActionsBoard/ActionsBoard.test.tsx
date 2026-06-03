@@ -118,6 +118,13 @@ const buildCombatActions = () => ({
 });
 
 describe("ActionsBoardContainer", () => {
+  const setStoreMock = (store: Record<string, unknown>) => {
+    vi.mocked(useCharacterStore).mockImplementation(
+      ((selector?: (state: Record<string, unknown>) => unknown) =>
+        typeof selector === "function" ? selector(store) : store) as never,
+    );
+  };
+
   let removeInventoryItemMock: ReturnType<typeof vi.fn>;
   let expendSpellSlotMock: ReturnType<typeof vi.fn>;
   let expendPactSlotMock: ReturnType<typeof vi.fn>;
@@ -131,12 +138,12 @@ describe("ActionsBoardContainer", () => {
     expendTraitActionUseMock = vi.fn();
 
     vi.mocked(useCombatActions).mockReturnValue(buildCombatActions() as never);
-    vi.mocked(useCharacterStore).mockReturnValue({
+    setStoreMock({
       removeInventoryItem: removeInventoryItemMock,
       expendSpellSlot: expendSpellSlotMock,
       expendPactSlot: expendPactSlotMock,
       expendTraitActionUse: expendTraitActionUseMock,
-    } as never);
+    });
   });
 
   it("renders board title, spell slot HUD, and action section", () => {

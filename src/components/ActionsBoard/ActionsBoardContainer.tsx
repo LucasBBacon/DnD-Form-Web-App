@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from "react";
 import { useMemo, useState } from "react";
 import type {
   AttackActionEntry,
   CombatActionEntry,
-  CombatRollMetadata,
 } from "../../hooks/useCombatActions";
 import { useCombatActions } from "../../hooks/useCombatActions";
 import { useCharacterStore } from "../../store/useCharacterStore";
@@ -19,7 +17,15 @@ const stripSpellPrefix = (entryId: string): string =>
   entryId.startsWith("spell:") ? entryId.slice("spell:".length) : entryId;
 
 export const ActionsBoardContainer: React.FC = () => {
-  const store = useCharacterStore();
+  const removeInventoryItem = useCharacterStore(
+    (state) => state.removeInventoryItem,
+  );
+  const expendSpellSlot = useCharacterStore((state) => state.expendSpellSlot);
+  const expendPactSlot = useCharacterStore((state) => state.expendPactSlot);
+  const expendTraitActionUse = useCharacterStore(
+    (state) => state.expendTraitActionUse,
+  );
+
   const { spellcasting, sections, toRomanNumeral } = useCombatActions();
   const [attackRollModes, setAttackRollModes] = useState<
     Record<string, AttackRollMode>
@@ -44,12 +50,12 @@ export const ActionsBoardContainer: React.FC = () => {
     }
 
     if (metadata.canUseSharedSlot) {
-      store.expendSpellSlot(metadata.selectedCastLevel);
+      expendSpellSlot(metadata.selectedCastLevel);
       return;
     }
 
     if (metadata.canUsePactSlot) {
-      store.expendPactSlot();
+      expendPactSlot();
     }
   };
 
@@ -65,27 +71,22 @@ export const ActionsBoardContainer: React.FC = () => {
           [entryId]: mode,
         }));
       }}
-      onAttackResult={(_entryId, _config, _rolls, _mode) => {
+      onAttackResult={() => {
         // Reserved for integrating roll history/logging panel.
       }}
-      onDamageResult={(
-        entryId: string,
-        _damageId: string,
-        _config: CombatRollMetadata,
-        _total: number,
-      ) => {
+      onDamageResult={(entryId: string) => {
         const entry = entriesById.get(entryId);
         if (!entry || entry.source !== "attack") return;
 
         const attackEntry = entry as AttackActionEntry;
 
         if (attackEntry.isThrown && attackEntry.throwableItemId) {
-          store.removeInventoryItem(attackEntry.throwableItemId, 1);
+          removeInventoryItem(attackEntry.throwableItemId, 1);
         }
       }}
       onCastSpell={handleCastSpell}
       onExpendTraitUse={(entryId: string) => {
-        store.expendTraitActionUse(stripTraitPrefix(entryId));
+        expendTraitActionUse(stripTraitPrefix(entryId));
       }}
     />
   );

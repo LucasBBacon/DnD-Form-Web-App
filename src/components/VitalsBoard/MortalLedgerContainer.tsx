@@ -10,18 +10,32 @@ const toHitDieSides = (hitDie: HitDie | undefined): number => hitDie ?? 8;
 
 export const MortalLedgerContainer: React.FC = () => {
   const stats = useCharacterStats();
-  const store = useCharacterStore();
+  const classTracks = useCharacterStore((state) => state.classTracks);
+  const classId = useCharacterStore((state) => state.classId);
+  const subclassId = useCharacterStore((state) => state.subclassId);
+  const level = useCharacterStore((state) => state.level);
+  const expendedHitDice = useCharacterStore((state) => state.expendedHitDice);
+  const tempHp = useCharacterStore((state) => state.tempHp);
+  const deathSaves = useCharacterStore((state) => state.deathSaves);
+
+  const takeDamage = useCharacterStore((state) => state.takeDamage);
+  const heal = useCharacterStore((state) => state.heal);
+  const setTempHp = useCharacterStore((state) => state.setTempHp);
+  const recordDeathSave = useCharacterStore((state) => state.recordDeathSave);
+  const expendHitDie = useCharacterStore((state) => state.expendHitDie);
+  const takeShortRest = useCharacterStore((state) => state.takeShortRest);
+  const takeLongRest = useCharacterStore((state) => state.takeLongRest);
 
   const hitDicePools = useMemo<HitDicePool[]>(() => {
     const tracks =
-      store.classTracks.length > 0
-        ? store.classTracks
-        : store.classId
+      classTracks.length > 0
+        ? classTracks
+        : classId
           ? [
               {
-                classId: store.classId,
-                subclassId: store.subclassId,
-                level: store.level,
+                classId,
+                subclassId,
+                level,
               },
             ]
           : [];
@@ -38,7 +52,7 @@ export const MortalLedgerContainer: React.FC = () => {
       .map(([sides, total]) => ({ sides, total, expended: 0 }))
       .sort((a, b) => b.sides - a.sides);
 
-    let remainingExpended = store.expendedHitDice;
+    let remainingExpended = expendedHitDice;
 
     pools.forEach((pool) => {
       if (remainingExpended <= 0) return;
@@ -49,11 +63,11 @@ export const MortalLedgerContainer: React.FC = () => {
 
     return pools;
   }, [
-    store.classId,
-    store.classTracks,
-    store.expendedHitDice,
-    store.level,
-    store.subclassId,
+    classId,
+    classTracks,
+    expendedHitDice,
+    level,
+    subclassId,
   ]);
 
   return (
@@ -63,20 +77,20 @@ export const MortalLedgerContainer: React.FC = () => {
       speed={stats.combat.speed}
       isArmorPenalized={stats.combat.isArmorPenalized}
       hp={stats.combat.hp}
-      tempHp={store.tempHp}
-      deathSaves={store.deathSaves}
-      level={store.level}
+      tempHp={tempHp}
+      deathSaves={deathSaves}
+      level={level}
       hitDicePools={hitDicePools}
-      onTakeDamage={store.takeDamage}
-      onHeal={store.heal}
-      onSetTempHp={store.setTempHp}
+      onTakeDamage={takeDamage}
+      onHeal={heal}
+      onSetTempHp={setTempHp}
       onRecordSave={(type, count) => {
-        const current = store.deathSaves[type];
-        store.recordDeathSave(type, count > current);
+        const current = deathSaves[type];
+        recordDeathSave(type, count > current);
       }}
-      onSpendHitDie={() => store.expendHitDie()}
-      onShortRest={store.takeShortRest}
-      onLongRest={store.takeLongRest}
+      onSpendHitDie={() => expendHitDie()}
+      onShortRest={takeShortRest}
+      onLongRest={takeLongRest}
     />
   );
 };

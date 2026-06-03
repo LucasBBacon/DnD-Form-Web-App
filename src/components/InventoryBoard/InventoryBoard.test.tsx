@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { InventoryBoard } from "./InventoryBoard";
 import { useCharacterStore } from "../../store/useCharacterStore";
@@ -54,6 +54,28 @@ const mockWeapon = {
   weight: 3,
   cpCost: 1500,
   lore: { shortDescription: "A versatile weapon" },
+  weaponProperties: {
+    category: "martial_melee",
+    damageDice: "1d8",
+    versatileDamageDice: "1d10",
+    damageType: "slashing",
+    properties: [],
+    propertyIds: [],
+    range: "5 ft",
+    rules: {
+      attackAbility: "str",
+      isRangedWeapon: false,
+      meleeReachFeet: 5,
+      requiresAmmunition: false,
+      loading: false,
+      light: false,
+      heavy: false,
+      twoHanded: false,
+      special: false,
+      finesse: false,
+      versatile: true,
+    },
+  },
 };
 
 const mockMagicItem = {
@@ -76,9 +98,16 @@ const mockRations = {
 };
 
 describe("InventoryBoard", () => {
+  const setStoreMock = (store: Record<string, unknown>) => {
+    vi.mocked(useCharacterStore).mockImplementation(
+      ((selector?: (state: Record<string, unknown>) => unknown) =>
+        typeof selector === "function" ? selector(store) : store) as never,
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useCharacterStore).mockReturnValue(mockStoreActions() as never);
+    setStoreMock(mockStoreActions() as unknown as Record<string, unknown>);
     vi.mocked(useCharacterStats).mockReturnValue({
       encumbrance: {
         totalWeight: 0,
@@ -91,8 +120,8 @@ describe("InventoryBoard", () => {
 
   it("renders inventory board view", () => {
     render(<InventoryBoard />);
-    expect(screen.getByText("EQUIPMENT & ATTUNEMENT")).toBeInTheDocument();
-    expect(screen.getByText(/BACKPACK \(GEAR & CONSUMABLES\)/)).toBeInTheDocument();
+    expect(screen.getByText("Inventory & Wealth")).toBeInTheDocument();
+    expect(screen.getByText("Your pack is empty.")).toBeInTheDocument();
   });
 
   it("renders wealth tracker", () => {
@@ -116,8 +145,7 @@ describe("InventoryBoard", () => {
 
   it("shows empty state when no equipment", () => {
     render(<InventoryBoard />);
-    expect(screen.getByText("No equipment.")).toBeInTheDocument();
-    expect(screen.getByText("Backpack is empty.")).toBeInTheDocument();
+    expect(screen.getByText("Your pack is empty.")).toBeInTheDocument();
   });
 
   it("displays missing item IDs warning when item not found", () => {
@@ -129,7 +157,7 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(null);
 
     render(<InventoryBoard />);
@@ -147,14 +175,14 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockWeapon as never);
 
     render(<InventoryBoard />);
     expect(screen.getByText("Longsword")).toBeInTheDocument();
   });
 
-  it("renders equipment with equip button", () => {
+  it("renders equipment with equip button", async () => {
     const store = mockStoreActions();
     store.inventoryInstances = [
       {
@@ -163,11 +191,14 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockWeapon as never);
 
     render(<InventoryBoard />);
-    expect(screen.getByRole("button", { name: "Equip" })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Longsword"));
+    expect(
+      await screen.findByRole("button", { name: "Equip" }),
+    ).toBeInTheDocument();
   });
 
   it("calls equipWeaponInstance when weapon equip button is clicked", async () => {
@@ -180,11 +211,12 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockWeapon as never);
 
     render(<InventoryBoard />);
-    await user.click(screen.getByRole("button", { name: "Equip" }));
+    await user.click(screen.getByText("Longsword"));
+    await user.click(await screen.findByRole("button", { name: "Equip" }));
     expect(store.equipWeaponInstance).toHaveBeenCalledWith("inst-1");
   });
 
@@ -199,11 +231,12 @@ describe("InventoryBoard", () => {
       },
     ];
     store.equippedWeaponInstanceIds = ["inst-1"];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockWeapon as never);
 
     render(<InventoryBoard />);
-    await user.click(screen.getByRole("button", { name: "EQUIPPED" }));
+    await user.click(screen.getByText("Longsword"));
+    await user.click(await screen.findByRole("button", { name: "Unequip" }));
     expect(store.unequipWeaponInstance).toHaveBeenCalledWith("inst-1");
   });
 
@@ -217,16 +250,17 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockWeapon as never);
 
     render(<InventoryBoard />);
-    const dropButton = screen.getByRole("button", { name: "Drop" });
+    await user.click(screen.getByText("Longsword"));
+    const dropButton = await screen.findByRole("button", { name: "Drop" });
     await user.click(dropButton);
     expect(store.removeInventoryInstance).toHaveBeenCalledWith("inst-1");
   });
 
-  it("renders attuned magic items with attune button", () => {
+  it("renders attuned magic items with attune button", async () => {
     const store = mockStoreActions();
     store.inventoryInstances = [
       {
@@ -235,11 +269,14 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
 
     render(<InventoryBoard />);
-    expect(screen.getByRole("button", { name: "Attune" })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Ring of Protection"));
+    expect(
+      await screen.findByRole("button", { name: "Attune" }),
+    ).toBeInTheDocument();
   });
 
   it("calls attuneInstance when attune button is clicked", async () => {
@@ -252,11 +289,12 @@ describe("InventoryBoard", () => {
         customName: undefined,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
 
     render(<InventoryBoard />);
-    await user.click(screen.getByRole("button", { name: "Attune" }));
+    await user.click(screen.getByText("Ring of Protection"));
+    await user.click(await screen.findByRole("button", { name: "Attune" }));
     expect(store.attuneInstance).toHaveBeenCalledWith("inst-magic");
   });
 
@@ -271,16 +309,26 @@ describe("InventoryBoard", () => {
       },
     ];
     store.attunedInstanceIds = ["inst-magic"];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
 
     render(<InventoryBoard />);
-    await user.click(screen.getByRole("button", { name: "ATTUNED" }));
+    await user.click(screen.getByText("Ring of Protection"));
+    await user.click(
+      await screen.findByRole("button", { name: "Break Attunement" }),
+    );
     expect(store.unattuneInstance).toHaveBeenCalledWith("inst-magic");
   });
 
   it("renders backpack items (stacks) with quantity controls", () => {
     const store = mockStoreActions();
+    store.inventoryInstances = [
+      {
+        instanceId: "inst-1",
+        baseItemId: "weapon_longsword",
+        customName: undefined,
+      },
+    ];
     store.inventoryStacks = [
       {
         stackId: "stack-1",
@@ -288,17 +336,28 @@ describe("InventoryBoard", () => {
         quantity: 5,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockRations as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
+    vi.mocked(staticDataApi.getItemById).mockImplementation(
+      ((itemId: string) =>
+        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
+    );
 
     render(<InventoryBoard />);
     expect(screen.getByText("Rations")).toBeInTheDocument();
-    expect(screen.getByText("5")).toBeInTheDocument();
+    expect(screen.getByTitle("Decrease Quantity")).toBeInTheDocument();
+    expect(screen.getByTitle("Increase Quantity")).toBeInTheDocument();
   });
 
   it("calls removeInventoryItem when stack is decremented", async () => {
     const user = userEvent.setup();
     const store = mockStoreActions();
+    store.inventoryInstances = [
+      {
+        instanceId: "inst-1",
+        baseItemId: "weapon_longsword",
+        customName: undefined,
+      },
+    ];
     store.inventoryStacks = [
       {
         stackId: "stack-1",
@@ -306,8 +365,11 @@ describe("InventoryBoard", () => {
         quantity: 5,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockRations as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
+    vi.mocked(staticDataApi.getItemById).mockImplementation(
+      ((itemId: string) =>
+        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
+    );
 
     render(<InventoryBoard />);
     const minusButtons = screen.getAllByRole("button", { name: "-" });
@@ -321,6 +383,13 @@ describe("InventoryBoard", () => {
   it("calls addInventoryItem when stack is incremented", async () => {
     const user = userEvent.setup();
     const store = mockStoreActions();
+    store.inventoryInstances = [
+      {
+        instanceId: "inst-1",
+        baseItemId: "weapon_longsword",
+        customName: undefined,
+      },
+    ];
     store.inventoryStacks = [
       {
         stackId: "stack-1",
@@ -328,8 +397,11 @@ describe("InventoryBoard", () => {
         quantity: 5,
       },
     ];
-    vi.mocked(useCharacterStore).mockReturnValue(store as never);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockRations as never);
+    setStoreMock(store as unknown as Record<string, unknown>);
+    vi.mocked(staticDataApi.getItemById).mockImplementation(
+      ((itemId: string) =>
+        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
+    );
 
     render(<InventoryBoard />);
     const plusButtons = screen.getAllByRole("button", { name: "+" });
