@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Ability, Skill } from "../types/common";
+import type { Skill } from "../types/common";
 import type { LevelUpMode } from "../types/progression";
 import type { SavedCharacterData, SavedCharacterFile } from "../types/savedCharacter";
 import { ABILITIES } from "../utils/abilityConstants";
@@ -50,7 +50,6 @@ const ROLLING_INPUT_MODES = ["virtual", "physical"] as const satisfies readonly 
 
 const abilitySchema = z.enum(ABILITIES);
 const skillSchema = z.enum(SKILLS);
-const EMPTY_ABILITY_RECORD = {} as Record<Ability, number>;
 
 const coinPurseSchema = z.object({
   cp: z.number().int().min(0),
@@ -161,13 +160,13 @@ const characterStateSchema = z.object({
   classTracks: z.array(characterClassTrackSchema),
   baseAbilityScores: baseAbilityScoresSchema,
   hpRolls: z.record(z.string(), z.number().int()),
-  chosenRacialBonuses: z.record(abilitySchema, z.number().int()).default(EMPTY_ABILITY_RECORD),
+  chosenRacialBonuses: z.partialRecord(abilitySchema, z.number().int()).default({}),
   abilityAssignmentMethod: z.enum(ABILITY_ASSIGNMENT_METHODS),
   abilityRollingInputMode: z.enum(ROLLING_INPUT_MODES),
   abilityPointBuyOverrideAccepted: z.boolean(),
   abilityAssignmentCompleted: z.boolean(),
   abilityVirtualRolls: z.array(virtualAbilityRollSchema),
-  abilityVirtualRollAssignments: z.record(abilitySchema, z.number().int()).default(EMPTY_ABILITY_RECORD),
+  abilityVirtualRollAssignments: z.partialRecord(abilitySchema, z.number().int()).default({}),
   backgroundId: z.string().min(1).nullable(),
   chosenRacialSkills: z.array(skillSchema),
   chosenBackgroundSkills: z.array(skillSchema),

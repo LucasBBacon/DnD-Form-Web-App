@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1",
+  "savedAt": "2026-06-04T21:34:56.217Z",
+  "appVersion": "0.0.0",
+  "character": {
+    "playerName": "Dev",
+    "name": "Sable Dawnblade",
+    "alignment": "Chaotic Good",
+    "age": "",
+    "height": "",
+    "weight": "",
+    "eyes": "",
+    "skin": "",
+    "hair": "",
+    "appearance": "",
+    "backstory": "",
+    "personalityTraits": "",
+    "ideals": "",
+    "bonds": "",
+    "flaws": "",
+    "alliesAndOrganizations": "",
+    "xp": 34000,
+    "level": 8,
+    "levelUpMode": "xp_gated",
+    "raceId": "race_half_elf",
+    "subraceId": null,
+    "classId": "class_fighter",
+    "subclassId": null,
+    "classTracks": [
+      {
+        "classId": "class_fighter",
+        "subclassId": null,
+        "level": 5
+      },
+      {
+        "classId": "class_rogue",
+        "subclassId": null,
+        "level": 3
+      }
+    ],
+    "baseAbilityScores": {
+      "str": 14,
+      "dex": 18,
+      "con": 14,
+      "int": 12,
+      "wis": 10,
+      "cha": 14
+    },
+    "hpRolls": {
+      "1": 10,
+      "2": 8,
+      "3": 7,
+      "4": 9,
+      "5": 8,
+      "6": 6,
+      "7": 7,
+      "8": 8
+    },
+    "chosenRacialBonuses": {},
+    "abilityAssignmentMethod": "standard_array",
+    "abilityRollingInputMode": "virtual",
+    "abilityPointBuyOverrideAccepted": false,
+    "abilityAssignmentCompleted": false,
+    "abilityVirtualRolls": [],
+    "abilityVirtualRollAssignments": {},
+    "backgroundId": null,
+    "chosenRacialSkills": [],
+    "chosenBackgroundSkills": [],
+    "choicesByLevel": {
+      "1": {
+        "hpGained": 10
+      },
+      "2": {
+        "hpGained": 8
+      },
+      "3": {
+        "hpGained": 7
+      },
+      "4": {
+        "hpGained": 9
+      },
+      "5": {
+        "hpGained": 8
+      },
+      "6": {
+        "hpGained": 6
+      },
+      "7": {
+        "hpGained": 7
+      },
+      "8": {
+        "hpGained": 8
+      }
+    },
+    "acquiredFeats": [],
+    "spellsKnown": [],
+    "spellsPrepared": [],
+    "freeSchoolKnownSpellIds": [],
+    "expendedSpellSlots": {},
+    "expendedPactSlots": 0,
+    "expendedTraitActionUses": {},
+    "coinPurse": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+    },
+    "inventoryStacks": [
+      {
+        "stackId": "b5eb46fb-e39c-44d6-a580-ac6f9d1436e9",
+        "baseItemId": "item_ammo_bolt",
+        "quantity": 30
+      }
+    ],
+    "inventoryInstances": [
+      {
+        "instanceId": "4583f001-73de-4b62-9581-4dea998c34dc",
+        "baseItemId": "item_backpack"
+      },
+      {
+        "instanceId": "80147623-00ac-49aa-84b2-8c43f606af59",
+        "baseItemId": "item_armor_leather"
+      },
+      {
+        "instanceId": "6ad8695c-1ab9-47dc-b818-ca686fc28e0f",
+        "baseItemId": "item_weapon_club"
+      },
+      {
+        "instanceId": "73888717-5ef5-4699-98bc-bc8dfeb3236b",
+        "baseItemId": "item_weapon_club"
+      },
+      {
+        "instanceId": "abc746b4-a827-4992-bdfa-ef8f6b6f3912",
+        "baseItemId": "item_weapon_crossbow_light"
+      }
+    ],
+    "equippedArmorInstanceId": "80147623-00ac-49aa-84b2-8c43f606af59",
+    "equippedShieldInstanceId": null,
+    "equippedWeaponInstanceIds": [
+      "6ad8695c-1ab9-47dc-b818-ca686fc28e0f",
+      "abc746b4-a827-4992-bdfa-ef8f6b6f3912"
+    ],
+    "attunedInstanceIds": [],
+    "damageTaken": 0,
+    "tempHp": 0,
+    "deathSaves": {
+      "success": 0,
+      "failure": 0
+    },
+    "expendedHitDice": 0,
+    "isSetupComplete": false,
+    "startingEquipmentSelections": {},
+    "startingEquipmentCategorySelections": {}
+  }
+}

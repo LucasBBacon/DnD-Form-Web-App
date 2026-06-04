@@ -9,16 +9,7 @@ import {
 export const SaveLoadControls = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  const {
-    name,
-    isSetupComplete,
-    hydrateCharacter,
-  } = useCharacterStore((state) => ({
-    name: state.name,
-    isSetupComplete: state.isSetupComplete,
-    hydrateCharacter: state.hydrateCharacter,
-  }));
+  const hydrateCharacter = useCharacterStore((state) => state.hydrateCharacter);
 
   const handleSave = () => {
     setErrorMessage(null);
@@ -51,8 +42,10 @@ export const SaveLoadControls = () => {
       return;
     }
 
+    const currentState = useCharacterStore.getState();
+
     if (
-      (isSetupComplete || name.trim().length > 0) &&
+      (currentState.isSetupComplete || currentState.name.trim().length > 0) &&
       !window.confirm("Load this save and replace the current character?")
     ) {
       return;
