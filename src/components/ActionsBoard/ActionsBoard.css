@@ -4,6 +4,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%; /* Fluid width to accommodate 1/3 to 2/3 screen space */
+  box-sizing: border-box;
   background-color: var(--vellum-bg);
   border: 1px solid var(--border-filigree);
   border-radius: 4px;
@@ -92,9 +93,9 @@
   gap: 4px;
 }
 
-/* Allow the combat action row to stretch and fill the wide screen */
+/* Keep row sizing inclusive of padding/border to avoid horizontal overflow */
 .combat-action-row {
-  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Heavy-weapon disadvantage warning badge (Phase 3) */

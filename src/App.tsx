@@ -40,8 +40,7 @@ function App() {
           `[dev] Unknown scenario "${scenarioName}". Check src/dev/characterScenarios.ts for valid names.`,
         );
       }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }); 
   }, []);
 
   const effectiveCurrentLevel = Math.max(

@@ -17,8 +17,10 @@
 /* --- PASSIVES BANNER --- */
 .passives-banner {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   background-color: rgba(229, 217, 197, 0.4);
   border: 1px solid var(--border-filigree);
   border-radius: 4px;
@@ -51,15 +53,17 @@
 
 .passives-group {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px 20px;
   flex-grow: 1;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .passive-stat {
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .passive-icon {
