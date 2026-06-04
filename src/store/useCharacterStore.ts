@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import type { Ability, Skill, UUID } from "../types/common";
 import type { FeatAcquisitionEntry } from "../types/feat";
 import type { ItemData, ItemInstanceData } from "../types/item";
@@ -880,11 +881,80 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
 };
 
 /**
+ * Explicit allowlist of CharacterState keys that are persisted to both
+ * localStorage (via the persist middleware) and file saves. Intentionally
+ * excludes `levelUpModalState` and `restModalState` so modals never restore
+ * as open.
+ */
+export const SAVEABLE_STATE_KEYS = [
+  "playerName",
+  "name",
+  "alignment",
+  "age",
+  "height",
+  "weight",
+  "eyes",
+  "skin",
+  "hair",
+  "appearance",
+  "backstory",
+  "personalityTraits",
+  "ideals",
+  "bonds",
+  "flaws",
+  "alliesAndOrganizations",
+  "xp",
+  "level",
+  "levelUpMode",
+  "raceId",
+  "subraceId",
+  "classId",
+  "subclassId",
+  "classTracks",
+  "baseAbilityScores",
+  "hpRolls",
+  "chosenRacialBonuses",
+  "abilityAssignmentMethod",
+  "abilityRollingInputMode",
+  "abilityPointBuyOverrideAccepted",
+  "abilityAssignmentCompleted",
+  "abilityVirtualRolls",
+  "abilityVirtualRollAssignments",
+  "backgroundId",
+  "chosenRacialSkills",
+  "chosenBackgroundSkills",
+  "choicesByLevel",
+  "acquiredFeats",
+  "spellsKnown",
+  "spellsPrepared",
+  "freeSchoolKnownSpellIds",
+  "expendedSpellSlots",
+  "expendedPactSlots",
+  "expendedTraitActionUses",
+  "coinPurse",
+  "inventoryStacks",
+  "inventoryInstances",
+  "equippedArmorInstanceId",
+  "equippedShieldInstanceId",
+  "equippedWeaponInstanceIds",
+  "attunedInstanceIds",
+  "damageTaken",
+  "tempHp",
+  "deathSaves",
+  "expendedHitDice",
+  "isSetupComplete",
+  "startingEquipmentSelections",
+  "startingEquipmentCategorySelections",
+] as const satisfies readonly (keyof CharacterState)[];
+
+/**
  * Zustand store for managing the state of a D&D character, including core character info, spells, inventory, and combat status.
  * Provides actions for updating character details, managing spells, handling inventory changes,
  * and tracking combat-related information like damage and death saves.
  */
-export const useCharacterStore = create<CharacterStore>((set) => ({
+export const useCharacterStore = create<CharacterStore>()(
+  persist(
+    (set) => ({
   // #region --- Initial State ---
 
   ...BASELINE_CHARACTER_STATE,
@@ -1956,6 +2026,28 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     }),
 
   // #endregion
-}));
+    }),
+    {
+      name: "dnd5e-character",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state): Omit<CharacterState, "levelUpModalState" | "restModalState"> =>
+        Object.fromEntries(
+          SAVEABLE_STATE_KEYS.map((k) => [k, state[k]]),
+        ) as Omit<CharacterState, "levelUpModalState" | "restModalState">,
+      version: 1,
+      migrate: (persistedState, version) => {
+        const merged = {
+          ...BASELINE_CHARACTER_STATE,
+          ...(persistedState as Partial<CharacterState>),
+        };
+        if (version === 1) {
+          return merged;
+        }
+        // Unknown / future version: merge onto baseline to fill any missing keys.
+        return merged;
+      },
+    },
+  ),
+);
 
 // #endregion

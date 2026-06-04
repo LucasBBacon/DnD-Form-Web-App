@@ -7,7 +7,8 @@ import type {
   AbilityAssignmentMethod,
   RollingInputMode,
 } from "../utils/abilityAssignmentUtils";
-import type { CharacterState } from "./useCharacterStore";
+import { SAVEABLE_STATE_KEYS, type CharacterState } from "./useCharacterStore";
+export { SAVEABLE_STATE_KEYS };
 
 export const CURRENT_SCHEMA_VERSION = "1";
 export const CURRENT_APP_VERSION = "0.0.0";
@@ -204,67 +205,6 @@ export const savedCharacterFileSchema = z.object({
 export type SavedCharacterFileResult =
   | { success: true; data: SavedCharacterFile }
   | { success: false; error: string };
-
-export const SAVEABLE_STATE_KEYS = [
-  "playerName",
-  "name",
-  "alignment",
-  "age",
-  "height",
-  "weight",
-  "eyes",
-  "skin",
-  "hair",
-  "appearance",
-  "backstory",
-  "personalityTraits",
-  "ideals",
-  "bonds",
-  "flaws",
-  "alliesAndOrganizations",
-  "xp",
-  "level",
-  "levelUpMode",
-  "raceId",
-  "subraceId",
-  "classId",
-  "subclassId",
-  "classTracks",
-  "baseAbilityScores",
-  "hpRolls",
-  "chosenRacialBonuses",
-  "abilityAssignmentMethod",
-  "abilityRollingInputMode",
-  "abilityPointBuyOverrideAccepted",
-  "abilityAssignmentCompleted",
-  "abilityVirtualRolls",
-  "abilityVirtualRollAssignments",
-  "backgroundId",
-  "chosenRacialSkills",
-  "chosenBackgroundSkills",
-  "choicesByLevel",
-  "acquiredFeats",
-  "spellsKnown",
-  "spellsPrepared",
-  "freeSchoolKnownSpellIds",
-  "expendedSpellSlots",
-  "expendedPactSlots",
-  "expendedTraitActionUses",
-  "coinPurse",
-  "inventoryStacks",
-  "inventoryInstances",
-  "equippedArmorInstanceId",
-  "equippedShieldInstanceId",
-  "equippedWeaponInstanceIds",
-  "attunedInstanceIds",
-  "damageTaken",
-  "tempHp",
-  "deathSaves",
-  "expendedHitDice",
-  "isSetupComplete",
-  "startingEquipmentSelections",
-  "startingEquipmentCategorySelections",
-] as const satisfies readonly (keyof CharacterState)[];
 
 export const extractSaveData = (state: CharacterState): SavedCharacterData => {
   return Object.fromEntries(
