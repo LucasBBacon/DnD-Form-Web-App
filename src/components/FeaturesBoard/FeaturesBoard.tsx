@@ -1,6 +1,6 @@
 import type React from "react";
 import "./FeaturesBoard.css";
-import { FeatureCard, type FeatureCardProps } from "./ui/FeatureCard";
+import { FeatureCard, type FeatureCardProps } from "./FeatureCard/FeatureCard";
 import { useMemo, useState } from "react";
 
 interface FeaturesBoardProps {

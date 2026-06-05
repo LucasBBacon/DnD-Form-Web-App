@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1",
+  "savedAt": "2026-06-04T21:34:56.217Z",
+  "appVersion": "0.0.0",
+  "character": {
+    "playerName": "Dev",
+    "name": "Dying Hero",
+    "alignment": "Lawful Good",
+    "age": "",
+    "height": "",
+    "weight": "",
+    "eyes": "",
+    "skin": "",
+    "hair": "",
+    "appearance": "",
+    "backstory": "",
+    "personalityTraits": "",
+    "ideals": "",
+    "bonds": "",
+    "flaws": "",
+    "alliesAndOrganizations": "",
+    "xp": 900,
+    "level": 3,
+    "levelUpMode": "xp_gated",
+    "raceId": "race_human",
+    "subraceId": null,
+    "classId": "class_fighter",
+    "subclassId": null,
+    "classTracks": [
+      {
+        "classId": "class_fighter",
+        "subclassId": null,
+        "level": 3
+      }
+    ],
+    "baseAbilityScores": {
+      "str": 14,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "hpRolls": {
+      "1": 10,
+      "2": 8,
+      "3": 7
+    },
+    "chosenRacialBonuses": {},
+    "abilityAssignmentMethod": "standard_array",
+    "abilityRollingInputMode": "virtual",
+    "abilityPointBuyOverrideAccepted": false,
+    "abilityAssignmentCompleted": false,
+    "abilityVirtualRolls": [],
+    "abilityVirtualRollAssignments": {},
+    "backgroundId": null,
+    "chosenRacialSkills": [],
+    "chosenBackgroundSkills": [],
+    "choicesByLevel": {
+      "1": {
+        "hpGained": 10
+      },
+      "2": {
+        "hpGained": 8
+      },
+      "3": {
+        "hpGained": 7
+      }
+    },
+    "acquiredFeats": [],
+    "spellsKnown": [],
+    "spellsPrepared": [],
+    "freeSchoolKnownSpellIds": [],
+    "expendedSpellSlots": {},
+    "expendedPactSlots": 0,
+    "expendedTraitActionUses": {},
+    "coinPurse": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+    },
+    "inventoryStacks": [],
+    "inventoryInstances": [],
+    "equippedArmorInstanceId": null,
+    "equippedShieldInstanceId": null,
+    "equippedWeaponInstanceIds": [],
+    "attunedInstanceIds": [],
+    "damageTaken": 31,
+    "tempHp": 0,
+    "deathSaves": {
+      "success": 1,
+      "failure": 2
+    },
+    "expendedHitDice": 2,
+    "isSetupComplete": false,
+    "startingEquipmentSelections": {},
+    "startingEquipmentCategorySelections": {}
+  }
+}

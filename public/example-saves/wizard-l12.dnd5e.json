@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1",
+  "savedAt": "2026-06-04T21:34:56.217Z",
+  "appVersion": "0.0.0",
+  "character": {
+    "playerName": "Dev",
+    "name": "Elara Moonwhisper",
+    "alignment": "Neutral",
+    "age": "",
+    "height": "",
+    "weight": "",
+    "eyes": "",
+    "skin": "",
+    "hair": "",
+    "appearance": "",
+    "backstory": "",
+    "personalityTraits": "",
+    "ideals": "",
+    "bonds": "",
+    "flaws": "",
+    "alliesAndOrganizations": "",
+    "xp": 64000,
+    "level": 12,
+    "levelUpMode": "xp_gated",
+    "raceId": "race_elf",
+    "subraceId": null,
+    "classId": "class_wizard",
+    "subclassId": null,
+    "classTracks": [
+      {
+        "classId": "class_wizard",
+        "subclassId": null,
+        "level": 12
+      }
+    ],
+    "baseAbilityScores": {
+      "str": 8,
+      "dex": 14,
+      "con": 14,
+      "int": 20,
+      "wis": 13,
+      "cha": 10
+    },
+    "hpRolls": {
+      "1": 6,
+      "2": 5,
+      "3": 4,
+      "4": 6,
+      "5": 3,
+      "6": 5,
+      "7": 6,
+      "8": 4,
+      "9": 5,
+      "10": 4,
+      "11": 6,
+      "12": 5
+    },
+    "chosenRacialBonuses": {},
+    "abilityAssignmentMethod": "standard_array",
+    "abilityRollingInputMode": "virtual",
+    "abilityPointBuyOverrideAccepted": false,
+    "abilityAssignmentCompleted": false,
+    "abilityVirtualRolls": [],
+    "abilityVirtualRollAssignments": {},
+    "backgroundId": null,
+    "chosenRacialSkills": [],
+    "chosenBackgroundSkills": [],
+    "choicesByLevel": {
+      "1": {
+        "hpGained": 6
+      },
+      "2": {
+        "hpGained": 5
+      },
+      "3": {
+        "hpGained": 4
+      },
+      "4": {
+        "hpGained": 6
+      },
+      "5": {
+        "hpGained": 3
+      },
+      "6": {
+        "hpGained": 5
+      },
+      "7": {
+        "hpGained": 6
+      },
+      "8": {
+        "hpGained": 4
+      },
+      "9": {
+        "hpGained": 5
+      },
+      "10": {
+        "hpGained": 4
+      },
+      "11": {
+        "hpGained": 6
+      },
+      "12": {
+        "hpGained": 5
+      }
+    },
+    "acquiredFeats": [],
+    "spellsKnown": [
+      "spell_acid_splash"
+    ],
+    "spellsPrepared": [
+      "spell_acid_splash"
+    ],
+    "freeSchoolKnownSpellIds": [],
+    "expendedSpellSlots": {
+      "1": 3,
+      "2": 2,
+      "3": 1
+    },
+    "expendedPactSlots": 0,
+    "expendedTraitActionUses": {},
+    "coinPurse": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+    },
+    "inventoryStacks": [
+      {
+        "stackId": "39807be9-a334-448b-a65e-bb62cfbd949f",
+        "baseItemId": "item_torch",
+        "quantity": 3
+      },
+      {
+        "stackId": "b2f46b9a-4b6a-4c2a-a617-d68dfc1f2b9d",
+        "baseItemId": "item_ammo_bolt",
+        "quantity": 20
+      }
+    ],
+    "inventoryInstances": [
+      {
+        "instanceId": "e46b1c70-97e2-4c5a-9553-7bf1ecd422f6",
+        "baseItemId": "item_backpack"
+      },
+      {
+        "instanceId": "373f0958-797b-4a3d-9fa2-41b4e7ac7b14",
+        "baseItemId": "item_weapon_crossbow_light"
+      }
+    ],
+    "equippedArmorInstanceId": null,
+    "equippedShieldInstanceId": null,
+    "equippedWeaponInstanceIds": [
+      "373f0958-797b-4a3d-9fa2-41b4e7ac7b14"
+    ],
+    "attunedInstanceIds": [],
+    "damageTaken": 0,
+    "tempHp": 0,
+    "deathSaves": {
+      "success": 0,
+      "failure": 0
+    },
+    "expendedHitDice": 0,
+    "isSetupComplete": false,
+    "startingEquipmentSelections": {},
+    "startingEquipmentCategorySelections": {}
+  }
+}

@@ -99,10 +99,9 @@ const mockRations = {
 
 describe("InventoryBoard", () => {
   const setStoreMock = (store: Record<string, unknown>) => {
-    vi.mocked(useCharacterStore).mockImplementation(
-      ((selector?: (state: Record<string, unknown>) => unknown) =>
-        typeof selector === "function" ? selector(store) : store) as never,
-    );
+    vi.mocked(useCharacterStore).mockImplementation(((
+      selector?: (state: Record<string, unknown>) => unknown,
+    ) => (typeof selector === "function" ? selector(store) : store)) as never);
   };
 
   beforeEach(() => {
@@ -270,7 +269,9 @@ describe("InventoryBoard", () => {
       },
     ];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
+    vi.mocked(staticDataApi.getItemById).mockReturnValue(
+      mockMagicItem as never,
+    );
 
     render(<InventoryBoard />);
     fireEvent.click(screen.getByText("Ring of Protection"));
@@ -290,7 +291,9 @@ describe("InventoryBoard", () => {
       },
     ];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
+    vi.mocked(staticDataApi.getItemById).mockReturnValue(
+      mockMagicItem as never,
+    );
 
     render(<InventoryBoard />);
     await user.click(screen.getByText("Ring of Protection"));
@@ -310,7 +313,9 @@ describe("InventoryBoard", () => {
     ];
     store.attunedInstanceIds = ["inst-magic"];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockReturnValue(mockMagicItem as never);
+    vi.mocked(staticDataApi.getItemById).mockReturnValue(
+      mockMagicItem as never,
+    );
 
     render(<InventoryBoard />);
     await user.click(screen.getByText("Ring of Protection"));
@@ -337,10 +342,12 @@ describe("InventoryBoard", () => {
       },
     ];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockImplementation(
-      ((itemId: string) =>
-        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
-    );
+    vi.mocked(staticDataApi.getItemById).mockImplementation(((
+      itemId: string,
+    ) =>
+      itemId === "adventuring_gear_rations"
+        ? mockRations
+        : mockWeapon) as never);
 
     render(<InventoryBoard />);
     expect(screen.getByText("Rations")).toBeInTheDocument();
@@ -366,10 +373,12 @@ describe("InventoryBoard", () => {
       },
     ];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockImplementation(
-      ((itemId: string) =>
-        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
-    );
+    vi.mocked(staticDataApi.getItemById).mockImplementation(((
+      itemId: string,
+    ) =>
+      itemId === "adventuring_gear_rations"
+        ? mockRations
+        : mockWeapon) as never);
 
     render(<InventoryBoard />);
     const minusButtons = screen.getAllByRole("button", { name: "-" });
@@ -398,10 +407,12 @@ describe("InventoryBoard", () => {
       },
     ];
     setStoreMock(store as unknown as Record<string, unknown>);
-    vi.mocked(staticDataApi.getItemById).mockImplementation(
-      ((itemId: string) =>
-        itemId === "adventuring_gear_rations" ? mockRations : mockWeapon) as never,
-    );
+    vi.mocked(staticDataApi.getItemById).mockImplementation(((
+      itemId: string,
+    ) =>
+      itemId === "adventuring_gear_rations"
+        ? mockRations
+        : mockWeapon) as never);
 
     render(<InventoryBoard />);
     const plusButtons = screen.getAllByRole("button", { name: "+" });

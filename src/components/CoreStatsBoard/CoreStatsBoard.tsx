@@ -1,6 +1,6 @@
 import type React from "react";
 import "./CoreStatsBoard.css";
-import { AbilityCard, type CoreStatsAbilityEntry } from "./ui/AbilityCard";
+import { AbilityCard, type CoreStatsAbilityEntry } from "./AbilityCard/AbilityCard";
 import { Brain, Eye, Search } from "lucide-react";
 
 // #region Interfaces

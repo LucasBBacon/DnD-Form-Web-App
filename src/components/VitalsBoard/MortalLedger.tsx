@@ -1,9 +1,9 @@
 import type React from "react";
 import "./MortalLedger.css";
-import { CombatDefenses } from "./ui/CombatDefenses";
-import { DeathSaves } from "./ui/DeathSaves";
-import { HealthLedger } from "./ui/HealthLedger";
-import { RestAndRecovery } from "./ui/RestAndRecovery";
+import { CombatDefenses } from "./CombatDefenses/CombatDefenses";
+import { DeathSaves } from "./DeathSaves/DeathSaves";
+import { HealthLedger } from "./HealthLedger/HealthLedger";
+import { RestAndRecovery } from "./RestAndRecovery/RestAndRecovery";
 
 // #region Types and Interfaces
 

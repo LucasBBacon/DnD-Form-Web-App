@@ -2,8 +2,8 @@
 import "./ActionsBoard.css";
 import type { CombatActionEntry } from "../../hooks/useCombatActions";
 import type { UseSpellcastingReturn } from "../../hooks/useSpellcasting";
-import { CombatActionRow } from "./ui/CombatActionRow";
-import { SpellSlotAbacus } from "./ui/SpellSlotAbacus";
+import { CombatActionRow } from "./CombatActionRow/CombatActionRow";
+import { SpellSlotAbacus } from "./SpellSlotAbacus/SpellSlotAbacus";
 
 export interface ActionsBoardProps {
   spellcasting: UseSpellcastingReturn;

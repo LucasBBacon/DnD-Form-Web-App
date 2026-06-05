@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAllCharacterTraitsWithSources } from "../../utils/traitUtils";
 import { FeaturesBoard } from "./FeaturesBoard";
-import type { FeatureCardProps } from "./ui/FeatureCard";
+import type { FeatureCardProps } from "./FeatureCard/FeatureCard";
 
 export const FeaturesBoardContainer: React.FC = () => {
   const level = useCharacterStore((state) => state.level);

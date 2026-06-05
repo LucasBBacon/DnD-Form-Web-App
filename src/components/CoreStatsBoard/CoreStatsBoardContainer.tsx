@@ -6,7 +6,7 @@ import type { Skill } from "../../types/common";
 import { ABILITIES, ABILITY_LABELS } from "../../utils/abilityConstants";
 import { SKILL_ABILITY_MAP } from "../../utils/constants";
 import { CoreStatsBoard } from "./CoreStatsBoard";
-import type { AbilityCardSkill, CoreStatsAbilityEntry } from "./ui/AbilityCard";
+import type { AbilityCardSkill, CoreStatsAbilityEntry } from "./AbilityCard/AbilityCard";
 
 const toSkillLabel = (skill: Skill): string =>
   skill.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());

@@ -2,7 +2,10 @@ import { getAllItemCategories, getItemById } from "../data/staticDataApi";
 import { useCharacterStore } from "../store/useCharacterStore";
 import type { UUID } from "../types/common";
 import type { Attack } from "../types/action";
-import type { ItemInstanceData, WeaponPropertyCatalogEntry } from "../types/item";
+import type {
+  ItemInstanceData,
+  WeaponPropertyCatalogEntry,
+} from "../types/item";
 import { resolveInstance } from "../utils/inventoryUtils";
 import {
   aggregateNonSkillProficienciesMulticlass,
@@ -123,8 +126,7 @@ export const useAttacks = (): { attacks: Attack[] } => {
       0,
     );
     const instanceCount = state.inventoryInstances.reduce(
-      (total, instance) =>
-        instance.baseItemId === itemId ? total + 1 : total,
+      (total, instance) => (instance.baseItemId === itemId ? total + 1 : total),
       0,
     );
 
@@ -179,7 +181,8 @@ export const useAttacks = (): { attacks: Attack[] } => {
       const statMod = resolveAttackStatModifier(props.rules.attackAbility);
 
       // #region --- Proficiency Check ---
-      const categoryIds = weaponCategoryMembershipByItemId.get(baseItemId) ?? [];
+      const categoryIds =
+        weaponCategoryMembershipByItemId.get(baseItemId) ?? [];
       const isProficient = isWeaponProficient(
         {
           baseItemId,
@@ -295,8 +298,7 @@ export const useAttacks = (): { attacks: Attack[] } => {
 
       const statMod = resolveAttackStatModifier(props.rules.attackAbility);
       const toHit =
-        statMod +
-        (isProficient ? derivedStats.proficiencyBonus : 0);
+        statMod + (isProficient ? derivedStats.proficiencyBonus : 0);
       const damageBonus = statMod;
       const thrownRangeInfo = props.rules.thrownRange;
       const thrownRangeText = formatRangeBand(thrownRangeInfo) ?? props.range;

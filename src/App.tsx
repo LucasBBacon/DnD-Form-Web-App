@@ -4,6 +4,7 @@ import { useCharacterStore } from "./store/useCharacterStore";
 import { CharacterSheetLayout } from "./components/CharacterSheetLayout/CharacterSheetLayout";
 import { CharacterCreationWizard } from "./components/CharacterCreationWizard/CharacterCreationWizard";
 import { LevelUpModal } from "./components/LevelUp/LevelUpModal";
+import { SaveLoadControls } from "./components/ui/SaveLoadControls/SaveLoadControls";
 import {
   getAvailableLevelUpTargetForCharacter,
   getFirstIncompleteLevelChoice,
@@ -90,6 +91,9 @@ function App() {
 
   return (
     <main className="app-container">
+      <div className="app-save-load-controls">
+        <SaveLoadControls />
+      </div>
       {isSetupComplete ? <CharacterSheetLayout /> : <CharacterCreationWizard />}
       {isSetupComplete &&
         levelUpModalState.isOpen &&

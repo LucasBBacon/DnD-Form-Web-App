@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1",
+  "savedAt": "2026-06-04T21:34:56.217Z",
+  "appVersion": "0.0.0",
+  "character": {
+    "playerName": "Dev",
+    "name": "Aldric Steele",
+    "alignment": "Neutral Good",
+    "age": "",
+    "height": "",
+    "weight": "",
+    "eyes": "",
+    "skin": "",
+    "hair": "",
+    "appearance": "",
+    "backstory": "",
+    "personalityTraits": "",
+    "ideals": "",
+    "bonds": "",
+    "flaws": "",
+    "alliesAndOrganizations": "",
+    "xp": 0,
+    "level": 1,
+    "levelUpMode": "xp_gated",
+    "raceId": "race_human",
+    "subraceId": null,
+    "classId": "class_fighter",
+    "subclassId": null,
+    "classTracks": [
+      {
+        "classId": "class_fighter",
+        "subclassId": null,
+        "level": 1
+      }
+    ],
+    "baseAbilityScores": {
+      "str": 16,
+      "dex": 13,
+      "con": 15,
+      "int": 10,
+      "wis": 12,
+      "cha": 8
+    },
+    "hpRolls": {
+      "1": 10
+    },
+    "chosenRacialBonuses": {},
+    "abilityAssignmentMethod": "standard_array",
+    "abilityRollingInputMode": "virtual",
+    "abilityPointBuyOverrideAccepted": false,
+    "abilityAssignmentCompleted": false,
+    "abilityVirtualRolls": [],
+    "abilityVirtualRollAssignments": {},
+    "backgroundId": null,
+    "chosenRacialSkills": [],
+    "chosenBackgroundSkills": [],
+    "choicesByLevel": {
+      "1": {
+        "hpGained": 10
+      }
+    },
+    "acquiredFeats": [],
+    "spellsKnown": [],
+    "spellsPrepared": [],
+    "freeSchoolKnownSpellIds": [],
+    "expendedSpellSlots": {},
+    "expendedPactSlots": 0,
+    "expendedTraitActionUses": {},
+    "coinPurse": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+    },
+    "inventoryStacks": [
+      {
+        "stackId": "484391f0-4173-443e-9e86-3bb58792e4ce",
+        "baseItemId": "item_torch",
+        "quantity": 10
+      }
+    ],
+    "inventoryInstances": [
+      {
+        "instanceId": "f17b4f1c-24b5-422a-ac29-3cf3ecdc974f",
+        "baseItemId": "item_backpack"
+      },
+      {
+        "instanceId": "9de17b78-175c-4752-8858-e1e47ba87aba",
+        "baseItemId": "item_armor_leather"
+      },
+      {
+        "instanceId": "00543204-3107-450e-805f-a2062d5d3885",
+        "baseItemId": "item_weapon_club"
+      }
+    ],
+    "equippedArmorInstanceId": "9de17b78-175c-4752-8858-e1e47ba87aba",
+    "equippedShieldInstanceId": null,
+    "equippedWeaponInstanceIds": [
+      "00543204-3107-450e-805f-a2062d5d3885"
+    ],
+    "attunedInstanceIds": [],
+    "damageTaken": 0,
+    "tempHp": 0,
+    "deathSaves": {
+      "success": 0,
+      "failure": 0
+    },
+    "expendedHitDice": 0,
+    "isSetupComplete": false,
+    "startingEquipmentSelections": {},
+    "startingEquipmentCategorySelections": {}
+  }
+}

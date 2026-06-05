@@ -1,8 +1,8 @@
 import type React from "react";
 import "./IdentityHeader.css";
 import type { LevelUpMode } from "../../types/progression";
-import { ClassAndLevelDisplay } from "./ui/ClassAndLevelDisplay";
-import { ExperienceTracker } from "./ui/ExperienceTracker";
+import { ClassAndLevelDisplay } from "./ClassAndLevelDisplay/ClassAndLevelDisplay";
+import { ExperienceTracker } from "./ExperienceTracker/ExperienceTracker";
 
 export interface CharacterClassEntry {
   classId: string;

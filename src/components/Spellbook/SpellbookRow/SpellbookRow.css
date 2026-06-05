@@ -1,0 +1,131 @@
+.spellbook-row-container {
+  border: 1px solid var(--border-filigree);
+  border-radius: 4px;
+  background-color: var(--vellum-bg);
+  transition: border-color 0.2s ease;
+}
+
+.spellbook-row-container:hover {
+  border-color: var(--ink-muted);
+}
+
+.spellbook-row-container.is-expanded {
+  border-color: var(--ink-main);
+  box-shadow: 0 4px 12px rgba(44, 36, 27, 0.05);
+}
+
+.spell-summary-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.spell-level-indicator {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ink-main);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: bold;
+  color: var(--ink-main);
+  font-size: 0.9rem;
+}
+
+.spell-primary-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.spell-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink-main);
+}
+
+.spell-school-subtext {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+.spell-status-flags {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-muted);
+}
+
+.prepared-icon {
+  color: var(--ink-main);
+}
+
+.prepared-icon.always-prepared {
+  color: var(--gilt-gold);
+}
+
+.spell-details-body {
+  padding: 0 16px 16px 16px;
+}
+
+.spell-mechanics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  background-color: rgba(229, 217, 197, 0.2);
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.mechanic-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.mechanic-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border-bottom: 1px dotted var(--border-filigree);
+  margin-bottom: 2px;
+}
+
+.mechanic-value {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-main);
+}
+
+.material-text {
+  font-style: italic;
+  font-weight: normal;
+  columns: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+.spell-description-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-main);
+}
+
+.spell-description-text p {
+  margin-bottom: 12px;
+}
+
+.higher-levels-text {
+  background-color: rgba(158, 42, 43, 0.05);
+  padding: 8px;
+  border-left: 2px solid var(--rubric-red);
+}

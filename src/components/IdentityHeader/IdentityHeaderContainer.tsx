@@ -1,6 +1,10 @@
 import type React from "react";
 import { useMemo } from "react";
-import { getClassById, getRaceById, getSubclassById } from "../../data/staticDataApi";
+import {
+  getClassById,
+  getRaceById,
+  getSubclassById,
+} from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
 import { getAvailableLevelUpTargetForCharacter } from "../../utils/levelAvailabilityUtils";
 import { IdentityHeader, type CharacterClassEntry } from "./IdentityHeader";
@@ -54,9 +58,7 @@ export const IdentityHeaderContainer: React.FC = () => {
     if (!classId) return [];
 
     const classData = getClassById(classId);
-    const subclassData = subclassId
-      ? getSubclassById(subclassId)
-      : null;
+    const subclassData = subclassId ? getSubclassById(subclassId) : null;
 
     return [
       {
