@@ -1,0 +1,87 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(26, 22, 18, 0.8);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-parchment {
+  background-color: var(--vellum-bg);
+  border: 2px solid var(--ink-main);
+  border-radius: 4px;
+  padding: 24px 32px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(44, 36, 27, 0.05);
+  text-align: center;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--rubric-red);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal-message {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--ink-main);
+  line-height: 1.5;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.destructive-btn {
+  border-color: var(--rubric-red);
+  color: var(--rubric-red);
+  font-weight: bold;
+}
+
+.destructive-btn:hover {
+  background-color: var(--rubric-red);
+  columns: var(--vellum-bg);
+}
+
+.cancel-btn {
+  border-color: var(--ink-muted);
+  color: var(--ink-muted);
+}
+
+.cancel-btn:hover {
+  background-color: var(--ink-muted);
+  columns: var(--vellum-bg);
+}
+
+.fadeInScale {
+  animation: fadeInScale 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

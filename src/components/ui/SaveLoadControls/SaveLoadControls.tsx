@@ -1,4 +1,6 @@
 import { useRef, useState, type ChangeEvent } from "react";
+import { SaveLoad } from "../../SaveLoad/SaveLoad";
+import { ConfirmationModal } from "../ConfirmationModal/ConfirmationModal";
 import { useCharacterStore } from "../../../store/useCharacterStore";
 import {
   migrateIfNeeded,
@@ -9,7 +11,29 @@ import {
 export const SaveLoadControls = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const hydrateCharacter = useCharacterStore((state) => state.hydrateCharacter);
+
+  const loadFile = async (file: File) => {
+    try {
+      const text = await file.text();
+      const result = validateAndDeserialize(text);
+
+      if (!result.success) {
+        setErrorMessage(result.error);
+        return;
+      }
+
+      const migrated = migrateIfNeeded(result.data);
+      hydrateCharacter(migrated.character);
+      setErrorMessage(null);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Unable to load save file.";
+      setErrorMessage(message);
+    }
+  };
 
   const handleSave = () => {
     setErrorMessage(null);
@@ -34,6 +58,22 @@ export const SaveLoadControls = () => {
     fileInputRef.current?.click();
   };
 
+  const handleConfirmLoad = async () => {
+    if (!pendingFile) {
+      setIsConfirmationOpen(false);
+      return;
+    }
+
+    setIsConfirmationOpen(false);
+    await loadFile(pendingFile);
+    setPendingFile(null);
+  };
+
+  const handleCancelLoad = () => {
+    setIsConfirmationOpen(false);
+    setPendingFile(null);
+  };
+
   const handleFileSelected = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -46,46 +86,41 @@ export const SaveLoadControls = () => {
 
     if (
       (currentState.isSetupComplete || currentState.name.trim().length > 0) &&
-      !window.confirm("Load this save and replace the current character?")
+      file
     ) {
+      setPendingFile(file);
+      setIsConfirmationOpen(true);
       return;
     }
 
-    try {
-      const text = await file.text();
-      const result = validateAndDeserialize(text);
-
-      if (!result.success) {
-        setErrorMessage(result.error);
-        return;
-      }
-
-      const migrated = migrateIfNeeded(result.data);
-      hydrateCharacter(migrated.character);
-      setErrorMessage(null);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Unable to load save file.";
-      setErrorMessage(message);
-    }
+    await loadFile(file);
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleSave}>
-        Save
-      </button>
-      <button type="button" onClick={handleLoadClick}>
-        Load
-      </button>
+    <>
+      <SaveLoad
+        onSave={handleSave}
+        onLoadRequest={handleLoadClick}
+        errorMessage={errorMessage}
+        clearError={() => setErrorMessage(null)}
+      />
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        title="Overwrite Existing Save?"
+        message="Loading this file will replace your current character state. This cannot be undone."
+        onConfirm={handleConfirmLoad}
+        onCancel={handleCancelLoad}
+      />
       <input
         ref={fileInputRef}
         type="file"
         accept="application/json,.json"
         onChange={handleFileSelected}
+        aria-hidden="true"
+        tabIndex={-1}
+        style={{ display: "none" }}
         hidden
       />
-      {errorMessage && <p>{errorMessage}</p>}
-    </div>
+    </>
   );
 };
