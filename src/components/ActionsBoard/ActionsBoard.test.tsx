@@ -21,9 +21,12 @@ vi.mock("../ui/DiceRoller/DiceRoller", () => ({
     <button
       type="button"
       onClick={() =>
-        onRollComplete?.(Array.from({ length: count }, () => 5), {
-          total: count * 5,
-        })
+        onRollComplete?.(
+          Array.from({ length: count }, () => 5),
+          {
+            total: count * 5,
+          },
+        )
       }
     >
       {rollLabel ?? `Mock d${sides}`}
@@ -119,10 +122,9 @@ const buildCombatActions = () => ({
 
 describe("ActionsBoardContainer", () => {
   const setStoreMock = (store: Record<string, unknown>) => {
-    vi.mocked(useCharacterStore).mockImplementation(
-      ((selector?: (state: Record<string, unknown>) => unknown) =>
-        typeof selector === "function" ? selector(store) : store) as never,
-    );
+    vi.mocked(useCharacterStore).mockImplementation(((
+      selector?: (state: Record<string, unknown>) => unknown,
+    ) => (typeof selector === "function" ? selector(store) : store)) as never);
   };
 
   let removeInventoryItemMock: ReturnType<typeof vi.fn>;

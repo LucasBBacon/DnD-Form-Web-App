@@ -16,7 +16,7 @@ import type {
 
 // #region --- Types and Interfaces ---
 
-/** 
+/**
  * CharacterClassTrack represents a single class track for a character, used to manage multi-classing by tracking the class ID, optional subclass ID, and level for each class track the character has.
  * This allows for flexible multi-classing support while maintaining clear associations between classes and their respective levels and subclasses.
  */
@@ -28,7 +28,7 @@ export interface CharacterClassTrack {
 
 export type RestType = "short" | "long";
 
-/** 
+/**
  * Inventory types used for managing the character's inventory state, including stack-based and instance-based items
  */
 export interface InventoryStackRecord {
@@ -92,9 +92,20 @@ const clampCharacterLevel = (level: number): number =>
 const normalizeQuantity = (quantity: number): number =>
   Math.max(1, Math.floor(quantity));
 
+/**
+ * Normalizes a coin amount to be a non-negative integer, ensuring that any updates to coin amounts do not result in negative or fractional values.
+ * @param amount The coin amount to normalize.
+ * @returns The normalized coin amount.
+ */
 const normalizeCoinAmount = (amount: number): number =>
   Math.max(0, Math.floor(amount));
 
+/**
+ * Adds coins to a coin purse, ensuring that the amounts are normalized and do not result in negative or fractional values.
+ * @param purse The current coin purse to add coins to.
+ * @param coins The coins to add, specified as a partial record of coin types and amounts.
+ * @returns The updated coin purse with the added coins.
+ */
 const addCoinsToPurse = (
   purse: CoinPurse,
   coins: Partial<Record<CoinType, number>>,
@@ -111,12 +122,23 @@ const addCoinsToPurse = (
   return nextPurse;
 };
 
+/**
+ * Calculates the total value of a coin purse in copper pieces by multiplying the quantity of each coin type by its respective value and summing the totals, allowing for easy conversion of the entire coin purse into a single denomination for calculations or comparisons.
+ * @param purse The coin purse to calculate the total value for.
+ * @returns The total value of the coin purse in copper pieces.
+ */
 const totalCopperPieces = (purse: CoinPurse): number =>
   COIN_TYPES.reduce(
     (total, coinType) => total + purse[coinType] * COIN_VALUES[coinType],
     0,
   );
 
+  /**
+   * Consolidates a coin purse by converting smaller denominations into larger ones where possible, resulting in a more compact representation of the character's coins while maintaining the same total value. The function takes into account optional parameters to allow or disallow certain denominations during consolidation.
+   * @param purse The coin purse to consolidate.
+   * @param options Optional parameters to allow or disallow certain denominations during consolidation.
+   * @returns The consolidated coin purse.
+   */
 const consolidateCoinPurse = (
   purse: CoinPurse,
   options?: { allowElectrum?: boolean; allowPlatinum?: boolean },
@@ -144,6 +166,13 @@ const consolidateCoinPurse = (
   return nextPurse;
 };
 
+/**
+ * Removes coins from a coin purse, ensuring that the amounts are normalized and do not result in negative values. If the purse does not contain enough coins of the specified types to cover the removal, the function returns null to indicate that the operation cannot be completed.
+ * @param purse The current coin purse to remove coins from.
+ * @param coinType The type of coin to remove.
+ * @param amount The amount of coins to remove.
+ * @returns The updated coin purse with the removed coins, or null if the operation cannot be completed.
+ */
 const removeCoinsFromPurse = (
   purse: CoinPurse,
   coinType: CoinType,
@@ -239,8 +268,8 @@ const getTotalClassTrackLevels = (tracks: CharacterClassTrack[]): number =>
   tracks.reduce((total, track) => total + track.level, 0);
 
 /**
- * Upserts a character class track in the array of tracks. 
- * If a track with the specified class ID already exists, it updates that track with the provided updates. 
+ * Upserts a character class track in the array of tracks.
+ * If a track with the specified class ID already exists, it updates that track with the provided updates.
  * If no such track exists, it creates a new track with the given class ID and updates.
  * @param tracks The array of character class tracks to update.
  * @param classId The ID of the class track to upsert.
@@ -278,18 +307,29 @@ const upsertClassTrack = (
   );
 };
 
+/**
+ * Builds a LevelChoice object from a LevelUpDraft by mapping the properties of the draft to the corresponding fields in the LevelChoice, while also ensuring that optional fields are only included if they have valid values. This function is used to convert the user's level-up selections into a format that can be stored in the character's state and used for calculations and trait applications.
+ * @param draft The LevelUpDraft object containing the user's level-up selections.
+ * @returns A Partial<LevelChoice> object representing the user's level-up choices.
+ */
 const buildLevelChoiceFromDraft = (
   draft: LevelUpDraft,
 ): Partial<LevelChoice> => ({
   selectedClassId: draft.targetClassId ?? undefined,
   hpGained: draft.hpGained ?? undefined,
-  ...(Object.keys(draft.asiChoices).length > 0 ? { asiChoices: draft.asiChoices } : {}),
+  ...(Object.keys(draft.asiChoices).length > 0
+    ? { asiChoices: draft.asiChoices }
+    : {}),
   ...(draft.featId ? { featId: draft.featId } : {}),
-  ...(draft.skillChoices.length > 0 ? { skillChoices: draft.skillChoices } : {}),
+  ...(draft.skillChoices.length > 0
+    ? { skillChoices: draft.skillChoices }
+    : {}),
   ...(draft.expertiseChoices.length > 0
     ? { expertiseChoices: draft.expertiseChoices }
     : {}),
-  ...(draft.weaponChoices.length > 0 ? { weaponChoices: draft.weaponChoices } : {}),
+  ...(draft.weaponChoices.length > 0
+    ? { weaponChoices: draft.weaponChoices }
+    : {}),
   ...(draft.toolChoices.length > 0 ? { toolChoices: draft.toolChoices } : {}),
   ...(draft.languageChoices.length > 0
     ? { languageChoices: draft.languageChoices }
@@ -301,6 +341,11 @@ const buildLevelChoiceFromDraft = (
 
 type TraitActionResetCadence = "short_rest" | "long_rest" | "turn" | "other";
 
+/**
+ * Determines the reset cadences for trait-granted actions based on the character's traits and their associated effects. The function analyzes all traits available to the character, identifies those that grant actions, and collects the reset cadences for those actions to determine how and when expended uses of those actions should be recovered. This is essential for accurately managing the character's resources and ensuring that traits with limited uses are properly reset according to their defined cadences.
+ * @param context An object containing the character's current context, including level and relevant character information needed to determine the traits and their effects.
+ * @returns A record mapping action IDs to sets of reset cadences, indicating how and when expended uses of each action should be recovered.
+ */
 const getTraitActionResetCadences = (context: {
   level: number;
   raceId: string | null;
@@ -344,6 +389,12 @@ const getTraitActionResetCadences = (context: {
   return byActionId;
 };
 
+/**
+ * Calculates the remaining expended trait action uses after a rest, taking into account the reset cadences of each action and the type of rest taken.
+ * @param context An object containing the character's current context, including level, traits, and expended action uses.
+ * @param restType The type of rest taken, either "short" or "long".
+ * @returns A record mapping action IDs to the number of remaining expended uses after the rest.
+ */
 const getRemainingExpendedTraitActionUsesAfterRest = (
   context: {
     level: number;
@@ -360,29 +411,29 @@ const getRemainingExpendedTraitActionUsesAfterRest = (
 ): Record<string, number> => {
   const resetCadencesByActionId = getTraitActionResetCadences(context);
   const recoverableCadences = new Set<TraitActionResetCadence>(
-    restType === "short"
-      ? ["short_rest"]
-      : ["short_rest", "long_rest"],
+    restType === "short" ? ["short_rest"] : ["short_rest", "long_rest"],
   );
 
   const nextExpended: Record<string, number> = {};
 
-  Object.entries(context.expendedTraitActionUses).forEach(([actionId, expended]) => {
-    if (expended <= 0) {
-      return;
-    }
+  Object.entries(context.expendedTraitActionUses).forEach(
+    ([actionId, expended]) => {
+      if (expended <= 0) {
+        return;
+      }
 
-    const actionCadences = resetCadencesByActionId[actionId];
-    const shouldRecover = actionCadences
-      ? Array.from(actionCadences).some((cadence) =>
-          recoverableCadences.has(cadence),
-        )
-      : false;
+      const actionCadences = resetCadencesByActionId[actionId];
+      const shouldRecover = actionCadences
+        ? Array.from(actionCadences).some((cadence) =>
+            recoverableCadences.has(cadence),
+          )
+        : false;
 
-    if (!shouldRecover) {
-      nextExpended[actionId] = expended;
-    }
-  });
+      if (!shouldRecover) {
+        nextExpended[actionId] = expended;
+      }
+    },
+  );
 
   return nextExpended;
 };
@@ -392,8 +443,8 @@ const getRemainingExpendedTraitActionUsesAfterRest = (
 // #region --- Store Types ---
 
 /**
- * CharacterState represents the complete state of a D&D character, including core character information, spells, inventory, and combat status. 
- * This interface defines all the properties that make up the character's state, which is managed by the Zustand store. 
+ * CharacterState represents the complete state of a D&D character, including core character information, spells, inventory, and combat status.
+ * This interface defines all the properties that make up the character's state, which is managed by the Zustand store.
  * It includes fields for player and character names, alignment, experience, level, race, class, and various other attributes.
  */
 export interface CharacterState {
@@ -554,35 +605,35 @@ interface CharacterActions {
   // #region --- Character Setup Actions ---
 
   setPlayerName: (playerName: string) => void;
-  
+
   setName: (name: string) => void;
-  
+
   setAlignment: (alignment: string) => void;
 
   updateRoleplayField: (field: keyof CharacterState, value: string) => void;
-  
+
   setXp: (xp: number) => void;
 
   setLevelUpMode: (mode: LevelUpMode) => void;
-  
+
   setRace: (raceId: string) => void;
-  
+
   setSubrace: (subraceId: string | null) => void;
-  
+
   setClass: (classId: string) => void;
-  
+
   setSubclass: (subclassId: string | null) => void;
 
   // #region --- Multi-Classing Actions ---
 
   setClassTracks: (tracks: CharacterClassTrack[]) => void;
-  
+
   addClassTrack: (classId: string, startingLevel?: number) => void;
-  
+
   removeClassTrack: (classId: string) => void;
-  
+
   setClassTrackLevel: (classId: string, level: number) => void;
-  
+
   setClassTrackSubclass: (classId: string, subclassId: string | null) => void;
 
   // #endregion
@@ -590,7 +641,7 @@ interface CharacterActions {
   // #region --- Background and Ability Actions ---
 
   setBackground: (background: string) => void;
-  
+
   setLevel: (level: number) => void;
 
   /**
@@ -601,11 +652,11 @@ interface CharacterActions {
     targetLevel: number;
     draft: LevelUpDraft;
   }) => boolean;
-  
+
   updateLevelChoice: (level: number, updates: Partial<LevelChoice>) => void;
-  
+
   setBaseAbilityScore: (ability: Ability, score: number) => void;
-  
+
   setBaseAbilityScores: (scores: Record<Ability, number>) => void;
 
   setAbilityAssignmentMethod: (method: AbilityAssignmentMethod) => void;
@@ -624,13 +675,13 @@ interface CharacterActions {
   ) => void;
 
   clearAbilityVirtualRollAssignments: () => void;
-  
+
   setRacialSkills: (skills: Skill[]) => void;
-  
+
   setChosenRacialBonuses: (bonuses: Partial<Record<Ability, number>>) => void;
-  
+
   setBackgroundSkills: (skills: Skill[]) => void;
-  
+
   setOriginFeat: (featId: string | null) => void;
 
   /**
@@ -639,7 +690,10 @@ interface CharacterActions {
    * index replaces the previous selection (old items are NOT auto-removed since
    * inventory management is tracked externally during creation).
    */
-  setStartingEquipmentSelection: (groupIndex: number, optionIndex: number) => void;
+  setStartingEquipmentSelection: (
+    groupIndex: number,
+    optionIndex: number,
+  ) => void;
 
   /**
    * Records a concrete item pick for a specific category reference embedded in a
@@ -650,7 +704,10 @@ interface CharacterActions {
     itemId: string,
   ) => void;
 
-  openLevelUpModal: (targetLevel: number, options?: { isBlocking?: boolean }) => void;
+  openLevelUpModal: (
+    targetLevel: number,
+    options?: { isBlocking?: boolean },
+  ) => void;
 
   closeLevelUpModal: () => void;
 
@@ -665,9 +722,9 @@ interface CharacterActions {
   // #region --- Spell Actions ---
 
   learnSpell: (spellId: string) => void;
-  
+
   prepareSpell: (spellId: string) => void;
-  
+
   unprepareSpell: (spellId: string) => void;
 
   /** Removes a spell from spellsKnown (used during character creation). */
@@ -684,9 +741,9 @@ interface CharacterActions {
   // #region --- Combat Actions ---
 
   expendSpellSlot: (level: number) => void;
-  
+
   restoreSpellSlot: (level: number) => void;
-  
+
   expendPactSlot: () => void;
 
   expendTraitActionUse: (actionId: string) => void;
@@ -698,7 +755,7 @@ interface CharacterActions {
   // #region --- Resting Actions ---
 
   takeLongRest: () => void;
-  
+
   takeShortRest: () => void;
 
   // #endregion
@@ -706,26 +763,29 @@ interface CharacterActions {
   // #region --- Inventory Actions ---
 
   addInventoryItem: (itemId: string, quantity: number) => void;
-  
+
   removeInventoryItem: (itemId: string, quantity: number) => void;
 
   /** Removes a single instance item by its exact instanceId, cleaning up all equipped and attuned references for that instance. */
   removeInventoryInstance: (instanceId: UUID) => void;
-  
+
   equipArmorInstance: (instanceId: UUID | null) => void;
-  
+
   equipShieldInstance: (instanceId: UUID | null) => void;
-  
+
   equipWeaponInstance: (instanceId: UUID) => void;
-  
+
   unequipWeaponInstance: (instanceId: UUID) => void;
-  
-  setWeaponVersatileMode: (instanceId: UUID, mode: "one-handed" | "two-handed") => void;
-  
+
+  setWeaponVersatileMode: (
+    instanceId: UUID,
+    mode: "one-handed" | "two-handed",
+  ) => void;
+
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
-  
+
   attuneInstance: (instanceId: UUID) => void;
-  
+
   unattuneInstance: (instanceId: UUID) => void;
 
   // #endregion
@@ -733,13 +793,13 @@ interface CharacterActions {
   // #region --- Combat Actions ---
 
   takeDamage: (amount: number) => void;
-  
+
   heal: (amount: number) => void;
-  
+
   setTempHp: (amount: number) => void;
-  
+
   recordDeathSave: (type: "success" | "failure", value: boolean) => void;
-  
+
   expendHitDie: () => void;
 
   // #endregion
@@ -762,9 +822,9 @@ interface CharacterActions {
   // #region --- Character Saving Actions ---
 
   completeSetup: () => void;
-  
+
   resetCharacter: () => void;
-  
+
   /**
    * Replaces the character state with the baseline merged with the given overrides,
    * and marks setup as complete so the character sheet renders immediately.
@@ -783,13 +843,13 @@ type CharacterStore = CharacterState & CharacterActions;
 // #region --- Full Store Implementation ---
 
 /**
- * Baseline character state used for initializing the store and resetting the character. 
- * This state represents a level 1 character with no race, class, or equipment, and serves as the default state for a new character before any choices are made. 
+ * Baseline character state used for initializing the store and resetting the character.
+ * This state represents a level 1 character with no race, class, or equipment, and serves as the default state for a new character before any choices are made.
  * It includes sensible defaults for all fields to ensure that the character sheet can render without errors even when no data is present.
  */
 export const BASELINE_CHARACTER_STATE: CharacterState = {
   // #region --- Core Character State ---
-  
+
   playerName: "",
   name: "",
   alignment: "",
@@ -860,9 +920,9 @@ export const BASELINE_CHARACTER_STATE: CharacterState = {
   tempHp: 0,
   deathSaves: { success: 0, failure: 0 },
   expendedHitDice: 0,
-  
+
   // #endregion
-  
+
   isSetupComplete: false,
 
   levelUpModalState: {
@@ -955,1082 +1015,1123 @@ export const SAVEABLE_STATE_KEYS = [
 export const useCharacterStore = create<CharacterStore>()(
   persist(
     (set) => ({
-  // #region --- Initial State ---
+      // #region --- Initial State ---
 
-  ...BASELINE_CHARACTER_STATE,
+      ...BASELINE_CHARACTER_STATE,
 
-  // #endregion
+      // #endregion
 
-  // #region --- Wealth Actions ---
+      // #region --- Wealth Actions ---
 
-  receiveCoins: (coins) =>
-    set((state) => ({
-      coinPurse: addCoinsToPurse(state.coinPurse, coins),
-    })),
+      receiveCoins: (coins) =>
+        set((state) => ({
+          coinPurse: addCoinsToPurse(state.coinPurse, coins),
+        })),
 
-  addCoins: (coinType, amount) =>
-    set((state) => ({
-      coinPurse: addCoinsToPurse(state.coinPurse, {
-        [coinType]: amount,
-      }),
-    })),
+      addCoins: (coinType, amount) =>
+        set((state) => ({
+          coinPurse: addCoinsToPurse(state.coinPurse, {
+            [coinType]: amount,
+          }),
+        })),
 
-  removeCoins: (coinType, amount) =>
-    set((state) => {
-      const nextCoinPurse = removeCoinsFromPurse(
-        state.coinPurse,
-        coinType,
-        amount,
-      );
+      removeCoins: (coinType, amount) =>
+        set((state) => {
+          const nextCoinPurse = removeCoinsFromPurse(
+            state.coinPurse,
+            coinType,
+            amount,
+          );
 
-      if (nextCoinPurse === null) {
-        return state;
-      }
+          if (nextCoinPurse === null) {
+            return state;
+          }
 
-      return {
-        coinPurse: nextCoinPurse,
-      };
-    }),
+          return {
+            coinPurse: nextCoinPurse,
+          };
+        }),
 
-  consolidateCoins: (options) =>
-    set((state) => ({
-      coinPurse: consolidateCoinPurse(state.coinPurse, options),
-    })),
+      consolidateCoins: (options) =>
+        set((state) => ({
+          coinPurse: consolidateCoinPurse(state.coinPurse, options),
+        })),
 
-  // #endregion
+      // #endregion
 
-  // #region --- Setup Actions ---
+      // #region --- Setup Actions ---
 
-  setPlayerName: (playerName) => set({ playerName }),
+      setPlayerName: (playerName) => set({ playerName }),
 
-  setName: (name) => set({ name }),
+      setName: (name) => set({ name }),
 
-  setAlignment: (alignment) => set({ alignment }),
+      setAlignment: (alignment) => set({ alignment }),
 
-  updateRoleplayField: (field, value) => set({ [field]: value }),
+      updateRoleplayField: (field, value) => set({ [field]: value }),
 
-  setXp: (xp) =>
-    set({
-      xp: Math.max(0, Math.floor(xp)),
-    }),
+      setXp: (xp) =>
+        set({
+          xp: Math.max(0, Math.floor(xp)),
+        }),
 
-  setLevelUpMode: (mode) =>
-    set({
-      levelUpMode: mode,
-    }),
+      setLevelUpMode: (mode) =>
+        set({
+          levelUpMode: mode,
+        }),
 
-  setLevel: (newLevel) =>
-    set((state) => {
-      // If leveled DOWN, should theoretically clear choices for levels lost to prevent ghost stats from applying
-      const clampedLevel = clampCharacterLevel(newLevel);
+      setLevel: (newLevel) =>
+        set((state) => {
+          // If leveled DOWN, should theoretically clear choices for levels lost to prevent ghost stats from applying
+          const clampedLevel = clampCharacterLevel(newLevel);
 
-      // If the character has a class and the new level is below the subclass choice level, remove the subclass
-      let updatedSubclassId = state.subclassId;
-      if (state.classId && updatedSubclassId) {
-        const currentClass = getClassById(state.classId);
-        if (
-          currentClass &&
-          clampedLevel < currentClass.subclassInfo.choiceLevel
-        ) {
-          updatedSubclassId = null;
-        }
-      }
-
-      // Clean up feature choices if de-leveling
-      const updatedChoices = { ...state.choicesByLevel };
-      Object.keys(updatedChoices).forEach((key) => {
-        if (Number(key) > clampedLevel) {
-          delete updatedChoices[Number(key)];
-        }
-      });
-
-      // Remove any feats acquired through level up that are now above the new level
-      const updatedAcquiredFeats = state.acquiredFeats.filter((entry) => {
-        if (entry.source !== "level_up") return true;
-        return (entry.sourceLevel ?? 0) <= clampedLevel;
-      });
-
-      // If the character has only one class track and its level is now above the new total level, adjust it down to match
-      const updatedClassTracks =
-        state.classTracks.length === 1 &&
-        state.classId === state.classTracks[0].classId
-          ? upsertClassTrack(state.classTracks, state.classTracks[0].classId, {
-              level: clampedLevel,
-            })
-          : state.classTracks;
-
-      return {
-        level: clampedLevel,
-        choicesByLevel: updatedChoices,
-        acquiredFeats: updatedAcquiredFeats,
-        subclassId: updatedSubclassId,
-        classTracks: updatedClassTracks,
-      };
-    }),
-
-  commitLevelUpTransaction: ({ targetLevel, draft }) => {
-    let committed = false;
-
-    set((state) => {
-      if (!draft.targetClassId) {
-        return state;
-      }
-
-      const clampedTargetLevel = clampCharacterLevel(targetLevel);
-
-      const nextTracksBase = draft.isNewMulticlass
-        ? upsertClassTrack(state.classTracks, draft.targetClassId, { level: 1 })
-        : upsertClassTrack(state.classTracks, draft.targetClassId, {
-            level: draft.targetClassLevel,
-          });
-
-      const nextTracks = draft.newSubclassId
-        ? upsertClassTrack(nextTracksBase, draft.targetClassId, {
-            subclassId: draft.newSubclassId,
-          })
-        : nextTracksBase;
-
-      const nextTotalLevel = clampCharacterLevel(getTotalClassTrackLevels(nextTracks));
-
-      const currentChoiceForLevel = state.choicesByLevel[clampedTargetLevel] || {};
-      const nextLevelChoice: LevelChoice = {
-        ...currentChoiceForLevel,
-        ...buildLevelChoiceFromDraft(draft),
-      };
-
-      const nextChoicesByLevel: Record<number, LevelChoice> = {
-        ...state.choicesByLevel,
-        [clampedTargetLevel]: nextLevelChoice,
-      };
-
-      const nextAcquiredFeats = state.acquiredFeats.filter(
-        (entry) =>
-          !(entry.source === "level_up" && entry.sourceLevel === clampedTargetLevel),
-      );
-
-      if (draft.featId && draft.featId.trim().length > 0) {
-        nextAcquiredFeats.push({
-          featId: draft.featId,
-          source: "level_up",
-          sourceLevel: clampedTargetLevel,
-        });
-      }
-
-      const selectedFeatureSpellIds = Object.values(draft.featureChoices).filter(
-        (value) => typeof value === "string" && value.startsWith("spell_"),
-      );
-
-      const nextSpellsKnown = Array.from(
-        new Set([
-          ...state.spellsKnown,
-          ...draft.cantripsLearned,
-          ...draft.spellsLearned,
-          ...selectedFeatureSpellIds,
-        ]),
-      );
-
-      const nextHpRolls =
-        typeof draft.hpGained === "number" && draft.hpGained > 0
-          ? {
-              ...state.hpRolls,
-              [clampedTargetLevel]: Math.floor(draft.hpGained),
+          // If the character has a class and the new level is below the subclass choice level, remove the subclass
+          let updatedSubclassId = state.subclassId;
+          if (state.classId && updatedSubclassId) {
+            const currentClass = getClassById(state.classId);
+            if (
+              currentClass &&
+              clampedLevel < currentClass.subclassInfo.choiceLevel
+            ) {
+              updatedSubclassId = null;
             }
-          : state.hpRolls;
+          }
 
-      const nextPrimaryClassId = state.classId ?? nextTracks[0]?.classId ?? null;
-
-      const shouldMirrorSubclass =
-        state.classId === null || state.classId === draft.targetClassId;
-
-      const nextTopLevelSubclassId = shouldMirrorSubclass
-        ? (draft.newSubclassId ??
-          nextTracks.find((track) => track.classId === draft.targetClassId)
-            ?.subclassId ??
-          state.subclassId)
-        : state.subclassId;
-
-      committed = true;
-
-      return {
-        classTracks: nextTracks,
-        classId: nextPrimaryClassId,
-        subclassId: nextTopLevelSubclassId,
-        level: nextTotalLevel,
-        hpRolls: nextHpRolls,
-        choicesByLevel: nextChoicesByLevel,
-        acquiredFeats: nextAcquiredFeats,
-        spellsKnown: nextSpellsKnown,
-        levelUpModalState: {
-          isOpen: false,
-          targetLevel: null,
-          isBlocking: false,
-        },
-        restModalState: {
-          isOpen: false,
-          restType: "short",
-        },
-      };
-    });
-
-    return committed;
-  },
-
-  updateLevelChoice: (level, updates) =>
-    set((state) => {
-      // Update the choices for the specified level with the provided updates, merging with existing choices if present
-      const nextChoicesByLevel = {
-        ...state.choicesByLevel,
-        [level]: {
-          ...(state.choicesByLevel[level] || {}),
-          ...updates,
-        },
-      };
-
-      // If a feat choice is being updated, update the acquired feats list accordingly
-      const nextAcquiredFeats = state.acquiredFeats.filter(
-        (entry) =>
-          !(entry.source === "level_up" && entry.sourceLevel === level),
-      );
-
-      // If a new feat is being added at this level, add it to the acquired feats list with the appropriate source and level information
-      if (Object.prototype.hasOwnProperty.call(updates, "featId")) {
-        const levelFeatId = updates.featId;
-        if (typeof levelFeatId === "string" && levelFeatId.trim().length > 0) {
-          nextAcquiredFeats.push({
-            featId: levelFeatId,
-            source: "level_up",
-            sourceLevel: level,
+          // Clean up feature choices if de-leveling
+          const updatedChoices = { ...state.choicesByLevel };
+          Object.keys(updatedChoices).forEach((key) => {
+            if (Number(key) > clampedLevel) {
+              delete updatedChoices[Number(key)];
+            }
           });
-        }
-      }
 
-      return {
-        choicesByLevel: nextChoicesByLevel,
-        acquiredFeats: nextAcquiredFeats,
-      };
-    }),
+          // Remove any feats acquired through level up that are now above the new level
+          const updatedAcquiredFeats = state.acquiredFeats.filter((entry) => {
+            if (entry.source !== "level_up") return true;
+            return (entry.sourceLevel ?? 0) <= clampedLevel;
+          });
 
-  setRace: (raceId) =>
-    set((state) => ({
-      raceId,
-      subraceId: null, // Reset subrace if the main race changes
-      chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
-      acquiredFeats: state.acquiredFeats.filter(
-        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the race
-      ),
-    })),
+          // If the character has only one class track and its level is now above the new total level, adjust it down to match
+          const updatedClassTracks =
+            state.classTracks.length === 1 &&
+            state.classId === state.classTracks[0].classId
+              ? upsertClassTrack(
+                  state.classTracks,
+                  state.classTracks[0].classId,
+                  {
+                    level: clampedLevel,
+                  },
+                )
+              : state.classTracks;
 
-  setSubrace: (subraceId) =>
-    set((state) => ({
-      subraceId,
-      acquiredFeats: state.acquiredFeats.filter(
-        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subrace
-      ),
-    })),
+          return {
+            level: clampedLevel,
+            choicesByLevel: updatedChoices,
+            acquiredFeats: updatedAcquiredFeats,
+            subclassId: updatedSubclassId,
+            classTracks: updatedClassTracks,
+          };
+        }),
 
-  setClass: (classId) =>
-    set((state) => ({
-      classId,
-      subclassId: null,
-      classTracks: [
-        {
+      commitLevelUpTransaction: ({ targetLevel, draft }) => {
+        let committed = false;
+
+        set((state) => {
+          if (!draft.targetClassId) {
+            return state;
+          }
+
+          const clampedTargetLevel = clampCharacterLevel(targetLevel);
+
+          const nextTracksBase = draft.isNewMulticlass
+            ? upsertClassTrack(state.classTracks, draft.targetClassId, {
+                level: 1,
+              })
+            : upsertClassTrack(state.classTracks, draft.targetClassId, {
+                level: draft.targetClassLevel,
+              });
+
+          const nextTracks = draft.newSubclassId
+            ? upsertClassTrack(nextTracksBase, draft.targetClassId, {
+                subclassId: draft.newSubclassId,
+              })
+            : nextTracksBase;
+
+          const nextTotalLevel = clampCharacterLevel(
+            getTotalClassTrackLevels(nextTracks),
+          );
+
+          const currentChoiceForLevel =
+            state.choicesByLevel[clampedTargetLevel] || {};
+          const nextLevelChoice: LevelChoice = {
+            ...currentChoiceForLevel,
+            ...buildLevelChoiceFromDraft(draft),
+          };
+
+          const nextChoicesByLevel: Record<number, LevelChoice> = {
+            ...state.choicesByLevel,
+            [clampedTargetLevel]: nextLevelChoice,
+          };
+
+          const nextAcquiredFeats = state.acquiredFeats.filter(
+            (entry) =>
+              !(
+                entry.source === "level_up" &&
+                entry.sourceLevel === clampedTargetLevel
+              ),
+          );
+
+          if (draft.featId && draft.featId.trim().length > 0) {
+            nextAcquiredFeats.push({
+              featId: draft.featId,
+              source: "level_up",
+              sourceLevel: clampedTargetLevel,
+            });
+          }
+
+          const selectedFeatureSpellIds = Object.values(
+            draft.featureChoices,
+          ).filter(
+            (value) => typeof value === "string" && value.startsWith("spell_"),
+          );
+
+          const nextSpellsKnown = Array.from(
+            new Set([
+              ...state.spellsKnown,
+              ...draft.cantripsLearned,
+              ...draft.spellsLearned,
+              ...selectedFeatureSpellIds,
+            ]),
+          );
+
+          const nextHpRolls =
+            typeof draft.hpGained === "number" && draft.hpGained > 0
+              ? {
+                  ...state.hpRolls,
+                  [clampedTargetLevel]: Math.floor(draft.hpGained),
+                }
+              : state.hpRolls;
+
+          const nextPrimaryClassId =
+            state.classId ?? nextTracks[0]?.classId ?? null;
+
+          const shouldMirrorSubclass =
+            state.classId === null || state.classId === draft.targetClassId;
+
+          const nextTopLevelSubclassId = shouldMirrorSubclass
+            ? (draft.newSubclassId ??
+              nextTracks.find((track) => track.classId === draft.targetClassId)
+                ?.subclassId ??
+              state.subclassId)
+            : state.subclassId;
+
+          committed = true;
+
+          return {
+            classTracks: nextTracks,
+            classId: nextPrimaryClassId,
+            subclassId: nextTopLevelSubclassId,
+            level: nextTotalLevel,
+            hpRolls: nextHpRolls,
+            choicesByLevel: nextChoicesByLevel,
+            acquiredFeats: nextAcquiredFeats,
+            spellsKnown: nextSpellsKnown,
+            levelUpModalState: {
+              isOpen: false,
+              targetLevel: null,
+              isBlocking: false,
+            },
+            restModalState: {
+              isOpen: false,
+              restType: "short",
+            },
+          };
+        });
+
+        return committed;
+      },
+
+      updateLevelChoice: (level, updates) =>
+        set((state) => {
+          // Update the choices for the specified level with the provided updates, merging with existing choices if present
+          const nextChoicesByLevel = {
+            ...state.choicesByLevel,
+            [level]: {
+              ...(state.choicesByLevel[level] || {}),
+              ...updates,
+            },
+          };
+
+          // If a feat choice is being updated, update the acquired feats list accordingly
+          const nextAcquiredFeats = state.acquiredFeats.filter(
+            (entry) =>
+              !(entry.source === "level_up" && entry.sourceLevel === level),
+          );
+
+          // If a new feat is being added at this level, add it to the acquired feats list with the appropriate source and level information
+          if (Object.prototype.hasOwnProperty.call(updates, "featId")) {
+            const levelFeatId = updates.featId;
+            if (
+              typeof levelFeatId === "string" &&
+              levelFeatId.trim().length > 0
+            ) {
+              nextAcquiredFeats.push({
+                featId: levelFeatId,
+                source: "level_up",
+                sourceLevel: level,
+              });
+            }
+          }
+
+          return {
+            choicesByLevel: nextChoicesByLevel,
+            acquiredFeats: nextAcquiredFeats,
+          };
+        }),
+
+      setRace: (raceId) =>
+        set((state) => ({
+          raceId,
+          subraceId: null, // Reset subrace if the main race changes
+          chosenRacialSkills: [], // Race skill pool changes, previous picks are invalid
+          acquiredFeats: state.acquiredFeats.filter(
+            (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the race
+          ),
+        })),
+
+      setSubrace: (subraceId) =>
+        set((state) => ({
+          subraceId,
+          acquiredFeats: state.acquiredFeats.filter(
+            (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subrace
+          ),
+        })),
+
+      setClass: (classId) =>
+        set((state) => ({
           classId,
           subclassId: null,
-          level: clampCharacterLevel(state.level),
-        },
-      ],
-      choicesByLevel: {
-        ...state.choicesByLevel,
-        1: {},
-      },
-      spellsKnown: [],
-      spellsPrepared: [],
-      freeSchoolKnownSpellIds: [],
-      expendedSpellSlots: {},
-      expendedPactSlots: 0,
-      acquiredFeats: state.acquiredFeats.filter(
-        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the class
-      ),
-      // Reset equipment bundle selections whenever the class changes since the
-      // choice groups are class-specific
-      startingEquipmentSelections: {},
-      startingEquipmentCategorySelections: {},
-    })),
-
-  setSubclass: (subclassId) =>
-    set((state) => ({
-      subclassId,
-      classTracks: state.classId
-        ? upsertClassTrack(state.classTracks, state.classId, { subclassId })
-        : state.classTracks, // If there's no class, subclass can't be associated with a track, so just update the state and rely on the UI to handle this edge case <- TODO: Maybe should just prevent setting a subclass if there's no class?
-      acquiredFeats: state.acquiredFeats.filter(
-        (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subclass
-      ),
-    })),
-
-  // #region --- Setup Multi Class Actions ---
-
-  setClassTracks: (tracks) =>
-    set((state) => {
-      // Sanitize the incoming tracks to ensure they are valid and consistent,
-      // then determine the primary track and total level for the character based on the sanitized tracks
-      const sanitizedTracks = sanitizeClassTracks(tracks);
-      const primaryTrack = sanitizedTracks[0] || null;
-      const totalLevel =
-        sanitizedTracks.length > 0
-          ? clampCharacterLevel(getTotalClassTrackLevels(sanitizedTracks))
-          : state.level;
-
-      return {
-        classTracks: sanitizedTracks,
-        classId: primaryTrack?.classId ?? state.classId,
-        subclassId: primaryTrack?.subclassId ?? state.subclassId,
-        level: totalLevel,
-      };
-    }),
-
-  addClassTrack: (classId, startingLevel = 1) =>
-    set((state) => {
-      // Add a new class track for the specified class ID, defaulting to the character's current level or 1 if not provided,
-      // then determine the primary track and total level for the character based on the updated tracks
-      const nextTracks = upsertClassTrack(state.classTracks, classId, {
-        level: Math.max(1, Math.floor(startingLevel)),
-      });
-      const primaryTrack = nextTracks[0] || null;
-
-      return {
-        classTracks: nextTracks,
-        classId: state.classId ?? primaryTrack?.classId ?? null,
-        subclassId:
-          state.classId === null
-            ? (primaryTrack?.subclassId ?? null)
-            : state.subclassId,
-        level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
-      };
-    }),
-
-  removeClassTrack: (classId) =>
-    set((state) => {
-      const nextTracks = state.classTracks.filter(
-        (track) => track.classId !== classId,
-      );
-      const primaryTrack = nextTracks[0] || null; // After removing the specified class track, determine the new primary track and total level for the character based on the remaining tracks
-
-      return {
-        classTracks: nextTracks,
-        classId:
-          state.classId === classId
-            ? (primaryTrack?.classId ?? null)
-            : state.classId, // If the removed track was the primary track, update the primary class ID to the new primary track's class ID or null if no tracks remain; otherwise, keep the existing primary class ID
-        subclassId:
-          state.classId === classId
-            ? (primaryTrack?.subclassId ?? null)
-            : state.subclassId, // If the removed track was the primary track, update the subclass ID to match the new primary track's subclass ID or null if no tracks remain; otherwise, keep the existing subclass ID
-        level:
-          nextTracks.length > 0
-            ? clampCharacterLevel(getTotalClassTrackLevels(nextTracks))
-            : 1, // If there are remaining tracks, recalculate the total level; if no tracks remain, reset to level 1
-      };
-    }),
-
-  setClassTrackLevel: (classId, level) =>
-    set((state) => {
-      const classTrackLevel = Math.max(1, Math.floor(level));
-      const nextTracks = upsertClassTrack(state.classTracks, classId, {
-        level: classTrackLevel,
-      });
-
-      return {
-        classTracks: nextTracks,
-        level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
-      };
-    }),
-
-  setClassTrackSubclass: (classId, subclassId) =>
-    set((state) => ({
-      classTracks: upsertClassTrack(state.classTracks, classId, {
-        subclassId,
-      }),
-      classId: state.classId ?? classId,
-      subclassId:
-        state.classId === classId || state.classId === null
-          ? subclassId
-          : state.subclassId,
-    })),
-
-  // #endregion
-
-  // #region --- Setup Background and Ability Actions ---
-
-  setBackground: (backgroundId) =>
-    set({
-      backgroundId,
-      chosenBackgroundSkills: [], // Background skill pool changes, previous picks are invalid
-    }),
-
-  setBaseAbilityScore: (ability, score) =>
-    set((state) => ({
-      baseAbilityScores: {
-        ...state.baseAbilityScores,
-        [ability]: clampAbilityScore(score),
-      },
-    })),
-
-  setBaseAbilityScores: (scores) =>
-    set((state) => {
-      const nextScores = { ...state.baseAbilityScores };
-
-      // Iterate over the provided scores and clamp each one to ensure they are within valid bounds, while also validating that the incoming values are numbers
-      (Object.keys(scores) as Ability[]).forEach((ability) => {
-        const incoming = scores[ability];
-        if (typeof incoming === "number" && Number.isFinite(incoming)) {
-          nextScores[ability] = clampAbilityScore(incoming);
-        }
-      });
-
-      return {
-        baseAbilityScores: nextScores,
-      };
-    }),
-
-  setAbilityAssignmentMethod: (method) =>
-    set((state) => ({
-      abilityAssignmentMethod: method,
-      abilityAssignmentCompleted: false,
-      abilityPointBuyOverrideAccepted:
-        method === "point_buy"
-          ? state.abilityPointBuyOverrideAccepted
-          : false,
-      abilityVirtualRollAssignments: {},
-    })),
-
-  setAbilityRollingInputMode: (mode) =>
-    set({
-      abilityRollingInputMode: mode,
-      abilityAssignmentCompleted: false,
-      abilityVirtualRollAssignments: mode === "virtual" ? {} : {},
-    }),
-
-  setAbilityPointBuyOverrideAccepted: (accepted) =>
-    set({ abilityPointBuyOverrideAccepted: accepted }),
-
-  setAbilityAssignmentCompleted: (completed) =>
-    set({ abilityAssignmentCompleted: completed }),
-
-  setAbilityVirtualRolls: (rolls) =>
-    set({
-      abilityVirtualRolls: rolls,
-      abilityVirtualRollAssignments: {},
-      abilityAssignmentCompleted: false,
-    }),
-
-  setAbilityVirtualRollAssignment: (ability, score) =>
-    set((state) => {
-      const nextAssignments = { ...state.abilityVirtualRollAssignments };
-      if (score === null) {
-        delete nextAssignments[ability];
-      } else {
-        nextAssignments[ability] = Math.floor(score);
-      }
-      return {
-        abilityVirtualRollAssignments: nextAssignments,
-        abilityAssignmentCompleted: false,
-      };
-    }),
-
-  clearAbilityVirtualRollAssignments: () =>
-    set({
-      abilityVirtualRollAssignments: {},
-      abilityAssignmentCompleted: false,
-    }),
-
-  setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
-
-  setChosenRacialBonuses: (bonuses) => set({ chosenRacialBonuses: bonuses }),
-
-  setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
-
-  setOriginFeat: (featId) =>
-    set((state) => {
-      const filtered = state.acquiredFeats.filter(
-        (entry) => entry.source !== "origin",
-      );
-
-      if (!featId) {
-        return { acquiredFeats: filtered };
-      }
-
-      return {
-        acquiredFeats: [
-          ...filtered,
-          {
-            featId,
-            source: "origin",
-            sourceLevel: 1,
+          classTracks: [
+            {
+              classId,
+              subclassId: null,
+              level: clampCharacterLevel(state.level),
+            },
+          ],
+          choicesByLevel: {
+            ...state.choicesByLevel,
+            1: {},
           },
-        ],
-      };
-    }),
+          spellsKnown: [],
+          spellsPrepared: [],
+          freeSchoolKnownSpellIds: [],
+          expendedSpellSlots: {},
+          expendedPactSlots: 0,
+          acquiredFeats: state.acquiredFeats.filter(
+            (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the class
+          ),
+          // Reset equipment bundle selections whenever the class changes since the
+          // choice groups are class-specific
+          startingEquipmentSelections: {},
+          startingEquipmentCategorySelections: {},
+        })),
 
-  setStartingEquipmentSelection: (groupIndex, optionIndex) =>
-    set((state) => {
-      // Persist the selection index for requirement resolution
-      const updatedSelections = {
-        ...state.startingEquipmentSelections,
-        [groupIndex]: optionIndex,
-      };
+      setSubclass: (subclassId) =>
+        set((state) => ({
+          subclassId,
+          classTracks: state.classId
+            ? upsertClassTrack(state.classTracks, state.classId, { subclassId })
+            : state.classTracks, // If there's no class, subclass can't be associated with a track, so just update the state and rely on the UI to handle this edge case <- TODO: Maybe should just prevent setting a subclass if there's no class?
+          acquiredFeats: state.acquiredFeats.filter(
+            (entry) => entry.source !== "origin", // Remove any origin feats since those are tied to the subclass
+          ),
+        })),
 
-      // Clear any category picks for this choice group when option changes.
-      const groupPrefix = `${groupIndex}:`;
-      const updatedCategorySelections = Object.fromEntries(
-        Object.entries(state.startingEquipmentCategorySelections).filter(
-          ([key]) => !key.startsWith(groupPrefix),
-        ),
-      );
+      // #region --- Setup Multi Class Actions ---
 
-      return {
-        startingEquipmentSelections: updatedSelections,
-        startingEquipmentCategorySelections: updatedCategorySelections,
-      };
-    }),
+      setClassTracks: (tracks) =>
+        set((state) => {
+          // Sanitize the incoming tracks to ensure they are valid and consistent,
+          // then determine the primary track and total level for the character based on the sanitized tracks
+          const sanitizedTracks = sanitizeClassTracks(tracks);
+          const primaryTrack = sanitizedTracks[0] || null;
+          const totalLevel =
+            sanitizedTracks.length > 0
+              ? clampCharacterLevel(getTotalClassTrackLevels(sanitizedTracks))
+              : state.level;
 
-  setStartingEquipmentCategorySelection: (selectionKey, itemId) =>
-    set((state) => ({
-      startingEquipmentCategorySelections: {
-        ...state.startingEquipmentCategorySelections,
-        [selectionKey]: itemId,
-      },
-    })),
-
-  openLevelUpModal: (targetLevel, options) =>
-    set({
-      levelUpModalState: {
-        isOpen: true,
-        targetLevel: clampCharacterLevel(targetLevel),
-        isBlocking: options?.isBlocking ?? false,
-      },
-    }),
-
-  closeLevelUpModal: () =>
-    set((state) => {
-      if (state.levelUpModalState.isBlocking) {
-        return state;
-      }
-
-      return {
-        levelUpModalState: {
-          isOpen: false,
-          targetLevel: null,
-          isBlocking: false,
-        },
-      };
-    }),
-
-  openRestModal: (restType) =>
-    set({
-      restModalState: {
-        isOpen: true,
-        restType,
-      },
-    }),
-
-  closeRestModal: () =>
-    set({
-      restModalState: {
-        isOpen: false,
-        restType: "short",
-      },
-    }),
-
-  // #endregion
-
-  // #region --- Spell Actions ---
-
-  learnSpell: (spellId) =>
-    set((state) => {
-      if (!spellId || state.spellsKnown.includes(spellId)) {
-        return state;
-      }
-
-      return {
-        spellsKnown: [...state.spellsKnown, spellId],
-      };
-    }),
-
-  prepareSpell: (spellId) =>
-    set((state) => {
-      if (!spellId || state.spellsPrepared.includes(spellId)) {
-        return state;
-      }
-
-      return {
-        spellsPrepared: [...state.spellsPrepared, spellId],
-      };
-    }),
-
-  unprepareSpell: (spellId) =>
-    set((state) => ({
-      spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
-    })),
-
-  unlearnSpell: (spellId) =>
-    set((state) => ({
-      spellsKnown: state.spellsKnown.filter((id) => id !== spellId),
-      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
-        (id) => id !== spellId,
-      ),
-    })),
-
-  designateFreeSchoolSpell: (spellId) =>
-    set((state) => {
-      if (!spellId || state.freeSchoolKnownSpellIds.includes(spellId)) {
-        return state;
-      }
-      return {
-        freeSchoolKnownSpellIds: [...state.freeSchoolKnownSpellIds, spellId],
-      };
-    }),
-
-  undesignateFreeSchoolSpell: (spellId) =>
-    set((state) => ({
-      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
-        (id) => id !== spellId,
-      ),
-    })),
-
-  trimFreeSchoolDesignations: (limit) =>
-    set((state) => ({
-      freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.slice(0, limit),
-    })),
-
-  // #endregion
-
-  // #region --- Combat Actions ---
-
-  expendSpellSlot: (level) =>
-    set((state) => {
-      if (!Number.isInteger(level) || level < 1 || level > 9) {
-        return state;
-      }
-
-      const currentUsed = state.expendedSpellSlots[level] ?? 0; // If the character has already expended all their slots for this level, don't allow further expenditure
-      return {
-        expendedSpellSlots: {
-          ...state.expendedSpellSlots,
-          [level]: currentUsed + 1,
-        },
-      };
-    }),
-
-  restoreSpellSlot: (level) =>
-    set((state) => {
-      if (!Number.isInteger(level) || level < 1 || level > 9) {
-        return state;
-      }
-
-      const currentUsed = state.expendedSpellSlots[level] ?? 0;
-      if (currentUsed <= 0) {
-        return state;
-      }
-
-      const updated = {
-        ...state.expendedSpellSlots,
-        [level]: currentUsed - 1,
-      };
-
-      if (updated[level] === 0) {
-        delete updated[level];
-      }
-
-      return {
-        expendedSpellSlots: updated,
-      };
-    }),
-
-  expendPactSlot: () =>
-    set((state) => ({
-      expendedPactSlots: state.expendedPactSlots + 1,
-    })),
-
-  expendTraitActionUse: (actionId) =>
-    set((state) => {
-      if (!actionId) return state;
-      const current = state.expendedTraitActionUses[actionId] ?? 0;
-      return {
-        expendedTraitActionUses: {
-          ...state.expendedTraitActionUses,
-          [actionId]: current + 1,
-        },
-      };
-    }),
-
-  restoreTraitActionUse: (actionId) =>
-    set((state) => {
-      if (!actionId) return state;
-      const current = state.expendedTraitActionUses[actionId] ?? 0;
-      if (current <= 0) return state;
-
-      const updated = {
-        ...state.expendedTraitActionUses,
-        [actionId]: current - 1,
-      };
-
-      if (updated[actionId] === 0) {
-        delete updated[actionId];
-      }
-
-      return {
-        expendedTraitActionUses: updated,
-      };
-    }),
-
-  // #endregion
-
-  // #region --- Rest Actions ---
-
-  takeLongRest: () =>
-    set((state) => ({
-      expendedSpellSlots: {}, // Wipes all normal slot usage
-      expendedPactSlots: 0, // Wipes pact slot usage
-      // Long rest recovers uses that reset on short_rest or long_rest.
-      // Uses with reset "turn" or "other" are unaffected by resting.
-      expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
-        state,
-        "long",
-      ),
-      damageTaken: 0, // fully heal
-      tempHp: 0, // temp HP stops after long rest
-      // 5e rule: regain half total hit dice (min 1)
-      expendedHitDice: Math.max(
-        0,
-        state.expendedHitDice - Math.max(1, Math.floor(state.level / 2)),
-      ),
-    })),
-
-  takeShortRest: () =>
-    set((state) => ({
-      expendedPactSlots: 0, // Warlocks get spell slots back after short rest
-      // Short rest recovers only uses with reset cadence short_rest.
-      // Uses with reset "long_rest", "turn", or "other" are unchanged.
-      expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
-        state,
-        "short",
-      ),
-      // Normal spell slots remain untouched
-    })),
-
-  // #endregion
-
-  // #region --- Inventory Actions ---
-
-  addInventoryItem: (itemId, quantity) =>
-    set((state) => {
-      const normalizedQuantity = normalizeQuantity(quantity);
-      const itemData = getItemById(itemId);
-      const stackMode = defaultStackMode(itemData);
-
-      const nextInventoryStacks = [...state.inventoryStacks];
-      const nextInventoryInstances = [...state.inventoryInstances];
-
-      if (stackMode === "stack") {
-        const existingStackIndex = nextInventoryStacks.findIndex(
-          (stack) => stack.baseItemId === itemId,
-        );
-        if (existingStackIndex >= 0) {
-          nextInventoryStacks[existingStackIndex] = {
-            ...nextInventoryStacks[existingStackIndex],
-            quantity:
-              nextInventoryStacks[existingStackIndex].quantity +
-              normalizedQuantity,
+          return {
+            classTracks: sanitizedTracks,
+            classId: primaryTrack?.classId ?? state.classId,
+            subclassId: primaryTrack?.subclassId ?? state.subclassId,
+            level: totalLevel,
           };
-        } else {
-          nextInventoryStacks.push(toStackRecord(itemId, normalizedQuantity));
-        }
-      } else {
-        for (let index = 0; index < normalizedQuantity; index += 1) {
-          nextInventoryInstances.push(toInstanceRecord(itemId));
-        }
-      }
+        }),
 
-      return {
-        inventoryStacks: nextInventoryStacks,
-        inventoryInstances: nextInventoryInstances,
-      };
-    }),
+      addClassTrack: (classId, startingLevel = 1) =>
+        set((state) => {
+          // Add a new class track for the specified class ID, defaulting to the character's current level or 1 if not provided,
+          // then determine the primary track and total level for the character based on the updated tracks
+          const nextTracks = upsertClassTrack(state.classTracks, classId, {
+            level: Math.max(1, Math.floor(startingLevel)),
+          });
+          const primaryTrack = nextTracks[0] || null;
 
-  removeInventoryItem: (itemId, quantity) =>
-    set((state) => {
-      const normalizedQuantity = normalizeQuantity(quantity);
+          return {
+            classTracks: nextTracks,
+            classId: state.classId ?? primaryTrack?.classId ?? null,
+            subclassId:
+              state.classId === null
+                ? (primaryTrack?.subclassId ?? null)
+                : state.subclassId,
+            level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
+          };
+        }),
 
-      const nextInventoryStacks = state.inventoryStacks
-        .map((stack) =>
-          stack.baseItemId === itemId
-            ? { ...stack, quantity: stack.quantity - normalizedQuantity }
-            : stack,
-        )
-        .filter((stack) => stack.quantity > 0);
+      removeClassTrack: (classId) =>
+        set((state) => {
+          const nextTracks = state.classTracks.filter(
+            (track) => track.classId !== classId,
+          );
+          const primaryTrack = nextTracks[0] || null; // After removing the specified class track, determine the new primary track and total level for the character based on the remaining tracks
 
-      const toRemoveCount = normalizedQuantity;
-      let removedCount = 0;
-      const removedInstanceIds = new Set<UUID>();
-      const nextInventoryInstances = state.inventoryInstances.filter(
-        (instance) => {
-          if (instance.baseItemId !== itemId || removedCount >= toRemoveCount) {
+          return {
+            classTracks: nextTracks,
+            classId:
+              state.classId === classId
+                ? (primaryTrack?.classId ?? null)
+                : state.classId, // If the removed track was the primary track, update the primary class ID to the new primary track's class ID or null if no tracks remain; otherwise, keep the existing primary class ID
+            subclassId:
+              state.classId === classId
+                ? (primaryTrack?.subclassId ?? null)
+                : state.subclassId, // If the removed track was the primary track, update the subclass ID to match the new primary track's subclass ID or null if no tracks remain; otherwise, keep the existing subclass ID
+            level:
+              nextTracks.length > 0
+                ? clampCharacterLevel(getTotalClassTrackLevels(nextTracks))
+                : 1, // If there are remaining tracks, recalculate the total level; if no tracks remain, reset to level 1
+          };
+        }),
+
+      setClassTrackLevel: (classId, level) =>
+        set((state) => {
+          const classTrackLevel = Math.max(1, Math.floor(level));
+          const nextTracks = upsertClassTrack(state.classTracks, classId, {
+            level: classTrackLevel,
+          });
+
+          return {
+            classTracks: nextTracks,
+            level: clampCharacterLevel(getTotalClassTrackLevels(nextTracks)),
+          };
+        }),
+
+      setClassTrackSubclass: (classId, subclassId) =>
+        set((state) => ({
+          classTracks: upsertClassTrack(state.classTracks, classId, {
+            subclassId,
+          }),
+          classId: state.classId ?? classId,
+          subclassId:
+            state.classId === classId || state.classId === null
+              ? subclassId
+              : state.subclassId,
+        })),
+
+      // #endregion
+
+      // #region --- Setup Background and Ability Actions ---
+
+      setBackground: (backgroundId) =>
+        set({
+          backgroundId,
+          chosenBackgroundSkills: [], // Background skill pool changes, previous picks are invalid
+        }),
+
+      setBaseAbilityScore: (ability, score) =>
+        set((state) => ({
+          baseAbilityScores: {
+            ...state.baseAbilityScores,
+            [ability]: clampAbilityScore(score),
+          },
+        })),
+
+      setBaseAbilityScores: (scores) =>
+        set((state) => {
+          const nextScores = { ...state.baseAbilityScores };
+
+          // Iterate over the provided scores and clamp each one to ensure they are within valid bounds, while also validating that the incoming values are numbers
+          (Object.keys(scores) as Ability[]).forEach((ability) => {
+            const incoming = scores[ability];
+            if (typeof incoming === "number" && Number.isFinite(incoming)) {
+              nextScores[ability] = clampAbilityScore(incoming);
+            }
+          });
+
+          return {
+            baseAbilityScores: nextScores,
+          };
+        }),
+
+      setAbilityAssignmentMethod: (method) =>
+        set((state) => ({
+          abilityAssignmentMethod: method,
+          abilityAssignmentCompleted: false,
+          abilityPointBuyOverrideAccepted:
+            method === "point_buy"
+              ? state.abilityPointBuyOverrideAccepted
+              : false,
+          abilityVirtualRollAssignments: {},
+        })),
+
+      setAbilityRollingInputMode: (mode) =>
+        set({
+          abilityRollingInputMode: mode,
+          abilityAssignmentCompleted: false,
+          abilityVirtualRollAssignments: mode === "virtual" ? {} : {},
+        }),
+
+      setAbilityPointBuyOverrideAccepted: (accepted) =>
+        set({ abilityPointBuyOverrideAccepted: accepted }),
+
+      setAbilityAssignmentCompleted: (completed) =>
+        set({ abilityAssignmentCompleted: completed }),
+
+      setAbilityVirtualRolls: (rolls) =>
+        set({
+          abilityVirtualRolls: rolls,
+          abilityVirtualRollAssignments: {},
+          abilityAssignmentCompleted: false,
+        }),
+
+      setAbilityVirtualRollAssignment: (ability, score) =>
+        set((state) => {
+          const nextAssignments = { ...state.abilityVirtualRollAssignments };
+          if (score === null) {
+            delete nextAssignments[ability];
+          } else {
+            nextAssignments[ability] = Math.floor(score);
+          }
+          return {
+            abilityVirtualRollAssignments: nextAssignments,
+            abilityAssignmentCompleted: false,
+          };
+        }),
+
+      clearAbilityVirtualRollAssignments: () =>
+        set({
+          abilityVirtualRollAssignments: {},
+          abilityAssignmentCompleted: false,
+        }),
+
+      setRacialSkills: (skills) => set({ chosenRacialSkills: skills }),
+
+      setChosenRacialBonuses: (bonuses) =>
+        set({ chosenRacialBonuses: bonuses }),
+
+      setBackgroundSkills: (skills) => set({ chosenBackgroundSkills: skills }),
+
+      setOriginFeat: (featId) =>
+        set((state) => {
+          const filtered = state.acquiredFeats.filter(
+            (entry) => entry.source !== "origin",
+          );
+
+          if (!featId) {
+            return { acquiredFeats: filtered };
+          }
+
+          return {
+            acquiredFeats: [
+              ...filtered,
+              {
+                featId,
+                source: "origin",
+                sourceLevel: 1,
+              },
+            ],
+          };
+        }),
+
+      setStartingEquipmentSelection: (groupIndex, optionIndex) =>
+        set((state) => {
+          // Persist the selection index for requirement resolution
+          const updatedSelections = {
+            ...state.startingEquipmentSelections,
+            [groupIndex]: optionIndex,
+          };
+
+          // Clear any category picks for this choice group when option changes.
+          const groupPrefix = `${groupIndex}:`;
+          const updatedCategorySelections = Object.fromEntries(
+            Object.entries(state.startingEquipmentCategorySelections).filter(
+              ([key]) => !key.startsWith(groupPrefix),
+            ),
+          );
+
+          return {
+            startingEquipmentSelections: updatedSelections,
+            startingEquipmentCategorySelections: updatedCategorySelections,
+          };
+        }),
+
+      setStartingEquipmentCategorySelection: (selectionKey, itemId) =>
+        set((state) => ({
+          startingEquipmentCategorySelections: {
+            ...state.startingEquipmentCategorySelections,
+            [selectionKey]: itemId,
+          },
+        })),
+
+      openLevelUpModal: (targetLevel, options) =>
+        set({
+          levelUpModalState: {
+            isOpen: true,
+            targetLevel: clampCharacterLevel(targetLevel),
+            isBlocking: options?.isBlocking ?? false,
+          },
+        }),
+
+      closeLevelUpModal: () =>
+        set((state) => {
+          if (state.levelUpModalState.isBlocking) {
+            return state;
+          }
+
+          return {
+            levelUpModalState: {
+              isOpen: false,
+              targetLevel: null,
+              isBlocking: false,
+            },
+          };
+        }),
+
+      openRestModal: (restType) =>
+        set({
+          restModalState: {
+            isOpen: true,
+            restType,
+          },
+        }),
+
+      closeRestModal: () =>
+        set({
+          restModalState: {
+            isOpen: false,
+            restType: "short",
+          },
+        }),
+
+      // #endregion
+
+      // #region --- Spell Actions ---
+
+      learnSpell: (spellId) =>
+        set((state) => {
+          if (!spellId || state.spellsKnown.includes(spellId)) {
+            return state;
+          }
+
+          return {
+            spellsKnown: [...state.spellsKnown, spellId],
+          };
+        }),
+
+      prepareSpell: (spellId) =>
+        set((state) => {
+          if (!spellId || state.spellsPrepared.includes(spellId)) {
+            return state;
+          }
+
+          return {
+            spellsPrepared: [...state.spellsPrepared, spellId],
+          };
+        }),
+
+      unprepareSpell: (spellId) =>
+        set((state) => ({
+          spellsPrepared: state.spellsPrepared.filter((id) => id !== spellId),
+        })),
+
+      unlearnSpell: (spellId) =>
+        set((state) => ({
+          spellsKnown: state.spellsKnown.filter((id) => id !== spellId),
+          freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
+            (id) => id !== spellId,
+          ),
+        })),
+
+      designateFreeSchoolSpell: (spellId) =>
+        set((state) => {
+          if (!spellId || state.freeSchoolKnownSpellIds.includes(spellId)) {
+            return state;
+          }
+          return {
+            freeSchoolKnownSpellIds: [
+              ...state.freeSchoolKnownSpellIds,
+              spellId,
+            ],
+          };
+        }),
+
+      undesignateFreeSchoolSpell: (spellId) =>
+        set((state) => ({
+          freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.filter(
+            (id) => id !== spellId,
+          ),
+        })),
+
+      trimFreeSchoolDesignations: (limit) =>
+        set((state) => ({
+          freeSchoolKnownSpellIds: state.freeSchoolKnownSpellIds.slice(
+            0,
+            limit,
+          ),
+        })),
+
+      // #endregion
+
+      // #region --- Combat Actions ---
+
+      expendSpellSlot: (level) =>
+        set((state) => {
+          if (!Number.isInteger(level) || level < 1 || level > 9) {
+            return state;
+          }
+
+          const currentUsed = state.expendedSpellSlots[level] ?? 0; // If the character has already expended all their slots for this level, don't allow further expenditure
+          return {
+            expendedSpellSlots: {
+              ...state.expendedSpellSlots,
+              [level]: currentUsed + 1,
+            },
+          };
+        }),
+
+      restoreSpellSlot: (level) =>
+        set((state) => {
+          if (!Number.isInteger(level) || level < 1 || level > 9) {
+            return state;
+          }
+
+          const currentUsed = state.expendedSpellSlots[level] ?? 0;
+          if (currentUsed <= 0) {
+            return state;
+          }
+
+          const updated = {
+            ...state.expendedSpellSlots,
+            [level]: currentUsed - 1,
+          };
+
+          if (updated[level] === 0) {
+            delete updated[level];
+          }
+
+          return {
+            expendedSpellSlots: updated,
+          };
+        }),
+
+      expendPactSlot: () =>
+        set((state) => ({
+          expendedPactSlots: state.expendedPactSlots + 1,
+        })),
+
+      expendTraitActionUse: (actionId) =>
+        set((state) => {
+          if (!actionId) return state;
+          const current = state.expendedTraitActionUses[actionId] ?? 0;
+          return {
+            expendedTraitActionUses: {
+              ...state.expendedTraitActionUses,
+              [actionId]: current + 1,
+            },
+          };
+        }),
+
+      restoreTraitActionUse: (actionId) =>
+        set((state) => {
+          if (!actionId) return state;
+          const current = state.expendedTraitActionUses[actionId] ?? 0;
+          if (current <= 0) return state;
+
+          const updated = {
+            ...state.expendedTraitActionUses,
+            [actionId]: current - 1,
+          };
+
+          if (updated[actionId] === 0) {
+            delete updated[actionId];
+          }
+
+          return {
+            expendedTraitActionUses: updated,
+          };
+        }),
+
+      // #endregion
+
+      // #region --- Rest Actions ---
+
+      takeLongRest: () =>
+        set((state) => ({
+          expendedSpellSlots: {}, // Wipes all normal slot usage
+          expendedPactSlots: 0, // Wipes pact slot usage
+          // Long rest recovers uses that reset on short_rest or long_rest.
+          // Uses with reset "turn" or "other" are unaffected by resting.
+          expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
+            state,
+            "long",
+          ),
+          damageTaken: 0, // fully heal
+          tempHp: 0, // temp HP stops after long rest
+          // 5e rule: regain half total hit dice (min 1)
+          expendedHitDice: Math.max(
+            0,
+            state.expendedHitDice - Math.max(1, Math.floor(state.level / 2)),
+          ),
+        })),
+
+      takeShortRest: () =>
+        set((state) => ({
+          expendedPactSlots: 0, // Warlocks get spell slots back after short rest
+          // Short rest recovers only uses with reset cadence short_rest.
+          // Uses with reset "long_rest", "turn", or "other" are unchanged.
+          expendedTraitActionUses: getRemainingExpendedTraitActionUsesAfterRest(
+            state,
+            "short",
+          ),
+          // Normal spell slots remain untouched
+        })),
+
+      // #endregion
+
+      // #region --- Inventory Actions ---
+
+      addInventoryItem: (itemId, quantity) =>
+        set((state) => {
+          const normalizedQuantity = normalizeQuantity(quantity);
+          const itemData = getItemById(itemId);
+          const stackMode = defaultStackMode(itemData);
+
+          const nextInventoryStacks = [...state.inventoryStacks];
+          const nextInventoryInstances = [...state.inventoryInstances];
+
+          if (stackMode === "stack") {
+            const existingStackIndex = nextInventoryStacks.findIndex(
+              (stack) => stack.baseItemId === itemId,
+            );
+            if (existingStackIndex >= 0) {
+              nextInventoryStacks[existingStackIndex] = {
+                ...nextInventoryStacks[existingStackIndex],
+                quantity:
+                  nextInventoryStacks[existingStackIndex].quantity +
+                  normalizedQuantity,
+              };
+            } else {
+              nextInventoryStacks.push(
+                toStackRecord(itemId, normalizedQuantity),
+              );
+            }
+          } else {
+            for (let index = 0; index < normalizedQuantity; index += 1) {
+              nextInventoryInstances.push(toInstanceRecord(itemId));
+            }
+          }
+
+          return {
+            inventoryStacks: nextInventoryStacks,
+            inventoryInstances: nextInventoryInstances,
+          };
+        }),
+
+      removeInventoryItem: (itemId, quantity) =>
+        set((state) => {
+          const normalizedQuantity = normalizeQuantity(quantity);
+
+          const nextInventoryStacks = state.inventoryStacks
+            .map((stack) =>
+              stack.baseItemId === itemId
+                ? { ...stack, quantity: stack.quantity - normalizedQuantity }
+                : stack,
+            )
+            .filter((stack) => stack.quantity > 0);
+
+          const toRemoveCount = normalizedQuantity;
+          let removedCount = 0;
+          const removedInstanceIds = new Set<UUID>();
+          const nextInventoryInstances = state.inventoryInstances.filter(
+            (instance) => {
+              if (
+                instance.baseItemId !== itemId ||
+                removedCount >= toRemoveCount
+              ) {
+                return true;
+              }
+
+              removedInstanceIds.add(instance.instanceId);
+              removedCount += 1;
+              return false;
+            },
+          );
+
+          return {
+            inventoryStacks: nextInventoryStacks,
+            inventoryInstances: nextInventoryInstances,
+            equippedArmorInstanceId:
+              state.equippedArmorInstanceId &&
+              removedInstanceIds.has(state.equippedArmorInstanceId)
+                ? null
+                : state.equippedArmorInstanceId,
+            equippedShieldInstanceId:
+              state.equippedShieldInstanceId &&
+              removedInstanceIds.has(state.equippedShieldInstanceId)
+                ? null
+                : state.equippedShieldInstanceId,
+            equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
+              (instanceId) => !removedInstanceIds.has(instanceId),
+            ),
+            attunedInstanceIds: state.attunedInstanceIds.filter(
+              (instanceId) => !removedInstanceIds.has(instanceId),
+            ),
+          };
+        }),
+
+      removeInventoryInstance: (instanceId) =>
+        set((state) => ({
+          inventoryInstances: state.inventoryInstances.filter(
+            (instance) => instance.instanceId !== instanceId,
+          ),
+          equippedArmorInstanceId:
+            state.equippedArmorInstanceId === instanceId
+              ? null
+              : state.equippedArmorInstanceId,
+          equippedShieldInstanceId:
+            state.equippedShieldInstanceId === instanceId
+              ? null
+              : state.equippedShieldInstanceId,
+          equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
+            (id) => id !== instanceId,
+          ),
+          attunedInstanceIds: state.attunedInstanceIds.filter(
+            (id) => id !== instanceId,
+          ),
+        })),
+
+      equipArmorInstance: (instanceId) =>
+        set(() => ({
+          equippedArmorInstanceId: instanceId,
+        })),
+
+      equipShieldInstance: (instanceId) =>
+        set(() => ({
+          equippedShieldInstanceId: instanceId,
+        })),
+
+      equipWeaponInstance: (instanceId) =>
+        set((state) => {
+          const instance = state.inventoryInstances.find(
+            (entry) => entry.instanceId === instanceId,
+          );
+          if (!instance) return state;
+          if (state.equippedWeaponInstanceIds.includes(instanceId))
+            return state;
+
+          return {
+            equippedWeaponInstanceIds: [
+              ...state.equippedWeaponInstanceIds,
+              instanceId,
+            ],
+          };
+        }),
+
+      unequipWeaponInstance: (instanceId) =>
+        set((state) => ({
+          equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
+            (id) => id !== instanceId,
+          ),
+        })),
+
+      setWeaponVersatileMode: (instanceId, mode) =>
+        set((state) => ({
+          inventoryInstances: state.inventoryInstances.map((instance) =>
+            instance.instanceId === instanceId
+              ? { ...instance, versatileMode: mode }
+              : instance,
+          ),
+        })),
+
+      createItemInstance: (baseItemId, quantity = 1) => {
+        const normalizedQuantity = normalizeQuantity(quantity);
+        const createdInstances = Array.from(
+          { length: normalizedQuantity },
+          () => toInstanceRecord(baseItemId),
+        );
+
+        set((state) => ({
+          inventoryInstances: [
+            ...state.inventoryInstances,
+            ...createdInstances,
+          ],
+        }));
+
+        return createdInstances.map((instance) => instance.instanceId);
+      },
+
+      attuneInstance: (instanceId) =>
+        set((state) => {
+          if (state.attunedInstanceIds.includes(instanceId)) return state;
+          if (state.attunedInstanceIds.length >= 3) return state;
+          return {
+            attunedInstanceIds: [...state.attunedInstanceIds, instanceId],
+          };
+        }),
+
+      unattuneInstance: (instanceId) =>
+        set((state) => ({
+          attunedInstanceIds: state.attunedInstanceIds.filter(
+            (id) => id !== instanceId,
+          ),
+        })),
+
+      // #endregion
+
+      // #region --- Combat Actions ---
+
+      takeDamage: (amount) =>
+        set((state) => {
+          let remainingDamage = amount;
+          let newTempHp = state.tempHp;
+
+          // Temp HP absorbs damage first
+          if (newTempHp > 0) {
+            if (newTempHp >= remainingDamage) {
+              newTempHp -= remainingDamage;
+              remainingDamage = 0;
+            } else {
+              remainingDamage -= newTempHp;
+              newTempHp = 0;
+            }
+          }
+
+          return {
+            tempHp: newTempHp,
+            damageTaken: state.damageTaken + remainingDamage,
+          };
+        }),
+
+      heal: (amount) =>
+        set((state) => ({
+          // Cannot have negative damage take (cannot heal above max HP)
+          damageTaken: Math.max(0, state.damageTaken - amount),
+          // 5e rule: regaining any HP resets death saves
+          deathSaves: { success: 0, failure: 0 },
+        })),
+
+      setTempHp: (amount) =>
+        set((state) => ({
+          // 5e rule: temp hp does not stack, choose higher value
+          tempHp: Math.max(state.tempHp, amount),
+        })),
+
+      recordDeathSave: (type, value) =>
+        set((state) => {
+          const current = state.deathSaves[type];
+          return {
+            deathSaves: {
+              ...state.deathSaves,
+              // add or subtract depending on the checkbox toggle
+              [type]: value
+                ? Math.min(3, current + 1)
+                : Math.max(0, current - 1),
+            },
+          };
+        }),
+
+      expendHitDie: () =>
+        set((state) => ({
+          expendedHitDice: state.expendedHitDice + 1,
+        })),
+
+      // #endregion
+
+      // #region --- Character Saving Actions ---
+
+      completeSetup: () => set({ isSetupComplete: true }),
+
+      resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
+
+      hydrateCharacter: (overrides) =>
+        set(() => {
+          const merged = {
+            ...BASELINE_CHARACTER_STATE,
+            ...overrides,
+            coinPurse: {
+              ...BASELINE_CHARACTER_STATE.coinPurse,
+              ...(overrides.coinPurse ?? {}),
+            },
+            isSetupComplete: true,
+          };
+
+          // Migration: reclassify stack records whose item catalog now specifies
+          // "instance" mode. Each unit of quantity becomes its own instance record.
+          const reclassifiedInstances: InventoryInstanceRecord[] = [];
+          const correctedStacks = merged.inventoryStacks.filter((stack) => {
+            const itemData = getItemById(stack.baseItemId);
+            if (defaultStackMode(itemData) === "instance") {
+              for (let i = 0; i < stack.quantity; i += 1) {
+                reclassifiedInstances.push(toInstanceRecord(stack.baseItemId));
+              }
+              return false;
+            }
             return true;
-          }
+          });
 
-          removedInstanceIds.add(instance.instanceId);
-          removedCount += 1;
-          return false;
-        },
-      );
+          // Migration: deduplicate instance records with the same instanceId
+          // (a sign of legacy copy-paste / bad serialization).
+          const seenInstanceIds = new Set<UUID>();
+          const cleanedInstances = [
+            ...merged.inventoryInstances,
+            ...reclassifiedInstances,
+          ].filter((instance) => {
+            if (seenInstanceIds.has(instance.instanceId)) return false;
+            seenInstanceIds.add(instance.instanceId);
+            return true;
+          });
 
-      return {
-        inventoryStacks: nextInventoryStacks,
-        inventoryInstances: nextInventoryInstances,
-        equippedArmorInstanceId:
-          state.equippedArmorInstanceId &&
-          removedInstanceIds.has(state.equippedArmorInstanceId)
-            ? null
-            : state.equippedArmorInstanceId,
-        equippedShieldInstanceId:
-          state.equippedShieldInstanceId &&
-          removedInstanceIds.has(state.equippedShieldInstanceId)
-            ? null
-            : state.equippedShieldInstanceId,
-        equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
-          (instanceId) => !removedInstanceIds.has(instanceId),
-        ),
-        attunedInstanceIds: state.attunedInstanceIds.filter(
-          (instanceId) => !removedInstanceIds.has(instanceId),
-        ),
-      };
-    }),
+          // Drop equipped/attuned refs that no longer point to a valid instance.
+          const validIds = new Set(cleanedInstances.map((i) => i.instanceId));
+          return {
+            ...merged,
+            inventoryStacks: correctedStacks,
+            inventoryInstances: cleanedInstances,
+            equippedArmorInstanceId:
+              merged.equippedArmorInstanceId &&
+              validIds.has(merged.equippedArmorInstanceId)
+                ? merged.equippedArmorInstanceId
+                : null,
+            equippedShieldInstanceId:
+              merged.equippedShieldInstanceId &&
+              validIds.has(merged.equippedShieldInstanceId)
+                ? merged.equippedShieldInstanceId
+                : null,
+            equippedWeaponInstanceIds: merged.equippedWeaponInstanceIds.filter(
+              (id) => validIds.has(id),
+            ),
+            attunedInstanceIds: merged.attunedInstanceIds.filter((id) =>
+              validIds.has(id),
+            ),
+          };
+        }),
 
-  removeInventoryInstance: (instanceId) =>
-    set((state) => ({
-      inventoryInstances: state.inventoryInstances.filter(
-        (instance) => instance.instanceId !== instanceId,
-      ),
-      equippedArmorInstanceId:
-        state.equippedArmorInstanceId === instanceId
-          ? null
-          : state.equippedArmorInstanceId,
-      equippedShieldInstanceId:
-        state.equippedShieldInstanceId === instanceId
-          ? null
-          : state.equippedShieldInstanceId,
-      equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
-        (id) => id !== instanceId,
-      ),
-      attunedInstanceIds: state.attunedInstanceIds.filter(
-        (id) => id !== instanceId,
-      ),
-    })),
-
-  equipArmorInstance: (instanceId) =>
-    set(() => ({
-      equippedArmorInstanceId: instanceId,
-    })),
-
-  equipShieldInstance: (instanceId) =>
-    set(() => ({
-      equippedShieldInstanceId: instanceId,
-    })),
-
-  equipWeaponInstance: (instanceId) =>
-    set((state) => {
-      const instance = state.inventoryInstances.find(
-        (entry) => entry.instanceId === instanceId,
-      );
-      if (!instance) return state;
-      if (state.equippedWeaponInstanceIds.includes(instanceId)) return state;
-
-      return {
-        equippedWeaponInstanceIds: [
-          ...state.equippedWeaponInstanceIds,
-          instanceId,
-        ],
-      };
-    }),
-
-  unequipWeaponInstance: (instanceId) =>
-    set((state) => ({
-      equippedWeaponInstanceIds: state.equippedWeaponInstanceIds.filter(
-        (id) => id !== instanceId,
-      ),
-    })),
-
-  setWeaponVersatileMode: (instanceId, mode) =>
-    set((state) => ({
-      inventoryInstances: state.inventoryInstances.map((instance) =>
-        instance.instanceId === instanceId
-          ? { ...instance, versatileMode: mode }
-          : instance,
-      ),
-    })),
-
-  createItemInstance: (baseItemId, quantity = 1) => {
-    const normalizedQuantity = normalizeQuantity(quantity);
-    const createdInstances = Array.from({ length: normalizedQuantity }, () =>
-      toInstanceRecord(baseItemId),
-    );
-
-    set((state) => ({
-      inventoryInstances: [...state.inventoryInstances, ...createdInstances],
-    }));
-
-    return createdInstances.map((instance) => instance.instanceId);
-  },
-
-  attuneInstance: (instanceId) =>
-    set((state) => {
-      if (state.attunedInstanceIds.includes(instanceId)) return state;
-      if (state.attunedInstanceIds.length >= 3) return state;
-      return {
-        attunedInstanceIds: [...state.attunedInstanceIds, instanceId],
-      };
-    }),
-
-  unattuneInstance: (instanceId) =>
-    set((state) => ({
-      attunedInstanceIds: state.attunedInstanceIds.filter(
-        (id) => id !== instanceId,
-      ),
-    })),
-
-  // #endregion
-
-  // #region --- Combat Actions ---
-
-  takeDamage: (amount) =>
-    set((state) => {
-      let remainingDamage = amount;
-      let newTempHp = state.tempHp;
-
-      // Temp HP absorbs damage first
-      if (newTempHp > 0) {
-        if (newTempHp >= remainingDamage) {
-          newTempHp -= remainingDamage;
-          remainingDamage = 0;
-        } else {
-          remainingDamage -= newTempHp;
-          newTempHp = 0;
-        }
-      }
-
-      return {
-        tempHp: newTempHp,
-        damageTaken: state.damageTaken + remainingDamage,
-      };
-    }),
-
-  heal: (amount) =>
-    set((state) => ({
-      // Cannot have negative damage take (cannot heal above max HP)
-      damageTaken: Math.max(0, state.damageTaken - amount),
-      // 5e rule: regaining any HP resets death saves
-      deathSaves: { success: 0, failure: 0 },
-    })),
-
-  setTempHp: (amount) =>
-    set((state) => ({
-      // 5e rule: temp hp does not stack, choose higher value
-      tempHp: Math.max(state.tempHp, amount),
-    })),
-
-  recordDeathSave: (type, value) =>
-    set((state) => {
-      const current = state.deathSaves[type];
-      return {
-        deathSaves: {
-          ...state.deathSaves,
-          // add or subtract depending on the checkbox toggle
-          [type]: value ? Math.min(3, current + 1) : Math.max(0, current - 1),
-        },
-      };
-    }),
-
-  expendHitDie: () =>
-    set((state) => ({
-      expendedHitDice: state.expendedHitDice + 1,
-    })),
-
-  // #endregion
-
-  // #region --- Character Saving Actions ---
-
-  completeSetup: () => set({ isSetupComplete: true }),
-
-  resetCharacter: () => set({ ...BASELINE_CHARACTER_STATE }),
-
-  hydrateCharacter: (overrides) =>
-    set(() => {
-      const merged = {
-        ...BASELINE_CHARACTER_STATE,
-        ...overrides,
-        coinPurse: {
-          ...BASELINE_CHARACTER_STATE.coinPurse,
-          ...(overrides.coinPurse ?? {}),
-        },
-        isSetupComplete: true,
-      };
-
-      // Migration: reclassify stack records whose item catalog now specifies
-      // "instance" mode. Each unit of quantity becomes its own instance record.
-      const reclassifiedInstances: InventoryInstanceRecord[] = [];
-      const correctedStacks = merged.inventoryStacks.filter((stack) => {
-        const itemData = getItemById(stack.baseItemId);
-        if (defaultStackMode(itemData) === "instance") {
-          for (let i = 0; i < stack.quantity; i += 1) {
-            reclassifiedInstances.push(toInstanceRecord(stack.baseItemId));
-          }
-          return false;
-        }
-        return true;
-      });
-
-      // Migration: deduplicate instance records with the same instanceId
-      // (a sign of legacy copy-paste / bad serialization).
-      const seenInstanceIds = new Set<UUID>();
-      const cleanedInstances = [
-        ...merged.inventoryInstances,
-        ...reclassifiedInstances,
-      ].filter((instance) => {
-        if (seenInstanceIds.has(instance.instanceId)) return false;
-        seenInstanceIds.add(instance.instanceId);
-        return true;
-      });
-
-      // Drop equipped/attuned refs that no longer point to a valid instance.
-      const validIds = new Set(cleanedInstances.map((i) => i.instanceId));
-      return {
-        ...merged,
-        inventoryStacks: correctedStacks,
-        inventoryInstances: cleanedInstances,
-        equippedArmorInstanceId:
-          merged.equippedArmorInstanceId &&
-          validIds.has(merged.equippedArmorInstanceId)
-            ? merged.equippedArmorInstanceId
-            : null,
-        equippedShieldInstanceId:
-          merged.equippedShieldInstanceId &&
-          validIds.has(merged.equippedShieldInstanceId)
-            ? merged.equippedShieldInstanceId
-            : null,
-        equippedWeaponInstanceIds:
-          merged.equippedWeaponInstanceIds.filter((id) => validIds.has(id)),
-        attunedInstanceIds:
-          merged.attunedInstanceIds.filter((id) => validIds.has(id)),
-      };
-    }),
-
-  // #endregion
+      // #endregion
     }),
     {
       name: "dnd5e-character",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state): Omit<CharacterState, "levelUpModalState" | "restModalState"> =>
+      partialize: (
+        state,
+      ): Omit<CharacterState, "levelUpModalState" | "restModalState"> =>
         Object.fromEntries(
           SAVEABLE_STATE_KEYS.map((k) => [k, state[k]]),
         ) as Omit<CharacterState, "levelUpModalState" | "restModalState">,

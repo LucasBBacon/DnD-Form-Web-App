@@ -62,13 +62,7 @@ export const MortalLedgerContainer: React.FC = () => {
     });
 
     return pools;
-  }, [
-    classId,
-    classTracks,
-    expendedHitDice,
-    level,
-    subclassId,
-  ]);
+  }, [classId, classTracks, expendedHitDice, level, subclassId]);
 
   return (
     <MortalLedger

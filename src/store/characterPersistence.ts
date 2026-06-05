@@ -1,7 +1,10 @@
 import { z } from "zod";
 import type { Skill } from "../types/common";
 import type { LevelUpMode } from "../types/progression";
-import type { SavedCharacterData, SavedCharacterFile } from "../types/savedCharacter";
+import type {
+  SavedCharacterData,
+  SavedCharacterFile,
+} from "../types/savedCharacter";
 import { ABILITIES } from "../utils/abilityConstants";
 import type {
   AbilityAssignmentMethod,
@@ -47,160 +50,189 @@ const ABILITY_ASSIGNMENT_METHODS = [
   "point_buy",
 ] as const satisfies readonly AbilityAssignmentMethod[];
 
-const ROLLING_INPUT_MODES = ["virtual", "physical"] as const satisfies readonly RollingInputMode[];
+const ROLLING_INPUT_MODES = [
+  "virtual",
+  "physical",
+] as const satisfies readonly RollingInputMode[];
 
 const abilitySchema = z.enum(ABILITIES);
 const skillSchema = z.enum(SKILLS);
 
-const coinPurseSchema = z.object({
-  cp: z.number().int().min(0),
-  sp: z.number().int().min(0),
-  ep: z.number().int().min(0),
-  gp: z.number().int().min(0),
-  pp: z.number().int().min(0),
-}).strip();
+const coinPurseSchema = z
+  .object({
+    cp: z.number().int().min(0),
+    sp: z.number().int().min(0),
+    ep: z.number().int().min(0),
+    gp: z.number().int().min(0),
+    pp: z.number().int().min(0),
+  })
+  .strip();
 
-const characterClassTrackSchema = z.object({
-  classId: z.string().min(1),
-  subclassId: z.string().min(1).nullable(),
-  level: z.number().int().min(1).max(20),
-}).strip();
+const characterClassTrackSchema = z
+  .object({
+    classId: z.string().min(1),
+    subclassId: z.string().min(1).nullable(),
+    level: z.number().int().min(1).max(20),
+  })
+  .strip();
 
-const virtualAbilityRollSchema = z.object({
-  dice: z.tuple([
-    z.number().int().min(1),
-    z.number().int().min(1),
-    z.number().int().min(1),
-    z.number().int().min(1),
-  ]),
-  dropped: z.number().int().min(1),
-  kept: z.tuple([
-    z.number().int().min(1),
-    z.number().int().min(1),
-    z.number().int().min(1),
-  ]),
-  total: z.number().int().min(0),
-}).strip();
+const virtualAbilityRollSchema = z
+  .object({
+    dice: z.tuple([
+      z.number().int().min(1),
+      z.number().int().min(1),
+      z.number().int().min(1),
+      z.number().int().min(1),
+    ]),
+    dropped: z.number().int().min(1),
+    kept: z.tuple([
+      z.number().int().min(1),
+      z.number().int().min(1),
+      z.number().int().min(1),
+    ]),
+    total: z.number().int().min(0),
+  })
+  .strip();
 
-const levelChoiceSchema = z.object({
-  selectedClassId: z.string().min(1).optional(),
-  hpGained: z.number().int().min(0).optional(),
-  asiChoices: z.record(abilitySchema, z.number().int()).optional(),
-  featId: z.string().min(1).optional(),
-  featureChoices: z.record(z.string(), z.string()).optional(),
-  skillChoices: z.array(skillSchema).optional(),
-  expertiseChoices: z.array(skillSchema).optional(),
-  weaponChoices: z.array(z.string()).optional(),
-  toolChoices: z.array(z.string()).optional(),
-  languageChoices: z.array(z.string()).optional(),
-}).strip();
+const levelChoiceSchema = z
+  .object({
+    selectedClassId: z.string().min(1).optional(),
+    hpGained: z.number().int().min(0).optional(),
+    asiChoices: z.record(abilitySchema, z.number().int()).optional(),
+    featId: z.string().min(1).optional(),
+    featureChoices: z.record(z.string(), z.string()).optional(),
+    skillChoices: z.array(skillSchema).optional(),
+    expertiseChoices: z.array(skillSchema).optional(),
+    weaponChoices: z.array(z.string()).optional(),
+    toolChoices: z.array(z.string()).optional(),
+    languageChoices: z.array(z.string()).optional(),
+  })
+  .strip();
 
-const featAcquisitionSchema = z.object({
-  featId: z.string().min(1),
-  source: z.enum(["origin", "level_up"]),
-  sourceLevel: z.number().int().min(1).optional(),
-  sourceId: z.string().min(1).optional(),
-}).strip();
+const featAcquisitionSchema = z
+  .object({
+    featId: z.string().min(1),
+    source: z.enum(["origin", "level_up"]),
+    sourceLevel: z.number().int().min(1).optional(),
+    sourceId: z.string().min(1).optional(),
+  })
+  .strip();
 
-const itemInstanceSchema = z.object({
-  instanceId: z.string().min(1),
-  baseItemId: z.string().min(1),
-  customName: z.string().optional(),
-  notes: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  overrides: z.record(z.string(), z.unknown()).optional(),
-  createdFromCatalogBaseItemId: z.string().min(1).optional(),
-  isCustom: z.boolean().optional(),
-  versatileMode: z.enum(["one-handed", "two-handed"]).optional(),
-}).strip();
+const itemInstanceSchema = z
+  .object({
+    instanceId: z.string().min(1),
+    baseItemId: z.string().min(1),
+    customName: z.string().optional(),
+    notes: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    overrides: z.record(z.string(), z.unknown()).optional(),
+    createdFromCatalogBaseItemId: z.string().min(1).optional(),
+    isCustom: z.boolean().optional(),
+    versatileMode: z.enum(["one-handed", "two-handed"]).optional(),
+  })
+  .strip();
 
-const inventoryStackSchema = z.object({
-  stackId: z.string().min(1),
-  baseItemId: z.string().min(1),
-  quantity: z.number().int().min(1),
-}).strip();
+const inventoryStackSchema = z
+  .object({
+    stackId: z.string().min(1),
+    baseItemId: z.string().min(1),
+    quantity: z.number().int().min(1),
+  })
+  .strip();
 
-const deathSavesSchema = z.object({
-  success: z.number().int().min(0).max(3),
-  failure: z.number().int().min(0).max(3),
-}).strip();
+const deathSavesSchema = z
+  .object({
+    success: z.number().int().min(0).max(3),
+    failure: z.number().int().min(0).max(3),
+  })
+  .strip();
 
-const baseAbilityScoresSchema = z.object({
-  str: z.number().int().min(1).max(20),
-  dex: z.number().int().min(1).max(20),
-  con: z.number().int().min(1).max(20),
-  int: z.number().int().min(1).max(20),
-  wis: z.number().int().min(1).max(20),
-  cha: z.number().int().min(1).max(20),
-}).strip();
+const baseAbilityScoresSchema = z
+  .object({
+    str: z.number().int().min(1).max(20),
+    dex: z.number().int().min(1).max(20),
+    con: z.number().int().min(1).max(20),
+    int: z.number().int().min(1).max(20),
+    wis: z.number().int().min(1).max(20),
+    cha: z.number().int().min(1).max(20),
+  })
+  .strip();
 
-const characterStateSchema = z.object({
-  playerName: z.string(),
-  name: z.string(),
-  alignment: z.string(),
-  age: z.string(),
-  height: z.string(),
-  weight: z.string(),
-  eyes: z.string(),
-  skin: z.string(),
-  hair: z.string(),
-  appearance: z.string(),
-  backstory: z.string(),
-  personalityTraits: z.string(),
-  ideals: z.string(),
-  bonds: z.string(),
-  flaws: z.string(),
-  alliesAndOrganizations: z.string(),
-  xp: z.number().int().min(0),
-  level: z.number().int().min(1).max(20),
-  levelUpMode: z.enum(LEVEL_UP_MODES),
-  raceId: z.string().min(1).nullable(),
-  subraceId: z.string().min(1).nullable(),
-  classId: z.string().min(1).nullable(),
-  subclassId: z.string().min(1).nullable(),
-  classTracks: z.array(characterClassTrackSchema),
-  baseAbilityScores: baseAbilityScoresSchema,
-  hpRolls: z.record(z.string(), z.number().int()),
-  chosenRacialBonuses: z.partialRecord(abilitySchema, z.number().int()).default({}),
-  abilityAssignmentMethod: z.enum(ABILITY_ASSIGNMENT_METHODS),
-  abilityRollingInputMode: z.enum(ROLLING_INPUT_MODES),
-  abilityPointBuyOverrideAccepted: z.boolean(),
-  abilityAssignmentCompleted: z.boolean(),
-  abilityVirtualRolls: z.array(virtualAbilityRollSchema),
-  abilityVirtualRollAssignments: z.partialRecord(abilitySchema, z.number().int()).default({}),
-  backgroundId: z.string().min(1).nullable(),
-  chosenRacialSkills: z.array(skillSchema),
-  chosenBackgroundSkills: z.array(skillSchema),
-  choicesByLevel: z.record(z.string(), levelChoiceSchema),
-  acquiredFeats: z.array(featAcquisitionSchema),
-  spellsKnown: z.array(z.string()),
-  spellsPrepared: z.array(z.string()),
-  freeSchoolKnownSpellIds: z.array(z.string()),
-  expendedSpellSlots: z.record(z.string(), z.number().int()),
-  expendedPactSlots: z.number().int().min(0),
-  expendedTraitActionUses: z.record(z.string(), z.number().int()),
-  coinPurse: coinPurseSchema,
-  inventoryStacks: z.array(inventoryStackSchema),
-  inventoryInstances: z.array(itemInstanceSchema),
-  equippedArmorInstanceId: z.string().min(1).nullable(),
-  equippedShieldInstanceId: z.string().min(1).nullable(),
-  equippedWeaponInstanceIds: z.array(z.string().min(1)),
-  attunedInstanceIds: z.array(z.string().min(1)),
-  damageTaken: z.number().int().min(0),
-  tempHp: z.number().int().min(0),
-  deathSaves: deathSavesSchema,
-  expendedHitDice: z.number().int().min(0),
-  isSetupComplete: z.boolean(),
-  startingEquipmentSelections: z.record(z.string(), z.number().int()),
-  startingEquipmentCategorySelections: z.record(z.string(), z.string()),
-}).strip();
+const characterStateSchema = z
+  .object({
+    playerName: z.string(),
+    name: z.string(),
+    alignment: z.string(),
+    age: z.string(),
+    height: z.string(),
+    weight: z.string(),
+    eyes: z.string(),
+    skin: z.string(),
+    hair: z.string(),
+    appearance: z.string(),
+    backstory: z.string(),
+    personalityTraits: z.string(),
+    ideals: z.string(),
+    bonds: z.string(),
+    flaws: z.string(),
+    alliesAndOrganizations: z.string(),
+    xp: z.number().int().min(0),
+    level: z.number().int().min(1).max(20),
+    levelUpMode: z.enum(LEVEL_UP_MODES),
+    raceId: z.string().min(1).nullable(),
+    subraceId: z.string().min(1).nullable(),
+    classId: z.string().min(1).nullable(),
+    subclassId: z.string().min(1).nullable(),
+    classTracks: z.array(characterClassTrackSchema),
+    baseAbilityScores: baseAbilityScoresSchema,
+    hpRolls: z.record(z.string(), z.number().int()),
+    chosenRacialBonuses: z
+      .partialRecord(abilitySchema, z.number().int())
+      .default({}),
+    abilityAssignmentMethod: z.enum(ABILITY_ASSIGNMENT_METHODS),
+    abilityRollingInputMode: z.enum(ROLLING_INPUT_MODES),
+    abilityPointBuyOverrideAccepted: z.boolean(),
+    abilityAssignmentCompleted: z.boolean(),
+    abilityVirtualRolls: z.array(virtualAbilityRollSchema),
+    abilityVirtualRollAssignments: z
+      .partialRecord(abilitySchema, z.number().int())
+      .default({}),
+    backgroundId: z.string().min(1).nullable(),
+    chosenRacialSkills: z.array(skillSchema),
+    chosenBackgroundSkills: z.array(skillSchema),
+    choicesByLevel: z.record(z.string(), levelChoiceSchema),
+    acquiredFeats: z.array(featAcquisitionSchema),
+    spellsKnown: z.array(z.string()),
+    spellsPrepared: z.array(z.string()),
+    freeSchoolKnownSpellIds: z.array(z.string()),
+    expendedSpellSlots: z.record(z.string(), z.number().int()),
+    expendedPactSlots: z.number().int().min(0),
+    expendedTraitActionUses: z.record(z.string(), z.number().int()),
+    coinPurse: coinPurseSchema,
+    inventoryStacks: z.array(inventoryStackSchema),
+    inventoryInstances: z.array(itemInstanceSchema),
+    equippedArmorInstanceId: z.string().min(1).nullable(),
+    equippedShieldInstanceId: z.string().min(1).nullable(),
+    equippedWeaponInstanceIds: z.array(z.string().min(1)),
+    attunedInstanceIds: z.array(z.string().min(1)),
+    damageTaken: z.number().int().min(0),
+    tempHp: z.number().int().min(0),
+    deathSaves: deathSavesSchema,
+    expendedHitDice: z.number().int().min(0),
+    isSetupComplete: z.boolean(),
+    startingEquipmentSelections: z.record(z.string(), z.number().int()),
+    startingEquipmentCategorySelections: z.record(z.string(), z.string()),
+  })
+  .strip();
 
-export const savedCharacterFileSchema = z.object({
-  schemaVersion: z.string().min(1),
-  savedAt: z.string().min(1),
-  appVersion: z.string().min(1),
-  character: characterStateSchema,
-}).strip();
+export const savedCharacterFileSchema = z
+  .object({
+    schemaVersion: z.string().min(1),
+    savedAt: z.string().min(1),
+    appVersion: z.string().min(1),
+    character: characterStateSchema,
+  })
+  .strip();
 
 export type SavedCharacterFileResult =
   | { success: true; data: SavedCharacterFile }
@@ -220,7 +252,8 @@ export const validateAndDeserialize = (
   try {
     parsed = JSON.parse(json);
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown JSON parse error";
+    const message =
+      error instanceof Error ? error.message : "Unknown JSON parse error";
     return { success: false, error: `Invalid JSON: ${message}` };
   }
 

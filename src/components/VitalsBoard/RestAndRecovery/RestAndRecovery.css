@@ -1,0 +1,187 @@
+/* --- CONTAINER & TOGGLE --- */
+.rest-recovery-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.camp-toggle-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: rgba(229, 217, 197, 0.4);
+  border: 1px solid var(--border-filigree);
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--ink-main);
+}
+
+.camp-toggle-btn:hover {
+  background-color: var(--vellum-hover);
+  border-color: var(--ink-muted);
+}
+
+.camp-toggle-btn.is-open {
+  border-radius: 4px 4px 0 0;
+  border-bottom: 1px dashed var(--border-filigree);
+}
+
+.camp-toggle-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.camp-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+.hit-dice-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.summary-text {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.summary-numbers {
+  font-family: var(--font-body);
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* --- THE CAMP DRAWER --- */
+.camp-drawer {
+  width: 100%;
+  background-color: rgba(229, 217, 197, 0.2);
+  border: 1px solid var(--border-filigree);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.camp-drawer-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* --- HIT DICE POOLS --- */
+.hit-dice-pools {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hit-die-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 2px;
+}
+
+.hit-die-row.is-depleted {
+  opacity: 0.6;
+  background-color: transparent;
+}
+
+.die-stamp {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--ink-main);
+  width: 40px;
+}
+
+.die-count {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.count-slash {
+  color: var(--ink-muted);
+  font-weight: normal;
+}
+
+.die-roller-slot {
+  flex-shrink: 0;
+}
+
+.hit-die-roller .roll-btn {
+  min-width: 80px;
+  border-color: #5a6b5a;
+  color: #5a6b5a;
+}
+
+.hit-die-roller .roll-btn:hover:not(:disabled) {
+  background-color: #5a6b5a;
+  color: var(--vellum-bg);
+}
+
+/* --- REST ACTIONS --- */
+.rest-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.short-rest-btn {
+  border-color: #a65a2e; /* Warm campfire orange/brown */
+  color: #a65a2e;
+}
+
+.short-rest-btn:hover {
+  background-color: #a65a2e;
+  color: var(--vellum-bg);
+}
+
+.long-rest-btn {
+  border-color: #4a5a78; /* Deep twilight blue */
+  color: #4a5a78;
+}
+
+.long-rest-btn:hover {
+  background-color: #4a5a78;
+  color: var(--vellum-bg);
+}
+
+.fadeInDown {
+  animation: fadeInDown 0.2s ease-out;
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -2,8 +2,8 @@ import type React from "react";
 import "./Spellbook.css";
 import type { SpellCastMetadata } from "../../hooks/useSpellcasting";
 import { useMemo, useState } from "react";
-import { SpellbookFilters } from "./ui/SpellbookFilters";
-import { SpellbookRow } from "./ui/SpellbookRow";
+import { SpellbookFilters } from "./SpellbookFilters/SpellbookFilters";
+import { SpellbookRow } from "./SpellbookRow/SpellbookRow";
 
 export interface SpellReferenceData {
   id: string;

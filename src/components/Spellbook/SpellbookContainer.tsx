@@ -55,7 +55,7 @@ const mapReference = (spellId: string): SpellReferenceData | null => {
       vocal: spell.components.vocal,
       somatic: spell.components.somatic,
       material: spell.components.material
-        ? spell.components.materialMaterials ?? "Material Component"
+        ? (spell.components.materialMaterials ?? "Material Component")
         : null,
     },
     duration: spell.duration,
@@ -71,7 +71,9 @@ export const SpellbookContainer: React.FC = () => {
     const knownSpellIds = spellcasting.pools.known.selected;
     const preparedSpellIds = spellcasting.pools.prepared.selected;
     const alwaysPreparedSpellIds = spellcasting.pools.bonusPrepared;
-    const innateSpellIds = spellcasting.pools.innate.map((entry) => entry.spellId);
+    const innateSpellIds = spellcasting.pools.innate.map(
+      (entry) => entry.spellId,
+    );
 
     const activeSpellIds = Array.from(
       new Set([

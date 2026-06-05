@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FeaturesBoard } from "./FeaturesBoard";
-import { RaceFeature, ClassFeature, MultipleSourceBadges } from "./ui/FeatureCard.stories";
-import type { FeatureCardProps } from "./ui/FeatureCard";
+import { RaceFeature, ClassFeature, MultipleSourceBadges } from "./FeatureCard/FeatureCard.stories";
+import type { FeatureCardProps } from "./FeatureCard/FeatureCard";
 
 const meta: Meta<typeof FeaturesBoard> = {
 	title: "RoleplayBoard/FeaturesBoard",

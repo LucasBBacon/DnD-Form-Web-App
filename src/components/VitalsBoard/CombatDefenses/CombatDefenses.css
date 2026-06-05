@@ -1,0 +1,124 @@
+.combat-defenses-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--ink-main);
+}
+
+/* CRESTS */
+.defense-crest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--ink-main);
+  border-radius: 2px 2px 8px 8px;
+  position: relative;
+}
+
+/* some inner shading to make it feel like parchment */
+.defense-crest::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  box-shadow: inset 0 0 12px rgba(44, 36, 27, 0.05);
+  pointer-events: none;
+}
+
+.crest-value-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crest-icon {
+  color: var(--ink-muted);
+}
+
+.crest-value {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--ink-main);
+}
+
+.crest-label {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  border-top: 1px dashed var(--border-filigree);
+  width: 100%;
+  text-align: center;
+}
+
+/* SIZING */
+.minor-crest {
+  padding: 8px 12px;
+  min-width: 90px;
+}
+
+.minor-crest .crest-value {
+  font-size: 1.2rem;
+}
+
+.minor-crest .crest-label {
+  font-size: 0.7rem;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.major-crest {
+  padding: 12px 20px;
+  min-width: 110px;
+  border-width: 2px;
+  border-radius: 4px 4px 12px 12px;
+  box-shadow: 0 4px 8px rgba(44, 36, 27, 0.1);
+  transform: translateY(4px);
+}
+
+.major-crest .ac-value {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.major-crest .crest-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-main);
+  margin-top: 8px;
+  padding-top: 6px;
+}
+
+/* WARNING */
+.penalized-text {
+  color: var(--rubric-red);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+}
+
+.warning-icon {
+  color: var(--rubric-red);
+  cursor: help;
+}
+
+@keyframes pulseWarning {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 2px rgba(158, 42, 43, 0.5));
+  }
+}
+
+.pulse-warning {
+  animation: pulseWarning 2s infinite ease-in-out;
+}

@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { Spellbook, type SpellbookEntry, type SpellReferenceData } from "./Spellbook";
+import {
+  Spellbook,
+  type SpellbookEntry,
+  type SpellReferenceData,
+} from "./Spellbook";
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const toRomanNumeral = (level: number) => ROMAN[level - 1] ?? String(level);
@@ -26,7 +30,8 @@ const mageHand: SpellReferenceData = {
   range: "30 feet",
   components: { vocal: true, somatic: true, material: null },
   duration: "1 minute",
-  description: "A spectral, floating hand appears at a point you choose within range.",
+  description:
+    "A spectral, floating hand appears at a point you choose within range.",
 };
 
 const hex: SpellReferenceData = {
@@ -61,7 +66,8 @@ const fireball: SpellReferenceData = {
     material: "A tiny ball of bat guano and sulfur.",
   },
   duration: "Instantaneous",
-  description: "A streak flashes to a point and explodes in a 20-foot radius sphere of flame.",
+  description:
+    "A streak flashes to a point and explodes in a 20-foot radius sphere of flame.",
   highLevelsText:
     "When cast using a spell slot of 4th level or higher, damage increases by 1d6 per slot level above 3rd.",
 };
@@ -75,7 +81,8 @@ const arcaneEye: SpellReferenceData = {
   range: "30 feet",
   components: { vocal: true, somatic: true, material: "A bit of bat fur." },
   duration: "1 hour",
-  description: "You create an invisible magical eye and receive visual information from it.",
+  description:
+    "You create an invisible magical eye and receive visual information from it.",
 };
 
 const nondetection: SpellReferenceData = {
@@ -153,7 +160,10 @@ export const SearchFilterFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.type(canvas.getByPlaceholderText("Search incantations"), "hand");
+    await userEvent.type(
+      canvas.getByPlaceholderText("Search incantations"),
+      "hand",
+    );
 
     await expect(canvas.getByText("Mage Hand")).toBeInTheDocument();
     await expect(canvas.queryByText("Hex")).not.toBeInTheDocument();
@@ -211,7 +221,12 @@ export const SortByLevelThenName: Story = {
   args: {
     entries: [
       makeEntry(fireball),
-      makeEntry({ ...hex, name: "Bane", id: "spell_bane", school: "Enchantment" }),
+      makeEntry({
+        ...hex,
+        name: "Bane",
+        id: "spell_bane",
+        school: "Enchantment",
+      }),
       makeEntry(mageHand),
       makeEntry(hex),
     ],

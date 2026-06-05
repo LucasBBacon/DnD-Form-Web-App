@@ -99,9 +99,7 @@ const toInstance = (
     lore: {
       shortDescription,
     },
-    ...(armorType
-      ? { armorProperties: buildArmorProperties(armorType) }
-      : {}),
+    ...(armorType ? { armorProperties: buildArmorProperties(armorType) } : {}),
     ...(requiresAttunement
       ? { magicItemProperties: { requiresAttunement: true } }
       : {}),

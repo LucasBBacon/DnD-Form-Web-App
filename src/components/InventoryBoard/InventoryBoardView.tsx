@@ -1,10 +1,10 @@
 import type React from "react";
 import "./InventoryBoard.css";
-import { EncumbranceDisplay } from "./ui/EncumbranceDisplay";
+import { EncumbranceDisplay } from "./EncumbranceDisplay/EncumbranceDisplay";
 import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
-import { InventoryLedgerCard } from "./ui/InventoryLedgerCard";
+import { InventoryLedgerCard } from "./InventoryLedgerCard/InventoryLedgerCard";
 import type { ItemStackingRules, WeaponProperties } from "../../types/item";
-import { WealthTracker } from "./ui/WealthTracker";
+import { WealthTracker } from "./WealthTracker/WealthTracker";
 
 // #region Interfaces
 

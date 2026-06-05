@@ -3,7 +3,7 @@ import { useCharacterStore } from "../../store/useCharacterStore.ts";
 import { useCharacterStats } from "../../hooks/useCharacterStats.ts";
 import { useMemo, useState } from "react";
 import { getItemById } from "../../data/staticDataApi.ts";
-import { TwoHandedWarningDialog } from "./ui/TwoHandedWarningDialog.tsx";
+import { TwoHandedWarningDialog } from "./TwoHandedWarningDialog/TwoHandedWarningDialog.tsx";
 import { canEquipTwoHandedWeapon } from "../../utils/equipmentValidator.ts";
 import {
   InventoryBoardView,
@@ -23,7 +23,9 @@ interface TwoHandedWarningState {
 // #region Component
 
 export const InventoryBoard: React.FC = () => {
-  const inventoryInstances = useCharacterStore((state) => state.inventoryInstances);
+  const inventoryInstances = useCharacterStore(
+    (state) => state.inventoryInstances,
+  );
   const inventoryStacks = useCharacterStore((state) => state.inventoryStacks);
   const equippedWeaponInstanceIds = useCharacterStore(
     (state) => state.equippedWeaponInstanceIds,
@@ -34,22 +36,35 @@ export const InventoryBoard: React.FC = () => {
   const equippedShieldInstanceId = useCharacterStore(
     (state) => state.equippedShieldInstanceId,
   );
-  const attunedInstanceIds = useCharacterStore((state) => state.attunedInstanceIds);
+  const attunedInstanceIds = useCharacterStore(
+    (state) => state.attunedInstanceIds,
+  );
 
-  const equipWeaponInstance = useCharacterStore((state) => state.equipWeaponInstance);
-  const unequipWeaponInstance = useCharacterStore((state) => state.unequipWeaponInstance);
-  const equipArmorInstance = useCharacterStore((state) => state.equipArmorInstance);
-  const equipShieldInstance = useCharacterStore((state) => state.equipShieldInstance);
+  const equipWeaponInstance = useCharacterStore(
+    (state) => state.equipWeaponInstance,
+  );
+  const unequipWeaponInstance = useCharacterStore(
+    (state) => state.unequipWeaponInstance,
+  );
+  const equipArmorInstance = useCharacterStore(
+    (state) => state.equipArmorInstance,
+  );
+  const equipShieldInstance = useCharacterStore(
+    (state) => state.equipShieldInstance,
+  );
   const attuneInstance = useCharacterStore((state) => state.attuneInstance);
   const unattuneInstance = useCharacterStore((state) => state.unattuneInstance);
   const removeInventoryInstance = useCharacterStore(
     (state) => state.removeInventoryInstance,
   );
-  const removeInventoryItem = useCharacterStore((state) => state.removeInventoryItem);
+  const removeInventoryItem = useCharacterStore(
+    (state) => state.removeInventoryItem,
+  );
   const addInventoryItem = useCharacterStore((state) => state.addInventoryItem);
 
   const { encumbrance } = useCharacterStats();
-  const [twoHandedWarningState, setTwoHandedWarningState] = useState<TwoHandedWarningState | null>(null);
+  const [twoHandedWarningState, setTwoHandedWarningState] =
+    useState<TwoHandedWarningState | null>(null);
 
   // #region Hydration
 

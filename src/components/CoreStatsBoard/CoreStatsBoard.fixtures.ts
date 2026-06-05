@@ -4,7 +4,7 @@ import {
   ABILITY_LABELS as ABILITY_NAMES,
 } from "../../utils/abilityConstants";
 import type { CoreStatsBoardProps } from "./CoreStatsBoard";
-import type { AbilityCardSkill } from "./ui/AbilityCard";
+import type { AbilityCardSkill } from "./AbilityCard/AbilityCard";
 
 // #region Interfaces
 

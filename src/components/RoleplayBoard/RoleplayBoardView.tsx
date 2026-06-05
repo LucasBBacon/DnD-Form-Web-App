@@ -1,6 +1,6 @@
 import type React from "react";
 import "./RoleplayBoard.css";
-import { ManuscriptField } from "./ui/ManuscriptField";
+import { ManuscriptField } from "./ManuscriptField/ManuscriptField";
 
 // #region Types & Interfaces
 

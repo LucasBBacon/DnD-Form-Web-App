@@ -64,7 +64,8 @@ export const SaveLoadControls = () => {
       hydrateCharacter(migrated.character);
       setErrorMessage(null);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unable to load save file.";
+      const message =
+        error instanceof Error ? error.message : "Unable to load save file.";
       setErrorMessage(message);
     }
   };
