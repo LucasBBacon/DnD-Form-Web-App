@@ -9,6 +9,11 @@ const PRESET_ITEMS: AddItemPresetOption[] = [
     name: "Chain Mail",
     type: "armor",
     weight: 55,
+    cpCost: 7500,
+    lore: {
+      shortDescription: "Heavy armor forged from interlocking steel rings.",
+      fullText: "Favored by disciplined soldiers despite its bulk.",
+    },
     armorProperties: {
       acApplication: "set",
       armorType: "heavy",
@@ -23,6 +28,11 @@ const PRESET_ITEMS: AddItemPresetOption[] = [
     name: "Longsword",
     type: "weapon",
     weight: 3,
+    cpCost: 1500,
+    lore: {
+      shortDescription: "A versatile martial weapon.",
+      fullText: "Favored by knights and mercenaries alike.",
+    },
     weaponProperties: {
       category: "martial_melee",
       damageDice: "1d8",
@@ -46,7 +56,14 @@ const PRESET_ITEMS: AddItemPresetOption[] = [
       },
     },
   },
-  { id: "item_rations", name: "Rations", type: "gear", weight: 2 },
+  {
+    id: "item_rations",
+    name: "Rations",
+    type: "gear",
+    weight: 2,
+    cpCost: 50,
+    lore: { shortDescription: "Trail food." },
+  },
 ];
 
 describe("AddItemModal", () => {
@@ -155,16 +172,86 @@ describe("AddItemModal", () => {
     await user.type(screen.getByLabelText("Quantity"), "2");
     await user.clear(screen.getByLabelText("Weight Override (lb)"));
     await user.type(screen.getByLabelText("Weight Override (lb)"), "4");
+    await user.clear(screen.getByLabelText("Custom Value (cp)"));
+    await user.type(screen.getByLabelText("Custom Value (cp)"), "2500");
+    await user.clear(screen.getByLabelText("Custom Short Description"));
+    await user.type(
+      screen.getByLabelText("Custom Short Description"),
+      "A reforged knightly blade.",
+    );
+    await user.clear(screen.getByLabelText("Custom Full Description"));
+    await user.type(
+      screen.getByLabelText("Custom Full Description"),
+      "Rebalanced and etched with a personal crest.",
+    );
     await user.clear(screen.getByLabelText("Weapon Damage Dice"));
     await user.type(screen.getByLabelText("Weapon Damage Dice"), "1d10");
+    await user.clear(screen.getByLabelText("Weapon Range"));
+    await user.type(screen.getByLabelText("Weapon Range"), "10 ft");
+    await user.click(screen.getByLabelText("Finesse"));
+
+    await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
+
+    expect(onConfirmCustomFromBaseAdd).toHaveBeenCalledWith(
+      {
+        baseItemId: "item_longsword",
+        quantity: 2,
+        customName: "Longsword +1",
+        overrides: expect.objectContaining({
+          weight: 4,
+          cpCost: 2500,
+          lore: {
+            shortDescription: "A reforged knightly blade.",
+            fullText: "Rebalanced and etched with a personal crest.",
+          },
+          weaponProperties: expect.objectContaining({
+            damageDice: "1d10",
+            range: "10 ft",
+            propertyIds: expect.arrayContaining(["property_finesse"]),
+          }),
+        }),
+      },
+    );
+  });
+
+  it("submits armor custom-from-base overrides for strength and stealth", async () => {
+    const user = userEvent.setup();
+    const onConfirmCustomFromBaseAdd = vi.fn();
+
+    render(
+      <AddItemModal
+        isOpen={true}
+        step="flow_details"
+        selectedFlow="custom_from_base"
+        presetItems={PRESET_ITEMS}
+        onClose={vi.fn()}
+        onBack={vi.fn()}
+        onSelectFlow={vi.fn()}
+        onConfirmPresetAdd={vi.fn()}
+        onConfirmCustomFromBaseAdd={onConfirmCustomFromBaseAdd}
+        onConfirmCustomGenericAdd={vi.fn()}
+      />,
+    );
+
+    await user.selectOptions(
+      screen.getByLabelText("Base Item"),
+      "item_chain_mail",
+    );
+    await user.clear(screen.getByLabelText("Strength Requirement"));
+    await user.type(screen.getByLabelText("Strength Requirement"), "15");
+    await user.click(screen.getByLabelText("Stealth Disadvantage"));
 
     await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
 
     expect(onConfirmCustomFromBaseAdd).toHaveBeenCalledWith(
       expect.objectContaining({
-        baseItemId: "item_longsword",
-        quantity: 2,
-        customName: "Longsword +1",
+        baseItemId: "item_chain_mail",
+        overrides: expect.objectContaining({
+          armorProperties: expect.objectContaining({
+            strengthRequirement: 15,
+            stealthDisadvantage: false,
+          }),
+        }),
       }),
     );
   });

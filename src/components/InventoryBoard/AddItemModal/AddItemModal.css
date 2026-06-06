@@ -107,6 +107,19 @@
   resize: vertical;
 }
 
+.inventory-weapon-property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.35rem 0.75rem;
+}
+
+.inventory-checkbox-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink-main);
+}
+
 .inventory-modal-subsection-title {
   margin: 0.4rem 0 0;
   font-size: 0.95rem;

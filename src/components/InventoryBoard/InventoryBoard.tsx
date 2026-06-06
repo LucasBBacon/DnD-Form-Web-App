@@ -232,6 +232,8 @@ export const InventoryBoard: React.FC = () => {
           name: item.name,
           type: item.type,
           weight: item.weight,
+          cpCost: item.cpCost,
+          lore: item.lore,
           armorProperties: item.armorProperties,
           weaponProperties: item.weaponProperties,
           magicItemProperties: item.magicItemProperties,

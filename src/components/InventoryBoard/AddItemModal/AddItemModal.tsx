@@ -1,10 +1,13 @@
 import type React from "react";
 import { useMemo, useState } from "react";
+import { getAllWeaponProperties } from "../../../data/staticDataApi";
+import { normalizeWeaponProperties } from "../../../data/weaponNormalizer";
 import type {
   ArmorProperties,
   ItemInstanceOverrides,
   MagicItemProperties,
   WeaponProperties,
+  WeaponPropertyId,
 } from "../../../types/item";
 import "./AddItemModal.css";
 
@@ -20,6 +23,11 @@ export interface AddItemPresetOption {
   name: string;
   type: string;
   weight: number;
+  cpCost: number;
+  lore: {
+    shortDescription: string;
+    fullText?: string;
+  };
   armorProperties?: ArmorProperties;
   weaponProperties?: WeaponProperties;
   magicItemProperties?: MagicItemProperties;
@@ -90,9 +98,22 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     useState("1");
   const [customNameInput, setCustomNameInput] = useState("");
   const [customWeightInput, setCustomWeightInput] = useState("");
+  const [customCpCostInput, setCustomCpCostInput] = useState("");
+  const [customShortDescriptionInput, setCustomShortDescriptionInput] =
+    useState("");
+  const [customFullDescriptionInput, setCustomFullDescriptionInput] =
+    useState("");
   const [customDamageDiceInput, setCustomDamageDiceInput] = useState("");
   const [customDamageTypeInput, setCustomDamageTypeInput] = useState("");
+  const [customWeaponRangeInput, setCustomWeaponRangeInput] = useState("");
+  const [customWeaponPropertyIds, setCustomWeaponPropertyIds] = useState<
+    WeaponPropertyId[]
+  >([]);
   const [customArmorBaseAcInput, setCustomArmorBaseAcInput] = useState("");
+  const [customArmorStrengthRequirementInput, setCustomArmorStrengthRequirementInput] =
+    useState("");
+  const [customArmorStealthDisadvantage, setCustomArmorStealthDisadvantage] =
+    useState(false);
   const [genericNameInput, setGenericNameInput] = useState("");
   const [genericShortDescriptionInput, setGenericShortDescriptionInput] =
     useState("");
@@ -118,6 +139,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     1,
     Math.floor(Number(presetQuantityInput) || 1),
   );
+  const weaponPropertyCatalog = useMemo(() => getAllWeaponProperties(), []);
 
   const filteredCustomBaseItems = useMemo(() => {
     const normalizedSearch = customFromBaseSearch.trim().toLowerCase();
@@ -162,12 +184,27 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     }
 
     setCustomWeightInput(String(selectedBaseItem.weight));
+    setCustomCpCostInput(String(selectedBaseItem.cpCost ?? 0));
+    setCustomShortDescriptionInput(selectedBaseItem.lore?.shortDescription ?? "");
+    setCustomFullDescriptionInput(selectedBaseItem.lore?.fullText ?? "");
     setCustomDamageDiceInput(selectedBaseItem.weaponProperties?.damageDice ?? "");
     setCustomDamageTypeInput(selectedBaseItem.weaponProperties?.damageType ?? "");
+    setCustomWeaponRangeInput(selectedBaseItem.weaponProperties?.range ?? "");
+    setCustomWeaponPropertyIds(
+      selectedBaseItem.weaponProperties?.propertyIds ?? [],
+    );
     setCustomArmorBaseAcInput(
       selectedBaseItem.armorProperties
         ? String(selectedBaseItem.armorProperties.baseAc)
         : "",
+    );
+    setCustomArmorStrengthRequirementInput(
+      selectedBaseItem.armorProperties?.strengthRequirement != null
+        ? String(selectedBaseItem.armorProperties.strengthRequirement)
+        : "",
+    );
+    setCustomArmorStealthDisadvantage(
+      selectedBaseItem.armorProperties?.stealthDisadvantage ?? false,
     );
   };
 
@@ -183,9 +220,16 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     setCustomFromBaseQuantityInput("1");
     setCustomNameInput("");
     setCustomWeightInput("");
+    setCustomCpCostInput("");
+    setCustomShortDescriptionInput("");
+    setCustomFullDescriptionInput("");
     setCustomDamageDiceInput("");
     setCustomDamageTypeInput("");
+    setCustomWeaponRangeInput("");
+    setCustomWeaponPropertyIds([]);
     setCustomArmorBaseAcInput("");
+    setCustomArmorStrengthRequirementInput("");
+    setCustomArmorStealthDisadvantage(false);
   };
 
   const resetCustomGenericForm = () => {
@@ -214,7 +258,13 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
 
     const trimmedCustomName = customNameInput.trim();
     const parsedWeight = Number(customWeightInput);
+    const parsedCpCost = Number(customCpCostInput);
+    const trimmedShortDescription = customShortDescriptionInput.trim();
+    const trimmedFullDescription = customFullDescriptionInput.trim();
     const parsedArmorBaseAc = Number(customArmorBaseAcInput);
+    const parsedArmorStrengthRequirement = Number(
+      customArmorStrengthRequirementInput,
+    );
 
     const overrides: ItemInstanceOverrides = {};
     if (
@@ -225,34 +275,82 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
       overrides.weight = parsedWeight;
     }
 
+    if (
+      Number.isFinite(parsedCpCost) &&
+      parsedCpCost >= 0 &&
+      parsedCpCost !== selectedCustomBaseItem.cpCost
+    ) {
+      overrides.cpCost = Math.floor(parsedCpCost);
+    }
+
+    const shouldOverrideLore =
+      trimmedShortDescription.length > 0 &&
+      (trimmedShortDescription !== selectedCustomBaseItem.lore.shortDescription ||
+        trimmedFullDescription !== (selectedCustomBaseItem.lore.fullText ?? ""));
+
+    if (shouldOverrideLore) {
+      overrides.lore = {
+        shortDescription: trimmedShortDescription,
+        fullText: trimmedFullDescription || undefined,
+      };
+    }
+
     if (selectedCustomBaseItem.weaponProperties) {
       const nextDamageDice = customDamageDiceInput.trim();
       const nextDamageType = customDamageTypeInput.trim();
+      const nextPropertyIds = weaponPropertyCatalog
+        .filter((entry) => customWeaponPropertyIds.includes(entry.id))
+        .map((entry) => entry.id);
+      const currentPropertyIds = selectedCustomBaseItem.weaponProperties.propertyIds;
+      const nextRange = customWeaponRangeInput.trim();
+      const hasPropertyChange =
+        nextPropertyIds.length !== currentPropertyIds.length ||
+        nextPropertyIds.some((propertyId, index) => propertyId !== currentPropertyIds[index]);
       const shouldOverrideWeapon =
         nextDamageDice.length > 0 &&
         nextDamageType.length > 0 &&
         (nextDamageDice !== selectedCustomBaseItem.weaponProperties.damageDice ||
-          nextDamageType !== selectedCustomBaseItem.weaponProperties.damageType);
+          nextDamageType !== selectedCustomBaseItem.weaponProperties.damageType ||
+          nextRange !== selectedCustomBaseItem.weaponProperties.range ||
+          hasPropertyChange);
 
       if (shouldOverrideWeapon) {
-        overrides.weaponProperties = {
-          ...selectedCustomBaseItem.weaponProperties,
+        overrides.weaponProperties = normalizeWeaponProperties({
+          category: selectedCustomBaseItem.weaponProperties.category,
           damageDice: nextDamageDice,
+          versatileDamageDice:
+            selectedCustomBaseItem.weaponProperties.versatileDamageDice,
           damageType: nextDamageType,
-        };
+          properties: nextPropertyIds,
+          range: nextRange,
+          ammoItemId: selectedCustomBaseItem.weaponProperties.ammoItemId,
+        });
       }
     }
 
     if (selectedCustomBaseItem.armorProperties) {
+      const normalizedStrengthRequirement =
+        customArmorStrengthRequirementInput.trim() === ""
+          ? undefined
+          : Number.isFinite(parsedArmorStrengthRequirement) &&
+              parsedArmorStrengthRequirement >= 0
+            ? Math.floor(parsedArmorStrengthRequirement)
+            : selectedCustomBaseItem.armorProperties.strengthRequirement;
       const shouldOverrideArmor =
         Number.isFinite(parsedArmorBaseAc) &&
         parsedArmorBaseAc > 0 &&
-        parsedArmorBaseAc !== selectedCustomBaseItem.armorProperties.baseAc;
+        (parsedArmorBaseAc !== selectedCustomBaseItem.armorProperties.baseAc ||
+          normalizedStrengthRequirement !==
+            selectedCustomBaseItem.armorProperties.strengthRequirement ||
+          customArmorStealthDisadvantage !==
+            selectedCustomBaseItem.armorProperties.stealthDisadvantage);
 
       if (shouldOverrideArmor) {
         overrides.armorProperties = {
           ...selectedCustomBaseItem.armorProperties,
           baseAc: Math.floor(parsedArmorBaseAc),
+          strengthRequirement: normalizedStrengthRequirement,
+          stealthDisadvantage: customArmorStealthDisadvantage,
         };
       }
     }
@@ -268,6 +366,14 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     });
 
     resetCustomFromBaseForm();
+  };
+
+  const toggleCustomWeaponProperty = (propertyId: WeaponPropertyId) => {
+    setCustomWeaponPropertyIds((current) =>
+      current.includes(propertyId)
+        ? current.filter((entry) => entry !== propertyId)
+        : [...current, propertyId],
+    );
   };
 
   const handleCustomGenericAdd = () => {
@@ -516,6 +622,53 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
                   onChange={(event) => setCustomWeightInput(event.target.value)}
                 />
 
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="custom-item-cp-cost"
+                >
+                  Custom Value (cp)
+                </label>
+                <input
+                  id="custom-item-cp-cost"
+                  className="inventory-modal-input inventory-modal-input-short"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  value={customCpCostInput}
+                  onChange={(event) => setCustomCpCostInput(event.target.value)}
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="custom-item-short-description"
+                >
+                  Custom Short Description
+                </label>
+                <input
+                  id="custom-item-short-description"
+                  className="inventory-modal-input"
+                  type="text"
+                  value={customShortDescriptionInput}
+                  onChange={(event) =>
+                    setCustomShortDescriptionInput(event.target.value)
+                  }
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="custom-item-full-description"
+                >
+                  Custom Full Description
+                </label>
+                <textarea
+                  id="custom-item-full-description"
+                  className="inventory-modal-input inventory-modal-textarea"
+                  value={customFullDescriptionInput}
+                  onChange={(event) =>
+                    setCustomFullDescriptionInput(event.target.value)
+                  }
+                />
+
                 {selectedCustomBaseItem?.weaponProperties && (
                   <>
                     <label
@@ -549,6 +702,41 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
                         setCustomDamageTypeInput(event.target.value)
                       }
                     />
+
+                    <label
+                      className="inventory-modal-field-label"
+                      htmlFor="custom-weapon-range"
+                    >
+                      Weapon Range
+                    </label>
+                    <input
+                      id="custom-weapon-range"
+                      className="inventory-modal-input inventory-modal-input-short"
+                      type="text"
+                      value={customWeaponRangeInput}
+                      onChange={(event) =>
+                        setCustomWeaponRangeInput(event.target.value)
+                      }
+                    />
+
+                    <span className="inventory-modal-field-label">
+                      Weapon Properties
+                    </span>
+                    <div className="inventory-weapon-property-grid">
+                      {weaponPropertyCatalog.map((property) => (
+                        <label
+                          key={property.id}
+                          className="inventory-checkbox-option"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={customWeaponPropertyIds.includes(property.id)}
+                            onChange={() => toggleCustomWeaponProperty(property.id)}
+                          />
+                          <span>{property.name}</span>
+                        </label>
+                      ))}
+                    </div>
                   </>
                 )}
 
@@ -571,6 +759,36 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
                         setCustomArmorBaseAcInput(event.target.value)
                       }
                     />
+
+                    <label
+                      className="inventory-modal-field-label"
+                      htmlFor="custom-armor-strength-requirement"
+                    >
+                      Strength Requirement
+                    </label>
+                    <input
+                      id="custom-armor-strength-requirement"
+                      className="inventory-modal-input inventory-modal-input-short"
+                      type="number"
+                      inputMode="numeric"
+                      min={0}
+                      step={1}
+                      value={customArmorStrengthRequirementInput}
+                      onChange={(event) =>
+                        setCustomArmorStrengthRequirementInput(event.target.value)
+                      }
+                    />
+
+                    <label className="inventory-checkbox-option">
+                      <input
+                        type="checkbox"
+                        checked={customArmorStealthDisadvantage}
+                        onChange={(event) =>
+                          setCustomArmorStealthDisadvantage(event.target.checked)
+                        }
+                      />
+                      <span>Stealth Disadvantage</span>
+                    </label>
                   </>
                 )}
 
