@@ -9,12 +9,13 @@ import type {
   WeaponProperties,
   WeaponPropertyId,
 } from "../../../types/item";
+import { AddItemFlowSelector } from "./AddItemFlowSelector";
+import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
+import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
+import { PresetItemFlow } from "./PresetItemFlow";
 import "./AddItemModal.css";
 
-export type AddItemFlowType =
-  | "preset"
-  | "custom_from_base"
-  | "custom_generic";
+export type AddItemFlowType = "preset" | "custom_from_base" | "custom_generic";
 
 export type AddItemModalStep = "choose_flow" | "flow_details";
 
@@ -110,8 +111,10 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     WeaponPropertyId[]
   >([]);
   const [customArmorBaseAcInput, setCustomArmorBaseAcInput] = useState("");
-  const [customArmorStrengthRequirementInput, setCustomArmorStrengthRequirementInput] =
-    useState("");
+  const [
+    customArmorStrengthRequirementInput,
+    setCustomArmorStrengthRequirementInput,
+  ] = useState("");
   const [customArmorStealthDisadvantage, setCustomArmorStealthDisadvantage] =
     useState(false);
   const [genericNameInput, setGenericNameInput] = useState("");
@@ -185,10 +188,16 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
 
     setCustomWeightInput(String(selectedBaseItem.weight));
     setCustomCpCostInput(String(selectedBaseItem.cpCost ?? 0));
-    setCustomShortDescriptionInput(selectedBaseItem.lore?.shortDescription ?? "");
+    setCustomShortDescriptionInput(
+      selectedBaseItem.lore?.shortDescription ?? "",
+    );
     setCustomFullDescriptionInput(selectedBaseItem.lore?.fullText ?? "");
-    setCustomDamageDiceInput(selectedBaseItem.weaponProperties?.damageDice ?? "");
-    setCustomDamageTypeInput(selectedBaseItem.weaponProperties?.damageType ?? "");
+    setCustomDamageDiceInput(
+      selectedBaseItem.weaponProperties?.damageDice ?? "",
+    );
+    setCustomDamageTypeInput(
+      selectedBaseItem.weaponProperties?.damageType ?? "",
+    );
     setCustomWeaponRangeInput(selectedBaseItem.weaponProperties?.range ?? "");
     setCustomWeaponPropertyIds(
       selectedBaseItem.weaponProperties?.propertyIds ?? [],
@@ -285,8 +294,10 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
 
     const shouldOverrideLore =
       trimmedShortDescription.length > 0 &&
-      (trimmedShortDescription !== selectedCustomBaseItem.lore.shortDescription ||
-        trimmedFullDescription !== (selectedCustomBaseItem.lore.fullText ?? ""));
+      (trimmedShortDescription !==
+        selectedCustomBaseItem.lore.shortDescription ||
+        trimmedFullDescription !==
+          (selectedCustomBaseItem.lore.fullText ?? ""));
 
     if (shouldOverrideLore) {
       overrides.lore = {
@@ -301,16 +312,21 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
       const nextPropertyIds = weaponPropertyCatalog
         .filter((entry) => customWeaponPropertyIds.includes(entry.id))
         .map((entry) => entry.id);
-      const currentPropertyIds = selectedCustomBaseItem.weaponProperties.propertyIds;
+      const currentPropertyIds =
+        selectedCustomBaseItem.weaponProperties.propertyIds;
       const nextRange = customWeaponRangeInput.trim();
       const hasPropertyChange =
         nextPropertyIds.length !== currentPropertyIds.length ||
-        nextPropertyIds.some((propertyId, index) => propertyId !== currentPropertyIds[index]);
+        nextPropertyIds.some(
+          (propertyId, index) => propertyId !== currentPropertyIds[index],
+        );
       const shouldOverrideWeapon =
         nextDamageDice.length > 0 &&
         nextDamageType.length > 0 &&
-        (nextDamageDice !== selectedCustomBaseItem.weaponProperties.damageDice ||
-          nextDamageType !== selectedCustomBaseItem.weaponProperties.damageType ||
+        (nextDamageDice !==
+          selectedCustomBaseItem.weaponProperties.damageDice ||
+          nextDamageType !==
+            selectedCustomBaseItem.weaponProperties.damageType ||
           nextRange !== selectedCustomBaseItem.weaponProperties.range ||
           hasPropertyChange);
 
@@ -359,10 +375,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
       baseItemId: selectedCustomBaseItem.id,
       quantity: normalizedCustomFromBaseQuantity,
       customName: trimmedCustomName || undefined,
-      overrides:
-        Object.keys(overrides).length > 0
-          ? overrides
-          : undefined,
+      overrides: Object.keys(overrides).length > 0 ? overrides : undefined,
     });
 
     resetCustomFromBaseForm();
@@ -429,34 +442,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
         <hr className="ornate-board-divider" />
 
         {step === "choose_flow" ? (
-          <div className="inventory-modal-content">
-            <p className="inventory-modal-copy">
-              Choose how you want to add the item.
-            </p>
-            <div className="inventory-flow-options-grid">
-              <button
-                type="button"
-                className="action-btn inventory-flow-option-btn"
-                onClick={() => onSelectFlow("preset")}
-              >
-                Add Preset Item
-              </button>
-              <button
-                type="button"
-                className="action-btn inventory-flow-option-btn"
-                onClick={() => onSelectFlow("custom_from_base")}
-              >
-                Custom From Base
-              </button>
-              <button
-                type="button"
-                className="action-btn inventory-flow-option-btn"
-                onClick={() => onSelectFlow("custom_generic")}
-              >
-                Fully Custom Item
-              </button>
-            </div>
-          </div>
+          <AddItemFlowSelector onSelectFlow={onSelectFlow} />
         ) : (
           <div className="inventory-modal-content">
             <p className="inventory-modal-copy">
@@ -469,450 +455,85 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
             </p>
 
             {selectedFlow === "preset" && (
-              <div className="inventory-preset-form">
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="preset-search"
-                >
-                  Search Preset Items
-                </label>
-                <input
-                  id="preset-search"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={presetSearch}
-                  onChange={(event) => setPresetSearch(event.target.value)}
-                  placeholder="Search by item name"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="preset-item-select"
-                >
-                  Select Item
-                </label>
-                <select
-                  id="preset-item-select"
-                  className="inventory-modal-select"
-                  value={selectedPresetItemId}
-                  onChange={(event) => setSelectedPresetItemId(event.target.value)}
-                >
-                  <option value="">Choose an item...</option>
-                  {filteredPresetItems.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name} ({item.type})
-                    </option>
-                  ))}
-                </select>
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="preset-quantity"
-                >
-                  Quantity
-                </label>
-                <input
-                  id="preset-quantity"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  value={presetQuantityInput}
-                  onChange={(event) => setPresetQuantityInput(event.target.value)}
-                />
-
-                <button
-                  type="button"
-                  className="action-btn"
-                  disabled={!selectedPresetItemId}
-                  onClick={handlePresetAdd}
-                >
-                  Add Selected Item
-                </button>
-              </div>
+              <PresetItemFlow
+                searchValue={presetSearch}
+                selectedItemId={selectedPresetItemId}
+                quantityInput={presetQuantityInput}
+                filteredItems={filteredPresetItems}
+                onSearchChange={setPresetSearch}
+                onSelectedItemChange={setSelectedPresetItemId}
+                onQuantityInputChange={setPresetQuantityInput}
+                onSubmit={handlePresetAdd}
+                submitDisabled={!selectedPresetItemId}
+              />
             )}
 
             {selectedFlow === "custom_from_base" && (
-              <div className="inventory-preset-form">
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-base-search"
-                >
-                  Search Base Items
-                </label>
-                <input
-                  id="custom-base-search"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={customFromBaseSearch}
-                  onChange={(event) =>
-                    setCustomFromBaseSearch(event.target.value)
-                  }
-                  placeholder="Search by base item name"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-base-item-select"
-                >
-                  Base Item
-                </label>
-                <select
-                  id="custom-base-item-select"
-                  className="inventory-modal-select"
-                  value={selectedCustomBaseItemId}
-                  onChange={(event) =>
-                    handleCustomBaseItemSelection(event.target.value)
-                  }
-                >
-                  <option value="">Choose a base item...</option>
-                  {filteredCustomBaseItems.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name} ({item.type})
-                    </option>
-                  ))}
-                </select>
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-name"
-                >
-                  Custom Name (Optional)
-                </label>
-                <input
-                  id="custom-item-name"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={customNameInput}
-                  onChange={(event) => setCustomNameInput(event.target.value)}
-                  placeholder="Leave blank to use base item name"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-quantity"
-                >
-                  Quantity
-                </label>
-                <input
-                  id="custom-item-quantity"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  value={customFromBaseQuantityInput}
-                  onChange={(event) =>
-                    setCustomFromBaseQuantityInput(event.target.value)
-                  }
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-weight"
-                >
-                  Weight Override (lb)
-                </label>
-                <input
-                  id="custom-item-weight"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  value={customWeightInput}
-                  onChange={(event) => setCustomWeightInput(event.target.value)}
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-cp-cost"
-                >
-                  Custom Value (cp)
-                </label>
-                <input
-                  id="custom-item-cp-cost"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  value={customCpCostInput}
-                  onChange={(event) => setCustomCpCostInput(event.target.value)}
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-short-description"
-                >
-                  Custom Short Description
-                </label>
-                <input
-                  id="custom-item-short-description"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={customShortDescriptionInput}
-                  onChange={(event) =>
-                    setCustomShortDescriptionInput(event.target.value)
-                  }
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="custom-item-full-description"
-                >
-                  Custom Full Description
-                </label>
-                <textarea
-                  id="custom-item-full-description"
-                  className="inventory-modal-input inventory-modal-textarea"
-                  value={customFullDescriptionInput}
-                  onChange={(event) =>
-                    setCustomFullDescriptionInput(event.target.value)
-                  }
-                />
-
-                {selectedCustomBaseItem?.weaponProperties && (
-                  <>
-                    <label
-                      className="inventory-modal-field-label"
-                      htmlFor="custom-weapon-damage-dice"
-                    >
-                      Weapon Damage Dice
-                    </label>
-                    <input
-                      id="custom-weapon-damage-dice"
-                      className="inventory-modal-input inventory-modal-input-short"
-                      type="text"
-                      value={customDamageDiceInput}
-                      onChange={(event) =>
-                        setCustomDamageDiceInput(event.target.value)
-                      }
-                    />
-
-                    <label
-                      className="inventory-modal-field-label"
-                      htmlFor="custom-weapon-damage-type"
-                    >
-                      Weapon Damage Type
-                    </label>
-                    <input
-                      id="custom-weapon-damage-type"
-                      className="inventory-modal-input"
-                      type="text"
-                      value={customDamageTypeInput}
-                      onChange={(event) =>
-                        setCustomDamageTypeInput(event.target.value)
-                      }
-                    />
-
-                    <label
-                      className="inventory-modal-field-label"
-                      htmlFor="custom-weapon-range"
-                    >
-                      Weapon Range
-                    </label>
-                    <input
-                      id="custom-weapon-range"
-                      className="inventory-modal-input inventory-modal-input-short"
-                      type="text"
-                      value={customWeaponRangeInput}
-                      onChange={(event) =>
-                        setCustomWeaponRangeInput(event.target.value)
-                      }
-                    />
-
-                    <span className="inventory-modal-field-label">
-                      Weapon Properties
-                    </span>
-                    <div className="inventory-weapon-property-grid">
-                      {weaponPropertyCatalog.map((property) => (
-                        <label
-                          key={property.id}
-                          className="inventory-checkbox-option"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={customWeaponPropertyIds.includes(property.id)}
-                            onChange={() => toggleCustomWeaponProperty(property.id)}
-                          />
-                          <span>{property.name}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                {selectedCustomBaseItem?.armorProperties && (
-                  <>
-                    <label
-                      className="inventory-modal-field-label"
-                      htmlFor="custom-armor-base-ac"
-                    >
-                      Armor Base AC
-                    </label>
-                    <input
-                      id="custom-armor-base-ac"
-                      className="inventory-modal-input inventory-modal-input-short"
-                      type="number"
-                      inputMode="numeric"
-                      min={1}
-                      value={customArmorBaseAcInput}
-                      onChange={(event) =>
-                        setCustomArmorBaseAcInput(event.target.value)
-                      }
-                    />
-
-                    <label
-                      className="inventory-modal-field-label"
-                      htmlFor="custom-armor-strength-requirement"
-                    >
-                      Strength Requirement
-                    </label>
-                    <input
-                      id="custom-armor-strength-requirement"
-                      className="inventory-modal-input inventory-modal-input-short"
-                      type="number"
-                      inputMode="numeric"
-                      min={0}
-                      step={1}
-                      value={customArmorStrengthRequirementInput}
-                      onChange={(event) =>
-                        setCustomArmorStrengthRequirementInput(event.target.value)
-                      }
-                    />
-
-                    <label className="inventory-checkbox-option">
-                      <input
-                        type="checkbox"
-                        checked={customArmorStealthDisadvantage}
-                        onChange={(event) =>
-                          setCustomArmorStealthDisadvantage(event.target.checked)
-                        }
-                      />
-                      <span>Stealth Disadvantage</span>
-                    </label>
-                  </>
-                )}
-
-                <button
-                  type="button"
-                  className="action-btn"
-                  disabled={!selectedCustomBaseItemId}
-                  onClick={handleCustomFromBaseAdd}
-                >
-                  Add Custom Item
-                </button>
-              </div>
+              <CustomFromBaseFlow
+                searchValue={customFromBaseSearch}
+                selectedBaseItemId={selectedCustomBaseItemId}
+                filteredBaseItems={filteredCustomBaseItems}
+                selectedBaseItem={selectedCustomBaseItem}
+                quantityInput={customFromBaseQuantityInput}
+                customNameInput={customNameInput}
+                customWeightInput={customWeightInput}
+                customCpCostInput={customCpCostInput}
+                customShortDescriptionInput={customShortDescriptionInput}
+                customFullDescriptionInput={customFullDescriptionInput}
+                customDamageDiceInput={customDamageDiceInput}
+                customDamageTypeInput={customDamageTypeInput}
+                customWeaponRangeInput={customWeaponRangeInput}
+                customWeaponPropertyIds={customWeaponPropertyIds}
+                customArmorBaseAcInput={customArmorBaseAcInput}
+                customArmorStrengthRequirementInput={
+                  customArmorStrengthRequirementInput
+                }
+                customArmorStealthDisadvantage={customArmorStealthDisadvantage}
+                weaponPropertyCatalog={weaponPropertyCatalog}
+                onSearchChange={setCustomFromBaseSearch}
+                onSelectBaseItem={handleCustomBaseItemSelection}
+                onQuantityChange={setCustomFromBaseQuantityInput}
+                onCustomNameChange={setCustomNameInput}
+                onCustomWeightChange={setCustomWeightInput}
+                onCustomCpCostChange={setCustomCpCostInput}
+                onCustomShortDescriptionChange={setCustomShortDescriptionInput}
+                onCustomFullDescriptionChange={setCustomFullDescriptionInput}
+                onCustomDamageDiceChange={setCustomDamageDiceInput}
+                onCustomDamageTypeChange={setCustomDamageTypeInput}
+                onCustomWeaponRangeChange={setCustomWeaponRangeInput}
+                onToggleWeaponProperty={toggleCustomWeaponProperty}
+                onCustomArmorBaseAcChange={setCustomArmorBaseAcInput}
+                onCustomArmorStrengthRequirementChange={
+                  setCustomArmorStrengthRequirementInput
+                }
+                onCustomArmorStealthDisadvantageChange={
+                  setCustomArmorStealthDisadvantage
+                }
+                onSubmit={handleCustomFromBaseAdd}
+                submitDisabled={!selectedCustomBaseItemId}
+              />
             )}
 
             {selectedFlow === "custom_generic" && (
-              <div className="inventory-preset-form">
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-name"
-                >
-                  Item Name
-                </label>
-                <input
-                  id="generic-item-name"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={genericNameInput}
-                  onChange={(event) => setGenericNameInput(event.target.value)}
-                  placeholder="Custom item name"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-short-description"
-                >
-                  Short Description
-                </label>
-                <input
-                  id="generic-item-short-description"
-                  className="inventory-modal-input"
-                  type="text"
-                  value={genericShortDescriptionInput}
-                  onChange={(event) =>
-                    setGenericShortDescriptionInput(event.target.value)
-                  }
-                  placeholder="One-line description"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-full-description"
-                >
-                  Full Description (Optional)
-                </label>
-                <textarea
-                  id="generic-item-full-description"
-                  className="inventory-modal-input inventory-modal-textarea"
-                  value={genericFullDescriptionInput}
-                  onChange={(event) =>
-                    setGenericFullDescriptionInput(event.target.value)
-                  }
-                  placeholder="Longer notes about this custom item"
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-weight"
-                >
-                  Weight (lb)
-                </label>
-                <input
-                  id="generic-item-weight"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  value={genericWeightInput}
-                  onChange={(event) => setGenericWeightInput(event.target.value)}
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-cp-cost"
-                >
-                  Value (cp)
-                </label>
-                <input
-                  id="generic-item-cp-cost"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="numeric"
-                  min={0}
-                  value={genericCpCostInput}
-                  onChange={(event) => setGenericCpCostInput(event.target.value)}
-                />
-
-                <label
-                  className="inventory-modal-field-label"
-                  htmlFor="generic-item-quantity"
-                >
-                  Quantity
-                </label>
-                <input
-                  id="generic-item-quantity"
-                  className="inventory-modal-input inventory-modal-input-short"
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  value={genericQuantityInput}
-                  onChange={(event) => setGenericQuantityInput(event.target.value)}
-                />
-
-                <button
-                  type="button"
-                  className="action-btn"
-                  onClick={handleCustomGenericAdd}
-                  disabled={
-                    genericNameInput.trim().length === 0 ||
-                    genericShortDescriptionInput.trim().length === 0
-                  }
-                >
-                  Add Fully Custom Item
-                </button>
-              </div>
+              <CustomGenericItemFlow
+                nameInput={genericNameInput}
+                shortDescriptionInput={genericShortDescriptionInput}
+                fullDescriptionInput={genericFullDescriptionInput}
+                weightInput={genericWeightInput}
+                cpCostInput={genericCpCostInput}
+                quantityInput={genericQuantityInput}
+                onNameChange={setGenericNameInput}
+                onShortDescriptionChange={setGenericShortDescriptionInput}
+                onFullDescriptionChange={setGenericFullDescriptionInput}
+                onWeightChange={setGenericWeightInput}
+                onCpCostChange={setGenericCpCostInput}
+                onQuantityChange={setGenericQuantityInput}
+                onSubmit={handleCustomGenericAdd}
+                submitDisabled={
+                  genericNameInput.trim().length === 0 ||
+                  genericShortDescriptionInput.trim().length === 0
+                }
+              />
             )}
           </div>
         )}
