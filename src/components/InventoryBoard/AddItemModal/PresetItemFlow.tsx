@@ -1,5 +1,7 @@
 import type React from "react";
+import "./PresetItemFlow.css";
 import type { AddItemPresetOption } from "./AddItemModal";
+import { Package, Plus, Search } from "lucide-react";
 
 interface PresetItemFlowProps {
   searchValue: string;
@@ -25,60 +27,83 @@ export const PresetItemFlow: React.FC<PresetItemFlowProps> = ({
   submitDisabled,
 }) => {
   return (
-    <div className="inventory-preset-form">
-      <label className="inventory-modal-field-label" htmlFor="preset-search">
-        Search Preset Items
-      </label>
-      <input
-        id="preset-search"
-        className="inventory-modal-input"
-        type="text"
-        value={searchValue}
-        onChange={(event) => onSearchChange(event.target.value)}
-        placeholder="Search by item name"
-      />
+    <div className="preset-flow-container">
+      {/* SEARCH BAR */}
+      <div className="requisition-search-bar">
+        <Search size={18} className="search-icon" />
+        <input
+          type="text"
+          className="manuscript-input full-width"
+          placeholder="Search the ledger by name or type..."
+          value={searchValue}
+          onChange={(e) => onSearchChange(e.target.value)}
+          autoFocus
+        />
+      </div>
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="preset-item-select"
-      >
-        Select Item
-      </label>
-      <select
-        id="preset-item-select"
-        className="inventory-modal-select"
-        value={selectedItemId}
-        onChange={(event) => onSelectedItemChange(event.target.value)}
-      >
-        <option value="">Choose an item...</option>
-        {filteredItems.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.name} ({item.type})
-          </option>
-        ))}
-      </select>
+      {/* SCROLLABLE ITEM LIST */}
+      <div className="requisition-ledger-list custom-scrollbar">
+        {filteredItems.length === 0 ? (
+          <div className="empty-state-text">
+            No items found in archives matching this search.
+          </div>
+        ) : (
+          filteredItems.map((item) => {
+            const isSelected = item.id === selectedItemId;
+            return (
+              <button
+                key={item.id}
+                className={`ledger-item-row ${isSelected ? "is-selected" : ""}`}
+                onClick={() => onSelectedItemChange(item.id)}
+              >
+                <div className="row-primary">
+                  <span className="item-name">{item.name}</span>
+                  <span className="item-type">{item.type}</span>
+                </div>
+                <div className="row-secondary">
+                  <span className="item-weight">{item.weight} lb</span>
+                  <span className="item-divider">|</span>
+                  <span className="item-cost">{item.cpCost}</span>
+                </div>
+              </button>
+            );
+          })
+        )}
+      </div>
 
-      <label className="inventory-modal-field-label" htmlFor="preset-quantity">
-        Quantity
-      </label>
-      <input
-        id="preset-quantity"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={1}
-        value={quantityInput}
-        onChange={(event) => onQuantityInputChange(event.target.value)}
-      />
+      {/* SELECTED ITEM LORE */}
+      {selectedItemId && (
+        <div className="selected-item-lore">
+          <Package size={16} className="lore-icon" />
+          <span className="lore-text">
+            {filteredItems.find((i) => i.id === selectedItemId)?.lore
+              .shortDescription || "A standard piece of equipment."}
+          </span>
+        </div>
+      )}
 
-      <button
-        type="button"
-        className="action-btn"
-        disabled={submitDisabled}
-        onClick={onSubmit}
-      >
-        Add Selected Item
-      </button>
+      {/* QUANTITY AND SUBMIT */}
+      <div className="requisition-footer">
+        <div className="quantity-control">
+          <label htmlFor="preset-quantity">Qty:</label>
+          <input
+            id="preset-quantity"
+            type="number"
+            className="manuscript-input quantity-input"
+            value={quantityInput}
+            onChange={(e) => onQuantityInputChange(e.target.value)}
+            min="1"
+          />
+        </div>
+
+        <button
+          className="action-btn confirm-add-btn"
+          onClick={onSubmit}
+          disabled={submitDisabled}
+        >
+          <Plus size={16} /> Add to Inventory
+        </button>
+      </div>
     </div>
   );
 };

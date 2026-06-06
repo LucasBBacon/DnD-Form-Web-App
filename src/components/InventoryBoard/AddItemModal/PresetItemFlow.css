@@ -1,0 +1,152 @@
+.preset-flow-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+}
+
+.requisition-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--ink-main);
+  border-radius: 4px;
+  padding: 8px 12px;
+  flex-shrink: 0;
+}
+
+.requisition-search-bar .full-width {
+  flex-grow: 1;
+  border: none;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.requisition-ledger-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border-filigree);
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.ledger-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--border-filigree);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.1s ease;
+}
+
+.ledger-item-row:hover {
+  background-color: rgba(229, 217, 197, 0.4);
+}
+
+.ledger-item-row.is-selected {
+  background-color: var(--ink-main);
+  color: var(--vellum-bg);
+}
+
+.row-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-name {
+  font-family: var(--font-display);
+  font-weight: bold;
+  font-size: 1.05rem;
+  color: inherit;
+}
+
+.item-type {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.row-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+/* --- SELECTED LORE BANNER --- */
+.selected-item-lore {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background-color: rgba(212, 175, 55, 0.1);
+  border-left: 2px solid var(--gilt-gold);
+  border-radius: 0 4px 4px 0;
+  flex-shrink: 0;
+}
+
+.lore-icon {
+  color: var(--gilt-gold);
+  margin-top: 2px;
+}
+
+.lore-text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ink-main);
+}
+
+/* --- FOOTER CONTROLS --- */
+.requisition-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-filigree);
+  flex-shrink: 0;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: bold;
+  color: var(--ink-muted);
+}
+
+.quantity-input {
+  width: 60px;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.confirm-add-btn {
+  border-color: var(--gilt-gold);
+  color: #8c7323;
+}
+
+.confirm-add-btn:hover:not(:disabled) {
+  background-color: var(--gilt-gold);
+  color: var(--vellum-bg);
+}
+
+.confirm-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: var(--border-filigree);
+  color: var(--ink-muted);
+}
