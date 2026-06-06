@@ -591,6 +591,35 @@ describe("useCharacterStore inventory instance actions", () => {
     });
   });
 
+  it("createCustomGenericItemInstance creates generic custom items with lore and value", () => {
+    const ids = useCharacterStore.getState().createCustomGenericItemInstance({
+      name: "Rune-Carved Relic",
+      shortDescription: "A hand-sized relic etched with draconic runes.",
+      fullDescription: "Warm to the touch and faintly humming at twilight.",
+      weight: 1.5,
+      cpCost: 750,
+      quantity: 2,
+    });
+
+    const created = useCharacterStore
+      .getState()
+      .inventoryInstances.filter((instance) => ids.includes(instance.instanceId));
+
+    expect(created).toHaveLength(2);
+    created.forEach((instance) => {
+      expect(instance.isCustom).toBe(true);
+      expect(instance.customName).toBe("Rune-Carved Relic");
+      expect(instance.overrides?.weight).toBe(1.5);
+      expect(instance.overrides?.cpCost).toBe(750);
+      expect(instance.overrides?.lore?.shortDescription).toContain(
+        "hand-sized relic",
+      );
+      expect(instance.overrides?.lore?.fullText).toContain(
+        "humming at twilight",
+      );
+    });
+  });
+
   it("hydrateCharacter deduplicates instance records with identical instanceIds", () => {
     const sharedId = "test-uuid-dupe";
     useCharacterStore.getState().hydrateCharacter({

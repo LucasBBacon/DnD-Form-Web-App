@@ -102,6 +102,11 @@
   max-width: 7rem;
 }
 
+.inventory-modal-textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
 .inventory-modal-subsection-title {
   margin: 0.4rem 0 0;
   font-size: 0.95rem;

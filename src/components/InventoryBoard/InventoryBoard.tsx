@@ -1,11 +1,14 @@
 import type React from "react";
-import { useCharacterStore } from "../../store/useCharacterStore.ts";
+import {
+  useCharacterStore,
+} from "../../store/useCharacterStore.ts";
 import { useCharacterStats } from "../../hooks/useCharacterStats.ts";
 import { useMemo, useState } from "react";
 import { getAllItems, getItemById } from "../../data/staticDataApi.ts";
 import { TwoHandedWarningDialog } from "./TwoHandedWarningDialog/TwoHandedWarningDialog.tsx";
 import {
   AddItemModal,
+  type AddCustomGenericPayload,
   type AddCustomFromBasePayload,
   type AddItemFlowType,
   type AddItemPresetOption,
@@ -77,6 +80,9 @@ export const InventoryBoard: React.FC = () => {
   const createCustomItemInstance = useCharacterStore(
     (state) => state.createCustomItemInstance,
   );
+  const createCustomGenericItemInstance = useCharacterStore(
+    (state) => state.createCustomGenericItemInstance,
+  );
 
   const { encumbrance } = useCharacterStats();
   const [twoHandedWarningState, setTwoHandedWarningState] =
@@ -98,8 +104,35 @@ export const InventoryBoard: React.FC = () => {
         .map((instance) => {
           const itemData = getItemById(instance.baseItemId);
           if (!itemData) {
-            missingItemIds.push(instance.baseItemId);
-            return null;
+            if (!instance.isCustom) {
+              missingItemIds.push(instance.baseItemId);
+              return null;
+            }
+
+            const customShortDescription =
+              instance.overrides?.lore?.shortDescription ?? "Custom item.";
+            const customItemName =
+              instance.customName ?? instance.overrides?.name ?? "Custom Item";
+
+            return {
+              ...instance,
+              itemData: {
+                name: customItemName,
+                type: "gear" as const,
+                weight: instance.overrides?.weight ?? 0,
+                cpCost: instance.overrides?.cpCost ?? 0,
+                lore: {
+                  shortDescription: customShortDescription,
+                  fullText: instance.overrides?.lore?.fullText,
+                },
+                stacking: {
+                  mode: "instance" as const,
+                },
+                armorProperties: undefined,
+                weaponProperties: undefined,
+                magicItemProperties: undefined,
+              },
+            };
           }
 
           return { ...instance, itemData };
@@ -118,11 +151,15 @@ export const InventoryBoard: React.FC = () => {
               instance.itemData.name,
             type: instance.itemData.type,
             weight: instance.overrides?.weight ?? instance.itemData.weight,
-            cpCost: instance.itemData.cpCost,
+            cpCost: instance.overrides?.cpCost ?? instance.itemData.cpCost,
             stacking: instance.itemData.stacking,
             lore: {
-              shortDescription: instance.itemData.lore.shortDescription,
-              fullText: instance.itemData.lore.fullText,
+              shortDescription:
+                instance.overrides?.lore?.shortDescription ??
+                instance.itemData.lore.shortDescription,
+              fullText:
+                instance.overrides?.lore?.fullText ??
+                instance.itemData.lore.fullText,
             },
             armorProperties:
               instance.overrides?.armorProperties ??
@@ -332,6 +369,18 @@ export const InventoryBoard: React.FC = () => {
     closeAddItemModal();
   };
 
+  const confirmCustomGenericAdd = (payload: AddCustomGenericPayload) => {
+    createCustomGenericItemInstance({
+      name: payload.name,
+      shortDescription: payload.shortDescription,
+      fullDescription: payload.fullDescription,
+      weight: payload.weight,
+      cpCost: payload.cpCost,
+      quantity: payload.quantity,
+    });
+    closeAddItemModal();
+  };
+
   return (
     <>
       <InventoryBoardView
@@ -380,6 +429,7 @@ export const InventoryBoard: React.FC = () => {
         onSelectFlow={selectAddItemFlow}
         onConfirmPresetAdd={confirmPresetAdd}
         onConfirmCustomFromBaseAdd={confirmCustomFromBaseAdd}
+        onConfirmCustomGenericAdd={confirmCustomGenericAdd}
       />
     </>
   );

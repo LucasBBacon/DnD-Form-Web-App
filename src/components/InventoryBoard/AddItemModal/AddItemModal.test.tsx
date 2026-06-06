@@ -62,6 +62,7 @@ describe("AddItemModal", () => {
         onSelectFlow={vi.fn()}
         onConfirmPresetAdd={vi.fn()}
         onConfirmCustomFromBaseAdd={vi.fn()}
+        onConfirmCustomGenericAdd={vi.fn()}
       />,
     );
 
@@ -85,6 +86,7 @@ describe("AddItemModal", () => {
         onSelectFlow={vi.fn()}
         onConfirmPresetAdd={onConfirmPresetAdd}
         onConfirmCustomFromBaseAdd={vi.fn()}
+        onConfirmCustomGenericAdd={vi.fn()}
       />,
     );
 
@@ -116,6 +118,7 @@ describe("AddItemModal", () => {
         onSelectFlow={vi.fn()}
         onConfirmPresetAdd={vi.fn()}
         onConfirmCustomFromBaseAdd={vi.fn()}
+        onConfirmCustomGenericAdd={vi.fn()}
       />,
     );
 
@@ -139,6 +142,7 @@ describe("AddItemModal", () => {
         onSelectFlow={vi.fn()}
         onConfirmPresetAdd={vi.fn()}
         onConfirmCustomFromBaseAdd={onConfirmCustomFromBaseAdd}
+        onConfirmCustomGenericAdd={vi.fn()}
       />,
     );
 
@@ -163,5 +167,50 @@ describe("AddItemModal", () => {
         customName: "Longsword +1",
       }),
     );
+  });
+
+  it("submits fully custom generic item", async () => {
+    const user = userEvent.setup();
+    const onConfirmCustomGenericAdd = vi.fn();
+
+    render(
+      <AddItemModal
+        isOpen={true}
+        step="flow_details"
+        selectedFlow="custom_generic"
+        presetItems={PRESET_ITEMS}
+        onClose={vi.fn()}
+        onBack={vi.fn()}
+        onSelectFlow={vi.fn()}
+        onConfirmPresetAdd={vi.fn()}
+        onConfirmCustomFromBaseAdd={vi.fn()}
+        onConfirmCustomGenericAdd={onConfirmCustomGenericAdd}
+      />,
+    );
+
+    await user.type(screen.getByLabelText("Item Name"), "Trophy Skull");
+    await user.type(
+      screen.getByLabelText("Short Description"),
+      "A grim keepsake from an ancient crypt.",
+    );
+    await user.type(
+      screen.getByLabelText("Full Description (Optional)"),
+      "Etched with runes and wrapped in old bronze wire.",
+    );
+    await user.type(screen.getByLabelText("Weight (lb)"), "2.5");
+    await user.type(screen.getByLabelText("Value (cp)"), "125");
+    await user.clear(screen.getByLabelText("Quantity"));
+    await user.type(screen.getByLabelText("Quantity"), "2");
+
+    await user.click(screen.getByRole("button", { name: "Add Fully Custom Item" }));
+
+    expect(onConfirmCustomGenericAdd).toHaveBeenCalledWith({
+      name: "Trophy Skull",
+      shortDescription: "A grim keepsake from an ancient crypt.",
+      fullDescription: "Etched with runes and wrapped in old bronze wire.",
+      weight: 2.5,
+      cpCost: 125,
+      quantity: 2,
+    });
   });
 });

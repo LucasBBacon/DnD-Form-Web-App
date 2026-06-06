@@ -32,6 +32,15 @@ export interface AddCustomFromBasePayload {
   overrides?: ItemInstanceOverrides;
 }
 
+export interface AddCustomGenericPayload {
+  name: string;
+  shortDescription: string;
+  fullDescription?: string;
+  weight: number;
+  cpCost: number;
+  quantity: number;
+}
+
 export interface AddItemModalProps {
   isOpen: boolean;
   step: AddItemModalStep;
@@ -42,6 +51,7 @@ export interface AddItemModalProps {
   onSelectFlow: (flow: AddItemFlowType) => void;
   onConfirmPresetAdd: (itemId: string, quantity: number) => void;
   onConfirmCustomFromBaseAdd: (payload: AddCustomFromBasePayload) => void;
+  onConfirmCustomGenericAdd: (payload: AddCustomGenericPayload) => void;
 }
 
 const FLOW_TITLE: Record<AddItemFlowType, string> = {
@@ -69,6 +79,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
   onSelectFlow,
   onConfirmPresetAdd,
   onConfirmCustomFromBaseAdd,
+  onConfirmCustomGenericAdd,
 }) => {
   const [presetSearch, setPresetSearch] = useState("");
   const [selectedPresetItemId, setSelectedPresetItemId] = useState("");
@@ -82,6 +93,14 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
   const [customDamageDiceInput, setCustomDamageDiceInput] = useState("");
   const [customDamageTypeInput, setCustomDamageTypeInput] = useState("");
   const [customArmorBaseAcInput, setCustomArmorBaseAcInput] = useState("");
+  const [genericNameInput, setGenericNameInput] = useState("");
+  const [genericShortDescriptionInput, setGenericShortDescriptionInput] =
+    useState("");
+  const [genericFullDescriptionInput, setGenericFullDescriptionInput] =
+    useState("");
+  const [genericWeightInput, setGenericWeightInput] = useState("");
+  const [genericCpCostInput, setGenericCpCostInput] = useState("");
+  const [genericQuantityInput, setGenericQuantityInput] = useState("1");
 
   const filteredPresetItems = useMemo(() => {
     const normalizedSearch = presetSearch.trim().toLowerCase();
@@ -121,6 +140,11 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
   const normalizedCustomFromBaseQuantity = Math.max(
     1,
     Math.floor(Number(customFromBaseQuantityInput) || 1),
+  );
+
+  const normalizedGenericQuantity = Math.max(
+    1,
+    Math.floor(Number(genericQuantityInput) || 1),
   );
 
   const handleCustomBaseItemSelection = (nextBaseItemId: string) => {
@@ -164,9 +188,19 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     setCustomArmorBaseAcInput("");
   };
 
+  const resetCustomGenericForm = () => {
+    setGenericNameInput("");
+    setGenericShortDescriptionInput("");
+    setGenericFullDescriptionInput("");
+    setGenericWeightInput("");
+    setGenericCpCostInput("");
+    setGenericQuantityInput("1");
+  };
+
   const resetForms = () => {
     resetPresetForm();
     resetCustomFromBaseForm();
+    resetCustomGenericForm();
   };
 
   const handlePresetAdd = () => {
@@ -234,6 +268,29 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
     });
 
     resetCustomFromBaseForm();
+  };
+
+  const handleCustomGenericAdd = () => {
+    const trimmedName = genericNameInput.trim();
+    const trimmedShortDescription = genericShortDescriptionInput.trim();
+    const trimmedFullDescription = genericFullDescriptionInput.trim();
+    const parsedWeight = Number(genericWeightInput);
+    const parsedCpCost = Number(genericCpCostInput);
+
+    if (!trimmedName || !trimmedShortDescription) return;
+    if (!Number.isFinite(parsedWeight) || parsedWeight < 0) return;
+    if (!Number.isFinite(parsedCpCost) || parsedCpCost < 0) return;
+
+    onConfirmCustomGenericAdd({
+      name: trimmedName,
+      shortDescription: trimmedShortDescription,
+      fullDescription: trimmedFullDescription || undefined,
+      weight: parsedWeight,
+      cpCost: Math.floor(parsedCpCost),
+      quantity: normalizedGenericQuantity,
+    });
+
+    resetCustomGenericForm();
   };
 
   const handleClose = () => {
@@ -524,6 +581,118 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
                   onClick={handleCustomFromBaseAdd}
                 >
                   Add Custom Item
+                </button>
+              </div>
+            )}
+
+            {selectedFlow === "custom_generic" && (
+              <div className="inventory-preset-form">
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-name"
+                >
+                  Item Name
+                </label>
+                <input
+                  id="generic-item-name"
+                  className="inventory-modal-input"
+                  type="text"
+                  value={genericNameInput}
+                  onChange={(event) => setGenericNameInput(event.target.value)}
+                  placeholder="Custom item name"
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-short-description"
+                >
+                  Short Description
+                </label>
+                <input
+                  id="generic-item-short-description"
+                  className="inventory-modal-input"
+                  type="text"
+                  value={genericShortDescriptionInput}
+                  onChange={(event) =>
+                    setGenericShortDescriptionInput(event.target.value)
+                  }
+                  placeholder="One-line description"
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-full-description"
+                >
+                  Full Description (Optional)
+                </label>
+                <textarea
+                  id="generic-item-full-description"
+                  className="inventory-modal-input inventory-modal-textarea"
+                  value={genericFullDescriptionInput}
+                  onChange={(event) =>
+                    setGenericFullDescriptionInput(event.target.value)
+                  }
+                  placeholder="Longer notes about this custom item"
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-weight"
+                >
+                  Weight (lb)
+                </label>
+                <input
+                  id="generic-item-weight"
+                  className="inventory-modal-input inventory-modal-input-short"
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  value={genericWeightInput}
+                  onChange={(event) => setGenericWeightInput(event.target.value)}
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-cp-cost"
+                >
+                  Value (cp)
+                </label>
+                <input
+                  id="generic-item-cp-cost"
+                  className="inventory-modal-input inventory-modal-input-short"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  value={genericCpCostInput}
+                  onChange={(event) => setGenericCpCostInput(event.target.value)}
+                />
+
+                <label
+                  className="inventory-modal-field-label"
+                  htmlFor="generic-item-quantity"
+                >
+                  Quantity
+                </label>
+                <input
+                  id="generic-item-quantity"
+                  className="inventory-modal-input inventory-modal-input-short"
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  value={genericQuantityInput}
+                  onChange={(event) => setGenericQuantityInput(event.target.value)}
+                />
+
+                <button
+                  type="button"
+                  className="action-btn"
+                  onClick={handleCustomGenericAdd}
+                  disabled={
+                    genericNameInput.trim().length === 0 ||
+                    genericShortDescriptionInput.trim().length === 0
+                  }
+                >
+                  Add Fully Custom Item
                 </button>
               </div>
             )}

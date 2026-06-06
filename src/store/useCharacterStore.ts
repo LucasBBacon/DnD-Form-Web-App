@@ -51,6 +51,17 @@ export interface CreateCustomItemInstanceInput {
   overrides?: ItemInstanceOverrides;
 }
 
+export interface CreateCustomGenericItemInstanceInput {
+  name: string;
+  shortDescription: string;
+  fullDescription?: string;
+  weight: number;
+  cpCost: number;
+  quantity?: number;
+}
+
+export const CUSTOM_GENERIC_ITEM_BASE_ID = "item_custom_generic";
+
 // Represents a single instance of an item in the character's inventory, used for non-stackable items like weapons and armor that may have unique properties or custom names
 export type InventoryInstanceRecord = ItemInstanceData;
 
@@ -796,6 +807,10 @@ interface CharacterActions {
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
 
   createCustomItemInstance: (input: CreateCustomItemInstanceInput) => UUID[];
+
+  createCustomGenericItemInstance: (
+    input: CreateCustomGenericItemInstanceInput,
+  ) => UUID[];
 
   attuneInstance: (instanceId: UUID) => void;
 
@@ -2009,6 +2024,43 @@ export const useCharacterStore = create<CharacterStore>()(
           customName: normalizedCustomName,
           overrides: normalizedOverrides,
           createdFromCatalogBaseItemId: baseItemId,
+          isCustom: true,
+        }));
+
+        set((state) => ({
+          inventoryInstances: [...state.inventoryInstances, ...createdInstances],
+        }));
+
+        return createdInstances.map((instance) => instance.instanceId);
+      },
+
+      createCustomGenericItemInstance: ({
+        name,
+        shortDescription,
+        fullDescription,
+        weight,
+        cpCost,
+        quantity = 1,
+      }) => {
+        const normalizedQuantity = normalizeQuantity(quantity);
+        const normalizedName = name.trim();
+        const normalizedShortDescription = shortDescription.trim();
+        const normalizedFullDescription = fullDescription?.trim() || undefined;
+        const normalizedWeight = Math.max(0, weight);
+        const normalizedCpCost = Math.max(0, Math.floor(cpCost));
+
+        const createdInstances = Array.from({ length: normalizedQuantity }, () => ({
+          ...toInstanceRecord(CUSTOM_GENERIC_ITEM_BASE_ID),
+          customName: normalizedName,
+          overrides: {
+            name: normalizedName,
+            weight: normalizedWeight,
+            cpCost: normalizedCpCost,
+            lore: {
+              shortDescription: normalizedShortDescription,
+              fullText: normalizedFullDescription,
+            },
+          },
           isCustom: true,
         }));
 

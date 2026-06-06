@@ -45,6 +45,8 @@ const mockStoreActions = () => ({
   removeInventoryInstance: vi.fn(),
   removeInventoryItem: vi.fn(),
   addInventoryItem: vi.fn(),
+  createCustomItemInstance: vi.fn(),
+  createCustomGenericItemInstance: vi.fn(),
 });
 
 const mockWeapon = {
