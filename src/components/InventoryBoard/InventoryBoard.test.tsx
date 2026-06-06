@@ -6,14 +6,15 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import { useCharacterStats } from "../../hooks/useCharacterStats";
 import * as staticDataApi from "../../data/staticDataApi";
 import type { UUID } from "../../types/common";
+import type { ItemInstanceOverrides } from "../../types/item";
 
 vi.mock("../../store/useCharacterStore");
 vi.mock("../../hooks/useCharacterStats");
 vi.mock("../../data/staticDataApi");
-vi.mock("./ui/WealthTracker", () => ({
+vi.mock("./WealthTracker/WealthTracker", () => ({
   WealthTracker: () => <div data-testid="wealth-tracker">Wealth Tracker</div>,
 }));
-vi.mock("./ui/TwoHandedWarningDialog", () => ({
+vi.mock("./TwoHandedWarningDialog/TwoHandedWarningDialog", () => ({
   TwoHandedWarningDialog: ({ onConfirm }: { onConfirm: () => void }) => (
     <div data-testid="two-handed-dialog">
       <button onClick={onConfirm}>Confirm</button>
@@ -26,6 +27,8 @@ const mockStoreActions = () => ({
     instanceId: UUID;
     baseItemId: string;
     customName?: string;
+    overrides?: ItemInstanceOverrides;
+    isCustom?: boolean;
   }>,
   inventoryStacks: [] as Array<{
     stackId: UUID;
@@ -36,12 +39,16 @@ const mockStoreActions = () => ({
   equippedArmorInstanceId: null,
   equippedShieldInstanceId: null,
   attunedInstanceIds: [] as UUID[],
+  coinPurse: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
   equipWeaponInstance: vi.fn(),
   unequipWeaponInstance: vi.fn(),
   equipArmorInstance: vi.fn(),
   equipShieldInstance: vi.fn(),
   attuneInstance: vi.fn(),
   unattuneInstance: vi.fn(),
+  addCoins: vi.fn(),
+  removeCoins: vi.fn(),
+  consolidateCoins: vi.fn(),
   removeInventoryInstance: vi.fn(),
   removeInventoryItem: vi.fn(),
   addInventoryItem: vi.fn(),
@@ -93,11 +100,13 @@ const mockMagicItem = {
 const mockRations = {
   id: "adventuring_gear_rations",
   name: "Rations",
-  type: "adventuring_gear",
+  type: "gear",
   weight: 1,
   cpCost: 50,
   lore: { shortDescription: "One day of preserved food" },
 };
+
+const mockCatalogItems = [mockWeapon, mockMagicItem, mockRations];
 
 describe("InventoryBoard", () => {
   const setStoreMock = (store: Record<string, unknown>) => {
@@ -117,6 +126,9 @@ describe("InventoryBoard", () => {
       },
     } as never);
     vi.mocked(staticDataApi.getItemById).mockReturnValue(null);
+    vi.mocked(staticDataApi.getAllItems).mockReturnValue(
+      mockCatalogItems as never,
+    );
   });
 
   it("renders inventory board view", () => {
@@ -423,5 +435,107 @@ describe("InventoryBoard", () => {
       "adventuring_gear_rations",
       1,
     );
+  });
+
+  it("submits preset add flow through modal", async () => {
+    const user = userEvent.setup();
+    const store = mockStoreActions();
+    setStoreMock(store as unknown as Record<string, unknown>);
+
+    render(<InventoryBoard />);
+
+    await user.click(screen.getByRole("button", { name: /add inventory item/i }));
+    await user.click(screen.getByRole("button", { name: "Add Preset Item" }));
+    await user.selectOptions(screen.getByLabelText("Select Item"), "weapon_longsword");
+    await user.clear(screen.getByLabelText("Quantity"));
+    await user.type(screen.getByLabelText("Quantity"), "2");
+    await user.click(screen.getByRole("button", { name: "Add Selected Item" }));
+
+    expect(store.addInventoryItem).toHaveBeenCalledWith("weapon_longsword", 2);
+  });
+
+  it("submits custom-from-base flow through modal", async () => {
+    const user = userEvent.setup();
+    const store = mockStoreActions();
+    setStoreMock(store as unknown as Record<string, unknown>);
+
+    render(<InventoryBoard />);
+
+    await user.click(screen.getByRole("button", { name: /add inventory item/i }));
+    await user.click(screen.getByRole("button", { name: "Custom From Base" }));
+    await user.selectOptions(screen.getByLabelText("Base Item"), "weapon_longsword");
+    await user.type(screen.getByLabelText("Custom Name (Optional)"), "Knight Blade");
+    await user.clear(screen.getByLabelText("Quantity"));
+    await user.type(screen.getByLabelText("Quantity"), "2");
+    await user.clear(screen.getByLabelText("Weight Override (lb)"));
+    await user.type(screen.getByLabelText("Weight Override (lb)"), "4");
+    await user.clear(screen.getByLabelText("Weapon Damage Dice"));
+    await user.type(screen.getByLabelText("Weapon Damage Dice"), "1d10");
+    await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
+
+    expect(store.createCustomItemInstance).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baseItemId: "weapon_longsword",
+        quantity: 2,
+        customName: "Knight Blade",
+      }),
+    );
+  });
+
+  it("submits fully custom item flow through modal", async () => {
+    const user = userEvent.setup();
+    const store = mockStoreActions();
+    setStoreMock(store as unknown as Record<string, unknown>);
+
+    render(<InventoryBoard />);
+
+    await user.click(screen.getByRole("button", { name: /add inventory item/i }));
+    await user.click(screen.getByRole("button", { name: "Fully Custom Item" }));
+    await user.type(screen.getByLabelText("Item Name"), "Relic Fragment");
+    await user.type(
+      screen.getByLabelText("Short Description"),
+      "A chipped piece of an ancient monument.",
+    );
+    await user.type(screen.getByLabelText("Weight (lb)"), "1.2");
+    await user.type(screen.getByLabelText("Value (cp)"), "220");
+    await user.clear(screen.getByLabelText("Quantity"));
+    await user.type(screen.getByLabelText("Quantity"), "2");
+    await user.click(
+      screen.getByRole("button", { name: "Add Fully Custom Item" }),
+    );
+
+    expect(store.createCustomGenericItemInstance).toHaveBeenCalledWith({
+      name: "Relic Fragment",
+      shortDescription: "A chipped piece of an ancient monument.",
+      fullDescription: undefined,
+      weight: 1.2,
+      cpCost: 220,
+      quantity: 2,
+    });
+  });
+
+  it("hydrates custom unknown-base instance without missing reference warning", () => {
+    const store = mockStoreActions();
+    store.inventoryInstances = [
+      {
+        instanceId: "inst-custom" as UUID,
+        baseItemId: "item_custom_generic",
+        customName: "Artifact Scrap",
+        isCustom: true,
+        overrides: {
+          name: "Artifact Scrap",
+          weight: 0.5,
+          cpCost: 90,
+          lore: { shortDescription: "A mysterious remnant." },
+        },
+      },
+    ];
+    setStoreMock(store as unknown as Record<string, unknown>);
+    vi.mocked(staticDataApi.getItemById).mockReturnValue(null);
+
+    render(<InventoryBoard />);
+
+    expect(screen.getByText("Artifact Scrap")).toBeInTheDocument();
+    expect(screen.queryByText(/Missing equipment reference/i)).not.toBeInTheDocument();
   });
 });
