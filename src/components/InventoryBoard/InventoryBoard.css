@@ -34,6 +34,18 @@
   letter-spacing: 0.05em;
 }
 
+.inventory-toolbar-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.inventory-add-item-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .ornate-board-divider {
   border: 0;
   height: 3px;

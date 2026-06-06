@@ -564,6 +564,33 @@ describe("useCharacterStore inventory instance actions", () => {
     expect(new Set(ids).size).toBe(2);
   });
 
+  it("createCustomItemInstance creates custom instances with name and overrides", () => {
+    const ids = useCharacterStore.getState().createCustomItemInstance({
+      baseItemId: "item_weapon_club",
+      quantity: 2,
+      customName: "Spiked Club",
+      overrides: {
+        weight: 3,
+      },
+    });
+
+    const state = useCharacterStore.getState();
+    expect(ids).toHaveLength(2);
+
+    const created = state.inventoryInstances.filter((instance) =>
+      ids.includes(instance.instanceId),
+    );
+
+    expect(created).toHaveLength(2);
+    created.forEach((instance) => {
+      expect(instance.baseItemId).toBe("item_weapon_club");
+      expect(instance.customName).toBe("Spiked Club");
+      expect(instance.overrides?.weight).toBe(3);
+      expect(instance.isCustom).toBe(true);
+      expect(instance.createdFromCatalogBaseItemId).toBe("item_weapon_club");
+    });
+  });
+
   it("hydrateCharacter deduplicates instance records with identical instanceIds", () => {
     const sharedId = "test-uuid-dupe";
     useCharacterStore.getState().hydrateCharacter({

@@ -8,13 +8,13 @@ const createProps = (
   scenario: (typeof INVENTORY_BOARD_FIXTURES)[keyof typeof INVENTORY_BOARD_FIXTURES],
 ) => ({
   ...scenario,
-  wealthView: <div data-testid="wealth-placeholder">Wealth Placeholder</div>,
   onToggleWeaponEquip: vi.fn(),
   onToggleArmorEquip: vi.fn(),
   onToggleAttunement: vi.fn(),
   onDropInstance: vi.fn(),
   onStackIncrement: vi.fn(),
   onStackDecrement: vi.fn(),
+  onOpenAddItemModal: vi.fn(),
 });
 
 describe("InventoryBoardView", () => {
@@ -23,8 +23,18 @@ describe("InventoryBoardView", () => {
 
     render(<InventoryBoardView {...props} />);
 
-    expect(screen.getByText("No equipment.")).toBeInTheDocument();
-    expect(screen.getByText("Backpack is empty.")).toBeInTheDocument();
+    expect(screen.getByText("Your pack is empty.")).toBeInTheDocument();
+  });
+
+  it("calls add item callback", async () => {
+    const user = userEvent.setup();
+    const props = createProps(INVENTORY_BOARD_FIXTURES.empty);
+
+    render(<InventoryBoardView {...props} />);
+
+    await user.click(screen.getByRole("button", { name: /add item/i }));
+
+    expect(props.onOpenAddItemModal).toHaveBeenCalledTimes(1);
   });
 
   it("renders equipment and stack rows", () => {

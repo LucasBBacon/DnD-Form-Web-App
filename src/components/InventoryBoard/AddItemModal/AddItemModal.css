@@ -1,0 +1,110 @@
+.inventory-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  background: rgba(29, 24, 18, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.inventory-modal-shell {
+  width: min(560px, 100%);
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  padding: 1rem;
+}
+
+.inventory-modal-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.inventory-modal-title {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--ink-main);
+  font-size: 1.25rem;
+}
+
+.inventory-modal-close-btn {
+  border: 1px solid var(--border-filigree);
+  background: transparent;
+  color: var(--ink-main);
+  border-radius: 4px;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.inventory-modal-content {
+  margin-top: 0.75rem;
+}
+
+.inventory-modal-copy {
+  margin: 0;
+  color: var(--ink-main);
+}
+
+.inventory-modal-copy + .inventory-modal-copy {
+  margin-top: 0.5rem;
+}
+
+.inventory-modal-copy-muted {
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.inventory-flow-options-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.inventory-flow-option-btn {
+  justify-content: flex-start;
+}
+
+.inventory-modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.inventory-preset-form {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.inventory-modal-field-label {
+  font-size: 0.9rem;
+  color: var(--ink-main);
+}
+
+.inventory-modal-input,
+.inventory-modal-select {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border-filigree);
+  border-radius: 4px;
+  color: var(--ink-main);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.inventory-modal-input-short {
+  max-width: 7rem;
+}
+
+.inventory-modal-subsection-title {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+  font-family: var(--font-display);
+  color: var(--ink-main);
+}

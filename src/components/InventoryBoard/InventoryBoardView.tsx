@@ -115,6 +115,8 @@ export interface InventoryBoardViewProps {
   onStackIncrement: (baseItemId: string) => void;
   /** Callback for decrementing a stack of items */
   onStackDecrement: (baseItemId: string) => void;
+  /** Callback for opening add-item modal */
+  onOpenAddItemModal: () => void;
 }
 
 // #endregion
@@ -136,6 +138,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   onDropInstance,
   onStackIncrement,
   onStackDecrement,
+  onOpenAddItemModal,
 }) => {
   const formatItemCost = (cpCost: number): string =>
     formatCpAsMaxCoinValue(cpCost);
@@ -145,6 +148,18 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
       {/* Sticky Dashboard */}
       <div className="inventory-dashboard-sticky">
         <h2 className="manuscript-section-title">Inventory & Wealth</h2>
+
+        <div className="inventory-toolbar-row">
+          <button
+            type="button"
+            className="action-btn inventory-add-item-btn"
+            onClick={onOpenAddItemModal}
+            aria-label="Add inventory item"
+          >
+            <span aria-hidden="true">+</span>
+            Add Item
+          </button>
+        </div>
 
         <WealthTracker />
         <EncumbranceDisplay

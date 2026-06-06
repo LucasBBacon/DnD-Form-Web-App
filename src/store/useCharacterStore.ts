@@ -2,7 +2,11 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { Ability, Skill, UUID } from "../types/common";
 import type { FeatAcquisitionEntry } from "../types/feat";
-import type { ItemData, ItemInstanceData } from "../types/item";
+import type {
+  ItemData,
+  ItemInstanceData,
+  ItemInstanceOverrides,
+} from "../types/item";
 import type { LevelUpDraft } from "../types/levelUpDraft";
 import type { LevelChoice, LevelUpMode } from "../types/progression";
 import { getClassById, getItemById } from "../data/staticDataApi";
@@ -38,6 +42,13 @@ export interface InventoryStackRecord {
   baseItemId: string;
   // The quantity of items in this stack, used for stackable items like consumables or ammunition; should be a positive integer
   quantity: number;
+}
+
+export interface CreateCustomItemInstanceInput {
+  baseItemId: string;
+  quantity?: number;
+  customName?: string;
+  overrides?: ItemInstanceOverrides;
 }
 
 // Represents a single instance of an item in the character's inventory, used for non-stackable items like weapons and armor that may have unique properties or custom names
@@ -783,6 +794,8 @@ interface CharacterActions {
   ) => void;
 
   createItemInstance: (baseItemId: string, quantity?: number) => UUID[];
+
+  createCustomItemInstance: (input: CreateCustomItemInstanceInput) => UUID[];
 
   attuneInstance: (instanceId: UUID) => void;
 
@@ -1973,6 +1986,34 @@ export const useCharacterStore = create<CharacterStore>()(
             ...state.inventoryInstances,
             ...createdInstances,
           ],
+        }));
+
+        return createdInstances.map((instance) => instance.instanceId);
+      },
+
+      createCustomItemInstance: ({
+        baseItemId,
+        quantity = 1,
+        customName,
+        overrides,
+      }) => {
+        const normalizedQuantity = normalizeQuantity(quantity);
+        const normalizedCustomName = customName?.trim() || undefined;
+        const normalizedOverrides =
+          overrides && Object.keys(overrides).length > 0
+            ? overrides
+            : undefined;
+
+        const createdInstances = Array.from({ length: normalizedQuantity }, () => ({
+          ...toInstanceRecord(baseItemId),
+          customName: normalizedCustomName,
+          overrides: normalizedOverrides,
+          createdFromCatalogBaseItemId: baseItemId,
+          isCustom: true,
+        }));
+
+        set((state) => ({
+          inventoryInstances: [...state.inventoryInstances, ...createdInstances],
         }));
 
         return createdInstances.map((instance) => instance.instanceId);

@@ -2,8 +2,15 @@ import type React from "react";
 import { useCharacterStore } from "../../store/useCharacterStore.ts";
 import { useCharacterStats } from "../../hooks/useCharacterStats.ts";
 import { useMemo, useState } from "react";
-import { getItemById } from "../../data/staticDataApi.ts";
+import { getAllItems, getItemById } from "../../data/staticDataApi.ts";
 import { TwoHandedWarningDialog } from "./TwoHandedWarningDialog/TwoHandedWarningDialog.tsx";
+import {
+  AddItemModal,
+  type AddCustomFromBasePayload,
+  type AddItemFlowType,
+  type AddItemPresetOption,
+  type AddItemModalStep,
+} from "./AddItemModal/AddItemModal.tsx";
 import { canEquipTwoHandedWeapon } from "../../utils/equipmentValidator.ts";
 import {
   InventoryBoardView,
@@ -18,6 +25,12 @@ interface TwoHandedWarningState {
   conflictingShieldName: string | null;
   conflictingWeaponInstanceIds: string[];
   conflictingWeaponNames: string[];
+}
+
+interface AddItemModalState {
+  isOpen: boolean;
+  step: AddItemModalStep;
+  selectedFlow: AddItemFlowType | null;
 }
 
 // #region Component
@@ -61,10 +74,19 @@ export const InventoryBoard: React.FC = () => {
     (state) => state.removeInventoryItem,
   );
   const addInventoryItem = useCharacterStore((state) => state.addInventoryItem);
+  const createCustomItemInstance = useCharacterStore(
+    (state) => state.createCustomItemInstance,
+  );
 
   const { encumbrance } = useCharacterStats();
   const [twoHandedWarningState, setTwoHandedWarningState] =
     useState<TwoHandedWarningState | null>(null);
+  const [addItemModalState, setAddItemModalState] =
+    useState<AddItemModalState>({
+      isOpen: false,
+      step: "choose_flow",
+      selectedFlow: null,
+    });
 
   // #region Hydration
 
@@ -90,18 +112,27 @@ export const InventoryBoard: React.FC = () => {
           instanceId: instance.instanceId,
           baseItemId: instance.baseItemId,
           itemData: {
-            name: instance.itemData.name,
+            name:
+              instance.customName ??
+              instance.overrides?.name ??
+              instance.itemData.name,
             type: instance.itemData.type,
-            weight: instance.itemData.weight,
+            weight: instance.overrides?.weight ?? instance.itemData.weight,
             cpCost: instance.itemData.cpCost,
             stacking: instance.itemData.stacking,
             lore: {
               shortDescription: instance.itemData.lore.shortDescription,
               fullText: instance.itemData.lore.fullText,
             },
-            armorProperties: instance.itemData.armorProperties,
-            weaponProperties: instance.itemData.weaponProperties,
-            magicItemProperties: instance.itemData.magicItemProperties,
+            armorProperties:
+              instance.overrides?.armorProperties ??
+              instance.itemData.armorProperties,
+            weaponProperties:
+              instance.overrides?.weaponProperties ??
+              instance.itemData.weaponProperties,
+            magicItemProperties:
+              instance.overrides?.magicItemProperties ??
+              instance.itemData.magicItemProperties,
           },
         }));
 
@@ -152,6 +183,23 @@ export const InventoryBoard: React.FC = () => {
     () =>
       Array.from(new Set([...missingInstanceItemIds, ...missingStackItemIds])),
     [missingInstanceItemIds, missingStackItemIds],
+  );
+
+  const presetItems = useMemo<AddItemPresetOption[]>(
+    () =>
+      getAllItems()
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((item) => ({
+          id: item.id,
+          name: item.name,
+          type: item.type,
+          weight: item.weight,
+          armorProperties: item.armorProperties,
+          weaponProperties: item.weaponProperties,
+          magicItemProperties: item.magicItemProperties,
+        })),
+    [],
   );
 
   // #endregion
@@ -237,6 +285,53 @@ export const InventoryBoard: React.FC = () => {
     removeInventoryInstance(instanceId);
   };
 
+  const openAddItemModal = () => {
+    setAddItemModalState({
+      isOpen: true,
+      step: "choose_flow",
+      selectedFlow: null,
+    });
+  };
+
+  const closeAddItemModal = () => {
+    setAddItemModalState({
+      isOpen: false,
+      step: "choose_flow",
+      selectedFlow: null,
+    });
+  };
+
+  const selectAddItemFlow = (flow: AddItemFlowType) => {
+    setAddItemModalState({
+      isOpen: true,
+      step: "flow_details",
+      selectedFlow: flow,
+    });
+  };
+
+  const backToFlowSelection = () => {
+    setAddItemModalState((previous) => ({
+      ...previous,
+      step: "choose_flow",
+      selectedFlow: null,
+    }));
+  };
+
+  const confirmPresetAdd = (itemId: string, quantity: number) => {
+    addInventoryItem(itemId, quantity);
+    closeAddItemModal();
+  };
+
+  const confirmCustomFromBaseAdd = (payload: AddCustomFromBasePayload) => {
+    createCustomItemInstance({
+      baseItemId: payload.baseItemId,
+      quantity: payload.quantity,
+      customName: payload.customName,
+      overrides: payload.overrides,
+    });
+    closeAddItemModal();
+  };
+
   return (
     <>
       <InventoryBoardView
@@ -262,6 +357,7 @@ export const InventoryBoard: React.FC = () => {
         onStackIncrement={(baseItemId: string) =>
           addInventoryItem(baseItemId, 1)
         }
+        onOpenAddItemModal={openAddItemModal}
       />
 
       {twoHandedWarningState && (
@@ -273,6 +369,18 @@ export const InventoryBoard: React.FC = () => {
           onConfirm={confirmTwoHandedEquip}
         />
       )}
+
+      <AddItemModal
+        isOpen={addItemModalState.isOpen}
+        step={addItemModalState.step}
+        selectedFlow={addItemModalState.selectedFlow}
+        presetItems={presetItems}
+        onClose={closeAddItemModal}
+        onBack={backToFlowSelection}
+        onSelectFlow={selectAddItemFlow}
+        onConfirmPresetAdd={confirmPresetAdd}
+        onConfirmCustomFromBaseAdd={confirmCustomFromBaseAdd}
+      />
     </>
   );
 };
