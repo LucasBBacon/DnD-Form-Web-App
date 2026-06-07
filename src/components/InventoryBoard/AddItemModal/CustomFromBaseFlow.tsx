@@ -51,7 +51,6 @@ interface CustomFromBaseFlowProps {
 
 export const CustomFromBaseFlow: React.FC<CustomFromBaseFlowProps> = ({
   searchValue,
-  selectedBaseItemId,
   filteredBaseItems,
   selectedBaseItem,
   quantityInput,
@@ -131,6 +130,7 @@ export const CustomFromBaseFlow: React.FC<CustomFromBaseFlowProps> = ({
           <span className="locked-name">{selectedBaseItem.name}</span>
         </div>
         <button
+          type="button"
           className="action-btn cancel-btn"
           onClick={() => onSelectBaseItem("")}
         >
@@ -246,6 +246,7 @@ export const CustomFromBaseFlow: React.FC<CustomFromBaseFlowProps> = ({
           />
         </div>
         <button
+          type="button"
           className="action-btn confirm-add-btn"
           onClick={onSubmit}
           disabled={submitDisabled}

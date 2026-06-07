@@ -80,6 +80,7 @@ export const WeaponPropertiesEditor: React.FC<WeaponPropertiesEditorProps> = ({
             const isActive = selectedPropertyIds.includes(prop.id);
             return (
               <button
+                type="button"
                 key={prop.id}
                 className={`property-pill ${isActive ? "is-active" : ""}`}
                 onClick={() => onToggleProperty(prop.id)}

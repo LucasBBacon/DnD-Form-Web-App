@@ -52,6 +52,7 @@ export const PresetItemFlow: React.FC<PresetItemFlowProps> = ({
             const isSelected = item.id === selectedItemId;
             return (
               <button
+                type="button"
                 key={item.id}
                 className={`ledger-item-row ${isSelected ? "is-selected" : ""}`}
                 onClick={() => onSelectedItemChange(item.id)}
@@ -97,6 +98,7 @@ export const PresetItemFlow: React.FC<PresetItemFlowProps> = ({
         </div>
 
         <button
+          type="button"
           className="action-btn confirm-add-btn"
           onClick={onSubmit}
           disabled={submitDisabled}

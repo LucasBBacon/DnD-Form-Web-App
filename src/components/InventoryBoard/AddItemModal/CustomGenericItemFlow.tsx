@@ -136,6 +136,7 @@ export const CustomGenericItemFlow: React.FC<CustomGenericItemFlowProps> = ({
           </div>
 
           <button
+            type="button"
             className="action-btn confirm-add-btn"
             onClick={onSubmit}
             disabled={submitDisabled}

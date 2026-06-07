@@ -83,9 +83,9 @@ describe("AddItemModal", () => {
       />,
     );
 
-    expect(screen.getByText("Add Preset Item")).toBeInTheDocument();
-    expect(screen.getByText("Custom From Base")).toBeInTheDocument();
-    expect(screen.getByText("Fully Custom Item")).toBeInTheDocument();
+    expect(screen.getByText("Standard Equipment")).toBeInTheDocument();
+    expect(screen.getByText("Modify Base Item")).toBeInTheDocument();
+    expect(screen.getByText("Custom Item")).toBeInTheDocument();
   });
 
   it("submits preset add with selected item and quantity", async () => {
@@ -107,18 +107,12 @@ describe("AddItemModal", () => {
       />,
     );
 
-    await user.type(
-      screen.getByLabelText("Search Preset Items"),
-      "long",
-    );
-    await user.selectOptions(
-      screen.getByLabelText("Select Item"),
-      "item_longsword",
-    );
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "3");
+    await user.type(screen.getByPlaceholderText(/search the ledger/i), "long");
+    await user.click(screen.getByRole("button", { name: /longsword/i }));
+    await user.clear(screen.getByLabelText("Qty:"));
+    await user.type(screen.getByLabelText("Qty:"), "3");
 
-    await user.click(screen.getByRole("button", { name: "Add Selected Item" }));
+    await user.click(screen.getByRole("button", { name: /add to inventory/i }));
 
     expect(onConfirmPresetAdd).toHaveBeenCalledWith("item_longsword", 3);
   });
@@ -140,7 +134,7 @@ describe("AddItemModal", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: "Add Selected Item" }),
+      screen.getByRole("button", { name: /add to inventory/i }),
     ).toBeDisabled();
   });
 
@@ -163,39 +157,34 @@ describe("AddItemModal", () => {
       />,
     );
 
-    await user.selectOptions(
-      screen.getByLabelText("Base Item"),
-      "item_longsword",
-    );
-    await user.type(screen.getByLabelText("Custom Name (Optional)"), "Longsword +1");
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "2");
-    await user.clear(screen.getByLabelText("Weight Override (lb)"));
-    await user.type(screen.getByLabelText("Weight Override (lb)"), "4");
-    await user.clear(screen.getByLabelText("Custom Value (cp)"));
-    await user.type(screen.getByLabelText("Custom Value (cp)"), "2500");
-    await user.clear(screen.getByLabelText("Custom Short Description"));
+    await user.click(screen.getByRole("button", { name: /longsword/i }));
+    await user.type(screen.getByPlaceholderText("Custom Longsword"), "Longsword +1");
+    await user.clear(screen.getByPlaceholderText("3 lb"));
+    await user.type(screen.getByPlaceholderText("3 lb"), "4");
+    await user.clear(screen.getByPlaceholderText("1500 cp"));
+    await user.type(screen.getByPlaceholderText("1500 cp"), "2500");
+    await user.clear(screen.getByPlaceholderText("Override short description..."));
     await user.type(
-      screen.getByLabelText("Custom Short Description"),
+      screen.getByPlaceholderText("Override short description..."),
       "A reforged knightly blade.",
     );
-    await user.clear(screen.getByLabelText("Custom Full Description"));
+    await user.clear(screen.getByPlaceholderText("Override detailed description..."));
     await user.type(
-      screen.getByLabelText("Custom Full Description"),
+      screen.getByPlaceholderText("Override detailed description..."),
       "Rebalanced and etched with a personal crest.",
     );
-    await user.clear(screen.getByLabelText("Weapon Damage Dice"));
-    await user.type(screen.getByLabelText("Weapon Damage Dice"), "1d10");
-    await user.clear(screen.getByLabelText("Weapon Range"));
-    await user.type(screen.getByLabelText("Weapon Range"), "10 ft");
-    await user.click(screen.getByLabelText("Finesse"));
+    await user.clear(screen.getByPlaceholderText("e.g., 1d8"));
+    await user.type(screen.getByPlaceholderText("e.g., 1d8"), "1d10");
+    await user.clear(screen.getByPlaceholderText("e.g., 20/60 or 5ft"));
+    await user.type(screen.getByPlaceholderText("e.g., 20/60 or 5ft"), "10 ft");
+    await user.click(screen.getByRole("button", { name: "Finesse" }));
 
-    await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
+    await user.click(screen.getByRole("button", { name: /forge & add/i }));
 
     expect(onConfirmCustomFromBaseAdd).toHaveBeenCalledWith(
       {
         baseItemId: "item_longsword",
-        quantity: 2,
+        quantity: 1,
         customName: "Longsword +1",
         overrides: expect.objectContaining({
           weight: 4,
@@ -233,15 +222,12 @@ describe("AddItemModal", () => {
       />,
     );
 
-    await user.selectOptions(
-      screen.getByLabelText("Base Item"),
-      "item_chain_mail",
-    );
-    await user.clear(screen.getByLabelText("Strength Requirement"));
-    await user.type(screen.getByLabelText("Strength Requirement"), "15");
-    await user.click(screen.getByLabelText("Stealth Disadvantage"));
+    await user.click(screen.getByRole("button", { name: /chain mail/i }));
+    await user.clear(screen.getByPlaceholderText("e.g., 13"));
+    await user.type(screen.getByPlaceholderText("e.g., 13"), "15");
+    await user.click(screen.getByRole("checkbox"));
 
-    await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
+    await user.click(screen.getByRole("button", { name: /forge & add/i }));
 
     expect(onConfirmCustomFromBaseAdd).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -276,20 +262,17 @@ describe("AddItemModal", () => {
     );
 
     await user.type(screen.getByLabelText("Item Name"), "Trophy Skull");
-    await user.type(
-      screen.getByLabelText("Short Description"),
-      "A grim keepsake from an ancient crypt.",
-    );
+    await user.type(screen.getByLabelText("Brief Description"), "A grim keepsake from an ancient crypt.");
     await user.type(
       screen.getByLabelText("Full Description (Optional)"),
       "Etched with runes and wrapped in old bronze wire.",
     );
-    await user.type(screen.getByLabelText("Weight (lb)"), "2.5");
-    await user.type(screen.getByLabelText("Value (cp)"), "125");
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "2");
+    await user.type(screen.getByLabelText("Weight (lbs)"), "2.5");
+    await user.type(screen.getByLabelText("Value (in CP)"), "125");
+    await user.clear(screen.getByLabelText("Qty:"));
+    await user.type(screen.getByLabelText("Qty:"), "2");
 
-    await user.click(screen.getByRole("button", { name: "Add Fully Custom Item" }));
+    await user.click(screen.getByRole("button", { name: /create & add item/i }));
 
     expect(onConfirmCustomGenericAdd).toHaveBeenCalledWith({
       name: "Trophy Skull",

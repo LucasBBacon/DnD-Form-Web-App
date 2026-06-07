@@ -12,7 +12,11 @@ export const AddItemFlowSelector: React.FC<AddItemFlowSelectorProps> = ({
 }) => {
   return (
     <div className="flow-selector-grid">
-      <button className="flow-card" onClick={() => onSelectFlow("preset")}>
+      <button
+        type="button"
+        className="flow-card"
+        onClick={() => onSelectFlow("preset")}
+      >
         <div className="flow-icon-wrapper">
           <PackageSearch size={24} />
         </div>
@@ -23,6 +27,7 @@ export const AddItemFlowSelector: React.FC<AddItemFlowSelectorProps> = ({
       </button>
 
       <button
+        type="button"
         className="flow-card"
         onClick={() => onSelectFlow("custom_from_base")}
       >
@@ -37,6 +42,7 @@ export const AddItemFlowSelector: React.FC<AddItemFlowSelectorProps> = ({
       </button>
 
       <button
+        type="button"
         className="flow-card"
         onClick={() => onSelectFlow("custom_generic")}
       >

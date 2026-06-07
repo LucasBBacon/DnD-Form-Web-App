@@ -5,6 +5,7 @@ import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
 import { InventoryLedgerCard } from "./InventoryLedgerCard/InventoryLedgerCard";
 import type { ItemStackingRules, WeaponProperties } from "../../types/item";
 import { WealthTracker } from "./WealthTracker/WealthTracker";
+import { Plus } from "lucide-react";
 
 // #region Interfaces
 
@@ -149,24 +150,21 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
       <div className="inventory-dashboard-sticky">
         <h2 className="manuscript-section-title">Inventory & Wealth</h2>
 
-        <div className="inventory-toolbar-row">
-          <button
-            type="button"
-            className="action-btn inventory-add-item-btn"
-            onClick={onOpenAddItemModal}
-            aria-label="Add inventory item"
-          >
-            <span aria-hidden="true">+</span>
-            Add Item
-          </button>
-        </div>
-
         <WealthTracker />
         <EncumbranceDisplay
           totalWeight={encumbrance.totalWeight}
           capacity={encumbrance.capacity}
           isEncumbered={encumbrance.isEncumbered}
         />
+
+        <button
+          type="button"
+          className="action-btn requisition-btn"
+          onClick={onOpenAddItemModal}
+          aria-label="Add inventory item"
+        >
+          <Plus size={16} /> Add Item
+        </button>
 
         <hr className="ornate-board-divider" />
       </div>

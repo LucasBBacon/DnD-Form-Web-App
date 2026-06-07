@@ -129,6 +129,7 @@ describe("InventoryBoard", () => {
     vi.mocked(staticDataApi.getAllItems).mockReturnValue(
       mockCatalogItems as never,
     );
+    vi.mocked(staticDataApi.getAllWeaponProperties).mockReturnValue([] as never);
   });
 
   it("renders inventory board view", () => {
@@ -445,11 +446,11 @@ describe("InventoryBoard", () => {
     render(<InventoryBoard />);
 
     await user.click(screen.getByRole("button", { name: /add inventory item/i }));
-    await user.click(screen.getByRole("button", { name: "Add Preset Item" }));
-    await user.selectOptions(screen.getByLabelText("Select Item"), "weapon_longsword");
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "2");
-    await user.click(screen.getByRole("button", { name: "Add Selected Item" }));
+    await user.click(screen.getByRole("button", { name: /standard equipment/i }));
+    await user.click(screen.getByRole("button", { name: /longsword/i }));
+    await user.clear(screen.getByLabelText("Qty:"));
+    await user.type(screen.getByLabelText("Qty:"), "2");
+    await user.click(screen.getByRole("button", { name: /add to inventory/i }));
 
     expect(store.addInventoryItem).toHaveBeenCalledWith("weapon_longsword", 2);
   });
@@ -462,21 +463,19 @@ describe("InventoryBoard", () => {
     render(<InventoryBoard />);
 
     await user.click(screen.getByRole("button", { name: /add inventory item/i }));
-    await user.click(screen.getByRole("button", { name: "Custom From Base" }));
-    await user.selectOptions(screen.getByLabelText("Base Item"), "weapon_longsword");
-    await user.type(screen.getByLabelText("Custom Name (Optional)"), "Knight Blade");
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "2");
-    await user.clear(screen.getByLabelText("Weight Override (lb)"));
-    await user.type(screen.getByLabelText("Weight Override (lb)"), "4");
-    await user.clear(screen.getByLabelText("Weapon Damage Dice"));
-    await user.type(screen.getByLabelText("Weapon Damage Dice"), "1d10");
-    await user.click(screen.getByRole("button", { name: "Add Custom Item" }));
+    await user.click(screen.getByRole("button", { name: /modify base item/i }));
+    await user.click(screen.getByRole("button", { name: /longsword/i }));
+    await user.type(screen.getByPlaceholderText("Custom Longsword"), "Knight Blade");
+    await user.clear(screen.getByPlaceholderText("3 lb"));
+    await user.type(screen.getByPlaceholderText("3 lb"), "4");
+    await user.clear(screen.getByPlaceholderText("e.g., 1d8"));
+    await user.type(screen.getByPlaceholderText("e.g., 1d8"), "1d10");
+    await user.click(screen.getByRole("button", { name: /forge & add/i }));
 
     expect(store.createCustomItemInstance).toHaveBeenCalledWith(
       expect.objectContaining({
         baseItemId: "weapon_longsword",
-        quantity: 2,
+        quantity: 1,
         customName: "Knight Blade",
       }),
     );
@@ -490,18 +489,18 @@ describe("InventoryBoard", () => {
     render(<InventoryBoard />);
 
     await user.click(screen.getByRole("button", { name: /add inventory item/i }));
-    await user.click(screen.getByRole("button", { name: "Fully Custom Item" }));
+    await user.click(screen.getByRole("button", { name: /custom item/i }));
     await user.type(screen.getByLabelText("Item Name"), "Relic Fragment");
     await user.type(
-      screen.getByLabelText("Short Description"),
+      screen.getByLabelText("Brief Description"),
       "A chipped piece of an ancient monument.",
     );
-    await user.type(screen.getByLabelText("Weight (lb)"), "1.2");
-    await user.type(screen.getByLabelText("Value (cp)"), "220");
-    await user.clear(screen.getByLabelText("Quantity"));
-    await user.type(screen.getByLabelText("Quantity"), "2");
+    await user.type(screen.getByLabelText("Weight (lbs)"), "1.2");
+    await user.type(screen.getByLabelText("Value (in CP)"), "220");
+    await user.clear(screen.getByLabelText("Qty:"));
+    await user.type(screen.getByLabelText("Qty:"), "2");
     await user.click(
-      screen.getByRole("button", { name: "Add Fully Custom Item" }),
+      screen.getByRole("button", { name: /create & add item/i }),
     );
 
     expect(store.createCustomGenericItemInstance).toHaveBeenCalledWith({
