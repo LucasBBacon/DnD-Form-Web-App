@@ -1,8 +1,10 @@
 import type React from "react";
+import "./AddItemModal.css";
 import type { WeaponPropertyId } from "../../../types/item";
 import type { AddItemPresetOption } from "./AddItemModal";
 import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor";
 import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor";
+import { ArrowLeft, Coins, PenTool, Scale, Search } from "lucide-react";
 
 interface WeaponPropertyOption {
   id: WeaponPropertyId;
@@ -84,151 +86,173 @@ export const CustomFromBaseFlow: React.FC<CustomFromBaseFlowProps> = ({
   onSubmit,
   submitDisabled,
 }) => {
+  if (!selectedBaseItem) {
+    return (
+      <div className="preset-flow-container">
+        <div className="requisition-search-bar">
+          <Search size={18} className="search-icon" />
+          <input
+            type="text"
+            className="manuscript-input full-width"
+            placeholder="Search for a base item to modify..."
+            value={searchValue}
+            onChange={(e) => onSearchChange(e.target.value)}
+            autoFocus
+          />
+        </div>
+
+        <div className="requisition-ledger-list custom-scrollbar">
+          {filteredBaseItems.map((item) => (
+            <button
+              key={item.id}
+              className="ledger-item-row"
+              onClick={() => onSelectBaseItem(item.id)}
+            >
+              <div className="row-primary">
+                <span className="item-name">{item.name}</span>
+                <span className="item-type">{item.type}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const isWeapon = !!selectedBaseItem.weaponProperties;
+  const isArmor = !!selectedBaseItem.armorProperties;
+
   return (
-    <div className="inventory-preset-form">
-      <label className="inventory-modal-field-label" htmlFor="custom-base-search">
-        Search Base Items
-      </label>
-      <input
-        id="custom-base-search"
-        className="inventory-modal-input"
-        type="text"
-        value={searchValue}
-        onChange={(event) => onSearchChange(event.target.value)}
-        placeholder="Search by base item name"
-      />
+    <div className="custom-from-base-container">
+      {/* BASE ITEM HEADER (locked) */}
+      <div className="base-item-locked-header">
+        <div className="locked-info">
+          <span className="locked-label">Forging from Base:</span>
+          <span className="locked-name">{selectedBaseItem.name}</span>
+        </div>
+        <button
+          className="action-btn cancel-btn"
+          onClick={() => onSelectBaseItem("")}
+        >
+          <ArrowLeft size={14} /> Change Base
+        </button>
+      </div>
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-base-item-select"
-      >
-        Base Item
-      </label>
-      <select
-        id="custom-base-item-select"
-        className="inventory-modal-select"
-        value={selectedBaseItemId}
-        onChange={(event) => onSelectBaseItem(event.target.value)}
-      >
-        <option value="">Choose a base item...</option>
-        {filteredBaseItems.map((item) => (
-          <option key={item.id} value={item.id}>
-            {item.name} ({item.type})
-          </option>
-        ))}
-      </select>
+      {/* Scrollable Form Area */}
+      <div className="generic-form-scroll-area custom-scrollbar">
+        {/* Core overrides */}
+        <div className="form-section">
+          <label className="manuscript-label">Custom Name</label>
+          <input
+            type="text"
+            className="manuscript-input pristine-input"
+            placeholder={`Custom ${selectedBaseItem.name}`}
+            value={customNameInput}
+            onChange={(e) => onCustomNameChange(e.target.value)}
+          />
+        </div>
 
-      <label className="inventory-modal-field-label" htmlFor="custom-item-name">
-        Custom Name (Optional)
-      </label>
-      <input
-        id="custom-item-name"
-        className="inventory-modal-input"
-        type="text"
-        value={customNameInput}
-        onChange={(event) => onCustomNameChange(event.target.value)}
-        placeholder="Leave blank to use base item name"
-      />
+        <div className="form-row-grid">
+          <div className="form-section">
+            <label className="manuscript-label">
+              <Scale size={14} /> Override Weight
+            </label>
+            <input
+              type="number"
+              className="manuscript-input"
+              placeholder={`${selectedBaseItem.weight} lb`}
+              value={customWeightInput}
+              onChange={(e) => onCustomWeightChange(e.target.value)}
+            />
+          </div>
 
-      <label className="inventory-modal-field-label" htmlFor="custom-item-quantity">
-        Quantity
-      </label>
-      <input
-        id="custom-item-quantity"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={1}
-        value={quantityInput}
-        onChange={(event) => onQuantityChange(event.target.value)}
-      />
+          <div className="form-section">
+            <label className="manuscript-label">
+              <Coins size={14} /> Override Cost (Cp)
+            </label>
+            <input
+              type="number"
+              className="manuscript-input"
+              placeholder={`${selectedBaseItem.cpCost} cp`}
+              value={customCpCostInput}
+              onChange={(e) => onCustomCpCostChange(e.target.value)}
+            />
+          </div>
+        </div>
 
-      <label className="inventory-modal-field-label" htmlFor="custom-item-weight">
-        Weight Override (lb)
-      </label>
-      <input
-        id="custom-item-weight"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="decimal"
-        min={0}
-        value={customWeightInput}
-        onChange={(event) => onCustomWeightChange(event.target.value)}
-      />
+        <hr className="filigree-divider subtle-divider" />
 
-      <label className="inventory-modal-field-label" htmlFor="custom-item-cp-cost">
-        Custom Value (cp)
-      </label>
-      <input
-        id="custom-item-cp-cost"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={0}
-        value={customCpCostInput}
-        onChange={(event) => onCustomCpCostChange(event.target.value)}
-      />
+        {/* Conditional Editors */}
+        {isWeapon && (
+          <WeaponPropertiesEditor
+            damageDiceInput={customDamageDiceInput}
+            damageTypeInput={customDamageTypeInput}
+            rangeInput={customWeaponRangeInput}
+            selectedPropertyIds={customWeaponPropertyIds}
+            weaponPropertyCatalog={weaponPropertyCatalog}
+            onDamageDiceChange={onCustomDamageDiceChange}
+            onDamageTypeChange={onCustomDamageTypeChange}
+            onRangeChange={onCustomWeaponRangeChange}
+            onToggleProperty={onToggleWeaponProperty}
+          />
+        )}
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-item-short-description"
-      >
-        Custom Short Description
-      </label>
-      <input
-        id="custom-item-short-description"
-        className="inventory-modal-input"
-        type="text"
-        value={customShortDescriptionInput}
-        onChange={(event) => onCustomShortDescriptionChange(event.target.value)}
-      />
+        {isArmor && (
+          <ArmorPropertiesEditor
+            baseAcInput={customArmorBaseAcInput}
+            strengthRequirementInput={customArmorStrengthRequirementInput}
+            stealthDisadvantage={customArmorStealthDisadvantage}
+            onBaseAcChange={onCustomArmorBaseAcChange}
+            onStrengthRequirementChange={onCustomArmorStrengthRequirementChange}
+            onStealthDisadvantageChange={onCustomArmorStealthDisadvantageChange}
+          />
+        )}
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-item-full-description"
-      >
-        Custom Full Description
-      </label>
-      <textarea
-        id="custom-item-full-description"
-        className="inventory-modal-input inventory-modal-textarea"
-        value={customFullDescriptionInput}
-        onChange={(event) => onCustomFullDescriptionChange(event.target.value)}
-      />
+        <hr className="filigree-divider subtle-divider" />
 
-      {selectedBaseItem?.weaponProperties && (
-        <WeaponPropertiesEditor
-          damageDiceInput={customDamageDiceInput}
-          damageTypeInput={customDamageTypeInput}
-          rangeInput={customWeaponRangeInput}
-          selectedPropertyIds={customWeaponPropertyIds}
-          weaponPropertyCatalog={weaponPropertyCatalog}
-          onDamageDiceChange={onCustomDamageDiceChange}
-          onDamageTypeChange={onCustomDamageTypeChange}
-          onRangeChange={onCustomWeaponRangeChange}
-          onToggleProperty={onToggleWeaponProperty}
-        />
-      )}
+        {/* Lore Overrides */}
+        <div className="form-section">
+          <label className="manuscript-label">Custom Brief Lore</label>
+          <input
+            type="text"
+            className="manuscript-input"
+            placeholder="Override short description..."
+            value={customShortDescriptionInput}
+            onChange={(e) => onCustomShortDescriptionChange(e.target.value)}
+          />
+        </div>
 
-      {selectedBaseItem?.armorProperties && (
-        <ArmorPropertiesEditor
-          baseAcInput={customArmorBaseAcInput}
-          strengthRequirementInput={customArmorStrengthRequirementInput}
-          stealthDisadvantage={customArmorStealthDisadvantage}
-          onBaseAcChange={onCustomArmorBaseAcChange}
-          onStrengthRequirementChange={onCustomArmorStrengthRequirementChange}
-          onStealthDisadvantageChange={onCustomArmorStealthDisadvantageChange}
-        />
-      )}
+        <div className="form-section">
+          <label className="manuscript-label">Custom Full Lore</label>
+          <textarea
+            className="manuscript-textarea"
+            placeholder="Override detailed description..."
+            value={customFullDescriptionInput}
+            onChange={(e) => onCustomFullDescriptionChange(e.target.value)}
+          />
+        </div>
+      </div>
 
-      <button
-        type="button"
-        className="action-btn"
-        disabled={submitDisabled}
-        onClick={onSubmit}
-      >
-        Add Custom Item
-      </button>
+      {/* Footer */}
+      <div className="requisition-footer">
+        <div className="quantity-control">
+          <label>Qty:</label>
+          <input
+            type="number"
+            className="manuscript-input quantity-input"
+            value={quantityInput}
+            onChange={(e) => onQuantityChange(e.target.value)}
+            min="1"
+          />
+        </div>
+        <button
+          className="action-btn confirm-add-btn"
+          onClick={onSubmit}
+          disabled={submitDisabled}
+        >
+          <PenTool size={16} /> Forge & Add
+        </button>
+      </div>
     </div>
   );
 };

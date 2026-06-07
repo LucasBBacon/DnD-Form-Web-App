@@ -1,4 +1,6 @@
 import type React from "react";
+import "./AddItemModal.css";
+import { EyeOff, Shield } from "lucide-react";
 
 interface ArmorPropertiesEditorProps {
   baseAcInput: string;
@@ -18,45 +20,49 @@ export const ArmorPropertiesEditor: React.FC<ArmorPropertiesEditorProps> = ({
   onStealthDisadvantageChange,
 }) => {
   return (
-    <>
-      <label className="inventory-modal-field-label" htmlFor="custom-armor-base-ac">
-        Armor Base AC
-      </label>
-      <input
-        id="custom-armor-base-ac"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={1}
-        value={baseAcInput}
-        onChange={(event) => onBaseAcChange(event.target.value)}
-      />
+    <div className="properties-editor-panel">
+      <div className="panel-header">
+        <Shield size={16} className="panel-icon" />
+        <span className="panel-title">Armor Properties</span>
+      </div>
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-armor-strength-requirement"
-      >
-        Strength Requirement
-      </label>
-      <input
-        id="custom-armor-strength-requirement"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={0}
-        step={1}
-        value={strengthRequirementInput}
-        onChange={(event) => onStrengthRequirementChange(event.target.value)}
-      />
+      <div className="form-row-grid">
+        <div className="form-section">
+          <label className="manuscript-label">Base AC</label>
+          <input
+            type="number"
+            className="manuscript-input"
+            placeholder="11"
+            value={baseAcInput}
+            onChange={(e) => onBaseAcChange(e.target.value)}
+            min="1"
+          />
+        </div>
 
-      <label className="inventory-checkbox-option">
-        <input
-          type="checkbox"
-          checked={stealthDisadvantage}
-          onChange={(event) => onStealthDisadvantageChange(event.target.checked)}
-        />
-        <span>Stealth Disadvantage</span>
-      </label>
-    </>
+        <div className="form-section">
+          <label className="manuscript-label">Strength Req.</label>
+          <input
+            type="number"
+            className="manuscript-input"
+            placeholder="e.g., 13"
+            value={strengthRequirementInput}
+            onChange={(e) => onStrengthRequirementChange(e.target.value)}
+            min="0"
+          />
+        </div>
+      </div>
+
+      <div className="form-section checkbox-section">
+        <label className="manuscript-checkbox-label">
+          <input
+            type="checkbox"
+            checked={stealthDisadvantage}
+            onChange={(e) => onStealthDisadvantageChange(e.target.checked)}
+          />
+          <EyeOff size={16} className="checkbox-icon" />
+          Imposes Disadvantage on Stealth
+        </label>
+      </div>
+    </div>
   );
 };

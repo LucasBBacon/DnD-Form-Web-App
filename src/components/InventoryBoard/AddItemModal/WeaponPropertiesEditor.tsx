@@ -1,5 +1,7 @@
 import type React from "react";
+import "./AddItemModal.css";
 import type { WeaponPropertyId } from "../../../types/item";
+import { Sword } from "lucide-react";
 
 interface WeaponPropertyOption {
   id: WeaponPropertyId;
@@ -30,59 +32,64 @@ export const WeaponPropertiesEditor: React.FC<WeaponPropertiesEditorProps> = ({
   onToggleProperty,
 }) => {
   return (
-    <>
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-weapon-damage-dice"
-      >
-        Weapon Damage Dice
-      </label>
-      <input
-        id="custom-weapon-damage-dice"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="text"
-        value={damageDiceInput}
-        onChange={(event) => onDamageDiceChange(event.target.value)}
-      />
-
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="custom-weapon-damage-type"
-      >
-        Weapon Damage Type
-      </label>
-      <input
-        id="custom-weapon-damage-type"
-        className="inventory-modal-input"
-        type="text"
-        value={damageTypeInput}
-        onChange={(event) => onDamageTypeChange(event.target.value)}
-      />
-
-      <label className="inventory-modal-field-label" htmlFor="custom-weapon-range">
-        Weapon Range
-      </label>
-      <input
-        id="custom-weapon-range"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="text"
-        value={rangeInput}
-        onChange={(event) => onRangeChange(event.target.value)}
-      />
-
-      <span className="inventory-modal-field-label">Weapon Properties</span>
-      <div className="inventory-weapon-property-grid">
-        {weaponPropertyCatalog.map((property) => (
-          <label key={property.id} className="inventory-checkbox-option">
-            <input
-              type="checkbox"
-              checked={selectedPropertyIds.includes(property.id)}
-              onChange={() => onToggleProperty(property.id)}
-            />
-            <span>{property.name}</span>
-          </label>
-        ))}
+    <div className="properties-editor-panel">
+      <div className="panel-header">
+        <Sword size={16} className="panel-icon" />
+        <span className="panel-title">Martial Properties</span>
       </div>
-    </>
+
+      <div className="form-row-grid">
+        <div className="form-section">
+          <label className="manuscript-label">Damage</label>
+          <input
+            type="text"
+            className="manuscript-input"
+            placeholder="e.g., 1d8"
+            value={damageDiceInput}
+            onChange={(e) => onDamageDiceChange(e.target.value)}
+          />
+        </div>
+
+        <div className="form-section">
+          <label className="manuscript-label">Type</label>
+          <input
+            type="text"
+            className="manuscript-input"
+            placeholder="e.g., Slashing"
+            value={damageTypeInput}
+            onChange={(e) => onDamageTypeChange(e.target.value)}
+          />
+        </div>
+
+        <div className="form-section">
+          <label className="manuscript-label">Range</label>
+          <input
+            type="text"
+            className="manuscript-input"
+            placeholder="e.g., 20/60 or 5ft"
+            value={rangeInput}
+            onChange={(e) => onRangeChange(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="form-section properties-toggle-section">
+        <label className="manuscript-label">Weapon Traits</label>
+        <div className="property-pills">
+          {weaponPropertyCatalog.map((prop) => {
+            const isActive = selectedPropertyIds.includes(prop.id);
+            return (
+              <button
+                key={prop.id}
+                className={`property-pill ${isActive ? "is-active" : ""}`}
+                onClick={() => onToggleProperty(prop.id)}
+              >
+                {prop.name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 };

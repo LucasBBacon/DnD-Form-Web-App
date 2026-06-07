@@ -1,134 +1,44 @@
-.inventory-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  background: rgba(29, 24, 18, 0.6);
+.inventory-modal {
+  max-width: 600px; /* Slightly wider to accommodate item descriptions */
+  height: 80vh; /* Fixed height so the internal lists scroll */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  flex-direction: column;
 }
 
-.inventory-modal-shell {
-  width: min(560px, 100%);
-  background-color: var(--vellum-bg);
-  border: 1px solid var(--border-filigree);
-  border-radius: 6px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  padding: 1rem;
-}
-
-.inventory-modal-header-row {
+.modal-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.inventory-modal-title {
-  margin: 0;
-  font-family: var(--font-display);
-  color: var(--ink-main);
-  font-size: 1.25rem;
-}
-
-.inventory-modal-close-btn {
-  border: 1px solid var(--border-filigree);
-  background: transparent;
-  color: var(--ink-main);
-  border-radius: 4px;
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-}
-
-.inventory-modal-content {
-  margin-top: 0.75rem;
-}
-
-.inventory-modal-copy {
-  margin: 0;
-  color: var(--ink-main);
-}
-
-.inventory-modal-copy + .inventory-modal-copy {
-  margin-top: 0.5rem;
-}
-
-.inventory-modal-copy-muted {
-  color: var(--ink-muted);
-  line-height: 1.4;
-}
-
-.inventory-flow-options-grid {
-  margin-top: 0.75rem;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.inventory-flow-option-btn {
-  justify-content: flex-start;
-}
-
-.inventory-modal-actions {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-.inventory-preset-form {
-  margin-top: 0.9rem;
-  display: grid;
-  gap: 0.5rem;
-}
-
-.inventory-modal-field-label {
-  font-size: 0.9rem;
-  color: var(--ink-main);
-}
-
-.inventory-modal-input,
-.inventory-modal-select {
-  width: 100%;
-  padding: 0.45rem 0.55rem;
-  border: 1px solid var(--border-filigree);
-  border-radius: 4px;
-  color: var(--ink-main);
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.inventory-modal-input-short {
-  max-width: 7rem;
-}
-
-.inventory-modal-textarea {
-  min-height: 5rem;
-  resize: vertical;
-}
-
-.inventory-weapon-property-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.35rem 0.75rem;
-}
-
-.inventory-checkbox-option {
-  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  margin-bottom: 12px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: rgba(44, 36, 27, 0.05);
   color: var(--ink-main);
 }
 
-.inventory-modal-subsection-title {
-  margin: 0.4rem 0 0;
-  font-size: 0.95rem;
-  font-family: var(--font-display);
-  color: var(--ink-main);
+.header-spacer {
+  width: 28px; /* Matches the width of the icon buttons to keep title centered */
 }
 
-/* AddItemFlowSelector */
+.modal-content-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Important: Lets child components handle their own scrolling */
+}
 
+/* --- STEP 1: FLOW SELECTOR --- */
 .flow-selector-grid {
   display: flex;
   flex-direction: column;
@@ -179,8 +89,7 @@
   max-width: 80%;
 }
 
-/* PresetItemFlow */
-
+/* --- STEP 2: PRESET FLOW --- */
 .preset-flow-container {
   display: flex;
   flex-direction: column;
@@ -351,6 +260,7 @@
   padding-bottom: 16px;
 }
 
+/* --- FORM ELEMENTS --- */
 .form-section {
   display: flex;
   flex-direction: column;
@@ -367,6 +277,7 @@
   font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 700;
+  text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ink-muted);
   display: flex;
@@ -378,6 +289,7 @@
   opacity: 0.7;
 }
 
+/* Base input styling for forms */
 .manuscript-input,
 .manuscript-textarea {
   background-color: rgba(255, 255, 255, 0.4);
@@ -387,7 +299,7 @@
   font-family: var(--font-body);
   font-size: 1rem;
   color: var(--ink-main);
-  width: 100%;
+  transition: all 0.2s ease;
 }
 
 .manuscript-input:focus,
@@ -405,19 +317,142 @@
   font-style: italic;
 }
 
+/* Specific overrides */
 .pristine-input {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: bold;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .manuscript-textarea {
-    resize: vertical;
-    min-height: 80px;
-    line-height: 1.5;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
 }
 
 .subtle-divider {
-    margin: 8px 0;
-    opacity: 0.5;
+  margin: 8px 0;
+  opacity: 0.5;
+}
+
+.custom-from-base-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.base-item-locked-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(44, 36, 27, 0.05);
+  border: 1px solid var(--border-filigree);
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.locked-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.locked-label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.locked-name {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink-main);
+}
+
+/* WeaponPropertiesEditor */
+.properties-editor-panel {
+  background-color: rgba(158, 42, 43, 0.03);
+  border: 1px dashed var(--rubric-red);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--rubric-red);
+  margin-bottom: 4px;
+  border-bottom: 1px dotted rgba(158, 42, 43, 0.3);
+  padding-bottom: 4px;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.properties-toggle-section {
+  margin-top: 8px;
+}
+
+.property-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.property-pill {
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.property-pill:hover {
+  border-color: var(--ink-main);
+  color: var(--ink-main);
+}
+
+.property-pill.is-active {
+  background-color: var(--ink-main);
+  border-color: var(--ink-main);
+  color: var(--vellum-bg);
+  box-shadow: 0 2px 4px rgba(44, 36, 27, 0.2);
+}
+
+.checkbox-section {
+  margin-top: 8px;
+}
+
+.manuscript-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink-main);
+  cursor: pointer;
+}
+
+.checkbox-icon {
+  color: var(--ink-muted);
 }
