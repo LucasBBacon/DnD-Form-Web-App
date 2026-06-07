@@ -14,6 +14,7 @@ import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
 import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
 import { PresetItemFlow } from "./PresetItemFlow";
 import "./AddItemModal.css";
+import { ChevronLeft, X } from "lucide-react";
 
 export type AddItemFlowType = "preset" | "custom_from_base" | "custom_generic";
 
@@ -424,18 +425,41 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
 
   if (!isOpen) return null;
 
+  const getModalTitle = () => {
+    if (step === "choose_flow") return "Add Equipment";
+    if (selectedFlow === "preset") return "Standard Ledger";
+    if (selectedFlow === "custom_from_base") return "Forge Modified Item";
+    if (selectedFlow === "custom_generic") return "Create New Item";
+    return "Add Item";
+  };
+
   return (
-    <div className="inventory-modal-overlay" role="dialog" aria-modal="true">
-      <div className="inventory-modal-shell">
-        <div className="inventory-modal-header-row">
-          <h3 className="inventory-modal-title">Add Inventory Item</h3>
+    <div className="modal-overlay fadeIn">
+      <div
+        className="modal-parchment inventory-modal"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="modal-header">
+          {step === "flow_details" ? (
+            <button
+              className="icon-btn back-btn"
+              onClick={onBack}
+              aria-label="Go Back"
+            >
+              <ChevronLeft size={20} />
+            </button>
+          ) : (
+            <div className="header-spacer" />
+          )}
+          <h2 className="manuscript-section-title">{getModalTitle()}</h2>
+          
           <button
-            type="button"
-            className="inventory-modal-close-btn"
+            className="icon-btn close-btn"
             onClick={handleClose}
             aria-label="Close add item modal"
           >
-            X
+            <X size={20}/>
           </button>
         </div>
 
@@ -444,7 +468,7 @@ export const AddItemModal: React.FC<AddItemModalProps> = ({
         {step === "choose_flow" ? (
           <AddItemFlowSelector onSelectFlow={onSelectFlow} />
         ) : (
-          <div className="inventory-modal-content">
+          <div className="modal-content-area">
             <p className="inventory-modal-copy">
               {selectedFlow ? FLOW_TITLE[selectedFlow] : "Flow"}
             </p>
