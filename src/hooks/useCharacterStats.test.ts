@@ -725,6 +725,65 @@ describe("useCharacterStats", () => {
       // weight: 2 * 5 = 10, capacity: 15 * 15 = 225
       expect(result.encumbrance.isEncumbered).toBe(false);
     });
+
+    it("should include inventory instance base-item weights in total weight", () => {
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        inventoryInstances: [
+          { instanceId: "inst-1", baseItemId: "item1" },
+          { instanceId: "inst-2", baseItemId: "item2" },
+        ],
+      } as any);
+
+      vi.mocked(staticDataApi.getItemById).mockImplementation((id) => {
+        if (id === "item1") return { weight: 3 } as any;
+        if (id === "item2") return { weight: 7 } as any;
+        return null;
+      });
+
+      const result = useCharacterStats();
+
+      expect(result.encumbrance.totalWeight).toBe(10);
+    });
+
+    it("should prioritize instance override weight over base item weight", () => {
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        inventoryInstances: [
+          {
+            instanceId: "inst-custom-weight",
+            baseItemId: "item1",
+            overrides: { weight: 9.5 },
+          },
+        ],
+      } as any);
+
+      vi.mocked(staticDataApi.getItemById).mockReturnValue({ weight: 2 } as any);
+
+      const result = useCharacterStats();
+
+      expect(result.encumbrance.totalWeight).toBe(9.5);
+    });
+
+    it("should count custom unknown-base instance weight from overrides", () => {
+      vi.mocked(useCharacterStore).mockReturnValue({
+        ...createDefaultCharacterState(),
+        inventoryInstances: [
+          {
+            instanceId: "inst-custom-generic",
+            baseItemId: "item_custom_generic",
+            isCustom: true,
+            overrides: { weight: 4.25 },
+          },
+        ],
+      } as any);
+
+      vi.mocked(staticDataApi.getItemById).mockReturnValue(null);
+
+      const result = useCharacterStats();
+
+      expect(result.encumbrance.totalWeight).toBe(4.25);
+    });
   });
 
   describe("Trait Application & Effects", () => {

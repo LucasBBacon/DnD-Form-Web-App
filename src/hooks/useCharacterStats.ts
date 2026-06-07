@@ -236,6 +236,19 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
 
   // #region --- Calculate Total Weight and Encumbrance ---
 
+  const resolveInstanceWeight = (instance: {
+    baseItemId: string;
+    overrides?: { weight?: number };
+  }): number => {
+    const overrideWeight = instance.overrides?.weight;
+    if (typeof overrideWeight === "number" && Number.isFinite(overrideWeight)) {
+      return Math.max(0, overrideWeight);
+    }
+
+    const baseItem = getItemById(instance.baseItemId);
+    return Math.max(0, baseItem?.weight ?? 0);
+  };
+
   // Calculate total weight from UUID-backed inventory
   const totalWeight =
     state.inventoryStacks.reduce((total, stack) => {
@@ -243,8 +256,7 @@ export const useCharacterStats = (): UseCharacterStatsReturn => {
       return total + (itemData?.weight ?? 0) * stack.quantity;
     }, 0) +
     state.inventoryInstances.reduce((total, instance) => {
-      const itemData = getItemById(instance.baseItemId);
-      return total + (itemData?.weight ?? 0);
+      return total + resolveInstanceWeight(instance);
     }, 0);
 
   const carryingCapacity = totalScores.str * 15;
