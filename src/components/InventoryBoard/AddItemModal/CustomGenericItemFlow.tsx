@@ -1,4 +1,6 @@
 import type React from "react";
+import "./AddItemModal.css";
+import { Coins, Scale, Sparkles } from "lucide-react";
 
 interface CustomGenericItemFlowProps {
   nameInput: string;
@@ -34,95 +36,114 @@ export const CustomGenericItemFlow: React.FC<CustomGenericItemFlowProps> = ({
   submitDisabled,
 }) => {
   return (
-    <div className="inventory-preset-form">
-      <label className="inventory-modal-field-label" htmlFor="generic-item-name">
-        Item Name
-      </label>
-      <input
-        id="generic-item-name"
-        className="inventory-modal-input"
-        type="text"
-        value={nameInput}
-        onChange={(event) => onNameChange(event.target.value)}
-        placeholder="Custom item name"
-      />
+    <div className="custom-generic-flow-container">
+      <div className="generic-form-scroll-area custom-scrollbar">
+        {/* IDENTITY SELECTION */}
+        <div className="form-section">
+          <label htmlFor="generic-name" className="manuscript-label">
+            Item Name
+          </label>
+          <input
+            id="generic-name"
+            type="text"
+            className="manuscript-input pristine-input"
+            placeholder="e.g., Amulet of the Black Hound"
+            value={nameInput}
+            onChange={(e) => onNameChange(e.target.value)}
+            autoFocus
+          />
+        </div>
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="generic-item-short-description"
-      >
-        Short Description
-      </label>
-      <input
-        id="generic-item-short-description"
-        className="inventory-modal-input"
-        type="text"
-        value={shortDescriptionInput}
-        onChange={(event) => onShortDescriptionChange(event.target.value)}
-        placeholder="One-line description"
-      />
+        {/* PHYSICAL PROPERTIES GRID */}
+        <div className="form-row-grid">
+          <div className="form-section">
+            <label htmlFor="generic-weight" className="manuscript-label">
+              <Scale size={14} className="label-icon" /> Weight (lbs)
+            </label>
+            <input
+              id="generic-weight"
+              type="number"
+              className="manuscript-input"
+              placeholder="0.0"
+              value={weightInput}
+              onChange={(e) => onWeightChange(e.target.value)}
+              min="0"
+              step="0.1"
+            />
+          </div>
 
-      <label
-        className="inventory-modal-field-label"
-        htmlFor="generic-item-full-description"
-      >
-        Full Description (Optional)
-      </label>
-      <textarea
-        id="generic-item-full-description"
-        className="inventory-modal-input inventory-modal-textarea"
-        value={fullDescriptionInput}
-        onChange={(event) => onFullDescriptionChange(event.target.value)}
-        placeholder="Longer notes about this custom item"
-      />
+          <div className="form-section">
+            {/* TODO: Allow player to specify coin type value */}
+            <label htmlFor="generic-cost" className="manuscript-label">
+              <Coins size={14} className="label-icon" /> Value (in CP)
+            </label>
+            <input
+              id="generic-cost"
+              type="number"
+              className="manuscript-input"
+              placeholder="e.g., 100 for 1gp"
+              value={cpCostInput}
+              onChange={(e) => onCpCostChange(e.target.value)}
+              min="0"
+            />
+          </div>
+        </div>
 
-      <label className="inventory-modal-field-label" htmlFor="generic-item-weight">
-        Weight (lb)
-      </label>
-      <input
-        id="generic-item-weight"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="decimal"
-        min={0}
-        value={weightInput}
-        onChange={(event) => onWeightChange(event.target.value)}
-      />
+        <hr className="filigree-divider subtle-divider" />
 
-      <label className="inventory-modal-field-label" htmlFor="generic-item-cp-cost">
-        Value (cp)
-      </label>
-      <input
-        id="generic-item-cp-cost"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={0}
-        value={cpCostInput}
-        onChange={(event) => onCpCostChange(event.target.value)}
-      />
+        {/* LORE AND DESCRIPTIONS */}
+        <div className="form-section">
+          <label htmlFor="generic-short-desc" className="manuscript-label">
+            Brief Description
+          </label>
+          <input
+            id="generic-short-desc"
+            type="text"
+            className="manuscript-input"
+            placeholder="A short summary for the inventory list..."
+            value={shortDescriptionInput}
+            onChange={(e) => onShortDescriptionChange(e.target.value)}
+            maxLength={100}
+          />
+        </div>
 
-      <label className="inventory-modal-field-label" htmlFor="generic-item-quantity">
-        Quantity
-      </label>
-      <input
-        id="generic-item-quantity"
-        className="inventory-modal-input inventory-modal-input-short"
-        type="number"
-        inputMode="numeric"
-        min={1}
-        value={quantityInput}
-        onChange={(event) => onQuantityChange(event.target.value)}
-      />
+        <div className="form-section">
+          <label htmlFor="generic-full-desc" className="manuscript-label">
+            Full Description (Optional)
+          </label>
+          <textarea
+            id="generic-full-desc"
+            className="manuscript-textarea"
+            placeholder="Detailed lore, mechanical effects, or historical notes..."
+            value={fullDescriptionInput}
+            onChange={(e) => onFullDescriptionChange(e.target.value)}
+            rows={4}
+          />
+        </div>
 
-      <button
-        type="button"
-        className="action-btn"
-        onClick={onSubmit}
-        disabled={submitDisabled}
-      >
-        Add Fully Custom Item
-      </button>
+        {/* FOOTER */}
+        <div className="requisition-footer">
+          <div className="quantity-control">
+            <label htmlFor="generic-quantity">Qty:</label>
+            <input
+              id="generic-quantity"
+              type="number"
+              className="manuscript-input quantity-input"
+              value={quantityInput}
+              onChange={(e) => onQuantityChange(e.target.value)}
+              min="1"
+            />
+          </div>
+
+          <button
+            className="action-btn confirm-add-btn"
+            onClick={onSubmit}
+            disabled={submitDisabled}
+          >
+            <Sparkles size={16} /> Create & Add Item
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
