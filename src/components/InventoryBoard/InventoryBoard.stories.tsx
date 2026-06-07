@@ -19,6 +19,7 @@ const baseCallbacks = {
   onDropInstance: () => {},
   onStackIncrement: () => {},
   onStackDecrement: () => {},
+  onOpenAddItemModal: () => {},
 };
 
 export const Empty: Story = {

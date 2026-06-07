@@ -5,6 +5,7 @@ import { formatCpAsMaxCoinValue } from "../../utils/currencyUtils";
 import { InventoryLedgerCard } from "./InventoryLedgerCard/InventoryLedgerCard";
 import type { ItemStackingRules, WeaponProperties } from "../../types/item";
 import { WealthTracker } from "./WealthTracker/WealthTracker";
+import { Plus } from "lucide-react";
 
 // #region Interfaces
 
@@ -115,6 +116,8 @@ export interface InventoryBoardViewProps {
   onStackIncrement: (baseItemId: string) => void;
   /** Callback for decrementing a stack of items */
   onStackDecrement: (baseItemId: string) => void;
+  /** Callback for opening add-item modal */
+  onOpenAddItemModal: () => void;
 }
 
 // #endregion
@@ -136,6 +139,7 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
   onDropInstance,
   onStackIncrement,
   onStackDecrement,
+  onOpenAddItemModal,
 }) => {
   const formatItemCost = (cpCost: number): string =>
     formatCpAsMaxCoinValue(cpCost);
@@ -152,6 +156,15 @@ export const InventoryBoardView: React.FC<InventoryBoardViewProps> = ({
           capacity={encumbrance.capacity}
           isEncumbered={encumbrance.isEncumbered}
         />
+
+        <button
+          type="button"
+          className="action-btn requisition-btn"
+          onClick={onOpenAddItemModal}
+          aria-label="Add inventory item"
+        >
+          <Plus size={16} /> Add Item
+        </button>
 
         <hr className="ornate-board-divider" />
       </div>

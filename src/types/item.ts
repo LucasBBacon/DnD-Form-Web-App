@@ -156,6 +156,13 @@ export interface ItemInstanceOverrides {
   name?: string;
   /** Custom weight for the item instance */
   weight?: number;
+  /** Custom value in copper pieces for the item instance */
+  cpCost?: number;
+  /** Custom lore text for the item instance */
+  lore?: {
+    shortDescription: string;
+    fullText?: string;
+  };
   /** Custom armor properties for the item instance */
   armorProperties?: ArmorProperties;
   /** Custom weapon properties for the item instance */
