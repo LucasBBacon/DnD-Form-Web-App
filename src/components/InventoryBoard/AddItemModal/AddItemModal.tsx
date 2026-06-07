@@ -9,10 +9,10 @@ import type {
   WeaponProperties,
   WeaponPropertyId,
 } from "../../../types/item";
-import { AddItemFlowSelector } from "./AddItemFlowSelector";
-import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
-import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
-import { PresetItemFlow } from "./PresetItemFlow";
+import { AddItemFlowSelector } from "./AddItemFlowSelector/AddItemFlowSelector";
+import { CustomFromBaseFlow } from "./CustomFromBaseFlow/CustomFromBaseFlow";
+import { CustomGenericItemFlow } from "./CustomGenericItemFlow/CustomGenericItemFlow";
+import { PresetItemFlow } from "./PresetItemFlow/PresetItemFlow";
 import "./AddItemModal.css";
 import { ChevronLeft, X } from "lucide-react";
 

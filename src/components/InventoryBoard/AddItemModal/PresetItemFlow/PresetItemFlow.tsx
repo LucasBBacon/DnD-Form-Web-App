@@ -1,6 +1,6 @@
 import type React from "react";
 import "./AddItemModal.css";
-import type { AddItemPresetOption } from "./AddItemModal";
+import type { AddItemPresetOption } from "../AddItemModal";
 import { Package, Plus, Search } from "lucide-react";
 
 interface PresetItemFlowProps {

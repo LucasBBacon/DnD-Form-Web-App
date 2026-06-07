@@ -11,11 +11,11 @@ import {
   type PresetItemFlowScenario,
   type WeaponPropertiesEditorScenario,
 } from "./AddItemModal.fixtures";
-import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor";
-import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
-import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
-import { PresetItemFlow } from "./PresetItemFlow";
-import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor";
+import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor/ArmorPropertiesEditor";
+import { CustomFromBaseFlow } from "./CustomFromBaseFlow/CustomFromBaseFlow";
+import { CustomGenericItemFlow } from "./CustomGenericItemFlow/CustomGenericItemFlow";
+import { PresetItemFlow } from "./PresetItemFlow/PresetItemFlow";
+import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor/WeaponPropertiesEditor";
 
 export const createAddItemFlowSelectorCallbacks = () => ({
   onSelectFlow: fn(),

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ADD_ITEM_GENERIC_FLOW_SCENARIOS } from "./AddItemModal.fixtures";
-import { createCustomGenericItemFlowArgs } from "./AddItemModal.story-adapter";
+import { ADD_ITEM_GENERIC_FLOW_SCENARIOS } from "../AddItemModal.fixtures";
+import { createCustomGenericItemFlowArgs } from "../AddItemModal.story-adapter";
 import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
 import "./AddItemModal.css";
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ADD_ITEM_PRESET_FLOW_SCENARIOS } from "./AddItemModal.fixtures";
-import { createPresetItemFlowArgs } from "./AddItemModal.story-adapter";
+import { ADD_ITEM_PRESET_FLOW_SCENARIOS } from "../AddItemModal.fixtures";
+import { createPresetItemFlowArgs } from "../AddItemModal.story-adapter";
 import { PresetItemFlow } from "./PresetItemFlow";
 import "./AddItemModal.css";
 

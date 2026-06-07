@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ADD_ITEM_CUSTOM_FROM_BASE_SCENARIOS,
-} from "./AddItemModal.fixtures";
-import { createCustomFromBaseFlowArgs } from "./AddItemModal.story-adapter";
+} from "../AddItemModal.fixtures";
+import { createCustomFromBaseFlowArgs } from "../AddItemModal.story-adapter";
 import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
 import "./AddItemModal.css";
 

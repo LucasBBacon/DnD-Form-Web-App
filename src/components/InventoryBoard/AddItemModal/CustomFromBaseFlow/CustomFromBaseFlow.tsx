@@ -1,9 +1,9 @@
 import type React from "react";
 import "./AddItemModal.css";
-import type { WeaponPropertyId } from "../../../types/item";
-import type { AddItemPresetOption } from "./AddItemModal";
-import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor";
-import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor";
+import type { WeaponPropertyId } from "../../../../types/item";
+import type { AddItemPresetOption } from "../AddItemModal";
+import { ArmorPropertiesEditor } from "../ArmorPropertiesEditor/ArmorPropertiesEditor";
+import { WeaponPropertiesEditor } from "../WeaponPropertiesEditor/WeaponPropertiesEditor";
 import { ArrowLeft, Coins, PenTool, Scale, Search } from "lucide-react";
 
 interface WeaponPropertyOption {

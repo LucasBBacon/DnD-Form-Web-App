@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ADD_ITEM_WEAPON_EDITOR_SCENARIOS } from "./AddItemModal.fixtures";
-import { createWeaponPropertiesEditorArgs } from "./AddItemModal.story-adapter";
+import { ADD_ITEM_WEAPON_EDITOR_SCENARIOS } from "../AddItemModal.fixtures";
+import { createWeaponPropertiesEditorArgs } from "../AddItemModal.story-adapter";
 import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor";
 import "./AddItemModal.css";
 

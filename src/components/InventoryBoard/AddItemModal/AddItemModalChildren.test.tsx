@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { AddItemFlowSelector } from "./AddItemFlowSelector";
-import { PresetItemFlow } from "./PresetItemFlow";
-import { CustomGenericItemFlow } from "./CustomGenericItemFlow";
-import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor";
-import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor";
-import { CustomFromBaseFlow } from "./CustomFromBaseFlow";
+import { AddItemFlowSelector } from "./AddItemFlowSelector/AddItemFlowSelector";
+import { PresetItemFlow } from "./PresetItemFlow/PresetItemFlow";
+import { CustomGenericItemFlow } from "./CustomGenericItemFlow/CustomGenericItemFlow";
+import { WeaponPropertiesEditor } from "./WeaponPropertiesEditor/WeaponPropertiesEditor";
+import { ArmorPropertiesEditor } from "./ArmorPropertiesEditor/ArmorPropertiesEditor";
+import { CustomFromBaseFlow } from "./CustomFromBaseFlow/CustomFromBaseFlow";
 import {
   ADD_ITEM_ARMOR_EDITOR_SCENARIOS,
   ADD_ITEM_CUSTOM_FROM_BASE_SCENARIOS,
