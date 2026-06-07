@@ -12,21 +12,6 @@
   margin-bottom: 12px;
 }
 
-.icon-btn {
-  background: transparent;
-  border: none;
-  color: var(--ink-muted);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.icon-btn:hover {
-  background-color: rgba(44, 36, 27, 0.05);
-  color: var(--ink-main);
-}
-
 .header-spacer {
   width: 28px; /* Matches the width of the icon buttons to keep title centered */
 }

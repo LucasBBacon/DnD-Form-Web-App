@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "./LevelUpModal.css";
 import { getClassById, getSubclassById } from "../../data/staticDataApi";
 import { useCharacterStore } from "../../store/useCharacterStore";
@@ -13,6 +13,7 @@ import { ProficiencyChoiceStep } from "./steps/ProficiencyChoiceStep";
 import { ReviewStep } from "./steps/ReviewStep";
 import { SpellChoiceStep } from "./steps/SpellChoiceStep";
 import { SubclassPickStep } from "./steps/SubclassPickStep";
+import { ArrowLeft, ArrowRight, BookOpen, Check, X } from "lucide-react";
 
 // #region --- Types and Interfaces ---
 
@@ -156,6 +157,15 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
     subclassData,
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !isBlocking) onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isBlocking, onClose]);
+
   // #endregion
 
   // #region --- Render ---
@@ -196,74 +206,85 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   };
 
   return (
-    <div className="modal-backdrop">
+    <div className="modal-overlay fadeIn">
       <div
-        className="modal level-up-modal"
+        className="modal-parchment level-up-modal"
         role="dialog"
         aria-modal="true"
-        aria-label={`Level Up to ${targetLevel}`}
       >
-        {/* ── Header ── */}
-        <div className="level-up-modal__header">
-          <h2 className="level-up-modal__title">
-            Level Up — Level {targetLevel}
-          </h2>
-          <button
-            type="button"
-            className="level-up-modal__close"
-            onClick={onClose}
-            aria-label="Close"
-            disabled={isBlocking}
-            title={isBlocking ? "Finish this level-up before closing" : "Close"}
-          >
-            ✕
-          </button>
+        {/* LEFT PANE - TRACKER */}
+        <div className="level-up-sidebar">
+          <div className="sidebar-header">
+            <BookOpen size={24} className="header-icon" />
+            <h2 className="manuscript-section-title">Level {targetLevel}</h2>
+            <div className="sidebar-subtitle">Ascension</div>
+          </div>
+
+          <nav className="step-tracker">
+            {/* TODO: Map over dynamic step plans here */}
+            <div className="step-item is-completed">
+              <div className="step-node">
+                <Check size={12} />
+              </div>
+              <span className="step-label">Class</span>
+            </div>
+            <div className="step-item is-active">
+              <div className="step-node">
+                <span className="node-dot" />
+              </div>
+              <span className="step-label">Hit Points</span>
+            </div>
+            <div className="step-item is-locked">
+              <div className="step-node" />
+              <span className="step-label">Features</span>
+            </div>
+          </nav>
         </div>
 
-        {isBlocking && (
-          <div className="level-up-modal__banner" role="status">
-            This level-up must be completed before returning to the character
-            sheet.
+        {/* RIGHT PANE - ACTIVE CONTENT */}
+        <div className="level-up-content-area">
+          <div className="content-header">
+            {!isBlocking && (
+              <button
+                className="icon-btn close-btn"
+                onClick={onClose}
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            )}
           </div>
-        )}
 
-        {/* ── Step progress indicator ── */}
-        <div className="level-up-modal__steps" aria-hidden="true">
-          {plan.orderedSteps.map((stepId, idx) => (
-            <div
-              key={stepId}
-              className={[
-                "level-up-modal__step-dot",
-                idx < currentStepIndex ? "level-up-modal__step-dot--done" : "",
-                idx === currentStepIndex
-                  ? "level-up-modal__step-dot--active"
-                  : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-            />
-          ))}
+          <div className="step-render-zone custom-scrollbar">
+            {renderStep()}
+          </div>
+
+          <hr className="ornate-board-divider" />
+
+          {/* FOOTER CONTROLS */}
+          <div className="wizard-footer">
+            {!isFirstStep && (
+              <button className="action-btn cancel-btn" onClick={goPrev}>
+                <ArrowLeft size={16} /> Previous
+              </button>
+            )}
+
+            <div className="footer-spacer" />
+
+            {isOnReview ? (
+              <button
+                className="action-btn confirm-add-btn destructive-btn"
+                onClick={handleCommit}
+              >
+                Level Up
+              </button>
+            ) : (
+              <button className="action-btn confirm-add-btn" onClick={goNext}>
+                Next <ArrowRight size={16} />
+              </button>
+            )}
+          </div>
         </div>
-
-        {/* ── Step content ── */}
-        <div className="level-up-modal__content">{renderStep()}</div>
-
-        {/* ── Navigation footer (hidden on review step — it has its own confirm btn) ── */}
-        {!isOnReview && (
-          <div className="level-up-modal__footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={goPrev}
-              disabled={isFirstStep}
-            >
-              Back
-            </button>
-            <button type="button" className="btn btn-primary" onClick={goNext}>
-              Next
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

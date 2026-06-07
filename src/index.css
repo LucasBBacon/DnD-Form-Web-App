@@ -217,3 +217,18 @@ code {
   border-bottom-style: solid;
   border-bottom-color: var(--gilt-gold);
 }
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background-color: rgba(44, 36, 27, 0.05);
+  color: var(--ink-main);
+}
