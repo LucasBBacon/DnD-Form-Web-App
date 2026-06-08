@@ -1,12 +1,23 @@
 import React from "react";
+import "./ClassPickStep.css";
 import type { CharacterClassTrack } from "../../../store/useCharacterStore";
 import { getAllClasses, getClassById } from "../../../data/staticDataApi";
 import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
-import { evaluateMulticlassEligibility } from "../../../utils/multiclassEligibilityUtils";
+import {
+  evaluateMulticlassEligibility,
+  type MulticlassEligibilityFailure,
+} from "../../../utils/multiclassEligibilityUtils";
 import { useCharacterStats } from "../../../hooks/useCharacterStats";
+import {
+  AlertCircle,
+  ArrowRight,
+  Lock,
+  PlusCircle,
+  Swords,
+} from "lucide-react";
 
 // #region --- Types ---
 
@@ -26,6 +37,23 @@ interface ClassPickStepProps {
   /** The character's class tracks */
   classTracks: CharacterClassTrack[];
 }
+
+const formatFailureReason = (failure: MulticlassEligibilityFailure): string => {
+  switch (failure.code) {
+    case "already_has_class":
+      return "Already pursuing this discipline.";
+    case "character_level_too_low":
+      return `Requires character level ${failure.required || 2}`;
+    case "missing_current_class":
+      return "Missing prerequisite discipline";
+    case "missing_ability_score":
+      return `Requires a valid ${failure.ability?.toUpperCase() || "ability"} score.`;
+    case "ability_score_below_minimum":
+      return `Requires ${failure.ability?.toUpperCase()} ${failure.required} (Current: ${failure.actual || 0})`;
+    default:
+      return "Requirements not met.";
+  }
+};
 
 // #endregion
 
@@ -72,7 +100,7 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
   // #endregion
 
   // #region --- Multiclass Eligibility ---
-  
+
   const multiclassEligibilityByClassId = Object.fromEntries(
     availableNewClasses.map((c) => {
       const result = evaluateMulticlassEligibility({
@@ -93,119 +121,116 @@ export const ClassPickStep: React.FC<ClassPickStepProps> = ({
   // #region --- Render ---
 
   return (
-    <div className="level-up-step">
-      <h3 className="level-up-step__title">Choose Class to Level</h3>
-      <p className="level-up-step__description">
-        Select which class to advance, or add a new multiclass.
-      </p>
-
-      {/* Existing class tracks */}
-      {classTracks.length > 0 && (
-        <>
-          <p className="level-up-step__section-label">
-            Level up an existing class
-          </p>
-          <ul className="level-up-step__option-list">
-            {classTracks.map((track) => {
-              const cd = getClassById(track.classId);
-              if (!cd) return null;
-              const isSelected =
-                draft.targetClassId === track.classId && isLevelingExisting;
-              return (
-                <li key={track.classId}>
-                  <label
-                    className={[
-                      "level-up-step__option",
-                      isSelected ? "level-up-step__option--selected" : "",
-                    ]
-                      .join(" ")
-                      .trim()}
-                  >
-                    <input
-                      type="radio"
-                      name="class-pick"
-                      checked={isSelected}
-                      onChange={() => handleSelectExistingTrack(track)}
-                    />
-                    <span>
-                      <span className="level-up-step__option-label">
-                        {cd.name}
-                      </span>
-                      <br />
-                      <span className="level-up-step__option-hint">
-                        Currently level {track.level} → becoming level{" "}
-                        {track.level + 1}
-                        {track.subclassId ? ` · ${track.subclassId}` : ""}
-                      </span>
-                    </span>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-
-      {/* Add new multiclass */}
-      {targetLevel > 1 && availableNewClasses.length > 0 && (
-        <>
-          <p className="level-up-step__section-label">Add a new multiclass</p>
-          <ul className="level-up-step__option-list">
-            {availableNewClasses.map((c) => {
-              const eligibility = multiclassEligibilityByClassId[c.id];
-              const isEligible = eligibility?.eligible ?? false;
-              const isSelected =
-                draft.targetClassId === c.id && draft.isNewMulticlass;
-              return (
-                <li key={c.id}>
-                  <label
-                    className={[
-                      "level-up-step__option",
-                      isSelected ? "level-up-step__option--selected" : "",
-                      !isEligible ? "level-up-step__option--disabled" : "",
-                    ]
-                      .join(" ")
-                      .trim()}
-                  >
-                    <input
-                      type="radio"
-                      name="class-pick"
-                      checked={isSelected}
-                      onChange={() => isEligible && handleSelectNewClass(c.id)}
-                      disabled={!isEligible}
-                    />
-                    <span>
-                      <span className="level-up-step__option-label">
-                        {c.name}
-                      </span>
-                      <br />
-                      <span className="level-up-step__option-hint">
-                        {isEligible
-                          ? `Add ${c.name} level 1`
-                          : `Not eligible: ${(eligibility?.failures ?? [])
-                              .map((f) => f.code)
-                              .join(", ")}`}
-                      </span>
-                    </span>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-
-      {showAutoSelected && draft.targetClassId && (
-        <p
-          style={{
-            fontSize: "0.8rem",
-            color: "var(--color-text-muted, #888)",
-            marginTop: "0.75rem",
-          }}
-        >
-          Your class is auto-selected. Click Next to continue.
+    <div className="step-container class-pick-step">
+      <div className="ste-intro">
+        <h3 className="step-title">Choose Your Path</h3>
+        <p className="step-description">
+          Will you continue to hone your current disciplines, or branch into a
+          new martial or arcane art?
         </p>
-      )}
+      </div>
+
+      {/* Existing Paths */}
+      <div className="class-selection-group">
+        <h4 className="group-label">Current Disciplines</h4>
+        <div
+          className={`class-cards-grid ${showAutoSelected ? "single-path-mode" : ""}`}
+        >
+          {classTracks.map((track) => {
+            const isSelected =
+              draft.targetClassId === track.classId && isLevelingExisting;
+
+            const classD = getClassById(track.classId);
+            if (!classD) return null;
+
+            return (
+              <button
+                key={`existing-${track.classId}`}
+                className={`class-card ${isSelected ? "is-selected" : ""}`}
+                onClick={() => handleSelectExistingTrack(track)}
+              >
+                <div className="card-primary">
+                  <Swords
+                    size={showAutoSelected ? 28 : 20}
+                    className="card-icon"
+                  />
+                  <span className="class-name">{classD.name}</span>
+                </div>
+                <div className="card-secondary">
+                  <span className="level-preview">
+                    Level {track.level}{" "}
+                    <ArrowRight size={12} className="arrow-icon" /> Level{" "}
+                    {track.level + 1}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <hr className="filigree-divider subtle-divider" />
+
+      {/* SECTION 2: MULTICLASSING */}
+      <div className="class-selection-group">
+        <h4 className="group-label">Forge a New Path (Multiclass)</h4>
+
+        <div className="class-cards-grid multiclass-grid">
+          {availableNewClasses.map((newClass) => {
+            const isSelected =
+              draft.targetClassId === newClass.id && draft.isNewMulticlass;
+            const eligibility = multiclassEligibilityByClassId[newClass.id];
+            const isEligible = eligibility?.eligible ?? true;
+
+            const classD = getClassById(newClass.id);
+            if (!classD) return null;
+
+            if (!isEligible) {
+              return (
+                <div
+                  key={`locked-${newClass.id}`}
+                  className="class-card multiclass-card is-locked"
+                >
+                  <div className="card-primary">
+                    <Lock size={16} className="card-icon locked-icon" />
+                    <span className="class-name">{classD.name}</span>
+                  </div>
+                  <div className="card-secondary locked-reasons-list">
+                    {eligibility?.failures.map((failure, idx) => (
+                      <div key={idx} className="locked-reason-item">
+                        <AlertCircle size={12} />
+                        <span>{formatFailureReason(failure)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <button
+                key={`new-${newClass.id}`}
+                className={`class-card multiclass-card ${isSelected ? "is-selected" : ""}`}
+                onClick={() => handleSelectNewClass(newClass.id)}
+              >
+                <div className="card-primary">
+                  <PlusCircle size={16} className="card-icon" />
+                  <span className="class-name">{classD.name}</span>
+                </div>
+                <div className="card-secondary">
+                  <span className="level-preview">New Level 1</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {availableNewClasses.length === 0 && (
+          <div className="empty-state-text">
+            No available disciplines for multiclassing.
+          </div>
+        )}
+      </div>
     </div>
   );
 
