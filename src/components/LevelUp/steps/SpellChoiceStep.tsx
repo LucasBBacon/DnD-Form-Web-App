@@ -1,10 +1,13 @@
 import React, { useMemo } from "react";
+import "../LevelUpModal.css";
+import "./SpellChoiceStep.css";
 import { getAllSpells } from "../../../data/staticDataApi";
 import { useCharacterStore } from "../../../store/useCharacterStore";
 import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
+import { BookOpen, Check, CheckCircle2, Lock } from "lucide-react";
 
 // #region --- Types ---
 
@@ -23,10 +26,18 @@ interface SpellChoiceStepProps {
 
 // #endregion
 
+const formatSpellLevel = (level: number) => {
+  if (level === 0) return "Cantrip";
+  if (level === 1) return "1st Level";
+  if (level === 2) return "2nd Level";
+  if (level === 3) return "3rd Level";
+  return `${level}th Level`;
+};
+
 // #region --- Spell Selector Component ---
 
 /**
-  * Step for choosing which spells to learn at a level that grants new spells.
+ * Step for choosing which spells to learn at a level that grants new spells.
  * @param param0 Props for the spell selector
  * @returns JSX element for the spell selector
  */
@@ -43,6 +54,8 @@ function SpellSelector({
   pool: { id: string; name: string; level: number }[];
   onChange: (next: string[]) => void;
 }) {
+  const isMaxReached = selected.length >= needed;
+
   const toggle = (id: string) => {
     if (selected.includes(id)) {
       onChange(selected.filter((s) => s !== id));
@@ -51,45 +64,71 @@ function SpellSelector({
     }
   };
 
+  const groupedSpells = useMemo(() => {
+    return pool.reduce(
+      (acc, spell) => {
+        if (!acc[spell.level]) acc[spell.level] = [];
+        acc[spell.level].push(spell);
+        return acc;
+      },
+      {} as Record<number, typeof pool>,
+    );
+  }, [pool]);
+
+  const sortedLevels = Object.keys(groupedSpells)
+    .map(Number)
+    .sort((a, b) => a - b);
+
   // #region --- Render ---
 
   return (
-    <div style={{ marginBottom: "1rem" }}>
-      <p className="level-up-step__section-label">
-        {label} — choose {needed} (selected {selected.length}/{needed})
-      </p>
-      <ul
-        className="level-up-step__option-list"
-        style={{ maxHeight: 240, overflowY: "auto" }}
-      >
-        {pool.map((spell) => {
-          const isChecked = selected.includes(spell.id);
-          const isDisabled = !isChecked && selected.length >= needed;
-          return (
-            <li key={spell.id}>
-              <label
-                className={[
-                  "level-up-step__option",
-                  isChecked ? "level-up-step__option--selected" : "",
-                  isDisabled ? "level-up-step__option--disabled" : "",
-                ]
-                  .join(" ")
-                  .trim()}
-              >
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  disabled={isDisabled}
-                  onChange={() => toggle(spell.id)}
-                />
-                <span className="level-up-step__option-label">
-                  {spell.name}
-                </span>
-              </label>
-            </li>
-          );
-        })}
-      </ul>
+    <div className="proficiency-choice-group">
+      <div className="choice-group-header">
+        <div className="group-title-area">
+          <span className="group-instruction">{label}</span>
+          <span className="group-source-label">Select up to {needed}</span>
+        </div>
+        <div className={`choice-counter ${isMaxReached ? "is-complete" : ""}`}>
+          {selected.length} / {needed}
+          {isMaxReached && <CheckCircle2 size={16} className="complete-icon" />}
+        </div>
+      </div>
+
+      <div className="spell-groups-container">
+        {sortedLevels.map((level) => (
+          <div key={level} className="spell-level-section">
+            {sortedLevels.length > 1 && (
+              <h5 className="spell-level-divider">{formatSpellLevel(level)}</h5>
+            )}
+
+            <div className="choice-options-grid">
+              {groupedSpells[level].map((spell) => {
+                const isSelected = selected.includes(spell.id);
+                const isLockedOut = isMaxReached && !isSelected;
+
+                return (
+                  <button
+                    key={spell.id}
+                    className={`choice-card ${isSelected ? "is-selected" : ""} ${isLockedOut ? "is-locked-out" : ""}`}
+                    onClick={() => toggle(spell.id)}
+                    disabled={isLockedOut}
+                  >
+                    <div
+                      className={`wax-seal-indicator ${isSelected ? "is-filled" : "is-empty"}`}
+                    >
+                      {isSelected && <Check size={12} strokeWidth={3} />}
+                    </div>
+                    <div className="spell-card-info">
+                      <span className="choice-name">{spell.name}</span>
+                    </div>
+                    {isLockedOut && <Lock size={12} className="lock-icon" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 
@@ -99,7 +138,7 @@ function SpellSelector({
 // #endregion
 
 /**
-  * Step for choosing new spells to learn at a level-up. Shows separate selectors for cantrips and leveled spells if both are granted.
+ * Step for choosing new spells to learn at a level-up. Shows separate selectors for cantrips and leveled spells if both are granted.
  * @param param0 Props for the spell choice step
  * @returns JSX element for the spell choice step
  */
@@ -147,47 +186,58 @@ export const SpellChoiceStep: React.FC<SpellChoiceStepProps> = ({
     [classSpells, knownSpellIds],
   );
 
+  const totalToLearn = (newSpellsToLearn || 0) + (newCantripsToLearn || 0);
+
   // #endregion
 
   // #region --- Render ---
 
+  if (totalToLearn === 0) {
+    return (
+      <div className="step-container empty-state-container">
+        <BookOpen size={32} />
+        <h3 className="empty-state-title">No New Incantations</h3>
+        <p className="empty-state-text">
+          Your spellbook remains unchanged at this level. You do not learn any
+          new cantrips or leveled spells at this time.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="level-up-step">
-      <h3 className="level-up-step__title">Learn Spells</h3>
-      <p className="level-up-step__description">
-        Choose the spells you learn at this level.
-      </p>
-
-      {newCantripsToLearn > 0 && (
-        <SpellSelector
-          label="Cantrips"
-          needed={newCantripsToLearn}
-          selected={draft.cantripsLearned}
-          pool={cantripPool}
-          onChange={(next) => onUpdateDraft({ cantripsLearned: next })}
-        />
-      )}
-
-      {newSpellsToLearn > 0 && (
-        <SpellSelector
-          label="Spells"
-          needed={newSpellsToLearn}
-          selected={draft.spellsLearned}
-          pool={spellPool}
-          onChange={(next) => onUpdateDraft({ spellsLearned: next })}
-        />
-      )}
-
-      {newCantripsToLearn > 0 && cantripPool.length === 0 && (
-        <p className="level-up-step__description">
-          No eligible new cantrips are available.
+    <div className="step-container spell-choice-step">
+      <div className="step-intro">
+        <h3 className="step-title">Arcane & Divine Secrets</h3>
+        <p className="step-description">
+          Your understanding of the weave deepens. Select the new incantations
+          you wish to commit to memory.
         </p>
-      )}
-      {newSpellsToLearn > 0 && spellPool.length === 0 && (
-        <p className="level-up-step__description">
-          No eligible new spells are available.
-        </p>
-      )}
+      </div>
+
+      <div className="proficiency-ledgers custom-scrollbar">
+        {/* RENDER CANTRIPS */}
+        {newCantripsToLearn > 0 && (
+          <SpellSelector
+            label="New Cantrips"
+            needed={newCantripsToLearn}
+            selected={draft.cantripsLearned || []}
+            pool={cantripPool}
+            onChange={(next) => onUpdateDraft({ cantripsLearned: next })}
+          />
+        )}
+
+        {/* RENDER LEVELED SPELLS */}
+        {newSpellsToLearn > 0 && (
+          <SpellSelector
+            label="New Leveled Spells"
+            needed={newSpellsToLearn}
+            selected={draft.spellsLearned || []}
+            pool={spellPool}
+            onChange={(next) => onUpdateDraft({ spellsLearned: next })}
+          />
+        )}
+      </div>
     </div>
   );
 
