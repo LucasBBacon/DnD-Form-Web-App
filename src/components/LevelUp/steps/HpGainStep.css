@@ -1,0 +1,178 @@
+/* --- HP GAIN STEP --- */
+.hp-gain-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- CHOICE CARDS --- */
+.hp-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.hp-method-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
+  padding: 24px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hp-method-card:hover:not(.is-locked) {
+  background-color: var(--vellum-hover);
+  border-color: var(--ink-main);
+  transform: translateY(-2px);
+}
+
+.hp-method-card.is-selected {
+  background-color: rgba(158, 42, 43, 0.05);
+  border: 2px solid var(--rubric-red);
+  box-shadow: 0 4px 12px rgba(158, 42, 43, 0.15);
+}
+
+.hp-method-card.is-locked {
+  cursor: default;
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 1px solid var(--gilt-gold);
+  grid-column: 1 / -1; /* Spans full width for Level 1 */
+}
+
+.method-icon {
+  color: var(--ink-muted);
+  margin-bottom: 12px;
+}
+
+.hp-method-card.is-selected .method-icon {
+  color: var(--rubric-red);
+}
+
+.hp-method-card.is-locked .locked-icon {
+  color: var(--gilt-gold);
+}
+
+.method-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ink-main);
+  margin-bottom: 8px;
+}
+
+.method-description {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+/* --- MANUAL ROLL INPUT --- */
+.manual-roll-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(44, 36, 27, 0.03);
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px dashed var(--border-filigree);
+}
+
+.hp-roll-input {
+  width: 100px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* --- EQUATION BOARD --- */
+.hp-equation-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--vellum-bg);
+  border: 2px solid var(--ink-main);
+  border-radius: 6px;
+  padding: 24px;
+  margin-top: 8px;
+  box-shadow: inset 0 0 16px rgba(44, 36, 27, 0.03);
+}
+
+.equation-label {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  margin-bottom: 16px;
+  border-bottom: 1px dotted var(--border-filigree);
+  padding-bottom: 4px;
+}
+
+.equation-math {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.math-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.math-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--ink-main);
+  line-height: 1;
+}
+
+.math-caption {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.math-operator {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--border-filigree);
+  margin: 0 8px;
+}
+
+/* Total Emphasis */
+.total-block {
+  position: relative;
+  min-width: 80px;
+}
+
+.total-heart-icon {
+  position: absolute;
+  top: -12px;
+  color: var(--rubric-red);
+  opacity: 0.2;
+  transform: scale(3);
+  z-index: 0;
+}
+
+.total-value {
+  color: var(--rubric-red);
+  font-size: 3.5rem;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.fadeInDown {
+  animation: fadeInDown 0.2s ease-out;
+}
