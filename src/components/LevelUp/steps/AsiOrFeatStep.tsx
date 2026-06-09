@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import "../LevelUpModal.css";
+import "./AsiOrFeatStep.css";
 import { getAllFeats } from "../../../data/staticDataApi";
 import type { Ability } from "../../../types/common";
-import { ABILITIES, ABILITY_LABELS } from "../../../utils/abilityConstants";
+import { ABILITIES_KEY_LABEL } from "../../../utils/abilityConstants";
 import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
-import { isFeatEligible } from "../../../utils/featUtils";
+import { formatFeatPrerequisites, isFeatEligible } from "../../../utils/featUtils";
 import { useCharacterStats } from "../../../hooks/useCharacterStats";
 import { useCharacterStore } from "../../../store/useCharacterStore";
+import {
+  ArrowUpCircle,
+  BookOpen,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Minus,
+  Plus,
+  Search,
+  Sparkles,
+} from "lucide-react";
 
 // #region --- Types ---
 
@@ -37,7 +50,6 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
   draft,
   onUpdateDraft,
 }) => {
-
   // #region --- State and Data ---
 
   const { abilities } = useCharacterStats();
@@ -92,152 +104,201 @@ export const AsiOrFeatStep: React.FC<AsiOrFeatStepProps> = ({
 
   // #endregion
 
+  const [featSearch, setFeatSearch] = useState("");
+  const [expandedFeatId, setExpandedFeatId] = useState<string | null>(null);
+
+  const filteredFeats = eligibleFeats.filter((f) =>
+    f.name.toLowerCase().includes(featSearch.toLowerCase()),
+  );
+
+  const toggleFeatExpand = (e: React.MouseEvent, featId: string) => {
+    e.stopPropagation();
+    setExpandedFeatId((prev) => (prev === featId ? null : featId));
+  };
+
   // #region --- Render ---
 
   return (
-    <div className="level-up-step">
-      <h3 className="level-up-step__title">
-        Ability Score Improvement or Feat
-      </h3>
-      <p className="level-up-step__description">
-        Choose to improve two ability scores by 1 (or one by 2), or take a feat.
-      </p>
-
-      {/* Mode toggle */}
-      <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}>
-        <label
-          className={`level-up-step__option ${isAsiMode ? "level-up-step__option--selected" : ""}`}
-        >
-          <input
-            type="radio"
-            name="asi-or-feat"
-            checked={isAsiMode}
-            onChange={handleSetAsiMode}
-          />
-          <span className="level-up-step__option-label">
-            Ability Score Improvement
-          </span>
-        </label>
-        <label
-          className={`level-up-step__option ${!isAsiMode ? "level-up-step__option--selected" : ""}`}
-        >
-          <input
-            type="radio"
-            name="asi-or-feat"
-            checked={!isAsiMode}
-            onChange={handleSetFeatMode}
-          />
-          <span className="level-up-step__option-label">Feat</span>
-        </label>
+    <div className="step-container asi-feat-step">
+      <div className="step-intro">
+        <h3 className="step-title">Power & Progression</h3>
+        <p className="step-description">
+          Your experiences have tempered you. Choose to increase your core
+          attributes or master a new, specialized feat.
+        </p>
       </div>
 
-      {isAsiMode ? (
-        <>
-          <p className="asi-step__points-remaining">
-            Points remaining: <strong>{remainingPoints}</strong> / 2
-          </p>
-          <div className="asi-step__ability-grid">
-            {ABILITIES.map((ability) => {
-              const base = totalScores[ability];
-              const allocated = draft.asiChoices[ability] ?? 0;
-              const atMax = base + allocated >= 20;
+      {/* Mode toggle */}
+      <div className="mode-toggle-grid">
+        <button
+          className={`mode-card ${isAsiMode ? "is-selected" : ""}`}
+          onClick={handleSetAsiMode}
+        >
+          <ArrowUpCircle size={24} className="mode-icon" />
+          <span className="mode-title">Ability Score Increase</span>
+          <span className="mode-desc">
+            Add +2 to one score, or +1 to two scores (Max 20).
+          </span>
+        </button>
+
+        <button
+          className={`mode-card ${!isAsiMode ? "is-selected" : ""}`}
+          onClick={handleSetFeatMode}
+        >
+          <Sparkles size={24} className="mode-icon" />
+          <span className="mode-title">Acquire a Feat</span>
+          <span className="mode-desc">
+            Gain an unique talent or area of expertise.
+          </span>
+        </button>
+
+        <hr className="filigree-divider subtle-divider" />
+      </div>
+
+      {/* RENDER ASI EDITOR */}
+      {isAsiMode && (
+        <div className="asi-editor-section fadeIn">
+          <div className="asi-header">
+            <span className="asi-instruction">Allocate your points:</span>
+            <div
+              className={`points-counter ${remainingPoints === 0 ? "is-complete" : ""}`}
+            >
+              Remaining: <span className="points-value">{remainingPoints}</span>
+            </div>
+          </div>
+
+          <div className="asi-attributes-list">
+            {ABILITIES_KEY_LABEL.map(({ key, label }) => {
+              const baseScore = totalScores[key];
+              const allocated = draft.asiChoices[key] ?? 0;
+              const finalScore = baseScore + allocated;
+              const isMaxedOut = finalScore >= 20;
+
               return (
-                <div key={ability} className="asi-step__ability-cell">
-                  <span className="asi-step__ability-name">
-                    {ABILITY_LABELS[ability]}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "0.8rem",
-                      color: "var(--color-text-muted, #888)",
-                    }}
-                  >
-                    {base}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleAsiChange(ability, -1)}
-                    disabled={allocated === 0}
-                    style={{
-                      padding: "0 6px",
-                      background: "none",
-                      border: "1px solid #555",
-                      borderRadius: 3,
-                      cursor: "pointer",
-                      color: "#ccc",
-                    }}
-                  >
-                    −
-                  </button>
-                  <span
-                    style={{
-                      minWidth: 16,
-                      textAlign: "center",
-                      fontWeight: 700,
-                    }}
-                  >
-                    +{allocated}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleAsiChange(ability, 1)}
-                    disabled={remainingPoints === 0 || atMax}
-                    style={{
-                      padding: "0 6px",
-                      background: "none",
-                      border: "1px solid #555",
-                      borderRadius: 3,
-                      cursor: "pointer",
-                      color: "#ccc",
-                    }}
-                  >
-                    +
-                  </button>
+                <div
+                  key={key}
+                  className={`asi-row ${allocated > 0 ? "has-points" : ""} ${isMaxedOut ? "is-maxed" : ""}`}
+                >
+                  <div className="asi-row-label">
+                    <span className="attr-name">{label}</span>
+                    {isMaxedOut && <span className="max-badge">Max</span>}
+                  </div>
+
+                  <div className="asi-row-controls">
+                    <span className="base-score">{baseScore}</span>
+                    <span className="arrow-spacer">→</span>
+
+                    <div className="stepper-control">
+                      <button
+                        className="stepper-btn"
+                        disabled={allocated == 0}
+                        onClick={() => handleAsiChange(key, -1)}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span
+                        className={`stepper-value ${allocated > 0 ? "active" : ""}`}
+                      >
+                        +{allocated}
+                      </span>
+                      <button
+                        className="stepper-btn"
+                        disabled={remainingPoints === 0 || isMaxedOut}
+                        onClick={() => handleAsiChange(key, 1)}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+
+                    <span className="arrow-spacer">=</span>
+                    <span
+                      className={`final-score ${allocated > 0 ? "improved" : ""}`}
+                    >
+                      {finalScore}
+                    </span>
+                  </div>
                 </div>
               );
             })}
           </div>
-        </>
-      ) : (
-        <>
-          <p className="level-up-step__description">
-            {eligibleFeats.length === 0
-              ? "No eligible feats found for your current character."
-              : "Choose a feat:"}
-          </p>
-          <ul className="level-up-step__option-list">
-            {eligibleFeats.map((feat) => (
-              <li key={feat.id}>
-                <label
-                  className={[
-                    "level-up-step__option",
-                    draft.featId === feat.id
-                      ? "level-up-step__option--selected"
-                      : "",
-                  ]
-                    .join(" ")
-                    .trim()}
+        </div>
+      )}
+
+      {/* RENDER FEAT PICKER */}
+      {!isAsiMode && (
+        <div className="feat-picker-section fadeIn">
+          <div className="requisition-search-bar">
+            <Search size={18} className="search-icon" />
+            <input
+              type="text"
+              className="manuscript-input full-width"
+              placeholder="Search available feats..."
+              value={featSearch}
+              onChange={(e) => setFeatSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="feat-ledger-list custom-scrollbar">
+            {filteredFeats.map((feat) => {
+              const isSelected = draft.featId === feat.id;
+              const isExpanded = expandedFeatId === feat.id;
+
+              return (
+                <div
+                  key={feat.id}
+                  className={`subclass-card ${isSelected ? "is-selected" : ""}`}
+                  onClick={() => onUpdateDraft({ featId: feat.id })}
                 >
-                  <input
-                    type="radio"
-                    name="feat-pick"
-                    checked={draft.featId === feat.id}
-                    onChange={() => onUpdateDraft({ featId: feat.id })}
-                  />
-                  <span>
-                    <span className="level-up-step__option-label">
-                      {feat.name}
+                  <div className="subclass-card-header">
+                    <div className="subclass-primary-info">
+                      <h4 className="subclass-name">{feat.name}</h4>
+                      {feat.prerequisites && (
+                        <span className="feat-prerequisite">
+                          {formatFeatPrerequisites(feat)}
+                        </span>
+                      )}
+                    </div>
+                    <div
+                      className={`selection-indicator ${isSelected ? "active" : ""}`}
+                    >
+                      {isSelected && <CheckCircle2 size={20} />}
+                    </div>
+                  </div>
+
+                  <button
+                    className="lore-toggle-btn"
+                    onClick={(e) => toggleFeatExpand(e, feat.id)}
+                  >
+                    <BookOpen size={14} className="lore-icon" />
+                    <span>
+                      {isExpanded ? "Hide Details" : "Read Description"}
                     </span>
-                    <br />
-                    <span className="level-up-step__option-hint">
-                      {feat.lore.shortDescription}
-                    </span>
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </>
+                    {isExpanded ? (
+                      <ChevronUp size={14} />
+                    ) : (
+                      <ChevronDown size={14} />
+                    )}
+                  </button>
+
+                  {isExpanded && (
+                    <div className="subclass-expanded-lore">
+                      <hr className="filigree-divider subtle-divider" />
+                      <div className="lore-text-content">
+                        <p>{feat.lore.shortDescription}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {filteredFeats.length === 0 && (
+              <div className="empty-state-text">
+                No feats match your search.
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

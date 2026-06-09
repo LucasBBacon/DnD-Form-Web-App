@@ -95,3 +95,28 @@ export const FeatMode: Story = {
     );
   },
 };
+
+export const FeatPrerequisiteExample: Story = {
+  render: () => {
+    const { draft, updateDraft } = useInteractiveDraft(
+      createStoryDraft({
+        currentStepId: "asi_or_feat",
+        featId: "feat_battle_hardened",
+      }),
+    );
+
+    return (
+      <StoryCharacterState state={asiState}>
+        <LevelUpStepStoryShell>
+          <AsiOrFeatStep
+            draft={draft}
+            onUpdateDraft={updateDraft}
+            plan={createStoryPlan({ requirements: { requiresAsiOrFeat: true } })}
+            classData={fighterClass}
+            subclassData={null}
+          />
+        </LevelUpStepStoryShell>
+      </StoryCharacterState>
+    );
+  },
+};

@@ -7,6 +7,7 @@ import {
   getSubraceById,
   getTraitsByIds,
 } from "../data/staticDataApi";
+import { ABILITIES_KEY_LABEL } from "./abilityConstants";
 import type { Ability } from "../types/common";
 import type { FeatAcquisitionEntry, FeatData } from "../types/feat";
 import type { LevelChoice } from "../types/progression";
@@ -294,6 +295,86 @@ export const isFeatEligible = (
   }
 
   return true;
+};
+
+const formatIdLabel = (value: string): string =>
+  value.replace(/_/g, " ").replace(/\b\w/g, (character) => character.toUpperCase());
+
+const getAbilityLabel = (ability: Ability): string => {
+  const label = ABILITIES_KEY_LABEL.find((entry) => entry.key === ability)?.label;
+  return label ?? ability.toUpperCase();
+};
+
+const joinPrerequisiteParts = (parts: string[]): string =>
+  parts.length <= 1
+    ? parts[0] ?? ""
+    : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+
+export const formatFeatPrerequisites = (feat: FeatData): string | null => {
+  const prerequisites = feat.prerequisites;
+  if (!prerequisites) return null;
+
+  const parts: string[] = [];
+
+  if (prerequisites.minimumLevel !== undefined) {
+    parts.push(`level ${prerequisites.minimumLevel}`);
+  }
+
+  if (prerequisites.abilityMinimums) {
+    const abilityText = Object.entries(prerequisites.abilityMinimums)
+      .map(([ability, minimum]) => `${getAbilityLabel(ability as Ability)} ${minimum}`)
+      .join(", ");
+
+    if (abilityText) {
+      parts.push(abilityText);
+    }
+  }
+
+  if (prerequisites.requiredFeatIds?.length) {
+    const requiredFeatNames = prerequisites.requiredFeatIds.map((featId) =>
+      getFeatById(featId)?.name ?? formatIdLabel(featId),
+    );
+
+    parts.push(`feat ${joinPrerequisiteParts(requiredFeatNames)}`);
+  }
+
+  const requiredClassNames = prerequisites.requiredClassIds?.map((classId) =>
+    getClassById(classId)?.name ?? formatIdLabel(classId),
+  );
+  if (requiredClassNames?.length) {
+    parts.push(`class ${joinPrerequisiteParts(requiredClassNames)}`);
+  }
+
+  const requiredSubclassNames = prerequisites.requiredSubclassIds?.map((subclassId) =>
+    getSubclassById(subclassId)?.name ?? formatIdLabel(subclassId),
+  );
+  if (requiredSubclassNames?.length) {
+    parts.push(`subclass ${joinPrerequisiteParts(requiredSubclassNames)}`);
+  }
+
+  const requiredRaceNames = prerequisites.requiredRaceIds?.map((raceId) =>
+    getRaceById(raceId)?.name ?? formatIdLabel(raceId),
+  );
+  if (requiredRaceNames?.length) {
+    parts.push(`race ${joinPrerequisiteParts(requiredRaceNames)}`);
+  }
+
+  const requiredSubraceNames = prerequisites.requiredSubraceIds?.map((subraceId) =>
+    getSubraceById(subraceId)?.name ?? formatIdLabel(subraceId),
+  );
+  if (requiredSubraceNames?.length) {
+    parts.push(`subrace ${joinPrerequisiteParts(requiredSubraceNames)}`);
+  }
+
+  if (prerequisites.requiresSpellcasting) {
+    parts.push("spellcasting");
+  }
+
+  if (parts.length === 0) {
+    return null;
+  }
+
+  return `Prerequisite: ${joinPrerequisiteParts(parts)}`;
 };
 
 export const resolveGrantedTraitIdsForSelectedFeats = (
