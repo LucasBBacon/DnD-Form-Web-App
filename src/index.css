@@ -168,6 +168,17 @@ code {
   }
 }
 
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .manuscript-section-title {
   font-family: var(--font-display);
   font-size: 1.5rem;
