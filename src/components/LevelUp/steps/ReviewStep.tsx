@@ -11,7 +11,15 @@ import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
-import { Award, Heart, Scroll, ShieldAlert, Swords } from "lucide-react";
+import {
+  Award,
+  BookOpen,
+  Heart,
+  Scroll,
+  ShieldAlert,
+  Sparkles,
+  Swords,
+} from "lucide-react";
 
 // #region --- Types ---
 
@@ -34,20 +42,12 @@ interface ReviewStepProps {
 
 // #endregion
 
-function ReviewRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: React.ReactNode;
-}) {
-  return (
-    <div className="review-step__row">
-      <span className="review-step__label">{label}</span>
-      <span className="review-step__value">{value}</span>
-    </div>
-  );
-}
+const formatDisplayLabel = (text: string) => {
+  return text
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
 
 /**
  * Final review step showing a summary of all the choices made during the level-up process, along with any unmet requirements.
@@ -111,7 +111,7 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
       <div className="review-manifesto custom-scrollbar">
         <div className="manifesto-inner-border">
           <div className="manifesto-header">
-            <Scroll size={16} className="manifesto-icon" />
+            <Scroll size={28} className="manifesto-icon" />
             <h4 className="manifesto-title">Deeds of Advancement</h4>
             <div className="manifesto-subtitle">
               Character Level {targetLevel}
@@ -153,10 +153,93 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
             )}
 
             {/* TRAINING & COMPETENCIES */}
-            {(draft.skillChoices.length > 0 || draft.toolChoices.length > 0 || draft.languageChoices.length > 0) && (
+            {(draft.skillChoices.length > 0 ||
+              draft.toolChoices.length > 0 ||
+              draft.languageChoices.length > 0) && (
               <div className="manifesto-block">
                 <div className="block-header">
                   <Award size={16} /> <span>New Competencies</span>
+                </div>
+
+                {draft.skillChoices.length > 0 && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Skills Learned</span>
+                    <span className="row-value list-value">
+                      {draft.skillChoices.map(formatDisplayLabel).join(", ")}
+                    </span>
+                  </div>
+                )}
+
+                {draft.toolChoices.length > 0 && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Tools Mastered</span>
+                    <span className="row-value list-value">
+                      {draft.toolChoices.map(formatDisplayLabel).join(", ")}
+                    </span>
+                  </div>
+                )}
+
+                {draft.languageChoices.length > 0 && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Languages Known</span>
+                    <span className="row-value list-value">
+                      {draft.languageChoices.map(formatDisplayLabel).join(", ")}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TALENTS & ASI */}
+            {(asiSummary || feat || selectedFeatureChoices.length > 0) && (
+              <div className="manifesto-block">
+                <div className="block-header">
+                  <Sparkles size={16} /> <span>Feats & Adaptations</span>
+                </div>
+
+                {asiSummary && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Attribute Increase</span>
+                    <span className="row-value font-display text-red">
+                      {asiSummary}
+                    </span>
+                  </div>
+                )}
+
+                {feat && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Feat Acquired</span>
+                    <span className="row-value list-value text-gold">
+                      {feat.name}
+                    </span>
+                  </div>
+                )}
+
+                {selectedFeatureChoices.length > 0 && (
+                  <div className="block-row is-aligned-top">
+                    <span className="row-label">Features Chosen</span>
+                    <span className="row-value list-value">
+                      {selectedFeatureChoices.flatMap((str) =>
+                        str.split(",").map(formatDisplayLabel).join(", "),
+                      )}
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ARCANE LORE */}
+            {allSpells.length > 0 && (
+              <div className="manifesto-block">
+                <div className="block-header">
+                  <BookOpen size={16} /> <span>Mystical Repertoire</span>
+                </div>
+
+                <div className="block-row is-aligned-top">
+                  <span className="row-label">Incantations Learned</span>
+                  <span className="row-value list-value spell-list-glow">
+                    {allSpells.map(formatDisplayLabel).join(', ')}
+                  </span>
                 </div>
               </div>
             )}
