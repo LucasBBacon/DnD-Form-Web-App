@@ -1,13 +1,8 @@
+/* #region --- SUBCLASS LEDGER --- */
 .subclass-ledger-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 16px;
 }
-
-.subclass-short-desc {
-  font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--ink-muted);
-  line-height: 1.4;
-}
+/* #endregion --- SUBCLASS LEDGER --- */

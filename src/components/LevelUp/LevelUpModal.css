@@ -1,3 +1,4 @@
+/* #region --- MODAL SHELL LAYOUT --- */
 .level-up-modal {
   max-width: 850px;
   width: 90vw;
@@ -9,24 +10,24 @@
 
 .level-up-sidebar {
   width: 240px;
-  background-color: rgba(44, 36, 27, 0.05);
-  border-right: 1px solid var(--border-filigree);
   padding: 24px;
   display: flex;
   flex-direction: column;
+  background-color: rgba(44, 36, 27, 0.05);
+  border-right: 1px solid var(--border-filigree);
 }
 
 .sidebar-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   margin-bottom: 32px;
+  text-align: center;
 }
 
 .sidebar-header .header-icon {
-  color: var(--gilt-gold);
   margin-bottom: 12px;
+  color: var(--gilt-gold);
 }
 
 .sidebar-header .manuscript-section-title {
@@ -37,8 +38,8 @@
 .sidebar-subtitle {
   font-family: var(--font-body);
   font-style: italic;
-  color: var(--ink-muted);
   letter-spacing: 0.05em;
+  color: var(--ink-muted);
 }
 
 .step-tracker {
@@ -63,11 +64,11 @@
 .step-node {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
-  border: 1px solid var(--ink-muted);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--ink-muted);
   background-color: var(--vellum-bg);
 }
 
@@ -92,8 +93,8 @@
 }
 
 .step-item.is-active .step-label {
-  color: var(--rubric-red);
   font-weight: bold;
+  color: var(--rubric-red);
 }
 
 .level-up-content-area {
@@ -125,13 +126,14 @@
 .footer-spacer {
   flex-grow: 1;
 }
+/* #endregion --- MODAL SHELL LAYOUT --- */
 
-/* --- PICK STEPS --- */
+/* #region --- STEP FOUNDATION --- */
 .step-container {
-  background-color: white;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  background-color: white;
 }
 
 .step-intro {
@@ -139,11 +141,11 @@
 }
 
 .step-title {
+  margin-bottom: 8px;
   font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--ink-main);
-  margin-bottom: 8px;
 }
 
 .step-description {
@@ -152,17 +154,19 @@
   line-height: 1.5;
   color: var(--ink-muted);
 }
+/* #endregion --- STEP FOUNDATION --- */
 
+/* #region --- SHARED CARD PATTERNS --- */
 .subclass-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
   background-color: var(--vellum-bg);
   border: 1px solid var(--border-filigree);
   border-radius: 6px;
-  padding: 16px;
+  box-shadow: 0 2px 4px rgba(44, 36, 27, 0.02);
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 4px rgba(44, 36, 27, 0.02);
 }
 
 .subclass-card:hover {
@@ -189,11 +193,18 @@
 }
 
 .subclass-name {
+  margin-bottom: 6px;
   font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--ink-main);
-  margin-bottom: 6px;
+}
+
+.subclass-short-desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--ink-muted);
 }
 
 .subclass-card.is-selected .subclass-name {
@@ -203,13 +214,13 @@
 .selection-indicator {
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-  border: 2px solid var(--border-filigree);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   margin-top: 4px;
+  border-radius: 50%;
+  border: 2px solid var(--border-filigree);
   transition: all 0.2s ease;
 }
 
@@ -223,18 +234,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: transparent;
-  border: none;
+  padding: 8px 0 0;
+  margin-top: 12px;
+  align-self: flex-start;
   font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: bold;
   text-transform: uppercase;
+  background: transparent;
+  border: none;
   color: var(--ink-muted);
-  cursor: pointer;
-  padding: 8px 0 0;
-  margin-top: 12px;
-  align-self: flex-start;
   opacity: 0.8;
+  cursor: pointer;
   transition: opacity 0.2s ease;
 }
 
@@ -253,8 +264,8 @@
 }
 
 .lore-text-content {
-  background-color: rgba(44, 36, 27, 0.03);
   padding: 16px;
+  background-color: rgba(44, 36, 27, 0.03);
   border-radius: 4px;
   border-left: 2px solid var(--border-filigree);
 }
@@ -264,17 +275,19 @@
 }
 
 .lore-text-content p {
+  margin-bottom: 12px;
   font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.6;
   color: var(--ink-main);
-  margin-bottom: 12px;
 }
 
 .lore-text-content p:last-child {
   margin-bottom: 0;
 }
+/* #endregion --- SHARED CARD PATTERNS --- */
 
+/* #region --- SHARED CHOICE CONTROLS --- */
 .choice-options-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -285,13 +298,13 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 10px 12px;
+  text-align: left;
   background-color: var(--vellum-bg);
   border: 1px solid var(--border-filigree);
   border-radius: 4px;
-  padding: 10px 12px;
   cursor: pointer;
   transition: all 0.2s ease;
-  text-align: left;
 }
 
 .choice-card:hover:not(.is-locked-out) {
@@ -308,16 +321,16 @@
 
 .choice-card.is-locked-out {
   opacity: 0.5;
-  cursor: not-allowed;
   background-color: transparent;
+  cursor: not-allowed;
 }
 
 .choice-name {
+  flex-grow: 1;
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ink-main);
-  flex-grow: 1;
 }
 
 .choice-card.is-selected .choice-name {
@@ -327,12 +340,12 @@
 .wax-seal-indicator {
   width: 18px;
   height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--ink-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--ink-muted);
   transition: all 0.2s ease;
 }
 
@@ -351,12 +364,18 @@
   opacity: 0.7;
 }
 
+.locked-icon {
+  color: var(--ink-muted);
+}
+/* #endregion --- SHARED CHOICE CONTROLS --- */
+
+/* #region --- GROUP HEADERS & PROGRESS --- */
 .group-source-label {
   font-family: var(--font-display);
   font-size: 0.75rem;
   text-transform: uppercase;
-  color: var(--ink-muted);
   letter-spacing: 0.05em;
+  color: var(--ink-muted);
 }
 
 .group-instruction {
@@ -370,12 +389,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 12px;
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: bold;
   color: var(--ink-muted);
   background-color: var(--vellum-bg);
-  padding: 4px 12px;
   border-radius: 16px;
   border: 1px solid var(--border-filigree);
   transition: all 0.3s ease;
@@ -392,11 +411,11 @@
 }
 
 .proficiency-choice-group {
+  padding: 16px;
+  margin-bottom: 16px;
   background-color: rgba(229, 217, 197, 0.3);
   border: 1px solid var(--border-filigree);
   border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
 }
 
 .choice-group-header {
@@ -413,3 +432,109 @@
   flex-direction: column;
   gap: 4px;
 }
+/* #endregion --- GROUP HEADERS & PROGRESS --- */
+
+/* #region --- FEEDBACK & STATUS STATES --- */
+.empty-state-container {
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.empty-state-icon {
+  margin-bottom: 16px;
+  color: var(--ink-muted);
+}
+
+.empty-state-title {
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--ink-main);
+}
+
+.empty-state-text {
+  padding: 32px 16px;
+  margin: 16px 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+  color: var(--ink-muted);
+  opacity: 0.8;
+  background-color: rgba(44, 36, 27, 0.02); /* Very faint indent */
+  border: 1px dashed var(--border-filigree);
+  border-radius: 4px;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px 24px;
+  margin: 16px 0;
+  text-align: center;
+  background-color: rgba(158, 42, 43, 0.05); /* Faint wash of rubric red */
+  border: 1px dashed var(--rubric-red);
+  border-radius: 6px;
+  color: var(--rubric-red);
+}
+
+.error-state .error-icon {
+  color: var(--rubric-red);
+  opacity: 0.8;
+}
+
+.error-state p {
+  max-width: 80%;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+/* #endregion --- FEEDBACK & STATUS STATES --- */
+
+/* #region --- LEDGER LAYOUTS --- */
+.proficiency-ledgers,
+.feature-ledgers {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Generous spacing between different categories */
+  flex-grow: 1; /* Takes up remaining height in the modal */
+  overflow-y: auto;
+  padding-right: 12px; /* Breathing room so the custom scrollbar doesn't clip content */
+  padding-bottom: 24px; /* Ensures the last item isn't flush with the modal footer */
+}
+/* #endregion --- LEDGER LAYOUTS --- */
+
+/* #region --- CUSTOM SCROLLBAR UTILITY --- */
+.custom-scrollbar {
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(44, 36, 27, 0.3) transparent;
+}
+
+/* For Chrome, Edge, and Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Very thin and elegant */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Lets the vellum show through */
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 36, 27, 0.2); /* Faint ink */
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(44, 36, 27, 0.5); /* Darkens when interacted with */
+}
+/* #endregion --- CUSTOM SCROLLBAR UTILITY --- */

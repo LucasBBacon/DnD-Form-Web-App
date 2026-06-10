@@ -1,14 +1,17 @@
+/* #region --- GROUP LABEL --- */
 .group-label {
+  margin-bottom: 12px;
+  padding-bottom: 4px;
   font-family: var(--font-display);
   font-size: 1rem;
-  color: var(--ink-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 12px;
+  color: var(--ink-muted);
   border-bottom: 1px dotted var(--border-filigree);
-  padding-bottom: 4px;
 }
+/* #endregion --- GROUP LABEL --- */
 
+/* #region --- CLASS CARD GRID --- */
 .class-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px 1fr));
@@ -20,23 +23,23 @@
 }
 
 .class-card {
-  background-color: var(--vellum-bg);
-  border: 1px solid var(--border-filigree);
-  border-radius: 6px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  text-align: left;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  text-align: left;
 }
 
 .class-card:hover {
   background-color: var(--vellum-hover);
   border-color: var(--ink-main);
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(44, 36, 27, 0.05);
+  transform: translateY(-2px);
 }
 
 .class-card.is-selected {
@@ -92,8 +95,8 @@
 }
 
 .class-cards-grid.single-path-mode .level-preview {
-  font-size: 1.1rem;
   margin-top: 8px;
+  font-size: 1.1rem;
 }
 
 .card-secondary {
@@ -121,33 +124,31 @@
 .class-card.is-locked {
   background-color: rgba(44, 36, 27, 0.03);
   border-color: var(--border-filigree);
-  cursor: not-allowed;
   opacity: 0.7;
-  transform: none !important;
   box-shadow: none !important;
+  cursor: not-allowed;
+  transform: none !important;
 }
+/* #endregion --- CLASS CARD GRID --- */
 
-.locked-icon {
-  color: var(--ink-muted);
-}
-
+/* #region --- LOCKED REASONS --- */
 .locked-reasons-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 4px;
-  border-top: 1px dotted rgba(158, 42, 43, 0.3);
   padding-top: 8px;
+  border-top: 1px dotted rgba(158, 42, 43, 0.3);
 }
 
 .locked-reason-item {
   display: flex;
   align-items: flex-start;
   gap: 6px;
-  color: var(--rubric-red);
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 600;
+  color: var(--rubric-red);
 }
 
 .reason-icon {
@@ -158,3 +159,4 @@
 .locked-reason-item span {
   line-height: 1.3;
 }
+/* #endregion --- LOCKED REASONS --- */
