@@ -1,15 +1,18 @@
 /* #region --- MODAL SHELL LAYOUT --- */
-.level-up-modal {
-  max-width: 850px;
-  width: 90vw;
-  height: 80vh;
+.modal-parchment.level-up-modal {
+  width: min(1180px, calc(100vw - 48px));
+  max-width: min(1180px, calc(100vw - 48px));
+  height: min(860px, calc(100vh - 48px));
+  max-height: calc(100vh - 48px);
   display: flex;
   padding: 0;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
 .level-up-sidebar {
-  width: 240px;
+  width: 280px;
+  flex-shrink: 0;
   padding: 24px;
   display: flex;
   flex-direction: column;
@@ -99,8 +102,10 @@
 
 .level-up-content-area {
   flex-grow: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   padding: 24px;
 }
 
@@ -112,8 +117,28 @@
 
 .step-render-zone {
   flex-grow: 1;
+  min-width: 0;
   overflow-y: auto;
+  overflow-x: auto;
   padding: 0 16px 16px 0;
+}
+
+@media (max-width: 1100px) {
+  .modal-parchment.level-up-modal {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    height: calc(100vh - 24px);
+    max-height: calc(100vh - 24px);
+  }
+
+  .level-up-sidebar {
+    width: 232px;
+    padding: 16px;
+  }
+
+  .level-up-content-area {
+    padding: 16px;
+  }
 }
 
 .wizard-footer {
