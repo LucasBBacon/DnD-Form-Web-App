@@ -1,5 +1,5 @@
 import type React from "react";
-import "./AddItemModal.css";
+import "../AddItemModal.css";
 import type { WeaponPropertyId } from "../../../../types/item";
 import type { AddItemPresetOption } from "../AddItemModal";
 import { ArmorPropertiesEditor } from "../ArmorPropertiesEditor/ArmorPropertiesEditor";

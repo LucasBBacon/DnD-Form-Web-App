@@ -1,5 +1,6 @@
 import type React from "react";
-import "./AddItemModal.css";
+import "../AddItemModal.css";
+import "./AddItemFlowSelector.css";
 import type { AddItemFlowType } from "../AddItemModal";
 import { PackageSearch, PenTool, Sparkles } from "lucide-react";
 
