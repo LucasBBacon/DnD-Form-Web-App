@@ -26,6 +26,17 @@ export interface LevelUpModalProps {
   onClose: () => void;
 }
 
+const STEP_LABELS: Record<LevelUpStepId, string> = {
+  class_pick: "Class",
+  subclass_pick: "Subclass",
+  hp_gain: "Hit Points",
+  proficiency_choice: "Proficiencies",
+  feature_choice: "Features",
+  asi_or_feat: "ASI / Feat",
+  spell_choice: "Spells",
+  review: "Review",
+};
+
 // #endregion
 
 /**
@@ -110,20 +121,21 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   // #region --- Step Navigation ---
 
   const currentStepIndex = plan.orderedSteps.indexOf(draft.currentStepId);
+  const activeStepIndex = currentStepIndex >= 0 ? currentStepIndex : 0;
 
   const goToStep = (stepId: LevelUpStepId) => {
     setDraft((d) => ({ ...d, currentStepId: stepId }));
   };
 
   const goNext = () => {
-    const nextIdx = currentStepIndex + 1;
+    const nextIdx = activeStepIndex + 1;
     if (nextIdx < plan.orderedSteps.length) {
       goToStep(plan.orderedSteps[nextIdx]);
     }
   };
 
   const goPrev = () => {
-    const prevIdx = currentStepIndex - 1;
+    const prevIdx = activeStepIndex - 1;
     if (prevIdx >= 0) {
       goToStep(plan.orderedSteps[prevIdx]);
     }
@@ -147,7 +159,7 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
   };
 
   const isOnReview = draft.currentStepId === "review";
-  const isFirstStep = currentStepIndex === 0;
+  const isFirstStep = activeStepIndex === 0;
 
   const stepProps = {
     draft,
@@ -221,23 +233,25 @@ export const LevelUpModal: React.FC<LevelUpModalProps> = ({
           </div>
 
           <nav className="step-tracker">
-            {/* TODO: Map over dynamic step plans here */}
-            <div className="step-item is-completed">
-              <div className="step-node">
-                <Check size={12} />
-              </div>
-              <span className="step-label">Class</span>
-            </div>
-            <div className="step-item is-active">
-              <div className="step-node">
-                <span className="node-dot" />
-              </div>
-              <span className="step-label">Hit Points</span>
-            </div>
-            <div className="step-item is-locked">
-              <div className="step-node" />
-              <span className="step-label">Features</span>
-            </div>
+            {plan.orderedSteps.map((stepId, index) => {
+              const isCompleted = index < activeStepIndex;
+              const isActive = index === activeStepIndex;
+              const stateClass = isCompleted
+                ? "is-completed"
+                : isActive
+                  ? "is-active"
+                  : "is-locked";
+
+              return (
+                <div key={stepId} className={`step-item ${stateClass}`}>
+                  <div className="step-node">
+                    {isCompleted ? <Check size={12} /> : null}
+                    {isActive ? <span className="node-dot" /> : null}
+                  </div>
+                  <span className="step-label">{STEP_LABELS[stepId]}</span>
+                </div>
+              );
+            })}
           </nav>
         </div>
 

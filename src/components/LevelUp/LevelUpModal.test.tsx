@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BASELINE_CHARACTER_STATE, useCharacterStore } from "../../store/useCharacterStore";
 import { LevelUpModal } from "./LevelUpModal";
+import { buildLevelUpPlan } from "../../utils/levelUpPlanner";
 
 vi.mock("../../utils/levelUpPlanner", () => ({
   buildLevelUpPlan: vi.fn(() => ({
@@ -22,6 +23,8 @@ vi.mock("../../utils/levelUpPlanner", () => ({
     completionErrors: [],
   })),
 }));
+
+const buildLevelUpPlanMock = vi.mocked(buildLevelUpPlan);
 
 vi.mock("../../data/staticDataApi", () => ({
   getClassById: vi.fn(() => null),
@@ -70,22 +73,15 @@ describe("LevelUpModal blocking UX", () => {
     } as any);
   });
 
-  it("shows the blocking banner and disables close while blocking", async () => {
+  it("hides close controls while blocking", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
 
     render(<LevelUpModal targetLevel={1} isBlocking onClose={onClose} />);
 
-    expect(
-      screen.getByText(
-        "This level-up must be completed before returning to the character sheet.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
 
-    const closeButton = screen.getByRole("button", { name: "Close" });
-    expect(closeButton).toBeDisabled();
-
-    await user.click(closeButton);
+    await user.keyboard("{Escape}");
 
     expect(onClose).not.toHaveBeenCalled();
   });
@@ -96,17 +92,80 @@ describe("LevelUpModal blocking UX", () => {
 
     render(<LevelUpModal targetLevel={1} onClose={onClose} />);
 
-    expect(
-      screen.queryByText(
-        "This level-up must be completed before returning to the character sheet.",
-      ),
-    ).not.toBeInTheDocument();
-
     const closeButton = screen.getByRole("button", { name: "Close" });
     expect(closeButton).not.toBeDisabled();
 
     await user.click(closeButton);
 
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("LevelUpModal step tracker", () => {
+  beforeEach(() => {
+    useCharacterStore.setState({
+      ...BASELINE_CHARACTER_STATE,
+      classId: "class_fighter",
+      classTracks: [{ classId: "class_fighter", subclassId: null, level: 1 }],
+      level: 1,
+    } as any);
+  });
+
+  it("renders tracker labels in planner step order", () => {
+    buildLevelUpPlanMock.mockReturnValueOnce({
+      orderedSteps: [
+        "class_pick",
+        "subclass_pick",
+        "hp_gain",
+        "spell_choice",
+        "feature_choice",
+        "review",
+      ],
+      requirements: {
+        requiresAsiOrFeat: false,
+        requiresSubclass: true,
+        requiresProficiencySelection: false,
+        requiresSkillSelection: false,
+        newCantripsToLearn: 0,
+        newSpellsToLearn: 1,
+      },
+      pendingProficiencyChoices: [],
+      pendingFeatureChoices: [],
+      isComplete: false,
+      completionErrors: [],
+    });
+
+    render(<LevelUpModal targetLevel={2} onClose={vi.fn()} />);
+
+    const trackerLabels = Array.from(
+      document.querySelectorAll(".step-tracker .step-label"),
+    ).map((el) => el.textContent?.trim());
+
+    expect(trackerLabels).toEqual([
+      "Class",
+      "Subclass",
+      "Hit Points",
+      "Spells",
+      "Features",
+      "Review",
+    ]);
+  });
+
+  it("updates completed, active, and locked tracker states as user advances", async () => {
+    const user = userEvent.setup();
+    render(<LevelUpModal targetLevel={2} onClose={vi.fn()} />);
+
+    const getTrackerItems = (): HTMLElement[] =>
+      Array.from(document.querySelectorAll(".step-tracker .step-item"));
+
+    let items = getTrackerItems();
+    expect(items[0].classList.contains("is-active")).toBe(true);
+    expect(items[1].classList.contains("is-locked")).toBe(true);
+
+    await user.click(screen.getByRole("button", { name: /next/i }));
+
+    items = getTrackerItems();
+    expect(items[0].classList.contains("is-completed")).toBe(true);
+    expect(items[1].classList.contains("is-active")).toBe(true);
   });
 });
