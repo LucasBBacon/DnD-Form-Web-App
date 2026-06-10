@@ -1,4 +1,6 @@
 import React from "react";
+import "../LevelUpModal.css";
+import "./ReviewStep.css";
 import {
   getClassById,
   getFeatById,
@@ -9,6 +11,7 @@ import type { ClassData } from "../../../types/class";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
 import type { SubclassData } from "../../../types/subclass";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
+import { Award, Heart, Scroll, ShieldAlert, Swords } from "lucide-react";
 
 // #region --- Types ---
 
@@ -57,7 +60,6 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
   targetLevel,
   onConfirm,
 }) => {
-
   // #region --- Data Preparation ---
 
   const classData = draft.targetClassId
@@ -76,90 +78,91 @@ export const ReviewStep: React.FC<ReviewStepProps> = ({
   const allSpells = [...draft.cantripsLearned, ...draft.spellsLearned];
   const selectedFeatureChoices = Object.values(draft.featureChoices);
 
+  const hasErrors = plan.completionErrors && plan.completionErrors.length > 0;
   // #endregion
 
   // #region --- Render ---
 
   return (
-    <div className="level-up-step">
-      <h3 className="level-up-step__title">Review Level Up</h3>
-      <p className="level-up-step__description">
-        Confirm your choices. Click Back to adjust anything.
-      </p>
+    <div className="step-container review-step">
+      <div className="step-intro">
+        <h3 className="step-title">Review Level Up</h3>
+        <p className="step-description">
+          Review your training decisions. Once complete, these paths will be
+          formally woven into your character's ledger.
+        </p>
+      </div>
 
-      <ReviewRow label="Character Level" value={targetLevel} />
-      <ReviewRow
-        label="Class Leveled"
-        value={
-          classData
-            ? `${classData.name} → Level ${draft.targetClassLevel}${draft.isNewMulticlass ? " (new)" : ""}`
-            : "—"
-        }
-      />
-      {draft.hpGained !== null && (
-        <ReviewRow label="HP Gained" value={`+${draft.hpGained}`} />
-      )}
-      {subclass && <ReviewRow label="Subclass" value={subclass.name} />}
-      {feat && <ReviewRow label="Feat" value={feat.name} />}
-      {asiSummary && <ReviewRow label="ASI" value={asiSummary} />}
-      {draft.skillChoices.length > 0 && (
-        <ReviewRow
-          label="Skill Proficiencies"
-          value={draft.skillChoices.map((s) => s.replace(/_/g, " ")).join(", ")}
-        />
-      )}
-      {draft.weaponChoices.length > 0 && (
-        <ReviewRow
-          label="Weapon Proficiencies"
-          value={draft.weaponChoices.join(", ")}
-        />
-      )}
-      {draft.toolChoices.length > 0 && (
-        <ReviewRow
-          label="Tool Proficiencies"
-          value={draft.toolChoices.join(", ")}
-        />
-      )}
-      {draft.languageChoices.length > 0 && (
-        <ReviewRow label="Languages" value={draft.languageChoices.join(", ")} />
-      )}
-      {allSpells.length > 0 && (
-        <ReviewRow label="Spells Learned" value={allSpells.join(", ")} />
-      )}
-      {selectedFeatureChoices.length > 0 && (
-        <ReviewRow
-          label="Feature Choices"
-          value={selectedFeatureChoices
-            .map(
-              (value) => getSpellByID(value)?.name ?? value.replace(/_/g, " "),
-            )
-            .join(", ")}
-        />
-      )}
-
-      {!plan.isComplete && (
-        <div className="level-up-step__error-list" role="alert">
-          <p className="level-up-step__unmet-title">Unmet requirements</p>
-          <ul>
-            {plan.completionErrors.map((err) => (
-              <li key={err}>{err}</li>
+      {/* COMPLETION ERROR BANNER */}
+      {hasErrors && (
+        <div className="error-state review-error-banner">
+          <div className="error-banner-header">
+            <ShieldAlert size={20} className="error-icon" />
+            <span>Unfinished Actions</span>
+          </div>
+          <ul className="error-list">
+            {plan.completionErrors.map((err, idx) => (
+              <li key={idx}>{err}</li>
             ))}
           </ul>
-          <p className="level-up-step__option-hint">
-            Use Back to complete the missing selections, then return here to
-            confirm.
-          </p>
         </div>
       )}
 
-      <button
-        type="button"
-        className="level-up-step__confirm-btn"
-        disabled={!plan.isComplete}
-        onClick={onConfirm}
-      >
-        Confirm Level Up
-      </button>
+      <div className="review-manifesto custom-scrollbar">
+        <div className="manifesto-inner-border">
+          <div className="manifesto-header">
+            <Scroll size={16} className="manifesto-icon" />
+            <h4 className="manifesto-title">Deeds of Advancement</h4>
+            <div className="manifesto-subtitle">
+              Character Level {targetLevel}
+            </div>
+          </div>
+
+          <div className="manifesto-grid">
+            {classData && (
+              <div className="manifesto-block">
+                <div className="block-header">
+                  <Swords size={16} /> <span>Core Discipline</span>
+                </div>
+
+                <div className="block-row">
+                  <span className="row-label">Class Advanced</span>
+                  <span className="row-value font-display">
+                    {classData.name} (Level {draft.targetClassLevel})
+                  </span>
+                </div>
+
+                {subclass && (
+                  <div className="block-row">
+                    <span className="row-label">Specialization</span>
+                    <span className="row-value font-display text-gold">
+                      {subclass.name}
+                    </span>
+                  </div>
+                )}
+                {draft.hpGained !== null && (
+                  <div className="block-row">
+                    <span className="row-label">Vitality Increase</span>
+                    <span className="row-value vital-hp-text">
+                      <Heart size={12} fill="var(--rubric-red)" /> +
+                      {draft.hpGained} Max HP
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* TRAINING & COMPETENCIES */}
+            {(draft.skillChoices.length > 0 || draft.toolChoices.length > 0 || draft.languageChoices.length > 0) && (
+              <div className="manifesto-block">
+                <div className="block-header">
+                  <Award size={16} /> <span>New Competencies</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 
