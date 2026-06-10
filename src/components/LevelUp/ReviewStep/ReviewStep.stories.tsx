@@ -5,10 +5,10 @@ import {
   createStoryDraft,
   createStoryPlan,
   LevelUpStepStoryShell,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/ReviewStep",
+  title: "LevelUp/ReviewStep",
   component: ReviewStep,
   tags: ["autodocs"],
   parameters: {

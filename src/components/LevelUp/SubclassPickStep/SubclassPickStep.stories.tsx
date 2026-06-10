@@ -8,10 +8,10 @@ import {
   LevelUpStepStoryShell,
   StoryCharacterState,
   useInteractiveDraft,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/SubclassPickStep",
+  title: "LevelUp/SubclassPickStep",
   component: SubclassPickStep,
   tags: ["autodocs"],
   parameters: {

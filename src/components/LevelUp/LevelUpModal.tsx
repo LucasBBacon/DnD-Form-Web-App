@@ -5,14 +5,14 @@ import { useCharacterStore } from "../../store/useCharacterStore";
 import type { LevelUpDraft, LevelUpStepId } from "../../types/levelUpDraft";
 import { createEmptyDraft } from "../../types/levelUpDraft";
 import { buildLevelUpPlan } from "../../utils/levelUpPlanner";
-import { AsiOrFeatStep } from "./steps/AsiOrFeatStep";
-import { ClassPickStep } from "./steps/ClassPickStep";
-import { FeatureChoiceStep } from "./steps/FeatureChoiceStep";
-import { HpGainStep } from "./steps/HpGainStep";
-import { ProficiencyChoiceStep } from "./steps/ProficiencyChoiceStep";
-import { ReviewStep } from "./steps/ReviewStep";
-import { SpellChoiceStep } from "./steps/SpellChoiceStep";
-import { SubclassPickStep } from "./steps/SubclassPickStep";
+import { AsiOrFeatStep } from "./AsiOrFeatStep/AsiOrFeatStep";
+import { ClassPickStep } from "./ClassPickStep/ClassPickStep";
+import { FeatureChoiceStep } from "./FeatureChoiceStep/FeatureChoiceStep";
+import { HpGainStep } from "./HpGainStep/HpGainStep";
+import { ProficiencyChoiceStep } from "./ProficiencyChoiceStep/ProficiencyChoiceStep";
+import { ReviewStep } from "./ReviewStep/ReviewStep";
+import { SpellChoiceStep } from "./SpellChoiceStep/SpellChoiceStep";
+import { SubclassPickStep } from "./SubclassPickStep/SubclassPickStep";
 import { ArrowLeft, ArrowRight, BookOpen, Check, X } from "lucide-react";
 
 // #region --- Types and Interfaces ---

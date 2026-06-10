@@ -3,14 +3,14 @@ import {
   BASELINE_CHARACTER_STATE,
   useCharacterStore,
   type CharacterState,
-} from "../../../store/useCharacterStore";
-import {
-  createEmptyDraft,
-  type LevelUpDraft,
-} from "../../../types/levelUpDraft";
-import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
+} from "../../store/useCharacterStore";
+import { createEmptyDraft, type LevelUpDraft } from "../../types/levelUpDraft";
+import type { LevelUpPlannerResult } from "../../utils/levelUpPlanner";
 
-type StoryPlanOverrides = Omit<Partial<LevelUpPlannerResult>, "requirements"> & {
+type StoryPlanOverrides = Omit<
+  Partial<LevelUpPlannerResult>,
+  "requirements"
+> & {
   requirements?: Partial<LevelUpPlannerResult["requirements"]>;
 };
 
@@ -27,7 +27,8 @@ export const createStoryPlan = (
       requiresSubclass: requirementOverrides.requiresSubclass ?? false,
       requiresProficiencySelection:
         requirementOverrides.requiresProficiencySelection ?? false,
-      requiresSkillSelection: requirementOverrides.requiresSkillSelection ?? false,
+      requiresSkillSelection:
+        requirementOverrides.requiresSkillSelection ?? false,
       newCantripsToLearn: requirementOverrides.newCantripsToLearn ?? 0,
       newSpellsToLearn: requirementOverrides.newSpellsToLearn ?? 0,
     },

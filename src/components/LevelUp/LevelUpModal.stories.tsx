@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import type { CharacterState } from "../../store/useCharacterStore";
 import { LevelUpModal } from "./LevelUpModal";
-import { StoryCharacterState } from "./steps/LevelUpStoryHelpers";
+import { StoryCharacterState } from "./LevelUpStoryHelpers";
 
 const meta = {
   title: "Flows/LevelUp/LevelUpModal",

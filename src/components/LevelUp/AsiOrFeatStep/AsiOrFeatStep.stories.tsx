@@ -8,10 +8,10 @@ import {
   LevelUpStepStoryShell,
   StoryCharacterState,
   useInteractiveDraft,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/AsiOrFeatStep",
+  title: "LevelUp/AsiOrFeatStep",
   component: AsiOrFeatStep,
   tags: ["autodocs"],
   parameters: {

@@ -6,10 +6,10 @@ import {
   createStoryPlan,
   LevelUpStepStoryShell,
   useInteractiveDraft,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/ProficiencyChoiceStep",
+  title: "LevelUp/ProficiencyChoiceStep",
   component: ProficiencyChoiceStep,
   tags: ["autodocs"],
   parameters: {
@@ -62,17 +62,17 @@ export const MultipleChoiceGroups: Story = {
         <ProficiencyChoiceStep
           draft={draft}
           onUpdateDraft={updateDraft}
-          plan={
-            createStoryPlan({
-              requirements: {
-                requiresProficiencySelection: true,
-                requiresSkillSelection: true,
-              },
-              pendingProficiencyChoices: pendingChoices,
-              isComplete: false,
-              completionErrors: ["Bonus Skill Training: select 1 more selection(s)."],
-            })
-          }
+          plan={createStoryPlan({
+            requirements: {
+              requiresProficiencySelection: true,
+              requiresSkillSelection: true,
+            },
+            pendingProficiencyChoices: pendingChoices,
+            isComplete: false,
+            completionErrors: [
+              "Bonus Skill Training: select 1 more selection(s).",
+            ],
+          })}
           classData={null}
           subclassData={null}
         />

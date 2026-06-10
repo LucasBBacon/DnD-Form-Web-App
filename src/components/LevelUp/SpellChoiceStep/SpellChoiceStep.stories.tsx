@@ -8,10 +8,10 @@ import {
   LevelUpStepStoryShell,
   StoryCharacterState,
   useInteractiveDraft,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/SpellChoiceStep",
+  title: "LevelUp/SpellChoiceStep",
   component: SpellChoiceStep,
   tags: ["autodocs"],
   parameters: {
@@ -56,14 +56,12 @@ export const LearnCantripAndSpell: Story = {
           <SpellChoiceStep
             draft={draft}
             onUpdateDraft={updateDraft}
-            plan={
-              createStoryPlan({
-                requirements: {
-                  newCantripsToLearn: 1,
-                  newSpellsToLearn: 1,
-                },
-              })
-            }
+            plan={createStoryPlan({
+              requirements: {
+                newCantripsToLearn: 1,
+                newSpellsToLearn: 1,
+              },
+            })}
             classData={wizardClass}
             subclassData={null}
           />
@@ -89,14 +87,12 @@ export const CantripsOnly: Story = {
           <SpellChoiceStep
             draft={draft}
             onUpdateDraft={updateDraft}
-            plan={
-              createStoryPlan({
-                requirements: {
-                  newCantripsToLearn: 1,
-                  newSpellsToLearn: 0,
-                },
-              })
-            }
+            plan={createStoryPlan({
+              requirements: {
+                newCantripsToLearn: 1,
+                newSpellsToLearn: 0,
+              },
+            })}
             classData={wizardClass}
             subclassData={null}
           />

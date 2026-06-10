@@ -6,10 +6,10 @@ import {
   createStoryPlan,
   LevelUpStepStoryShell,
   useInteractiveDraft,
-} from "./LevelUpStoryHelpers";
+} from "../LevelUpStoryHelpers";
 
 const meta = {
-  title: "Flows/LevelUp/Steps/FeatureChoiceStep",
+  title: "LevelUp/FeatureChoiceStep",
   component: FeatureChoiceStep,
   tags: ["autodocs"],
   parameters: {
