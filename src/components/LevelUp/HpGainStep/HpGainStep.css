@@ -1,0 +1,183 @@
+/* #region --- HP GAIN STEP --- */
+.hp-gain-step {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* #endregion --- HP GAIN STEP --- */
+
+/* #region --- CHOICE CARDS --- */
+.hp-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.hp-method-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  text-align: center;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hp-method-card:hover:not(.is-locked) {
+  background-color: var(--vellum-hover);
+  border-color: var(--ink-main);
+  transform: translateY(-2px);
+}
+
+.hp-method-card.is-selected {
+  background-color: rgba(158, 42, 43, 0.05);
+  border: 2px solid var(--rubric-red);
+  box-shadow: 0 4px 12px rgba(158, 42, 43, 0.15);
+}
+
+.hp-method-card.is-locked {
+  grid-column: 1 / -1; /* Spans full width for Level 1 */
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 1px solid var(--gilt-gold);
+  cursor: default;
+}
+
+.method-icon {
+  margin-bottom: 12px;
+  color: var(--ink-muted);
+}
+
+.hp-method-card.is-selected .method-icon {
+  color: var(--rubric-red);
+}
+
+.hp-method-card.is-locked .locked-icon {
+  color: var(--gilt-gold);
+}
+
+.method-title {
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--ink-main);
+}
+
+.method-description {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+/* #endregion --- CHOICE CARDS --- */
+
+/* #region --- MANUAL ROLL INPUT --- */
+.manual-roll-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background-color: rgba(44, 36, 27, 0.03);
+  border-radius: 4px;
+  border: 1px dashed var(--border-filigree);
+}
+
+.hp-roll-input {
+  width: 100px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+/* #endregion --- MANUAL ROLL INPUT --- */
+
+/* #region --- EQUATION BOARD --- */
+.hp-equation-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  margin-top: 8px;
+  background-color: var(--vellum-bg);
+  border: 2px solid var(--ink-main);
+  border-radius: 6px;
+  box-shadow: inset 0 0 16px rgba(44, 36, 27, 0.03);
+}
+
+.equation-label {
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  border-bottom: 1px dotted var(--border-filigree);
+}
+
+.equation-math {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.math-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.math-value {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-main);
+}
+
+.math-caption {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.math-operator {
+  margin: 0 8px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--border-filigree);
+}
+/* #endregion --- EQUATION BOARD --- */
+
+/* #region --- TOTAL EMPHASIS --- */
+.total-block {
+  position: relative;
+  min-width: 80px;
+}
+
+.total-heart-icon {
+  position: absolute;
+  top: -12px;
+  z-index: 0;
+  color: var(--rubric-red);
+  opacity: 0.2;
+  transform: scale(3);
+}
+
+.total-value {
+  z-index: 1;
+  font-size: 3.5rem;
+  color: var(--rubric-red);
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.fadeInDown {
+  animation: fadeInDown 0.2s ease-out;
+}
+/* #endregion --- TOTAL EMPHASIS --- */

@@ -1,0 +1,162 @@
+/* #region --- GROUP LABEL --- */
+.group-label {
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  border-bottom: 1px dotted var(--border-filigree);
+}
+/* #endregion --- GROUP LABEL --- */
+
+/* #region --- CLASS CARD GRID --- */
+.class-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px 1fr));
+  gap: 16px;
+}
+
+.class-cards-grid.single-path-mode {
+  grid-template-columns: 1fr;
+}
+
+.class-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  background-color: var(--vellum-bg);
+  border: 1px solid var(--border-filigree);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.class-card:hover {
+  background-color: var(--vellum-hover);
+  border-color: var(--ink-main);
+  box-shadow: 0 4px 12px rgba(44, 36, 27, 0.05);
+  transform: translateY(-2px);
+}
+
+.class-card.is-selected {
+  background-color: var(--ink-main);
+  border-color: var(--ink-main);
+  color: var(--vellum-bg);
+  box-shadow: 0 4px 16px rgba(44, 36, 27, 0.15);
+}
+
+.class-cards-grid.single-path-mode .class-card {
+  padding: 24px;
+  align-items: center;
+  text-align: center;
+  background-color: rgba(212, 175, 55, 0.05);
+  border: 2px solid var(--gilt-gold);
+}
+
+.class-cards-grid.single-path-mode .class-card.is-selected {
+  color: var(--ink-main);
+}
+
+.card-primary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.class-cards-grid.single-path-mode .card-primary {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-icon {
+  color: var(--rubric-red);
+}
+
+.class-card.is-selected .card-icon {
+  color: var(--vellum-bg);
+}
+
+.class-cards-grid.single-path-mode .class-card.is-selected .card-icon {
+  color: var(--ink-main);
+}
+
+.class-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.class-cards-grid.single-path-mode .class-name {
+  font-size: 1.8rem;
+}
+
+.class-cards-grid.single-path-mode .level-preview {
+  margin-top: 8px;
+  font-size: 1.1rem;
+}
+
+.card-secondary {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.level-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.arrow-icon {
+  opacity: 0.5;
+}
+
+.multiclass-card {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-style: dashed;
+}
+
+.class-card.is-locked {
+  background-color: rgba(44, 36, 27, 0.03);
+  border-color: var(--border-filigree);
+  opacity: 0.7;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  transform: none !important;
+}
+/* #endregion --- CLASS CARD GRID --- */
+
+/* #region --- LOCKED REASONS --- */
+.locked-reasons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px dotted rgba(158, 42, 43, 0.3);
+}
+
+.locked-reason-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rubric-red);
+}
+
+.reason-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.locked-reason-item span {
+  line-height: 1.3;
+}
+/* #endregion --- LOCKED REASONS --- */

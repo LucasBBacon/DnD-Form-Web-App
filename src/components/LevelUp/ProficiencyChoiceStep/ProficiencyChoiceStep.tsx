@@ -1,4 +1,6 @@
 import React from "react";
+import "../LevelUpModal.css";
+import "./ProficiencyChoiceStep.css";
 import type { ClassData } from "../../../types/class";
 import type { Skill } from "../../../types/common";
 import type { LevelUpDraft } from "../../../types/levelUpDraft";
@@ -9,6 +11,7 @@ import {
   resolveProficiencyChoicePool,
 } from "../../../utils/choiceUtils";
 import type { LevelUpPlannerResult } from "../../../utils/levelUpPlanner";
+import { BookOpen, Check, CheckCircle2, Lock } from "lucide-react";
 
 // #region --- Utilities ---
 
@@ -107,6 +110,68 @@ function SkillChoiceGroup({
   // #endregion
 }
 
+function ProficiencyChoiceGroup({
+  group,
+  selected,
+  onChange,
+  pool,
+}: {
+  group: PendingProficiencyChoice;
+  selected: string[];
+  onChange: (next: string[]) => void;
+  pool: string[];
+}) {
+  const isMaxReached = selected.length >= group.count;
+
+  const toggle = (val: string) => {
+    if (selected.includes(val)) {
+      onChange(selected.filter((s) => s !== val));
+    } else if (!isMaxReached) {
+      onChange([...selected, val]);
+    }
+  };
+
+  return (
+    <div className="proficiency-choice-group">
+      <div className="choice-group-header">
+        <div className="group-title-area">
+          {/* TODO: Map group.sourceId to a readable name */}
+          <span className="group-source-label">Source: {group.sourceName}</span>
+          <span className="group-instruction">Choose {group.count}</span>
+        </div>
+        <div className={`choice-counter ${isMaxReached ? "is-complete" : ""}`}>
+          {selected.length} / {group.count}
+          {isMaxReached && <CheckCircle2 size={16} className="complete-icon" />}
+        </div>
+      </div>
+
+      <div className="choice-options-grid">
+        {pool.map((option) => {
+          const isSelected = selected.includes(option);
+          const isLockedOut = isMaxReached && !isSelected;
+
+          return (
+            <button
+              key={option}
+              className={`choice-card ${isSelected ? "is-selected" : ""} ${isLockedOut ? "is-locked-out" : ""}`}
+              onClick={() => toggle(option)}
+              disabled={isLockedOut}
+            >
+              <div
+                className={`wax-seal-indicator ${isSelected ? "is-filled" : "is-empty"}`}
+              >
+                {isSelected && <Check size={12} strokeWidth={3} />}
+              </div>
+              <span className="choice-name">{option}</span>
+              {isLockedOut && <Lock size={12} className="lock-icon" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // #endregion
 
 export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
@@ -114,10 +179,23 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
   onUpdateDraft,
   plan,
 }) => {
-
   // #region Pending Choices
 
   const { pendingProficiencyChoices } = plan;
+
+  // if no choices are required for this level up show a clean, empty state
+  if (!pendingProficiencyChoices || pendingProficiencyChoices.length === 0) {
+    return (
+      <div className="step-container empty-state-container">
+        <BookOpen size={32} className="empty-state-icon" />
+        <h3 className="empty-state-title">No New Proficiencies</h3>
+        <p className="empty-state-text">
+          Your existing training carries you forward. No new skills or tools are
+          learned at this level.
+        </p>
+      </div>
+    );
+  }
 
   const skillGroups = pendingProficiencyChoices.filter(
     (c) => c.category === "skills",
@@ -184,69 +262,52 @@ export const ProficiencyChoiceStep: React.FC<ProficiencyChoiceStepProps> = ({
     });
   };
 
-  // #region --- Render ---
+  const renderCategorySection = (
+    title: string,
+    groups: PendingProficiencyChoice[],
+  ) => {
+    if (groups.length === 0) return null;
 
-  if (pendingProficiencyChoices.length === 0) {
     return (
-      <div className="level-up-step">
-        <h3 className="level-up-step__title">Proficiencies</h3>
-        <p className="level-up-step__description">
-          No new proficiency choices at this level.
-        </p>
+      <div className="proficiency-category-section">
+        <h4 className="category-header">{title}</h4>
+        {groups.map((group) => {
+          const selectionKey = getSelectionKey(group);
+          const selected = draft.proficiencySelectionsBySource[selectionKey];
+          const pool = toSelectionPool(group);
+
+          return (
+            <ProficiencyChoiceGroup
+              key={selectionKey}
+              group={group}
+              selected={selected}
+              onChange={(next) => updateSourceSelections(group, next)}
+              pool={pool}
+            />
+          );
+        })}
       </div>
     );
-  }
+  };
+
+  // #region --- Render ---
 
   return (
-    <div className="level-up-step">
-      <h3 className="level-up-step__title">Choose Proficiencies</h3>
-      <p className="level-up-step__description">
-        Select the proficiencies granted at this level.
-      </p>
+    <div className="step-container proficiency-choice-step">
+      <div className="step-intro">
+        <h3 className="step-title">Expand Your Expertise</h3>
+        <p className="step-description">
+          Select new skills, tools, or languages granted by your continued
+          training.
+        </p>
+      </div>
 
-      {skillGroups.map((group) => (
-        <SkillChoiceGroup
-          key={group.sourceId}
-          group={group}
-          selected={
-            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
-          }
-          onChange={(next) => updateSourceSelections(group, next)}
-        />
-      ))}
-
-      {weaponGroups.map((group) => (
-        <SkillChoiceGroup
-          key={group.sourceId}
-          group={group}
-          selected={
-            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
-          }
-          onChange={(next) => updateSourceSelections(group, next)}
-        />
-      ))}
-
-      {toolGroups.map((group) => (
-        <SkillChoiceGroup
-          key={group.sourceId}
-          group={group}
-          selected={
-            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
-          }
-          onChange={(next) => updateSourceSelections(group, next)}
-        />
-      ))}
-
-      {langGroups.map((group) => (
-        <SkillChoiceGroup
-          key={group.sourceId}
-          group={group}
-          selected={
-            draft.proficiencySelectionsBySource[getSelectionKey(group)] ?? []
-          }
-          onChange={(next) => updateSourceSelections(group, next)}
-        />
-      ))}
+      <div className="proficiency-ledgers custom-scrollbar">
+        {renderCategorySection("Skill Proficiencies", skillGroups)}
+        {renderCategorySection("Martial Training (Weapons)", weaponGroups)}
+        {renderCategorySection("Artisan & Practical Tools", toolGroups)}
+        {renderCategorySection("Languages", langGroups)}
+      </div>
     </div>
   );
 

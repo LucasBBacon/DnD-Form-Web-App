@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   getOwnedFeatsWithSources,
   getSelectedFeatIds,
+  formatFeatPrerequisites,
   isFeatEligible,
   resolveGrantedTraitIdsForSelectedFeats,
 } from "./featUtils";
@@ -209,6 +210,73 @@ describe("featUtils", () => {
 
       expect(eligibleResult).toBe(true);
       expect(ineligibleResult).toBe(false);
+    });
+  });
+
+  describe("formatFeatPrerequisites", () => {
+    it("formats mixed prerequisite requirements into one label", () => {
+      vi.mocked(getFeatById).mockImplementation((featId) => {
+        if (featId === "feat_alert") {
+          return {
+            id: "feat_alert",
+            name: "Alert",
+            grantedTraits: [],
+          } as any;
+        }
+
+        return null;
+      });
+
+      vi.mocked(getClassById).mockReturnValue({ name: "Fighter" } as any);
+      vi.mocked(getSubclassById).mockReturnValue({ name: "Champion" } as any);
+      vi.mocked(getRaceById).mockReturnValue({ name: "Human" } as any);
+      vi.mocked(getSubraceById).mockReturnValue({ name: "Variant Human" } as any);
+
+      const result = formatFeatPrerequisites({
+        id: "feat_test",
+        name: "Test Feat",
+        category: "general",
+        grantedTraits: [],
+        lore: { shortDescription: "" },
+        prerequisites: {
+          minimumLevel: 4,
+          abilityMinimums: { str: 13, dex: 12 },
+          requiredFeatIds: ["feat_alert"],
+          requiredClassIds: ["class_fighter"],
+          requiredSubclassIds: ["subclass_fighter_champion"],
+          requiredRaceIds: ["race_human"],
+          requiredSubraceIds: ["subrace_variant_human"],
+          requiresSpellcasting: true,
+        },
+      });
+
+      expect(result).toBe(
+        "Prerequisite: level 4, Strength 13, Dexterity 12, feat Alert, class Fighter, subclass Champion, race Human, subrace Variant Human and spellcasting",
+      );
+    });
+
+    it("falls back to readable ids when prerequisite lookups fail", () => {
+      vi.mocked(getFeatById).mockReturnValue(null);
+      vi.mocked(getClassById).mockReturnValue(null);
+      vi.mocked(getSubclassById).mockReturnValue(null);
+      vi.mocked(getRaceById).mockReturnValue(null);
+      vi.mocked(getSubraceById).mockReturnValue(null);
+
+      const result = formatFeatPrerequisites({
+        id: "feat_test",
+        name: "Test Feat",
+        category: "general",
+        grantedTraits: [],
+        lore: { shortDescription: "" },
+        prerequisites: {
+          requiredFeatIds: ["feat_hidden_talent"],
+          requiredClassIds: ["class_arcane_trickster"],
+        },
+      });
+
+      expect(result).toBe(
+        "Prerequisite: feat Feat Hidden Talent and class Class Arcane Trickster",
+      );
     });
   });
 

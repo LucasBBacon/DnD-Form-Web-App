@@ -88,6 +88,8 @@ export const IdentityHeaderContainer: React.FC = () => {
       choicesByLevel,
     });
 
+    console.log(targetLevel)
+
     if (targetLevel !== null) {
       openLevelUpModal(targetLevel);
     }

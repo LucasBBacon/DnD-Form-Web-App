@@ -19,3 +19,12 @@ export const ABILITY_SHORT_LABELS: Record<Ability, string> = {
   wis: "WIS",
   cha: "CHA",
 };
+
+export const ABILITIES_KEY_LABEL: { key: Ability; label: string }[] = [
+  { key: "str", label: "Strength" },
+  { key: "dex", label: "Dexterity" },
+  { key: "con", label: "Constitution" },
+  { key: "int", label: "Intelligence" },
+  { key: "wis", label: "Wisdom" },
+  { key: "cha", label: "Charisma" },
+];

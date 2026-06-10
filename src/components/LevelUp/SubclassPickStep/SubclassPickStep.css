@@ -1,0 +1,8 @@
+/* #region --- SUBCLASS LEDGER --- */
+.subclass-ledger-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+/* #endregion --- SUBCLASS LEDGER --- */

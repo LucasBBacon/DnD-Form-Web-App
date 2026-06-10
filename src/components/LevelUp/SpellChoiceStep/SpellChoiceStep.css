@@ -1,0 +1,50 @@
+/* #region --- SPELL GROUP LAYOUT --- */
+.spell-groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.spell-level-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spell-level-divider {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+}
+
+.spell-level-divider::after {
+  flex-grow: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border-filigree), transparent);
+  content: "";
+}
+
+.spell-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+}
+/* #endregion --- SPELL GROUP LAYOUT --- */
+
+/* #region --- SPELL NAME TRUNCATION --- */
+.spell-card-info .choice-name {
+  overflow: hidden;
+  max-width: 140px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* #endregion --- SPELL NAME TRUNCATION --- */

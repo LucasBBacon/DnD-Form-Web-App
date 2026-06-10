@@ -1,5 +1,5 @@
 import type React from "react";
-import "./AddItemModal.css";
+import "../AddItemModal.css";
 import { EyeOff, Shield } from "lucide-react";
 
 interface ArmorPropertiesEditorProps {

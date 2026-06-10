@@ -1,0 +1,57 @@
+/* #region --- FEATURE OPTIONS --- */
+.feature-options-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-card.is-locked-out {
+  opacity: 0.6;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+}
+
+.feature-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feature-card .lock-icon {
+  color: var(--rubric-red);
+  opacity: 0.8;
+}
+
+.feature-name {
+  font-size: 1.15rem;
+}
+
+.feature-card.custom-value-card {
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.custom-value-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.custom-feature-input {
+  flex-grow: 1;
+  padding: 4px 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--ink-main);
+  outline: none;
+  border-bottom: 1px dashed var(--border-filigree);
+  transition: border-color 0.2s ease;
+}
+
+.custom-feature-input:focus {
+  border-bottom-color: var(--ink-main);
+}
+/* #endregion --- FEATURE OPTIONS --- */

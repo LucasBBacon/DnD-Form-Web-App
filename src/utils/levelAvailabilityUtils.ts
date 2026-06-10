@@ -46,7 +46,11 @@ export const getFirstIncompleteLevelChoice = (
 ): number | null => {
   const effectiveLevel = getCharacterLevelFromClassTracks(classTracks, level);
 
-  for (let candidateLevel = 1; candidateLevel <= effectiveLevel; candidateLevel += 1) {
+  for (
+    let candidateLevel = 1;
+    candidateLevel <= effectiveLevel;
+    candidateLevel += 1
+  ) {
     if (!choicesByLevel[candidateLevel]) {
       return candidateLevel;
     }
@@ -80,7 +84,9 @@ export const getAvailableLevelUpTargetForCharacter = ({
     return null;
   }
 
-  if (levelUpMode === "milestone_anytime") {
+  console.log(levelUpMode);
+
+  if (levelUpMode === "milestone") {
     return effectiveLevel + 1;
   }
 
